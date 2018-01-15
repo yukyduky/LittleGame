@@ -1,0 +1,25 @@
+#include "GameManager.h"
+#include "Locator.h"
+
+int main()
+{
+	GameManager re;
+
+	// Initialize the game
+	re.init();
+
+	// Game loop
+	while (re.getIsRunning()) {
+		// Update delta time
+		Locator::getGameTime()->UpdateFrameTime();
+		// Handle events & update & render
+		re.handleEvents();
+		re.update();
+		re.render();
+	}
+
+	// Cleanup the game
+	re.cleanup();
+
+	return 0;
+}
