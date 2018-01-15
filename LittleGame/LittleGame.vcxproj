@@ -122,8 +122,10 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="IGameTime.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="State.h" />
@@ -131,7 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />

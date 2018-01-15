@@ -3,6 +3,7 @@
 #define RANDOMZENGINE_H
 
 #include "IGameTime.h"
+#include <Windows.h>
 
 class State;
 
@@ -24,7 +25,7 @@ public:
 	// Handles the events according to the current state
 	void handleEvents();
 	// Poll for new events
-	//bool pollEvent(sf::Event &event);
+	bool pollEvent(MSG &msg);
 	// Updates according to the current state
 	void update();
 	// Renders according to the current state

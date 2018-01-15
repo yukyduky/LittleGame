@@ -72,6 +72,12 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="InputHandler.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -91,6 +97,12 @@
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="InputHandler.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayState.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

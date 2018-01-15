@@ -3,7 +3,7 @@
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
-
+#include "GamePlayState.h"
 
 void GameManager::init()
 {
@@ -15,6 +15,9 @@ void GameManager::init()
 	Locator::provide(this->gameTime);
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
+
+	// Set the first state of the game
+	StateManager::changeState(GamePlayState::getInstance());
 }
 
 void GameManager::cleanup()
@@ -32,10 +35,10 @@ void GameManager::handleEvents()
 	StateManager::handleEvents(this);
 }
 
-/*bool GameManager::pollEvent(sf::Event & event)
+bool GameManager::pollEvent(MSG &msg)
 {
-	return this->window.pollEvent(event);
-}*/
+	return PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE);
+}
 
 void GameManager::update()
 {
@@ -44,11 +47,17 @@ void GameManager::update()
 
 void GameManager::render()
 {
+	/*Color bgColor(255, 0, 255, 1.0f);
+	// Clear the backbuffer
+	gDevCon->ClearRenderTargetView(gFinalRTV, bgColor);*/
+
 	StateManager::render(this);
 }
 
 void GameManager::display(State* state)
 {
+	/*// Present the backbuffer to the screen
+	gSwapChain->Present(0, 0);*/
 }
 
 bool GameManager::getIsRunning()

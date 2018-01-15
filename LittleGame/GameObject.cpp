@@ -13,7 +13,7 @@ GameObject::~GameObject()
 void GameObject::send(Message msg)
 {
 	// Send the message to all the components that have been added to the object
-	for (auto c : this->components) { 
+	for (auto c : this->components) {
 		c->receive(*this, msg);
 	}
 }
