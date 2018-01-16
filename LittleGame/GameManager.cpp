@@ -5,9 +5,11 @@
 #include "GameTime.h"
 #include "GamePlayState.h"
 
-void GameManager::init()
+void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
 	this->isRunning = true;
+
+	window.InitializeWindow(hInstance, nCmdShow, 1920, 1080, true);
 
 	// Creation of gameTime;
 	this->gameTime = new GameTime;

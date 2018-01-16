@@ -1,12 +1,13 @@
+#include <Windows.h>
 #include "GameManager.h"
 #include "Locator.h"
 
-int main()
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	GameManager re;
 
 	// Initialize the game
-	re.init();
+	re.init(hInstance, nCmdShow);
 
 	// Game loop
 	while (re.getIsRunning()) {

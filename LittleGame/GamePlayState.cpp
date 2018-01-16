@@ -30,12 +30,16 @@ void GamePlayState::handleEvents(GameManager * re)
 
 	while (re->pollEvent(msg)) {
 		if (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) {
-			// Exit the application when escape is pressed
-			if (msg.message == VK_ESCAPE) {
+			// Exit the application when 'X' is pressed
+			if (msg.message == WM_QUIT) {
 				re->quit();
+				break;
 			}
 			InputHandler::generateInputCommands(this->commandQueue, msg);
 		}
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 }
 

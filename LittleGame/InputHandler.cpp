@@ -31,7 +31,6 @@ void InputHandler::eventTranslator(MSG &msg)
 
 void InputHandler::keyPress(MSG &msg)
 {
-	
 	if (keyStates[msg.wParam] == RELEASED) {
 		keyActions[msg.wParam] = EXECUTE;
 		keyStates[msg.wParam] = PRESSED;

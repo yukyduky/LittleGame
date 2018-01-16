@@ -2,8 +2,9 @@
 #ifndef RANDOMZENGINE_H
 #define RANDOMZENGINE_H
 
-#include "IGameTime.h"
 #include <Windows.h>
+#include "WindowManager.h"
+#include "IGameTime.h"
 
 class State;
 
@@ -11,11 +12,12 @@ class GameManager
 {
 private:
 	bool isRunning;
+	WindowManager window;
 	IGameTime* gameTime;
 
 public:
 	// Initialize the game window etc.
-	void init();
+	void init(HINSTANCE hInstance, int nCmdShow);
 	// Cleanup the engine
 	void cleanup();
 
