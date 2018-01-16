@@ -1,10 +1,17 @@
 #include <Windows.h>
+#include "D3D.h"
 #include "GameManager.h"
 #include "Locator.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	GameManager re;
+
+	// Initialize window
+	D3D::initializeWindow(hInstance, true, 1920, 1080, true);
+
+	// Initialize DirectX
+	D3D::initializeDirectX();
 
 	// Initialize the game
 	re.init(hInstance, nCmdShow);

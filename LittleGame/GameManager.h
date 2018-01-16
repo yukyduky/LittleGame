@@ -3,7 +3,7 @@
 #define RANDOMZENGINE_H
 
 #include <Windows.h>
-#include "WindowManager.h"
+#include <d3d11.h>
 #include "IGameTime.h"
 
 class State;
@@ -12,7 +12,6 @@ class GameManager
 {
 private:
 	bool isRunning;
-	WindowManager window;
 	IGameTime* gameTime;
 
 public:

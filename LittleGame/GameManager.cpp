@@ -1,4 +1,5 @@
 #include "GameManager.h"
+#include "D3D.h"
 #include "StateManager.h"
 #include "State.h"
 #include "Locator.h"
@@ -8,9 +9,7 @@
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
 	this->isRunning = true;
-
-	window.InitializeWindow(hInstance, nCmdShow, 1920, 1080, true);
-
+	
 	// Creation of gameTime;
 	this->gameTime = new GameTime;
 	// Provide the game time object to the service locator
