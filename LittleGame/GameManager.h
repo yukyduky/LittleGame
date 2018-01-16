@@ -16,7 +16,8 @@ private:
 	IGameTime* gameTime;
 
 public:
-	// Initialize the game window etc.
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Initialize the game window etc.*/
 	void init(HINSTANCE hInstance, int nCmdShow);
 	// Cleanup the engine
 	void cleanup();
