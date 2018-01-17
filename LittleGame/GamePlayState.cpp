@@ -33,7 +33,6 @@ void GamePlayState::handleEvents(GameManager * re)
 			// Exit the application when 'X' is pressed
 			if (msg.message == WM_QUIT) {
 				re->quit();
-				break;
 			}
 			InputHandler::generateInputCommands(this->commandQueue, msg);
 		}
@@ -48,6 +47,7 @@ void GamePlayState::update(GameManager * re)
 	for (auto &c : this->commandQueue) {
 		c->execute();
 	}
+	this->commandQueue.clear();
 }
 
 void GamePlayState::render(GameManager * re)
