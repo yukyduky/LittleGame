@@ -133,9 +133,11 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GamePlaySelectCommand.h" />
     <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="IGameTime.h" />
+    <ClInclude Include="IInputHandler.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />

@@ -4,6 +4,8 @@
 
 #include "State.h"
 #include <vector>
+#include "Command.h"
+#include "IInputHandler.h"
 
 class Command;
 
@@ -12,9 +14,11 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 
-	std::vector<Command*> commandQueue;
+	std::vector<Input> commandQueue;
+	Command* selectCommand;
+
+	void mapKeys();
 public:
-	GamePlayState();
 	// Initialize this state
 	virtual void init();
 	// Cleanup this state
@@ -31,6 +35,8 @@ public:
 	virtual void update(GameManager* re);
 	// Render this state
 	virtual void render(GameManager* re);
+
+	void commandSelect(size_t player);
 
 	// Get the static instance of this state
 	static GamePlayState* getInstance();

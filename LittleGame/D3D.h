@@ -62,21 +62,21 @@ public:
 
 	// Rendertarget and Shaderresource functions
 	static void clearRendertarget(ID3D11RenderTargetView* gRTV);
-	static void clearDepthStencilView(ID3D11DepthStencilView* gDSV, UINT clearFlags);
-	static void setRenderTargets(UINT numViews, ID3D11RenderTargetView** gRTV, ID3D11DepthStencilView* gDSV);
+	static void clearDepthStencilView(ID3D11DepthStencilView* gDSV, size_t clearFlags);
+	static void setRenderTargets(size_t numViews, ID3D11RenderTargetView** gRTV, ID3D11DepthStencilView* gDSV);
 	static void createTextureFromFile(ID3D11ShaderResourceView** gSRV, const wchar_t* fileName);
 	static void bindTextureToRTVAndSRV(ID3D11Texture2D** gTexure, ID3D11RenderTargetView** gRTV, ID3D11ShaderResourceView** gSRV, int width, int height, DXGI_FORMAT texFormat, DXGI_FORMAT rtvFormat, DXGI_FORMAT srvFormat);
 	static void bindTextureToDSVAndSRV(ID3D11Texture2D** gTexure, ID3D11DepthStencilView** gDSV, ID3D11ShaderResourceView** gSRV, int width, int height, DXGI_FORMAT texFormat, DXGI_FORMAT dsvFormat, DXGI_FORMAT srvFormat);
-	static void vsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV);
-	static void psSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV);
-	static void gsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV);
-	static void hsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV);
-	static void dsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV);
-	static void vsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler);
-	static void psSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler);
-	static void gsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler);
-	static void hsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler);
-	static void dsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler);
+	static void vsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV);
+	static void psSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV);
+	static void gsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV);
+	static void hsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV);
+	static void dsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV);
+	static void vsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
+	static void psSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
+	static void gsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
+	static void hsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
+	static void dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int bufferSize);
 
 	// Constant buffers
@@ -84,11 +84,11 @@ public:
 	static void createConstantBuffer(ID3D11Device * gDevice, ID3D11Buffer ** gBuffer, int bufferSize);
 
 	// Render functions
-	static void setIndexBuffer(ID3D11Buffer* gIndexBuffer, DXGI_FORMAT format, UINT offset);
-	static void setVertexBuffer(UINT start, UINT numBuffers, ID3D11Buffer** gVertexBuffer, UINT* stride, UINT* offset);
+	static void setIndexBuffer(ID3D11Buffer* gIndexBuffer, DXGI_FORMAT format, size_t offset);
+	static void setVertexBuffer(size_t start, size_t numBuffers, ID3D11Buffer** gVertexBuffer, size_t* stride, size_t* offset);
 	static void setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY topology);
-	static void draw(UINT numVertices, UINT start);
-	static void drawIndexed(UINT numIndex, UINT start, int baseVertexLoc);
+	static void draw(size_t numVertices, size_t start);
+	static void drawIndexed(size_t numIndex, size_t start, int baseVertexLoc);
 	static void swapBackBuffer();
 
 	// Get resolution

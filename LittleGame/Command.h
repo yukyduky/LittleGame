@@ -8,7 +8,7 @@ class Command
 {
 public:
 	// Executes the command
-	virtual void execute() = 0;
+	virtual void execute(size_t player) = 0;
 };
 
 #endif
