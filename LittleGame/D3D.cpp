@@ -176,7 +176,7 @@ void D3D::initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int heig
 	wc.cbWndExtra = NULL;							// Extra bytes after the windows instance
 	wc.hInstance = hInstance;						// Instance of the current program
 	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);		// Titlebar icon
-	wc.hCursor = LoadCursor(nullptr, IDC_CROSS);	// Default mouse icon
+	wc.hCursor = LoadCursor(nullptr, nullptr);	// Default mouse icon
 	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 4);	// Window background color
 	wc.lpszMenuName = nullptr;						// Name of the menu attached to the window if we had one
 	wc.lpszClassName = LPCTSTR("Project");			// Name of the windows class
@@ -708,13 +708,6 @@ LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE) {
-			if (MessageBox(0, "Are you sure you want to exit?", "Really?", MB_YESNO | MB_ICONQUESTION) == IDYES)
-				DestroyWindow(hwnd);
-		}
-		return 0;
-		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;

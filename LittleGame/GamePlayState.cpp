@@ -10,6 +10,7 @@ GamePlayState::GamePlayState()
 
 void GamePlayState::init()
 {
+	InputHandler input;
 }
 
 void GamePlayState::cleanup()
@@ -29,12 +30,9 @@ void GamePlayState::handleEvents(GameManager * re)
 	MSG msg;
 
 	while (re->pollEvent(msg)) {
-		if (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) {
-			// Exit the application when 'X' is pressed
-			if (msg.message == WM_QUIT) {
-				re->quit();
-			}
-			InputHandler::generateInputCommands(this->commandQueue, msg);
+		// Exit the application when 'X' is pressed
+		if (msg.message == WM_QUIT) {
+			re->quit();
 		}
 
 		TranslateMessage(&msg);
