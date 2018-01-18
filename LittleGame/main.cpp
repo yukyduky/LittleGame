@@ -29,7 +29,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		re.render();
 	}
 
-	// Cleanup the game
 	re.cleanup();
 
 	return 0;

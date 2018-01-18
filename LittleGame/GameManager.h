@@ -16,28 +16,59 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the game window etc.*/
+	1. Creates a/the 'GameTime'(class) object.
+	2. Provides the newly created 'gameTime'(obj) to 'Locator'(class).
+	3. Starts the game timer.
+	4. Set the first & initial 'State' via 'StateManager'(class).*/
 	void init(HINSTANCE hInstance, int nCmdShow);
-	// Cleanup the engine
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Delete the 'gameTime'(obj) object.
+	*/
 	void cleanup();
 
-	// Change to the given state
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Change the current state.
+	2. Passes the 'State'(class) object as a parameter.
+	*/
 	void changeState(State* state);
 
-	// Handles the events according to the current state
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Calls the 'handleEvents()' function found within the 'StateManager'(class).
+	*/
 	void handleEvents();
-	// Poll for new events
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Poll for new events via the 'PeekMessage()' function.
+	2. Passes the 'MSG'(class) object as a parameter.
+	*/
 	bool pollEvent(MSG &msg);
-	// Updates according to the current state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Updates the game depending on the current state.
+	2. Simply runs the 'StateManager'(class) 'update()' function.
+	*/
 	void update();
-	// Renders according to the current state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Renders the scene according to the current state.
+	2. Runs the 'StateManager'(class) 'render()' function.
+	*/
 	void render();
-	// Clears, draws, and displays the current state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Clears, draws, and displays the current state.
+	*/
 	void display(State* state);
 
-	// True/False if game is running
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns the 'isRunning'(obj) boolean, to see if the game is currently running.
+	*/
 	bool getIsRunning();
-	// Sets isRunning to false
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Sets the 'isRunning'(obj) boolean to false, closing the game.
+	*/
 	void quit();
 };
 

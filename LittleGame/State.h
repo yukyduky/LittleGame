@@ -7,21 +7,46 @@ class GameManager;
 class State
 {
 public:
-	// Initialize this state
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Initialize this state.
+	*/
 	virtual void init() = 0;
-	// Cleanup this state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Cleanup this state; freeing memory and setting settings for it back to default.
+	*/
 	virtual void cleanup() = 0;
 
-	// Pause this state
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Pause this state.
+	*/
 	virtual void pause() = 0;
-	// Resume this state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Resume this state.
+	*/
 	virtual void resume() = 0;
 
-	// Handle the events generated in this state
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Handle the events generated in this state.
+	*/
 	virtual void handleEvents(GameManager* re) = 0;
-	// Update this state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Update this state.
+	*/
 	virtual void update(GameManager* re) = 0;
-	// Render this state
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Virtual Function.
+	2. Render this state.
+	*/
 	virtual void render(GameManager* re) = 0;
 };
 
