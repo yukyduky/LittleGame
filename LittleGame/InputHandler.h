@@ -2,52 +2,40 @@
 #ifndef INPUTHANDLER_H
 #define INPUTHANDLER_H
 
+#include "IInputHandler.h"
 #include <array>
-#include <vector>
-#include "Command.h"
 #include <Windows.h>
+#include <Xinput.h>
+#include <map>
+#include <unordered_map>
 
-// Possible input types: TAP = 1 click, HOLD = key/button continuously pressed
-enum class COMMANDTYPE { TAP, HOLD };
+const int MAX_NUM_CONTROLLERS = 4;
 
-class InputHandler
+class InputHandler : public IInputHandler
 {
 private:
-	// Number of virtual keys
-	static const int MAX_KEYS = 254;
-	// Key states: Released or pressed
-	enum COMMANDSTATE { RELEASED, PRESSED };
-	// Key action: STOP = don't execute (Anymore), EXECUTE = execute command
-	enum COMMANDACTION { STOP, EXECUTE };
-
-	// One Command pointer for every key
-	static std::array<Command*, MAX_KEYS> keyCommands;
-	// One COMMANDTYPE for every key
-	static std::array<COMMANDTYPE, MAX_KEYS> keyTypes;
-	// One COMMANDSTATE for every key
-	static std::array<COMMANDSTATE, MAX_KEYS> keyStates;
-	// One COMMANDACTION for every key
-	static std::array<COMMANDACTION, MAX_KEYS> keyActions;
-
-	// Fills the command queue with new commands
-	static void fillCommandQueue(std::vector<Command*> &commandQueue);
-	// Sets the key/button to the correct state according to the event
-	static void eventTranslator(MSG &msg);
-
-	static void keyPress(MSG &msg);
-	static void keyRelease(MSG &msg);
-
-	static bool keyIsHeld(size_t key);
-	static bool keyWasPressed(size_t key);
+	std::map<size_t, Key> keyboardCommandMap;
+	std::map<size_t, Key> controllerCommandMap;
+	std::unordered_map<KEYBOARD::KEYS, size_t> keyboardKeyMap;
+	std::unordered_map<CONTROLLER::KEYS, size_t> controllerKeyMap;
+	std::array<XINPUT_STATE, MAX_NUM_CONTROLLERS> controllerStates;
+	bool thumbLSet;
+	bool thumbRSet;
+	
+	void mapKeyCodesToEnums();
+	void updateKeyboard(std::vector<Input>& commandQueue);
+	void updateControllers(std::vector<Input>& commandQueue);
 public:
 	InputHandler();
-
-	// Set all keys and buttons to RELEASED
-	static void resetCommands();
-	// Map command to key with an input type
-	static void mapCommandToInput(Command* command, COMMANDTYPE commandType, size_t key);
-	// Generate command if the event corresponds to any mapped command, results stored in the given command queue
-	static void generateInputCommands(std::vector<Command*> &commandQueue, MSG msg);
+	virtual void update(std::vector<Input>& commandQueue);
+	virtual void mapCommandToKeyboardKey(KEYBOARD::KEYS enumKey, Key key);
+	virtual void mapCommandToControllerKey(CONTROLLER::KEYS enumKey, Key key);
+	virtual void mapCommandToLeftThumbStick(Command* command);
+	virtual void mapCommandToRightThumbStick(Command* command);
+	virtual void remapKeyboardKey(size_t vkc, Key key);
+	virtual void remapControllerKey(size_t vkc, Key key);
+	virtual void resetKeyBindings();
+	virtual void vibrate(int controllerID, int left, int right);
 };
 
 #endif

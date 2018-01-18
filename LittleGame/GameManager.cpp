@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
+#include "InputHandler.h"
 #include "GamePlayState.h"
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
@@ -12,8 +13,13 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	
 	// Creation of gameTime;
 	this->gameTime = new GameTime;
-	// Provide the game time object to the service locator
+	// Provide the gametime object to the service locator
 	Locator::provide(this->gameTime);
+	// Creation of inputHandler;
+	this->inputHandler = new InputHandler;
+	// Provide the inputHandler object to the service locator
+	Locator::provide(this->inputHandler);
+
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 
@@ -24,6 +30,7 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 void GameManager::cleanup()
 {
 	delete this->gameTime;
+	delete this->inputHandler;
 }
 
 void GameManager::changeState(State* state)

@@ -1,27 +1,36 @@
 #include "GamePlayState.h"
 #include "GameManager.h"
-#include "InputHandler.h"
+#include "GamePlaySelectCommand.h"
+#include "Locator.h"
 
 GamePlayState GamePlayState::sGamePlayState;
 
-GamePlayState::GamePlayState()
+void GamePlayState::mapKeys()
 {
+	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::W, Key(this->selectCommand, COMMANDTYPE::TAP));
+	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::A, Key(this->selectCommand, COMMANDTYPE::TAP));
+	Locator::getInputHandler()->mapCommandToLeftThumbStick(this->selectCommand);
 }
 
 void GamePlayState::init()
 {
+	this->selectCommand = new GamePlaySelectCommand(*this);
+	this->mapKeys();
 }
 
 void GamePlayState::cleanup()
 {
+	delete this->selectCommand;
 }
 
 void GamePlayState::pause()
 {
+	Locator::getInputHandler()->resetKeyBindings();
 }
 
 void GamePlayState::resume()
 {
+	this->mapKeys();
 }
 
 void GamePlayState::handleEvents(GameManager * re)
@@ -29,23 +38,24 @@ void GamePlayState::handleEvents(GameManager * re)
 	MSG msg;
 
 	while (re->pollEvent(msg)) {
-		if (msg.message == WM_KEYDOWN || msg.message == WM_KEYUP) {
-			// Exit the application when 'X' is pressed
-			if (msg.message == WM_QUIT) {
-				re->quit();
-			}
-			InputHandler::generateInputCommands(this->commandQueue, msg);
+		// Exit the application when 'X' is pressed
+		if (msg.message == WM_QUIT) {
+			re->quit();
 		}
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
+	// Update input devices
+	Locator::getInputHandler()->update(this->commandQueue);
 }
 
 void GamePlayState::update(GameManager * re)
 {
-	for (auto &c : this->commandQueue) {
-		c->execute();
+	// Execute any generated commands
+	for (auto &i : this->commandQueue) {
+		i.command->execute(i.player);
 	}
 	this->commandQueue.clear();
 }
@@ -53,6 +63,11 @@ void GamePlayState::update(GameManager * re)
 void GamePlayState::render(GameManager * re)
 {
 	re->display(this);
+}
+
+void GamePlayState::commandSelect(size_t player)
+{
+	int test = player;
 }
 
 GamePlayState* GamePlayState::getInstance()

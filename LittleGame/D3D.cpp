@@ -1,5 +1,5 @@
 #include "D3D.h"
-LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK wndProc(HWND hwnd, size_t msg, WPARAM wParam, LPARAM lParam);
 
 IDXGISwapChain* D3D::gSwapChain = nullptr;
 ID3D11Device* D3D::gDevice = nullptr;
@@ -176,7 +176,7 @@ void D3D::initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int heig
 	wc.cbWndExtra = NULL;							// Extra bytes after the windows instance
 	wc.hInstance = hInstance;						// Instance of the current program
 	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);		// Titlebar icon
-	wc.hCursor = LoadCursor(nullptr, IDC_CROSS);	// Default mouse icon
+	wc.hCursor = LoadCursor(nullptr, nullptr);	// Default mouse icon
 	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 4);	// Window background color
 	wc.lpszMenuName = nullptr;						// Name of the menu attached to the window if we had one
 	wc.lpszClassName = LPCTSTR("Project");			// Name of the windows class
@@ -407,12 +407,12 @@ void D3D::clearRendertarget(ID3D11RenderTargetView* gRTV)
 	gDevCon->ClearRenderTargetView(gRTV, DirectX::SimpleMath::Color(255.0f, 0.0f, 255.0f, 1.0f));
 }
 
-void D3D::clearDepthStencilView(ID3D11DepthStencilView* gDSV, UINT clearFlags)
+void D3D::clearDepthStencilView(ID3D11DepthStencilView* gDSV, size_t clearFlags)
 {
 	gDevCon->ClearDepthStencilView(gDSV, clearFlags, 1.0f, 0);
 }
 
-void D3D::setRenderTargets(UINT numViews, ID3D11RenderTargetView** gRTV, ID3D11DepthStencilView* gDSV)
+void D3D::setRenderTargets(size_t numViews, ID3D11RenderTargetView** gRTV, ID3D11DepthStencilView* gDSV)
 {
 	gDevCon->OMSetRenderTargets(numViews, gRTV, gDSV);
 }
@@ -540,52 +540,52 @@ void D3D::bindTextureToDSVAndSRV(ID3D11Texture2D** gTexure, ID3D11DepthStencilVi
 	}
 }
 
-void D3D::vsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::vsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
 {
 	gDevCon->VSSetShaderResources(start, numViews, &gSRV);
 }
 
-void D3D::psSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::psSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
 {
 	gDevCon->PSSetShaderResources(start, numViews, &gSRV);
 }
 
-void D3D::gsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::gsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
 {
 	gDevCon->GSSetShaderResources(start, numViews, &gSRV);
 }
 
-void D3D::hsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::hsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
 {
 	gDevCon->HSSetShaderResources(start, numViews, &gSRV);
 }
 
-void D3D::dsSetShaderResource(UINT start, UINT numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::dsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
 {
 	gDevCon->DSSetShaderResources(start, numViews, &gSRV);
 }
 
-void D3D::vsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler)
+void D3D::vsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
 {
 	gDevCon->VSSetSamplers(start, numSamplers, &gSampler);
 }
 
-void D3D::psSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler)
+void D3D::psSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
 {
 	gDevCon->PSSetSamplers(start, numSamplers, &gSampler);
 }
 
-void D3D::gsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler)
+void D3D::gsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
 {
 	gDevCon->GSSetSamplers(start, numSamplers, &gSampler);
 }
 
-void D3D::hsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler)
+void D3D::hsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
 {
 	gDevCon->HSSetSamplers(start, numSamplers, &gSampler);
 }
 
-void D3D::dsSetSampler(UINT start, UINT numSamplers, ID3D11SamplerState* gSampler)
+void D3D::dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
 {
 	gDevCon->DSSetSamplers(start, numSamplers, &gSampler);
 }
@@ -655,12 +655,12 @@ void D3D::createConstantBuffer(ID3D11Device* gDevice, ID3D11Buffer** gBuffer, in
 }
 
 
-void D3D::setIndexBuffer(ID3D11Buffer * gIndexBuffer, DXGI_FORMAT format, UINT offset)
+void D3D::setIndexBuffer(ID3D11Buffer * gIndexBuffer, DXGI_FORMAT format, size_t offset)
 {
 	gDevCon->IASetIndexBuffer(gIndexBuffer, format, offset);
 }
 
-void D3D::setVertexBuffer(UINT start, UINT numBuffers, ID3D11Buffer** gVertexBuffer, UINT* stride, UINT* offset)
+void D3D::setVertexBuffer(size_t start, size_t numBuffers, ID3D11Buffer** gVertexBuffer, size_t* stride, size_t* offset)
 {
 	gDevCon->IASetVertexBuffers(start, numBuffers, gVertexBuffer, stride, offset);
 }
@@ -670,12 +670,12 @@ void D3D::setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY topology)
 	gDevCon->IASetPrimitiveTopology(topology);
 }
 
-void D3D::draw(UINT numVertices, UINT start)
+void D3D::draw(size_t numVertices, size_t start)
 {
 	gDevCon->Draw(numVertices, start);
 }
 
-void D3D::drawIndexed(UINT numIndex, UINT start, int baseVertexLoc)
+void D3D::drawIndexed(size_t numIndex, size_t start, int baseVertexLoc)
 {
 	gDevCon->DrawIndexed(numIndex, start, baseVertexLoc);
 }
@@ -704,17 +704,10 @@ void D3D::Release()
 	gDevCon->Release();
 }
 
-LRESULT CALLBACK wndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK wndProc(HWND hwnd, size_t msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-	case WM_KEYDOWN:
-		if (wParam == VK_ESCAPE) {
-			if (MessageBox(0, "Are you sure you want to exit?", "Really?", MB_YESNO | MB_ICONQUESTION) == IDYES)
-				DestroyWindow(hwnd);
-		}
-		return 0;
-		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
