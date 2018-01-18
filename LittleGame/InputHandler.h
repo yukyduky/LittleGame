@@ -17,7 +17,7 @@ namespace KEYBOARD {
 }
 namespace CONTROLLER {
 	//enum KEYS { A, B, X, Y, RSHOULDER, LSHOULDER, LTRIG, RTRIG, DPADUP, DPADDOWN, DPADLEFT, DPADRIGHT, START, BACK, LCLICK, RCLICK, LTHUP, LTHDOWN, LTHRIGHT, LTHLEFT, LTHUPLEFT, LTHUPRIGHT, LTHDOWNRIGHT, LTHDOWNLEFT, RTHUP, RTHDOWN, RTHRIGHT, RTHLEFT, RTHUPLEFT, RTHUPRIGHT, RTHDOWNRIGHT, RTHDOWNLEFT, SIZE };
-	enum KEYS { DPADUP, DPADDOWN, DPADLEFT, DPADRIGHT, START, BACK, LTHCLICK, RTHCLICK, LSHOULDER, RSHOULDER, A, B, X, Y };
+	enum KEYS { DPADUP, DPADDOWN, DPADLEFT, DPADRIGHT, START, BACK, LTHCLICK, RTHCLICK, LSHOULDER, RSHOULDER, A, B, X, Y, SIZE };
 }
 
 struct Key {
@@ -32,9 +32,11 @@ struct Key {
 class InputHandler
 {
 private:
-	std::map<UINT, Key> commandMap;
-	std::unordered_map<KEYBOARD::KEYS, UINT> keyboardMap;
-	std::unordered_map<CONTROLLER::KEYS, UINT> controllerMap;
+	std::map<UINT, Key> keyboardCommandMap;
+	std::map<UINT, Key> controllerCommandMap;
+	std::unordered_map<KEYBOARD::KEYS, UINT> keyboardKeyMap;
+	std::unordered_map<CONTROLLER::KEYS, UINT> controllerKeyMap;
+	std::array<XINPUT_STATE, 4> controllerStates;
 	
 	void mapEnumToVKC();
 	void updateKeyboard(std::vector<Command*> commandQueue);
@@ -42,8 +44,10 @@ private:
 public:
 	InputHandler();
 	void update(std::vector<Command*> commandQueue);
-	void mapEnumToKey(KEYBOARD::KEYS enumKey, Key key);
-	void remapVKCToKey(UINT vkc, Key key);
+	void mapCommandToKeyboardKey(KEYBOARD::KEYS enumKey, Key key);
+	void mapCommandToControllerKey(CONTROLLER::KEYS enumKey, Key key);
+	void remapKeyboardKey(UINT vkc, Key key);
+	void remapControllerKey(UINT vkc, Key key);
 };
 
 #endif

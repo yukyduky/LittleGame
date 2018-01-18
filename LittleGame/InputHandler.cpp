@@ -6,11 +6,11 @@ void InputHandler::mapEnumToVKC()
 	// Keyboard
 	int i = 0;
 	for (i = 0; i < 10; i++) {
-		this->keyboardMap.insert(this->keyboardMap.end(), std::pair<KEYBOARD::KEYS, UINT>(static_cast<KEYBOARD::KEYS>(i), 30 + i));
+		this->keyboardKeyMap.insert(this->keyboardKeyMap.end(), std::pair<KEYBOARD::KEYS, UINT>(static_cast<KEYBOARD::KEYS>(i), 30 + i));
 	}
 
 	for (; i < 26 + 10; i++) {
-		this->keyboardMap.insert(this->keyboardMap.end(), std::pair<KEYBOARD::KEYS, UINT>(static_cast<KEYBOARD::KEYS>(i), 31 + i));
+		this->keyboardKeyMap.insert(this->keyboardKeyMap.end(), std::pair<KEYBOARD::KEYS, UINT>(static_cast<KEYBOARD::KEYS>(i), 31 + i));
 	}
 	/*UINT test0 = VK_PAD_A;
 	UINT test1 = VK_PAD_B;
@@ -64,8 +64,8 @@ void InputHandler::mapEnumToVKC()
 
 	// Controller
 	int k = 1;
-	for (i = 0; i < 14; i++) {
-		this->controllerMap.insert(this->controllerMap.end(), std::pair<CONTROLLER::KEYS, UINT>(static_cast<CONTROLLER::KEYS>(i), k));
+	for (i = 0; i < CONTROLLER::SIZE; i++) {
+		this->controllerKeyMap.insert(this->controllerKeyMap.end(), std::pair<CONTROLLER::KEYS, UINT>(static_cast<CONTROLLER::KEYS>(i), k));
 		k *= 2;
 	}
 
@@ -88,7 +88,7 @@ void InputHandler::mapEnumToVKC()
 
 void InputHandler::updateKeyboard(std::vector<Command*> commandQueue)
 {
-	for (auto &it : this->commandMap) {
+	for (auto &it : this->keyboardCommandMap) {
 		if (GetAsyncKeyState(it.first) && it.second.type == COMMANDTYPE::TAP) {
 			commandQueue.push_back(it.second.command);
 		}
@@ -101,19 +101,22 @@ void InputHandler::updateKeyboard(std::vector<Command*> commandQueue)
 void InputHandler::updateControllers(std::vector<Command*> commandQueue)
 {
 	XINPUT_STATE nextState;
-	/*for (int i = 0; i < 4; i++) {
-		XINPUT_STATE nextState;
+	for (int i = 0; i < 4; i++) {
 		ZeroMemory(&nextState, sizeof(XINPUT_STATE));
 
 		DWORD result = XInputGetState(i, &nextState);
 
 		if (result == ERROR_SUCCESS) {
-			
+			for (auto &it : this->controllerCommandMap) {
+				if (nextState.Gamepad.wButtons & it.first && this->controllerStates[i].Gamepad.wButtons & it.first && it.second.type == COMMANDTYPE::HOLD) {
+					commandQueue.push_back(it.second.command);
+				}
+				else if (nextState.Gamepad.wButtons & it.first && this->controllerStates[i].Gamepad.wButtons ^ it.first && it.second.type == COMMANDTYPE::TAP) {
+
+				}
+			}
 		}
-	}*/
-
-	DWORD result = XInputGetState(0, &nextState);
-
+	}
 }
 
 InputHandler::InputHandler()
@@ -127,12 +130,22 @@ void InputHandler::update(std::vector<Command*> commandQueue)
 	updateControllers(commandQueue);
 }
 
-void InputHandler::mapEnumToKey(KEYBOARD::KEYS enumKey, Key key)
+void InputHandler::mapCommandToKeyboardKey(KEYBOARD::KEYS enumKey, Key key)
 {
-	this->commandMap.insert(this->commandMap.end(), std::pair<UINT, Key>(this->keyboardMap[enumKey], key));
+	this->keyboardCommandMap.insert(this->keyboardCommandMap.end(), std::pair<UINT, Key>(this->keyboardKeyMap[enumKey], key));
 }
 
-void InputHandler::remapVKCToKey(UINT vkc, Key key)
+void InputHandler::mapCommandToControllerKey(CONTROLLER::KEYS enumKey, Key key)
 {
-	this->commandMap[vkc] = key;
+	this->controllerCommandMap.insert(this->controllerCommandMap.end(), std::pair<UINT, Key>(this->controllerKeyMap[enumKey], key));
+}
+
+void InputHandler::remapKeyboardKey(UINT vkc, Key key)
+{
+	this->keyboardCommandMap[vkc] = key;
+}
+
+void InputHandler::remapControllerKey(UINT vkc, Key key)
+{
+	this->controllerCommandMap[vkc] = key;
 }
