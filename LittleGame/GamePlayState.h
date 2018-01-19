@@ -17,6 +17,11 @@ private:
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
 
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
+	2. Calls the 'getInputHandler()' in-order to call the 'mapCommandToControllerKey()' function.
+	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
+	*/
 	void mapKeys();
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

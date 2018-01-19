@@ -16,13 +16,24 @@ private:
 public:
 	GameTime();
 
-	// Starts the timer
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Starts the Game Timer.
+	*/
 	void StartTimer();
-	// Returns the time that the application has been running for
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns the total amount of time elapsed since the game was started.
+	*/
 	double GetTime();
-	// Updates the delta time since the last frame
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Updates the 'deltaTime'(obj) since the last frame.
+	*/
 	void UpdateFrameTime();
-	// Get delta time
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns the 'deltaTime'(obj).
+	*/
 	const double getDeltaTime();
 };
 
