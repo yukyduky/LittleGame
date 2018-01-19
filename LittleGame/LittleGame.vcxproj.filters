@@ -43,6 +43,33 @@
     <Filter Include="Source Files\Components\Object">
       <UniqueIdentifier>{094d125b-795d-448c-b8c3-b5dc959faf74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components\Graphics">
+      <UniqueIdentifier>{15f36d79-36f3-437f-8958-4cf2c4684a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Ability">
+      <UniqueIdentifier>{7387f45c-00db-45bc-b1fd-ad17b99612d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Physics">
+      <UniqueIdentifier>{3c69d92f-86f5-427c-b4c4-f43ae4d1072f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\UI">
+      <UniqueIdentifier>{caa28303-65b3-4b09-b92a-a14267fb721e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Pathing">
+      <UniqueIdentifier>{908ef0f6-d6f3-470f-bbc4-ada29e22ccf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Graphics">
+      <UniqueIdentifier>{234efab2-15b5-4fa8-82ee-34929070f53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Physics">
+      <UniqueIdentifier>{cdf9c6bd-d62f-44ec-ad69-2c13e43f117d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Ability">
+      <UniqueIdentifier>{c85281ad-d507-4c00-bfb5-0079f66de6b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\UI">
+      <UniqueIdentifier>{fef96ffd-a712-4053-93ff-11be5a46719d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -87,6 +114,12 @@
     <ClInclude Include="IInputHandler.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -115,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="D3D.cpp">
       <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

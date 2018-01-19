@@ -136,6 +136,7 @@
     <ClInclude Include="GamePlaySelectCommand.h" />
     <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="IInputHandler.h" />
     <ClInclude Include="InputHandler.h" />
@@ -143,6 +144,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D.cpp" />
@@ -154,6 +156,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

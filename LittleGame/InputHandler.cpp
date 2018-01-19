@@ -70,7 +70,6 @@ void InputHandler::updateControllers(std::vector<Input>& commandQueue)
 					commandQueue.push_back(Input(it.second.command, i + 1));
 				}
 			}
-			//this->controllerCommandMap[CONTROLLER::LTHUMB].
 
 			float LX = this->controllerStates[i].Gamepad.sThumbLX;
 			float LY = this->controllerStates[i].Gamepad.sThumbLY;
@@ -97,14 +96,14 @@ void InputHandler::updateControllers(std::vector<Input>& commandQueue)
 			else {
 				magL = 0.0f;
 			}
-			if (magR > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+			if (magR > XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) {
 				if (magR > 32767) {
 					magR = 32767;
 				}
 
-				magR -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+				magR -= XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 
-				magR /= 32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+				magR /= 32767 - XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
 			}
 			else {
 				magR = 0.0f;
@@ -181,7 +180,7 @@ void InputHandler::resetKeyBindings()
 	this->thumbRSet = false;
 }
 
-void InputHandler::vibrate(int controllerID, int left, int right)
+void InputHandler::vibrate(size_t controllerID, int left, int right)
 {
 	// Create a Vibraton State
 	XINPUT_VIBRATION vib;
