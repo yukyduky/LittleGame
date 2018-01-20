@@ -40,17 +40,17 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Call the 'handleEvents()' function found in the State at the back of the stack.
 	*/
-	static void handleEvents(GameManager* re);
+	static void handleEvents(GameManager* gm);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Call the 'update()' function found in the State at the back of the stack.
 	*/
-	static void update(GameManager* re);
+	static void update(GameManager* gm);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Call the 'render()' function found in the State at the back of the stack.
 	*/
-	static void render(GameManager* re);
+	static void render(GameManager* gm);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Call the 'cleanup()' function in all states currently in the stack.

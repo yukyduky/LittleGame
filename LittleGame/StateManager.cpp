@@ -47,19 +47,19 @@ void StateManager::pushState(State* state)
 	sStates.back()->init();
 }
 
-void StateManager::handleEvents(GameManager* re)
+void StateManager::handleEvents(GameManager* gm)
 {
-	sStates.back()->handleEvents(re);
+	sStates.back()->handleEvents(gm);
 }
 
-void StateManager::update(GameManager* re)
+void StateManager::update(GameManager* gm)
 {
-	sStates.back()->update(re);
+	sStates.back()->update(gm);
 }
 
-void StateManager::render(GameManager* re)
+void StateManager::render(GameManager* gm)
 {
-	sStates.back()->render(re);
+	sStates.back()->render(gm);
 }
 
 void StateManager::cleanup()

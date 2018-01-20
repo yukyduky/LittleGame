@@ -47,17 +47,17 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Handle the events generated in the GamePlayState.
 	*/
-	virtual void handleEvents(GameManager* re);
+	virtual void handleEvents(GameManager* gm);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Update the GamePlayState.
 	*/
-	virtual void update(GameManager* re);
+	virtual void update(GameManager* gm);
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Render the 'GamePlayState'
 	*/
-	virtual void render(GameManager* re);
+	virtual void render(GameManager* gm);
 
 	void commandSelect(size_t player);
 
