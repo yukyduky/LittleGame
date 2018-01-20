@@ -76,4 +76,6 @@ bool GameManager::getIsRunning()
 void GameManager::quit()
 {
 	this->isRunning = false;
+	StateManager::cleanup();
+	D3D::Release();
 }

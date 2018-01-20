@@ -702,6 +702,9 @@ void D3D::Release()
 	gSwapChain->Release();
 	gDevice->Release();
 	gDevCon->Release();
+	gRTV->Release();
+	gDSV->Release();
+	gDSB->Release();
 }
 
 LRESULT CALLBACK wndProc(HWND hwnd, size_t msg, WPARAM wParam, LPARAM lParam)

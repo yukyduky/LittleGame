@@ -61,3 +61,10 @@ void StateManager::render(GameManager* re)
 {
 	sStates.back()->render(re);
 }
+
+void StateManager::cleanup()
+{
+	for (auto &i : sStates) {
+		i->cleanup();
+	}
+}

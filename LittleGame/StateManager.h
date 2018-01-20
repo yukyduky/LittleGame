@@ -51,6 +51,11 @@ public:
 	1. Call the 'render()' function found in the State at the back of the stack.
 	*/
 	static void render(GameManager* re);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Call the 'cleanup()' function in all states currently in the stack.
+	*/
+	static void cleanup();
 };
 
 #endif
