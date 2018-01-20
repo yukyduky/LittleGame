@@ -14,7 +14,7 @@ void GamePlayState::mapKeys()
 
 void GamePlayState::init()
 {
-	this->selectCommand = new GamePlaySelectCommand(*this);
+	this->selectCommand = new GamePlaySelectCommand();
 	this->mapKeys();
 }
 

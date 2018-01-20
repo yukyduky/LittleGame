@@ -7,11 +7,8 @@
 
 class GamePlaySelectCommand : public Command
 {
-private:
-	GamePlayState * gamePlayState;
 public:
-	GamePlaySelectCommand(GamePlayState& gamePlayState) { this->gamePlayState = &gamePlayState; }
-	virtual void execute(size_t player) { this->gamePlayState->commandSelect(player); }
+	virtual void execute(size_t player) { GamePlayState::getInstance()->commandSelect(player); }
 };
 
 #endif
