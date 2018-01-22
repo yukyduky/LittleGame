@@ -11,9 +11,10 @@ class BlockComponent : GraphicsComponent
 private:
 	const size_t ID;
 	OBJECTTYPE::TYPE type;
-	static std::vector<PrimitiveVertex> vertices;
+	static std::vector<Vertex> vertices;
+	static std::vector<Vertex> normals;
 	static std::vector<DWORD> indices;
-	PrimitiveColor color;
+	vColor color;
 	void createVertices(const float r, const float g, const float b, const float a);
 	
 public:
@@ -22,9 +23,10 @@ public:
 	virtual void recieve(GameObject& obj, Message msg);
 	
 	virtual const size_t getID();
-	static std::vector<PrimitiveVertex>& GETvertices();
+	static std::vector<Vertex>& GETvertices();
+	static std::vector<Vertex>& GETnormals();
 	static std::vector<DWORD>& GETindices();
-	PrimitiveColor& GETcolor();
+	vColor& GETcolor();
 	OBJECTTYPE::TYPE GETtype();
 };
 

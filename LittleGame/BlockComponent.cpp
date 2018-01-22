@@ -36,14 +36,68 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 	p7 = (1.0, -1.0, 1.0)
 	*/
 	//Push the vertices into the vector (p0-p7)
-	this->vertices.push_back(PrimitiveVertex(-1.0, 1.0, -1.0));
-	this->vertices.push_back(PrimitiveVertex(1.0, 1.0, -1.0));
-	this->vertices.push_back(PrimitiveVertex(-1.0, -1.0, -1.0));
-	this->vertices.push_back(PrimitiveVertex(1.0, -1.0, -1.0));
-	this->vertices.push_back(PrimitiveVertex(-1.0, 1.0, 1.0));
-	this->vertices.push_back(PrimitiveVertex(-1.0, -1.0, 1.0));
-	this->vertices.push_back(PrimitiveVertex(1.0, 1.0, 1.0));
-	this->vertices.push_back(PrimitiveVertex(1.0, -1.0, 1.0));
+	//Front p0, p1, p2, p3
+	this->vertices.push_back(Vertex(-1.0, 1.0, -1.0));
+	this->vertices.push_back(Vertex(1.0, 1.0, -1.0));
+	this->vertices.push_back(Vertex(-1.0, -1.0, -1.0));
+	this->vertices.push_back(Vertex(1.0, -1.0, -1.0));
+	//Left p4, p0, p5, p2
+	this->vertices.push_back(Vertex(-1.0, 1.0, 1.0));
+	this->vertices.push_back(Vertex(-1.0, 1.0, -1.0));
+	this->vertices.push_back(Vertex(-1.0, -1.0, 1.0));
+	this->vertices.push_back(Vertex(-1.0, -1.0, -1.0));
+	//Right p1, p6, p3, p7
+	this->vertices.push_back(Vertex(1.0, 1.0, -1.0));
+	this->vertices.push_back(Vertex(1.0, 1.0, 1.0));
+	this->vertices.push_back(Vertex(1.0, -1.0, -1.0));
+	this->vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	//Back p6, p4, p7, p5
+	this->vertices.push_back(Vertex(-1.0, 1.0, 1.0));
+	this->vertices.push_back(Vertex(-1.0, -1.0, 1.0));
+	this->vertices.push_back(Vertex(1.0, 1.0, 1.0));
+	this->vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	//Top p4, p6, p0, p1
+	this->vertices.push_back(Vertex(-1.0, 1.0, 1.0));
+	this->vertices.push_back(Vertex(1.0, 1.0, 1.0));
+	this->vertices.push_back(Vertex(-1.0, 1.0, -1.0));
+	this->vertices.push_back(Vertex(1.0, 1.0, -1.0));
+	//Bottom p2, p3, p5, p7
+	this->vertices.push_back(Vertex(-1.0, -1.0, -1.0));
+	this->vertices.push_back(Vertex(1.0, -1.0, -1.0));
+	this->vertices.push_back(Vertex(-1.0, -1.0, 1.0));
+	this->vertices.push_back(Vertex(1.0, -1.0, 1.0));
+
+	//Push the normals into the vector
+	//Front
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	//Left
+	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
+	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
+	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
+	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
+	//Right
+	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
+	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
+	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
+	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
+	//Back
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	//Top
+	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
+	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
+	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
+	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
+	//Bottom
+	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
+	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
+	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
+	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
 
 	//Create indices for the box
 	DWORD index[] =
@@ -52,20 +106,20 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 		0, 1, 2,
 		2, 1, 3,
 		//Left p4, p0, p5, p2
-		4, 0, 5,
-		5, 0, 2,
+		4, 5, 6,
+		6, 5, 7,
 		//Right p1, p6, p3, p7
-		1, 6, 3,
-		3, 6, 7,
+		8, 9, 10,
+		10, 9, 11,
 		//Back p6, p4, p7, p5
-		6, 4, 7,
-		7, 4, 5,
+		12, 13, 14,
+		14, 13, 15,
 		//Top p4, p6, p0, p1
-		4, 6, 0,
-		0, 6, 1,
+		16, 17, 18,
+		18, 17, 19,
 		//Bottom p2, p3, p5, p7
-		2, 3, 5,
-		5, 3, 7
+		20, 21, 22,
+		22, 21, 23
 	};
 	//Push indices into the vector
 	for (int i = 0; i < 36; i++) {
@@ -111,9 +165,14 @@ const size_t BlockComponent::getID()
 	return this->ID;
 }
 
-std::vector<PrimitiveVertex>& BlockComponent::GETvertices()
+std::vector<Vertex>& BlockComponent::GETvertices()
 {
 	return vertices;
+}
+
+std::vector<Vertex>& BlockComponent::GETnormals()
+{
+	return normals;
 }
 
 std::vector<DWORD>& BlockComponent::GETindices()
@@ -121,7 +180,7 @@ std::vector<DWORD>& BlockComponent::GETindices()
 	return indices;
 }
 
-PrimitiveColor& BlockComponent::GETcolor()
+vColor& BlockComponent::GETcolor()
 {
 	return this->color;
 }

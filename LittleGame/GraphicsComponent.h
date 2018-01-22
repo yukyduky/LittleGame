@@ -8,20 +8,20 @@ namespace OBJECTTYPE {
 	enum TYPE { BLOCK, SIZE };
 }
 
-struct PrimitiveColor
+struct vColor
 {
 	float r, g, b, a;
 
-	PrimitiveColor(float r, float g, float b, float a)
+	vColor(float r, float g, float b, float a)
 		: r(r), g(g), b(b), a(a){}
-	PrimitiveColor(){}
+	vColor(){}
 };
 
-struct PrimitiveVertex
+struct Vertex
 {
 	float x, y, z;
 	
-	PrimitiveVertex(float x, float y, float z)
+	Vertex(float x, float y, float z)
 		: x(x), y(y), z(z){}
 };
 
