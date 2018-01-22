@@ -10,28 +10,40 @@
   |      CAMERA-NECESSARY TOOLS         |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-class ConstantBuffer {
+struct MatrixBufferCalc {
+	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX view;
+	DirectX::XMMATRIX projection;
+};
+
+struct MatrixBufferPack {
+	DirectX::XMFLOAT4X4 world;
+	DirectX::XMFLOAT4X4 view;
+	DirectX::XMFLOAT4X4 projection;
+
+	DirectX::XMFLOAT4 Kd;
+	DirectX::XMFLOAT4 ColorID;
+};
+
+class ConstantBufferHandler {
 private:
-	struct MatrixBufferCalc {
-		DirectX::XMMATRIX world;
-		DirectX::XMMATRIX view;
-		DirectX::XMMATRIX projection;
-	};
-
-	struct MatrixBufferPack {
-		DirectX::XMFLOAT4X4 world;
-		DirectX::XMFLOAT4X4 view;
-		DirectX::XMFLOAT4X4 projection;
-
-		DirectX::XMFLOAT4 Kd;
-		DirectX::XMFLOAT4 ColorID;
-	};
-
-
 
 public:
-	ConstantBuffer();
-	~ConstantBuffer();
+	ConstantBufferHandler();
+	~ConstantBufferHandler();
+
+	void releaseAll();
+
+	MatrixBufferPack	*GETpackagedMatrixData();
+	ID3D11Buffer*		*GETconstantBuffer();
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Initializes... (SEE COMMENT AND CONTINUE FROM HERE)
+	*/
+	void Initialize(
+		ID3D11Device*			*Device,
+		ID3D11DeviceContext*	*DeviceContext
+	);
 
 };
 
@@ -79,7 +91,7 @@ public:
 	void updateCamera(
 		TCHAR				characterMessage,
 		POINT				mouseCoordinates,
-		MatrixBufferStored	*formattedStructData,
+		MatrixBufferPack	*formattedStructData,
 		ID3D11Buffer*		*GSconstantBuffer,
 		ID3D11DeviceContext *deviceContext,
 		bool				HoverCamActivationStatus

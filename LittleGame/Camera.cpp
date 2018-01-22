@@ -63,11 +63,11 @@
 //
 
 
-ConstantBuffer::ConstantBuffer() {
+ConstantBufferHandler::ConstantBufferHandler() {
 
 }
 
-ConstantBuffer::~ConstantBuffer() {
+ConstantBufferHandler::~ConstantBufferHandler() {
 
 }
 
@@ -130,7 +130,7 @@ Camera::~Camera() {
 void Camera::updateCamera(
 	TCHAR				characterMessage,
 	POINT				mouseCoordinates,
-	MatrixBufferStored	*formattedStructData,
+	MatrixBufferPack	*formattedStructData,
 	ID3D11Buffer*		*GSconstantBuffer,
 	ID3D11DeviceContext *deviceContext,
 	bool				HoverCamActivationStatus) {
