@@ -7,6 +7,7 @@
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>
 #include "SimpleMath.h"
+#include "Deferred.h"
 
 class D3D
 {
@@ -38,6 +39,9 @@ private:
 	static int wWidth;
 	static int wHeight;
 
+	// DeferredRendering
+	static Deferred* pDeferred;
+
 public:
 	// Initialization functions
 	static void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed);
@@ -45,6 +49,7 @@ public:
 	static D3D11_VIEWPORT createViewPort(int width, int height);
 	static void setViewPort(D3D11_VIEWPORT* vp);
 	static void createDepthStencilView(int width, int height, ID3D11DepthStencilView** gDSV, ID3D11Texture2D** gDSB);
+	static void initializeDeferred();
 
 	// Shader setup functions
 	static void createFixedShaders(ID3D11InputLayout** gInputLayout, ID3D11VertexShader** gVertexShader, ID3D11PixelShader** gPixelShader, const wchar_t* fileNameVertex, const wchar_t* fileNamePixel, const D3D11_INPUT_ELEMENT_DESC* inputDesc, int inputDescSize);

@@ -43,6 +43,18 @@
     <Filter Include="Source Files\Components\Object">
       <UniqueIdentifier>{094d125b-795d-448c-b8c3-b5dc959faf74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\General\Deferred">
+      <UniqueIdentifier>{63149bed-aa69-4b02-9b28-6154280c6448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\General\Deferred">
+      <UniqueIdentifier>{e4b00e04-3181-4572-8d21-c13542a4c3f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\General\Deferred\DeferredHLSL">
+      <UniqueIdentifier>{2a0d178b-dad4-4c44-a32a-baa4e9215bd7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\General\Deferred\LightHLSL">
+      <UniqueIdentifier>{be0844f8-965f-456f-bf24-978af73f1235}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -87,6 +99,12 @@
     <ClInclude Include="IInputHandler.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="Deferred.h">
+      <Filter>Header Files\General\Deferred</Filter>
+    </ClInclude>
+    <ClInclude Include="DeferredShader.h">
+      <Filter>Header Files\General\Deferred</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -116,10 +134,45 @@
     <ClCompile Include="D3D.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+    <ClCompile Include="Deferred.cpp">
+      <Filter>Source Files\General\Deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredTexture2Ds.h">
+      <Filter>Header Files\General\Deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredTexture2Ds.cpp">
+      <Filter>Source Files\General\Deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="LightShader.h">
+      <Filter>Header Files\General\Deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="LightShader.cpp">
+      <Filter>Source Files\General\Deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="DeferredShader.cpp">
+      <Filter>Source Files\General\Deferred</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="DefVertex.hlsl">
+      <Filter>Source Files\General\Deferred\DeferredHLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="DefGeometry.hlsl">
+      <Filter>Source Files\General\Deferred\DeferredHLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="DefPixel.hlsl">
+      <Filter>Source Files\General\Deferred\DeferredHLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="LightPixel.hlsl">
+      <Filter>Source Files\General\Deferred\LightHLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="LightVertex.hlsl">
+      <Filter>Source Files\General\Deferred\LightHLSL</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

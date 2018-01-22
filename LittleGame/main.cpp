@@ -16,6 +16,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// Initialize DirectX
 	D3D::initializeDirectX();
 
+	// -------- TEST
+	D3D::initializeDeferred();
+	// -------- TEST
+
 	// Initialize the game
 	re.init(hInstance, nCmdShow);
 

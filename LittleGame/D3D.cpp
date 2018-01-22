@@ -7,6 +7,7 @@ ID3D11DeviceContext* D3D::gDevCon = nullptr;
 ID3D11RenderTargetView* D3D::gRTV = nullptr;
 ID3D11DepthStencilView* D3D::gDSV = nullptr;
 ID3D11Texture2D* D3D::gDSB = nullptr;
+Deferred* D3D::pDeferred = nullptr;
 
 HWND D3D::hwnd = nullptr;
 int D3D::wWidth = 800;
@@ -271,6 +272,10 @@ void D3D::createDepthStencilView(int width, int height, ID3D11DepthStencilView**
 		MessageBox(0, "Create Depth Stencil - Failed", "Error", MB_OK);
 		_exit(0);
 	}
+}
+
+void D3D::initializeDeferred() {
+	pDeferred->initialize(&gDevice, &gDevCon, &gRTV, wWidth, wHeight);
 }
 
 
