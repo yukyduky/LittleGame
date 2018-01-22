@@ -29,6 +29,7 @@ public:
 	BlockComponent(const float x, const float y, const float z,
 						const float r, const float g, const float b, const float a);
 	~BlockComponent();
+	virtual void recieve(GameObject& obj, Message msg);
 
 	ID3D11Buffer* GETvertexBuffer();
 	ID3D11Buffer* GETindexBuffer();

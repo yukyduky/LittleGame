@@ -1,4 +1,5 @@
 #include "BlockComponent.h"
+#include "GameObject.h"
 
 BlockComponent::BlockComponent(const float x, const float y, const float z,
 										const float r, const float g, const float b, const float a)
@@ -11,6 +12,11 @@ BlockComponent::~BlockComponent()
 {
 	this->vertexBuffer->Release();
 	this->indexBuffer->Release();
+}
+
+void BlockComponent::recieve(GameObject& obj, Message msg)
+{
+
 }
 
 Vertex* BlockComponent::createBuffers(const float x, const float y, const float z,

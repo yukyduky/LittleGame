@@ -15,7 +15,7 @@ private:
 	
 public:
 	const size_t getID();
-	void recieve(GameObject& obj, Message msg);
+	virtual void recieve(GameObject& obj, Message msg) = 0;
 };
 
 #endif
