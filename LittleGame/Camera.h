@@ -5,6 +5,46 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |										|
+  |		 CAMERA-NECESSARY TOOLS			|
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+class ConstantBuffer {
+private:
+	struct MatrixBufferCalc {
+		DirectX::XMMATRIX world;
+		DirectX::XMMATRIX view;
+		DirectX::XMMATRIX projection;
+	};
+
+	struct MatrixBufferPack {
+		DirectX::XMFLOAT4X4 world;
+		DirectX::XMFLOAT4X4 view;
+		DirectX::XMFLOAT4X4 projection;
+
+		DirectX::XMFLOAT4 Kd;
+		DirectX::XMFLOAT4 ColorID;
+	};
+
+
+
+public:
+	ConstantBuffer();
+	~ConstantBuffer();
+
+};
+
+//______________________________________________//
+//											    //
+//        END OF CAMERA-NECESSARY TOOLS         //
+//______________________________________________//
+//////////////////////////////////////////////////
+
+
+
+
+
 class Camera {
 private:
 	//float cameraMovementSpeed = 2.0;
@@ -30,6 +70,17 @@ private:
 public:
 	Camera();
 	~Camera();
+
+	void updateCamera(
+		TCHAR				characterMessage,
+		POINT				mouseCoordinates,
+		MatrixBufferStored	*formattedStructData,
+		ID3D11Buffer*		*GSconstantBuffer,
+		ID3D11DeviceContext *deviceContext,
+		bool				HoverCamActivationStatus
+	);
+
+	void resetCamera();
 
 	DirectX::XMVECTOR GETcameraStartPos();
 	DirectX::XMVECTOR GETcameraPosition();
