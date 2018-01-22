@@ -70,6 +70,12 @@
     <Filter Include="Source Files\Components\UI">
       <UniqueIdentifier>{fef96ffd-a712-4053-93ff-11be5a46719d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{83abd6d8-4274-447b-b598-5062b0c8cd1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Forward">
+      <UniqueIdentifier>{de719cfb-9c0f-42cf-8c82-a91af78c1460}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -157,5 +163,13 @@
     <None Include="packages.config">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="forwardVertex.hlsl">
+      <Filter>Resource Files\Shaders\Forward</Filter>
+    </FxCompile>
+    <FxCompile Include="forwardPixel.hlsl">
+      <Filter>Resource Files\Shaders\Forward</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
