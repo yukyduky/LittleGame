@@ -8,6 +8,15 @@
 #include <WICTextureLoader.h>
 #include "SimpleMath.h"
 
+struct Vertex
+{
+	Vertex(float x, float y, float z, float r, float g, float b, float a)
+		: pos(x, y, z), color(r, g, b, a) {}
+
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT4 color;
+};
+
 class D3D
 {
 private:
@@ -78,6 +87,7 @@ public:
 	static void hsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int bufferSize);
+	static void createVertexBuffer(Vertex* v, ID3D11Buffer** gVertexBuffer, int bufferSize);
 
 	// Constant buffers
 	static void mapBuffer(ID3D11DeviceContext* gDevCon, ID3D11Buffer** gBuffer, void * cbPtr, int structSize);

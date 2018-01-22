@@ -136,11 +136,13 @@
     <ClInclude Include="GamePlaySelectCommand.h" />
     <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="GameTime.h" />
+    <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="IInputHandler.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="BlockComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
   </ItemGroup>
@@ -149,10 +151,12 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="GraphicsComponent.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="BlockComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
   </ItemGroup>
   <ItemGroup>
