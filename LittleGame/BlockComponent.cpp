@@ -1,57 +1,52 @@
 #include "BlockComponent.h"
 #include "GameObject.h"
 
-BlockComponent::BlockComponent(const float x, const float y, const float z,
-										const float r, const float g, const float b, const float a)
-{
-	this->nrOfVertices = 8;
-	this->vertices = this->createBuffers(x, y, z, r, g, b, a);
-}
+/*_____________________________
+ |         START OF            |
+ |     PRIVATE FUNCTIONS       |
+ |_____________________________|
+ */
 
-BlockComponent::~BlockComponent() 
+void BlockComponent::createVertices(const float r, const float g, const float b, const float a)
 {
-	this->vertexBuffer->Release();
-	this->indexBuffer->Release();
-}
-
-void BlockComponent::recieve(GameObject& obj, Message msg)
-{
-
-}
-
-Vertex* BlockComponent::createBuffers(const float x, const float y, const float z,
-	const float r, const float g, const float b, const float a) 
-{
-	/*
-		x,y,z parameters determines the size of the Block in all three dimensions.
-		p4__________p6
-		 /|         /|
-	  p0/_|______p1/ |
-		| |       |  |
-		| |p5_____|__|p7
-		| /       | /
-		|/________|/
-		p2        p3
+	/*--------<INFORMATION>--------
+	1. Creates a box with points ranging from -1.0 to 1.0 in x,y,z dimensions.
+	2. Sets the color of every vertex to the r,g,b in the paramaters.
+	3. All vertices is in modelspace with origin in the center of the box.
+	4. Creates indices for the indexbuffer.
 	*/
-	Vertex v[] = 
-	{
-		//Front p0,p1,p2,p3
-		Vertex(-x, y, -z, r, g, b, a),
-		Vertex(x, y, -z, r, g, b, a),
-		Vertex(-x, -y, -z, r, g, b, a),
-		Vertex(x, -y, -z, r, g, b, a),
-		//Back p6, p4, p7, p5
-		Vertex(x, y, z, r, g, b, a),
-		Vertex(-x, y, z, r, g, b, a),
-		Vertex(x, -y, z, r, g, b, a),
-		Vertex(-x, -y, z, r, g, b, a),
-	};
 
-	//Create the vertexBuffer
-	D3D::createVertexBuffer(v, &this->vertexBuffer, sizeof(Vertex) * 8);
-	
+	/*
+	   p4__________p6
+	   /|         /|
+	p0/_|______p1/ |
+	  | |       |  |
+	  | |p5_____|__|p7
+	  | /       | /
+	  |/________|/
+	  p2        p3
+
+	p0 = (-1.0, 1.0, -1.0)
+	p1 = (1.0, 1.0, -1.0)
+	p2 = (-1.0, -1.0, -1.0)
+	p3 = (1.0, -1.0, -1.0)
+	p4 = (-1.0, 1.0, 1.0)
+	p5 = (-1.0, -1.0, 1.0)
+	p6 = (1.0, 1.0, 1.0)
+	p7 = (1.0, -1.0, 1.0)
+	*/
+	//Push the vertices into the vector (p0-p7)
+	this->vertices.push_back(PrimitiveVertex(-1.0, 1.0, -1.0));
+	this->vertices.push_back(PrimitiveVertex(1.0, 1.0, -1.0));
+	this->vertices.push_back(PrimitiveVertex(-1.0, -1.0, -1.0));
+	this->vertices.push_back(PrimitiveVertex(1.0, -1.0, -1.0));
+	this->vertices.push_back(PrimitiveVertex(-1.0, 1.0, 1.0));
+	this->vertices.push_back(PrimitiveVertex(-1.0, -1.0, 1.0));
+	this->vertices.push_back(PrimitiveVertex(1.0, 1.0, 1.0));
+	this->vertices.push_back(PrimitiveVertex(1.0, -1.0, 1.0));
+
 	//Create indices for the box
-	DWORD indices[] =
+	DWORD index[] =
 	{
 		//Front p0, p1, p2, p3
 		0, 1, 2,
@@ -68,20 +63,76 @@ Vertex* BlockComponent::createBuffers(const float x, const float y, const float 
 		//Top p4, p6, p0, p1
 		4, 6, 0,
 		0, 6, 1,
-		//Bot p2, p3, p5, p7
+		//Bottom p2, p3, p5, p7
 		2, 3, 5,
 		5, 3, 7
 	};
+	//Push indices into the vector
+	for (int i = 0; i < 36; i++) {
+		this->indices.push_back(index[i]);
+	}
 
-	D3D::createIndexBuffer(indices, &this->indexBuffer, sizeof(DWORD) * 12 * 3);
+	this->color.r = r;
+	this->color.g = g;
+	this->color.b = b;
+	this->color.a = a;
 }
 
-ID3D11Buffer* BlockComponent::GETvertexBuffer()
+/*_____________________________
+|          END OF             |
+|     PRIVATE FUNCTIONS       |
+|_____________________________|
+*/
+
+/*_____________________________
+|          START OF           |
+|      PUBLIC FUNCTIONS       |
+|_____________________________|
+*/
+
+BlockComponent::BlockComponent(size_t ID, const float r, const float g, const float b, const float a) : ID(ID)
 {
-	return this->vertexBuffer;
+	//Create vertices and indices for the box
+	this->createVertices(r, g, b, a);
+	//Set type to BLOCK
+	this->type = OBJECTTYPE::BLOCK;
 }
 
-ID3D11Buffer* BlockComponent::GETindexBuffer()
+BlockComponent::~BlockComponent() 
 {
-	return this->indexBuffer;
 }
+
+void BlockComponent::recieve(GameObject& obj, Message msg)
+{
+}
+
+const size_t BlockComponent::getID()
+{
+	return this->ID;
+}
+
+std::vector<PrimitiveVertex>& BlockComponent::GETvertices()
+{
+	return vertices;
+}
+
+std::vector<DWORD>& BlockComponent::GETindices()
+{
+	return indices;
+}
+
+PrimitiveColor& BlockComponent::GETcolor()
+{
+	return this->color;
+}
+
+OBJECTTYPE::TYPE BlockComponent::GETtype()
+{
+	return this->type;
+}
+
+/*_____________________________
+|          END OF             |
+|      PUBLIC FUNCTIONS       |
+|_____________________________|
+*/

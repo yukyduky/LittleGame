@@ -3,36 +3,29 @@
 #define BLOCKCOMPONENT_H_
 
 #include "GraphicsComponent.h"
-#include <array>
-
+#include <vector>
+#include <Windows.h>
 
 class BlockComponent : GraphicsComponent
 {
 private:
-	int nrOfVertices;
-	Vertex* vertices;
-	ID3D11Buffer* vertexBuffer;
-	ID3D11Buffer* indexBuffer;
-	ID3D11InputLayout* inputLayout;
-
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	Vertex* createBuffers(const float x, const float y, const float z, 
-							const float r, const float g, const float b, const float a);
+	const size_t ID;
+	OBJECTTYPE::TYPE type;
+	static std::vector<PrimitiveVertex> vertices;
+	static std::vector<DWORD> indices;
+	PrimitiveColor color;
+	void createVertices(const float r, const float g, const float b, const float a);
 	
-
 public:
-	BlockComponent(const float x, const float y, const float z,
-						const float r, const float g, const float b, const float a);
+	BlockComponent(size_t ID, const float r, const float g, const float b, const float a);
 	~BlockComponent();
 	virtual void recieve(GameObject& obj, Message msg);
-
-	ID3D11Buffer* GETvertexBuffer();
-	ID3D11Buffer* GETindexBuffer();
+	
+	virtual const size_t getID();
+	static std::vector<PrimitiveVertex>& GETvertices();
+	static std::vector<DWORD>& GETindices();
+	PrimitiveColor& GETcolor();
+	OBJECTTYPE::TYPE GETtype();
 };
 
 
