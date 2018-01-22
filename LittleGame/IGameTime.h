@@ -5,13 +5,24 @@
 class IGameTime
 {
 public:
-	// Starts the timer
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Starts the Game Timer.
+	*/
 	virtual void StartTimer() = 0;
-	// Returns the time that the application has been running for
+	
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns the total amount of time elapsed since the game was started.
+	*/
 	virtual double GetTime() = 0;
-	// Updates the delta time since the last frame
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Updates the 'deltaTime'(obj) since the last frame.
+	*/
 	virtual void UpdateFrameTime() = 0;
-	// Get delta time
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns the 'deltaTime'(obj).
+	*/
 	virtual const double getDeltaTime() = 0;
 };
 

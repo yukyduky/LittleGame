@@ -35,19 +35,19 @@ public:
 	1. Virtual Function.
 	2. Handle the events generated in this state.
 	*/
-	virtual void handleEvents(GameManager* re) = 0;
+	virtual void handleEvents(GameManager* gm) = 0;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Virtual Function.
 	2. Update this state.
 	*/
-	virtual void update(GameManager* re) = 0;
+	virtual void update(GameManager* gm) = 0;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Virtual Function.
 	2. Render this state.
 	*/
-	virtual void render(GameManager* re) = 0;
+	virtual void render(GameManager* gm) = 0;
 };
 
 #endif

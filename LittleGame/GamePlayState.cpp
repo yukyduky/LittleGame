@@ -14,7 +14,7 @@ void GamePlayState::mapKeys()
 
 void GamePlayState::init()
 {
-	this->selectCommand = new GamePlaySelectCommand(*this);
+	this->selectCommand = new GamePlaySelectCommand();
 	this->mapKeys();
 }
 
@@ -33,14 +33,14 @@ void GamePlayState::resume()
 	this->mapKeys();
 }
 
-void GamePlayState::handleEvents(GameManager * re)
+void GamePlayState::handleEvents(GameManager * gm)
 {
 	MSG msg;
 
-	while (re->pollEvent(msg)) {
+	while (gm->pollEvent(msg)) {
 		// Exit the application when 'X' is pressed
 		if (msg.message == WM_QUIT) {
-			re->quit();
+			gm->quit();
 		}
 
 		TranslateMessage(&msg);
@@ -51,7 +51,7 @@ void GamePlayState::handleEvents(GameManager * re)
 	Locator::getInputHandler()->update(this->commandQueue);
 }
 
-void GamePlayState::update(GameManager * re)
+void GamePlayState::update(GameManager * gm)
 {
 	// Execute any generated commands
 	for (auto &i : this->commandQueue) {
@@ -60,9 +60,9 @@ void GamePlayState::update(GameManager * re)
 	this->commandQueue.clear();
 }
 
-void GamePlayState::render(GameManager * re)
+void GamePlayState::render(GameManager * gm)
 {
-	re->display(this);
+	gm->display(this);
 }
 
 void GamePlayState::commandSelect(size_t player)

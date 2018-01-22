@@ -8,7 +8,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	GameManager re;
+	GameManager gm;
 
 	// Initialize window
 	D3D::initializeWindow(hInstance, true, 1920, 1080, true);
@@ -17,19 +17,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	D3D::initializeDirectX();
 
 	// Initialize the game
-	re.init(hInstance, nCmdShow);
+	gm.init(hInstance, nCmdShow);
 
 	// Game loop
-	while (re.getIsRunning()) {
+	while (gm.getIsRunning()) {
 		// Update delta time
 		Locator::getGameTime()->UpdateFrameTime();
 		// Handle events & update & render
-		re.handleEvents();
-		re.update();
-		re.render();
+		gm.handleEvents();
+		gm.update();
+		gm.render();
 	}
 
-	re.cleanup();
+	gm.cleanup();
 
 	return 0;
 }

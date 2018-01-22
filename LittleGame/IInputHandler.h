@@ -41,7 +41,7 @@ public:
 	virtual void remapKeyboardKey(size_t vkc, Key key) = 0;
 	virtual void remapControllerKey(size_t vkc, Key key) = 0;
 	virtual void resetKeyBindings() = 0;
-	virtual void vibrate(int controllerID, int left, int right) = 0;
+	virtual void vibrate(size_t controllerID, int left, int right) = 0;
 };
 
 #endif

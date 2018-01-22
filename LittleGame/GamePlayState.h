@@ -17,6 +17,11 @@ private:
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
 
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
+	2. Calls the 'getInputHandler()' in-order to call the 'mapCommandToControllerKey()' function.
+	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
+	*/
 	void mapKeys();
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -42,17 +47,17 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Handle the events generated in the GamePlayState.
 	*/
-	virtual void handleEvents(GameManager* re);
+	virtual void handleEvents(GameManager* gm);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Update the GamePlayState.
 	*/
-	virtual void update(GameManager* re);
+	virtual void update(GameManager* gm);
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Render the 'GamePlayState'
 	*/
-	virtual void render(GameManager* re);
+	virtual void render(GameManager* gm);
 
 	void commandSelect(size_t player);
 

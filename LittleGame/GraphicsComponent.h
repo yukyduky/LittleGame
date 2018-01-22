@@ -1,21 +1,29 @@
 #pragma once
-#ifndef GRAPHICSCOMPONENT_H_
-#define GRAPHICSCOMPONENT_H_
+#ifndef GRAPHICSCOMPONENT_H
+#define GRAPHICSCOMPONENT_H
 
 #include "Component.h"
-#include <DirectXMath.h>
-#include <d3d11.h>
-#include <Windows.h>
-#include "D3D.h"
 
-class GraphicsComponent : Component
+struct PrimitiveVertex
 {
-private:
-	size_t ID;
-	
-public:
-	const size_t getID();
-	virtual void recieve(GameObject& obj, Message msg) = 0;
+	float x, y, z;
+	float r, g, b;
 };
 
-#endif
+struct TextureVertex
+{
+	float x, y, z;
+	float tx, ty;
+
+	TextureVertex(float x, float y, float z, float tx, float ty) : x(x), y(y), z(z), tx(tx), ty(ty) {}
+	TextureVertex() {}
+};
+
+class GraphicsComponent : public Component
+{
+public:
+	virtual const size_t getID() = 0;
+	virtual void receive(GameObject & obj, Message msg) = 0;
+};
+
+#endif // !GRAPHICSCOMPONENT_H

@@ -145,6 +145,7 @@
     <ClInclude Include="BlockComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D.cpp" />
@@ -158,6 +159,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="BlockComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
