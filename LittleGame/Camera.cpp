@@ -10,8 +10,8 @@
 
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |								|
-  |		 PRIVATE FUNCTIONS		|
+  |                             |
+  |      PRIVATE FUNCTIONS      |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
@@ -19,8 +19,8 @@
 
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |								|
-  |		 PUBLIC FUNCTIONS		|
+  |                             |
+  |      PUBLIC FUNCTIONS       |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
@@ -63,8 +63,8 @@ ConstantBuffer::~ConstantBuffer() {
 
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |								|
-  |		 PRIVATE FUNCTIONS		|
+  |                             |
+  |      PRIVATE FUNCTIONS      |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void Camera::moveCameraUp() {
@@ -102,8 +102,8 @@ void Camera::updateRight() {
 
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |								|
-  |		 PUBLIC FUNCTIONS		|
+  |                             |
+  |      PUBLIC FUNCTIONS       |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 Camera::Camera() {
