@@ -1,73 +1,18 @@
 #include "Camera.h"
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//            START OF CAMERA-NCESSARY TOOLS               /
+//                        CAMERA                           /
 ///////////////////////////////////////////////////////////
 //////////////////////////////
 ///////////////
 ///////
 //
 
-
-/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |                             |
-  |      PRIVATE FUNCTIONS      |
-   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-
-//_________________________________________//
-//                                         //
-//        END OF PRIVATE FUNCTIONS         //
-//_________________________________________//
-/////////////////////////////////////////////
-
-
-
-
-
-/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |                             |
-  |      PUBLIC FUNCTIONS       |
-   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
-
-
-//_________________________________________//
-//                                         //
-//         END OF PUBLIC FUNCTIONS         //
-//_________________________________________//
-/////////////////////////////////////////////
-
-
-
-
-
-
-//
-//\\\\\
-//\\\\\\\\\\\\\
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//              END OF CAMERA-NCESSARY TOOLS               \
-////////////////////////////////////////////////////////////
-
-
-
-
-
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//                 START OF CAMERA CLASS                   /
-///////////////////////////////////////////////////////////
-//////////////////////////////
-///////////////
-///////
-//
-
-
-ConstantBufferHandler::ConstantBufferHandler() {
+ConstantBufferManager::ConstantBufferManager() {
 
 }
 
-ConstantBufferHandler::~ConstantBufferHandler() {
+ConstantBufferManager::~ConstantBufferManager() {
 
 }
 
@@ -77,8 +22,9 @@ ConstantBufferHandler::~ConstantBufferHandler() {
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
-  |      PRIVATE FUNCTIONS      |
+  |      PRIVATE_FUNCTIONS      |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
 
 void Camera::moveCameraUp() {
 
@@ -106,7 +52,7 @@ void Camera::updateRight() {
 
 //_________________________________________//
 //                                         //
-//        END OF PRIVATE FUNCTIONS         //
+//        END OF PRIVATE_FUNCTIONS         //
 //_________________________________________//
 /////////////////////////////////////////////
 
@@ -116,11 +62,14 @@ void Camera::updateRight() {
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
-  |      PUBLIC FUNCTIONS       |
+  |      PUBLIC_FUNCTIONS       |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-Camera::Camera() {
 
+Camera::Camera() {
+	this->angle = 0.45;
+	this->nearPlane = 0.5;
+	this->farPlane = 200.0;
 }
 
 Camera::~Camera() {
@@ -141,17 +90,32 @@ void Camera::resetCamera() {
 
 }
 
+void Camera::SETangle(float angleInput) {
+	this->angle = angleInput;
+}
+
+float Camera::GETangle() {
+	return angle;
+}
+
+float Camera::GETnearPlane() {
+	return nearPlane;
+}
+
+float Camera::GETfarPlane() {
+	return farPlane;
+}
+
 //_________________________________________//
 //                                         //
-//         END OF PUBLIC FUNCTIONS         //
+//         END OF PUBLIC_FUNCTIONS         //
 //_________________________________________//
 /////////////////////////////////////////////
-
 
 //
 //\\\\\
 //\\\\\\\\\\\\\
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//                   END OF CAMERA CLASS                   \
+//                      END OF CAMERA                      \
 ////////////////////////////////////////////////////////////

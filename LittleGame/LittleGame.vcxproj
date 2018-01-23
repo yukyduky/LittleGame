@@ -129,8 +129,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlaySelectCommand.h" />
@@ -147,6 +149,8 @@
     <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
