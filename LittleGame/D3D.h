@@ -8,24 +8,15 @@
 #include <WICTextureLoader.h>
 #include "SimpleMath.h"
 
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                                     |
+  |                 D3D                 |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
 class D3D
 {
 private:
-	// Functions
-	// Initialization functions
-	static void createSwapChain();
-	static void createBackBufferRTV(ID3D11RenderTargetView** gRTV);
-
-	// Shader setup functions
-	static void compileShaders(LPCSTR entryPoint, LPCSTR target, const wchar_t* fileName, ID3DBlob** gBlob);
-	static void createInputLayout(ID3DBlob* gBlob, ID3D11InputLayout** gInputLayout, const D3D11_INPUT_ELEMENT_DESC* inputDesc, int inputDescSize);
-	static void createVertexShader(ID3DBlob* gBlob, ID3D11VertexShader** gVertexShader);
-	static void createPixelShader(ID3DBlob* gBlob, ID3D11PixelShader** gPixelShader);
-	static void createGeometryShader(ID3DBlob* gBlob, ID3D11GeometryShader** gGeometryShader);
-	static void createHullShader(ID3DBlob* gBlob, ID3D11HullShader** gHullShader);
-	static void createDomainShader(ID3DBlob* gBlob, ID3D11DomainShader** gDomainShader);
-
-	// COMs
+	/// COMs
 	static IDXGISwapChain* gSwapChain;
 	static ID3D11Device* gDevice;
 	static ID3D11DeviceContext* gDevCon;
@@ -33,10 +24,24 @@ private:
 	static ID3D11DepthStencilView* gDSV;
 	static ID3D11Texture2D* gDSB;
 
-	// Variables
+	/// VARIABLES
 	static HWND hwnd;
 	static int wWidth;
 	static int wHeight;
+
+	// FUNCTIONS
+	/// INITIALIZATION FUNCTIONS
+	static void createSwapChain();
+	static void createBackBufferRTV(ID3D11RenderTargetView** gRTV);
+
+	/// SHADER SETUP FUNCTIONS
+	static void compileShaders(LPCSTR entryPoint, LPCSTR target, const wchar_t* fileName, ID3DBlob** gBlob);
+	static void createInputLayout(ID3DBlob* gBlob, ID3D11InputLayout** gInputLayout, const D3D11_INPUT_ELEMENT_DESC* inputDesc, int inputDescSize);
+	static void createVertexShader(ID3DBlob* gBlob, ID3D11VertexShader** gVertexShader);
+	static void createPixelShader(ID3DBlob* gBlob, ID3D11PixelShader** gPixelShader);
+	static void createGeometryShader(ID3DBlob* gBlob, ID3D11GeometryShader** gGeometryShader);
+	static void createHullShader(ID3DBlob* gBlob, ID3D11HullShader** gHullShader);
+	static void createDomainShader(ID3DBlob* gBlob, ID3D11DomainShader** gDomainShader);
 
 public:
 	// Initialization functions
@@ -99,4 +104,9 @@ public:
 	static void Release();
 };
 
+//______________________________________________//
+//                                              //
+//                 END OF D3D                   //
+//______________________________________________//
+//////////////////////////////////////////////////
 #endif

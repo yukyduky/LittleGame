@@ -1,4 +1,13 @@
 #include "D3D.h"
+
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//                         D3D                             /
+///////////////////////////////////////////////////////////
+//////////////////////////////
+///////////////
+///////
+//
+
 LRESULT CALLBACK wndProc(HWND hwnd, size_t msg, WPARAM wParam, LPARAM lParam);
 
 IDXGISwapChain* D3D::gSwapChain = nullptr;
@@ -11,6 +20,14 @@ ID3D11Texture2D* D3D::gDSB = nullptr;
 HWND D3D::hwnd = nullptr;
 int D3D::wWidth = 800;
 int D3D::wHeight = 600;
+
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                             |
+  |           PRIVATE           |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+
+/// INITIALIZATION FUNCTIONS
 
 void D3D::createSwapChain()
 {
@@ -69,6 +86,9 @@ void D3D::createBackBufferRTV(ID3D11RenderTargetView** gRTV)
 	BackBuffer->Release();
 }
 
+
+
+/// SHADER SETUP FUNCTIONS
 
 void D3D::compileShaders(LPCSTR entryPoint, LPCSTR target, const wchar_t * fileName, ID3DBlob** gBlob)
 {
@@ -161,6 +181,9 @@ void D3D::createDomainShader(ID3DBlob* gBlob, ID3D11DomainShader** gDomainShader
 	}
 }
 
+
+
+/// COMs
 
 void D3D::initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed)
 {
@@ -273,7 +296,6 @@ void D3D::createDepthStencilView(int width, int height, ID3D11DepthStencilView**
 	}
 }
 
-
 void D3D::createFixedShaders(ID3D11InputLayout** gInputLayout, ID3D11VertexShader** gVertexShader, ID3D11PixelShader** gPixelShader, const wchar_t* fileNameVertex, const wchar_t* fileNamePixel, const D3D11_INPUT_ELEMENT_DESC* inputDesc, int inputDescSize)
 {
 	ID3DBlob* gBlob = nullptr;
@@ -354,7 +376,6 @@ void D3D::setInputLayout(ID3D11InputLayout* gInputLayout)
 	gDevCon->IASetInputLayout(gInputLayout);
 }
 
-
 void D3D::createRasterizerState(ID3D11RasterizerState** gRastState, D3D11_CULL_MODE cullMode, D3D11_FILL_MODE fillMode, int depthBias, float depthBiasClamp, float slopedDepthBias)
 {
 	HRESULT hr;
@@ -400,7 +421,6 @@ void D3D::setRasterizerState(ID3D11RasterizerState* gRastState)
 {
 	gDevCon->RSSetState(gRastState);
 }
-
 
 void D3D::clearRendertarget(ID3D11RenderTargetView* gRTV)
 {
@@ -615,7 +635,6 @@ void D3D::createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int buf
 	}
 }
 
-
 void D3D::mapBuffer(ID3D11DeviceContext* gDevCon, ID3D11Buffer** gBuffer, void* cbPtr, int structSize)
 {
 	HRESULT hr;
@@ -654,7 +673,6 @@ void D3D::createConstantBuffer(ID3D11Device* gDevice, ID3D11Buffer** gBuffer, in
 	}
 }
 
-
 void D3D::setIndexBuffer(ID3D11Buffer * gIndexBuffer, DXGI_FORMAT format, size_t offset)
 {
 	gDevCon->IASetIndexBuffer(gIndexBuffer, format, offset);
@@ -685,7 +703,6 @@ void D3D::swapBackBuffer()
 	gSwapChain->Present(0, 0);
 }
 
-
 int D3D::getWidth()
 {
 	return wWidth;
@@ -695,7 +712,6 @@ int D3D::getHeight()
 {
 	return wHeight;
 }
-
 
 void D3D::Release()
 {
@@ -719,3 +735,11 @@ LRESULT CALLBACK wndProc(HWND hwnd, size_t msg, WPARAM wParam, LPARAM lParam)
 
 	return DefWindowProc(hwnd, msg, wParam, lParam);
 }
+
+//
+//\\\\\
+//\\\\\\\\\\\\\
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//                       END OF D3D                        \
+////////////////////////////////////////////////////////////
