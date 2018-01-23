@@ -80,6 +80,7 @@ public:
 	static void dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int bufferSize);
 	static void createVertexBuffer(Vertex* v, ID3D11Buffer** gVertexBuffer, int bufferSize);
+	static ID3D11RenderTargetView& getgRTV();
 
 	// Constant buffers
 	static void mapBuffer(ID3D11DeviceContext* gDevCon, ID3D11Buffer** gBuffer, void * cbPtr, int structSize);

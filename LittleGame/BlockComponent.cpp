@@ -161,7 +161,7 @@ BlockComponent::~BlockComponent()
 {
 }
 
-void BlockComponent::recieve(GameObject& obj, Message msg)
+void BlockComponent::receive(GameObject& obj, Message msg)
 {
 }
 

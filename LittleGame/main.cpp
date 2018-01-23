@@ -3,7 +3,6 @@
 #include "GameManager.h"
 #include "Locator.h"
 #include <crtdbg.h>
-#include "ForwardPipelineTest.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -20,9 +19,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);
 
-	FPLT test;
-	test.init();
-
 	// Game loop
 	while (gm.getIsRunning()) {
 		// Update delta time
@@ -32,7 +28,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		gm.update();
 		gm.render();
 	}
-
 	gm.cleanup();
 
 	return 0;

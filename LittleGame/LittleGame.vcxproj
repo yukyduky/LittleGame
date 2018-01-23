@@ -132,7 +132,6 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="D3D.h" />
-    <ClInclude Include="ForwardPipelineTest.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlaySelectCommand.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -150,7 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D.cpp" />
-    <ClCompile Include="ForwardPipelineTest.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />

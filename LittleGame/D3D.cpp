@@ -640,6 +640,10 @@ void D3D::createVertexBuffer(Vertex* v, ID3D11Buffer** gVertexBuffer, int buffer
 	}
 }
 
+ID3D11RenderTargetView& D3D::getgRTV()
+{
+	return *gRTV;
+}
 
 void D3D::mapBuffer(ID3D11DeviceContext* gDevCon, ID3D11Buffer** gBuffer, void* cbPtr, int structSize)
 {

@@ -12,6 +12,7 @@ VS_OUT VS(VS_IN input)
 {
 	VS_OUT output;
 
+	//output.position = input.position;
 	output.position = float4(input.position, 1.0);
 	output.color = input.color;
 
