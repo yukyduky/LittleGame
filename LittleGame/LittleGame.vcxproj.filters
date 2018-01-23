@@ -120,6 +120,12 @@
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ISoundManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -151,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

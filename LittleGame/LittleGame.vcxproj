@@ -78,7 +78,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;d3d11.lib;sfml-audio-d.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>NotSet</SubSystem>
     </Link>
@@ -140,8 +140,10 @@
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="IInputHandler.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="ISoundManager.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -155,6 +157,7 @@
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
