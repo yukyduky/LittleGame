@@ -67,20 +67,18 @@ public:
 	ConstantBufferManager();
 	~ConstantBufferManager();
 
-	void releaseAll();
-
-	MatrixBufferPack	*GETpackagedMatrixData();
-	ID3D11Buffer*		*GETconstantBuffer();
-
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initializes... (SEE COMMENT AND CONTINUE FROM HERE)
+	1. Initializes 
 	*/
 	void Initialize(
 		ID3D11Device*			*Device,
 		ID3D11DeviceContext*	*DeviceContext
 	);
-
 	void packageMatrices();
+	void releaseAll();
+
+	MatrixBufferPack	*GETpackagedMatrixData();
+	ID3D11Buffer*		*GETconstantBuffer();
 };
 
 //______________________________________________//
