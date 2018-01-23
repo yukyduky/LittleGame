@@ -132,6 +132,7 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="ForwardPipelineTest.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlaySelectCommand.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="ForwardPipelineTest.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
@@ -163,6 +165,25 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="forwardVertex.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DisableOptimizations>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="forwardPixel.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
+      <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</EnableDebuggingInformation>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PS</EntryPointName>
+      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DisableOptimizations>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
