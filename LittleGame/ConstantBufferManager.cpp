@@ -12,10 +12,13 @@
 
 void editConstantBuffers(
 	ID3D11Buffer*			targetBuffer,
-	MatrixBufferPack		targetStruct,
-	ID3D11DeviceContext*	*DeviceContext
+	MatrixBufferPack		targetStruct
 ) {
+	D3D11_MAPPED_SUBRESOURCE MappedBuffer;
 
+	D3D::GETgDevCon()->Map(targetBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedBuffer);
+	memcpy(MappedBuffer.pData, &targetStruct, sizeof(targetStruct));
+	D3D::GETgDevCon()->Unmap(targetBuffer, 0);
 }
 
 //
@@ -61,10 +64,7 @@ void ConstantBufferManager::InitializeConstantMatrices() {
 	this->rawMatrixData.projection = projectionMatrix;
 }
 
-void ConstantBufferManager::CreateSetConstantBuffers(
-	ID3D11Device*			*Device,
-	ID3D11DeviceContext*	*DeviceContext
-) {
+void ConstantBufferManager::CreateSetConstantBuffers() {
 	// BUFFER DESCRIPTION ('Settings')
 	D3D11_BUFFER_DESC cbDesc;
 	memset(&cbDesc, 0, sizeof(cbDesc));
@@ -83,12 +83,12 @@ void ConstantBufferManager::CreateSetConstantBuffers(
 	InitData.SysMemSlicePitch = 0;
 
 	// CREATE BUFFER
-	(*Device)->CreateBuffer(&cbDesc, &InitData, &this->ConstantBuffer);
+	(D3D::GETgDevice())->CreateBuffer(&cbDesc, &InitData, &this->ConstantBuffer);
 
 	// SET BUFFER
-	(*DeviceContext)->VSSetConstantBuffers(0, 1, &this->ConstantBuffer);
-	(*DeviceContext)->GSSetConstantBuffers(0, 1, &this->ConstantBuffer);
-	(*DeviceContext)->PSSetConstantBuffers(0, 1, &this->ConstantBuffer);
+	(D3D::GETgDevCon())->VSSetConstantBuffers(0, 1, &this->ConstantBuffer);
+	(D3D::GETgDevCon())->GSSetConstantBuffers(0, 1, &this->ConstantBuffer);
+	(D3D::GETgDevCon())->PSSetConstantBuffers(0, 1, &this->ConstantBuffer);
 
 	// Current GS-ConstantBuffer slots occupied:
 	// 0 - 
@@ -121,16 +121,16 @@ ConstantBufferManager::~ConstantBufferManager() {
 
 }
 
-void ConstantBufferManager::Initialize(
-	ID3D11Device*			*Device,
-	ID3D11DeviceContext*	*DeviceContext
-) {
+void ConstantBufferManager::Initialize() {
 	this->InitializeConstantMatrices();
 	this->packageMatrices();
-	this->CreateSetConstantBuffers(
-		Device,
-		DeviceContext
-	);
+	this->CreateSetConstantBuffers();
+}
+
+void ConstantBufferManager::packageMatrices() {
+	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.world, this->rawMatrixData.world);
+	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.view, this->rawMatrixData.view);
+	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.projection, this->rawMatrixData.projection);
 }
 
 void ConstantBufferManager::releaseAll() {
