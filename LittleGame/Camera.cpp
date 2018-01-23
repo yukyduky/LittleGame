@@ -8,21 +8,9 @@
 ///////
 //
 
-ConstantBufferManager::ConstantBufferManager() {
-
-}
-
-ConstantBufferManager::~ConstantBufferManager() {
-
-}
-
-
-
-
-
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
-  |      PRIVATE_FUNCTIONS      |
+  |           PRIVATE           |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
@@ -52,7 +40,7 @@ void Camera::updateRight() {
 
 //_________________________________________//
 //                                         //
-//        END OF PRIVATE_FUNCTIONS         //
+//             END OF PRIVATE              //
 //_________________________________________//
 /////////////////////////////////////////////
 
@@ -62,7 +50,7 @@ void Camera::updateRight() {
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
-  |      PUBLIC_FUNCTIONS       |
+  |           PUBLIC            |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
@@ -108,7 +96,7 @@ float Camera::GETfarPlane() {
 
 //_________________________________________//
 //                                         //
-//         END OF PUBLIC_FUNCTIONS         //
+//              END OF PUBLIC              //
 //_________________________________________//
 /////////////////////////////////////////////
 

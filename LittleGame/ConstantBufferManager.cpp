@@ -40,7 +40,7 @@ void editConstantBuffers(
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
-  |      PRIVATE_FUNCTIONS      |
+  |           PRIVATE           |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
@@ -99,7 +99,7 @@ void ConstantBufferManager::CreateSetConstantBuffers(
 
 //_________________________________________//
 //                                         //
-//        END OF PRIVATE_FUNCTIONS         //
+//             END OF PRIVATE              //
 //_________________________________________//
 /////////////////////////////////////////////
 
@@ -109,7 +109,7 @@ void ConstantBufferManager::CreateSetConstantBuffers(
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
-  |      PUBLIC_FUNCTIONS       |
+  |           PUBLIC            |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
@@ -147,7 +147,7 @@ ID3D11Buffer* *ConstantBufferManager::GETconstantBuffer() {
 
 //_________________________________________//
 //                                         //
-//         END OF PUBLIC_FUNCTIONS         //
+//             END OF PUBLIC               //
 //_________________________________________//
 /////////////////////////////////////////////
 
