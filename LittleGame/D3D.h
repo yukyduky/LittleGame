@@ -44,14 +44,14 @@ private:
 	static void createDomainShader(ID3DBlob* gBlob, ID3D11DomainShader** gDomainShader);
 
 public:
-	// Initialization functions
+	/// INITIALIZATION FUNCTIONS
 	static void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed);
 	static void initializeDirectX();
 	static D3D11_VIEWPORT createViewPort(int width, int height);
 	static void setViewPort(D3D11_VIEWPORT* vp);
 	static void createDepthStencilView(int width, int height, ID3D11DepthStencilView** gDSV, ID3D11Texture2D** gDSB);
 
-	// Shader setup functions
+	/// SHADER SETUP FUNCTIONS
 	static void createFixedShaders(ID3D11InputLayout** gInputLayout, ID3D11VertexShader** gVertexShader, ID3D11PixelShader** gPixelShader, const wchar_t* fileNameVertex, const wchar_t* fileNamePixel, const D3D11_INPUT_ELEMENT_DESC* inputDesc, int inputDescSize);
 	static void createGeoShaders(ID3D11GeometryShader** gGeometryShader, const wchar_t* fileNameGeometry);
 	static void createTesselationShaders(ID3D11HullShader** gHullShader, ID3D11DomainShader** gDomainShader, const wchar_t* fileNameHull, const wchar_t* fileNameDomain);
@@ -60,12 +60,12 @@ public:
 	static void setTesselationShaders(ID3D11HullShader* gHullShader, ID3D11DomainShader* gDomainShader);
 	static void setInputLayout(ID3D11InputLayout* gInputLayout);
 
-	// State creations
+	/// STATE CREATIONS
 	static void createRasterizerState(ID3D11RasterizerState** gRastState, D3D11_CULL_MODE cullMode, D3D11_FILL_MODE fillMode, int depthBias, float depthBiasClamp, float slopedDepthBias);
 	static void createSampler(ID3D11SamplerState** gSampler, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAdressModeU, D3D11_TEXTURE_ADDRESS_MODE texAdressModeV, D3D11_TEXTURE_ADDRESS_MODE texAdressModeW, D3D11_COMPARISON_FUNC compFunc);
 	static void setRasterizerState(ID3D11RasterizerState* gRastState);
 
-	// Rendertarget and Shaderresource functions
+	/// RENDERTARGET AND SHADER-RESOURCE FUNCTIONS
 	static void clearRendertarget(ID3D11RenderTargetView* gRTV);
 	static void clearDepthStencilView(ID3D11DepthStencilView* gDSV, size_t clearFlags);
 	static void setRenderTargets(size_t numViews, ID3D11RenderTargetView** gRTV, ID3D11DepthStencilView* gDSV);
@@ -84,11 +84,11 @@ public:
 	static void dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int bufferSize);
 
-	// Constant buffers
+	/// CONSTANT BUFFERS
 	static void mapBuffer(ID3D11DeviceContext* gDevCon, ID3D11Buffer** gBuffer, void * cbPtr, int structSize);
 	static void createConstantBuffer(ID3D11Device * gDevice, ID3D11Buffer ** gBuffer, int bufferSize);
 
-	// Render functions
+	/// RENDER FUNCTIONS
 	static void setIndexBuffer(ID3D11Buffer* gIndexBuffer, DXGI_FORMAT format, size_t offset);
 	static void setVertexBuffer(size_t start, size_t numBuffers, ID3D11Buffer** gVertexBuffer, size_t* stride, size_t* offset);
 	static void setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY topology);
@@ -96,11 +96,18 @@ public:
 	static void drawIndexed(size_t numIndex, size_t start, int baseVertexLoc);
 	static void swapBackBuffer();
 
-	// Get resolution
-	static int getWidth();
-	static int getHeight();
+	/// GET FUNCTIONS
+	static int						getWidth();
+	static int						getHeight();
+	static IDXGISwapChain*			GETgSwapChain();
+	static ID3D11Device*			GETgDevice();
+	static ID3D11DeviceContext*		GETgDevCon();
+	static ID3D11RenderTargetView*	GETgRTV();
+	static ID3D11DepthStencilView*	GETgDSV();
+	static ID3D11Texture2D*			GETgDSB();
 
-	// Release of memory
+
+	/// RELEASE OF MEMORY
 	static void Release();
 };
 
