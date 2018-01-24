@@ -690,6 +690,31 @@ void D3D::createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int buf
 	}
 }
 
+void D3D::createVertexBuffer(Vertex* v, ID3D11Buffer** gVertexBuffer, int bufferSize)
+{
+	HRESULT hr;
+
+	//Create Buffer description for vertex buffer.
+	D3D11_BUFFER_DESC vBuffDesc;
+	ZeroMemory(&vBuffDesc, sizeof(vBuffDesc));
+	vBuffDesc.Usage = D3D11_USAGE_DEFAULT;
+	vBuffDesc.ByteWidth = bufferSize;
+	vBuffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vBuffDesc.CPUAccessFlags = 0;
+	vBuffDesc.MiscFlags = 0;
+
+	//Create vertex subresource data.
+	D3D11_SUBRESOURCE_DATA vBuffData;
+	ZeroMemory(&vBuffData, sizeof(vBuffData));
+	vBuffData.pSysMem = v;
+
+	hr = gDevice->CreateBuffer(&vBuffDesc, &vBuffData, gVertexBuffer);
+	if (FAILED(hr)) {
+		MessageBox(0, "createVertexBuffer - Failed", "Error", MB_OK);
+		_exit(0);
+	}
+}
+
 
 
 // CONSTANT BUFFERS

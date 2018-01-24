@@ -120,6 +120,12 @@
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="GraphicsComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="DeferredRendering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -156,6 +162,12 @@
       <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="DeferredRendering.cpp">

@@ -4,10 +4,25 @@
 
 #include "Component.h"
 
-struct PrimitiveVertex
+namespace OBJECTTYPE {
+	enum TYPE { BLOCK, SIZE };
+}
+
+struct vColor
+{
+	float r, g, b, a;
+
+	vColor(float r, float g, float b, float a)
+		: r(r), g(g), b(b), a(a){}
+	vColor(){}
+};
+
+struct Vertex
 {
 	float x, y, z;
-	float r, g, b;
+	
+	Vertex(float x, float y, float z)
+		: x(x), y(y), z(z){}
 };
 
 struct TextureVertex

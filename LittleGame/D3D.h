@@ -8,17 +8,13 @@
 #include <WICTextureLoader.h>
 #include "SimpleMath.h"
 
-/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |                                     |
-  |                 D3D                 |
-   -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+struct Vertex
+{
+	Vertex(float x, float y, float z, float r, float g, float b, float a)
+		: pos(x, y, z), color(r, g, b, a) {}
 
-struct PrimitiveVertexData {
-	float x, y, z;
-	float nx, ny, nz;
-	float r, g, b, a;
-	PrimitiveVertexData(float x, float y, float z, float r, float g, float b, float a, float nx, float ny, float nz) : x(x), y(y), z(z), r(r), g(g), b(b), a(a), nx(nx), ny(ny), nz(nz) {}
-	PrimitiveVertexData() {}
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT4 color;
 };
 
 class D3D
@@ -92,6 +88,7 @@ public:
 	static void hsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler);
 	static void createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int bufferSize);
+	static void createVertexBuffer(Vertex* v, ID3D11Buffer** gVertexBuffer, int bufferSize);
 
 	// CONSTANT BUFFERS
 	static void mapBuffer(ID3D11DeviceContext* gDevCon, ID3D11Buffer** gBuffer, void * cbPtr, int structSize);
