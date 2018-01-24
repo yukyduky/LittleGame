@@ -8,6 +8,15 @@
 ///////
 //
 
+/// INITIALIZING STATIC VALUES ('GLOBALS')
+float Camera::angle = 0.45;
+float Camera::nearPlane = 0.5;
+float Camera::farPlane = 200.0;
+
+
+
+
+
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
   |           PRIVATE           |
@@ -110,6 +119,7 @@ void Camera::moveCameraBackward() {
 }
 
 void Camera::updateRightDir() {
+	// Create & set the new 'Right' vector
 	this->cameraRightDir = DirectX::XMVector3Cross(
 		this->cameraUpDir,
 		this->cameraFacingDir
@@ -117,56 +127,99 @@ void Camera::updateRightDir() {
 }
 
 void Camera::rotateCameraVertically(POINT mouseMovement) {
-	// COMMENT
+	// Create the 'Right' vector
 	this->rightAxis = DirectX::XMVector3Cross(
 		this->cameraUpDir,
 		this->cameraFacingDir
 	);
 
-	// COMMENT
-	this->rotationAngle = mouseMovement.y *cameraRotateSpeed;
+	// Update the 'rotationAngle' based on the 'cameraRotateSpeed'
+	this->rotationAngle = mouseMovement.y * cameraRotateSpeed;
 
-	// COMMENT
+	// Create the Quaternion using the 'Right' vector + 'rotationAngle'
 	this->rotationQuaternion = DirectX::XMQuaternionRotationAxis(
 		this->rightAxis,
 		this->rotationAngle
 	);
+
+	/// Camera-Plane movement is currently turned OFF. Un-comment the line below to turn it ON.
+	///this->cameraUpDir = DirectX::XMVector3Rotate(this->cameraUpDir, this->rotationQuaternion);
 
 	// SIMPLY EXPLAINED: If 'mouseMovement.y' is negative; the mouse was moved upwards,
 	// resulting in 'TRUE'. Else 'moveMovement.y' is positive; the mouse was moved downwards,
 	// resulting in 'FALSE'.
 	this->isMouseMovingUp = (mouseMovement.y < 0);
 
-	// Create the 'newRotation' (VECTOR form)
-	this->newRotationVector = DirectX::XMVector3Rotate(
+	// Create the direction the camera is facing (VECTOR form)
+	this->newRotation_Vector = DirectX::XMVector3Rotate(
 		this->cameraFacingDir,
 		this->rotationQuaternion
 	);
 
 	// Convert & Store 'newRotation' (VECTOR --> FLOAT3)
 	DirectX::XMStoreFloat3(
-		&this->newRotationFloat3,
-		this->newRotationVector
+		&this->newRotation_Float3,
+		this->newRotation_Vector
 	);
 
 	// Convert & Store 'oldRotation' (VECTOR --> FLOAT3)
+	// NOTE: 'oldRotation' based off of previous 'cameraFacingDir'
 	DirectX::XMStoreFloat3(
-		&this->oldRotationFloat3,
+		&this->oldRotation_Float3,
 		this->cameraFacingDir
 	);
 
-	this->tempCompareVector = DirectX::XMVector3Dot(
-		DirectX::XMVECTOR{ 0, 0, this->newRotationFloat3.z },
-		DirectX::XMVECTOR{ 0, 0, this->oldRotationFloat3.z }
+	// Create a temporary XMVECTOR for the difference in 'z-value'
+	// (New  vs. Old)
+	this->tempRotationDifference_Vector = DirectX::XMVector3Dot(
+		DirectX::XMVECTOR{ 0, 0, this->newRotation_Float3.z },
+		DirectX::XMVECTOR{ 0, 0, this->oldRotation_Float3.z }
 	);
 
+	// Convert temp XMVECTOR to XMFLOAT3
+	DirectX::XMStoreFloat3(
+		&this->tempRotationDifference_Float3,
+		this->tempRotationDifference_Vector
+	);
 
+	// Likely that this combats the 'look-too-far-up-or-down' problem.
+	// Ask Danne or Oliver for further info.
+	if (this->tempRotationDifference_Float3.x > 0) {
 
-	this->tempCompareFloat3;
+		if (this->isMouseMovingUp) {
+			if (this->newRotation_Float3.y > this->oldRotation_Float3.y) {
+				// Set the new direction for the camera
+				this->cameraFacingDir = this->newRotation_Vector;
+			}
+		}
+
+		else {
+			if (this->newRotation_Float3.y < this->oldRotation_Float3.y) {
+				// Set the new direction for the camera
+				this->cameraFacingDir = this->newRotation_Vector;
+			}
+		}
+	}
 }
 
-void Camera::rotateCameraHorizontally(POINT mouseMovemet) {
+void Camera::rotateCameraHorizontally(POINT mouseMovement) {
+	// Update the 'rotationAngle' based on the 'cameraRotateSpeed'
+	this->rotationAngle = (mouseMovement.x * cameraRotateSpeed);
 
+	// Create the Quaternion using the 'Right' vector + 'rotationAngle'
+	this->rotationQuaternion = DirectX::XMQuaternionRotationAxis(
+		this->cameraUpDir,
+		this->rotationAngle
+	);
+
+	/// Camera-Plane movement is currently turned OFF. Un-comment the line below to turn it ON.
+	///this->cameraUpDir = DirectX::XMVector3Rotate(this->cameraUpDir, this->rotationQuaternion);
+
+	// Create & set the direction the camera is facing
+	this->cameraFacingDir = DirectX::XMVector3Rotate(
+		this->cameraFacingDir,
+		this->rotationQuaternion
+	);
 }
 
 //_________________________________________//
@@ -186,10 +239,6 @@ void Camera::rotateCameraHorizontally(POINT mouseMovemet) {
 
 
 Camera::Camera() {
-	this->angle = 0.45;
-	this->nearPlane = 0.5;
-	this->farPlane = 200.0;
-
 	this->updateRequired = false;
 
 	this->cameraPos = this->cameraStartPos;
@@ -279,8 +328,8 @@ void Camera::SETangle(float angleInput) {
 }
 
 DirectX::XMFLOAT3 Camera::GETcameraPosFloat3() {
-	DirectX::XMStoreFloat3(&this->cameraPosFloat3, this->cameraPos);
-	return this->cameraPosFloat3;
+	DirectX::XMStoreFloat3(&this->cameraPos_Float3, this->cameraPos);
+	return this->cameraPos_Float3;
 }
 
 DirectX::XMVECTOR Camera::GETcameraStartPos() {
