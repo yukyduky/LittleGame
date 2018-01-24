@@ -33,15 +33,9 @@ struct MatrixBufferPack {
 /*- - - - - - - -<INFORMATION>- - - - - - - -
 1. NON-CLASS FUNCTION.
 2. Allows us to edit the data within the Constant Buffers.
---- DeviceContext()->Map() to allow us to write new data.
---- 'memcpy' copies the data we just wrote to our 'targetStruct'(Type: MatrixBufferPack).
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
---- NOT FINISHED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+--- DeviceContext()->Map() 'opens' the ID3D11Buffer for writing.
+--- 'memcpy' copies the data from our already packaged MatrixBufferPack.
+--- DeviceContext()->Unmap() 'closes' the ID3D11Buffer.
 */
 void editConstantBuffers(
 	ID3D11Buffer*			targetBuffer,

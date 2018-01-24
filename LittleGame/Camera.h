@@ -14,28 +14,38 @@
 
 class Camera {
 private:
-	//float cameraMovementSpeed = 2.0;
-	//float cameraRotationSpeed = 0.02;
+	float cameraMoveSpeed = 2.0;
+	float cameraRotateSpeed = 0.02;
 	static float angle;
 	static float nearPlane;
 	static float farPlane;
 
+	DirectX::XMFLOAT3 cameraPosFloat3;
+
 	DirectX::XMVECTOR cameraStartPos = { 0, 10, -10 };
-	DirectX::XMVECTOR cameraPosition;
-	DirectX::XMVECTOR facingDirection;
-	DirectX::XMVECTOR upDirection;
-	DirectX::XMVECTOR rightDirection;
+	DirectX::XMVECTOR cameraStartFacingDir = { 0, 0, 1 };
+	DirectX::XMVECTOR cameraPos;
+	DirectX::XMVECTOR cameraFacingDir;
+	DirectX::XMVECTOR cameraUpDir;
+	DirectX::XMVECTOR cameraRightDir;
+
+	// --- UPDATE_VECTORS ---
+	DirectX::XMVECTOR upVecNormalized;
+	DirectX::XMVECTOR moveVecNormalized;
+	DirectX::XMVECTOR rightAxis;
+
 	DirectX::XMMATRIX view;
 
+	bool updateRequired;
 	void moveCameraUp();
 	void moveCameraLeft();
 	void moveCameraRight();
 	void moveCameraForward();
 	void moveCameraBackward();
-	//void rotateCameraVertically(POINT MouseMovement);
-	//void rotateCameraHorizontally(POINT MouseMovement);
+	void updateRightDir();
 
-	void updateRight();
+	void rotateCameraVertically(POINT mouseMovement);
+	void rotateCameraHorizontally(POINT mouseMovement);
 
 public:
 	Camera();
@@ -46,7 +56,6 @@ public:
 		POINT				mouseCoordinates,
 		MatrixBufferPack	*formattedStructData,
 		ID3D11Buffer*		*GSconstantBuffer,
-		ID3D11DeviceContext *deviceContext,
 		bool				HoverCamActivationStatus
 	);
 
@@ -54,9 +63,10 @@ public:
 
 	void				SETangle(float angleInput);
 
+	DirectX::XMFLOAT3	GETcameraPosFloat3();
 	DirectX::XMVECTOR	GETcameraStartPos();
-	DirectX::XMVECTOR	GETcameraPosition();
-	DirectX::XMVECTOR	GETfacingDirection();
+	DirectX::XMVECTOR	GETcameraPos();
+	DirectX::XMVECTOR	GETfacingDir();
 	static float		GETangle();
 	static float		GETnearPlane();
 	static float		GETfarPlane();
