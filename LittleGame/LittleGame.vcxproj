@@ -142,6 +142,7 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
