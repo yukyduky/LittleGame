@@ -316,7 +316,30 @@ void D3D::createDepthStencilView(int width, int height, ID3D11DepthStencilView**
 	}
 }
 
+void D3D::createVertexBuffer(PrimitiveVertexData* v, ID3D11Buffer** gVertexBuffer, int bufferSize)
+{
+	HRESULT hr;
 
+	//Create Buffer description for vertex buffer.
+	D3D11_BUFFER_DESC vBuffDesc;
+	ZeroMemory(&vBuffDesc, sizeof(vBuffDesc));
+	vBuffDesc.Usage = D3D11_USAGE_DEFAULT;
+	vBuffDesc.ByteWidth = bufferSize;
+	vBuffDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vBuffDesc.CPUAccessFlags = 0;
+	vBuffDesc.MiscFlags = 0;
+
+	//Create vertex subresource data.
+	D3D11_SUBRESOURCE_DATA vBuffData;
+	ZeroMemory(&vBuffData, sizeof(vBuffData));
+	vBuffData.pSysMem = v;
+
+	hr = gDevice->CreateBuffer(&vBuffDesc, &vBuffData, gVertexBuffer);
+	if (FAILED(hr)) {
+		MessageBox(0, "createVertexBuffer - Failed", "Error", MB_OK);
+		_exit(0);
+	}
+}
 
 // SHADER SETUP FUNCTIONS
 
@@ -757,27 +780,27 @@ int D3D::getHeight()
 	return wHeight;
 }
 
-IDXGISwapChain* D3D::GETgSwapChain() {
+IDXGISwapChain*& D3D::GETgSwapChain() {
 	return gSwapChain;
 }
 
-ID3D11Device* D3D::GETgDevice() {
+ID3D11Device*& D3D::GETgDevice() {
 	return gDevice;
 }
 
-ID3D11DeviceContext* D3D::GETgDevCon() {
+ID3D11DeviceContext*& D3D::GETgDevCon() {
 	return gDevCon;
 }
 
-ID3D11RenderTargetView* D3D::GETgRTV() {
+ID3D11RenderTargetView*& D3D::GETgRTV() {
 	return gRTV;
 }
 
-ID3D11DepthStencilView* D3D::GETgDSV() {
+ID3D11DepthStencilView*& D3D::GETgDSV() {
 	return gDSV;
 }
 
-ID3D11Texture2D* D3D::GETgDSB() {
+ID3D11Texture2D*& D3D::GETgDSB() {
 	return gDSB;
 }
 

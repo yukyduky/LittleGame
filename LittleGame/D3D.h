@@ -13,6 +13,14 @@
   |                 D3D                 |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
+struct PrimitiveVertexData {
+	float x, y, z;
+	float nx, ny, nz;
+	float r, g, b, a;
+	PrimitiveVertexData(float x, float y, float z, float r, float g, float b, float a, float nx, float ny, float nz) : x(x), y(y), z(z), r(r), g(g), b(b), a(a), nx(nx), ny(ny), nz(nz) {}
+	PrimitiveVertexData() {}
+};
+
 class D3D
 {
 private:
@@ -50,6 +58,7 @@ public:
 	static D3D11_VIEWPORT createViewPort(int width, int height);
 	static void setViewPort(D3D11_VIEWPORT* vp);
 	static void createDepthStencilView(int width, int height, ID3D11DepthStencilView** gDSV, ID3D11Texture2D** gDSB);
+	static void createVertexBuffer(PrimitiveVertexData * v, ID3D11Buffer ** gVertexBuffer, int bufferSize);
 
 	// SHADER SETUP FUNCTIONS
 	static void createFixedShaders(ID3D11InputLayout** gInputLayout, ID3D11VertexShader** gVertexShader, ID3D11PixelShader** gPixelShader, const wchar_t* fileNameVertex, const wchar_t* fileNamePixel, const D3D11_INPUT_ELEMENT_DESC* inputDesc, int inputDescSize);
@@ -99,12 +108,12 @@ public:
 	// GET FUNCTIONS
 	static int						getWidth();
 	static int						getHeight();
-	static IDXGISwapChain*			GETgSwapChain();
-	static ID3D11Device*			GETgDevice();
-	static ID3D11DeviceContext*		GETgDevCon();
-	static ID3D11RenderTargetView*	GETgRTV();
-	static ID3D11DepthStencilView*	GETgDSV();
-	static ID3D11Texture2D*			GETgDSB();
+	static IDXGISwapChain*&			GETgSwapChain();
+	static ID3D11Device*&			GETgDevice();
+	static ID3D11DeviceContext*&	GETgDevCon();
+	static ID3D11RenderTargetView*&	GETgRTV();
+	static ID3D11DepthStencilView*&	GETgDSV();
+	static ID3D11Texture2D*&		GETgDSB();
 
 
 	// RELEASE OF MEMORY
