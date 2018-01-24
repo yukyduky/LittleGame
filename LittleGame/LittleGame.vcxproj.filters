@@ -123,6 +123,9 @@
     <ClInclude Include="DeferredRendering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RenderInputOrganizer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -156,6 +159,9 @@
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="DeferredRendering.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInputOrganizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
