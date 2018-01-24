@@ -1,11 +1,14 @@
 #include "BlockComponent.h"
 #include "GameObject.h"
+#include "D3D.h"
+#include "RenderInputOrganizer.h"
 
 /*_____________________________
  |         START OF            |
  |     PRIVATE FUNCTIONS       |
  |_____________________________|
  */
+
 
 void BlockComponent::createVertices(const float r, const float g, const float b, const float a)
 {
@@ -37,67 +40,72 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 	*/
 	//Push the vertices into the vector (p0-p7)
 	//Front p0, p1, p2, p3
-	this->vertices.push_back(Vertex(-1.0, 1.0, -1.0));
-	this->vertices.push_back(Vertex(1.0, 1.0, -1.0));
-	this->vertices.push_back(Vertex(-1.0, -1.0, -1.0));
-	this->vertices.push_back(Vertex(1.0, -1.0, -1.0));
+	this->vertexData[0].pos = XMFLOAT3(-1.0, 1.0, -1.0);
+	this->vertexData[1].pos = XMFLOAT3(1.0, 1.0, -1.0);
+	this->vertexData[2].pos = XMFLOAT3(-1.0, -1.0, -1.0);
+	this->vertexData[3].pos = XMFLOAT3(1.0, -1.0, -1.0);
 	//Left p4, p0, p5, p2
-	this->vertices.push_back(Vertex(-1.0, 1.0, 1.0));
-	this->vertices.push_back(Vertex(-1.0, 1.0, -1.0));
-	this->vertices.push_back(Vertex(-1.0, -1.0, 1.0));
-	this->vertices.push_back(Vertex(-1.0, -1.0, -1.0));
+	this->vertexData[8].pos = XMFLOAT3(-1.0, 1.0, 1.0);
+	this->vertexData[4].pos = XMFLOAT3(-1.0, 1.0, -1.0);
+	this->vertexData[9].pos = XMFLOAT3(-1.0, -1.0, 1.0);
+	this->vertexData[6].pos = XMFLOAT3(-1.0, -1.0, -1.0);
 	//Right p1, p6, p3, p7
-	this->vertices.push_back(Vertex(1.0, 1.0, -1.0));
-	this->vertices.push_back(Vertex(1.0, 1.0, 1.0));
-	this->vertices.push_back(Vertex(1.0, -1.0, -1.0));
-	this->vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	this->vertexData[9].pos = XMFLOAT3(1.0, 1.0, -1.0);
+	this->vertexData[14].pos = XMFLOAT3(1.0, 1.0, 1.0);
+	this->vertexData[11].pos = XMFLOAT3(1.0, -1.0, -1.0);
+	this->vertexData[15].pos = XMFLOAT3(1.0, -1.0, 1.0);
 	//Back p6, p4, p7, p5
-	this->vertices.push_back(Vertex(-1.0, 1.0, 1.0));
-	this->vertices.push_back(Vertex(-1.0, -1.0, 1.0));
-	this->vertices.push_back(Vertex(1.0, 1.0, 1.0));
-	this->vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	this->vertexData[18].pos = XMFLOAT3(-1.0, 1.0, 1.0);
+	this->vertexData[16].pos = XMFLOAT3(-1.0, -1.0, 1.0);
+	this->vertexData[19].pos = XMFLOAT3(1.0, 1.0, 1.0);
+	this->vertexData[17].pos = XMFLOAT3(1.0, -1.0, 1.0);
 	//Top p4, p6, p0, p1
-	this->vertices.push_back(Vertex(-1.0, 1.0, 1.0));
-	this->vertices.push_back(Vertex(1.0, 1.0, 1.0));
-	this->vertices.push_back(Vertex(-1.0, 1.0, -1.0));
-	this->vertices.push_back(Vertex(1.0, 1.0, -1.0));
+	this->vertexData[20].pos = XMFLOAT3(-1.0, 1.0, 1.0);
+	this->vertexData[22].pos = XMFLOAT3(1.0, 1.0, 1.0);
+	this->vertexData[16].pos = XMFLOAT3(-1.0, 1.0, -1.0);
+	this->vertexData[17].pos = XMFLOAT3(1.0, 1.0, -1.0);
 	//Bottom p2, p3, p5, p7
-	this->vertices.push_back(Vertex(-1.0, -1.0, -1.0));
-	this->vertices.push_back(Vertex(1.0, -1.0, -1.0));
-	this->vertices.push_back(Vertex(-1.0, -1.0, 1.0));
-	this->vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	this->vertexData[22].pos = XMFLOAT3(-1.0, -1.0, -1.0);
+	this->vertexData[23].pos = XMFLOAT3(1.0, -1.0, -1.0);
+	this->vertexData[25].pos = XMFLOAT3(-1.0, -1.0, 1.0);
+	this->vertexData[27].pos = XMFLOAT3(1.0, -1.0, 1.0);
 
 	//Push the normals into the vector
 	//Front
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	
+	this->vertexData[0].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	this->vertexData[1].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	this->vertexData[2].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	this->vertexData[3].normal = XMFLOAT3(0.0, 0.0, -1.0);
 	//Left
-	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
-	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
-	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
-	this->normals.push_back(Vertex(-1.0, 0.0, 0.0));
+	this->vertexData[4].normal = XMFLOAT3(-1.0, 0.0, 0.0);
+	this->vertexData[0].normal = XMFLOAT3(-1.0, 0.0, 0.0);
+	this->vertexData[5].normal = XMFLOAT3(-1.0, 0.0, 0.0);
+	this->vertexData[2].normal = XMFLOAT3(-1.0, 0.0, 0.0);
 	//Right
-	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
-	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
-	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
-	this->normals.push_back(Vertex(1.0, 0.0, 0.0));
+	this->vertexData[1].normal = XMFLOAT3(1.0, 0.0, 0.0);
+	this->vertexData[6].normal = XMFLOAT3(1.0, 0.0, 0.0);
+	this->vertexData[3].normal = XMFLOAT3(1.0, 0.0, 0.0);
+	this->vertexData[7].normal = XMFLOAT3(1.0, 0.0, 0.0);
 	//Back
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
-	this->normals.push_back(Vertex(0.0, 0.0, -1.0));
+	this->vertexData[6].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	this->vertexData[4].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	this->vertexData[7].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	this->vertexData[5].normal = XMFLOAT3(0.0, 0.0, -1.0);
 	//Top
-	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
-	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
-	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
-	this->normals.push_back(Vertex(0.0, 1.0, 0.0));
+	this->vertexData[4].normal = XMFLOAT3(0.0, 1.0, 0.0);
+	this->vertexData[6].normal = XMFLOAT3(0.0, 1.0, 0.0);
+	this->vertexData[0].normal = XMFLOAT3(0.0, 1.0, 0.0);
+	this->vertexData[1].normal = XMFLOAT3(0.0, 1.0, 0.0);
 	//Bottom
-	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
-	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
-	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
-	this->normals.push_back(Vertex(0.0, -1.0, 0.0));
+	this->vertexData[2].normal = XMFLOAT3(0.0, -1.0, 0.0);
+	this->vertexData[3].normal = XMFLOAT3(0.0, -1.0, 0.0);
+	this->vertexData[5].normal = XMFLOAT3(0.0, -1.0, 0.0);
+	this->vertexData[7].normal = XMFLOAT3(0.0, -1.0, 0.0);
+
+	for (auto &i : this->vertexData) {
+		i.color = XMFLOAT4(this->color.r, this->color.g, this->color.b, this->color.a);
+	}
 
 	//Create indices for the box
 	DWORD index[] =
@@ -122,14 +130,9 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 		22, 21, 23
 	};
 	//Push indices into the vector
-	for (int i = 0; i < 36; i++) {
-		this->indices.push_back(index[i]);
+	for (auto &i : this->indices) {
+		i = index[i];
 	}
-
-	this->color.r = r;
-	this->color.g = g;
-	this->color.b = b;
-	this->color.a = a;
 }
 
 /*_____________________________
@@ -160,24 +163,24 @@ void BlockComponent::recieve(GameObject& obj, Message msg)
 {
 }
 
+void BlockComponent::render(RenderInputOrganizer * rio)
+{
+	rio->render(this);
+}
+
 const size_t BlockComponent::getID()
 {
 	return this->ID;
 }
 
-std::vector<Vertex>& BlockComponent::GETvertices()
+std::array<PrimitiveVertexData, 24>& BlockComponent::GETVertexData()
 {
-	return vertices;
+	return this->vertexData;
 }
 
-std::vector<Vertex>& BlockComponent::GETnormals()
+std::array<DWORD, 36>& BlockComponent::GETindices()
 {
-	return normals;
-}
-
-std::vector<DWORD>& BlockComponent::GETindices()
-{
-	return indices;
+	return this->indices;
 }
 
 vColor& BlockComponent::GETcolor()

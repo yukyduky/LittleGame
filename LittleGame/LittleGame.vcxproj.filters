@@ -164,9 +164,6 @@
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="BlockComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>

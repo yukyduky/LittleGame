@@ -4,16 +4,18 @@
 
 #include "GraphicsComponent.h"
 #include <vector>
+#include <array>
 #include <Windows.h>
 
-class BlockComponent : GraphicsComponent
+struct PrimitiveVertexData;
+
+class BlockComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
 	OBJECTTYPE::TYPE type;
-	static std::vector<Vertex> vertices;
-	static std::vector<Vertex> normals;
-	static std::vector<DWORD> indices;
+	std::array<DWORD, 36> indices;
+	std::array<PrimitiveVertexData, 24> vertexData;
 	vColor color;
 	void createVertices(const float r, const float g, const float b, const float a);
 	
@@ -21,11 +23,13 @@ public:
 	BlockComponent(size_t ID, const float r, const float g, const float b, const float a);
 	~BlockComponent();
 	virtual void recieve(GameObject& obj, Message msg);
-	
+	virtual void render(RenderInputOrganizer* rio);
+
+	std::array<PrimitiveVertexData, 24>& GETVertexData();
+	std::array<DWORD, 36>& GETindices();
+
 	virtual const size_t getID();
-	static std::vector<Vertex>& GETvertices();
-	static std::vector<Vertex>& GETnormals();
-	static std::vector<DWORD>& GETindices();
+	
 	vColor& GETcolor();
 	OBJECTTYPE::TYPE GETtype();
 };

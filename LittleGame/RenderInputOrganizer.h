@@ -24,8 +24,8 @@ private:
 public:
 	RenderInputOrganizer();
 	void render();
+	void render(BlockComponent* block);
 	void addGraphics(GraphicsComponent* graphic);
-	void renderBlock(BlockComponent* block);
 };
 
 #endif // !RENDERINPUTORGANIZER_H

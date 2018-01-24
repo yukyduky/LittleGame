@@ -34,11 +34,14 @@ struct TextureVertex
 	TextureVertex() {}
 };
 
+class RenderInputOrganizer;
+
 class GraphicsComponent : public Component
 {
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
+	virtual void render(RenderInputOrganizer* rio) = 0;
 };
 
 #endif // !GRAPHICSCOMPONENT_H
