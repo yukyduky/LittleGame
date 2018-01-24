@@ -14,11 +14,11 @@
 
 class Camera {
 private:
-	float cameraMoveSpeed = 2.0;
-	float cameraRotateSpeed = 0.02;
-	static float angle;
-	static float nearPlane;
-	static float farPlane;
+	float			cameraMoveSpeed = 2.0;
+	float			cameraRotateSpeed = 0.02;
+	static float	angle;
+	static float	nearPlane;
+	static float	farPlane;
 
 	DirectX::XMFLOAT3 cameraPosFloat3;
 
@@ -29,10 +29,24 @@ private:
 	DirectX::XMVECTOR cameraUpDir;
 	DirectX::XMVECTOR cameraRightDir;
 
-	// --- UPDATE_VECTORS ---
-	DirectX::XMVECTOR upVecNormalized;
-	DirectX::XMVECTOR moveVecNormalized;
-	DirectX::XMVECTOR rightAxis;
+	/// ---- UPDATE-FUNCTION VARIABLES ----
+	// -------- POSITION MOVEMENT ---------
+	DirectX::XMVECTOR	upVecNormalized;
+	DirectX::XMVECTOR	moveVecNormalized;
+	DirectX::XMVECTOR	rightAxis;
+	// ____________________________________
+	// --------- LOOK-AT MOVEMENT ---------
+	float				rotationAngle;
+	DirectX::XMVECTOR	rotationQuaternion;
+	bool				isMouseMovingUp;
+	DirectX::XMFLOAT3	newRotationFloat3;
+	DirectX::XMVECTOR	newRotationVector;
+	DirectX::XMFLOAT3	oldRotationFloat3;
+	DirectX::XMVECTOR	oldRotationVector;
+	DirectX::XMFLOAT3	tempCompareFloat3;
+	DirectX::XMVECTOR	tempCompareVector;
+	// ____________________________________
+	///____________________________________
 
 	DirectX::XMMATRIX view;
 

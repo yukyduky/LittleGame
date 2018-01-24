@@ -117,7 +117,52 @@ void Camera::updateRightDir() {
 }
 
 void Camera::rotateCameraVertically(POINT mouseMovement) {
+	// COMMENT
+	this->rightAxis = DirectX::XMVector3Cross(
+		this->cameraUpDir,
+		this->cameraFacingDir
+	);
 
+	// COMMENT
+	this->rotationAngle = mouseMovement.y *cameraRotateSpeed;
+
+	// COMMENT
+	this->rotationQuaternion = DirectX::XMQuaternionRotationAxis(
+		this->rightAxis,
+		this->rotationAngle
+	);
+
+	// SIMPLY EXPLAINED: If 'mouseMovement.y' is negative; the mouse was moved upwards,
+	// resulting in 'TRUE'. Else 'moveMovement.y' is positive; the mouse was moved downwards,
+	// resulting in 'FALSE'.
+	this->isMouseMovingUp = (mouseMovement.y < 0);
+
+	// Create the 'newRotation' (VECTOR form)
+	this->newRotationVector = DirectX::XMVector3Rotate(
+		this->cameraFacingDir,
+		this->rotationQuaternion
+	);
+
+	// Convert & Store 'newRotation' (VECTOR --> FLOAT3)
+	DirectX::XMStoreFloat3(
+		&this->newRotationFloat3,
+		this->newRotationVector
+	);
+
+	// Convert & Store 'oldRotation' (VECTOR --> FLOAT3)
+	DirectX::XMStoreFloat3(
+		&this->oldRotationFloat3,
+		this->cameraFacingDir
+	);
+
+	this->tempCompareVector = DirectX::XMVector3Dot(
+		DirectX::XMVECTOR{ 0, 0, this->newRotationFloat3.z },
+		DirectX::XMVECTOR{ 0, 0, this->oldRotationFloat3.z }
+	);
+
+
+
+	this->tempCompareFloat3;
 }
 
 void Camera::rotateCameraHorizontally(POINT mouseMovemet) {
