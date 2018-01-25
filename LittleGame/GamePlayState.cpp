@@ -18,7 +18,6 @@ void GamePlayState::init()
 	this->selectCommand = new GamePlaySelectCommand();
 	this->mapKeys();
 
-	this->rio.init();
 	this->go = new GameObject(0);
 	this->block = new BlockComponent(*this->go, 1.0f, 0.0f, 0.0f, 1.0f);
 	this->rio.addGraphics(this->block);
@@ -68,7 +67,7 @@ void GamePlayState::update(GameManager * gm)
 
 void GamePlayState::render(GameManager * gm)
 {
-	this->rio.render();
+	//this->rio.render();
 	gm->display(this);
 }
 

@@ -1,25 +1,25 @@
 #pragma once
-#ifndef DEFERREDRENDERING_H
-#define DEFERREDRENDERING_H
+#ifndef RENDERER_H
+#define RENDERER_H
 
 #include <d3d11.h>
 #include <array>
+#include "Shader.h"
 
 const int NUM_DEFERRED_OUTPUTS = 3;
 const int GEO_INPUT_DESC_SIZE = 3;
 const int LIGHT_INPUT_DESC_SIZE = 1;
 
-class DeferredRendering
+class Renderer
 {
 private:
 	std::array<ID3D11RenderTargetView*, NUM_DEFERRED_OUTPUTS> gRTVs;
 	std::array<ID3D11ShaderResourceView*, NUM_DEFERRED_OUTPUTS> gSRVs;
 	std::array<ID3D11Texture2D*, NUM_DEFERRED_OUTPUTS> gDeferredTexs;
+	ID3D11RenderTargetView* gFinalRTV;
+	ID3D11DepthStencilView* gDSV;
+	ID3D11Texture2D* gDSB;
 	ID3D11SamplerState* gSampler;
-	ID3D11VertexShader* gGeoVertex;
-	ID3D11PixelShader* gGeoPixel;
-	ID3D11VertexShader* gLightVertex;
-	ID3D11PixelShader* gLightPixel;
 	ID3D11InputLayout* gGeoInputLayout;
 	ID3D11InputLayout* gLightInputLayout;
 	ID3D11Buffer* gQuadVertexBuffer;
@@ -27,14 +27,19 @@ private:
 
 	size_t vertBufferStride;
 	size_t vertBufferOffset;
+	Shader geoShaders;
+	Shader lightShaders;
+
+	std::array<float, 4> clearColor;
 
 	void initShaders();
-	void bindTextureToRTVAndSRV();
-	void initSampler();
+	void bindTextureToRTVAndSRV(ID3D11Texture2D** gTexure, ID3D11RenderTargetView** gRTV, ID3D11ShaderResourceView** gSRV, int width, int height, DXGI_FORMAT format);
+	void initSampler(ID3D11SamplerState** gSampler, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAdressModeU, D3D11_TEXTURE_ADDRESS_MODE texAdressModeV, D3D11_TEXTURE_ADDRESS_MODE texAdressModeW, D3D11_COMPARISON_FUNC compFunc);
 	void createQuad();
 	void createViewport();
+	void createBackBufferRTV();
+	void createDepthStencilView(size_t width, size_t height, ID3D11DepthStencilView** gDSV, ID3D11Texture2D** gDSB);
 public:
-	DeferredRendering();
 	void init();
 	void firstPass();
 	void secondPass();
@@ -57,4 +62,4 @@ private:
 	const wchar_t* fileNameLightPixel = L"lightPassPixel.hlsl";
 };
 
-#endif // !DEFERREDRENDERING_H
+#endif // !RENDERER_H

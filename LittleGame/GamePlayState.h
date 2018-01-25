@@ -21,8 +21,12 @@ private:
 	Command* selectCommand;
 
 	RenderInputOrganizer rio;
-	GraphicsComponent* block;
 	GameObject* go;
+	GraphicsComponent* block;
+
+	/*RenderInputOrganizer rio;
+	GraphicsComponent* block;
+	GameObject* go;*/
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.

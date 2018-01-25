@@ -1,16 +1,18 @@
 #include "GameManager.h"
-#include "D3D.h"
 #include "StateManager.h"
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
 #include "InputHandler.h"
 #include "GamePlayState.h"
+#include "Renderer.h"
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
 	this->isRunning = true;
 	
+	this->renderer.init();
+
 	// Creation of gameTime;
 	this->gameTime = new GameTime;
 	// Provide the gametime object to the service locator
@@ -55,17 +57,13 @@ void GameManager::update()
 
 void GameManager::render()
 {
-	/*Color bgColor(255, 0, 255, 1.0f);
-	// Clear the backbuffer
-	gDevCon->ClearRenderTargetView(gFinalRTV, bgColor);*/
-
+	//this->renderer.firstPass();
 	StateManager::render(this);
 }
 
 void GameManager::display(State* state)
 {
-	/*// Present the backbuffer to the screen
-	gSwapChain->Present(0, 0);*/
+	this->renderer.secondPass();
 }
 
 bool GameManager::getIsRunning()
@@ -77,5 +75,4 @@ void GameManager::quit()
 {
 	this->isRunning = false;
 	StateManager::cleanup();
-	D3D::Release();
 }

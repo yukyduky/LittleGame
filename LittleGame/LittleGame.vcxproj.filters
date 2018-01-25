@@ -105,9 +105,6 @@
     <ClInclude Include="GamePlayState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
     <ClInclude Include="GamePlaySelectCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -126,11 +123,20 @@
     <ClInclude Include="BlockComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="DeferredRendering.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\General</Filter>
     </ClInclude>
     <ClInclude Include="RenderInputOrganizer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ID3D.h">
+      <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,20 +164,23 @@
     <ClCompile Include="GamePlayState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
-    <ClCompile Include="D3D.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="BlockComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="DeferredRendering.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="RenderInputOrganizer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

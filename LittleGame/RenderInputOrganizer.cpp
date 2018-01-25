@@ -1,31 +1,22 @@
 #include "RenderInputOrganizer.h"
-#include "BlockComponent.h"
-#include "D3D.h"
+#include "GraphicsComponent.h"
+#include "Locator.h"
 
 
 void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
-	D3D::setVertexBuffer(0, 1, &graphics->GETvertexBuffer(), &graphics->GETstride(), &graphics->GEToffset());
-	D3D::setIndexBuffer(graphics->GETindexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	Locator::getD3D()->setVertexBuffer(&graphics->GETvertexBuffer(), &graphics->GETstride(), &graphics->GEToffset());
+	Locator::getD3D()->setIndexBuffer(graphics->GETindexBuffer(), 0);
 
-	D3D::setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	D3D::drawIndexed(graphics->GETnumIndices(), 0, 0);
-}
-
-void RenderInputOrganizer::init()
-{
-	this->defRenderer.init();
+	Locator::getD3D()->GETgDevCon()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Locator::getD3D()->GETgDevCon()->DrawIndexed(graphics->GETnumIndices(), 0, 0);
 }
 
 void RenderInputOrganizer::render()
 {
-	/*this->defRenderer.firstPass();
-
 	for (auto &i : this->graphics) {
 		this->drawGraphics(i);
-	}*/
-
-	this->defRenderer.secondPass();
+	}
 }
 
 void RenderInputOrganizer::addGraphics(GraphicsComponent * graphics)

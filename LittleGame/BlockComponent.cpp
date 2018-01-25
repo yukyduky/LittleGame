@@ -1,7 +1,6 @@
 #include "BlockComponent.h"
 #include "GameObject.h"
-#include "D3D.h"
-#include "RenderInputOrganizer.h"
+#include "Locator.h"
 
 /*_____________________________
  |         START OF            |
@@ -135,8 +134,9 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 	
 	this->offset = 0;
 	this->stride = sizeof(PrimitiveVertexData);
-	D3D::createVertexBuffer(vertexData.data(), &this->gVertexBuffer, this->stride);
-	D3D::createIndexBuffer(index, &this->gIndexBuffer, sizeof(DWORD) * this->numIndices);
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), &this->stride, &this->offset);
+	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index);
 }
 
 /*_____________________________
