@@ -120,8 +120,11 @@
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
-      <Filter>Header Files\Components\Physics</Filter>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferManager.h">
+      <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +158,11 @@
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>Source Files\Components\Physics</Filter>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferManager.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
