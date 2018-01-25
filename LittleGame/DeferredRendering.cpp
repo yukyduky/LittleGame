@@ -23,16 +23,41 @@ void DeferredRendering::initSampler()
 
 void DeferredRendering::createQuad()
 {
-	std::array<PrimitiveVertexData, 4> quad;
+	struct Vertex
+	{
+		float x, y, z, w;
+	};
 
-	quad[0] = PrimitiveVertexData(-1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f);
-	quad[1] = PrimitiveVertexData(1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f);
-	quad[2] = PrimitiveVertexData(-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f);
-	quad[3] = PrimitiveVertexData(-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f);
+	Vertex v[] =
+	{
+		-1.0f, 1.0f, 0.0f, 1.0f,
+		1.0f, 1.0f, 0.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 1.0f,
+		1.0f, -1.0f, 0.0f, 1.0f,
+	};
 
-	D3D::createVertexBuffer(quad.data(), &this->gQuadVertexBuffer, sizeof(PrimitiveVertexData) * 4);
+	// Describe the vertex buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	memset(&vertexBufferDesc, 0, sizeof(D3D11_BUFFER_DESC));
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(v);
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
 
-	this->vertBufferStride = sizeof(PrimitiveVertexData);
+	// Set the vertex buffer data
+	D3D11_SUBRESOURCE_DATA vertexData;
+	memset(&vertexData, 0, sizeof(vertexData));
+	vertexData.pSysMem = &v;
+
+	HRESULT hr = D3D::GETgDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &this->gQuadVertexBuffer);
+	if (FAILED(hr))
+	{
+		MessageBox(0, "Create Vertex buffer - Failed", "Error", MB_OK);
+		_exit(0);
+	}
+
+	this->vertBufferStride = sizeof(Vertex);
 	this->vertBufferOffset = 0;
 }
 
@@ -62,25 +87,26 @@ void DeferredRendering::firstPass()
 	D3D::clearDepthStencilView(D3D::GETgDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL);
 
 	D3D::setFixedShaders(this->gGeoVertex, this->gGeoPixel);
+	D3D::setInputLayout(gGeoInputLayout);
 
 	D3D::setViewPort(&this->viewport);
 
 	D3D::setRenderTargets(NUM_DEFERRED_OUTPUTS, this->gRTVs.data(), D3D::GETgDSV());
-
-	D3D::psSetSampler(0, 1, this->gSampler);
 }
 
 void DeferredRendering::secondPass()
 {
 	D3D::setFixedShaders(this->gLightVertex, this->gLightPixel);
+	D3D::setInputLayout(gLightInputLayout);
 
 	D3D::setVertexBuffer(0, 1, &this->gQuadVertexBuffer, &this->vertBufferStride, &this->vertBufferOffset);
 
-	D3D::setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	D3D::setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	D3D::setRenderTargets(1, &D3D::GETgRTV(), D3D::GETgDSV());
+	D3D::setRenderTargetToFinalRTV();
 
-	D3D::psSetShaderResource(0, NUM_DEFERRED_OUTPUTS, *this->gSRVs.data());
+	D3D::psSetShaderResource(0, NUM_DEFERRED_OUTPUTS, this->gSRVs.data());
+	D3D::psSetSampler(0, 1, &this->gSampler);
 
 	D3D::draw(4, 0);
 

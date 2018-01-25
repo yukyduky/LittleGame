@@ -492,6 +492,11 @@ void D3D::setRenderTargets(size_t numViews, ID3D11RenderTargetView** gRTV, ID3D1
 	gDevCon->OMSetRenderTargets(numViews, gRTV, gDSV);
 }
 
+void D3D::setRenderTargetToFinalRTV()
+{
+	gDevCon->OMSetRenderTargets(1, &gRTV, gDSV);
+}
+
 void D3D::createTextureFromFile(ID3D11ShaderResourceView** gSRV, const wchar_t* fileName)
 {
 	HRESULT hr;
@@ -615,54 +620,54 @@ void D3D::bindTextureToDSVAndSRV(ID3D11Texture2D** gTexure, ID3D11DepthStencilVi
 	}
 }
 
-void D3D::vsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::vsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView** gSRV)
 {
-	gDevCon->VSSetShaderResources(start, numViews, &gSRV);
+	gDevCon->VSSetShaderResources(start, numViews, gSRV);
 }
 
-void D3D::psSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::psSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView** gSRV)
 {
-	gDevCon->PSSetShaderResources(start, numViews, &gSRV);
+	gDevCon->PSSetShaderResources(start, numViews, gSRV);
 }
 
-void D3D::gsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::gsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView** gSRV)
 {
-	gDevCon->GSSetShaderResources(start, numViews, &gSRV);
+	gDevCon->GSSetShaderResources(start, numViews, gSRV);
 }
 
-void D3D::hsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::hsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView** gSRV)
 {
-	gDevCon->HSSetShaderResources(start, numViews, &gSRV);
+	gDevCon->HSSetShaderResources(start, numViews, gSRV);
 }
 
-void D3D::dsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView* gSRV)
+void D3D::dsSetShaderResource(size_t start, size_t numViews, ID3D11ShaderResourceView** gSRV)
 {
-	gDevCon->DSSetShaderResources(start, numViews, &gSRV);
+	gDevCon->DSSetShaderResources(start, numViews, gSRV);
 }
 
-void D3D::vsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
+void D3D::vsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState** gSampler)
 {
-	gDevCon->VSSetSamplers(start, numSamplers, &gSampler);
+	gDevCon->VSSetSamplers(start, numSamplers, gSampler);
 }
 
-void D3D::psSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
+void D3D::psSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState** gSampler)
 {
-	gDevCon->PSSetSamplers(start, numSamplers, &gSampler);
+	gDevCon->PSSetSamplers(start, numSamplers, gSampler);
 }
 
-void D3D::gsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
+void D3D::gsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState** gSampler)
 {
-	gDevCon->GSSetSamplers(start, numSamplers, &gSampler);
+	gDevCon->GSSetSamplers(start, numSamplers, gSampler);
 }
 
-void D3D::hsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
+void D3D::hsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState** gSampler)
 {
-	gDevCon->HSSetSamplers(start, numSamplers, &gSampler);
+	gDevCon->HSSetSamplers(start, numSamplers, gSampler);
 }
 
-void D3D::dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState* gSampler)
+void D3D::dsSetSampler(size_t start, size_t numSamplers, ID3D11SamplerState** gSampler)
 {
-	gDevCon->DSSetSamplers(start, numSamplers, &gSampler);
+	gDevCon->DSSetSamplers(start, numSamplers, gSampler);
 }
 
 void D3D::createIndexBuffer(DWORD* indices, ID3D11Buffer** gIndexBuffer, int bufferSize)

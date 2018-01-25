@@ -5,7 +5,7 @@
 #include <d3d11.h>
 #include <array>
 
-const int NUM_DEFERRED_OUTPUTS = 1;
+const int NUM_DEFERRED_OUTPUTS = 3;
 const int GEO_INPUT_DESC_SIZE = 3;
 const int LIGHT_INPUT_DESC_SIZE = 1;
 

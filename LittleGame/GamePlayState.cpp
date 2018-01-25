@@ -2,6 +2,7 @@
 #include "GameManager.h"
 #include "GamePlaySelectCommand.h"
 #include "Locator.h"
+#include "BlockComponent.h"
 
 GamePlayState GamePlayState::sGamePlayState;
 
@@ -16,6 +17,11 @@ void GamePlayState::init()
 {
 	this->selectCommand = new GamePlaySelectCommand();
 	this->mapKeys();
+
+	this->rio.init();
+	this->go = new GameObject(0);
+	this->block = new BlockComponent(*this->go, 1.0f, 0.0f, 0.0f, 1.0f);
+	this->rio.addGraphics(this->block);
 }
 
 void GamePlayState::cleanup()
@@ -62,6 +68,7 @@ void GamePlayState::update(GameManager * gm)
 
 void GamePlayState::render(GameManager * gm)
 {
+	this->rio.render();
 	gm->display(this);
 }
 

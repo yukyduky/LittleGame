@@ -3,33 +3,32 @@
 #include "D3D.h"
 
 
-RenderInputOrganizer::RenderInputOrganizer()
+void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
+{
+	D3D::setVertexBuffer(0, 1, &graphics->GETvertexBuffer(), &graphics->GETstride(), &graphics->GEToffset());
+	D3D::setIndexBuffer(graphics->GETindexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+
+	D3D::setPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	D3D::drawIndexed(graphics->GETnumIndices(), 0, 0);
+}
+
+void RenderInputOrganizer::init()
 {
 	this->defRenderer.init();
 }
 
 void RenderInputOrganizer::render()
 {
-	this->defRenderer.firstPass();
+	/*this->defRenderer.firstPass();
 
 	for (auto &i : this->graphics) {
-		i->render(this);
-	}
+		this->drawGraphics(i);
+	}*/
 
 	this->defRenderer.secondPass();
 }
 
-void RenderInputOrganizer::render(BlockComponent * block)
+void RenderInputOrganizer::addGraphics(GraphicsComponent * graphics)
 {
-	ID3D11Buffer* gVertexBuffer = nullptr;
-	ID3D11Buffer* gIndexBuffer = nullptr;
-	D3D::createVertexBuffer(block->GETVertexData().data(), &gVertexBuffer, sizeof(PrimitiveVertexData) * block->GETVertexData().size());
-	D3D::createIndexBuffer(block->GETindices().data(), &gIndexBuffer, sizeof(DWORD) * block->GETindices().size());
-	D3D::setIndexBuffer(gVertexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-}
-
-void RenderInputOrganizer::addGraphics(GraphicsComponent * graphic)
-{
-	this->graphics.push_back(graphic);
+	this->graphics.push_back(graphics);
 }

@@ -11,21 +11,17 @@ struct Vertex;
 class GraphicsComponent;
 class BlockComponent;
 
-namespace OBJECTTYPE {
-	enum TYPE { BLOCK, SIZE };
-}
-
 class RenderInputOrganizer
 {
 private:
 	DeferredRendering defRenderer;
-	std::vector<ID3D11Buffer*> gPrimitiveVertexBuffers;
 	std::vector<GraphicsComponent*> graphics;
+	
+	void drawGraphics(GraphicsComponent*& graphics);
 public:
-	RenderInputOrganizer();
+	void init();
 	void render();
-	void render(BlockComponent* block);
-	void addGraphics(GraphicsComponent* graphic);
+	void addGraphics(GraphicsComponent* graphics);
 };
 
 #endif // !RENDERINPUTORGANIZER_H

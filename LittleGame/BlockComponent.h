@@ -13,25 +13,26 @@ class BlockComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	OBJECTTYPE::TYPE type;
-	std::array<DWORD, 36> indices;
-	std::array<PrimitiveVertexData, 24> vertexData;
+	ID3D11Buffer* gVertexBuffer;
+	ID3D11Buffer* gIndexBuffer;
 	vColor color;
-	void createVertices(const float r, const float g, const float b, const float a);
+	size_t stride;
+	size_t offset;
+	size_t numIndices;
+	void createVertices(float r, float g, float b, float a);
 	
 public:
-	BlockComponent(size_t ID, const float r, const float g, const float b, const float a);
+	BlockComponent(GameObject& obj, float r, float g, float b, float a);
 	~BlockComponent();
-	virtual void recieve(GameObject& obj, Message msg);
-	virtual void render(RenderInputOrganizer* rio);
+	virtual void receive(GameObject& obj, Message msg);
 
-	std::array<PrimitiveVertexData, 24>& GETVertexData();
-	std::array<DWORD, 36>& GETindices();
+	virtual ID3D11Buffer*& GETvertexBuffer();
+	virtual ID3D11Buffer*& GETindexBuffer();
+	virtual size_t& GETstride();
+	virtual size_t& GEToffset();
+	virtual size_t& GETnumIndices();
 
 	virtual const size_t getID();
-	
-	vColor& GETcolor();
-	OBJECTTYPE::TYPE GETtype();
 };
 
 

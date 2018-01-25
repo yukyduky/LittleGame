@@ -3,10 +3,7 @@
 #define GRAPHICSCOMPONENT_H
 
 #include "Component.h"
-
-namespace OBJECTTYPE {
-	enum TYPE { BLOCK, SIZE };
-}
+#include <d3d11.h>
 
 struct vColor
 {
@@ -41,7 +38,11 @@ class GraphicsComponent : public Component
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
-	virtual void render(RenderInputOrganizer* rio) = 0;
+	virtual ID3D11Buffer*& GETvertexBuffer() = 0;
+	virtual ID3D11Buffer*& GETindexBuffer() = 0;
+	virtual size_t& GETstride() = 0;
+	virtual size_t& GEToffset() = 0;
+	virtual size_t& GETnumIndices() = 0;
 };
 
 #endif // !GRAPHICSCOMPONENT_H

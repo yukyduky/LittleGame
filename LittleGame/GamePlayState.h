@@ -6,6 +6,9 @@
 #include <vector>
 #include "Command.h"
 #include "IInputHandler.h"
+#include "RenderInputOrganizer.h"
+#include "GraphicsComponent.h"
+#include "GameObject.h"
 
 class Command;
 
@@ -16,6 +19,10 @@ private:
 
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
+
+	RenderInputOrganizer rio;
+	GraphicsComponent* block;
+	GameObject* go;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
