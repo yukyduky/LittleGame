@@ -6,6 +6,12 @@
 #include "D3D.h"
 #include "Component.h"
 
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                                     |
+  |         PHYSICS COMPONENT           |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+
 class PhysicsComponent : public Component
 {
 private:
@@ -18,9 +24,15 @@ public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
 
-	DirectX::BoundingBox getBoundingBox();
+	DirectX::BoundingSphere getBoundingSphere();
+	bool checkCollision(DirectX::BoundingSphere boundingSphere_in);
 
 	void update(); //start with boundingbox
 };
+//______________________________________________//
+//                                              //
+//           END OF PHYSICS COMPONENT           //
+//______________________________________________//
+//////////////////////////////////////////////////
 
 #endif
