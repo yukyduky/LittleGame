@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ControllerCommands.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlaySelectCommand.h" />
@@ -142,6 +143,10 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="MenuCommands.h" />
+    <ClInclude Include="MouseCommands.h" />
+    <ClInclude Include="MovementCommands.h" />
+    <ClInclude Include="AbilityCommands.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />

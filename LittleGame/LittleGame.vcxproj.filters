@@ -70,6 +70,15 @@
     <Filter Include="Source Files\Components\UI">
       <UniqueIdentifier>{fef96ffd-a712-4053-93ff-11be5a46719d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Commands\Mouse">
+      <UniqueIdentifier>{8cc33ff0-2612-4335-b6e5-c40895454954}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Commands\Keyboard">
+      <UniqueIdentifier>{afa6e733-328b-4d80-ac3f-d912340020eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Commands\Controller">
+      <UniqueIdentifier>{5603ff20-b4f8-4fce-b5ce-7b396c318e20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -119,6 +128,21 @@
     </ClInclude>
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementCommands.h">
+      <Filter>Header Files\Commands\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseCommands.h">
+      <Filter>Header Files\Commands\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityCommands.h">
+      <Filter>Header Files\Commands\Keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerCommands.h">
+      <Filter>Header Files\Commands\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuCommands.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
