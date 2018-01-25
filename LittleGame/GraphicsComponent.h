@@ -3,9 +3,13 @@
 #define GRAPHICSCOMPONENT_H
 
 #include "Component.h"
+#include <DirectXMath.h>
+#include <vector>
+
+using namespace DirectX;
 
 namespace OBJECTTYPE {
-	enum TYPE { BLOCK, SIZE };
+	enum TYPE { BLOCK, RECTANGLE, SIZE };
 }
 
 struct vColor
@@ -37,9 +41,13 @@ struct TextureVertex
 
 class GraphicsComponent : public Component
 {
+private:
+	XMMATRIX worldMatrix;
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
+	virtual void SETworldMatrix(XMMATRIX other) { this->worldMatrix = other; }
+	virtual XMMATRIX GETworldMatrix() { return this->worldMatrix; }
 };
 
 #endif // !GRAPHICSCOMPONENT_H

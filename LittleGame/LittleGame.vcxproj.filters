@@ -132,6 +132,9 @@
     <ClInclude Include="BlockComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="RectangleComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -164,10 +167,10 @@
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsComponent.cpp">
+    <ClCompile Include="BlockComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="BlockComponent.cpp">
+    <ClCompile Include="RectangleComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

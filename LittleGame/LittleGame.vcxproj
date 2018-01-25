@@ -143,6 +143,7 @@
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="BlockComponent.h" />
+    <ClInclude Include="RectangleComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -152,12 +153,12 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
-    <ClCompile Include="GraphicsComponent.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="BlockComponent.cpp" />
+    <ClCompile Include="RectangleComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>

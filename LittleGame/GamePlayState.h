@@ -6,6 +6,18 @@
 #include <vector>
 #include "Command.h"
 #include "IInputHandler.h"
+#include "GameObject.h"
+
+#define ARENAWIDTH 600		//The arenas "length" (x-dimension)
+#define ARENAHEIGHT 400		//The arenas "height" (z-dimension)
+#define ARENASQUARESIZE 10	//Have to be able to divide ARENAHEIGHT and ARENAWIDTH
+#define LENGTHOFWALLS 5		//Will be multiplied with ARENASQUARESIZE for total length of a wall.
+#define HEIGHTOFWALLS 1		//Will be multiplied with ARENASQUARESIZE for total height of a wall.
+#define PI 3.14159265358979323846
+
+namespace SQUARETYPE {
+	enum TYPE { EMPTY, WALL, SPAWN, SIZE };
+}
 
 class Command;
 
@@ -13,6 +25,13 @@ class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
+	
+	//arenaGrid values:
+	//0 = empty space
+	//1 = occupied space
+	//2 = spawnlocation
+	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
+	std::vector<GameObject*> arenaObjects;
 
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
@@ -65,6 +84,53 @@ public:
 	1. Get the static instance of the 'GamePlayState'.
 	*/
 	static GamePlayState* getInstance();
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Calls createArenaFloor
+	2. Calls createArenaWalls
+	3.
+	*/
+	void initArena();
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Creates a new GameObject with a new RectangleComponent.
+	2. Pushes the new GameObject into the arenaObject vector.
+	*/
+	void createArenaFloor(); 
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Calculates number of walls in Left, Right, Top and Bottom row.
+	2. Calculates the position of the wall we want to create.
+	3. Checks if the new positions should be a wall or a spawn location.
+	4. Creates the worldMatrix for the new wall.
+	5. Calls createAWall() function.
+	6. Sets the correct type of the squares in the arenaGrid.
+	7. TODO: Implement a randomize function for the spawn locations and make corner static corner pillars.
+	*/
+	void createArenaWalls();
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Creates a GameObject and a BlockComponent.
+	2. The ID for the new object is fetched from the arenaGrid vector.
+	3. Gives the worldMatrix to the BlockComponent.
+	4. Gives the BlockComponent to the GameObject.
+	5. Pushes the new GameObject into the arenaObjects vector.
+	6. PS: REMEMBER to set the grid area of the new wall to the right type.
+	*/
+	void createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Sets the square at the given index to the given type.
+	*/
+	void SETsquareType(XMFLOAT2 index, SQUARETYPE::TYPE type);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Find the index of a square at a given position.
+	2. The function does not care about the height of the position you send in.
+	3. Returns XMFLOAT2 where the x-value is the x-index and y-value is the z-index.
+	4. We call it z-index because the depth in the grid is along the z-axis.
+	*/
+	XMFLOAT2 findGridIndexFromPosition(XMFLOAT3 pos);
 };
 
 #endif // !GAMEPLAYSTATE_H

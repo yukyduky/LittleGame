@@ -11,15 +11,9 @@ std::vector<DWORD> BlockComponent::indices;
  |_____________________________|
  */
 
-void BlockComponent::createVertices(const float r, const float g, const float b, const float a)
+ 
+void BlockComponent::createVertices()
 {
-	/*--------<INFORMATION>--------
-	1. Creates a box with points ranging from -1.0 to 1.0 in x,y,z dimensions.
-	2. Sets the color of every vertex to the r,g,b in the paramaters.
-	3. All vertices is in modelspace with origin in the center of the box.
-	4. Creates indices for the indexbuffer.
-	*/
-
 	/*
 	   p4__________p6
 	   /|         /|
@@ -39,7 +33,7 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 	p6 = (1.0, 1.0, 1.0)
 	p7 = (1.0, -1.0, 1.0)
 	*/
-	//Push the vertices into the vector (p0-p7)
+	//Push the vertices of each side into the vector
 	//Front p0, p1, p2, p3
 	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, -1.0));
 	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, -1.0));
@@ -129,11 +123,6 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 	for (int i = 0; i < 36; i++) {
 		BlockComponent::indices.push_back(index[i]);
 	}
-
-	this->color.r = r;
-	this->color.g = g;
-	this->color.b = b;
-	this->color.a = a;
 }
 
 /*_____________________________
@@ -150,11 +139,17 @@ void BlockComponent::createVertices(const float r, const float g, const float b,
 
 BlockComponent::BlockComponent(size_t ID, const float r, const float g, const float b, const float a) : ID(ID)
 {
-	//Create vertices and indices for the box
-	this->createVertices(r, g, b, a);
+	if (BlockComponent::vertices.size() == 0) {
+		//Create vertices, indices and normals for the box
+		this->createVertices();
+	}
+	//Set the color of the box
+	this->color.r = r;
+	this->color.g = g;
+	this->color.b = b;
+	this->color.a = a;
 	//Set type to BLOCK
 	this->type = OBJECTTYPE::BLOCK;
-
 }
 
 BlockComponent::~BlockComponent() 

@@ -22,8 +22,8 @@ struct Message
 class GameObject
 {
 public:
-	GameObject(const size_t ID) : ID(ID), pos(Vector2(0.0f, 0.0f)), state(OBJECTSTATE::IDLE) {}
-	GameObject(const size_t ID, Vector2 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE) {}
+	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE) {}
+	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE) {}
 	virtual ~GameObject();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -36,17 +36,17 @@ public:
 	*/
 	void addComponent(Component* component);
 	const size_t getID() const { return this->ID; }
-	void setPosition(Vector2 pos) { this->pos = pos; }
-	Vector2 getPosition() const { return this->pos; }
-	void setVelocity(Vector2 velocity) { this->velocity = velocity; }
-	Vector2 getVelocity() const { return this->velocity; }
+	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
+	XMFLOAT3 getPosition() const { return this->pos; }
+	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
+	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE state) { this->state = state; }
 	OBJECTSTATE getState() const { return this->state; }
 private:
 	std::list<Component*> components;
 	const size_t ID;
-	Vector2 pos;
-	Vector2 velocity;
+	XMFLOAT3 pos;
+	XMFLOAT3 velocity;
 	OBJECTSTATE state;
 };
 
