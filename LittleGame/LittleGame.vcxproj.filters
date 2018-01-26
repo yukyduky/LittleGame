@@ -120,9 +120,6 @@
     <ClInclude Include="GamePlayState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
     <ClInclude Include="GamePlaySelectCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -134,6 +131,27 @@
     </ClInclude>
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderInputOrganizer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ID3D.h">
+      <Filter>Header Files\General</Filter>
     </ClInclude>
     <ClInclude Include="MovementCommands.h">
       <Filter>Header Files\Commands\Keyboard</Filter>
@@ -185,11 +203,23 @@
     <ClCompile Include="GamePlayState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
-    <ClCompile Include="D3D.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInputOrganizer.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="KeyboardComponent.cpp">
       <Filter>Source Files\Components\Input</Filter>
@@ -205,5 +235,19 @@
     <None Include="packages.config">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="geoPassVert.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="geoPassPixel.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassVert.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassPixel.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

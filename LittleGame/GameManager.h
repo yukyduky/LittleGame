@@ -6,6 +6,7 @@
 #include <d3d11.h>
 #include "IGameTime.h"
 #include "IInputHandler.h"
+#include "Renderer.h"
 
 class State;
 
@@ -15,6 +16,7 @@ private:
 	bool isRunning;
 	IGameTime* gameTime;
 	IInputHandler* inputHandler;
+	Renderer renderer;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

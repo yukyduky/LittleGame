@@ -6,6 +6,9 @@
 #include <vector>
 #include "Command.h"
 #include "IInputHandler.h"
+#include "RenderInputOrganizer.h"
+#include "GraphicsComponent.h"
+#include "GameObject.h"
 
 // If mingling with a POINT, just use x's and y's rather than mingling the entire structs
 
@@ -28,6 +31,9 @@ private:
 	Command* commands[Commands::Size];
 	std::vector<Input> commandQueue;
 
+	RenderInputOrganizer rio;
+	GameObject* go;
+	std::vector<GraphicsComponent*> blocks;
 
 	void mapCommands();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
