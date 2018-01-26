@@ -22,7 +22,7 @@ private:
 
 	RenderInputOrganizer rio;
 	GameObject* go;
-	GraphicsComponent* block;
+	std::vector<GraphicsComponent*> blocks;
 
 	/*RenderInputOrganizer rio;
 	GraphicsComponent* block;

@@ -13,7 +13,7 @@ struct VS_OUT {
 VS_OUT VS(VS_IN input) {
 	VS_OUT output;
 
-	output.pos = float4(input.pos, 1.0);
+	output.pos = float4(input.pos, 1.0f);
 	output.normal = input.normal;
 	output.color = input.color;
 

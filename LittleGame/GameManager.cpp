@@ -57,7 +57,7 @@ void GameManager::update()
 
 void GameManager::render()
 {
-	//this->renderer.firstPass();
+	this->renderer.firstPass();
 	StateManager::render(this);
 }
 

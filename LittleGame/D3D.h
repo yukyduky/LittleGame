@@ -18,9 +18,9 @@ private:
 public:
 	virtual void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed);
 	virtual void createSwapChain();
-	virtual void createVertexBuffer(ID3D11Buffer** gVertexBuffer, PrimitiveVertexData* vertexData, size_t* stride, size_t* offset);
-	virtual void createIndexBuffer(ID3D11Buffer** gIndexBuffer, DWORD* indexData);
-	virtual void setVertexBuffer(ID3D11Buffer** gVertexBuffer, size_t* stride, size_t* offset);
+	virtual void createVertexBuffer(ID3D11Buffer** gVertexBuffer, PrimitiveVertexData* v, size_t& stride, size_t& offset, size_t numVertices);
+	virtual void createIndexBuffer(ID3D11Buffer** gIndexBuffer, DWORD* data, size_t& numIndices);
+	virtual void setVertexBuffer(ID3D11Buffer** gVertexBuffer, size_t& stride, size_t& offset);
 	virtual void setIndexBuffer(ID3D11Buffer* gIndexBuffer, size_t offset);
 
 	virtual size_t& GETwWidth();

@@ -20,8 +20,6 @@ private:
 	ID3D11DepthStencilView* gDSV;
 	ID3D11Texture2D* gDSB;
 	ID3D11SamplerState* gSampler;
-	ID3D11InputLayout* gGeoInputLayout;
-	ID3D11InputLayout* gLightInputLayout;
 	ID3D11Buffer* gQuadVertexBuffer;
 	D3D11_VIEWPORT viewport;
 

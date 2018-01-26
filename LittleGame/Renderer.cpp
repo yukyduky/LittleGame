@@ -113,7 +113,7 @@ void Renderer::createQuad()
 	// Set the vertex buffer data
 	D3D11_SUBRESOURCE_DATA vertexData;
 	memset(&vertexData, 0, sizeof(vertexData));
-	vertexData.pSysMem = &v;
+	vertexData.pSysMem = v;
 
 	HRESULT hr = Locator::getD3D()->GETgDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &this->gQuadVertexBuffer);
 	if (FAILED(hr))
@@ -207,12 +207,15 @@ void Renderer::createDepthStencilView(size_t width, size_t height, ID3D11DepthSt
 
 void Renderer::init()
 {
+	// Set the clear color
 	this->clearColor[0] = 255.0f;
 	this->clearColor[1] = 0.0f;
 	this->clearColor[2] = 255.0f;
 	this->clearColor[3] = 255.0f;
 
+	// Create the backbuffer RenderTargetView (gFinalRTV)
 	this->createBackBufferRTV();
+	// Create the DepthStencilView
 	this->createDepthStencilView(Locator::getD3D()->GETwWidth(), Locator::getD3D()->GETwHeight(), &this->gDSV, &this->gDSB);
 	this->initShaders();
 	for (int i = 0; i < NUM_DEFERRED_OUTPUTS; i++) {
@@ -220,37 +223,54 @@ void Renderer::init()
 	}
 	this->createQuad();
 	this->initSampler(&this->gSampler, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_COMPARISON_ALWAYS);
+	this->createViewport();
 }
 
 void Renderer::firstPass()
 {
-	Locator::getD3D()->GETgDevCon()->ClearRenderTargetView(gFinalRTV, this->clearColor.data());
+	// Clear the final RenderTargetView
+	Locator::getD3D()->GETgDevCon()->ClearRenderTargetView(this->gFinalRTV, this->clearColor.data());
+	// Clear the deferred RenderTargetViews
 	for (auto &i : this->gRTVs) {
 		Locator::getD3D()->GETgDevCon()->ClearRenderTargetView(i, this->clearColor.data());
 	}
+	// Clear the DepthStencilView
 	Locator::getD3D()->GETgDevCon()->ClearDepthStencilView(this->gDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+	// Set the geo shaders to the current shaders
 	this->geoShaders.SetShaders(Locator::getD3D()->GETgDevCon());
 	Locator::getD3D()->GETgDevCon()->RSSetViewports(1, &this->viewport);
 
+	// Set the rendertarget to the deferred RenderTargetViews
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(NUM_DEFERRED_OUTPUTS, this->gRTVs.data(), this->gDSV);
 }
 
 void Renderer::secondPass()
 {
-	Locator::getD3D()->GETgDevCon()->ClearRenderTargetView(gFinalRTV, this->clearColor.data());
-	Locator::getD3D()->GETgDevCon()->ClearDepthStencilView(this->gDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	// Set the light shaders as the current shaders
 	this->lightShaders.SetShaders(Locator::getD3D()->GETgDevCon());
 
+	// Set the vertexbuffer to the quad vertices
 	Locator::getD3D()->GETgDevCon()->IASetVertexBuffers(0, 1, &this->gQuadVertexBuffer, &vertBufferStride, &vertBufferOffset);
 	Locator::getD3D()->GETgDevCon()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, this->gDSV);
+	// Unbind the RenderTargetViews
+	ID3D11RenderTargetView* gNullRTV[NUM_DEFERRED_OUTPUTS] = { nullptr, nullptr, nullptr };
+	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(NUM_DEFERRED_OUTPUTS, gNullRTV, nullptr);
 
-	//Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, this->gSRVs.data());
+	// Bind the ShaderResourceVies
+	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, this->gSRVs.data());
+	Locator::getD3D()->GETgDevCon()->PSSetSamplers(0, 1, &this->gSampler);
+
+	// Set the rendertarget to the final rendertarget
+	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, nullptr);
 
 	// Draw the final texture over the whole screen
 	Locator::getD3D()->GETgDevCon()->Draw(4, 0);
 	// Present the backbuffer to the screen
 	Locator::getD3D()->GETswapChain()->Present(0, 0);
+
+	// Unbind the ShaderResourceViews
+	ID3D11ShaderResourceView* gNullSRV[NUM_DEFERRED_OUTPUTS] = { nullptr, nullptr, nullptr };
+	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, gNullSRV);
 }

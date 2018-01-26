@@ -37,7 +37,7 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 	p6 = (1.0, 1.0, 1.0)
 	p7 = (1.0, -1.0, 1.0)
 	*/
-	std::array<PrimitiveVertexData, 24> vertexData;
+	/*std::array<PrimitiveVertexData, 24> vertexData;
 
 	//Push the vertices into the vector (p0-p7)
 	//Front p0, p1, p2, p3
@@ -130,13 +130,26 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 		20, 21, 22,
 		22, 21, 23
 	};
-	this->numIndices = 36;
+	this->numIndices = 36;*/
+
+	std::array<PrimitiveVertexData, 3> vertexData;
+
+	vertexData[0] = PrimitiveVertexData(0.0f, 0.5f, 0.5f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[1] = PrimitiveVertexData(0.5f, -0.5f, 0.5f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[2] = PrimitiveVertexData(-0.5f, -0.5f, 0.5f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+
+	DWORD index[] =
+	{
+		0, 1, 2,
+	};
+	this->numIndices = 3;
+
 	
 	this->offset = 0;
 	this->stride = sizeof(PrimitiveVertexData);
 
-	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), &this->stride, &this->offset);
-	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index);
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
+	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index, this->numIndices);
 }
 
 /*_____________________________

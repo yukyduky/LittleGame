@@ -62,10 +62,11 @@ void D3D::createSwapChain()
 	swapChainDesc.BufferCount = 1;                                  // one back buffer
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;   // use 32-bit color
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;    // how swap chain is to be used
-	swapChainDesc.OutputWindow = hwnd;								// the window to be used
+	swapChainDesc.OutputWindow = this->hwnd;						// the window to be used
 	swapChainDesc.SampleDesc.Count = 1;                             // how many multisamples
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.Windowed = TRUE;
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 	// Create the SwapChain
 	hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, D3D11_CREATE_DEVICE_DEBUG, nullptr, NULL, D3D11_SDK_VERSION, &swapChainDesc, &gSwapChain, &gDevice, nullptr, &gDevCon);
@@ -75,17 +76,57 @@ void D3D::createSwapChain()
 	}
 }
 
-void D3D::createVertexBuffer(ID3D11Buffer ** gVertexBuffer, PrimitiveVertexData* vertexData, size_t * stride, size_t * offset)
+void D3D::createVertexBuffer(ID3D11Buffer ** gVertexBuffer, PrimitiveVertexData* v, size_t& stride, size_t& offset, size_t numVertices)
 {
+	// Describe the vertex buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	memset(&vertexBufferDesc, 0, sizeof(D3D11_BUFFER_DESC));
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = stride * numVertices;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+	vertexBufferDesc.MiscFlags = 0;
+
+	// Set the vertex buffer data
+	D3D11_SUBRESOURCE_DATA vertexData;
+	memset(&vertexData, 0, sizeof(vertexData));
+	vertexData.pSysMem = v;
+
+	HRESULT hr = gDevice->CreateBuffer(&vertexBufferDesc, &vertexData, gVertexBuffer);
+	if (FAILED(hr))
+	{
+		MessageBox(0, "Create Vertex buffer - Failed", "Error", MB_OK);
+		_exit(0);
+	}
 }
 
-void D3D::createIndexBuffer(ID3D11Buffer ** gIndexBuffer, DWORD* indexData)
+void D3D::createIndexBuffer(ID3D11Buffer ** gIndexBuffer, DWORD* data, size_t& numIndices)
 {
+	// Describe the index buffer
+	D3D11_BUFFER_DESC indexBufferDesc;
+	memset(&indexBufferDesc, 0, sizeof(indexBufferDesc));
+
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(DWORD) * numIndices;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+	indexBufferDesc.MiscFlags = 0;
+
+	// Set the index buffer data
+	D3D11_SUBRESOURCE_DATA indexData;
+
+	indexData.pSysMem = data;
+	HRESULT hr = gDevice->CreateBuffer(&indexBufferDesc, &indexData, gIndexBuffer);
+	if (FAILED(hr))
+	{
+		MessageBox(0, "Box Index Buffer - Failed", "Error", MB_OK);
+		_exit(0);
+	}
 }
 
-void D3D::setVertexBuffer(ID3D11Buffer ** gVertexBuffer, size_t * stride, size_t * offset)
+void D3D::setVertexBuffer(ID3D11Buffer ** gVertexBuffer, size_t& stride, size_t& offset)
 {
-	this->gDevCon->IASetVertexBuffers(0, 1, gVertexBuffer, stride, offset);
+	this->gDevCon->IASetVertexBuffers(0, 1, gVertexBuffer, &stride, &offset);
 }
 
 void D3D::setIndexBuffer(ID3D11Buffer * gIndexBuffer, size_t offset)

@@ -23,9 +23,9 @@ class ID3D
 public:
 	virtual void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed) = 0;
 	virtual void createSwapChain() = 0;
-	virtual void createVertexBuffer(ID3D11Buffer** gVertexBuffer, PrimitiveVertexData* vertexData, size_t* stride, size_t* offset) = 0;
-	virtual void createIndexBuffer(ID3D11Buffer** gIndexBuffer, DWORD* indexData) = 0;
-	virtual void setVertexBuffer(ID3D11Buffer** gVertexBuffer, size_t* stride, size_t* offset) = 0;
+	virtual void createVertexBuffer(ID3D11Buffer** gVertexBuffer, PrimitiveVertexData* v, size_t& stride, size_t& offset, size_t numVertices) = 0;
+	virtual void createIndexBuffer(ID3D11Buffer** gIndexBuffer, DWORD* data, size_t& numIndices) = 0;
+	virtual void setVertexBuffer(ID3D11Buffer** gVertexBuffer, size_t& stride, size_t& offset) = 0;
 	virtual void setIndexBuffer(ID3D11Buffer* gIndexBuffer, size_t offset) = 0;
 
 	virtual size_t& GETwWidth() = 0;

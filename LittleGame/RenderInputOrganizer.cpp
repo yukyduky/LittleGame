@@ -5,7 +5,7 @@
 
 void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
-	Locator::getD3D()->setVertexBuffer(&graphics->GETvertexBuffer(), &graphics->GETstride(), &graphics->GEToffset());
+	Locator::getD3D()->setVertexBuffer(&graphics->GETvertexBuffer(), graphics->GETstride(), graphics->GEToffset());
 	Locator::getD3D()->setIndexBuffer(graphics->GETindexBuffer(), 0);
 
 	Locator::getD3D()->GETgDevCon()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

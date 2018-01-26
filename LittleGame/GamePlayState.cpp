@@ -19,8 +19,13 @@ void GamePlayState::init()
 	this->mapKeys();
 
 	this->go = new GameObject(0);
-	this->block = new BlockComponent(*this->go, 1.0f, 0.0f, 0.0f, 1.0f);
-	this->rio.addGraphics(this->block);
+	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
+	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
+	this->blocks.push_back(new BlockComponent(*this->go, 1.0f, 1.0f, 0.0f, 1.0f));
+
+	for (auto &i : this->blocks) {
+		this->rio.addGraphics(i);
+	}
 }
 
 void GamePlayState::cleanup()
@@ -67,7 +72,7 @@ void GamePlayState::update(GameManager * gm)
 
 void GamePlayState::render(GameManager * gm)
 {
-	//this->rio.render();
+	this->rio.render();
 	gm->display(this);
 }
 
