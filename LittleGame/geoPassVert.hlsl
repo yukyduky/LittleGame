@@ -18,6 +18,8 @@ cbuffer cbGeoColor : register(b0)
 VS_OUT VS(VS_IN input) {
 	VS_OUT output;
 
+	// Convert the vertices pos from Model space to World space
+	// Uncomment once the constant buffers work
 	//output.pos_W = mul(float4(input.pos_M, 1.0f), world);
 	output.pos_W = float4(input.pos_M, 1.0f);
 	output.normal = input.normal;

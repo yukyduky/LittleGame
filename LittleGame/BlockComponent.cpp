@@ -134,9 +134,9 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 
 	std::array<PrimitiveVertexData, 3> vertexData;
 
-	vertexData[0] = PrimitiveVertexData(0.0f, 0.5f, 0.5f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[1] = PrimitiveVertexData(0.5f, -0.5f, 0.5f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[2] = PrimitiveVertexData(-0.5f, -0.5f, 0.5f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[0] = PrimitiveVertexData(0.0f, 0.5f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[1] = PrimitiveVertexData(0.5f, -0.5f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[2] = PrimitiveVertexData(-0.5f, -0.5f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
 
 	DWORD index[] =
 	{
