@@ -132,6 +132,7 @@
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerCommands.h" />
+    <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlaySelectCommand.h" />
@@ -140,7 +141,9 @@
     <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="IInputHandler.h" />
+    <ClInclude Include="InputComponent.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="KeyboardComponent.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="MenuCommands.h" />
@@ -152,11 +155,14 @@
     <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="KeyboardComponent.cpp" />
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />

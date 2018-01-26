@@ -79,6 +79,12 @@
     <Filter Include="Header Files\Commands\Controller">
       <UniqueIdentifier>{5603ff20-b4f8-4fce-b5ce-7b396c318e20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components\Input">
+      <UniqueIdentifier>{38df6225-ef13-4daf-afb2-074665f63db2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Input">
+      <UniqueIdentifier>{ea3c4574-f4e4-44bf-9375-15c9c70ac82e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -144,6 +150,15 @@
     <ClInclude Include="MenuCommands.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="KeyboardComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -175,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
