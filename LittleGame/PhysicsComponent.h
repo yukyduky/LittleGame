@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include "D3D.h"
 #include "Component.h"
+#include <DirectXCollision.h>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                                     |
@@ -15,19 +16,50 @@
 class PhysicsComponent : public Component
 {
 private:
-	DirectX::BoundingBox selfBoundingBox;
+	DirectX::BoundingSphere selfBoundingSphere;
+	const size_t ID;
+
+	int collisionID;
+	GameObject* tempCollidableHolder;
+	DirectX::XMFLOAT3 pushVector;
+	/// Might need to mess with XMVector and storing and shit, so that I can normalize
+	float stepper = 0.1;
+
+	int createCollisionID(GameObject* collidable1, GameObject* collidable2);
+
+	void collisionPlayerPlayer(GameObject* collidable1, GameObject* collidable2);
+	void collisionPlayerEnemy(GameObject* collidable1, GameObject* collidable2);
+	void collisionPlayerDoodad(GameObject* collidable1, GameObject* collidable2);
+	void collisionPlayerIndestruct(GameObject* collidable1, GameObject* collidable2);
+	void collisionPlayerProjectile(GameObject* collidable1, GameObject* collidable2);
+	void collisionEnemyEnemy(GameObject* collidable1, GameObject* collidable2);
+	void collisionEnemyDoodad(GameObject* collidable1, GameObject* collidable2);
+	void collisionEnemyIndestruct(GameObject* collidable1, GameObject* collidable2);
+	void collisionEnemyProjectile(GameObject* collidable1, GameObject* collidable2);
+	void collisionDoodadDoodad(GameObject* collidable1, GameObject* collidable2);
+	void collisionDoodadIndestruct(GameObject* collidable1, GameObject* collidable2);
+	void collisionDoodadProjectile(GameObject* collidable1, GameObject* collidable2);
+	void collisionIndestructIndestruct(GameObject* collidable1, GameObject* collidable2);
+	void collisionIndestrucProjectile(GameObject* collidable1, GameObject* collidable2);
+	void collisionProjectileProjectile(GameObject* collidable1, GameObject* collidable2);
 
 public:
-	PhysicsComponent();
+	PhysicsComponent(GameObject& obj);
+	PhysicsComponent(DirectX::XMFLOAT3 boundingSphereCenter, float radius, GameObject& obj);
 	~PhysicsComponent();
-
-	virtual const size_t getID() = 0;
-	virtual void receive(GameObject & obj, Message msg) = 0;
 
 	DirectX::BoundingSphere getBoundingSphere();
 	bool checkCollision(DirectX::BoundingSphere boundingSphere_in);
+	bool checkCollision(DirectX::BoundingBox boundingBox_in);
 
-	void update(); //start with boundingbox
+	void updateBoundingArea(DirectX::XMFLOAT3 centerPos);
+	void updateBoundingArea(float radius);
+	void updateBoundingArea(DirectX::XMFLOAT3 centerPos, float radius);
+
+	void executeCollision(GameObject* collidable1, GameObject* collidable2);
+
+	virtual const size_t getID();
+	virtual void receive(GameObject & obj, Message msg);
 };
 //______________________________________________//
 //                                              //

@@ -12,6 +12,36 @@ void GamePlayState::mapKeys()
 	Locator::getInputHandler()->mapCommandToLeftThumbStick(this->selectCommand);
 }
 
+void GamePlayState::updatePhysicsComponents() {
+	for (auto&& i : gameObjectsArray) {
+		if (i->getState() != OBJECTSTATE::DEAD) {
+			this->physicsComponentsArray.at(i->getID())->updateBoundingArea(i->getPosition());
+		}
+	}
+}
+
+void GamePlayState::checkCollisions() {
+	// LOOP 1: Looping through each physicsComponent
+	for (auto&& i : physicsComponentsArray) {
+
+		// If the object is NOT DEAD, we compare its physComponent vs. all other physComponents
+		if (gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+
+			// LOOP 2: Comparing NON-DEAD object from pevious loop to all remaining NON-DEAD objects
+			for (auto&& k : physicsComponentsArray) {
+
+				if (gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+					/// Need a bool(collision detected or not detected?)
+					if (this->physicsComponentsArray.at(i->getID())->checkCollision(
+						this->physicsComponentsArray.at(k->getID())->getBoundingSphere())) {
+
+					}
+				}
+			}
+		}
+	}
+}
+
 void GamePlayState::init()
 {
 	this->selectCommand = new GamePlaySelectCommand();
@@ -58,6 +88,8 @@ void GamePlayState::update(GameManager * gm)
 		i.command->execute(i.player);
 	}
 	this->commandQueue.clear();
+
+	this->updatePhysicsComponents();
 }
 
 void GamePlayState::render(GameManager * gm)

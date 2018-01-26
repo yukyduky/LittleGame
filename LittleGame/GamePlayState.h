@@ -6,6 +6,9 @@
 #include <vector>
 #include "Command.h"
 #include "IInputHandler.h"
+#include "PhysicsComponent.h"
+#include "GameObject.h"
+#include <list>
 
 class Command;
 
@@ -16,6 +19,9 @@ private:
 
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
+	
+	std::vector<GameObject*> gameObjectsArray;
+	std::vector<PhysicsComponent*> physicsComponentsArray;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
@@ -23,6 +29,11 @@ private:
 	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
 	*/
 	void mapKeys();
+
+	void updatePhysicsComponents();
+	
+	void checkCollisions();
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'GamePlayState'.
