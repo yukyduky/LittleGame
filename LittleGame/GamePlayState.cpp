@@ -20,8 +20,6 @@ void GamePlayState::init()
 
 	this->go = new GameObject(0);
 	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-	this->blocks.push_back(new BlockComponent(*this->go, 1.0f, 1.0f, 0.0f, 1.0f));
 
 	for (auto &i : this->blocks) {
 		this->rio.addGraphics(i);

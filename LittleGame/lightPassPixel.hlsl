@@ -1,12 +1,29 @@
 Texture2D texPosition	: register(t0);
 Texture2D texNormal		: register(t1);
-Texture2D texDiffuse	: register(t2);
+Texture2D texColor	: register(t2);
 
-SamplerState gSampler	: register(s0);
-
-float4 PS(float4 position : SV_POSITION) : SV_TARGET
+cbuffer cbLightColor
 {
-	float3 texCoords = float3(position.xy, 0.0f);
-	float4 color = float4(texDiffuse.Load(texCoords).xyz, 1.0f);
-	return color;
+	float4x4 wvp;
+};
+
+void LoadGeoPassData(in float2 quadCoords, out float3 pos_W, out float3 normal, out float3 color);
+
+float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
+{
+	float3 pos_W, normal, color;
+	float2 quadCoords = position_S.xy;
+
+	LoadGeoPassData(quadCoords, pos_W, normal, color);
+
+	return float4(color, 1.0f);
+}
+
+void LoadGeoPassData(in float2 quadCoords, out float3 pos_W, out float3 normal, out float3 color)
+{
+	int3 texCoords = int3(quadCoords, 0.0f);
+
+	pos_W = texPosition.Load(texCoords).xyz;
+	normal = texNormal.Load(texCoords).xyz;
+	color = texColor.Load(texCoords).xyz;
 }

@@ -18,10 +18,12 @@ private:
 public:
 	virtual void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed);
 	virtual void createSwapChain();
-	virtual void createVertexBuffer(ID3D11Buffer** gVertexBuffer, PrimitiveVertexData* v, size_t& stride, size_t& offset, size_t numVertices);
+	virtual void createVertexBuffer(ID3D11Buffer** gVertexBuffer, void* v, size_t& stride, size_t& offset, size_t numVertices);
 	virtual void createIndexBuffer(ID3D11Buffer** gIndexBuffer, DWORD* data, size_t& numIndices);
 	virtual void setVertexBuffer(ID3D11Buffer** gVertexBuffer, size_t& stride, size_t& offset);
 	virtual void setIndexBuffer(ID3D11Buffer* gIndexBuffer, size_t offset);
+	virtual void createConstantBuffer(ID3D11Buffer ** gBuffer, int bufferSize);
+	virtual void mapConstantBuffer(ID3D11Buffer** gBuffer, void* cbPtr, int structSize);
 
 	virtual size_t& GETwWidth();
 	virtual size_t& GETwHeight();

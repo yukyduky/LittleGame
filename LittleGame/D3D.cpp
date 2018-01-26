@@ -76,7 +76,7 @@ void D3D::createSwapChain()
 	}
 }
 
-void D3D::createVertexBuffer(ID3D11Buffer ** gVertexBuffer, PrimitiveVertexData* v, size_t& stride, size_t& offset, size_t numVertices)
+void D3D::createVertexBuffer(ID3D11Buffer ** gVertexBuffer, void* v, size_t& stride, size_t& offset, size_t numVertices)
 {
 	// Describe the vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -132,6 +132,42 @@ void D3D::setVertexBuffer(ID3D11Buffer ** gVertexBuffer, size_t& stride, size_t&
 void D3D::setIndexBuffer(ID3D11Buffer * gIndexBuffer, size_t offset)
 {
 	this->gDevCon->IASetIndexBuffer(gIndexBuffer, DXGI_FORMAT_R32_UINT, offset);
+}
+
+void D3D::createConstantBuffer(ID3D11Buffer ** gBuffer, int bufferSize)
+{
+	// Describes the constant buffer
+	D3D11_BUFFER_DESC cbBufferDesc;
+	memset(&cbBufferDesc, 0, sizeof(D3D11_BUFFER_DESC));
+
+	cbBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	cbBufferDesc.ByteWidth = bufferSize;
+	cbBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbBufferDesc.MiscFlags = 0;
+
+	HRESULT hr = gDevice->CreateBuffer(&cbBufferDesc, nullptr, gBuffer);
+	if (FAILED(hr))
+	{
+		MessageBox(0, "Create Constant Buffer - Failed", "Error", MB_OK);
+		_exit(0);
+	}
+}
+
+void D3D::mapConstantBuffer(ID3D11Buffer ** gBuffer, void * cbPtr, int structSize)
+{
+	// Map constant buffer so that we can write to it.
+	D3D11_MAPPED_SUBRESOURCE dataPtr;
+	HRESULT hr = this->gDevCon->Map(*gBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &dataPtr);
+	if (FAILED(hr))
+	{
+		MessageBox(0, "Deferred Buffer mapping - Failed", "Error", MB_OK);
+		_exit(0);
+	}
+	// copy memory from CPU to GPU the entire struct
+	memcpy(dataPtr.pData, cbPtr, structSize);
+	// UnMap constant buffer so that we can use it again in the GPU
+	this->gDevCon->Unmap(*gBuffer, 0);
 }
 
 size_t & D3D::GETwWidth()

@@ -93,6 +93,7 @@ void Renderer::createQuad()
 		float x, y, z, w;
 	};
 
+	// Vertices
 	Vertex v[] =
 	{
 		-1.0f, 1.0f, 0.0f, 1.0f,
@@ -100,30 +101,12 @@ void Renderer::createQuad()
 		-1.0f, -1.0f, 0.0f, 1.0f,
 		1.0f, -1.0f, 0.0f, 1.0f,
 	};
-
-	// Describe the vertex buffer
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	memset(&vertexBufferDesc, 0, sizeof(D3D11_BUFFER_DESC));
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(v);
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
-
-	// Set the vertex buffer data
-	D3D11_SUBRESOURCE_DATA vertexData;
-	memset(&vertexData, 0, sizeof(vertexData));
-	vertexData.pSysMem = v;
-
-	HRESULT hr = Locator::getD3D()->GETgDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &this->gQuadVertexBuffer);
-	if (FAILED(hr))
-	{
-		MessageBox(0, "Create Vertex buffer - Failed", "Error", MB_OK);
-		_exit(0);
-	}
-
+	// Stride and offset
 	this->vertBufferStride = sizeof(Vertex);
 	this->vertBufferOffset = 0;
+
+	// Create the vertex buffer
+	Locator::getD3D()->createVertexBuffer(&this->gQuadVertexBuffer, &v, this->vertBufferStride, this->vertBufferOffset, 4);
 }
 
 void Renderer::createViewport()
@@ -213,16 +196,30 @@ void Renderer::init()
 	this->clearColor[2] = 255.0f;
 	this->clearColor[3] = 255.0f;
 
+	// Set current shaders to handle color objects
+	this->setShaderType(SHADERTYPE::COLOR);
+
 	// Create the backbuffer RenderTargetView (gFinalRTV)
 	this->createBackBufferRTV();
+
 	// Create the DepthStencilView
 	this->createDepthStencilView(Locator::getD3D()->GETwWidth(), Locator::getD3D()->GETwHeight(), &this->gDSV, &this->gDSB);
+
+	// Initialize all shaders
 	this->initShaders();
+
+	// Bind the deferred RTVs and SRVs to eachother
 	for (int i = 0; i < NUM_DEFERRED_OUTPUTS; i++) {
 		this->bindTextureToRTVAndSRV(&this->gDeferredTexs[i], &this->gRTVs[i], &this->gSRVs[i], Locator::getD3D()->GETwWidth(), Locator::getD3D()->GETwHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 	}
+
+	// Create the quad to draw on
 	this->createQuad();
+
+	// Initialize the sampler
 	this->initSampler(&this->gSampler, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_COMPARISON_ALWAYS);
+
+	// Create the viewport
 	this->createViewport();
 }
 
@@ -238,7 +235,7 @@ void Renderer::firstPass()
 	Locator::getD3D()->GETgDevCon()->ClearDepthStencilView(this->gDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	// Set the geo shaders to the current shaders
-	this->geoShaders.SetShaders(Locator::getD3D()->GETgDevCon());
+	this->currentGeoShaders->SetShaders(Locator::getD3D()->GETgDevCon());
 	Locator::getD3D()->GETgDevCon()->RSSetViewports(1, &this->viewport);
 
 	// Set the rendertarget to the deferred RenderTargetViews
@@ -248,7 +245,7 @@ void Renderer::firstPass()
 void Renderer::secondPass()
 {
 	// Set the light shaders as the current shaders
-	this->lightShaders.SetShaders(Locator::getD3D()->GETgDevCon());
+	this->currentLightShaders->SetShaders(Locator::getD3D()->GETgDevCon());
 
 	// Set the vertexbuffer to the quad vertices
 	Locator::getD3D()->GETgDevCon()->IASetVertexBuffers(0, 1, &this->gQuadVertexBuffer, &vertBufferStride, &vertBufferOffset);
@@ -260,7 +257,6 @@ void Renderer::secondPass()
 
 	// Bind the ShaderResourceVies
 	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, this->gSRVs.data());
-	Locator::getD3D()->GETgDevCon()->PSSetSamplers(0, 1, &this->gSampler);
 
 	// Set the rendertarget to the final rendertarget
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, nullptr);
@@ -273,4 +269,17 @@ void Renderer::secondPass()
 	// Unbind the ShaderResourceViews
 	ID3D11ShaderResourceView* gNullSRV[NUM_DEFERRED_OUTPUTS] = { nullptr, nullptr, nullptr };
 	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, gNullSRV);
+}
+
+void Renderer::setShaderType(SHADERTYPE type)
+{
+	switch (type)
+	{
+	case COLOR:
+		this->currentGeoShaders = &this->geoShaders;
+		this->currentLightShaders = &this->lightShaders;
+		break;
+	case TEXTURE:
+		break;
+	}
 }

@@ -10,6 +10,8 @@ const int NUM_DEFERRED_OUTPUTS = 3;
 const int GEO_INPUT_DESC_SIZE = 3;
 const int LIGHT_INPUT_DESC_SIZE = 1;
 
+const enum SHADERTYPE { COLOR, TEXTURE };
+
 class Renderer
 {
 private:
@@ -27,6 +29,8 @@ private:
 	size_t vertBufferOffset;
 	Shader geoShaders;
 	Shader lightShaders;
+	Shader* currentGeoShaders;
+	Shader* currentLightShaders;
 
 	std::array<float, 4> clearColor;
 
@@ -41,6 +45,7 @@ public:
 	void init();
 	void firstPass();
 	void secondPass();
+	void setShaderType(SHADERTYPE type);
 private:
 	const D3D11_INPUT_ELEMENT_DESC geoInputDesc[GEO_INPUT_DESC_SIZE] =
 	{

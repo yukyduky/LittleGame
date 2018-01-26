@@ -4,6 +4,7 @@
 
 #include "Component.h"
 #include <d3d11.h>
+#include <DirectXMath.h>
 
 struct vColor
 {
@@ -14,21 +15,17 @@ struct vColor
 	vColor(){}
 };
 
-struct Vertex
+struct PrimitiveVertexData
 {
-	float x, y, z;
-	
-	Vertex(float x, float y, float z)
-		: x(x), y(y), z(z){}
-};
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT4 color;
 
-struct TextureVertex
-{
-	float x, y, z;
-	float tx, ty;
-
-	TextureVertex(float x, float y, float z, float tx, float ty) : x(x), y(y), z(z), tx(tx), ty(ty) {}
-	TextureVertex() {}
+	PrimitiveVertexData(float x, float y, float z, float nx, float ny, float nz, float r, float g, float b, float a) :
+		pos(x, y, z), normal(nx, ny, nz), color(r, g, b, a) {}
+	PrimitiveVertexData(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 normal, DirectX::XMFLOAT4 color) :
+		pos(pos), normal(normal), color(color) {}
+	PrimitiveVertexData() {}
 };
 
 class RenderInputOrganizer;
