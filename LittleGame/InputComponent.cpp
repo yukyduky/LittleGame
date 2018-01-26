@@ -1,5 +1,6 @@
 #include "InputComponent.h"
 #include "GameObject.h"
+#include "Locator.h"
 
 std::unordered_map<KEYBOARD::KEY, size_t> InputComponent::keyboardKeyMap;
 std::unordered_map<MOUSE::KEY, size_t> InputComponent::mouseKeyMap;
@@ -109,4 +110,29 @@ void InputComponent::resetKeyBindings()
 	this->keyboardCommandMap.clear();
 	this->mouseCommandMap.clear();
 	this->controllerCommandMap.clear();
+}
+
+XMFLOAT2 InputComponent::GETrelativeValueOfLeftStick()
+{
+	return XMFLOAT2(1.0f, 1.0f);
+}
+
+XMFLOAT2 InputComponent::GETrelativeValueOfRightStick()
+{
+	return XMFLOAT2(1.0f, 1.0f);
+}
+
+float InputComponent::GETrelativeValueOfLeftTrigger()
+{
+	return 1.0f;
+}
+
+float InputComponent::GETrelativeValueOfRightTrigger()
+{
+	return 1.0f;
+}
+
+XMFLOAT2 InputComponent::GETcursorPos()
+{
+	return XMFLOAT2(0.0f, 0.0f);
 }

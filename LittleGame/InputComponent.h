@@ -65,6 +65,11 @@ public:
 	void remapKeyboardKey(size_t vkc, Key key);
 	void remapControllerKey(size_t vkc, Key key);
 	void resetKeyBindings();
+	virtual XMFLOAT2 GETrelativeValueOfLeftStick();
+	virtual XMFLOAT2 GETrelativeValueOfRightStick();
+	virtual float GETrelativeValueOfLeftTrigger();
+	virtual float GETrelativeValueOfRightTrigger();
+	virtual XMFLOAT2 GETcursorPos();
 };
 
 #endif // !INPUTCOMPONENT_H

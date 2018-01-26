@@ -41,9 +41,6 @@ ControllerComponent::ControllerComponent(GameObject& obj, size_t controllerID) :
 {
 	ZeroMemory(&this->currentState, sizeof(XINPUT_STATE));
 	XInputGetState(this->controllerID, &this->currentState);
-
-	this->thumbLSet = false;
-	this->thumbRSet = false;
 }
 
 void ControllerComponent::receive(GameObject & obj, Message msg)
@@ -72,42 +69,38 @@ void ControllerComponent::generateCommands()
 		}
 
 
-		if (this->thumbLSet) {
-			float mag = this->checkThumb(THUMB::LTHUMB, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, nextState);
-			// Send commands that either the left or the right thumbstick has been moved.
-			if (mag != 0.0f) {
-				commandQueue.push_back(this->controllerCommandMap[CONTROLLER::LTHUMB].command);
-				this->thumbLDir = { nextState.Gamepad.sThumbLX, nextState.Gamepad.sThumbLY };
-			}
-			else {
-				this->thumbLDir = { 0.0f, 0.0f };
-			}
+		float mag = this->checkThumb(THUMB::LTHUMB, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE, nextState);
+		// Send commands that either the left or the right thumbstick has been moved.
+		if (mag != 0.0f) {
+			commandQueue.push_back(this->controllerCommandMap[CONTROLLER::LTHUMB].command);
+			this->thumbLDir = { nextState.Gamepad.sThumbLX / mag, nextState.Gamepad.sThumbLY / mag };
 		}
-		if (this->thumbRSet) {
-			float mag = this->checkThumb(THUMB::RTHUMB, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE, nextState);
-			if (mag != 0.0f) {
-				commandQueue.push_back(this->controllerCommandMap[CONTROLLER::RTHUMB].command);
-				this->thumbRDir = { nextState.Gamepad.sThumbRX, nextState.Gamepad.sThumbRY };
-			}
-			else {
-				this->thumbRDir = { 0.0f, 0.0f };
-			}
+		else {
+			this->thumbLDir = { 0.0f, 0.0f };
+		}
+		mag = this->checkThumb(THUMB::RTHUMB, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE, nextState);
+		if (mag != 0.0f) {
+			commandQueue.push_back(this->controllerCommandMap[CONTROLLER::RTHUMB].command);
+			this->thumbRDir = { nextState.Gamepad.sThumbRX / mag, nextState.Gamepad.sThumbRY / mag };
+		}
+		else {
+			this->thumbRDir = { 0.0f, 0.0f };
 		}
 		
 		// Check if either LSHOULDER or RSHOULDER was triggered
 		if (nextState.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
 			commandQueue.push_back(this->controllerCommandMap[CONTROLLER::LSHOULDER].command);
-			this->trigLValue = nextState.Gamepad.bLeftTrigger;
+			this->trigLValue = nextState.Gamepad.bLeftTrigger / 255;
 		}
 		else {
-			this->trigLValue = 0;
+			this->trigLValue = 0.0f;
 		}
 		if (nextState.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
 			commandQueue.push_back(this->controllerCommandMap[CONTROLLER::RSHOULDER].command);
-			this->trigRValue = nextState.Gamepad.bRightTrigger;
+			this->trigRValue = nextState.Gamepad.bRightTrigger / 255;
 		}
 		else {
-			this->trigRValue = 0;
+			this->trigRValue = 0.0f;
 		}
 
 		this->currentState = nextState;
@@ -131,5 +124,25 @@ void ControllerComponent::vibrate(size_t left, size_t right)
 
 	// Vibrate the controller
 	XInputSetState(controllerID, &vib);
+}
+
+XMFLOAT2 ControllerComponent::GETrelativeValueOfLeftStick()
+{
+	return this->thumbLDir;
+}
+
+XMFLOAT2 ControllerComponent::GETrelativeValueOfRightStick()
+{
+	return this->thumbRDir;
+}
+
+float ControllerComponent::GETrelativeValueOfLeftTrigger()
+{
+	return this->trigLValue;
+}
+
+float ControllerComponent::GETrelativeValueOfRightTrigger()
+{
+	return this->trigRValue;
 }
 

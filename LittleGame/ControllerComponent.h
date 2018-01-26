@@ -7,6 +7,8 @@
 #include <Xinput.h>
 #include <DirectXMath.h>
 
+using namespace DirectX;
+
 class ControllerComponent : public InputComponent
 {
 private:
@@ -14,8 +16,6 @@ private:
 
 	size_t controllerID;
 	XINPUT_STATE currentState;
-	bool thumbLSet;
-	bool thumbRSet;
 	XMFLOAT2 thumbLDir;
 	XMFLOAT2 thumbRDir;
 	float trigLValue;
@@ -28,6 +28,10 @@ public:
 	virtual void generateCommands();
 	virtual void execute();
 	virtual void vibrate(size_t left, size_t right);
+	virtual XMFLOAT2 GETrelativeValueOfLeftStick();
+	virtual XMFLOAT2 GETrelativeValueOfRightStick();
+	virtual float GETrelativeValueOfLeftTrigger();
+	virtual float GETrelativeValueOfRightTrigger();
 };
 
 #endif // !CONTROLLERCOMPONENT_H

@@ -4,6 +4,9 @@
 
 KeyboardComponent::KeyboardComponent(GameObject& obj) : InputComponent(obj)
 {
+	POINT p;
+	GetCursorPos(&p);
+	this->cursorPos.x = p.x;
 }
 
 void KeyboardComponent::receive(GameObject & obj, Message msg)
@@ -35,9 +38,23 @@ void KeyboardComponent::generateCommands()
 			this->commandQueue.push_back(it.second.command);
 		}
 	}
+
+
 }
 
 void KeyboardComponent::execute()
 {
 
+}
+
+XMFLOAT2 KeyboardComponent::GETcursorPos()
+{
+	POINT p;
+	GetCursorPos(&p);
+	// TODO
+	//ScreenToClient()
+	this->cursorPos.x = p.x;
+	this->cursorPos.y = p.y;
+
+	return this->cursorPos;
 }
