@@ -15,7 +15,6 @@ public:
 	KeyboardComponent(GameObject& obj);
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void generateCommands();
-	virtual void execute();
 	virtual XMFLOAT2 GETcursorPos();
 };
 

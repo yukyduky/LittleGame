@@ -4,8 +4,8 @@
 
 #include "State.h"
 #include <vector>
+#include <array>
 #include "Command.h"
-#include "IInputHandler.h"
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
@@ -13,6 +13,8 @@
 // If mingling with a POINT, just use x's and y's rather than mingling the entire structs
 
 class Command;
+class InputComponent;
+
 enum Commands
 {
 	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE, 
@@ -29,11 +31,12 @@ private:
 	static GamePlayState sGamePlayState;
 
 	Command* commands[Commands::Size];
-	std::vector<Input> commandQueue;
 
 	RenderInputOrganizer rio;
 	GameObject* go;
 	std::vector<GraphicsComponent*> blocks;
+
+	std::array<InputComponent*, 5> playerInput;
 
 	void mapCommands();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -80,25 +83,6 @@ public:
 	1. Render the 'GamePlayState'
 	*/
 	virtual void render(GameManager* gm);
-
-	void commandSelect(size_t player);
-	void commandMoveUp();
-	void commandMoveLeft();
-	void commandMoveDown();
-	void commandMoveRight();
-	void commandSelectAbility1();
-	void commandSelectAbility2();
-	void commandSelectAbility3();
-	void commandSelectAbility4();
-	void commandFireAbility0();
-	void commandFireAbilityX();
-	void commandMouseRotation();
-
-	void commandControllerMovement();
-	void commandControllerRotation();
-
-	void commandOpenMenu0();
-	void commandOpenMenu1();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Get the static instance of the 'GamePlayState'.

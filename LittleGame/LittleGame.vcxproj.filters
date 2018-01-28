@@ -70,15 +70,6 @@
     <Filter Include="Source Files\Components\UI">
       <UniqueIdentifier>{fef96ffd-a712-4053-93ff-11be5a46719d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Commands\Mouse">
-      <UniqueIdentifier>{8cc33ff0-2612-4335-b6e5-c40895454954}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Commands\Keyboard">
-      <UniqueIdentifier>{afa6e733-328b-4d80-ac3f-d912340020eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Commands\Controller">
-      <UniqueIdentifier>{5603ff20-b4f8-4fce-b5ce-7b396c318e20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Components\Input">
       <UniqueIdentifier>{38df6225-ef13-4daf-afb2-074665f63db2}</UniqueIdentifier>
     </Filter>
@@ -114,17 +105,8 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
     <ClInclude Include="GamePlayState.h">
       <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePlaySelectCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="IInputHandler.h">
-      <Filter>Header Files\General</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
@@ -153,21 +135,6 @@
     <ClInclude Include="ID3D.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
-    <ClInclude Include="MovementCommands.h">
-      <Filter>Header Files\Commands\Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="MouseCommands.h">
-      <Filter>Header Files\Commands\Mouse</Filter>
-    </ClInclude>
-    <ClInclude Include="AbilityCommands.h">
-      <Filter>Header Files\Commands\Keyboard</Filter>
-    </ClInclude>
-    <ClInclude Include="ControllerCommands.h">
-      <Filter>Header Files\Commands\Controller</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuCommands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="KeyboardComponent.h">
       <Filter>Header Files\Components\Input</Filter>
     </ClInclude>
@@ -175,7 +142,16 @@
       <Filter>Header Files\Components\Input</Filter>
     </ClInclude>
     <ClInclude Include="ControllerComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementCommands.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityCommands.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuCommands.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -195,9 +171,6 @@
       <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="GamePlayState.cpp">
@@ -228,7 +201,7 @@
       <Filter>Source Files\Components\Input</Filter>
     </ClCompile>
     <ClCompile Include="ControllerComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -23,44 +23,44 @@ void InputComponent::mapKeyCodesToEnums()
 
 	// Maps keys 0-9
 	for (i = 0; i < 10; i++) {
-		this->keyboardKeyMap.insert(this->keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), k++));
+		keyboardKeyMap.insert(keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), k++));
 	}
 
 	// 65 is 'A' in decimal
 	k = 65;
 	// Maps keys A-Z
 	for (; i < 26 + 10; i++) {
-		this->keyboardKeyMap.insert(this->keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), k++));
+		keyboardKeyMap.insert(keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), k++));
 	}
 
 	// Map ESCAPE to enum (Mapped to index = i with the hexadecimal value of 27)
-	this->keyboardKeyMap.insert(this->keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), 27));
+	keyboardKeyMap.insert(keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), 27));
 
 
 	k = 1;
 	// Mouse
 	for (i = 0; i < 2; i++) {
-		this->mouseKeyMap.insert(this->mouseKeyMap.end(), std::pair<MOUSE::KEY, size_t>(static_cast<MOUSE::KEY>(i), k++));
+		mouseKeyMap.insert(mouseKeyMap.end(), std::pair<MOUSE::KEY, size_t>(static_cast<MOUSE::KEY>(i), k++));
 	}
 
 	// Controller
 	k = 1;
 	// Maps all the controller buttons
 	for (i = 0; i < CONTROLLER::SIZE - 6; i++) {
-		this->controllerKeyMap.insert(this->controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i), k));
+		controllerKeyMap.insert(controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i), k));
 		k *= 2;
 	}
 	k *= 4;
 	for (; i < CONTROLLER::SIZE; i++) {
-		this->controllerKeyMap.insert(this->controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i), k));
+		controllerKeyMap.insert(controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i), k));
 		k *= 2;
 	}
 
 	// Map LSHOULDER & RSHOULDER
 	// LSHOULDER
-	this->controllerKeyMap.insert(this->controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i++), 15));
+	controllerKeyMap.insert(controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i++), 15));
 	// RSHOULDER
-	this->controllerKeyMap.insert(this->controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i++), 16));
+	controllerKeyMap.insert(controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i++), 16));
 }
 
 InputComponent::InputComponent(GameObject & obj) : ID(obj.getID())
@@ -70,6 +70,19 @@ InputComponent::InputComponent(GameObject & obj) : ID(obj.getID())
 const size_t InputComponent::getID()
 {
 	return this->ID;
+}
+
+void InputComponent::init()
+{
+	mapKeyCodesToEnums();
+}
+
+void InputComponent::execute()
+{
+	for (auto &i : this->commandQueue) {
+		//i->execute(this->head); // TODO INPUT
+	}
+	this->commandQueue.clear();
 }
 
 void InputComponent::vibrate(size_t left, size_t right)
@@ -84,6 +97,7 @@ void InputComponent::mapKeyboardKeyToCommand(Key key, KEYBOARD::KEY enumKey)
 
 void InputComponent::mapMouseKeyToCommand(Key key, MOUSE::KEY enumKey)
 {
+	// Finds the keycode that corresponds with the provided enum and adds the command to the current controller map
 	this->mouseCommandMap.insert(this->mouseCommandMap.end(), std::pair<size_t, Key>(this->mouseKeyMap[enumKey], key));
 }
 
@@ -99,6 +113,12 @@ void InputComponent::remapKeyboardKey(size_t vkc, Key key)
 	this->keyboardCommandMap[vkc] = key;
 }
 
+void InputComponent::remapMouseKey(size_t vkc, Key key)
+{
+	// Overwrites the command with a new one at the corresponding mouse keycode location
+	this->mouseCommandMap[vkc] = key;
+}
+
 void InputComponent::remapControllerKey(size_t vkc, Key key)
 {
 	// Overwrites the command with a new one at the corresponding controller keycode location
@@ -112,22 +132,22 @@ void InputComponent::resetKeyBindings()
 	this->controllerCommandMap.clear();
 }
 
-XMFLOAT2 InputComponent::GETrelativeValueOfLeftStick()
+XMFLOAT2 InputComponent::GETnormalizedVectorOfLeftStick()
 {
 	return XMFLOAT2(1.0f, 1.0f);
 }
 
-XMFLOAT2 InputComponent::GETrelativeValueOfRightStick()
+XMFLOAT2 InputComponent::GETnormalizedVectorOfRightStick()
 {
 	return XMFLOAT2(1.0f, 1.0f);
 }
 
-float InputComponent::GETrelativeValueOfLeftTrigger()
+float InputComponent::GETnormalizedValueOfLeftTrigger()
 {
 	return 1.0f;
 }
 
-float InputComponent::GETrelativeValueOfRightTrigger()
+float InputComponent::GETnormalizedValueOfRightTrigger()
 {
 	return 1.0f;
 }

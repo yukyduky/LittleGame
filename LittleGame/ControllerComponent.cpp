@@ -107,10 +107,6 @@ void ControllerComponent::generateCommands()
 	}
 }
 
-void ControllerComponent::execute()
-{
-}
-
 void ControllerComponent::vibrate(size_t left, size_t right)
 {
 	// Create a Vibraton State
@@ -126,22 +122,22 @@ void ControllerComponent::vibrate(size_t left, size_t right)
 	XInputSetState(controllerID, &vib);
 }
 
-XMFLOAT2 ControllerComponent::GETrelativeValueOfLeftStick()
+XMFLOAT2 ControllerComponent::GETnormalizedVectorOfLeftStick()
 {
 	return this->thumbLDir;
 }
 
-XMFLOAT2 ControllerComponent::GETrelativeValueOfRightStick()
+XMFLOAT2 ControllerComponent::GETnormalizedVectorOfRightStick()
 {
 	return this->thumbRDir;
 }
 
-float ControllerComponent::GETrelativeValueOfLeftTrigger()
+float ControllerComponent::GETnormalizedValueOfLeftTrigger()
 {
 	return this->trigLValue;
 }
 
-float ControllerComponent::GETrelativeValueOfRightTrigger()
+float ControllerComponent::GETnormalizedValueOfRightTrigger()
 {
 	return this->trigRValue;
 }

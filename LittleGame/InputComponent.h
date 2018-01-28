@@ -6,6 +6,9 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include <DirectXMath.h>
+
+using namespace DirectX;
 
 class Command;
 
@@ -45,7 +48,7 @@ private:
 	static std::unordered_map<MOUSE::KEY, size_t> mouseKeyMap;
 	static std::unordered_map<CONTROLLER::KEY, size_t> controllerKeyMap;
 
-	void mapKeyCodesToEnums();
+	static void mapKeyCodesToEnums();
 protected:
 	static std::map<size_t, Key> keyboardCommandMap;
 	static std::map<size_t, Key> mouseCommandMap;
@@ -56,19 +59,54 @@ public:
 	InputComponent(GameObject& obj);
 	const size_t getID();
 	virtual void receive(GameObject & obj, Message msg) = 0;
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	WARNING Has to be run once before any other use of this class WARNING
+	1. Initializes the mappings between keycodes and enums
+	*/
+	static void init();
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Checks what keys are pressed and if they were just pressed or if they're being held
+	2. Adds the command to the command queue if the key has a command mapped to it
+	*/
 	virtual void generateCommands() = 0;
-	virtual void execute()= 0;
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Executes all the commands that have been stored in the command queue
+	*/
+	void execute();
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Makes the controller vibrate a variable amount in either left or right or both sides
+		If the InputComponent is a keyboard then nothing happens
+	*/
 	virtual void vibrate(size_t left, size_t right);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given Key struct to the given enumerated key
+	*/
 	void mapKeyboardKeyToCommand(Key key, KEYBOARD::KEY enumKey);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given Key struct to the given enumerated key
+	*/
 	void mapMouseKeyToCommand(Key key, MOUSE::KEY enumKey);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given Key struct to the given enumerated key
+	*/
 	void mapControllerKeyToCommand(Key key, CONTROLLER::KEY enumKey);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given virtual key code to the given Key struct
+	*/
 	void remapKeyboardKey(size_t vkc, Key key);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given virtual key code to the given Key struct
+	*/
+	void remapMouseKey(size_t vkc, Key key);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given virtual key code to the given Key struct
+	*/
 	void remapControllerKey(size_t vkc, Key key);
 	void resetKeyBindings();
-	virtual XMFLOAT2 GETrelativeValueOfLeftStick();
-	virtual XMFLOAT2 GETrelativeValueOfRightStick();
-	virtual float GETrelativeValueOfLeftTrigger();
-	virtual float GETrelativeValueOfRightTrigger();
+	virtual XMFLOAT2 GETnormalizedVectorOfLeftStick();
+	virtual XMFLOAT2 GETnormalizedVectorOfRightStick();
+	virtual float GETnormalizedValueOfLeftTrigger();
+	virtual float GETnormalizedValueOfRightTrigger();
 	virtual XMFLOAT2 GETcursorPos();
 };
 

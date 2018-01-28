@@ -3,6 +3,7 @@
 #define COMMAND_H
 
 /* Command pattern */
+
 class ActorObject;
 
 class Command

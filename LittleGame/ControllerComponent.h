@@ -26,12 +26,11 @@ public:
 	ControllerComponent(GameObject& obj, size_t controllerID);
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void generateCommands();
-	virtual void execute();
 	virtual void vibrate(size_t left, size_t right);
-	virtual XMFLOAT2 GETrelativeValueOfLeftStick();
-	virtual XMFLOAT2 GETrelativeValueOfRightStick();
-	virtual float GETrelativeValueOfLeftTrigger();
-	virtual float GETrelativeValueOfRightTrigger();
+	virtual XMFLOAT2 GETnormalizedVectorOfLeftStick();
+	virtual XMFLOAT2 GETnormalizedVectorOfRightStick();
+	virtual float GETnormalizedValueOfLeftTrigger();
+	virtual float GETnormalizedValueOfRightTrigger();
 };
 
 #endif // !CONTROLLERCOMPONENT_H

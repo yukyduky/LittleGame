@@ -1,5 +1,7 @@
 #include "KeyboardComponent.h"
 #include "GameObject.h"
+#include "Locator.h"
+#include "Command.h"
 
 
 KeyboardComponent::KeyboardComponent(GameObject& obj) : InputComponent(obj)
@@ -39,22 +41,17 @@ void KeyboardComponent::generateCommands()
 		}
 	}
 
+	POINT p;
+	// Gets the cursor pos relative to the screen
+	GetCursorPos(&p);
+	// Converts the cursor pos to relative to the window
+	ScreenToClient(Locator::getD3D()->GEThwnd(), &p);
 
-}
-
-void KeyboardComponent::execute()
-{
-
+	this->cursorPos.x = p.x;
+	this->cursorPos.y = p.y;
 }
 
 XMFLOAT2 KeyboardComponent::GETcursorPos()
 {
-	POINT p;
-	GetCursorPos(&p);
-	// TODO
-	//ScreenToClient()
-	this->cursorPos.x = p.x;
-	this->cursorPos.y = p.y;
-
 	return this->cursorPos;
 }
