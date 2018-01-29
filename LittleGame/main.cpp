@@ -30,6 +30,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		gm.render();
 	}
 	gm.cleanup();
+	d3d->cleanup();
+	delete d3d;
 
 	return 0;
 }

@@ -1,6 +1,7 @@
 struct PS_IN
 {
-	float4 pos_W		: SV_POSITION;
+	float4 pos_S		: SV_POSITION;
+	float4 pos_W		: POSITION;
 	float3 normal		: NORMAL;
 	float4 color		: COLOR;
 };
