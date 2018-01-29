@@ -129,37 +129,73 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbilityCommands.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="ID3D.h" />
+    <ClInclude Include="MenuCommands.h" />
+    <ClInclude Include="MovementCommands.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GamePlaySelectCommand.h" />
     <ClInclude Include="GamePlayState.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="GraphicsComponent.h" />
     <ClInclude Include="IGameTime.h" />
-    <ClInclude Include="IInputHandler.h" />
-    <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="KeyboardComponent.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="BlockComponent.h" />
+    <ClInclude Include="RenderInputOrganizer.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
-    <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="KeyboardComponent.cpp" />
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="BlockComponent.cpp" />
+    <ClCompile Include="RenderInputOrganizer.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="geoPassPixel.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="geoPassVert.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="lightPassPixel.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="lightPassVert.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
