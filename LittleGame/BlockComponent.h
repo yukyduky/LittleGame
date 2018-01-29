@@ -3,17 +3,24 @@
 #define BLOCKCOMPONENT_H_
 
 #include "GraphicsComponent.h"
+#include <vector>
+#include <array>
 #include <Windows.h>
+
+struct PrimitiveVertexData;
 
 class BlockComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	OBJECTTYPE::TYPE type;
-	static std::vector<Vertex> vertices;
-	static std::vector<Vertex> normals;
-	static std::vector<DWORD> indices;
+	ID3D11Buffer* gVertexBuffer;
+	ID3D11Buffer* gIndexBuffer;
 	vColor color;
+	size_t stride;
+	size_t offset;
+	size_t numIndices;
+
+	
 
 	/*--------<INFORMATION>--------
 	1. Creates a block with points ranging from -1.0 to 1.0 in x,y,z dimensions.
@@ -24,11 +31,16 @@ private:
 	void createVertices();
 	
 public:
-	/*--------<INFORMATION>--------
-	1. Calls the private function createVertices() if it's the first time a BlockComponent is being created.
-	*/
-	BlockComponent(size_t ID, const float r, const float g, const float b, const float a);
+	BlockComponent(GameObject& obj, float r, float g, float b, float a);
 	~BlockComponent();
+
+
+	virtual ID3D11Buffer*& GETvertexBuffer();
+	virtual ID3D11Buffer*& GETindexBuffer();
+	virtual size_t& GETstride();
+	virtual size_t& GEToffset();
+	virtual size_t& GETnumIndices();
+
 
 	/*--------<INFORMATION>--------
 	1. Something
@@ -39,31 +51,6 @@ public:
 	1. Returns the ID of the component.
 	*/
 	virtual const size_t getID();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the vertices of the block.
-	*/
-	static std::vector<Vertex>& GETvertices();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the normals of the block.
-	*/
-	static std::vector<Vertex>& GETnormals();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the indices of the block.
-	*/
-	static std::vector<DWORD>& GETindices();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the color of the block.
-	*/
-	vColor& GETcolor();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the type of the component.
-	*/
-	OBJECTTYPE::TYPE GETtype();
 };
 
 

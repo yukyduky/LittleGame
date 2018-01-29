@@ -1,8 +1,9 @@
 #include <Windows.h>
-#include "D3D.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include <crtdbg.h>
+#include "ID3D.h"
+#include "D3D.h"
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -10,11 +11,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GameManager gm;
 
-	// Initialize window
-	D3D::initializeWindow(hInstance, true, 1920, 1080, true);
+	ID3D* d3d = new D3D();
+	Locator::provide(d3d);
 
-	// Initialize DirectX
-	D3D::initializeDirectX();
+	Locator::getD3D()->initializeWindow(hInstance, true, 800, 600, true);
+	Locator::getD3D()->createSwapChain();
 
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);

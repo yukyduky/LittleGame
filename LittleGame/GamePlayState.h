@@ -4,10 +4,13 @@
 
 #include "State.h"
 #include <vector>
+#include <array>
 #include "Command.h"
-#include "IInputHandler.h"
-#include "GameObject.h"
+#include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
+#include "GameObject.h"
+#include "IInputHandler.h"
+
 
 #define ARENAWIDTH 600		//The arenas "length" (x-dimension)
 #define ARENAHEIGHT 400		//The arenas "height" (z-dimension)
@@ -27,6 +30,17 @@ namespace WALLTYPE {
 }
 
 class Command;
+class InputComponent;
+
+enum Commands
+{
+	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE, 
+	MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT,
+	SELECTABILITY1, SELECTABILITY2, SELECTABILITY3, SELECTABILITY4,
+	FIREABILITY0, FIREABILITYX, 
+	OPENMENU0, OPENMENU1, 
+	Size
+};
 
 class GamePlayState : public State
 {
@@ -44,12 +58,16 @@ private:
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
 
+	void mapCommands();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
 	2. Calls the 'getInputHandler()' in-order to call the 'mapCommandToControllerKey()' function.
 	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
 	*/
 	void mapKeys();
+
+	void initInputMapping();
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'GamePlayState'.
@@ -85,8 +103,6 @@ public:
 	1. Render the 'GamePlayState'
 	*/
 	virtual void render(GameManager* gm);
-
-	void commandSelect(size_t player);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Get the static instance of the 'GamePlayState'.

@@ -3,14 +3,8 @@
 #define GRAPHICSCOMPONENT_H
 
 #include "Component.h"
+#include <d3d11.h>
 #include <DirectXMath.h>
-#include <vector>
-
-using namespace DirectX;
-
-namespace OBJECTTYPE {
-	enum TYPE { BLOCK, RECTANGLE, LINE, SIZE };
-}
 
 struct vColor
 {
@@ -21,23 +15,20 @@ struct vColor
 	vColor(){}
 };
 
-struct Vertex
+struct PrimitiveVertexData
 {
-	float x, y, z;
-	
-	Vertex(float x, float y, float z)
-		: x(x), y(y), z(z){}
-	Vertex(){}
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT4 color;
+
+	PrimitiveVertexData(float x, float y, float z, float nx, float ny, float nz, float r, float g, float b, float a) :
+		pos(x, y, z), normal(nx, ny, nz), color(r, g, b, a) {}
+	PrimitiveVertexData(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 normal, DirectX::XMFLOAT4 color) :
+		pos(pos), normal(normal), color(color) {}
+	PrimitiveVertexData() {}
 };
 
-struct TextureVertex
-{
-	float x, y, z;
-	float tx, ty;
-
-	TextureVertex(float x, float y, float z, float tx, float ty) : x(x), y(y), z(z), tx(tx), ty(ty) {}
-	TextureVertex() {}
-};
+class RenderInputOrganizer;
 
 class GraphicsComponent : public Component
 {
@@ -46,8 +37,11 @@ private:
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
-	virtual void SETworldMatrix(XMMATRIX other) { this->worldMatrix = other; }
-	virtual XMMATRIX GETworldMatrix() { return this->worldMatrix; }
+	virtual ID3D11Buffer*& GETvertexBuffer() = 0;
+	virtual ID3D11Buffer*& GETindexBuffer() = 0;
+	virtual size_t& GETstride() = 0;
+	virtual size_t& GEToffset() = 0;
+	virtual size_t& GETnumIndices() = 0;
 };
 
 #endif // !GRAPHICSCOMPONENT_H

@@ -1,5 +1,6 @@
 #include "BlockComponent.h"
 #include "GameObject.h"
+#include "Locator.h"
 
 std::vector<Vertex> BlockComponent::vertices;
 std::vector<Vertex> BlockComponent::normals;
@@ -11,9 +12,16 @@ std::vector<DWORD> BlockComponent::indices;
  |_____________________________|
  */
 
- 
-void BlockComponent::createVertices()
+
+void BlockComponent::createVertices(float r, float g, float b, float a)
 {
+	/*--------<INFORMATION>--------
+	1. Creates a box with points ranging from -1.0 to 1.0 in x,y,z dimensions.
+	2. Sets the color of every vertex to the r,g,b in the paramaters.
+	3. All vertices is in modelspace with origin in the center of the box.
+	4. Creates indices for the indexbuffer.
+	*/
+
 	/*
 	   p4__________p6
 	   /|         /|
@@ -33,69 +41,76 @@ void BlockComponent::createVertices()
 	p6 = (1.0, 1.0, 1.0)
 	p7 = (1.0, -1.0, 1.0)
 	*/
-	//Push the vertices of each side into the vector
+	/*std::array<PrimitiveVertexData, 24> vertexData;
+
+	//Push the vertices into the vector (p0-p7)
 	//Front p0, p1, p2, p3
-	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, -1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, -1.0, -1.0));
+	vertexData[0].pos = XMFLOAT3(-1.0, 1.0, -1.0);
+	vertexData[1].pos = XMFLOAT3(1.0, 1.0, -1.0);
+	vertexData[2].pos = XMFLOAT3(-1.0, -1.0, -1.0);
+	vertexData[3].pos = XMFLOAT3(1.0, -1.0, -1.0);
 	//Left p4, p0, p5, p2
-	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, -1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, -1.0, -1.0));
+	vertexData[4].pos = XMFLOAT3(-1.0, 1.0, 1.0);
+	vertexData[5].pos = XMFLOAT3(-1.0, 1.0, -1.0);
+	vertexData[6].pos = XMFLOAT3(-1.0, -1.0, 1.0);
+	vertexData[7].pos = XMFLOAT3(-1.0, -1.0, -1.0);
 	//Right p1, p6, p3, p7
-	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, -1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	vertexData[8].pos = XMFLOAT3(1.0, 1.0, -1.0);
+	vertexData[9].pos = XMFLOAT3(1.0, 1.0, 1.0);
+	vertexData[10].pos = XMFLOAT3(1.0, -1.0, -1.0);
+	vertexData[11].pos = XMFLOAT3(1.0, -1.0, 1.0);
 	//Back p6, p4, p7, p5
-	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, -1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	vertexData[12].pos = XMFLOAT3(-1.0, 1.0, 1.0);
+	vertexData[13].pos = XMFLOAT3(-1.0, -1.0, 1.0);
+	vertexData[14].pos = XMFLOAT3(1.0, 1.0, 1.0);
+	vertexData[15].pos = XMFLOAT3(1.0, -1.0, 1.0);
 	//Top p4, p6, p0, p1
-	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, 1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, 1.0, -1.0));
+	vertexData[16].pos = XMFLOAT3(-1.0, 1.0, 1.0);
+	vertexData[17].pos = XMFLOAT3(1.0, 1.0, 1.0);
+	vertexData[18].pos = XMFLOAT3(-1.0, 1.0, -1.0);
+	vertexData[19].pos = XMFLOAT3(1.0, 1.0, -1.0);
 	//Bottom p2, p3, p5, p7
-	BlockComponent::vertices.push_back(Vertex(-1.0, -1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, -1.0, -1.0));
-	BlockComponent::vertices.push_back(Vertex(-1.0, -1.0, 1.0));
-	BlockComponent::vertices.push_back(Vertex(1.0, -1.0, 1.0));
+	vertexData[20].pos = XMFLOAT3(-1.0, -1.0, -1.0);
+	vertexData[21].pos = XMFLOAT3(1.0, -1.0, -1.0);
+	vertexData[22].pos = XMFLOAT3(-1.0, -1.0, 1.0);
+	vertexData[23].pos = XMFLOAT3(1.0, -1.0, 1.0);
 
 	//Push the normals into the vector
 	//Front
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
+	
+	vertexData[0].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	vertexData[1].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	vertexData[2].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	vertexData[3].normal = XMFLOAT3(0.0, 0.0, -1.0);
 	//Left
-	BlockComponent::normals.push_back(Vertex(-1.0, 0.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(-1.0, 0.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(-1.0, 0.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(-1.0, 0.0, 0.0));
+	vertexData[4].normal = XMFLOAT3(-1.0, 0.0, 0.0);
+	vertexData[5].normal = XMFLOAT3(-1.0, 0.0, 0.0);
+	vertexData[6].normal = XMFLOAT3(-1.0, 0.0, 0.0);
+	vertexData[7].normal = XMFLOAT3(-1.0, 0.0, 0.0);
 	//Right
-	BlockComponent::normals.push_back(Vertex(1.0, 0.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(1.0, 0.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(1.0, 0.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(1.0, 0.0, 0.0));
+	vertexData[8].normal = XMFLOAT3(1.0, 0.0, 0.0);
+	vertexData[9].normal = XMFLOAT3(1.0, 0.0, 0.0);
+	vertexData[10].normal = XMFLOAT3(1.0, 0.0, 0.0);
+	vertexData[11].normal = XMFLOAT3(1.0, 0.0, 0.0);
 	//Back
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 0.0, -1.0));
+	vertexData[12].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	vertexData[13].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	vertexData[14].normal = XMFLOAT3(0.0, 0.0, -1.0);
+	vertexData[15].normal = XMFLOAT3(0.0, 0.0, -1.0);
 	//Top
-	BlockComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
+	vertexData[16].normal = XMFLOAT3(0.0, 1.0, 0.0);
+	vertexData[17].normal = XMFLOAT3(0.0, 1.0, 0.0);
+	vertexData[18].normal = XMFLOAT3(0.0, 1.0, 0.0);
+	vertexData[19].normal = XMFLOAT3(0.0, 1.0, 0.0);
 	//Bottom
-	BlockComponent::normals.push_back(Vertex(0.0, -1.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(0.0, -1.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(0.0, -1.0, 0.0));
-	BlockComponent::normals.push_back(Vertex(0.0, -1.0, 0.0));
+	vertexData[20].normal = XMFLOAT3(0.0, -1.0, 0.0);
+	vertexData[21].normal = XMFLOAT3(0.0, -1.0, 0.0);
+	vertexData[22].normal = XMFLOAT3(0.0, -1.0, 0.0);
+	vertexData[23].normal = XMFLOAT3(0.0, -1.0, 0.0);
+
+	for (auto &i : vertexData) {
+		i.color = XMFLOAT4(this->color.r, this->color.g, this->color.b, this->color.a);
+	}
 
 	//Create indices for the box
 	DWORD index[] =
@@ -119,10 +134,26 @@ void BlockComponent::createVertices()
 		20, 21, 22,
 		22, 21, 23
 	};
-	//Push indices into the vector
-	for (int i = 0; i < 36; i++) {
-		BlockComponent::indices.push_back(index[i]);
-	}
+	this->numIndices = 36;*/
+
+	std::array<PrimitiveVertexData, 3> vertexData;
+
+	vertexData[0] = PrimitiveVertexData(0.0f, 0.5f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[1] = PrimitiveVertexData(0.5f, -0.5f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[2] = PrimitiveVertexData(-0.5f, -0.5f, 0.0f, -1.0f, -1.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
+
+	DWORD index[] =
+	{
+		0, 1, 2,
+	};
+	this->numIndices = 3;
+
+	
+	this->offset = 0;
+	this->stride = sizeof(PrimitiveVertexData);
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
+	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index, this->numIndices);
 }
 
 /*_____________________________
@@ -137,7 +168,7 @@ void BlockComponent::createVertices()
 |_____________________________|
 */
 
-BlockComponent::BlockComponent(size_t ID, const float r, const float g, const float b, const float a) : ID(ID)
+BlockComponent::BlockComponent(GameObject& obj, float r, float g, float b, float a) : ID(obj.getID())
 {
 	if (BlockComponent::vertices.size() == 0) {
 		//Create vertices, indices and normals for the box
@@ -148,8 +179,6 @@ BlockComponent::BlockComponent(size_t ID, const float r, const float g, const fl
 	this->color.g = g;
 	this->color.b = b;
 	this->color.a = a;
-	//Set type to BLOCK
-	this->type = OBJECTTYPE::BLOCK;
 }
 
 BlockComponent::~BlockComponent() 
@@ -160,34 +189,34 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 {
 }
 
+ID3D11Buffer *& BlockComponent::GETvertexBuffer()
+{
+	return this->gVertexBuffer;
+}
+
+ID3D11Buffer *& BlockComponent::GETindexBuffer()
+{
+	return this->gIndexBuffer;
+}
+
+size_t & BlockComponent::GETstride()
+{
+	return this->stride;
+}
+
+size_t & BlockComponent::GEToffset()
+{
+	return this->offset;
+}
+
+size_t & BlockComponent::GETnumIndices()
+{
+	return this->numIndices;
+}
+
 const size_t BlockComponent::getID()
 {
 	return this->ID;
-}
-
-std::vector<Vertex>& BlockComponent::GETvertices()
-{
-	return BlockComponent::vertices;
-}
-
-std::vector<Vertex>& BlockComponent::GETnormals()
-{
-	return BlockComponent::normals;
-}
-
-std::vector<DWORD>& BlockComponent::GETindices()
-{
-	return BlockComponent::indices;
-}
-
-vColor& BlockComponent::GETcolor()
-{
-	return this->color;
-}
-
-OBJECTTYPE::TYPE BlockComponent::GETtype()
-{
-	return this->type;
 }
 
 /*_____________________________

@@ -70,6 +70,12 @@
     <Filter Include="Source Files\Components\UI">
       <UniqueIdentifier>{fef96ffd-a712-4053-93ff-11be5a46719d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components\Input">
+      <UniqueIdentifier>{38df6225-ef13-4daf-afb2-074665f63db2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Input">
+      <UniqueIdentifier>{ea3c4574-f4e4-44bf-9375-15c9c70ac82e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{83abd6d8-4274-447b-b598-5062b0c8cd1f}</UniqueIdentifier>
     </Filter>
@@ -105,20 +111,8 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
     <ClInclude Include="GamePlayState.h">
       <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePlaySelectCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="IInputHandler.h">
-      <Filter>Header Files\General</Filter>
     </ClInclude>
     <ClInclude Include="GraphicsComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
@@ -131,6 +125,39 @@
     </ClInclude>
     <ClInclude Include="BlockComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderInputOrganizer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ID3D.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementCommands.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityCommands.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuCommands.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="RectangleComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
@@ -158,14 +185,8 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
     <ClCompile Include="GamePlayState.cpp">
       <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D.cpp">
-      <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
@@ -173,9 +194,31 @@
     <ClCompile Include="BlockComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInputOrganizer.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    <ClCompile Include="BlockComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="RectangleComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
     <ClCompile Include="LineComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
@@ -186,11 +229,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="forwardVertex.hlsl">
-      <Filter>Resource Files\Shaders\Forward</Filter>
+    <FxCompile Include="geoPassVert.hlsl">
+      <Filter>Resource Files</Filter>
     </FxCompile>
-    <FxCompile Include="forwardPixel.hlsl">
-      <Filter>Resource Files\Shaders\Forward</Filter>
+    <FxCompile Include="geoPassPixel.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassVert.hlsl">
+      <Filter>Resource Files</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassPixel.hlsl">
+      <Filter>Resource Files</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
