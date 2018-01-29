@@ -55,7 +55,7 @@ void editConstantBuffers(
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
-void ConstantBufferManager::InitializeConstantMatrices() {
+void ConstantBufferManager::initializeConstantMatrices() {
 	// Create the WORLD MATRIX
 	DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
 
@@ -72,7 +72,7 @@ void ConstantBufferManager::InitializeConstantMatrices() {
 	this->rawMatrixData.projection = projectionMatrix;
 }
 
-void ConstantBufferManager::CreateSetConstantBuffers() {
+void ConstantBufferManager::createSetConstantBuffers() {
 	// BUFFER DESCRIPTION ('Settings')
 	D3D11_BUFFER_DESC cbDesc;
 	memset(&cbDesc, 0, sizeof(cbDesc));
@@ -91,7 +91,7 @@ void ConstantBufferManager::CreateSetConstantBuffers() {
 	InitData.SysMemSlicePitch = 0;
 
 	// CREATE BUFFER
-	Locator::getD3D()->createConstantBuffer(&this->ConstantBuffer, sizeof(MatrixBufferPack));
+	Locator::getD3D()->createConstantBuffer(&this->constantBuffer, sizeof(MatrixBufferPack));
 
 	// SET BUFFER
 	//(D3D::GETgDevCon())->VSSetConstantBuffers(0, 1, &this->ConstantBuffer);
@@ -121,17 +121,17 @@ void ConstantBufferManager::CreateSetConstantBuffers() {
 
 
 ConstantBufferManager::ConstantBufferManager() {
-	this->ConstantBuffer = nullptr;
+	this->constantBuffer = nullptr;
 }
 
 ConstantBufferManager::~ConstantBufferManager() {
 
 }
 
-void ConstantBufferManager::Initialize() {
-	this->InitializeConstantMatrices();
+void ConstantBufferManager::initialize() {
+	this->initializeConstantMatrices();
 	this->packageMatrices();
-	this->CreateSetConstantBuffers();
+	this->createSetConstantBuffers();
 }
 
 void ConstantBufferManager::packageMatrices() {
@@ -141,7 +141,7 @@ void ConstantBufferManager::packageMatrices() {
 }
 
 void ConstantBufferManager::releaseAll() {
-	this->ConstantBuffer->Release();
+	this->constantBuffer->Release();
 }
 
 MatrixBufferPack *ConstantBufferManager::GETpackagedMatrixData() {
@@ -149,7 +149,7 @@ MatrixBufferPack *ConstantBufferManager::GETpackagedMatrixData() {
 }
 
 ID3D11Buffer* *ConstantBufferManager::GETconstantBuffer() {
-	return &this->ConstantBuffer;
+	return &this->constantBuffer;
 }
 
 //_________________________________________//

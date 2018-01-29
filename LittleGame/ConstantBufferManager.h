@@ -61,14 +61,14 @@ class ConstantBufferManager {
 private:
 	MatrixBufferCalc	rawMatrixData;
 	MatrixBufferPack	packagedMatrixData;
-	ID3D11Buffer*		ConstantBuffer;
+	ID3D11Buffer*		constantBuffer;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initializes the WORLD & PROJECTION matrices.
 	2. Matrices are initialized in their 'rawMatrixData' format (XMMATRIX).
 	--- NOTE: The VIEW Matrix is initialized from within 'Camera'.
 	*/
-	void InitializeConstantMatrices();
+	void initializeConstantMatrices();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creating and Setting the ConstantBuffer by:
 	--- Defining the settings (D3D11_BUFFER_DESC).
@@ -76,7 +76,7 @@ private:
 	--- Creating the buffer via D3D-Device (Device->CreateBuffer()).
 	--- Set the buffer (decide which shader should have access to the buffer).
 	*/
-	void CreateSetConstantBuffers();
+	void createSetConstantBuffers();
 
 public:
 	ConstantBufferManager();
@@ -88,7 +88,7 @@ public:
 	--- 'Packaging' said Constant Matrices into a '4x4' format.
 	--- Create the Constant Buffer (D3D11_BUFFER_DESC & D3D11_SUBRESOURCE_DATA).
 	*/
-	void Initialize();
+	void initialize();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Re-formats the WORLD, VIEW, & PROJECTION matrix data.
 	2. Format Change Details: XMMATRIX --> XMFLOAT4X4.
