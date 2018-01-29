@@ -155,6 +155,10 @@ void PhysicsComponent::collisionPlayerPlayer(
 	GameObject* collidable2) {
 	// SEPARATE BOUNDING AREAS
 	collidable1->setPosition(DirectX::XMFLOAT3(
+
+	)
+
+	collidable1->setPosition(DirectX::XMFLOAT3(
 		collidable1->getPosition().x - (collidable1->getVelocity().x * this->stepper),
 		collidable1->getPosition().y - (collidable1->getVelocity().y * this->stepper),
 		collidable1->getPosition().z - (collidable1->getVelocity().z * this->stepper))
