@@ -9,7 +9,7 @@
 using namespace DirectX;
 
 namespace OBJECTTYPE {
-	enum TYPE { BLOCK, RECTANGLE, SIZE };
+	enum TYPE { BLOCK, RECTANGLE, LINE, SIZE };
 }
 
 struct vColor

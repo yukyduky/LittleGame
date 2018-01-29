@@ -140,6 +140,7 @@
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="IInputHandler.h" />
     <ClInclude Include="InputHandler.h" />
+    <ClInclude Include="LineComponent.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="BlockComponent.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="InputHandler.cpp" />
+    <ClCompile Include="LineComponent.cpp" />
     <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />

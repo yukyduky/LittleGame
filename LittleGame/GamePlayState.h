@@ -7,6 +7,7 @@
 #include "Command.h"
 #include "IInputHandler.h"
 #include "GameObject.h"
+#include "GraphicsComponent.h"
 
 #define ARENAWIDTH 600		//The arenas "length" (x-dimension)
 #define ARENAHEIGHT 400		//The arenas "height" (z-dimension)
@@ -15,8 +16,14 @@
 #define HEIGHTOFWALLS 1		//Will be multiplied with ARENASQUARESIZE for total height of a wall.
 #define PI 3.14159265358979323846
 
+//Defines what a specific space contains
 namespace SQUARETYPE {
 	enum TYPE { EMPTY, WALL, SPAWN, SIZE };
+}
+
+//Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
+namespace WALLTYPE {
+	enum TYPE {VERTICAL, HORIZONTAL, SIZE};
 }
 
 class Command;
@@ -32,6 +39,7 @@ private:
 	//2 = spawnlocation
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
 	std::vector<GameObject*> arenaObjects;
+	std::vector<GraphicsComponent*> graphics;
 
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
@@ -99,6 +107,23 @@ public:
 	void createArenaFloor(); 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Calculates the amount of vertical lines and horizontal lines the arena need.
+	2. Prepares the worldMatrix for the next line.
+	3. Creates all the veritcal lines by calling createLine function.
+	4. Creates all the horizontal lines by calling createLine function.
+	*/
+	void createArenaNeonGrid();
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Creates the new GameObject and the new LineComponent
+	2. Gives the world matrix to the LineComponent.
+	3. Gives the LineComponent to the new GameObject.
+	4. Pushes the new GameObject into the arenaObjects vector.
+	5. Pushes the new LineComponent into the graphics vector.
+	*/
+	void createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startColor, XMFLOAT4 endColor);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Calculates number of walls in Left, Right, Top and Bottom row.
 	2. Calculates the position of the wall we want to create.
 	3. Checks if the new positions should be a wall or a spawn location.
@@ -117,7 +142,7 @@ public:
 	5. Pushes the new GameObject into the arenaObjects vector.
 	6. PS: REMEMBER to set the grid area of the new wall to the right type.
 	*/
-	void createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color);
+	void createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, WALLTYPE::TYPE wType);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Sets the square at the given index to the given type.
