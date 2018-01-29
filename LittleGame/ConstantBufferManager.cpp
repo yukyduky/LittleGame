@@ -1,4 +1,4 @@
-#include "D3D.h"
+#include "Locator.h"
 #include "ConstantBufferManager.h"
 #include "Camera.h"
 
@@ -16,9 +16,17 @@ void editConstantBuffers(
 ) {
 	D3D11_MAPPED_SUBRESOURCE MappedBuffer;
 
-	D3D::GETgDevCon()->Map(targetBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedBuffer);
+	Locator::getD3D()->GETgDevCon()->Map(
+		targetBuffer,
+		0,
+		D3D11_MAP_WRITE_DISCARD,
+		0,
+		&MappedBuffer
+	);
+
 	memcpy(MappedBuffer.pData, &targetStruct, sizeof(targetStruct));
-	D3D::GETgDevCon()->Unmap(targetBuffer, 0);
+
+	Locator::getD3D()->GETgDevCon()->Unmap(targetBuffer, 0);
 }
 
 //
@@ -54,7 +62,7 @@ void ConstantBufferManager::InitializeConstantMatrices() {
 	// Create the PROJECTION MATRIX
 	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(
 		(DirectX::XM_PI * Camera::GETangle()),
-		(D3D::getWidth() / D3D::getHeight()),
+		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
 		Camera::GETnearPlane(),
 		Camera::GETfarPlane()
 	);
@@ -83,12 +91,11 @@ void ConstantBufferManager::CreateSetConstantBuffers() {
 	InitData.SysMemSlicePitch = 0;
 
 	// CREATE BUFFER
-	(D3D::GETgDevice())->CreateBuffer(&cbDesc, &InitData, &this->ConstantBuffer);
+	Locator::getD3D()->createConstantBuffer(&this->ConstantBuffer, sizeof(MatrixBufferPack));
 
 	// SET BUFFER
-	(D3D::GETgDevCon())->VSSetConstantBuffers(0, 1, &this->ConstantBuffer);
-	(D3D::GETgDevCon())->GSSetConstantBuffers(0, 1, &this->ConstantBuffer);
-	(D3D::GETgDevCon())->PSSetConstantBuffers(0, 1, &this->ConstantBuffer);
+	//(D3D::GETgDevCon())->VSSetConstantBuffers(0, 1, &this->ConstantBuffer);
+	//(D3D::GETgDevCon())->PSSetConstantBuffers(0, 1, &this->ConstantBuffer);
 
 	// Current GS-ConstantBuffer slots occupied:
 	// 0 - 

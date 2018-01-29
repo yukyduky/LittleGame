@@ -128,12 +128,12 @@
       <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup
+  <ItemGroup>
     <ClInclude Include="AbilityCommands.h" />
-    <ClInclude Include="ControllerComponent.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ControllerComponent.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="ID3D.h" />
