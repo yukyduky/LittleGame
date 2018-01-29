@@ -44,8 +44,36 @@ private:
 	void createBackBufferRTV();
 	void createDepthStencilView(size_t width, size_t height, ID3D11DepthStencilView** gDSV, ID3D11Texture2D** gDSB);
 public:
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Intializes the clear color
+	2. Sets the current shadertype
+	3. Creates the backbuffer rendertargetview aka the final rendertargetview
+	4. Intializes the shaders
+	5. Binds the deferred rendertargetviews with the deferred shaderresourceviews
+	6. Creates the Quad data
+	7. Initializes the sampler
+	8. Creates the viewport
+	*/
 	void init();
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Clears the final and the deferred rendertargetviews
+	2. Clears the depthstencilview
+	3. Sets current shaders to geo shaders
+	4. Sets the viewport to the default one
+	5. Sets the rendertarget to the deferred rendertargetview
+	*/
 	void firstPass();
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Sets current shaders to light shaders
+	2. Sets the vertex buffer for the Quad
+	3. Switches to trianglestrip topology
+	4. Unbinds the deferred rendertargetviews
+	5. Binds the deferred shaderresourceviews to the pixel shader
+	6. Sets the rendertarget to the final rendertargetview
+	7. Draws the Quad
+	8. Presents the backbuffer
+	9. Unbinds the deferred shaderresourceviews
+	*/
 	void secondPass();
 	void setShaderType(SHADERTYPE type);
 private:
