@@ -222,16 +222,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="geoPassVert.hlsl">
+    <FxCompile Include="geoPassPixelColor.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
-    <FxCompile Include="geoPassPixel.hlsl">
+    <FxCompile Include="geoPassVertColor.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
-    <FxCompile Include="lightPassVert.hlsl">
+    <FxCompile Include="lightPassPixelColor.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
-    <FxCompile Include="lightPassPixel.hlsl">
+    <FxCompile Include="lightPassVertColor.hlsl">
       <Filter>Resource Files</Filter>
     </FxCompile>
   </ItemGroup>

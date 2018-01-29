@@ -59,10 +59,10 @@ private:
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
-	const wchar_t* fileNameGeoVertex = L"geoPassVert.hlsl";
-	const wchar_t* fileNameGeoPixel = L"geoPassPixel.hlsl";
-	const wchar_t* fileNameLightVertex = L"lightPassVert.hlsl";
-	const wchar_t* fileNameLightPixel = L"lightPassPixel.hlsl";
+	const wchar_t* fileNameGeoVertex = L"geoPassVertColor.hlsl";
+	const wchar_t* fileNameGeoPixel = L"geoPassPixelColor.hlsl";
+	const wchar_t* fileNameLightVertex = L"lightPassVertColor.hlsl";
+	const wchar_t* fileNameLightPixel = L"lightPassPixelColor.hlsl";
 };
 
 #endif // !RENDERER_H
