@@ -153,6 +153,12 @@
     <ClInclude Include="MenuCommands.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBufferManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -202,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="ControllerComponent.cpp">
       <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBufferManager.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
