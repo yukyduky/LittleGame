@@ -1,9 +1,6 @@
 #include "RectangleComponent.h"
 #include "GameObject.h"
-
-std::vector<Vertex> RectangleComponent::vertices;
-std::vector<Vertex> RectangleComponent::normals;
-std::vector<DWORD> RectangleComponent::indices;
+#include "Locator.h"
 
 /*_____________________________
 |         START OF            |
@@ -27,7 +24,7 @@ void RectangleComponent::createVertices()
 	p2 = (-1.0, 0.0, -1.0)
 	p3 = (1.0, 0.0, -1.0)
 	*/
-
+	/*
 	//Push the vertices into the vector (p0-p3)
 	RectangleComponent::vertices.push_back(Vertex(-1.0, 0.0, 1.0));
 	RectangleComponent::vertices.push_back(Vertex(1.0, 0.0, 1.0));
@@ -39,6 +36,14 @@ void RectangleComponent::createVertices()
 	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
 	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
 	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
+	*/
+
+	std::array<PrimitiveVertexData, 4> vertexData;
+
+	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[0] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[0] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
 
 	DWORD index[] = 
 	{
@@ -47,11 +52,20 @@ void RectangleComponent::createVertices()
 		//Bottom triangle
 		2, 1, 3
 	};
+	this->numIndices = 6;
+	/*
 	//Push indices into the vector
 	for (int i = 0; i < 6; i++)
 	{
 		RectangleComponent::indices.push_back(index[i]);
 	}
+	*/
+
+	this->offset = 0;
+	this->stride = sizeof(PrimitiveVertexData);
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
+	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index, this->numIndices);
 }
 
 /*_____________________________
@@ -68,57 +82,58 @@ void RectangleComponent::createVertices()
 
 RectangleComponent::RectangleComponent(size_t ID, const float r, const float g, const float b, const float a) : ID(ID)
 {
-	if (RectangleComponent::vertices.size() == 0) {
-		//Create the vertices, indices and normals for the rectangle
-		this->createVertices();
-	}
+	this->createVertices();
 	//Set the color of the box
 	this->color.r = r;
 	this->color.g = g;
 	this->color.b = b;
 	this->color.a = a;
-	//Set type to RECTANGLE
-	this->type = OBJECTTYPE::RECTANGLE;
 }
 
 RectangleComponent::~RectangleComponent()
 {
 }
 
-void RectangleComponent::receive(GameObject& obj, Message msg)
-{
-}
-
-
 const size_t RectangleComponent::getID()
 {
 	return this->ID;
 }
 
-std::vector<Vertex>& RectangleComponent::GETvertices()
+void RectangleComponent::receive(GameObject& obj, Message msg)
 {
-	return RectangleComponent::vertices;
 }
 
-std::vector<Vertex>& RectangleComponent::GETnormals()
+ID3D11Buffer*& RectangleComponent::GETvertexBuffer()
 {
-	return RectangleComponent::normals;
+	return this->gVertexBuffer;
 }
 
-std::vector<DWORD>& RectangleComponent::GETindices()
+ID3D11Buffer*& RectangleComponent::GETindexBuffer()
 {
-	return RectangleComponent::indices;
+	return this->gIndexBuffer;
 }
+
+size_t& RectangleComponent::GETstride()
+{
+	return this->stride;
+}
+
+size_t& RectangleComponent::GEToffset()
+{
+	return this->offset;
+}
+
+size_t& RectangleComponent::GETnumIndices()
+{
+	return this->numIndices;
+}
+
 
 vColor& RectangleComponent::GETcolor()
 {
 	return this->color;
 }
 
-OBJECTTYPE::TYPE RectangleComponent::GETtype()
-{
-	return this->type;
-}
 
 /*_____________________________
 |          END OF             |

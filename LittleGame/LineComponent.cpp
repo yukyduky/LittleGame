@@ -1,9 +1,12 @@
 #include "LineComponent.h"
 #include "GameObject.h"
+#include "Locator.h"
 
+/*
 std::vector<Vertex> LineComponent::vertices;
 std::vector<Vertex> LineComponent::normals;
 std::vector<DWORD> LineComponent::indices;
+*/
 
 /*_____________________________
 |         START OF            |
@@ -20,18 +23,33 @@ void LineComponent::createVertices()
 	p1 = (1.0f, 0.0f, 0.0f);
 	*/
 	//Push the vertices of the line (p0, p1).
+	std::array<PrimitiveVertexData, 2> vertexData;
+	vertexData[0] = PrimitiveVertexData(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 255.0f);
+	vertexData[1] = PrimitiveVertexData(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 255.0f);
+
+	/*
 	LineComponent::vertices.push_back(Vertex(0.0f, 0.0f, 0.0f));
 	LineComponent::vertices.push_back(Vertex(1.0f, 0.0f, 0.0f));
+	*/
 
 	//Create indices for the line.
 	DWORD index[] =
 	{
 		0, 1
 	};
+	this->numIndices = 2;
+
+	this->offset = 0;
+	this->stride = sizeof(PrimitiveVertexData);
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
+	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index, this->numIndices);
+	/*
 	//Push indices into the vector.
 	for (int i = 0; i < 2; i++) {
 		LineComponent::indices.push_back(index[i]);
 	}
+	*/
 }
 
 /*_____________________________
@@ -48,15 +66,7 @@ void LineComponent::createVertices()
 
 LineComponent::LineComponent(size_t ID, vColor startColor, vColor endColor) : ID(ID)
 {
-	if (LineComponent::vertices.size() == 0) {
-		//Create vertices and indices for the line
-		this->createVertices();
-	}
-	//Set the colors of the box
-	this->colors.push_back(startColor);
-	this->colors.push_back(endColor);
-	//Set type to LINE
-	this->type = OBJECTTYPE::LINE;
+	this->createVertices();	
 }
 
 LineComponent::~LineComponent()
@@ -72,24 +82,29 @@ const size_t LineComponent::getID()
 	return this->ID;
 }
 
-std::vector<Vertex>& LineComponent::GETvertices()
+ID3D11Buffer*& LineComponent::GETvertexBuffer()
 {
-	return LineComponent::vertices;
+	return this->gVertexBuffer;
 }
 
-std::vector<DWORD>& LineComponent::GETindices()
+ID3D11Buffer*& LineComponent::GETindexBuffer()
 {
-	return LineComponent::indices;
+	return this->gIndexBuffer;
 }
 
-std::vector<vColor>& LineComponent::GETcolor()
+size_t& LineComponent::GETstride()
 {
-	return this->colors;
+	return this->stride;
 }
 
-OBJECTTYPE::TYPE LineComponent::GETtype()
+size_t& LineComponent::GEToffset()
 {
-	return this->type;
+	return this->offset;
+}
+
+size_t& LineComponent::GETnumIndices()
+{
+	return this->numIndices;
 }
 
 /*_____________________________

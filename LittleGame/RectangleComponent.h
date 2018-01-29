@@ -4,15 +4,17 @@
 
 #include "GraphicsComponent.h"
 #include <Windows.h>
+#include <array>
 
 class RectangleComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	OBJECTTYPE::TYPE type;
-	static std::vector<Vertex> vertices;
-	static std::vector<Vertex> normals;
-	static std::vector<DWORD> indices;
+	ID3D11Buffer* gVertexBuffer;
+	ID3D11Buffer* gIndexBuffer;
+	size_t stride;
+	size_t offset;
+	size_t numIndices;
 	vColor color;
 
 	/*--------<INFORMATION>--------
@@ -31,40 +33,30 @@ public:
 	~RectangleComponent();
 
 	/*--------<INFORMATION>--------
+	1. Returns the ID of the component.
+	*/
+	virtual const size_t getID();
+
+	/*--------<INFORMATION>--------
 	1. Something.
 	*/
 	virtual void receive(GameObject& obj, Message msg);
 
-	/*--------<INFORMATION>--------
-	1. Returns the ID of the component.
-	*/
-	virtual const size_t getID();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the vertices of the rectangle.
-	*/
-	static std::vector<Vertex>& GETvertices();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the normals of the rectangles.
-	*/
-	static std::vector<Vertex>& GETnormals();
-	
-	/*--------<INFORMATION>--------
-	1. Returns the indices of the rectangle.
-	*/
-	static std::vector<DWORD>& GETindices();
-	
+	virtual ID3D11Buffer*& GETvertexBuffer();
+
+	virtual ID3D11Buffer*& GETindexBuffer();
+
+	virtual size_t& GETstride();
+
+	virtual size_t& GEToffset();
+
+	virtual size_t& GETnumIndices();
+
 	/*--------<INFORMATION>--------
 	1. Returns the color of the rectangle.
 	*/
 	vColor& GETcolor();
 	
-	/*--------<INFORMATION>--------
-	1. Returns the type of the component.
-	*/
-	OBJECTTYPE::TYPE GETtype();
-
 };
 
 

@@ -95,25 +95,16 @@ void GamePlayState::initInputMapping()
 
 void GamePlayState::init()
 {
-	this->go = new GameObject(0);
-	this->playerInput[0] = new KeyboardComponent(*this->go);
+	this->initArena();
 
-	this->initInputMapping();
-	//this->selectCommand = new GamePlaySelectCommand();
-	this->mapKeys();
-
-	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-
-	for (auto &i : this->blocks) {
-		this->rio.addGraphics(i);
+	for (auto &i : this->graphics) {
+		rio.addGraphics(i);
 	}
 }
 
 void GamePlayState::cleanup()
 {
-	for (int i = 0; i < Commands::Size; i++) {
-		delete commands[i];
-	}
+
 }
 
 void GamePlayState::pause()
@@ -184,7 +175,7 @@ void GamePlayState::createArenaFloor()
 	vColor color(72.0f, 118.0f, 255.0f, 255.0f);
 	//Create the RectangleComponent and give it the finished world matrix.
 	rect = new RectangleComponent(nextID, color.r, color.g, color.b, color.a);
-	rect->SETworldMatrix(worldM);
+	object->SETworldMatrix(worldM);
 	//Give the RectangleComponent to the new GameObject.
 	object->addComponent(rect);
 	//Push the new GameObject into the arenaObject vector and graphics vector.
@@ -246,7 +237,7 @@ void GamePlayState::createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startCol
 	vColor startC(startColor.x, startColor.w, startColor.z, startColor.w);
 	vColor endC(startColor.x, startColor.w, startColor.z, startColor.w);
 	line = new LineComponent(nextID, startC, endC);
-	line->SETworldMatrix(wMatrix);
+	object->SETworldMatrix(wMatrix);
 	//Add the LineComponent to the GameObject and push the GameObject into the vectors.
 	object->addComponent(line);
 	this->graphics.push_back(line);
@@ -449,8 +440,8 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	//Create the GameObject.
 	object = new GameObject(nextID, pos);
 	//Create the BlockComponent and give it it's world matrix.
-	block = new BlockComponent(nextID, color.x, color.y, color.z, color.w);
-	block->SETworldMatrix(wMatrix);
+	block = new BlockComponent(*object, color.x, color.y, color.z, color.w);
+	object->SETworldMatrix(wMatrix);
 	//Add the BlockComponent to the GameObject and push the GameObject into the vectors.
 	object->addComponent(block);
 	this->graphics.push_back(block);
@@ -502,7 +493,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		worldMatrix = scaleMH * rotMH * translationM;
 		//Create the new LineComponent and hand it it's world matrix.
 		currentLine = new LineComponent(nextID, startColor, endColor);
-		currentLine->SETworldMatrix(worldMatrix);
+		object->SETworldMatrix(worldMatrix);
 		//Give the new GameObject the LineComponent and push them into their vectors for storage.
 		object->addComponent(currentLine);
 		this->arenaObjects.push_back(object);
@@ -516,7 +507,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMH * rotMH * translationM;
 		currentLine = new LineComponent(nextID, startColor, endColor);
-		currentLine->SETworldMatrix(worldMatrix);
+		object->SETworldMatrix(worldMatrix);
 		object->addComponent(currentLine);
 		this->arenaObjects.push_back(object);
 		this->graphics.push_back(currentLine);
@@ -537,7 +528,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		worldMatrix = scaleMV * rotMV * translationM;
 		//Create the new LineComponent and hand it it's world matrix.
 		currentLine = new LineComponent(nextID, startColor, endColor);
-		currentLine->SETworldMatrix(worldMatrix);
+		object->SETworldMatrix(worldMatrix);
 		//Give the GameObject the LineComponent and push them into their vectors for storage.
 		object->addComponent(currentLine);
 		this->arenaObjects.push_back(object);
@@ -551,7 +542,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMV * rotMV * translationM;
 		currentLine = new LineComponent(nextID, startColor, endColor);
-		currentLine->SETworldMatrix(worldMatrix);
+		object->SETworldMatrix(worldMatrix);
 		object->addComponent(currentLine);
 		this->arenaObjects.push_back(object);
 		this->graphics.push_back(currentLine);

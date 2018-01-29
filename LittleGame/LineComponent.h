@@ -4,16 +4,23 @@
 
 #include "GraphicsComponent.h"
 #include <Windows.h>
+#include <array>
 
 class LineComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	OBJECTTYPE::TYPE type;
+	ID3D11Buffer* gVertexBuffer;
+	ID3D11Buffer* gIndexBuffer;
+	size_t stride;
+	size_t offset;
+	size_t numIndices;
+	/*
 	static std::vector<Vertex> vertices;
 	static std::vector<Vertex> normals;
 	static std::vector<DWORD> indices;
 	std::vector<vColor> colors;
+	*/
 
 	/*--------<INFORMATION>--------
 	1. Creates a line with points ranging from 0.0 to 1.0 in x-dimension.
@@ -37,28 +44,13 @@ public:
 	1. Returns the ID of the component.
 	*/
 	virtual const size_t getID();
+
+	virtual ID3D11Buffer*& GETvertexBuffer();
+	virtual ID3D11Buffer*& GETindexBuffer();
+	virtual size_t& GETstride();
+	virtual size_t& GEToffset();
+	virtual size_t& GETnumIndices();
 	
-	/*--------<INFORMATION>--------
-	1. Returns the vertices of the line.
-	*/
-	static std::vector<Vertex>& GETvertices();
-
-
-	/*--------<INFORMATION>--------
-	1. Returns the indices of the line.
-	*/
-	static std::vector<DWORD>& GETindices();
-
-	/*--------<INFORMATION>--------
-	1. Returns the colors of the line as std::vector<vColor>&.
-	2. First color is the start color, second color is the end color.
-	*/
-	std::vector<vColor>& GETcolor();
-
-	/*--------<INFORMATION>--------
-	1. Returns the type of the component.
-	*/
-	OBJECTTYPE::TYPE GETtype();
 };
 
 #endif

@@ -9,7 +9,6 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
-#include "IInputHandler.h"
 
 
 #define ARENAWIDTH 600		//The arenas "length" (x-dimension)
@@ -55,7 +54,8 @@ private:
 	std::vector<GameObject*> arenaObjects;
 	std::vector<GraphicsComponent*> graphics;
 
-	std::vector<Input> commandQueue;
+	RenderInputOrganizer rio;
+
 	Command* selectCommand;
 
 	void mapCommands();

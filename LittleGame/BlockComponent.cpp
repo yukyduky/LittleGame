@@ -2,10 +2,11 @@
 #include "GameObject.h"
 #include "Locator.h"
 
+/*
 std::vector<Vertex> BlockComponent::vertices;
 std::vector<Vertex> BlockComponent::normals;
 std::vector<DWORD> BlockComponent::indices;
-
+*/
 /*_____________________________
  |         START OF            |
  |     PRIVATE FUNCTIONS       |
@@ -13,7 +14,7 @@ std::vector<DWORD> BlockComponent::indices;
  */
 
 
-void BlockComponent::createVertices(float r, float g, float b, float a)
+void BlockComponent::createVertices()
 {
 	/*--------<INFORMATION>--------
 	1. Creates a box with points ranging from -1.0 to 1.0 in x,y,z dimensions.
@@ -170,10 +171,7 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 
 BlockComponent::BlockComponent(GameObject& obj, float r, float g, float b, float a) : ID(obj.getID())
 {
-	if (BlockComponent::vertices.size() == 0) {
-		//Create vertices, indices and normals for the box
-		this->createVertices();
-	}
+	this->createVertices();
 	//Set the color of the box
 	this->color.r = r;
 	this->color.g = g;

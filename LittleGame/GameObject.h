@@ -42,12 +42,17 @@ public:
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE state) { this->state = state; }
 	OBJECTSTATE getState() const { return this->state; }
+	void SETworldMatrix(XMMATRIX wMatrix) { this->worldMatrix = wMatrix; }
+	XMMATRIX& GETworldMatrix() { return this->worldMatrix; }
+
+
 private:
 	std::list<Component*> components;
 	const size_t ID;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
+	XMMATRIX worldMatrix;
 };
 
 #endif // !GAMEOBJECT_H

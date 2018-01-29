@@ -32,8 +32,6 @@ class RenderInputOrganizer;
 
 class GraphicsComponent : public Component
 {
-private:
-	XMMATRIX worldMatrix;
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
