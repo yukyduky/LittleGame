@@ -5,7 +5,10 @@
 
 void Renderer::initShaders()
 {
-	this->geoShaders.CreateShaders(Locator::getD3D()->GETgDevice(), this->fileNameGeoVertex, this->fileNameGeoPixel, this->geoInputDesc, GEO_INPUT_DESC_SIZE);
+	this->geoTexShaders.CreateShaders(Locator::getD3D()->GETgDevice(), this->fileNameGeoTexVertex, this->fileNameGeoTexPixel, this->geoTexInputDesc, GEOTEX_INPUT_DESC_SIZE);
+
+	this->geoColorShaders.CreateShaders(Locator::getD3D()->GETgDevice(), this->fileNameGeoColorVertex, this->fileNameGeoColorPixel, this->geoColorInputDesc, GEOCOLOR_INPUT_DESC_SIZE);
+
 	this->lightShaders.CreateShaders(Locator::getD3D()->GETgDevice(), this->fileNameLightVertex, this->fileNameLightPixel, this->lightInputDesc, LIGHT_INPUT_DESC_SIZE);
 }
 
@@ -273,13 +276,14 @@ void Renderer::secondPass()
 
 void Renderer::setShaderType(SHADERTYPE type)
 {
+	this->currentLightShaders = &this->lightShaders;
 	switch (type)
 	{
 	case COLOR:
-		this->currentGeoShaders = &this->geoShaders;
-		this->currentLightShaders = &this->lightShaders;
+		this->currentGeoShaders = &this->geoColorShaders;
 		break;
 	case TEXTURE:
+		this->currentGeoShaders = &this->geoTexShaders;
 		break;
 	}
 }

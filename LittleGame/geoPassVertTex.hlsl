@@ -1,20 +1,19 @@
 struct VS_IN {
-	float3 pos_M	: POSITION;
-	float3 normal	: NORMAL;
-	float4 color	: COLOR;
+	float3 pos_M		: POSITION;
+	float3 normal		: NORMAL;
+	float2 texCoords	: TEXCOORDS;
 };
 
 struct VS_OUT {
-	float4 pos_S	: SV_POSITION;
-	float4 pos_W	: POSITION;
-	float3 normal	: NORMAL;
-	float4 color	: COLOR;
+	float4 pos_S		: SV_POSITION;
+	float4 pos_W		: POSITION;
+	float3 normal		: NORMAL;
+	float2 texCoords	: TEXCOORDS;
 };
 
 cbuffer cbGeoColor : register(b0)
 {
 	float4x4 world;
-	float4x4 wvp;
 };
 
 VS_OUT VS(VS_IN input) {
@@ -27,7 +26,7 @@ VS_OUT VS(VS_IN input) {
 	output.pos_S = float4(input.pos_M, 1.0f);
 	output.pos_W = float4(input.pos_M, 1.0f);
 	output.normal = input.normal;
-	output.color = input.color;
+	output.texCoords = input.texCoords;
 
 	return output;
 }

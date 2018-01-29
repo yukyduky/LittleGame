@@ -1,9 +1,13 @@
+Texture2D diffuseMap	: register(t0);
+
+SamplerState gSampler	: register(s0);
+
 struct PS_IN
 {
 	float4 pos_S		: SV_POSITION;
 	float4 pos_W		: POSITION;
 	float3 normal		: NORMAL;
-	float4 color		: COLOR;
+	float2 texCoords	: TEXCOORDS;
 };
 
 struct PS_OUT
@@ -17,12 +21,9 @@ PS_OUT PS(PS_IN input)
 {
 	PS_OUT output;
 
-	// Sample the texture for the diffuse light
-	float4 diffuse = input.color;
-
 	output.pos_W = input.pos_W;
 	output.normal = float4(input.normal, 1.0f);
-	output.diffuse = input.color;
+	output.diffuse = float4(diffuseMap.Sample(gSampler, input.texCoords).rgb, 1.0f);
 
 	return output;
 }

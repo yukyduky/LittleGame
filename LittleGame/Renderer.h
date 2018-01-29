@@ -7,7 +7,8 @@
 #include "Shader.h"
 
 const int NUM_DEFERRED_OUTPUTS = 3;
-const int GEO_INPUT_DESC_SIZE = 3;
+const int GEOCOLOR_INPUT_DESC_SIZE = 3;
+const int GEOTEX_INPUT_DESC_SIZE = 3;
 const int LIGHT_INPUT_DESC_SIZE = 1;
 
 const enum SHADERTYPE { COLOR, TEXTURE };
@@ -27,7 +28,8 @@ private:
 
 	size_t vertBufferStride;
 	size_t vertBufferOffset;
-	Shader geoShaders;
+	Shader geoColorShaders;
+	Shader geoTexShaders;
 	Shader lightShaders;
 	Shader* currentGeoShaders;
 	Shader* currentLightShaders;
@@ -47,7 +49,14 @@ public:
 	void secondPass();
 	void setShaderType(SHADERTYPE type);
 private:
-	const D3D11_INPUT_ELEMENT_DESC geoInputDesc[GEO_INPUT_DESC_SIZE] =
+	const D3D11_INPUT_ELEMENT_DESC geoTexInputDesc[GEOTEX_INPUT_DESC_SIZE] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORDS", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	const D3D11_INPUT_ELEMENT_DESC geoColorInputDesc[GEOCOLOR_INPUT_DESC_SIZE] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -59,10 +68,14 @@ private:
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
-	const wchar_t* fileNameGeoVertex = L"geoPassVertColor.hlsl";
-	const wchar_t* fileNameGeoPixel = L"geoPassPixelColor.hlsl";
-	const wchar_t* fileNameLightVertex = L"lightPassVertColor.hlsl";
-	const wchar_t* fileNameLightPixel = L"lightPassPixelColor.hlsl";
+	const wchar_t* fileNameLightVertex = L"lightPassVert.hlsl";
+	const wchar_t* fileNameLightPixel = L"lightPassPixel.hlsl";
+
+	const wchar_t* fileNameGeoColorVertex = L"geoPassVertColor.hlsl";
+	const wchar_t* fileNameGeoColorPixel = L"geoPassPixelColor.hlsl";
+
+	const wchar_t* fileNameGeoTexVertex = L"geoPassVertTex.hlsl";
+	const wchar_t* fileNameGeoTexPixel = L"geoPassPixelTex.hlsl";
 };
 
 #endif // !RENDERER_H

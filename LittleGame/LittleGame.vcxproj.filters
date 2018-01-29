@@ -76,6 +76,15 @@
     <Filter Include="Source Files\Components\Input">
       <UniqueIdentifier>{ea3c4574-f4e4-44bf-9375-15c9c70ac82e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{8eaaedc2-d371-40e6-a02d-eeb06e74b554}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Color">
+      <UniqueIdentifier>{376d95bb-6573-4846-9dc5-7245e123fe03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Texture">
+      <UniqueIdentifier>{ff166191-654d-4081-bbc1-4720628a12bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Command.h">
@@ -223,16 +232,22 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="geoPassPixelColor.hlsl">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders\Color</Filter>
+    </FxCompile>
+    <FxCompile Include="geoPassPixelTex.hlsl">
+      <Filter>Resource Files\Shaders\Texture</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassPixel.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassVert.hlsl">
+      <Filter>Resource Files\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="geoPassVertColor.hlsl">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders\Color</Filter>
     </FxCompile>
-    <FxCompile Include="lightPassPixelColor.hlsl">
-      <Filter>Resource Files</Filter>
-    </FxCompile>
-    <FxCompile Include="lightPassVertColor.hlsl">
-      <Filter>Resource Files</Filter>
+    <FxCompile Include="geoPassVertTex.hlsl">
+      <Filter>Resource Files\Shaders\Texture</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
