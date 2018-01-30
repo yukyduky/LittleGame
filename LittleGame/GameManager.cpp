@@ -4,7 +4,7 @@
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
-#include "InputHandler.h"
+//#include "InputHandler.h"
 #include "GamePlayState.h"
 #include "Renderer.h"
 #include "AudioManager.h"

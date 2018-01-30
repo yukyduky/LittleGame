@@ -1,6 +1,8 @@
 #pragma once
-#ifndef ISOUNDMANAGER_H
-#define ISOUNDMANAGER_H
+#ifndef IAUDIOMANAGER_H
+#define IAUDIOMANAGER_H
+
+#include <string>
 
 namespace SOUND {
 	enum NAME { AHEM, GUNSHOT, SIZE };
@@ -46,4 +48,4 @@ public:
 	virtual void setRepeatMusic(bool repeat) = 0;
 };
 
-#endif // !ISOUNDMANAGER_H
+#endif // !IAUDIOMANAGER_H
