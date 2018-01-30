@@ -1,14 +1,32 @@
 #include "KeyboardComponent.h"
 #include "GameObject.h"
 #include "Locator.h"
-#include "Command.h"
+#include "Commands.h"
 
 
-KeyboardComponent::KeyboardComponent(GameObject& obj) : InputComponent(obj)
+KeyboardComponent::KeyboardComponent(GameObject& obj) : ID(obj.getID())
 {
+	this->pHead = dynamic_cast<ActorObject*>(&obj);
+
 	POINT p;
 	GetCursorPos(&p);
 	this->cursorPos.x = p.x;
+	this->cursorPos.y = p.y;
+
+	this->init();
+}
+
+const size_t KeyboardComponent::getID()
+{
+	return this->ID;
+}
+
+void KeyboardComponent::execute()
+{
+	for (auto &i : commandQueue) {
+		i->execute(*this->pHead);
+	}
+	commandQueue.clear();
 }
 
 void KeyboardComponent::receive(GameObject & obj, Message msg)

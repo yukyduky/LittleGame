@@ -5,33 +5,19 @@
 #include "State.h"
 #include <vector>
 #include <array>
-#include "Command.h"
+#include "Commands.h"
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
 #include "Projectile.h"
 
-// If mingling with a POINT, just use x's and y's rather than mingling the entire structs
-
 class Command;
 class InputComponent;
-
-enum Commands
-{
-	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE, 
-	MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT,
-	SELECTABILITY1, SELECTABILITY2, SELECTABILITY3, SELECTABILITY4,
-	FIREABILITY0, FIREABILITYX, 
-	OPENMENU0, OPENMENU1, 
-	Size
-};
 
 class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
-
-	Command* commands[Commands::Size];
 
 	RenderInputOrganizer rio;
 	GameObject* go;
@@ -40,7 +26,7 @@ private:
 	std::vector<GameObject*> projectiles;
 	std::vector<GraphicsComponent*> projGraph;
 
-	std::array<InputComponent*, 5> playerInput;
+	std::array<InputComponent*, 1> playerInput;
 
 	void mapCommands();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -56,7 +42,7 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'GamePlayState'.
+	1. Initialize the 'GamePlayState'. <-- already in function name.
 	*/
 	virtual void init();
 

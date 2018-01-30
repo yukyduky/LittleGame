@@ -129,18 +129,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AbilityCommands.h" />
     <ClInclude Include="AbilityComponent.h" />
-    <ClInclude Include="AutoAttackComponent.h" />
-    <ClInclude Include="Command.h" />
+    <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="ID3D.h" />
-    <ClInclude Include="MenuCommands.h" />
-    <ClInclude Include="MovementCommands.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
@@ -163,6 +160,8 @@
     <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbilityComponent.cpp" />
+    <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="AutoAttackComponent.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
