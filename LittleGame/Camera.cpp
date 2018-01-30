@@ -8,14 +8,6 @@
 ///////
 //
 
-/// INITIALIZING STATIC VALUES ('GLOBALS')
-float Camera::angle = 0.45;
-float Camera::nearPlane = 0.5;
-float Camera::farPlane = 200.0;
-
-
-
-
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
@@ -245,12 +237,25 @@ Camera::Camera() {
 	this->cameraFacingDir = this->cameraStartFacingDir;
 	this->cameraUpDir = { 0, 1, 0 };
 
+	this->angle = 0.45;
+	this->nearPlane = 0.5;
+	this->farPlane = 200.0;
+
+	// Initiate the view matrix
+	this->view = DirectX::XMMatrixLookToLH(
+		this->cameraPos,
+		this->cameraFacingDir,
+		this->cameraUpDir
+	);
+
+	float temp1 = Locator::getD3D()->GETwWidth();
+
 	// Initiate the projection matrix
 	this->projection = DirectX::XMMatrixPerspectiveFovLH(
-		(DirectX::XM_PI * Camera::GETangle()),
+		(DirectX::XM_PI * this->angle),
 		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
-		Camera::GETnearPlane(),
-		Camera::GETfarPlane()
+		this->nearPlane,
+		this->farPlane
 	);
 
 	this->GETviewMatrix();
@@ -260,13 +265,9 @@ Camera::~Camera() {
 
 }
 
-void Camera::updateCamera(
-	TCHAR				characterMessage
-	/*POINT				mouseCoordinates*/) {
-	
-	// TEMPORARY
-	TCHAR				characterMessage;
+void Camera::updateCamera() {
 
+	/*
 	// POSITIONAL MOVEMENT
 	if (characterMessage == 'W') {
 		this->updateRequired = true;
@@ -291,7 +292,7 @@ void Camera::updateCamera(
 	else if (characterMessage == 'H')	// By-product of merging WindowsProcedure's handling of input and
 		this->updateRequired = true;	// the attempt here.
 										// -DanneBigD (November, 2016)
-/*
+
 	// CAMERA ROTATION
 	if (mouseCoordinates.y != 0) {
 		this->updateRequired = true;
@@ -302,14 +303,14 @@ void Camera::updateCamera(
 		this->updateRequired = true;
 		this->rotateCameraHorizontally(mouseCoordinates);
 	}
-*/
+
 
 	// MISC COMMANDS - Needs to be called after movement and rotation
 	if (characterMessage == 'R') {
 		updateRequired = true;
 		this->resetCamera();
 	}
-
+*/
 	// IF 'updateRequired' = TRUE --> UPDATE
 	if (updateRequired) {
 		//Create new VIEW Matrix
@@ -354,18 +355,6 @@ DirectX::XMVECTOR Camera::GETcameraPos() {
 
 DirectX::XMVECTOR Camera::GETfacingDir() {
 	return this->cameraFacingDir;
-}
-
-float Camera::GETangle() {
-	return angle;
-}
-
-float Camera::GETnearPlane() {
-	return nearPlane;
-}
-
-float Camera::GETfarPlane() {
-	return farPlane;
 }
 
 DirectX::XMMATRIX &Camera::GETviewMatrix()

@@ -2,21 +2,33 @@
 #include "GraphicsComponent.h"
 #include "Locator.h"
 
+void RenderInputOrganizer::packageMatrices() {
+	DirectX::XMStoreFloat4x4(
+		&this->packagedMatrixData.world,
+		*this->rawMatrixData.world
+	);
 
-void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics, Camera& camera)
+	DirectX::XMStoreFloat4x4(
+		&this->packagedMatrixData.worldViewProj,
+		*this->rawMatrixData.view
+	);
+}
+
+void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
 	// Skapa matrix, fixa ID3Dbuffer, se
 	DirectX::XMMATRIX wvpTemp;
 
+	///FIX ME
 	//Locator::getConstantBuffer()->GETcalcMatrixData(/*graphics.getWorld()*/);
 
-	Locator::getConstantBuffer()->packageMatrices();
+	//this->packageMatrices();
 
-	Locator::getConstantBuffer()->editConstantBuffers(
+	/*Locator::getD3D()->mapConstantBuffer(
 		&this->constantBuffer,
 		&this->packagedMatrixData,
 		sizeof(this->packagedMatrixData)
-	);
+	);*/
 
 	Locator::getD3D()->setVertexBuffer(&graphics->GETvertexBuffer(), graphics->GETstride(), graphics->GEToffset());
 	Locator::getD3D()->setIndexBuffer(graphics->GETindexBuffer(), 0);
@@ -28,11 +40,11 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics, Camera& c
 void RenderInputOrganizer::initialize(Camera& camera) {
 	this->rawMatrixData.view = &camera.GETviewMatrix();
 	this->rawMatrixData.proj = &camera.GETprojMatrix();
-}
 
-void RenderInputOrganizer::packageMatrices() {
-	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.world, *this->rawMatrixData.world);
-	DirectX::XMStoreFloat4x4(&packagedMatrixData.worldViewProj, *this->rawMatrixData.view);
+	Locator::getD3D()->createConstantBuffer(
+		&this->constantBuffer,
+		sizeof(this->packagedMatrixData)
+	);
 }
 
 void RenderInputOrganizer::render()

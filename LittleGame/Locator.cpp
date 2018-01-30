@@ -2,4 +2,3 @@
 
 IGameTime* Locator::sGT = nullptr;
 ID3D* Locator::sID3D = nullptr;
-IConstantBufferManager* Locator::sConstantBuffer = nullptr;

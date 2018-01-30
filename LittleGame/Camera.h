@@ -16,9 +16,9 @@ class Camera {
 private:
 	float			cameraMoveSpeed = 2.0;
 	float			cameraRotateSpeed = 0.02;
-	static float	angle;
-	static float	nearPlane;
-	static float	farPlane;
+	float			angle;
+	float			nearPlane;
+	float			farPlane;
 
 	DirectX::XMFLOAT3 cameraPos_Float3;
 
@@ -76,10 +76,7 @@ public:
 	3. Uses the 'updateRequired' bool to see if updating the Camera is necessary.
 	--- Should an update be required, then the constant buffers will be edited here.
 	*/
-	void updateCamera(
-		TCHAR				characterMessage
-		//POINT				mouseCoordinates
-	);
+	void updateCamera();
 
 	void resetCamera();
 
@@ -94,9 +91,6 @@ public:
 	DirectX::XMVECTOR	GETcameraStartPos();
 	DirectX::XMVECTOR	GETcameraPos();
 	DirectX::XMVECTOR	GETfacingDir();
-	static float		GETangle();
-	static float		GETnearPlane();
-	static float		GETfarPlane();
 	DirectX::XMMATRIX&	GETviewMatrix();
 	DirectX::XMMATRIX&	GETprojMatrix();
 };

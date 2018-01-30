@@ -39,16 +39,17 @@ private:
 	MatrixBufferCalc	rawMatrixData;
 	MatrixBufferPack	packagedMatrixData;
 	ID3D11Buffer*		constantBuffer;
-	
-	void drawGraphics(GraphicsComponent*& graphics, Camera& camera);
 
-public:
-	void initialize(Camera& camera);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Re-formats the WORLD, VIEW, & PROJECTION matrix data.
 	2. Format Change Details: XMMATRIX --> XMFLOAT4X4.
 	*/
 	void packageMatrices();
+	
+	void drawGraphics(GraphicsComponent*& graphics);
+
+public:
+	void initialize(Camera& camera);
 	void render();
 	void addGraphics(GraphicsComponent* graphics);
 };

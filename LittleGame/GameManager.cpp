@@ -20,9 +20,6 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 
-	// Provide the constantBuffer to Locator
-	Locator::provide(this->constantBuffer);
-
 	// Set the first state of the game
 	StateManager::changeState(GamePlayState::getInstance());
 }
@@ -51,12 +48,7 @@ void GameManager::update()
 {
 	StateManager::update(this);
 
-	this->camera.updateCamera(
-		//TCHAR				characterMessage,
-		//POINT				mouseCoordinates,
-		this->constantBufferViewProj.GETcalcMatrixData(),
-		this->constantBufferViewProj.GETconstantBuffer()
-	);
+	this->camera.updateCamera();
 }
 
 void GameManager::render()

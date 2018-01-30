@@ -4,7 +4,6 @@
 
 #include "IGameTime.h"
 #include "ID3D.h"
-#include "IConstantBufferManager.h"
 
 /* Service Locator pattern */
 
@@ -13,7 +12,6 @@ class Locator
 private:
 	static IGameTime* sGT;
 	static ID3D* sID3D;
-	static IConstantBufferManager* sConstantBuffer;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -22,15 +20,13 @@ public:
 	*/
 	static void provide(IGameTime* gameTime) { sGT = gameTime; }
 	static void provide(ID3D* d3d) { sID3D = d3d; }
-	static void provide(IConstantBufferManager* constantbuffer) { sConstantBuffer = constantbuffer; }
-	
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the 'sGT'(ptr).
 	2. 'sGT'(ptr) points to the address of 'gameTime'(obj), thereby returning that address.
 	*/
 	static IGameTime* getGameTime() { return sGT; }
 	static ID3D* getD3D() { return sID3D; }
-	static IConstantBufferManager* getConstantBuffer() { return sConstantBuffer; }
 };
 
 #endif
