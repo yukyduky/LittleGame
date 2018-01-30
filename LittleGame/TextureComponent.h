@@ -12,7 +12,6 @@ class TextureComponent : public GraphicsComponent
 protected:
 	const size_t ID;
 	ID3D11ShaderResourceView* gSRV;
-	std::array<TextureVertex, 4> vertices;
 public:
 	TextureComponent(size_t ID, ID3D11ShaderResourceView* gSRV);
 	ID3D11ShaderResourceView* getSRV();

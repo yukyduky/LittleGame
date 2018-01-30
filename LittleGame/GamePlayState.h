@@ -4,25 +4,50 @@
 
 #include "State.h"
 #include <vector>
+#include <array>
 #include "Command.h"
-#include "IInputHandler.h"
+#include "RenderInputOrganizer.h"
+#include "GraphicsComponent.h"
+#include "GameObject.h"
+
+// If mingling with a POINT, just use x's and y's rather than mingling the entire structs
 
 class Command;
+class InputComponent;
+
+enum Commands
+{
+	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE, 
+	MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT,
+	SELECTABILITY1, SELECTABILITY2, SELECTABILITY3, SELECTABILITY4,
+	FIREABILITY0, FIREABILITYX, 
+	OPENMENU0, OPENMENU1, 
+	Size
+};
 
 class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
 
-	std::vector<Input> commandQueue;
-	Command* selectCommand;
+	Command* commands[Commands::Size];
 
+	RenderInputOrganizer rio;
+	GameObject* go;
+	std::vector<GraphicsComponent*> blocks;
+
+	std::array<InputComponent*, 5> playerInput;
+
+	void mapCommands();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
 	2. Calls the 'getInputHandler()' in-order to call the 'mapCommandToControllerKey()' function.
 	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
 	*/
 	void mapKeys();
+
+	void initInputMapping();
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'GamePlayState'.
@@ -58,8 +83,6 @@ public:
 	1. Render the 'GamePlayState'
 	*/
 	virtual void render(GameManager* gm);
-
-	void commandSelect(size_t player);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Get the static instance of the 'GamePlayState'.

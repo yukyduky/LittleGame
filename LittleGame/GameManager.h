@@ -5,7 +5,8 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include "IGameTime.h"
-#include "IInputHandler.h"
+#include "Renderer.h"
+
 #include "IAudioManager.h"
 
 class State;
@@ -15,7 +16,8 @@ class GameManager
 private:
 	bool isRunning;
 	IGameTime* gameTime;
-	IInputHandler* inputHandler;
+	Renderer renderer;
+	
 	IAudioManager* audio;
 
 public:

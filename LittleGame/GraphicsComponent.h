@@ -3,27 +3,43 @@
 #define GRAPHICSCOMPONENT_H
 
 #include "Component.h"
+#include <d3d11.h>
+#include <DirectXMath.h>
 
-struct PrimitiveVertex
+struct vColor
 {
-	float x, y, z;
-	float r, g, b;
+	float r, g, b, a;
+
+	vColor(float r, float g, float b, float a)
+		: r(r), g(g), b(b), a(a){}
+	vColor(){}
 };
 
-struct TextureVertex
+struct PrimitiveVertexData
 {
-	float x, y, z;
-	float tx, ty;
+	DirectX::XMFLOAT3 pos;
+	DirectX::XMFLOAT3 normal;
+	DirectX::XMFLOAT4 color;
 
-	TextureVertex(float x, float y, float z, float tx, float ty) : x(x), y(y), z(z), tx(tx), ty(ty) {}
-	TextureVertex() {}
+	PrimitiveVertexData(float x, float y, float z, float nx, float ny, float nz, float r, float g, float b, float a) :
+		pos(x, y, z), normal(nx, ny, nz), color(r, g, b, a) {}
+	PrimitiveVertexData(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 normal, DirectX::XMFLOAT4 color) :
+		pos(pos), normal(normal), color(color) {}
+	PrimitiveVertexData() {}
 };
+
+class RenderInputOrganizer;
 
 class GraphicsComponent : public Component
 {
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
+	virtual ID3D11Buffer*& GETvertexBuffer() = 0;
+	virtual ID3D11Buffer*& GETindexBuffer() = 0;
+	virtual size_t& GETstride() = 0;
+	virtual size_t& GEToffset() = 0;
+	virtual size_t& GETnumIndices() = 0;
 };
 
 #endif // !GRAPHICSCOMPONENT_H
