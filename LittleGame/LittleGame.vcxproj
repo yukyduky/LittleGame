@@ -130,6 +130,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AbilityCommands.h" />
+    <ClInclude Include="AbilityComponent.h" />
+    <ClInclude Include="AutoAttackComponent.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
@@ -139,6 +141,7 @@
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MenuCommands.h" />
     <ClInclude Include="MovementCommands.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -160,10 +163,12 @@
     <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AutoAttackComponent.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />

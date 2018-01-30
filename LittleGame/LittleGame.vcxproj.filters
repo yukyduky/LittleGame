@@ -168,6 +168,15 @@
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="AbilityComponent.h">
+      <Filter>Header Files\Components\Ability</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Header Files\Components\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAttackComponent.h">
+      <Filter>Header Files\Components\Ability</Filter>
+    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
@@ -229,6 +238,12 @@
     </ClCompile>
     <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source Files\Components\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAttackComponent.cpp">
+      <Filter>Source Files\Components\Ability</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files\General</Filter>
