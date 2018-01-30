@@ -6,7 +6,7 @@
 #include <DirectXMath.h>
 
 namespace ABILITYTYPE {
-	enum TYPE { DEFAULT, SIZE};
+	enum TYPE {SIZE};
 }
 
 class AbilityComponent : public Component

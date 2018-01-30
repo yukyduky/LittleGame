@@ -9,7 +9,6 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
-#include "Projectile.h"
 
 class Command;
 class InputComponent;
@@ -37,8 +36,6 @@ private:
 	void mapKeys();
 
 	void initInputMapping();
-
-	void shootProjectile();
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
