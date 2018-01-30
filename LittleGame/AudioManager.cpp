@@ -5,6 +5,7 @@ int AudioManager::init()
 	int error = 0;
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
+	error += this->loadSound(std::string("include/Sound/gulp_x.wav"), SOUND::GULP);
 
 	error += this->mapMusic(std::string("include/Sound/OPM-OST.ogg"), MUSIC::ONEPUNCH);
 

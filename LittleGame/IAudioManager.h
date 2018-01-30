@@ -4,8 +4,18 @@
 
 #include <string>
 
+/* ---:HOW TO ADD NEW MUSIC OR SOUND:---
+1. Add a enum in the right namespace down below
+2. Go into audioManager.cpp and init() 
+3. Use the loadSound for sound (or mapMusic for music) function to add the audio the array
+	3.1 Binds the enum to the right filepath
+4. Use play to change music or play up a sound
+*/
+
+
+
 namespace SOUND {
-	enum NAME { AHEM, GUNSHOT, SIZE };
+	enum NAME { AHEM, GULP, SIZE };
 }
 namespace MUSIC {
 	enum NAME { ONEPUNCH, SIZE };
