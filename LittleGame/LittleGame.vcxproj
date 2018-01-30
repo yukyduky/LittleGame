@@ -134,7 +134,6 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MenuCommands.h" />
@@ -162,7 +161,6 @@
   <ItemGroup>
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />

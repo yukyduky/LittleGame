@@ -203,6 +203,11 @@ size_t & BlockComponent::GETnumIndices()
 	return this->numIndices;
 }
 
+XMMATRIX& BlockComponent::getWorld()
+{
+	return XMMATRIX();
+}
+
 const size_t BlockComponent::getID()
 {
 	return this->ID;

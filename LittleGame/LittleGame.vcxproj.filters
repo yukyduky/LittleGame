@@ -165,9 +165,6 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBufferManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
@@ -225,9 +222,6 @@
       <Filter>Source Files\Components\Input</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="ConstantBufferManager.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">

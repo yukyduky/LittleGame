@@ -9,8 +9,7 @@
 GamePlayState GamePlayState::sGamePlayState;
 
 
-void GamePlayState::mapCommands() 
-{
+void GamePlayState::mapCommands()  {
 	/*this->commands[Commands::SELECT] = new GamePlaySelectCommand();
 	this->commands[Commands::MOVEUP] = new MoveUpCommand();
 	this->commands[Commands::MOVEDOWN] = new MoveDownCommand();
@@ -29,8 +28,7 @@ void GamePlayState::mapCommands()
 	this->commands[Commands::OPENMENU1] = new OpenMenu1Command();*/
 }
 
-void GamePlayState::mapKeys()
-{
+void GamePlayState::mapKeys() {
 	// KEYBOARD -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 	/*// Movement & Rotation
 	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::W, Key(this->commands[Commands::MOVEUP], COMMANDTYPE::TAP));
@@ -81,8 +79,7 @@ void GamePlayState::mapKeys()
 	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::BACK, Key(this->commands[Commands::OPENMENU1], COMMANDTYPE::TAP));*/
 }
 
-void GamePlayState::initInputMapping()
-{
+void GamePlayState::initInputMapping() {
 	// TrueInput --> Internal 'Keys' --> Internal 'Commands' --> rest of system
 	// First we map the internal 'Keys' to commands.
 	this->mapCommands();
@@ -91,8 +88,9 @@ void GamePlayState::initInputMapping()
 }
 
 
-void GamePlayState::init()
-{
+void GamePlayState::init() {
+	this->rio.initialize(this->camera);
+
 	this->go = new GameObject(0);
 	this->playerInput[0] = new KeyboardComponent(*this->go);
 
@@ -107,24 +105,21 @@ void GamePlayState::init()
 	}
 }
 
-void GamePlayState::cleanup()
-{
+void GamePlayState::cleanup() {
 	for (int i = 0; i < Commands::Size; i++) {
 		delete commands[i];
 	}
 }
 
-void GamePlayState::pause()
-{
+void GamePlayState::pause() {
+
 }
 
-void GamePlayState::resume()
-{
+void GamePlayState::resume() {
 	this->mapKeys();
 }
 
-void GamePlayState::handleEvents(GameManager * gm)
-{
+void GamePlayState::handleEvents(GameManager * gm) {
 	MSG msg;
 
 	while (gm->pollEvent(msg)) {
@@ -138,17 +133,15 @@ void GamePlayState::handleEvents(GameManager * gm)
 	}
 }
 
-void GamePlayState::update(GameManager * gm)
-{
+void GamePlayState::update(GameManager * gm) {
+
 }
 
-void GamePlayState::render(GameManager * gm)
-{
+void GamePlayState::render(GameManager * gm) {
 	this->rio.render();
 	gm->display(this);
 }
 
-GamePlayState* GamePlayState::getInstance()
-{
+GamePlayState* GamePlayState::getInstance() {
 	return &sGamePlayState;
 }

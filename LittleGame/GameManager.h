@@ -6,7 +6,6 @@
 #include <d3d11.h>
 #include "IGameTime.h"
 #include "Renderer.h"
-
 #include "IAudioManager.h"
 
 class State;

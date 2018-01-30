@@ -9,6 +9,7 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
+#include "Camera.h"
 
 // If mingling with a POINT, just use x's and y's rather than mingling the entire structs
 
@@ -32,6 +33,7 @@ private:
 
 	Command* commands[Commands::Size];
 
+	Camera camera;
 	RenderInputOrganizer rio;
 	GameObject* go;
 	std::vector<GraphicsComponent*> blocks;
