@@ -6,6 +6,7 @@
 #include "GameTime.h"
 #include "InputHandler.h"
 #include "GamePlayState.h"
+#include "AudioManager.h"
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
@@ -20,11 +21,19 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Provide the inputHandler object to the service locator
 	Locator::provide(this->inputHandler);
 
+	// Create the AudioManager
+	this->audio = new AudioManager;
+	// Provide the audioManager object to the service locator
+	Locator::provide(this->audio);
+	// Initaiate the audio, loads in all sound and music
+	Locator::getAudioManager()->init();
+
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 
 	// Set the first state of the game
 	StateManager::changeState(GamePlayState::getInstance());
+
 }
 
 void GameManager::cleanup()

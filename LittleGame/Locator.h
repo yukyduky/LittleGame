@@ -4,6 +4,7 @@
 
 #include "IGameTime.h"
 #include "IInputHandler.h"
+#include "IAudioManager.h"
 
 /* Service Locator pattern */
 
@@ -12,6 +13,7 @@ class Locator
 private:
 	static IGameTime* sGT;
 	static IInputHandler* sIH;
+	static IAudioManager* sAM;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -20,6 +22,7 @@ public:
 	*/
 	static void provide(IGameTime* gameTime) { sGT = gameTime; }
 	static void provide(IInputHandler* inputHandler) { sIH = inputHandler; }
+	static void provide(IAudioManager* audioManager) { sAM = audioManager; }
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the 'sGT'(ptr).
@@ -27,6 +30,7 @@ public:
 	*/
 	static IGameTime* getGameTime() { return sGT; }
 	static IInputHandler* getInputHandler() { return sIH; }
+	static IAudioManager* getAudioManager() { return sAM; }
 };
 
 #endif
