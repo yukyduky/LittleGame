@@ -25,16 +25,23 @@ void GamePlayState::checkCollisions() {
 	for (auto&& i : physicsComponentsArray) {
 
 		// If the object is NOT DEAD, we compare its physComponent vs. all other physComponents
-		if (gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
 
 			// LOOP 2: Comparing NON-DEAD object from pevious loop to all remaining NON-DEAD objects
 			for (auto&& k : physicsComponentsArray) {
 
-				if (gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
 					/// Need a bool(collision detected or not detected?)
 					if (this->physicsComponentsArray.at(i->getID())->checkCollision(
 						this->physicsComponentsArray.at(k->getID())->getBoundingSphere())) {
 
+						// CALL COLLISION-CLASS FUNCITON
+						this->collisionHandler.executeCollision(
+							this->gameObjectsArray.at(i->getID()),
+							this->gameObjectsArray.at(k->getID()),
+							&this->physicsComponentsArray.at(i->getID())->getBoundingSphere(),
+							&this->physicsComponentsArray.at(k->getID())->getBoundingSphere()
+						);
 					}
 				}
 			}

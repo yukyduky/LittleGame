@@ -7,6 +7,7 @@
 #include "Command.h"
 #include "IInputHandler.h"
 #include "PhysicsComponent.h"
+#include "CollisionHandler.h"
 #include "GameObject.h"
 #include <list>
 
@@ -20,6 +21,8 @@ private:
 	std::vector<Input> commandQueue;
 	Command* selectCommand;
 	
+	CollisionHandler collisionHandler;
+
 	std::vector<GameObject*> gameObjectsArray;
 	std::vector<PhysicsComponent*> physicsComponentsArray;
 

@@ -47,7 +47,7 @@ bool GameManager::pollEvent(MSG &msg)
 {
 	return PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE);
 }
-
+ 
 void GameManager::update()
 {
 	StateManager::update(this);
