@@ -143,7 +143,6 @@ void GamePlayState::render(GameManager * gm)
 
 GamePlayState* GamePlayState::getInstance()
 {
-	sGamePlayState.initArena();
 	return &sGamePlayState;
 }
 

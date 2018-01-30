@@ -14,7 +14,7 @@ std::vector<DWORD> BlockComponent::indices;
  */
 
 
-void BlockComponent::createVertices()
+void BlockComponent::createVertices(float r, float g, float b, float a)
 {
 	/*--------<INFORMATION>--------
 	1. Creates a box with points ranging from -1.0 to 1.0 in x,y,z dimensions.
@@ -42,8 +42,57 @@ void BlockComponent::createVertices()
 	p6 = (1.0, 1.0, 1.0)
 	p7 = (1.0, -1.0, 1.0)
 	*/
-	/*std::array<PrimitiveVertexData, 24> vertexData;
+	XMFLOAT3 p0(-1.0f, 1.0f, -1.0f);
+	XMFLOAT3 p1(1.0f, 1.0f, -1.0f);
+	XMFLOAT3 p2(-1.0f, -1.0f, -1.0f);
+	XMFLOAT3 p3(1.0f, -1.0f, -1.0f);
+	XMFLOAT3 p4(-1.0f, 1.0f, 1.0f);
+	XMFLOAT3 p5(-1.0f, -1.0f, 1.0f);
+	XMFLOAT3 p6(1.0f, 1.0f, 1.0f);
+	XMFLOAT3 p7(1.0f, -1.0f, 1.0f);
 
+	XMFLOAT3 normalFront(0.0f, 0.0f, -1.0f);
+	XMFLOAT3 normalLeft(-1.0f, 0.0f, 0.0f);
+	XMFLOAT3 normalRight(1.0f, 0.0f, 0.0f);
+	XMFLOAT3 normalBack(0.0f, 0.0f, -1.0f);
+	XMFLOAT3 normalTop(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 normalBottom(0.0f, -1.0f, 0.0f);
+
+	std::array<PrimitiveVertexData, 24> vertexData2;
+	//Front p0, p1, p2, p3
+	vertexData2[0] = PrimitiveVertexData(p0.x, p0.y, p0.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p1.x, p1.y, p1.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p2.x, p2.y, p2.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p3.x, p3.y, p3.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
+	//Left p4, p0, p5, p2
+	vertexData2[0] = PrimitiveVertexData(p4.x, p4.y, p4.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p0.x, p0.y, p0.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p5.x, p5.y, p5.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p2.x, p2.y, p2.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
+	//Right p1, p6, p3, p7
+	vertexData2[0] = PrimitiveVertexData(p1.x, p1.y, p1.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p6.x, p6.y, p6.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p3.x, p3.y, p3.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p7.x, p7.y, p7.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
+	//Back p6, p4, p7, p5
+	vertexData2[0] = PrimitiveVertexData(p6.x, p6.y, p6.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p4.x, p4.y, p4.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p7.x, p7.y, p7.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p5.x, p5.y, p5.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
+	//Top p4, p6, p0, p1
+	vertexData2[0] = PrimitiveVertexData(p4.x, p4.y, p4.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p6.x, p6.y, p6.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p0.x, p0.y, p0.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p1.x, p1.y, p1.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
+	//Bottom p2, p3, p5, p7
+	vertexData2[0] = PrimitiveVertexData(p2.x, p2.y, p2.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p3.x, p3.y, p3.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p5.x, p5.y, p5.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
+	vertexData2[0] = PrimitiveVertexData(p7.x, p7.y, p7.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
+
+
+
+	/*
 	//Push the vertices into the vector (p0-p7)
 	//Front p0, p1, p2, p3
 	vertexData[0].pos = XMFLOAT3(-1.0, 1.0, -1.0);
@@ -78,7 +127,6 @@ void BlockComponent::createVertices()
 
 	//Push the normals into the vector
 	//Front
-	
 	vertexData[0].normal = XMFLOAT3(0.0, 0.0, -1.0);
 	vertexData[1].normal = XMFLOAT3(0.0, 0.0, -1.0);
 	vertexData[2].normal = XMFLOAT3(0.0, 0.0, -1.0);
@@ -171,7 +219,7 @@ void BlockComponent::createVertices()
 
 BlockComponent::BlockComponent(GameObject& obj, float r, float g, float b, float a) : ID(obj.getID())
 {
-	this->createVertices();
+	this->createVertices(r, g, b, a);
 	//Set the color of the box
 	this->color.r = r;
 	this->color.g = g;

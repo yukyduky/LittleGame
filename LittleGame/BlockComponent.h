@@ -28,7 +28,7 @@ private:
 	3. Creates normals for the vertices
 	4. Creates indices for the indexBuffer.
 	*/
-	void createVertices();
+	void createVertices(float r, float g, float b, float a);
 	
 public:
 	BlockComponent(GameObject& obj, float r, float g, float b, float a);

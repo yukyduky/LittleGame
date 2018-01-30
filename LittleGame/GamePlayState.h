@@ -46,10 +46,6 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
-	//arenaGrid values:
-	//0 = empty space
-	//1 = occupied space
-	//2 = spawnlocation
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
 	std::vector<GameObject*> arenaObjects;
 	std::vector<GraphicsComponent*> graphics;
