@@ -19,6 +19,7 @@ private:
 	size_t stride;
 	size_t offset;
 	size_t numIndices;
+	GameObject* head;
 
 	
 

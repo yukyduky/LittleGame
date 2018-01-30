@@ -220,6 +220,7 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 BlockComponent::BlockComponent(GameObject& obj, float r, float g, float b, float a) : ID(obj.getID())
 {
 	this->createVertices(r, g, b, a);
+	this->head = &obj;
 	//Set the color of the box
 	this->color.r = r;
 	this->color.g = g;
@@ -262,13 +263,14 @@ size_t & BlockComponent::GETnumIndices()
 
 XMMATRIX& BlockComponent::getWorld()
 {
-	return XMMATRIX();
+	return this->head->getWorld();
 }
 
 const size_t BlockComponent::getID()
 {
 	return this->ID;
 }
+
 
 /*_____________________________
 |          END OF             |

@@ -64,9 +64,10 @@ void LineComponent::createVertices()
 |_____________________________|
 */
 
-LineComponent::LineComponent(size_t ID, vColor startColor, vColor endColor) : ID(ID)
+LineComponent::LineComponent(GameObject& obj, vColor startColor, vColor endColor) : ID(obj.getID())
 {
 	this->createVertices();	
+	this->head = &obj;
 }
 
 LineComponent::~LineComponent()
@@ -105,6 +106,11 @@ size_t& LineComponent::GEToffset()
 size_t& LineComponent::GETnumIndices()
 {
 	return this->numIndices;
+}
+
+XMMATRIX& LineComponent::getWorld()
+{
+	return this->head->getWorld();
 }
 
 /*_____________________________

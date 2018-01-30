@@ -6,7 +6,10 @@
 #include "BlockComponent.h"
 #include "KeyboardComponent.h"
 #include "ControllerComponent.h"
+#include <DirectXMath.h>
+#include <d3d11.h>
 
+using namespace DirectX;
 
 GamePlayState GamePlayState::sGamePlayState;
 
@@ -92,9 +95,6 @@ void GamePlayState::initInputMapping() {
 
 void GamePlayState::init() {
 	this->rio.initialize(this->camera);
-
-	this->go = new GameObject(0);
-	this->playerInput[0] = new KeyboardComponent(*this->go);
 	this->initArena();
 
 	for (auto &i : this->graphics) {
@@ -103,9 +103,6 @@ void GamePlayState::init() {
 }
 
 void GamePlayState::cleanup() {
-	for (int i = 0; i < Commands::Size; i++) {
-		delete commands[i];
-	}
 }
 
 void GamePlayState::pause() {
@@ -170,7 +167,7 @@ void GamePlayState::createArenaFloor()
 	//Prepare the color of the rectangle.
 	vColor color(72.0f, 118.0f, 255.0f, 255.0f);
 	//Create the RectangleComponent and give it the finished world matrix.
-	rect = new RectangleComponent(nextID, color.r, color.g, color.b, color.a);
+	rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
 	object->SETworldMatrix(worldM);
 	//Give the RectangleComponent to the new GameObject.
 	object->addComponent(rect);
@@ -232,7 +229,7 @@ void GamePlayState::createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startCol
 	//Create the LineComponent and give it it's world matrix.
 	vColor startC(startColor.x, startColor.w, startColor.z, startColor.w);
 	vColor endC(startColor.x, startColor.w, startColor.z, startColor.w);
-	line = new LineComponent(nextID, startC, endC);
+	line = new LineComponent(*object, startC, endC);
 	object->SETworldMatrix(wMatrix);
 	//Add the LineComponent to the GameObject and push the GameObject into the vectors.
 	object->addComponent(line);
@@ -268,7 +265,7 @@ void GamePlayState::createArenaWalls()
 	//Create a color to be used in the BlockComponent.
 	XMFLOAT4 wallColor(255.0f, 48.0f, 48.0f, 255.0f);
 
-
+	/*
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
 	XMFLOAT2 posIndex; // used to find all the indexes of a wall section.
@@ -424,6 +421,7 @@ void GamePlayState::createArenaWalls()
 		}
 		skipChecker++;//remove when we implement the real random openings.
 	}
+	*/
 	int test2 = 2;
 }
 
@@ -443,7 +441,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	this->graphics.push_back(block);
 	this->arenaObjects.push_back(object);
 
-
+	/*
 	//Create lines for the walls.
 	LineComponent* currentLine;
 	XMFLOAT3 startPos;
@@ -488,7 +486,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMH * rotMH * translationM;
 		//Create the new LineComponent and hand it it's world matrix.
-		currentLine = new LineComponent(nextID, startColor, endColor);
+		currentLine = new LineComponent(*object, startColor, endColor);
 		object->SETworldMatrix(worldMatrix);
 		//Give the new GameObject the LineComponent and push them into their vectors for storage.
 		object->addComponent(currentLine);
@@ -502,7 +500,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		vec = DirectX::XMLoadFloat3(&parallelPos);
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMH * rotMH * translationM;
-		currentLine = new LineComponent(nextID, startColor, endColor);
+		currentLine = new LineComponent(*object, startColor, endColor);
 		object->SETworldMatrix(worldMatrix);
 		object->addComponent(currentLine);
 		this->arenaObjects.push_back(object);
@@ -523,7 +521,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMV * rotMV * translationM;
 		//Create the new LineComponent and hand it it's world matrix.
-		currentLine = new LineComponent(nextID, startColor, endColor);
+		currentLine = new LineComponent(*object, startColor, endColor);
 		object->SETworldMatrix(worldMatrix);
 		//Give the GameObject the LineComponent and push them into their vectors for storage.
 		object->addComponent(currentLine);
@@ -537,7 +535,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		vec = DirectX::XMLoadFloat3(&parallelPos);
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMV * rotMV * translationM;
-		currentLine = new LineComponent(nextID, startColor, endColor);
+		currentLine = new LineComponent(*object, startColor, endColor);
 		object->SETworldMatrix(worldMatrix);
 		object->addComponent(currentLine);
 		this->arenaObjects.push_back(object);
@@ -546,6 +544,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Prepare currPos for next iteration.
 		currPos = currPos + stepL;
 	}
+	*/
 }
 
 void GamePlayState::SETsquareType(XMFLOAT2 index, SQUARETYPE::TYPE type)

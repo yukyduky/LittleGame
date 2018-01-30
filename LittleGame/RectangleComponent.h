@@ -16,6 +16,7 @@ private:
 	size_t offset;
 	size_t numIndices;
 	vColor color;
+	GameObject* head;
 
 	/*--------<INFORMATION>--------
 	1. Creates a rectangle with points ranging from -1.0 to 1.0 in x and z dimensions.
@@ -29,7 +30,7 @@ public:
 	/*--------<INFORMATION>--------
 	1. Calls the private function createVertices() if it's the first time a RectangleComponent is being created.
 	*/
-	RectangleComponent(size_t ID, const float r, const float g, const float b, const float a);
+	RectangleComponent(GameObject& obj, const float r, const float g, const float b, const float a);
 	~RectangleComponent();
 
 	/*--------<INFORMATION>--------
@@ -51,6 +52,8 @@ public:
 	virtual size_t& GEToffset();
 
 	virtual size_t& GETnumIndices();
+
+	virtual XMMATRIX& getWorld();
 
 	/*--------<INFORMATION>--------
 	1. Returns the color of the rectangle.

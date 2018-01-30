@@ -80,9 +80,10 @@ void RectangleComponent::createVertices()
 |_____________________________|
 */
 
-RectangleComponent::RectangleComponent(size_t ID, const float r, const float g, const float b, const float a) : ID(ID)
+RectangleComponent::RectangleComponent(GameObject& obj, const float r, const float g, const float b, const float a) : ID(obj.getID())
 {
 	this->createVertices();
+	this->head = &obj;
 	//Set the color of the box
 	this->color.r = r;
 	this->color.g = g;
@@ -128,6 +129,10 @@ size_t& RectangleComponent::GETnumIndices()
 	return this->numIndices;
 }
 
+XMMATRIX& RectangleComponent::getWorld()
+{
+	return this->head->getWorld();
+}
 
 vColor& RectangleComponent::GETcolor()
 {

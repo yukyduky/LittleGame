@@ -15,6 +15,7 @@ private:
 	size_t stride;
 	size_t offset;
 	size_t numIndices;
+	GameObject* head;
 	/*
 	static std::vector<Vertex> vertices;
 	static std::vector<Vertex> normals;
@@ -32,7 +33,7 @@ public:
 	/*--------<INFORMATION>--------
 	1. Calls the private function createVertices() if it's the first time a LineComponent is being created.
 	*/
-	LineComponent(size_t ID, vColor startColor, vColor endColor);
+	LineComponent(GameObject& obj, vColor startColor, vColor endColor);
 	~LineComponent();
 	
 	/*--------<INFORMATION>--------
@@ -50,6 +51,7 @@ public:
 	virtual size_t& GETstride();
 	virtual size_t& GEToffset();
 	virtual size_t& GETnumIndices();
+	virtual XMMATRIX& getWorld();
 	
 };
 
