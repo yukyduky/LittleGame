@@ -1,6 +1,7 @@
 #pragma once
 #ifndef COMMANDS_H
 #define COMMANDS_H
+#include "ActorObject.h"
 
 /* Command pattern */
 class ActorObject;
