@@ -6,7 +6,11 @@ int AudioManager::init()
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
 
-	this->currentSound.setVolume(this->volume);
+	error += this->mapMusic(std::string("include/Sound/OPM-OST.ogg"), MUSIC::ONEPUNCH);
+
+	this->adjustEffects(this->soundVolume);
+	this->adjustMusic(this->musicVolume);
+
 	return error;
 }
 
@@ -22,9 +26,9 @@ int AudioManager::loadSound(std::string filename, SOUND::NAME name)
 int AudioManager::loadMusic(std::string filename)
 {
 	int error = 0;
-	if (!this->currentMusic.openFromFile(filename)) {
-		error = -1;
-	}
+	//if (!this->currentMusic.openFromFile(filename)) {
+	//	error = -1;
+	//}
 	return error;
 }
 
@@ -49,8 +53,8 @@ void AudioManager::update()
 
 void AudioManager::play(MUSIC::NAME name)
 {
-//	this->cur
-//	this->currentMusic.play(this->musicFilenames[name]);
+	this->currentMusic[currState].openFromFile(this->musicFilenames[name]);
+	this->currentMusic[currState].play();
 }
 
 void AudioManager::play(SOUND::NAME name)
@@ -65,7 +69,7 @@ void AudioManager::play(SOUND::NAME name)
 
 void AudioManager::stop(MUSIC::NAME name)
 {
-	this->currentMusic.stop();
+	this->currentMusic[currState].stop();
 }
 
 void AudioManager::stop(SOUND::NAME name)
@@ -74,6 +78,7 @@ void AudioManager::stop(SOUND::NAME name)
 
 void AudioManager::pause(MUSIC::NAME name)
 {
+	this->currentMusic[currState].pause();
 }
 
 void AudioManager::pause(SOUND::NAME name)
@@ -82,14 +87,22 @@ void AudioManager::pause(SOUND::NAME name)
 
 void AudioManager::adjustMaster(size_t volume)
 {
+	this->adjustEffects(volume);
+
+	this->adjustMusic(volume);
 }
 
 void AudioManager::adjustMusic(size_t volume)
 {
+	for (size_t i = 0; i < MUSICSTATE::SIZE; i++)
+	{
+		this->currentMusic[i].setVolume(this->musicVolume);
+	}
 }
 
 void AudioManager::adjustEffects(size_t volume)
 {
+	this->currentSound.setVolume(this->soundVolume);
 }
 
 void AudioManager::setRepeatMusic(bool repeat)

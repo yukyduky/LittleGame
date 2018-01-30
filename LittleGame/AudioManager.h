@@ -23,11 +23,14 @@ private:
 	std::array<std::string, MUSIC::SIZE> musicFilenames;
 	//Queue isnt neccesary and the game will play the sound instantly
 	std::deque<sf::Sound> soundQueue;
-	sf::Music currentMusic;
+	std::array<sf::Music, MUSICSTATE::SIZE> currentMusic;
 	//Sound object that will play the sound
 	sf::Sound currentSound;
 
-	int volume = 100;
+	size_t soundVolume = 100;
+	size_t musicVolume = 3;
+
+	size_t currState;
 public:
 	//Loads in all music and sound
 	int init();

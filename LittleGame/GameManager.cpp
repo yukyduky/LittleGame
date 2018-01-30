@@ -34,6 +34,9 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Set the first state of the game
 	StateManager::changeState(GamePlayState::getInstance());
 
+	Locator::getAudioManager()->play(MUSIC::ONEPUNCH);
+
+
 }
 
 void GameManager::cleanup()
