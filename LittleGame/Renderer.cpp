@@ -279,10 +279,10 @@ void Renderer::setShaderType(SHADERTYPE type)
 	this->currentLightShaders = &this->lightShaders;
 	switch (type)
 	{
-	case COLOR:
+	case SHADERTYPE::COLOR:
 		this->currentGeoShaders = &this->geoColorShaders;
 		break;
-	case TEXTURE:
+	case SHADERTYPE::TEXTURE:
 		this->currentGeoShaders = &this->geoTexShaders;
 		break;
 	}

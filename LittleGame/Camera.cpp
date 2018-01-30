@@ -8,14 +8,6 @@
 ///////
 //
 
-/// INITIALIZING STATIC VALUES ('GLOBALS')
-float Camera::angle = 0.45;
-float Camera::nearPlane = 0.5;
-float Camera::farPlane = 200.0;
-
-
-
-
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
@@ -238,24 +230,37 @@ void Camera::rotateCameraHorizontally(POINT mouseMovement) {
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
-Camera::Camera() {
+void Camera::init()
+{
 	this->updateRequired = false;
 
 	this->cameraPos = this->cameraStartPos;
 	this->cameraFacingDir = this->cameraStartFacingDir;
 	this->cameraUpDir = { 0, 1, 0 };
+
+	this->angle = 0.45;
+	this->nearPlane = 0.5;
+	this->farPlane = 200.0;
+
+	// Initiate the view matrix
+	this->view = DirectX::XMMatrixLookToLH(
+		this->cameraPos,
+		this->cameraFacingDir,
+		this->cameraUpDir
+	);
+
+	// Initiate the projection matrix
+	this->projection = DirectX::XMMatrixPerspectiveFovLH(
+		(DirectX::XM_PI * this->angle),
+		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
+		this->nearPlane,
+		this->farPlane
+	);
 }
 
-Camera::~Camera() {
+void Camera::updateCamera() {
 
-}
-
-void Camera::updateCamera(
-	TCHAR				characterMessage,
-	POINT				mouseCoordinates,
-	MatrixBufferPack	*packagedStructData,
-	ID3D11Buffer*		*GSconstantBuffer,
-	bool				HoverCamActivationStatus) {
+	/*
 	// POSITIONAL MOVEMENT
 	if (characterMessage == 'W') {
 		this->updateRequired = true;
@@ -292,12 +297,13 @@ void Camera::updateCamera(
 		this->rotateCameraHorizontally(mouseCoordinates);
 	}
 
+
 	// MISC COMMANDS - Needs to be called after movement and rotation
 	if (characterMessage == 'R') {
 		updateRequired = true;
 		this->resetCamera();
 	}
-
+*/
 	// IF 'updateRequired' = TRUE --> UPDATE
 	if (updateRequired) {
 		//Create new VIEW Matrix
@@ -310,10 +316,10 @@ void Camera::updateCamera(
 		this->updateRightDir();
 
 		// Updates the View Matrix in the PACKAGED Matrix Data
-		DirectX::XMStoreFloat4x4(&packagedStructData->view, this->view);
+		//DirectX::XMStoreFloat4x4(&packagedStructData->view, this->view);
 
 		// Edit the constant buffers, updating VIEW data
-		editConstantBuffers(*GSconstantBuffer, *packagedStructData);
+		//editConstantBuffers(*GSconstantBuffer, *packagedStructData);
 	}
 }
 
@@ -344,16 +350,14 @@ DirectX::XMVECTOR Camera::GETfacingDir() {
 	return this->cameraFacingDir;
 }
 
-float Camera::GETangle() {
-	return angle;
+DirectX::XMMATRIX &Camera::GETviewMatrix()
+{
+	return this->view;
 }
 
-float Camera::GETnearPlane() {
-	return nearPlane;
-}
-
-float Camera::GETfarPlane() {
-	return farPlane;
+DirectX::XMMATRIX &Camera::GETprojMatrix()
+{
+	return this->projection;
 }
 
 //_________________________________________//

@@ -10,3 +10,8 @@ ID3D11ShaderResourceView * TextureComponent::getSRV()
 {
 	return this->gSRV;
 }
+
+XMMATRIX& TextureComponent::getWorld()
+{
+	return XMMATRIX();
+}

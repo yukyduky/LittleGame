@@ -11,7 +11,7 @@ const int GEOCOLOR_INPUT_DESC_SIZE = 3;
 const int GEOTEX_INPUT_DESC_SIZE = 3;
 const int LIGHT_INPUT_DESC_SIZE = 1;
 
-const enum SHADERTYPE { COLOR, TEXTURE };
+enum class SHADERTYPE { COLOR, TEXTURE };
 
 class Renderer
 {
