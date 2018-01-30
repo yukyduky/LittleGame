@@ -5,7 +5,6 @@
 #include "KeyboardComponent.h"
 #include "ControllerComponent.h"
 
-
 GamePlayState GamePlayState::sGamePlayState;
 
 
@@ -151,4 +150,19 @@ void GamePlayState::render(GameManager * gm)
 GamePlayState* GamePlayState::getInstance()
 {
 	return &sGamePlayState;
+}
+
+
+void GamePlayState::shootProjectile() 
+{
+	size_t nextID = this->projectiles.size();
+
+	Projectile proj(nextID, DirectX::XMFLOAT3(1, 1, 1), DirectX::XMFLOAT3(0, 0, 0));
+
+	this->projectiles.push_back(&proj);
+	BlockComponent block(*projectiles.back(), 1, 0, 1, 1);
+	this->projGraph.push_back(&block);
+
+
+	this->projectiles.back()->addComponent(this->projGraph.back());
 }

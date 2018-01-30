@@ -9,6 +9,7 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
+#include "Projectile.h"
 
 // If mingling with a POINT, just use x's and y's rather than mingling the entire structs
 
@@ -36,6 +37,9 @@ private:
 	GameObject* go;
 	std::vector<GraphicsComponent*> blocks;
 
+	std::vector<GameObject*> projectiles;
+	std::vector<GraphicsComponent*> projGraph;
+
 	std::array<InputComponent*, 5> playerInput;
 
 	void mapCommands();
@@ -47,6 +51,8 @@ private:
 	void mapKeys();
 
 	void initInputMapping();
+
+	void shootProjectile();
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
