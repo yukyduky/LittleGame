@@ -5,6 +5,13 @@
 #include "ID3D.h"
 #include "D3D.h"
 
+// ----- TEST
+#include "ActorObject.h"
+#include "ControllerComponent.h"
+#include "KeyboardComponent.h"
+// ----- TEST
+
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -20,6 +27,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);
 
+	// ----- TEST
+	//ActorObject actor(0);
+	//ControllerComponent controller(actor, 0);
+	//KeyboardComponent keyboard(actor);
+
+
+	// ----- TEST
+
+
 	// Game loop
 	while (gm.getIsRunning()) {
 		// Update delta time
@@ -28,6 +44,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		gm.handleEvents();
 		gm.update();
 		gm.render();
+
+		//controller.execute();
+		//keyboard.execute();
 	}
 
 	gm.cleanup();

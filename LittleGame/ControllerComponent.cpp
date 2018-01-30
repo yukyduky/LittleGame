@@ -1,6 +1,20 @@
 #include "ControllerComponent.h"
+#include "ActorObject.h"
 #include "GameObject.h"
+#include "Commands.h"
 
+
+
+ControllerComponent::ControllerComponent(GameObject& obj, size_t controllerID)
+	: controllerID(obj.getID())
+{
+	this->pHead = dynamic_cast<ActorObject*>(&obj);
+
+	ZeroMemory(&this->currentState, sizeof(XINPUT_STATE));
+	XInputGetState(this->controllerID, &this->currentState);
+
+	this->init();
+}
 
 float ControllerComponent::checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE state)
 {
@@ -37,14 +51,17 @@ float ControllerComponent::checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE
 	return mag;
 }
 
-ControllerComponent::ControllerComponent(GameObject& obj, size_t controllerID) : InputComponent(obj), controllerID(controllerID)
+void ControllerComponent::execute()
 {
-	ZeroMemory(&this->currentState, sizeof(XINPUT_STATE));
-	XInputGetState(this->controllerID, &this->currentState);
+	for (auto &i : commandQueue) {
+		i->execute(*this->pHead);
+	}
+	commandQueue.clear();
 }
 
 void ControllerComponent::receive(GameObject & obj, Message msg)
 {
+
 }
 
 void ControllerComponent::generateCommands()
@@ -142,3 +159,7 @@ float ControllerComponent::GETnormalizedValueOfRightTrigger()
 	return this->trigRValue;
 }
 
+const size_t ControllerComponent::getID()
+{
+	return this->controllerID;
+}

@@ -12,6 +12,16 @@ using namespace DirectX;
 
 class Command;
 
+enum Commands
+{
+	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE,
+	MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT,
+	SELECTABILITY1, SELECTABILITY2, SELECTABILITY3, SELECTABILITY4,
+	FIREABILITY0, FIREABILITYX,
+	OPENMENU0, OPENMENU1,
+	Size
+};
+
 enum class COMMANDTYPE { TAP, HOLD };
 
 namespace KEYBOARD {
@@ -42,22 +52,51 @@ struct Key {
 class InputComponent : public Component
 {
 private:
-	const size_t ID;
-
+//	const size_t ID;
 	static std::unordered_map<KEYBOARD::KEY, size_t> keyboardKeyMap;
 	static std::unordered_map<MOUSE::KEY, size_t> mouseKeyMap;
 	static std::unordered_map<CONTROLLER::KEY, size_t> controllerKeyMap;
 
+	static void mapCommands();
+	static void mapKeys();
 	static void mapKeyCodesToEnums();
+	
+
 protected:
 	static std::map<size_t, Key> keyboardCommandMap;
 	static std::map<size_t, Key> mouseCommandMap;
 	static std::map<size_t, Key> controllerCommandMap;
 
 	std::vector<Command*> commandQueue;
+	static Command* commands[Commands::Size];
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given Key struct to the given enumerated key
+	*/
+	static void mapKeyboardKeyToCommand(Key key, KEYBOARD::KEY enumKey);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given Key struct to the given enumerated key
+	*/
+	static void mapMouseKeyToCommand(Key key, MOUSE::KEY enumKey);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Maps the given Key struct to the given enumerated key
+	*/
+	static void mapControllerKeyToCommand(Key key, CONTROLLER::KEY enumKey);
+
+	static void mapLeftThumbStickToCommand(Command* command);
+	static void mapRightThumbStickToCommand(Command* command);
+	static void mapLeftShoulderToCommand(Command* command);
+	static void mapRightShoulderToCommand(Command* command);
+
 public:
-	InputComponent(GameObject& obj);
-	const size_t getID();
+//	InputComponent(InputComponent& obj);
+	
+	//virtual void move() = 0;
+	//virtual void rotate() = 0;
+	//virtual void fireAbility0();
+	//virtual void fireAbilityX();
+
+	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	WARNING Has to be run once before any other use of this class WARNING
@@ -70,26 +109,14 @@ public:
 	*/
 	virtual void generateCommands() = 0;
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Executes all the commands that have been stored in the command queue
+	1. Executes all the commands that have been stored in the command queue.
 	*/
-	void execute();
+	virtual void execute() = 0;
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Makes the controller vibrate a variable amount in either left or right or both sides
 		If the InputComponent is a keyboard then nothing happens
 	*/
 	virtual void vibrate(size_t left, size_t right);
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Maps the given Key struct to the given enumerated key
-	*/
-	void mapKeyboardKeyToCommand(Key key, KEYBOARD::KEY enumKey);
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Maps the given Key struct to the given enumerated key
-	*/
-	void mapMouseKeyToCommand(Key key, MOUSE::KEY enumKey);
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Maps the given Key struct to the given enumerated key
-	*/
-	void mapControllerKeyToCommand(Key key, CONTROLLER::KEY enumKey);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Maps the given virtual key code to the given Key struct
 	*/
