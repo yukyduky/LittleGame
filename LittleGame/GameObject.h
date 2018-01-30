@@ -4,14 +4,13 @@
 
 #include <list>
 #include <d3d11.h>
-#include <SimpleMath.h>
+#include <DirectXMath.h>
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
 
 class Component;
 
 using namespace DirectX;
-using namespace DirectX::SimpleMath;
 
 struct Message
 {
@@ -42,8 +41,8 @@ public:
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE state) { this->state = state; }
 	OBJECTSTATE getState() const { return this->state; }
-	void SETworldMatrix(XMMATRIX wMatrix) { this->worldMatrix = wMatrix; }
-	XMMATRIX& GETworldMatrix() { return this->worldMatrix; }
+	XMMATRIX& getWorld() { return this->world; }
+	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
 
 
 private:
@@ -51,8 +50,8 @@ private:
 	const size_t ID;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
+	XMMATRIX world;
 	OBJECTSTATE state;
-	XMMATRIX worldMatrix;
 };
 
 #endif // !GAMEOBJECT_H

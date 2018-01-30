@@ -15,6 +15,13 @@ cbuffer cbGeoColor : register(b0)
 {
 	float4x4 world;
 	float4x4 wvp;
+
+	float3 ka;
+	float pad1;
+	float3 kd;
+	float pad2;
+	float3 ks;
+	float pad3;
 };
 
 VS_OUT VS(VS_IN input) {

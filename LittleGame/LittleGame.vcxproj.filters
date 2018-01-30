@@ -165,7 +165,10 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBufferManager.h">
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
     <ClInclude Include="RectangleComponent.h">
@@ -234,7 +237,7 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBufferManager.cpp">
+    <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
   </ItemGroup>
