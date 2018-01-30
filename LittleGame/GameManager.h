@@ -6,6 +6,7 @@
 #include <d3d11.h>
 #include "IGameTime.h"
 #include "Renderer.h"
+#include "Camera.h"
 
 class State;
 
@@ -15,6 +16,7 @@ private:
 	bool isRunning;
 	IGameTime* gameTime;
 	Renderer renderer;
+	Camera camera;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

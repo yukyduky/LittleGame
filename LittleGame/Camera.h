@@ -3,7 +3,7 @@
 #define CAMERA_H
 
 #include "D3D.h"
-#include "ConstantBufferManager.h"
+#include "Locator.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
 
@@ -30,6 +30,7 @@ private:
 	DirectX::XMVECTOR cameraRightDir;
 
 	DirectX::XMMATRIX view;
+	DirectX::XMMATRIX projection;
 
 	/// ---------- UPDATE-FUNCTION VARIABLES ---------
 	// ------------- POSITION MOVEMENT ---------------
@@ -76,11 +77,8 @@ public:
 	--- Should an update be required, then the constant buffers will be edited here.
 	*/
 	void updateCamera(
-		TCHAR				characterMessage,
-		POINT				mouseCoordinates,
-		MatrixBufferPack	*formattedStructData,
-		ID3D11Buffer*		*GSconstantBuffer,
-		bool				HoverCamActivationStatus
+		TCHAR				characterMessage
+		//POINT				mouseCoordinates
 	);
 
 	void resetCamera();
@@ -99,6 +97,8 @@ public:
 	static float		GETangle();
 	static float		GETnearPlane();
 	static float		GETfarPlane();
+	DirectX::XMMATRIX&	GETviewMatrix();
+	DirectX::XMMATRIX&	GETprojMatrix();
 };
 
 //______________________________________________//

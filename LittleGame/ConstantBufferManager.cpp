@@ -2,45 +2,6 @@
 #include "ConstantBufferManager.h"
 #include "Camera.h"
 
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//                             CONSTANT_BUFFER-RELATED CODE        /
-///////////////////////////////////////////////////////////////////
-//////////////////////////////
-///////////////
-///////
-//
-
-void editConstantBuffers(
-	ID3D11Buffer*			targetBuffer,
-	MatrixBufferPack		targetStruct
-) {
-	D3D11_MAPPED_SUBRESOURCE MappedBuffer;
-
-	Locator::getD3D()->GETgDevCon()->Map(
-		targetBuffer,
-		0,
-		D3D11_MAP_WRITE_DISCARD,
-		0,
-		&MappedBuffer
-	);
-
-	memcpy(MappedBuffer.pData, &targetStruct, sizeof(targetStruct));
-
-	Locator::getD3D()->GETgDevCon()->Unmap(targetBuffer, 0);
-}
-
-//
-//\\\\\
-//\\\\\\\\\\\\\
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-//           END OF CONSTANT_BUFFER-RELATED CODE           \
-////////////////////////////////////////////////////////////
-
-
-
-
-
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                CONSTANT_BUFFER_MANAGER                  /
 ///////////////////////////////////////////////////////////
@@ -54,42 +15,15 @@ void editConstantBuffers(
   |           PRIVATE           |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-
-void ConstantBufferManager::initializeConstantMatrices() {
-	// Create the WORLD MATRIX
-	DirectX::XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
-
-	// Create the PROJECTION MATRIX
-	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(
-		(DirectX::XM_PI * Camera::GETangle()),
-		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
-		Camera::GETnearPlane(),
-		Camera::GETfarPlane()
-	);
-
-	// Below we provide the RAW MATRICES with data
-	this->rawMatrixData.world = worldMatrix;
-	this->rawMatrixData.projection = projectionMatrix;
+void ConstantBufferManager::initialize() {
+	this->initializeConstantMatrices();
+	this->packageMatrices();
+	this->createSetConstantBuffers();
+	
+	Locator::getD3D()->createConstantBuffer(&this->constantBuffer[CBTYPE::GEOOBJECT], sizeof(MatrixBufferPack));
 }
 
 void ConstantBufferManager::createSetConstantBuffers() {
-	// BUFFER DESCRIPTION ('Settings')
-	D3D11_BUFFER_DESC cbDesc;
-	memset(&cbDesc, 0, sizeof(cbDesc));
-	cbDesc.ByteWidth = sizeof(MatrixBufferPack);
-	cbDesc.Usage = D3D11_USAGE_DYNAMIC;				// Needs to be DYNAMIC so that we can
-	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;	// Map/Unmap via 'editConstantBuffers()'.
-	cbDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cbDesc.MiscFlags = 0;
-	cbDesc.StructureByteStride = 0;
-
-	// SUBRESOURCE DATA ('Package' the data)
-	D3D11_SUBRESOURCE_DATA InitData;
-	memset(&InitData, 0, sizeof(InitData));
-	InitData.pSysMem = &this->packagedMatrixData;	// Meant to recieve data - not create.
-	InitData.SysMemPitch = 0;
-	InitData.SysMemSlicePitch = 0;
-
 	// CREATE BUFFER
 	Locator::getD3D()->createConstantBuffer(&this->constantBuffer, sizeof(MatrixBufferPack));
 
@@ -102,6 +36,18 @@ void ConstantBufferManager::createSetConstantBuffers() {
 	// 1 - 
 	// 2 - 
 	// ...
+}
+
+void ConstantBufferManager::calculateMatrices(DirectX::XMMATRIX& world) {
+	this->rawMatrixData.worldView = &DirectX::XMMatrixMultiply(
+		*this->rawMatrixData.world,
+		*this->rawMatrixData.view
+	);
+
+	this->rawMatrixData.worldViewProj = &DirectX::XMMatrixMultiply(
+		*this->rawMatrixData.worldView,
+		*this->rawMatrixData.world
+	);
 }
 
 //_________________________________________//
@@ -121,30 +67,36 @@ void ConstantBufferManager::createSetConstantBuffers() {
 
 
 ConstantBufferManager::ConstantBufferManager() {
-	this->constantBuffer = nullptr;
+	//this->constantBuffer = nullptr;
+	this->initialize();
 }
 
 ConstantBufferManager::~ConstantBufferManager() {
 
 }
 
-void ConstantBufferManager::initialize() {
-	this->initializeConstantMatrices();
-	this->packageMatrices();
-	this->createSetConstantBuffers();
-}
+void ConstantBufferManager::editConstantBuffers(
+	ID3D11Buffer* constantBuffer,
+	void* targetStruct,
+	size_t targetStructSize) {
 
-void ConstantBufferManager::packageMatrices() {
-	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.world, this->rawMatrixData.world);
-	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.view, this->rawMatrixData.view);
-	DirectX::XMStoreFloat4x4(&this->packagedMatrixData.projection, this->rawMatrixData.projection);
+	Locator::getD3D()->mapConstantBuffer(
+		&constantBuffer,
+		targetStruct,
+		targetStructSize
+	);
 }
 
 void ConstantBufferManager::releaseAll() {
 	this->constantBuffer->Release();
 }
 
-MatrixBufferPack *ConstantBufferManager::GETpackagedMatrixData() {
+MatrixBufferCalc* ConstantBufferManager::GETcalcMatrixData(DirectX::XMMATRIX& world) {
+	this->calculateMatrices(world);
+	return &this->rawMatrixData;
+}
+
+MatrixBufferPack*	ConstantBufferManager::GETpackagedMatrixData() {
 	return &this->packagedMatrixData;
 }
 

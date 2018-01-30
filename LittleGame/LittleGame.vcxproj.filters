@@ -159,6 +159,9 @@
     <ClInclude Include="ConstantBufferManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="IConstantBufferManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">

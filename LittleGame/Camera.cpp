@@ -244,6 +244,16 @@ Camera::Camera() {
 	this->cameraPos = this->cameraStartPos;
 	this->cameraFacingDir = this->cameraStartFacingDir;
 	this->cameraUpDir = { 0, 1, 0 };
+
+	// Initiate the projection matrix
+	this->projection = DirectX::XMMatrixPerspectiveFovLH(
+		(DirectX::XM_PI * Camera::GETangle()),
+		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
+		Camera::GETnearPlane(),
+		Camera::GETfarPlane()
+	);
+
+	this->GETviewMatrix();
 }
 
 Camera::~Camera() {
@@ -251,11 +261,12 @@ Camera::~Camera() {
 }
 
 void Camera::updateCamera(
-	TCHAR				characterMessage,
-	POINT				mouseCoordinates,
-	MatrixBufferPack	*packagedStructData,
-	ID3D11Buffer*		*GSconstantBuffer,
-	bool				HoverCamActivationStatus) {
+	TCHAR				characterMessage
+	/*POINT				mouseCoordinates*/) {
+	
+	// TEMPORARY
+	TCHAR				characterMessage;
+
 	// POSITIONAL MOVEMENT
 	if (characterMessage == 'W') {
 		this->updateRequired = true;
@@ -280,7 +291,7 @@ void Camera::updateCamera(
 	else if (characterMessage == 'H')	// By-product of merging WindowsProcedure's handling of input and
 		this->updateRequired = true;	// the attempt here.
 										// -DanneBigD (November, 2016)
-
+/*
 	// CAMERA ROTATION
 	if (mouseCoordinates.y != 0) {
 		this->updateRequired = true;
@@ -291,6 +302,7 @@ void Camera::updateCamera(
 		this->updateRequired = true;
 		this->rotateCameraHorizontally(mouseCoordinates);
 	}
+*/
 
 	// MISC COMMANDS - Needs to be called after movement and rotation
 	if (characterMessage == 'R') {
@@ -310,10 +322,10 @@ void Camera::updateCamera(
 		this->updateRightDir();
 
 		// Updates the View Matrix in the PACKAGED Matrix Data
-		DirectX::XMStoreFloat4x4(&packagedStructData->view, this->view);
+		//DirectX::XMStoreFloat4x4(&packagedStructData->view, this->view);
 
 		// Edit the constant buffers, updating VIEW data
-		editConstantBuffers(*GSconstantBuffer, *packagedStructData);
+		//editConstantBuffers(*GSconstantBuffer, *packagedStructData);
 	}
 }
 
@@ -354,6 +366,16 @@ float Camera::GETnearPlane() {
 
 float Camera::GETfarPlane() {
 	return farPlane;
+}
+
+DirectX::XMMATRIX &Camera::GETviewMatrix()
+{
+	return this->view;
+}
+
+DirectX::XMMATRIX &Camera::GETprojMatrix()
+{
+	return this->projection;
 }
 
 //_________________________________________//

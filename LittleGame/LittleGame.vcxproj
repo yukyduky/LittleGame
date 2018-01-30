@@ -136,6 +136,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="IConstantBufferManager.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MenuCommands.h" />
     <ClInclude Include="MovementCommands.h" />
