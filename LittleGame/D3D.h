@@ -32,7 +32,7 @@ public:
 	virtual HWND& GEThwnd();
 	virtual ID3D11Device*& GETgDevice();
 	virtual ID3D11DeviceContext*& GETgDevCon();
-	virtual virtual IDXGISwapChain*& GETswapChain();
+	virtual IDXGISwapChain*& GETswapChain();
 };
 
 

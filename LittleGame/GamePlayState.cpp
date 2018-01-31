@@ -11,107 +11,36 @@
 
 using namespace DirectX::SimpleMath;
 
+#include "ActorObject.h"
+
 GamePlayState GamePlayState::sGamePlayState;
 
-
-void GamePlayState::mapCommands()  {
-	/*this->commands[Commands::SELECT] = new GamePlaySelectCommand();
-	this->commands[Commands::MOVEUP] = new MoveUpCommand();
-	this->commands[Commands::MOVEDOWN] = new MoveDownCommand();
-	this->commands[Commands::MOVELEFT] = new MoveLeftCommand();
-	this->commands[Commands::MOVERIGHT] = new MoveRightCommand();
-	this->commands[Commands::MOUSEMOVE] = new MouseRotateCommand();
-	this->commands[Commands::CONTROLLERMOVE] = new ControllerMovementCommand();
-	this->commands[Commands::CONTROLLERROTATE] = new ControllerRotationCommand();
-	this->commands[Commands::SELECTABILITY1] = new SelectAbility1Command();
-	this->commands[Commands::SELECTABILITY2] = new SelectAbility2Command();
-	this->commands[Commands::SELECTABILITY3] = new SelectAbility3Command();
-	this->commands[Commands::SELECTABILITY4] = new SelectAbility4Command();
-	this->commands[Commands::FIREABILITY0] = new FireAbility0Command();
-	this->commands[Commands::FIREABILITYX] = new FireAbilityXCommand();
-	this->commands[Commands::OPENMENU0] = new OpenMenu0Command();
-	this->commands[Commands::OPENMENU1] = new OpenMenu1Command();*/
-}
-
-void GamePlayState::mapKeys() {
-	// KEYBOARD -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	/*// Movement & Rotation
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::W, Key(this->commands[Commands::MOVEUP], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::A, Key(this->commands[Commands::MOVELEFT], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::S, Key(this->commands[Commands::MOVEDOWN], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::D, Key(this->commands[Commands::MOVERIGHT], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToMouseKey(MOUSE::MOVE, Key(this->commands[Commands::MOUSEMOVE], COMMANDTYPE::HOLD));
-	/* Rotation is handled in GamePlayState::handleEvents(); */
-
-	/*// Selecting Abilities
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::NUM1, Key(this->commands[Commands::SELECTABILITY1], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::NUM2, Key(this->commands[Commands::SELECTABILITY2], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::NUM3, Key(this->commands[Commands::SELECTABILITY3], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::NUM4, Key(this->commands[Commands::SELECTABILITY4], COMMANDTYPE::TAP));
-
-	// Shoot Abilities
-	Locator::getInputHandler()->mapCommandToMouseKey(MOUSE::LEFTCLICK, Key(this->commands[Commands::FIREABILITY0], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToMouseKey(MOUSE::RIGHTCLICK, Key(this->commands[Commands::FIREABILITYX], COMMANDTYPE::TAP));
-	
-	// Menu relevant
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::ESC, Key(this->commands[Commands::OPENMENU0], COMMANDTYPE::TAP));
-
-
-	// CONTROLLER -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	// Movement & Rotation
-	Locator::getInputHandler()->mapCommandToLeftThumbStick(this->commands[Commands::CONTROLLERMOVE]);
-	Locator::getInputHandler()->mapCommandToRightThumbStick(this->commands[Commands::CONTROLLERROTATE]);
-	// DPAD
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADUP, Key(this->commands[Commands::MOVEUP], COMMANDTYPE::HOLD));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADDOWN, Key(this->commands[Commands::MOVEDOWN], COMMANDTYPE::HOLD));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADLEFT, Key(this->commands[Commands::MOVELEFT], COMMANDTYPE::HOLD));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADRIGHT, Key(this->commands[Commands::MOVERIGHT], COMMANDTYPE::HOLD));
-
-	// Selecting Abilities
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::A, Key(this->commands[Commands::SELECTABILITY1], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::X, Key(this->commands[Commands::SELECTABILITY2], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::Y, Key(this->commands[Commands::SELECTABILITY3], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::B, Key(this->commands[Commands::SELECTABILITY4], COMMANDTYPE::TAP));
-
-	// Shoot Abilities
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::LTRIGGER, Key(this->commands[Commands::FIREABILITYX], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::RTRIGGER, Key(this->commands[Commands::FIREABILITY0], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToLeftShoulder(this->commands[Commands::FIREABILITYX]);
-	Locator::getInputHandler()->mapCommandToRightShoulder(this->commands[Commands::FIREABILITY0]);
-	
-	// Menu relevant
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::START, Key(this->commands[Commands::OPENMENU0], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::BACK, Key(this->commands[Commands::OPENMENU1], COMMANDTYPE::TAP));*/
-}
-
-void GamePlayState::initInputMapping() {
-	// TrueInput --> Internal 'Keys' --> Internal 'Commands' --> rest of system
-	// First we map the internal 'Keys' to commands.
-	this->mapCommands();
-	// Then we map the trueInput to the internal 'Keys'
-	this->mapKeys();
-}
 
 
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera);
+	this->initPlayer();
 	this->initArena();
 
 	for (auto &i : this->graphics) {
-		rio.addGraphics(i);
+		this->rio.addGraphics(i);
 	}
 }
 
-void GamePlayState::cleanup() {
+
+void GamePlayState::cleanup()
+{
+
 }
 
 void GamePlayState::pause() {
 
 }
 
-void GamePlayState::resume() {
-	this->mapKeys();
+void GamePlayState::resume()
+{
+	
 }
 
 void GamePlayState::handleEvents(GameManager * gm) {
@@ -128,8 +57,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 	}
 }
 
-void GamePlayState::update(GameManager * gm) {
 
+void GamePlayState::update(GameManager * gm)
+{
+	for (auto &iterator : playerInput) {
+		iterator->generateCommands();
+		iterator->execute();
+	}
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -144,8 +78,10 @@ GamePlayState* GamePlayState::getInstance() {
 void GamePlayState::initArena()
 {
 	this->createArenaFloor();
-	this->createArenaNeonGrid();
+	//this->createArenaNeonGrid();
 	this->createArenaWalls();
+
+	int test23 = 1;
 }
 
 void GamePlayState::createArenaFloor()
@@ -446,7 +382,8 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	this->arenaObjects.push_back(object);
 
 	
-	
+	//DO NOT REMOVE!!!!! CAN'T DRAW LINES YET SO WE COMMENT THIS SECTION OUT UNTIL WE ACCTUALLY CAN DRAW THEM.
+	/*
 	//Create lines for the walls.
 	LineComponent* currentLine;
 	XMFLOAT3 startPos;
@@ -550,7 +487,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Prepare currPos for next iteration.
 		currPos = currPos + stepL;
 	}
-	
+	*/
 }
 
 void GamePlayState::SETsquareType(XMFLOAT2 index, SQUARETYPE::TYPE type)
@@ -566,4 +503,53 @@ XMFLOAT2 GamePlayState::findGridIndexFromPosition(XMFLOAT3 pos)
 	index.y = pos.z / ARENASQUARESIZE;
 
 	return index;
+}
+
+void GamePlayState::initPlayer()
+{
+	ActorObject* actor;
+	BlockComponent* block;
+	KeyboardComponent* input;
+	int nextID = this->arenaObjects.size();
+	
+	//Create the new ActorObject
+	XMFLOAT3 playerScales(10.0f, 30.0f, 10.0f);
+	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y / 2.0f, (float)(ARENAHEIGHT / 2));
+	actor = new ActorObject(nextID, playerPos);
+	XMFLOAT3 playerVelocity(100.0f, 100.0f, 100.0f);
+	actor->setVelocity(playerVelocity);
+
+	//Create the playerColor and the new BlockComponent that will represent the players body.
+	vColor playerColor(0.0f, 0.0f, 0.0f, 255.0f);
+	block = new BlockComponent(*actor, playerColor.r, playerColor.g, playerColor.b, playerColor.a);
+	
+	XMVECTOR playerTranslation = XMLoadFloat3(&playerPos);
+	XMMATRIX worldMatrix;
+	XMMATRIX translationM = XMMatrixTranslationFromVector(playerTranslation);
+	XMMATRIX rotationM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(playerScales.x, playerScales.y, playerScales.z);
+	worldMatrix = scaleM * rotationM * translationM;
+
+	actor->SETtranslationMatrix(translationM);
+	actor->SETscaleMatrix(scaleM);
+	actor->SETrotationMatrix(rotationM);
+	actor->SETworldMatrix(worldMatrix);
+	actor->addComponent(block);
+
+	//Create the new KeyboardComponent
+	input = new KeyboardComponent(*actor);
+	this->playerInput[0] = new KeyboardComponent(*actor);
+	actor->addComponent(input);
+
+	this->arenaObjects.push_back(actor);
+	this->graphics.push_back(block);
+
+
+	/*
+	this->go = new GameObject(0);
+	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
+	
+	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
+	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
+	*/
 }
