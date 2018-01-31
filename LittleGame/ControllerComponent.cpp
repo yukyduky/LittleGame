@@ -8,7 +8,9 @@
 ControllerComponent::ControllerComponent(GameObject& obj, size_t controllerID)
 	: controllerID(obj.getID())
 {
+	// Set up head
 	this->pHead = dynamic_cast<ActorObject*>(&obj);
+	this->pHead->SETinputComponent(this);
 
 	ZeroMemory(&this->currentState, sizeof(XINPUT_STATE));
 	XInputGetState(this->controllerID, &this->currentState);
@@ -70,7 +72,7 @@ void ControllerComponent::generateCommands()
 	ZeroMemory(&nextState, sizeof(XINPUT_STATE));
 
 	DWORD result = XInputGetState(this->controllerID, &nextState);
-
+	
 	if (result == ERROR_SUCCESS && this->currentState.dwPacketNumber != nextState.dwPacketNumber) {
 		// Iterates through all the controller buttons except LSHOULDER & RSHOULDER
 		for (auto &it : this->controllerCommandMap) {

@@ -15,12 +15,12 @@ std::map<size_t, Key> InputComponent::controllerCommandMap;
 void InputComponent::mapCommands()
 {
 	commands[Commands::SELECT] = new CommandSelect();
-	commands[Commands::MOVEUP] = new CommandMove();
-	commands[Commands::MOVEDOWN] = new CommandMove();
-	commands[Commands::MOVELEFT] = new CommandMove();
-	commands[Commands::MOVERIGHT] = new CommandMove();
+	commands[Commands::MOVEUP] = new CommandMoveUp();
+	commands[Commands::MOVEDOWN] = new CommandMoveDown();
+	commands[Commands::MOVELEFT] = new CommandMoveLeft();
+	commands[Commands::MOVERIGHT] = new CommandMoveRight();
 	commands[Commands::MOUSEMOVE] = new CommandRotate();
-	commands[Commands::CONTROLLERMOVE] = new CommandMove();
+	commands[Commands::CONTROLLERMOVE] = new CommandControllerMove();
 	commands[Commands::CONTROLLERROTATE] = new CommandRotate();
 	commands[Commands::SELECTABILITY1] = new CommandSelectAbility1();
 	commands[Commands::SELECTABILITY2] = new CommandSelectAbility2();
@@ -221,10 +221,12 @@ void InputComponent::resetKeyBindings()
 	keyboardCommandMap.clear();
 	mouseCommandMap.clear();
 	controllerCommandMap.clear();
+	init();
 }
 
 XMFLOAT2 InputComponent::GETnormalizedVectorOfLeftStick()
 {
+
 	return XMFLOAT2(1.0f, 1.0f);
 }
 

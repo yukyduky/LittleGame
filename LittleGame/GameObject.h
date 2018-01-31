@@ -8,11 +8,6 @@
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
 
-//enum class MSG {
-//	MOVE, FIREABILITY0, FIREABILITYX, 
-//	CHANGEABILITY1, CHANGEABILITY1,	CHANGEABILITY1,	CHANGEABILITY1
-//};
-
 class Component;
 
 using namespace DirectX;

@@ -41,6 +41,10 @@ namespace MOUSE {
 	enum KEY { LEFTCLICK, RIGHTCLICK, MOVE, SIZE };
 }
 
+namespace INPUTTYPE {
+	enum KEY { KEYBOARD, CONTROLLER };
+}
+
 struct Key {
 	Command* command;
 	COMMANDTYPE type;
@@ -52,7 +56,6 @@ struct Key {
 class InputComponent : public Component
 {
 private:
-//	const size_t ID;
 	static std::unordered_map<KEYBOARD::KEY, size_t> keyboardKeyMap;
 	static std::unordered_map<MOUSE::KEY, size_t> mouseKeyMap;
 	static std::unordered_map<CONTROLLER::KEY, size_t> controllerKeyMap;

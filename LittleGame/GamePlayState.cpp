@@ -6,15 +6,19 @@
 #include "ControllerComponent.h"
 
 
+#include "ActorObject.h"
+
 GamePlayState GamePlayState::sGamePlayState;
 
 
 void GamePlayState::init()
 {
-	this->go = new GameObject(0);
+	this->go =			new GameObject(0);
+	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
 
 	for (auto &iterator : this->playerInput) {
-		iterator = new KeyboardComponent(*this->go);
+		//iterator = new KeyboardComponent(*this->actorObject);			// Testing
+		iterator = new ControllerComponent(*this->actorObject, 0);		// Testing
 	}
 
 	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));

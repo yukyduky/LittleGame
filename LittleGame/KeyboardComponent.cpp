@@ -6,7 +6,9 @@
 
 KeyboardComponent::KeyboardComponent(GameObject& obj) : ID(obj.getID())
 {
+	// Set up head
 	this->pHead = dynamic_cast<ActorObject*>(&obj);
+	this->pHead->SETinputComponent(this);
 
 	POINT p;
 	GetCursorPos(&p);

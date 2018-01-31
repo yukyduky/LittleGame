@@ -2,9 +2,11 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 #include "ActorObject.h"
+//#include "ControllerComponent.h"
 
 /* Command pattern */
 class ActorObject;
+
 
 class Command
 {
@@ -23,22 +25,56 @@ public:
 	}
 };
 // -+-+-+
-class CommandMove : public Command
+
+
+class CommandMoveUp : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) {
-
-	}
+	virtual void execute(ActorObject& actor) { actor.moveUp(); }
 };
 // -+-+-+
+
+
+class CommandMoveLeft : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) { actor.moveLeft(); }
+};
+// -+-+-+
+
+
+class CommandMoveDown : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) { actor.moveDown(); }
+};
+// -+-+-+
+
+
+class CommandMoveRight : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) { actor.moveRight(); }
+};
+// -+-+-+
+
+
+class CommandControllerMove : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) { actor.move(); }
+};
+// -+-+-+
+
+
 class CommandRotate : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) {
-
-	}
+	virtual void execute(ActorObject& actor) { actor.rotate(); }
 };
 // -+-+-+
+
+
 class CommandFireAbility0 : public Command
 {
 public:
@@ -47,6 +83,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandFireAbilityX : public Command
 {
 public:
@@ -55,6 +93,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandSelectAbility1 : public Command
 {
 public:
@@ -63,6 +103,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandSelectAbility2 : public Command
 {
 public:
@@ -71,6 +113,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandSelectAbility3 : public Command
 {
 public:
@@ -79,6 +123,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandSelectAbility4 : public Command
 {
 public:
@@ -87,6 +133,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandOpenMenu0 : public Command
 {
 public:
@@ -95,6 +143,8 @@ public:
 	}
 };
 // -+-+-+
+
+
 class CommandOpenMenu1 : public Command
 {
 public:
@@ -102,4 +152,5 @@ public:
 
 	}
 };
+
 #endif

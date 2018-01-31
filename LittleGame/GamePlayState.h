@@ -9,6 +9,7 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
+#include "ActorObject.h"
 
 class Command;
 class InputComponent;
@@ -20,8 +21,9 @@ private:
 
 	RenderInputOrganizer rio;
 	GameObject* go;
+	GameObject* actorObject;
 	std::vector<GraphicsComponent*> blocks;
-	std::array<InputComponent*, 1> playerInput;
+	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 
 public:

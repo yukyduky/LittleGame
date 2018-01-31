@@ -37,17 +37,29 @@ public:
 	virtual void receive(GameObject & obj, Message msg);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Moves the Actor according his own direction and speed
+	1. Moves the Actor according to data fetched from the internal InputComponent
 	*/
 	// 
 	void move();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Moves the Actor according to the specified direction and speed
+	1. Affects the position of the ActorObject
 	*/
-	void move(Vector3 direction, float speed);
+	// 
+	void moveUp();
+	void moveLeft();
+	void moveDown();
+	void moveRight();
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Moves the Actor according to data fetched from the internal InputComponent
+	*/
+	void rotate();
 	void fireAbility0();
 	void selectAbilityX();
 	void fireAbilityX();
+
+	void SETinputComponent(InputComponent* pInputComponent);
+	InputComponent* GETinputComponent();
 
 
 
