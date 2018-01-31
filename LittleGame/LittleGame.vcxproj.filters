@@ -180,6 +180,9 @@
     <ClInclude Include="ProjectileHandler.h">
       <Filter>Header Files\Components\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="FireballComponent.h">
+      <Filter>Header Files\Components\Ability</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="ProjectileHandler.cpp">
       <Filter>Source Files\Components\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="FireballComponent.cpp">
+      <Filter>Source Files\Components\Ability</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

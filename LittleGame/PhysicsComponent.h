@@ -7,9 +7,9 @@
 class PhysicsComponent
 {
 private:
-	DirectX::
-
-public:
+//	DirectX::
+//
+//public:
 
 };
 

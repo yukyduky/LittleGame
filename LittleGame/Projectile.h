@@ -4,7 +4,7 @@
 
 #include <vector>
 #include "GameObject.h"
-#include "AbilityComponent.h"
+//#include "AbilityComponent.h"
 #include "Locator.h"
 
 class Projectile : public GameObject
@@ -12,12 +12,14 @@ class Projectile : public GameObject
 private:
 	float travelDist = 0;
 	DirectX::XMFLOAT3 direction;
+	float speed;
 
-	//std::vector<PhysicsComponent*> projPhy;
-	//std::vector<GraphicsComponent*> projGraph;
+	//PhysicsComponent* phyComp;
+	//GraphicsComponent* graphComp;
+	//AbilityComponent* abilComp;
 
 public:
-	Projectile(const size_t ID, XMFLOAT3 direction, float travelDist);
+	Projectile(const size_t ID, XMFLOAT3 start, XMFLOAT3 direction);
 	~Projectile();
 	
 	float getTravelDist() { return this->travelDist; };

@@ -1,9 +1,10 @@
 #include "Projectile.h"
 
-Projectile::Projectile(const size_t ID, XMFLOAT3 direction, float travelDist) : GameObject(ID)
+Projectile::Projectile(const size_t ID, XMFLOAT3 start, XMFLOAT3 direction) : GameObject(ID, start)
 {
 	this->direction = direction;
-	this->travelDist = travelDist;
+	this->travelDist = 0;
+	this->speed = this->getVelocity().Length();
 }
 
 Projectile::~Projectile()
@@ -13,24 +14,17 @@ Projectile::~Projectile()
 void Projectile::update()
 {
 	//Send msg with check range to comps
+	this->travelDist += this->speed * Locator::getGameTime()->getDeltaTime();
+	this->send(COMPMSG::CHE_RANGE);
+
 	//check kollison
+	this->send(COMPMSG::CHE_COLISION);
 
 	if (this->getState() == OBJECTSTATE::MOVING)
 	{
-		//this->travelDist += this->getVelocity() * Locator::getGameTime()->getDeltaTime();
 
-		if (true)//check if range has been reached
-		{
-
-			this->setPosition(this->getPosition() + this->direction * this->getVelocity());
-
-			//render
-		}
-		else
-		{
-			this->setState(OBJECTSTATE::STOP);
-		}
-
-
+		this->setPosition(this->getPosition() + this->direction * this->speed);
 	}
+
+
 }

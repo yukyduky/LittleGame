@@ -137,6 +137,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileHandler.h" />
@@ -182,6 +183,7 @@
     <ClCompile Include="RenderInputOrganizer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>

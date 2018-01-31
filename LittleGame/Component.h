@@ -9,7 +9,11 @@ class GameObject;
 
 class Component
 {
+	GameObject* pHead;
+
 public:
+	//Component(GameObject* pHead) { this->pHead = pHead; };
+
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
 };

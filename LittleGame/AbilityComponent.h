@@ -8,13 +8,19 @@
 struct Message;
 
 namespace ABILITYTYPE {
-	enum TYPE {SIZE};
+	enum TYPE {FIRE, SIZE};
 }
 
 class AbilityComponent : public Component
 {
+protected:
+	float damage;
+	float range;
+	float energyCost;
+	ABILITYTYPE::TYPE type;
 public:
-	
+	AbilityComponent(GameObject* pHead);
+
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
 	virtual float GETdamage() = 0;

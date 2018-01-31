@@ -9,6 +9,7 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
+#include "ProjectileHandler.h"
 
 class Command;
 class InputComponent;
@@ -22,6 +23,7 @@ private:
 	GameObject* go;
 	std::vector<GraphicsComponent*> blocks;
 
+	//ProjectileHandler projHandler;
 
 	std::array<InputComponent*, 1> playerInput;
 

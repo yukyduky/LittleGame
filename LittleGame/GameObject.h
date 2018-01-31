@@ -8,7 +8,7 @@
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
 
-enum class COMPMSG { CHE_RANGE, CHE_KOLISION };
+enum class COMPMSG { CHE_RANGE, CHE_COLISION };
 
 class Component;
 
