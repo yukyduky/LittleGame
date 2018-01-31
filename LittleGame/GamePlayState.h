@@ -41,15 +41,12 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
-	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
-	std::vector<GameObject*> arenaObjects;
-	std::vector<GraphicsComponent*> graphics;
-
-
 	Camera camera;
 	RenderInputOrganizer rio;
-	GameObject* go;
-	GameObject* actorObject;
+	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
+	std::vector<GameObject*> arenaObjects;
+
+	std::vector<GraphicsComponent*> graphics;
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
@@ -69,7 +66,7 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'GamePlayState'. <-- already in function name.
+	1. Initialize the 'GamePlayState'.
 	*/
 	virtual void init();
 

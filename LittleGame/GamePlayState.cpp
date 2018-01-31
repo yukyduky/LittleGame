@@ -13,8 +13,6 @@
 
 using namespace DirectX::SimpleMath;
 
-#include "ActorObject.h"
-
 GamePlayState GamePlayState::sGamePlayState;
 void GamePlayState::checkCollisions() {
 	// LOOP 1: Looping through each physicsComponent
@@ -45,27 +43,6 @@ void GamePlayState::checkCollisions() {
 	}
 }
 
-//void GamePlayState::init() {
-//	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
-//	this->rio.initialize(this->camera);
-//	this->initArena();
-//
-//	// Everything initialized here (=new) should be deleted in cleanUp() below so that 
-//	// memoryleaks can be found out instantly when they appear.
-//
-//	this->go = new ArenaObject(0);
-//	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
-//	this->playerInput[0] = new KeyboardComponent(*this->actorObject);
-//	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
-//
-//
-//	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-//
-//	for (auto &i : this->blocks) {
-//		this->rio.addGraphics(i);
-//	}
-//}
-
 
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
@@ -77,22 +54,18 @@ void GamePlayState::init() {
 	}
 }
 
-void GamePlayState::cleanup()
+void GamePlayState::cleanUp()
 {
-	this->go->cleanUp();
-	delete this->go;
-	delete this->actorObject;
+	// Direct internal objects
+	// this->rio.cleanUp();
+	// this->camera.cleanUp();
 
-	for (auto &iterator : this->playerInput) {
-		//iterator.cleanUp(); Not needed at the moment.
+
+	// GameObjects which will on their own clean up all of their connected components
+	for (auto &iterator : this->arenaObjects) {
+		iterator->cleanUp();
 		delete iterator;
 	}
-	for (auto &iterator : this->blocks) {
-		//iterator.cleanUp(); Not needed at the moment.
-		delete iterator;
-	}
-
-
 }
 
 void GamePlayState::pause() {
@@ -134,6 +107,7 @@ void GamePlayState::render(GameManager * gm) {
 
 GamePlayState* GamePlayState::getInstance() {
 	return &sGamePlayState;
+	
 }
 
 void GamePlayState::initArena()
@@ -599,18 +573,7 @@ void GamePlayState::initPlayer()
 
 	//Create the new KeyboardComponent
 	input = new KeyboardComponent(*actor);
-	this->playerInput[0] = new KeyboardComponent(*actor);
-	actor->addComponent(input);
-
+	this->playerInput[0] = input;
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
-
-
-	/*
-	this->go = new GameObject(0);
-	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
-	
-	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
-	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-	*/
 }
