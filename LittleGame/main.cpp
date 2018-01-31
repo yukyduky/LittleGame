@@ -54,7 +54,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//keyboard.execute();
 	}
 
-	}
 	gm.cleanup();
 	d3d->cleanup();
 	delete d3d;

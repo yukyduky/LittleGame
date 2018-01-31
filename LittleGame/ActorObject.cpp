@@ -1,6 +1,7 @@
 #include "ActorObject.h"
 #include "GameObject.h"
 #include "ControllerComponent.h"
+#include "Locator.h"
 
 ActorObject::ActorObject(const size_t ID)
 	: GameObject(ID)
@@ -20,16 +21,17 @@ ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos)
 	}
 }
 
+/* You get these from GameObject
 const size_t ActorObject::getID()
 {
-	return -1;
+	return this->ID;
 }
 
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
 }
-
+*/
 void ActorObject::move()
 {
 	DirectX::XMFLOAT2 MovementVector;
@@ -42,7 +44,12 @@ void ActorObject::move()
 void ActorObject::moveUp()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		double dt = Locator::getGameTime()->getDeltaTime();
+		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity();
+		playerPos.z += playerVelocity.z * dt;
+		this->setPosition(playerPos);
+		this->updateWorldMatrix();
 	}
 	else {
 
@@ -52,7 +59,12 @@ void ActorObject::moveUp()
 void ActorObject::moveLeft()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		double dt = Locator::getGameTime()->getDeltaTime();
+		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity();
+		playerPos.x -= playerVelocity.x * dt;
+		this->setPosition(playerPos);
+		this->updateWorldMatrix();
 	}
 	else {
 
@@ -61,7 +73,12 @@ void ActorObject::moveLeft()
 void ActorObject::moveDown()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		double dt = Locator::getGameTime()->getDeltaTime();
+		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity();
+		playerPos.z -= playerVelocity.z * dt;
+		this->setPosition(playerPos);
+		this->updateWorldMatrix();
 	}
 	else {
 
@@ -70,7 +87,12 @@ void ActorObject::moveDown()
 void ActorObject::moveRight()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		double dt = Locator::getGameTime()->getDeltaTime();
+		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity();
+		playerPos.x += playerVelocity.x * dt;
+		this->setPosition(playerPos);
+		this->updateWorldMatrix();
 	}
 	else {
 
@@ -115,6 +137,7 @@ void ActorObject::fireAbilityX()
 void ActorObject::SETinputComponent(InputComponent* pInputComponent)
 {
 	this->pInput = pInputComponent;
+	this->components.push_back(pInputComponent);
 }
 
 InputComponent* ActorObject::GETinputComponent()

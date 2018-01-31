@@ -36,8 +36,11 @@ public:
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
 	ActorObject(const size_t ID, XMFLOAT3 pos);
+	
+	/* You get these from GameObject
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
+	*/
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent

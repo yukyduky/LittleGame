@@ -21,11 +21,14 @@ struct Message
 class GameObject
 {
 private:
-	std::list<Component*> components;
+	XMMATRIX world;
+	XMMATRIX translationMatrix;
+	XMMATRIX scaleMatrix;
+	XMMATRIX rotationMatrix;
 
 protected:
+	std::list<Component*> components;
 	const size_t ID;
-	XMMATRIX world;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
@@ -55,13 +58,10 @@ public:
 	OBJECTSTATE getState() const { return this->state; }
 	XMMATRIX& getWorld() { return this->world; }
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
-private:
-	std::list<Component*> components;
-	const size_t ID;
-	XMFLOAT3 pos;
-	XMFLOAT3 velocity;
-	XMMATRIX world;
-	OBJECTSTATE state;
+	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
+	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
+	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	void updateWorldMatrix();
 };
 
 #endif // !GAMEOBJECT_H
