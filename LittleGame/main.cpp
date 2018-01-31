@@ -18,15 +18,31 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameManager gm;
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);
+	double deltaTime;
+	double timeLastFrame = 0;
+	int frames = 0;
+	char msgbuf[20];
 
 	// Game loop
 	while (gm.getIsRunning()) {
 		// Update delta time
 		Locator::getGameTime()->UpdateFrameTime();
+		deltaTime = Locator::getGameTime()->getDeltaTime();
+		timeLastFrame += deltaTime * 1000;
+		
 		// Handle events & update & render
 		gm.handleEvents();
 		gm.update();
 		gm.render();
+		frames++;
+
+		if (timeLastFrame > 1000.0) {
+			sprintf_s(msgbuf, "FPS: %d\n", frames);
+			frames = 0;
+			timeLastFrame = 0;
+			OutputDebugStringA(msgbuf);
+		}
+
 	}
 	gm.cleanup();
 	d3d->cleanup();
