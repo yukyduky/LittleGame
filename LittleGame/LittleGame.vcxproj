@@ -131,8 +131,9 @@
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
-    <ClInclude Include="ArenaObject.h" />
+	<ClInclude Include="ArenaObject.h" />
     <ClInclude Include="Commands.h" />
+    <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="RenderInputOrganizer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -165,6 +167,7 @@
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -181,6 +184,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="RectangleComponent.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>

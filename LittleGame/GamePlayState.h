@@ -11,6 +11,9 @@
 #include "GameObject.h"
 #include "ActorObject.h"
 #include "Camera.h"
+#include "PhysicsComponent.h"
+#include "CollisionHandler.h"
+#include <list>
 
 
 #define ARENAWIDTH 600		//The arenas "length" (x-dimension)
@@ -42,6 +45,7 @@ private:
 	std::vector<GameObject*> arenaObjects;
 	std::vector<GraphicsComponent*> graphics;
 
+
 	Camera camera;
 	RenderInputOrganizer rio;
 	GameObject* go;
@@ -49,6 +53,19 @@ private:
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	Command* selectCommand;
+	
+	CollisionHandler collisionHandler;
+
+	std::vector<GameObject*> gameObjectsArray;
+	std::vector<PhysicsComponent*> physicsComponentsArray;
+
+
+
+
+	void updatePhysicsComponents();
+	
+	void checkCollisions();
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -154,6 +171,9 @@ public:
 	4. We call it z-index because the depth in the grid is along the z-axis.
 	*/
 	XMFLOAT2 findGridIndexFromPosition(XMFLOAT3 pos);
+
+
+	void initPlayer();
 };
 
 #endif // !GAMEPLAYSTATE_H

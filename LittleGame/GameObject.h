@@ -5,9 +5,11 @@
 #include <list>
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <SimpleMath.h>
 
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
+enum class OBJECTTYPE { PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE, PROJECTILE };
 
 class Component;
 
@@ -24,19 +26,18 @@ struct Message
 class GameObject
 {
 private:
-
+	XMMATRIX world;
+	XMMATRIX translationMatrix;
+	XMMATRIX scaleMatrix;
+	XMMATRIX rotationMatrix;
 
 protected:
-	// For every object it never has two identical components, only possibly two pointers,
-	// where 1 pointer relies in the componentList (and the other lies specificly
-	// if one doesn't want to use messages.)
 	std::list<Component*> components;
-
 	const size_t ID;
-	XMMATRIX world;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
+	OBJECTTYPE type;
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE) {}
@@ -67,6 +68,12 @@ public:
 	OBJECTSTATE getState() const { return this->state; }
 	XMMATRIX& getWorld() { return this->world; }
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
+	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
+	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
+	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	void updateWorldMatrix();
+
+	OBJECTTYPE getType() const { return this->type; }
 
 };
 

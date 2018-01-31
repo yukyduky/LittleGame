@@ -13,8 +13,58 @@
 
 using namespace DirectX::SimpleMath;
 
-GamePlayState GamePlayState::sGamePlayState;
+#include "ActorObject.h"
 
+GamePlayState GamePlayState::sGamePlayState;
+void GamePlayState::checkCollisions() {
+	// LOOP 1: Looping through each physicsComponent
+	for (auto&& i : physicsComponentsArray) {
+
+		// If the object is NOT DEAD, we compare its physComponent vs. all other physComponents
+		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+
+			// LOOP 2: Comparing NON-DEAD object from pevious loop to all remaining NON-DEAD objects
+			for (auto&& k : physicsComponentsArray) {
+
+				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+					/// Need a bool(collision detected or not detected?)
+					if (this->physicsComponentsArray.at(i->getID())->checkCollision(
+						this->physicsComponentsArray.at(k->getID())->getBoundingSphere())) {
+
+						// CALL COLLISION-CLASS FUNCITON
+						this->collisionHandler.executeCollision(
+							this->gameObjectsArray.at(i->getID()),
+							this->gameObjectsArray.at(k->getID()),
+							&this->physicsComponentsArray.at(i->getID())->getBoundingSphere(),
+							&this->physicsComponentsArray.at(k->getID())->getBoundingSphere()
+						);
+					}
+				}
+			}
+		}
+	}
+}
+
+//void GamePlayState::init() {
+//	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
+//	this->rio.initialize(this->camera);
+//	this->initArena();
+//
+//	// Everything initialized here (=new) should be deleted in cleanUp() below so that 
+//	// memoryleaks can be found out instantly when they appear.
+//
+//	this->go = new ArenaObject(0);
+//	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
+//	this->playerInput[0] = new KeyboardComponent(*this->actorObject);
+//	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
+//
+//
+//	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
+//
+//	for (auto &i : this->blocks) {
+//		this->rio.addGraphics(i);
+//	}
+//}
 
 
 void GamePlayState::init() {
@@ -22,22 +72,10 @@ void GamePlayState::init() {
 	this->rio.initialize(this->camera);
 	this->initArena();
 
-	// Everything initialized here (=new) should be deleted in cleanUp() below so that 
-	// memoryleaks can be found out instantly when they appear.
-
-	this->go = new ArenaObject(0);
-	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
-	this->playerInput[0] = new KeyboardComponent(*this->actorObject);
-	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
-
-
-	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-
-	for (auto &i : this->blocks) {
+	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
 	}
 }
-
 
 void GamePlayState::cleanup()
 {
@@ -54,7 +92,7 @@ void GamePlayState::cleanup()
 		delete iterator;
 	}
 
-	
+
 }
 
 void GamePlayState::pause() {
@@ -101,8 +139,10 @@ GamePlayState* GamePlayState::getInstance() {
 void GamePlayState::initArena()
 {
 	this->createArenaFloor();
-	this->createArenaNeonGrid();
+	//this->createArenaNeonGrid();
 	this->createArenaWalls();
+
+	int test23 = 1;
 }
 
 void GamePlayState::createArenaFloor()
@@ -403,7 +443,8 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	this->arenaObjects.push_back(object);
 
 	
-	
+	//DO NOT REMOVE!!!!! CAN'T DRAW LINES YET SO WE COMMENT THIS SECTION OUT UNTIL WE ACCTUALLY CAN DRAW THEM.
+	/*
 	//Create lines for the walls.
 	LineComponent* currentLine;
 	XMFLOAT3 startPos;
@@ -507,7 +548,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Prepare currPos for next iteration.
 		currPos = currPos + stepL;
 	}
-	
+	*/
 }
 
 void GamePlayState::SETsquareType(XMFLOAT2 index, SQUARETYPE::TYPE type)
@@ -523,4 +564,53 @@ XMFLOAT2 GamePlayState::findGridIndexFromPosition(XMFLOAT3 pos)
 	index.y = pos.z / ARENASQUARESIZE;
 
 	return index;
+}
+
+void GamePlayState::initPlayer()
+{
+	ActorObject* actor;
+	BlockComponent* block;
+	InputComponent* input;		// THIS IS CORRECT!
+	int nextID = this->arenaObjects.size();
+	
+	//Create the new ActorObject
+	XMFLOAT3 playerScales(10.0f, 30.0f, 10.0f);
+	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y / 2.0f, (float)(ARENAHEIGHT / 2));
+	actor = new ActorObject(nextID, playerPos);
+	XMFLOAT3 playerVelocity(100.0f, 100.0f, 100.0f);
+	actor->setVelocity(playerVelocity);
+
+	//Create the playerColor and the new BlockComponent that will represent the players body.
+	vColor playerColor(0.0f, 0.0f, 0.0f, 255.0f);
+	block = new BlockComponent(*actor, playerColor.r, playerColor.g, playerColor.b, playerColor.a);
+	
+	XMVECTOR playerTranslation = XMLoadFloat3(&playerPos);
+	XMMATRIX worldMatrix;
+	XMMATRIX translationM = XMMatrixTranslationFromVector(playerTranslation);
+	XMMATRIX rotationM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(playerScales.x, playerScales.y, playerScales.z);
+	worldMatrix = scaleM * rotationM * translationM;
+
+	actor->SETtranslationMatrix(translationM);
+	actor->SETscaleMatrix(scaleM);
+	actor->SETrotationMatrix(rotationM);
+	actor->SETworldMatrix(worldMatrix);
+	actor->addComponent(block);
+
+	//Create the new KeyboardComponent
+	input = new KeyboardComponent(*actor);
+	this->playerInput[0] = new KeyboardComponent(*actor);
+	actor->addComponent(input);
+
+	this->arenaObjects.push_back(actor);
+	this->graphics.push_back(block);
+
+
+	/*
+	this->go = new GameObject(0);
+	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
+	
+	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
+	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
+	*/
 }

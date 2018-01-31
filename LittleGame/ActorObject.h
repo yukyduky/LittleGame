@@ -24,8 +24,10 @@ class ActorObject : public GameObject
 {
 private:
 	InputComponent * pInput;
+	// -------------TEMPLATE
 	AbilityComponent* abilities[5];
 	AbilityComponent* ability0;
+	// -------------TEMPLATE
 	float hp;
 	float energy;
 
