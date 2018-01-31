@@ -16,7 +16,7 @@ private:
 	bool isRunning;
 	IGameTime* gameTime;
 	Renderer renderer;
-	
+
 	IAudioManager* audio;
 
 public:

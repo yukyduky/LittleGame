@@ -11,7 +11,7 @@
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
 	this->isRunning = true;
-	
+
 	this->renderer.init();
 
 	// Creation of gameTime;
