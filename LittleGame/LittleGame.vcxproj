@@ -129,16 +129,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AbilityCommands.h" />
+    <ClInclude Include="AbilityComponent.h" />
+    <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
-    <ClInclude Include="Command.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="ID3D.h" />
-    <ClInclude Include="MenuCommands.h" />
-    <ClInclude Include="MovementCommands.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -164,6 +163,8 @@
     <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbilityComponent.cpp" />
+    <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />

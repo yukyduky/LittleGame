@@ -22,3 +22,9 @@ void GameObject::addComponent(Component* component)
 {
 	this->components.push_back(component);
 }
+
+void GameObject::updateWorldMatrix()
+{
+	this->translationMatrix = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+	this->world = this->scaleMatrix * this->rotationMatrix * this->translationMatrix;
+}

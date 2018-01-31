@@ -5,10 +5,11 @@
 #include "State.h"
 #include <vector>
 #include <array>
-#include "Command.h"
+#include "Commands.h"
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
+#include "ActorObject.h"
 #include "Camera.h"
 #include "IInputHandler.h"
 #include "PhysicsComponent.h"
@@ -36,16 +37,6 @@ namespace WALLTYPE {
 class Command;
 class InputComponent;
 
-enum Commands
-{
-	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE, 
-	MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT,
-	SELECTABILITY1, SELECTABILITY2, SELECTABILITY3, SELECTABILITY4,
-	FIREABILITY0, FIREABILITYX, 
-	OPENMENU0, OPENMENU1, 
-	Size
-};
-
 class GamePlayState : public State
 {
 private:
@@ -55,8 +46,13 @@ private:
 	std::vector<GameObject*> arenaObjects;
 	std::vector<GraphicsComponent*> graphics;
 
+
 	Camera camera;
 	RenderInputOrganizer rio;
+	GameObject* go;
+	GameObject* actorObject;
+	std::vector<GraphicsComponent*> blocks;
+	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 	Command* selectCommand;
 	
@@ -74,7 +70,6 @@ private:
 	*/
 	void mapKeys();
 
-	void initInputMapping();
 
 
 	void updatePhysicsComponents();
@@ -83,7 +78,7 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'GamePlayState'.
+	1. Initialize the 'GamePlayState'. <-- already in function name.
 	*/
 	virtual void init();
 
@@ -185,6 +180,9 @@ public:
 	4. We call it z-index because the depth in the grid is along the z-axis.
 	*/
 	XMFLOAT2 findGridIndexFromPosition(XMFLOAT3 pos);
+
+
+	void initPlayer();
 };
 
 #endif // !GAMEPLAYSTATE_H

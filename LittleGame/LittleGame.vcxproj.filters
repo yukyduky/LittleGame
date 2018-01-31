@@ -87,9 +87,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Command.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -153,15 +150,6 @@
     <ClInclude Include="ControllerComponent.h">
       <Filter>Header Files\Components\Input</Filter>
     </ClInclude>
-    <ClInclude Include="MovementCommands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="AbilityCommands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="MenuCommands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
@@ -170,6 +158,15 @@
     </ClInclude>
     <ClInclude Include="IAudioManager.h">
       <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorObject.h">
+      <Filter>Header Files\Components\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityComponent.h">
+      <Filter>Header Files\Components\Ability</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="RectangleComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
@@ -245,6 +242,12 @@
     </ClCompile>
     <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorObject.cpp">
+      <Filter>Source Files\Components\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilityComponent.cpp">
+      <Filter>Source Files\Components\Ability</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsComponent.cpp">
       <Filter>Source Files\Components\Physics</Filter>
