@@ -4,33 +4,42 @@
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
-#include "InputHandler.h"
 #include "GamePlayState.h"
+#include "Renderer.h"
+#include "AudioManager.h"
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
 	this->isRunning = true;
-	
+
+	this->renderer.init();
+
 	// Creation of gameTime;
 	this->gameTime = new GameTime;
 	// Provide the gametime object to the service locator
 	Locator::provide(this->gameTime);
-	// Creation of inputHandler;
-	this->inputHandler = new InputHandler;
-	// Provide the inputHandler object to the service locator
-	Locator::provide(this->inputHandler);
+
+	// Create the AudioManager
+	this->audio = new AudioManager;
+	// Provide the audioManager object to the service locator
+	Locator::provide(this->audio);
+	// Initaiate the audio, loads in all sound and music
+	Locator::getAudioManager()->init();
 
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 
 	// Set the first state of the game
 	StateManager::changeState(GamePlayState::getInstance());
+
+	Locator::getAudioManager()->play(MUSIC::ONEPUNCH);
+
+
 }
 
 void GameManager::cleanup()
 {
 	delete this->gameTime;
-	delete this->inputHandler;
 }
 
 void GameManager::changeState(State* state)
@@ -55,17 +64,13 @@ void GameManager::update()
 
 void GameManager::render()
 {
-	/*Color bgColor(255, 0, 255, 1.0f);
-	// Clear the backbuffer
-	gDevCon->ClearRenderTargetView(gFinalRTV, bgColor);*/
-
+	this->renderer.firstPass();
 	StateManager::render(this);
 }
 
 void GameManager::display(State* state)
 {
-	/*// Present the backbuffer to the screen
-	gSwapChain->Present(0, 0);*/
+	this->renderer.secondPass();
 }
 
 bool GameManager::getIsRunning()
@@ -77,5 +82,4 @@ void GameManager::quit()
 {
 	this->isRunning = false;
 	StateManager::cleanup();
-	D3D::Release();
 }

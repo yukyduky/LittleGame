@@ -1,0 +1,58 @@
+#pragma once
+#ifndef BLOCKCOMPONENT_H_
+#define BLOCKCOMPONENT_H_
+
+#include "GraphicsComponent.h"
+#include <vector>
+#include <array>
+#include <Windows.h>
+
+struct PrimitiveVertexData;
+
+class BlockComponent : public GraphicsComponent
+{
+private:
+	const size_t ID;
+	ID3D11Buffer* gVertexBuffer;
+	ID3D11Buffer* gIndexBuffer;
+	size_t stride;
+	size_t offset;
+	size_t numIndices;
+	GameObject* head;
+
+	
+
+	/*--------<INFORMATION>--------
+	1. Creates a block with points ranging from -1.0 to 1.0 in x,y,z dimensions.
+	2. All vertices is in modelspace with origin in the center of the block.
+	3. Creates normals for the vertices
+	4. Creates indices for the indexBuffer.
+	*/
+	void createVertices(float r, float g, float b, float a);
+	
+public:
+	BlockComponent(GameObject& obj, float r, float g, float b, float a);
+	~BlockComponent();
+
+
+	virtual ID3D11Buffer*& GETvertexBuffer();
+	virtual ID3D11Buffer*& GETindexBuffer();
+	virtual size_t& GETstride();
+	virtual size_t& GEToffset();
+	virtual size_t& GETnumIndices();
+	virtual XMMATRIX& getWorld();
+
+
+	/*--------<INFORMATION>--------
+	1. Something
+	*/
+	virtual void receive(GameObject& obj, Message msg);
+	
+	/*--------<INFORMATION>--------
+	1. Returns the ID of the component.
+	*/
+	virtual const size_t getID();
+};
+
+
+#endif

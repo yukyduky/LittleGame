@@ -5,7 +5,8 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include "IGameTime.h"
-#include "IInputHandler.h"
+#include "Renderer.h"
+#include "IAudioManager.h"
 
 class State;
 
@@ -14,14 +15,17 @@ class GameManager
 private:
 	bool isRunning;
 	IGameTime* gameTime;
-	IInputHandler* inputHandler;
+	Renderer renderer;
+
+	IAudioManager* audio;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates a/the 'GameTime'(class) object.
 	2. Provides the newly created 'gameTime'(obj) to 'Locator'(class).
 	3. Starts the game timer.
-	4. Set the first & initial 'State' via 'StateManager'(class).*/
+	4. Set the first & initial 'State' via 'StateManager'(class).
+	5. Initiates the audio*/
 	void init(HINSTANCE hInstance, int nCmdShow);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
