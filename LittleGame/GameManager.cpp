@@ -39,6 +39,8 @@ void GameManager::cleanUp()
 	// this->gameTime.cleanUp(); --Not necessary at the moment
 	delete this->gameTime;
 
+	// this->renderer.cleanUp();
+
 	// this->audio.cleanUp(); --Not necessary at the moment
 	delete this->audio;
 

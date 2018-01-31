@@ -37,6 +37,7 @@ void ActorObject::cleanUp()
 
 	// Cleanup all the components
 	for (auto &c : this->components) {
+		c->getID();
 		c->cleanUp();
 		delete c;
 	}

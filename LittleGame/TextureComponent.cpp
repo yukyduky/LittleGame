@@ -17,7 +17,7 @@ void TextureComponent::receive(GameObject& obj, Message msg)
 }
 void TextureComponent::cleanUp()
 {
-
+	// Maybe release this->gSRV here, maybe somewhere else
 }
 
 ID3D11ShaderResourceView * TextureComponent::getSRV()
