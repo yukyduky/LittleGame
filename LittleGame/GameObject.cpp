@@ -4,10 +4,7 @@
 
 GameObject::~GameObject()
 {
-	// Cleanup all the components
-	for (auto &c : this->components) {
-		delete c;
-	}
+	this->cleanUp();
 }
 
 void GameObject::send(Message msg)

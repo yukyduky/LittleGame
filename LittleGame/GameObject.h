@@ -18,11 +18,29 @@ struct Message
 	Message(OBJECTSTATE state) : state(state) {}
 };
 
+
+
 class GameObject
 {
+private:
+
+
+protected:
+	// For every object it never has two identical components, only possibly two pointers,
+	// where 1 pointer relies in the componentList (and the other lies specificly
+	// if one doesn't want to use messages.)
+	std::list<Component*> components;
+
+	const size_t ID;
+	XMMATRIX world;
+	XMFLOAT3 pos;
+	XMFLOAT3 velocity;
+	OBJECTSTATE state;
+
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE) {}
 	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE) {}
+
 	virtual ~GameObject();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -31,10 +49,16 @@ public:
 	void send(Message msg);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Cleans up the GameObject and all the attached components.
+	*/
+	virtual void cleanUp() = 0;
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Adds a component using the 'components.push_back()' function.
 	*/
 	void addComponent(Component* component);
 	const size_t getID() const { return this->ID; }
+
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
 	XMFLOAT3 getPosition() const { return this->pos; }
 	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
@@ -44,14 +68,6 @@ public:
 	XMMATRIX& getWorld() { return this->world; }
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
 
-
-private:
-	std::list<Component*> components;
-	const size_t ID;
-	XMFLOAT3 pos;
-	XMFLOAT3 velocity;
-	XMMATRIX world;
-	OBJECTSTATE state;
 };
 
 #endif // !GAMEOBJECT_H

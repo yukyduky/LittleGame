@@ -5,10 +5,11 @@
 #include "State.h"
 #include <vector>
 #include <array>
-#include "Command.h"
+#include "Commands.h"
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "GameObject.h"
+#include "ActorObject.h"
 #include "Camera.h"
 
 
@@ -32,16 +33,6 @@ namespace WALLTYPE {
 class Command;
 class InputComponent;
 
-enum Commands
-{
-	SELECT, MOUSEMOVE, CONTROLLERMOVE, CONTROLLERROTATE, 
-	MOVEUP, MOVEDOWN, MOVELEFT, MOVERIGHT,
-	SELECTABILITY1, SELECTABILITY2, SELECTABILITY3, SELECTABILITY4,
-	FIREABILITY0, FIREABILITYX, 
-	OPENMENU0, OPENMENU1, 
-	Size
-};
-
 class GamePlayState : public State
 {
 private:
@@ -53,22 +44,15 @@ private:
 
 	Camera camera;
 	RenderInputOrganizer rio;
+	GameObject* go;
+	GameObject* actorObject;
+	std::vector<GraphicsComponent*> blocks;
+	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
-	Command* selectCommand;
-
-	void mapCommands();
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
-	2. Calls the 'getInputHandler()' in-order to call the 'mapCommandToControllerKey()' function.
-	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
-	*/
-	void mapKeys();
-
-	void initInputMapping();
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'GamePlayState'.
+	1. Initialize the 'GamePlayState'. <-- already in function name.
 	*/
 	virtual void init();
 
