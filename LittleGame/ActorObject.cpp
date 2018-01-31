@@ -11,9 +11,10 @@ ActorObject::ActorObject(const size_t ID)
 }
 
 
-ActorObject::ActorObject(const size_t ID, Vector3 pos)
+ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos)
 	: GameObject(ID, pos)
 {
+	this->pos = pos;
 	for (auto it : this->abilities) {
 		it = nullptr;
 	}

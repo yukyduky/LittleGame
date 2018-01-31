@@ -78,7 +78,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>xinput.lib;d3d11.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;d3d11.lib;sfml-audio-d.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>NotSet</SubSystem>
     </Link>
@@ -135,7 +135,6 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="ConstantBufferManager.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="Renderer.h" />
@@ -146,11 +145,14 @@
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="KeyboardComponent.h" />
+
+    <ClInclude Include="IAudioManager.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="BlockComponent.h" />
     <ClInclude Include="RenderInputOrganizer.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="AudioManager.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -160,7 +162,6 @@
     <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="ConstantBufferManager.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="BlockComponent.cpp" />
     <ClCompile Include="RenderInputOrganizer.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
@@ -181,12 +183,22 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="geoPassPixel.hlsl">
+    <FxCompile Include="geoPassPixelColor.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="geoPassVert.hlsl">
+    <FxCompile Include="geoPassPixelTex.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="geoPassVertTex.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="geoPassVertColor.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>

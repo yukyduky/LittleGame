@@ -10,6 +10,8 @@
 #include "GraphicsComponent.h"
 #include "GameObject.h"
 #include "ActorObject.h"
+#include "Camera.h"
+
 
 class Command;
 class InputComponent;
@@ -19,6 +21,8 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 
+
+	Camera camera;
 	RenderInputOrganizer rio;
 	GameObject* go;
 	GameObject* actorObject;

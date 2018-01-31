@@ -1,10 +1,12 @@
 #include "GameManager.h"
+#include "D3D.h"
 #include "StateManager.h"
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
 #include "GamePlayState.h"
 #include "Renderer.h"
+#include "AudioManager.h"
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
@@ -17,11 +19,22 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Provide the gametime object to the service locator
 	Locator::provide(this->gameTime);
 
+	// Create the AudioManager
+	this->audio = new AudioManager;
+	// Provide the audioManager object to the service locator
+	Locator::provide(this->audio);
+	// Initaiate the audio, loads in all sound and music
+	Locator::getAudioManager()->init();
+
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 
 	// Set the first state of the game
 	StateManager::changeState(GamePlayState::getInstance());
+
+	Locator::getAudioManager()->play(MUSIC::ONEPUNCH);
+
+
 }
 
 void GameManager::cleanup()

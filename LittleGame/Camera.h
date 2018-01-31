@@ -3,7 +3,7 @@
 #define CAMERA_H
 
 #include "D3D.h"
-#include "ConstantBufferManager.h"
+#include "Locator.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
 
@@ -16,9 +16,9 @@ class Camera {
 private:
 	float			cameraMoveSpeed = 2.0;
 	float			cameraRotateSpeed = 0.02;
-	static float	angle;
-	static float	nearPlane;
-	static float	farPlane;
+	float			angle;
+	float			nearPlane;
+	float			farPlane;
 
 	DirectX::XMFLOAT3 cameraPos_Float3;
 
@@ -30,6 +30,7 @@ private:
 	DirectX::XMVECTOR cameraRightDir;
 
 	DirectX::XMMATRIX view;
+	DirectX::XMMATRIX projection;
 
 	/// ---------- UPDATE-FUNCTION VARIABLES ---------
 	// ------------- POSITION MOVEMENT ---------------
@@ -63,9 +64,7 @@ private:
 	void rotateCameraHorizontally(POINT mouseMovement);
 
 public:
-	Camera();
-	~Camera();
-
+	void init();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Receives a 'characterMessage' of type 'TCHAR', which can result in:
 	--- Camera Positional Movement: 'W', 'A', 'S', 'D', '32(SpaceBar)' = Up, 'R' = Reset Camera, 'H'.
@@ -75,13 +74,7 @@ public:
 	3. Uses the 'updateRequired' bool to see if updating the Camera is necessary.
 	--- Should an update be required, then the constant buffers will be edited here.
 	*/
-	void updateCamera(
-		TCHAR				characterMessage,
-		POINT				mouseCoordinates,
-		MatrixBufferPack	*formattedStructData,
-		ID3D11Buffer*		*GSconstantBuffer,
-		bool				HoverCamActivationStatus
-	);
+	void updateCamera();
 
 	void resetCamera();
 
@@ -96,9 +89,8 @@ public:
 	DirectX::XMVECTOR	GETcameraStartPos();
 	DirectX::XMVECTOR	GETcameraPos();
 	DirectX::XMVECTOR	GETfacingDir();
-	static float		GETangle();
-	static float		GETnearPlane();
-	static float		GETfarPlane();
+	DirectX::XMMATRIX&	GETviewMatrix();
+	DirectX::XMMATRIX&	GETprojMatrix();
 };
 
 //______________________________________________//

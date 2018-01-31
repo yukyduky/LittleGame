@@ -11,15 +11,15 @@
 GamePlayState GamePlayState::sGamePlayState;
 
 
-void GamePlayState::init()
-{
-	this->go =			new GameObject(0);
-	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
 
-	for (auto &iterator : this->playerInput) {
-		//iterator = new KeyboardComponent(*this->actorObject);			// Testing
-		iterator = new ControllerComponent(*this->actorObject, 0);		// Testing
-	}
+void GamePlayState::init() {
+	this->rio.initialize(this->camera);
+
+	this->go = new GameObject(0);
+	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
+	//this->playerInput[0] = new KeyboardComponent(*this->actorObject);
+	this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
+
 
 	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
 
@@ -28,21 +28,22 @@ void GamePlayState::init()
 	}
 }
 
+
 void GamePlayState::cleanup()
 {
+
 }
 
-void GamePlayState::pause()
-{
+void GamePlayState::pause() {
+
 }
 
 void GamePlayState::resume()
 {
-
+	
 }
 
-void GamePlayState::handleEvents(GameManager * gm)
-{
+void GamePlayState::handleEvents(GameManager * gm) {
 	MSG msg;
 
 	while (gm->pollEvent(msg)) {
@@ -56,6 +57,7 @@ void GamePlayState::handleEvents(GameManager * gm)
 	}
 }
 
+
 void GamePlayState::update(GameManager * gm)
 {
 	for (auto &iterator : playerInput) {
@@ -64,13 +66,11 @@ void GamePlayState::update(GameManager * gm)
 	}
 }
 
-void GamePlayState::render(GameManager * gm)
-{
+void GamePlayState::render(GameManager * gm) {
 	this->rio.render();
 	gm->display(this);
 }
 
-GamePlayState* GamePlayState::getInstance()
-{
+GamePlayState* GamePlayState::getInstance() {
 	return &sGamePlayState;
 }

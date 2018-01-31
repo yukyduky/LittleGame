@@ -4,6 +4,7 @@
 
 #include "IGameTime.h"
 #include "ID3D.h"
+#include "IAudioManager.h"
 
 /* Service Locator pattern */
 
@@ -13,6 +14,8 @@ private:
 	static IGameTime* sGT;
 	static ID3D* sID3D;
 
+	static IAudioManager* sAM;
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Provides the address of 'gameTime'(obj) to the 'sGT'(ptr) Locator object.
@@ -20,6 +23,7 @@ public:
 	*/
 	static void provide(IGameTime* gameTime) { sGT = gameTime; }
 	static void provide(ID3D* d3d) { sID3D = d3d; }
+	static void provide(IAudioManager* audioManager) { sAM = audioManager; }
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the 'sGT'(ptr).
@@ -27,6 +31,7 @@ public:
 	*/
 	static IGameTime* getGameTime() { return sGT; }
 	static ID3D* getD3D() { return sID3D; }
+	static IAudioManager* getAudioManager() { return sAM; }
 };
 
 #endif

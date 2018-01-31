@@ -170,6 +170,26 @@ void D3D::mapConstantBuffer(ID3D11Buffer ** gBuffer, void * cbPtr, int structSiz
 	this->gDevCon->Unmap(*gBuffer, 0);
 }
 
+void D3D::setConstantBuffer(ID3D11Buffer*& cBuffer, SHADER shader, size_t slot)
+{
+	switch (shader)
+	{
+	case SHADER::VERTEX:
+		this->gDevCon->VSSetConstantBuffers(slot, 1, &cBuffer);
+		break;
+	case SHADER::PIXEL:
+		this->gDevCon->PSSetConstantBuffers(slot, 1, &cBuffer);
+		break;
+	}
+}
+
+void D3D::cleanup()
+{
+	this->gSwapChain->Release();
+	this->gDevice->Release();
+	this->gDevCon->Release();
+}
+
 size_t & D3D::GETwWidth()
 {
 	return this->wWidth;
