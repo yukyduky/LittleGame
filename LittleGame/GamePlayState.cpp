@@ -14,6 +14,16 @@
 using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
+
+void GamePlayState::updatePhysicsComponents()
+{
+	for (auto&& i : gameObjectsArray) {
+		if (i->getState() != OBJECTSTATE::DEAD) {
+			this->physicsComponentsArray.at(i->getID())->updateBoundingArea(i->getPosition());
+		}
+	}
+}
+
 void GamePlayState::checkCollisions() {
 	// LOOP 1: Looping through each physicsComponent
 	for (auto&& i : physicsComponentsArray) {
@@ -47,6 +57,7 @@ void GamePlayState::checkCollisions() {
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera);
+	this->initPlayer();
 	this->initArena();
 
 	for (auto &i : this->graphics) {

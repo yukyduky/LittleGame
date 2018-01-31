@@ -8,7 +8,7 @@ void StateManager::changeState(State* state)
 	// If the state stack isn't empty
 	if (!sStates.empty()) {
 		// Cleanup the latest stack at the back
-		sStates.back()->cleanup();
+		sStates.back()->cleanUp();
 		// Remove the state from the back of the stack
 		sStates.pop_back();
 	}
@@ -23,7 +23,7 @@ void StateManager::popState()
 	// If the state stack isn't empty
 	if (!sStates.empty()) {
 		// Cleanup the latest stack at the back
-		sStates.back()->cleanup();
+		sStates.back()->cleanUp();
 		// Remove the state from the back of the stack
 		sStates.pop_back();
 		// If the state stack still isn't empty
@@ -62,9 +62,9 @@ void StateManager::render(GameManager* gm)
 	sStates.back()->render(gm);
 }
 
-void StateManager::cleanup()
+void StateManager::cleanUp()
 {
 	for (auto &i : sStates) {
-		i->cleanup();
+		i->cleanUp();
 	}
 }

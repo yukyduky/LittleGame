@@ -58,8 +58,6 @@ private:
 	std::vector<PhysicsComponent*> physicsComponentsArray;
 
 
-
-
 	void updatePhysicsComponents();
 	
 	void checkCollisions();
@@ -73,7 +71,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleanup the 'GamePlayState'; freeing memory, default settings, etc.
 	*/
-	virtual void cleanup();
+	virtual void cleanUp();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Pause the 'GamePlayState'.

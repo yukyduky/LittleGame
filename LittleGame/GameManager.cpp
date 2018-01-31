@@ -44,7 +44,7 @@ void GameManager::cleanUp()
 	// this->audio.cleanUp(); --Not necessary at the moment
 	delete this->audio;
 
-	StateManager::cleanup();
+	StateManager::cleanUp();
 }
 
 void GameManager::changeState(State* state)

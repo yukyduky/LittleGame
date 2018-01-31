@@ -55,7 +55,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Call the 'cleanup()' function in all states currently in the stack.
 	*/
-	static void cleanup();
+	static void cleanUp();
 };
 
 #endif
