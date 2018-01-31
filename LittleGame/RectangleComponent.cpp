@@ -8,7 +8,7 @@
 |_____________________________|
 */
 
-void RectangleComponent::createVertices()
+void RectangleComponent::createVertices(const float r, const float g, const float b, const float a)
 {
 	/*
 	p0 __________________ p1
@@ -24,26 +24,13 @@ void RectangleComponent::createVertices()
 	p2 = (-1.0, 0.0, -1.0)
 	p3 = (1.0, 0.0, -1.0)
 	*/
-	/*
-	//Push the vertices into the vector (p0-p3)
-	RectangleComponent::vertices.push_back(Vertex(-1.0, 0.0, 1.0));
-	RectangleComponent::vertices.push_back(Vertex(1.0, 0.0, 1.0));
-	RectangleComponent::vertices.push_back(Vertex(-1.0, 0.0, -1.0));
-	RectangleComponent::vertices.push_back(Vertex(1.0, 0.0, -1.0));
-
-	//Push the normals into the vector
-	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	RectangleComponent::normals.push_back(Vertex(0.0, 1.0, 0.0));
-	*/
 
 	std::array<PrimitiveVertexData, 4> vertexData;
 
-	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[1] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[2] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[3] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
+	vertexData[1] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
+	vertexData[2] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, r, g, b, a);
+	vertexData[3] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, r, g, b, a);
 
 	DWORD index[] = 
 	{
@@ -53,13 +40,6 @@ void RectangleComponent::createVertices()
 		2, 1, 3
 	};
 	this->numIndices = 6;
-	/*
-	//Push indices into the vector
-	for (int i = 0; i < 6; i++)
-	{
-		RectangleComponent::indices.push_back(index[i]);
-	}
-	*/
 
 	this->offset = 0;
 	this->stride = sizeof(PrimitiveVertexData);
@@ -82,7 +62,7 @@ void RectangleComponent::createVertices()
 
 RectangleComponent::RectangleComponent(GameObject& obj, const float r, const float g, const float b, const float a) : ID(obj.getID())
 {
-	this->createVertices();
+	this->createVertices(r, g, b, a);
 	this->head = &obj;
 	//Set the color of the box
 	this->color.r = r;

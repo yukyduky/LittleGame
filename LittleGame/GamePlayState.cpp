@@ -6,7 +6,10 @@
 #include "BlockComponent.h"
 #include "KeyboardComponent.h"
 #include "ControllerComponent.h"
+#include <SimpleMath.h>
+#include <DirectXMath.h>
 
+using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
 
@@ -143,7 +146,6 @@ void GamePlayState::initArena()
 	this->createArenaFloor();
 	this->createArenaNeonGrid();
 	this->createArenaWalls();
-	int test12 = 7;
 }
 
 void GamePlayState::createArenaFloor()
@@ -162,7 +164,6 @@ void GamePlayState::createArenaFloor()
 	XMMATRIX scaleM = DirectX::XMMatrixScaling(ARENAWIDTH / 2, 0, ARENAHEIGHT / 2);
 	XMMATRIX translationM = DirectX::XMMatrixTranslationFromVector(vec);
 	worldM = scaleM * rotationM * translationM;
-	//worldM = XMMatrixIdentity();
 	//Prepare the color of the rectangle.
 	vColor color(72.0f, 118.0f, 255.0f, 255.0f);
 	//Create the RectangleComponent and give it the finished world matrix.
@@ -271,14 +272,6 @@ void GamePlayState::createArenaWalls()
 	XMFLOAT2 posIndex; // used to find all the indexes of a wall section.
 	XMFLOAT3 temp;
 	//Creates left row of arena walls
-	
-	//currPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//vec = XMLoadFloat3(&currPos);
-	//translationM = DirectX::XMMatrixTranslationFromVector(vec);
-	//worldMatrix = scaleM * rotTB * translationM;
-	//this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::HORIZONTAL);
-	
-	
 	for (int i = 0; i < nrOfWallsLR; i++) {
 		//Calculate new pos
 		currPos = XMFLOAT3(ARENASQUARESIZE / 2.0f, (ARENASQUARESIZE * HEIGHTOFWALLS) / 2.0f, ((ARENASQUARESIZE * LENGTHOFWALLS) / 2.0f) + i * LENGTHOFWALLS * ARENASQUARESIZE);
@@ -286,11 +279,7 @@ void GamePlayState::createArenaWalls()
 		//Check if the new position is a spawn location.
 		if (skipChecker == skip[0] || skipChecker == skip[1]) {
 			//Find the index of the spawn locations first square
-			temp = XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
+			currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
 			
 			//Set the all of the spawnlocation areas squares to SPAWN.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -308,11 +297,7 @@ void GamePlayState::createArenaWalls()
 			this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::VERTICAL);
 
 			//Find the index of the wall locations first square.
-			temp = XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
+			currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
 			
 			//Set all of the wall locations areas squares to WALL.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -324,7 +309,6 @@ void GamePlayState::createArenaWalls()
 		}
 		skipChecker++;//remove when we implement the real random openings.
 	}
-	
 	//Creates right row of arena walls
 	for (int i = 0; i < nrOfWallsLR; i++) {
 		//Calculate new pos
@@ -333,11 +317,7 @@ void GamePlayState::createArenaWalls()
 		//Check if the new position is a spawn location.
 		if (skipChecker == skip[2] || skipChecker == skip[3]) {
 			//Find the index of the spawn locations first square
-			temp = XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
+			currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
 			
 			//Set the all of the spawnlocation areas squares to SPAWN.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -355,11 +335,7 @@ void GamePlayState::createArenaWalls()
 			this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::VERTICAL);
 
 			//Find the index of the wall locations first square.
-			temp = XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
+			currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
 
 			//Set all of the wall locations areas squares to WALL.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -371,7 +347,6 @@ void GamePlayState::createArenaWalls()
 		}
 		skipChecker++;//remove when we implement the real random openings.
 	}
-	
 	//Creates bottom row of arena walls
 	for (int i = 0; i < nrOfWallsTB; i++) {
 		//Calculate new pos
@@ -380,11 +355,7 @@ void GamePlayState::createArenaWalls()
 		//Check if the new position is a spawn location.
 		if (skipChecker == skip[4] || skipChecker == skip[5]) {
 			//Find the index of the spawn locations first square
-			temp = XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
+			currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
 
 			//Set the all of the spawnlocation areas squares to SPAWN.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -402,11 +373,7 @@ void GamePlayState::createArenaWalls()
 			this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::HORIZONTAL);
 		
 			//Find the index of the wall locations first square.
-			temp = XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
+			currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
 			
 			//Set all of the wall locations areas squares to WALL.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -428,11 +395,7 @@ void GamePlayState::createArenaWalls()
 		//Check if the new position is a spawn location.
 		if (skipChecker == skip[6] || skipChecker == skip[7]) {
 			//Find the index of the spawn locations first square
-			temp = XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
+			currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
 
 			//Set the all of the spawnlocation areas squares to SPAWN.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -450,11 +413,7 @@ void GamePlayState::createArenaWalls()
 			this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::HORIZONTAL);
 		
 			//Find the index of the wall locations first square.
-			temp = XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
-			currPos.x = currPos.x - temp.x;
-			currPos.y = currPos.y - temp.y;
-			currPos.z = currPos.z - temp.z;
-			//currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
+			currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
 
 			//Set all of the wall locations areas squares to WALL.
 			for (int j = 0; j < LENGTHOFWALLS; j++)
@@ -491,7 +450,6 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	//Create lines for the walls.
 	LineComponent* currentLine;
 	XMFLOAT3 startPos;
-	XMFLOAT3 temp;
 	XMFLOAT3 stepH(0.0f, ARENASQUARESIZE, 0.0f);
 	XMFLOAT3 stepL;
 	XMFLOAT3 parallelStep;
@@ -500,21 +458,13 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	//Define some variables we need to create the lines. Different values if the wall is
 	//running along the x-axis or the z-axis. A VERTICAL wall type means it runs along the z-axis.
 	if (wType == WALLTYPE::VERTICAL) {
-		temp = XMFLOAT3(ARENASQUARESIZE / 2, (HEIGHTOFWALLS * ARENASQUARESIZE) / 2, (LENGTHOFWALLS * ARENASQUARESIZE) / 2);
-		startPos.x = pos.x - temp.x;
-		startPos.y = pos.y - temp.y;
-		startPos.z = pos.z - temp.z;
-		//startPos = pos - XMFLOAT3(ARENASQUARESIZE / 2, (HEIGHTOFWALLS * ARENASQUARESIZE) / 2, (LENGTHOFWALLS * ARENASQUARESIZE) / 2);
+		startPos = pos - XMFLOAT3(ARENASQUARESIZE / 2, (HEIGHTOFWALLS * ARENASQUARESIZE) / 2, (LENGTHOFWALLS * ARENASQUARESIZE) / 2);
 		stepL = XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE);
 		rotMH = DirectX::XMMatrixRotationY((float)(PI / 2));
 		parallelStep = XMFLOAT3(ARENASQUARESIZE, 0.0f, 0.0f);
 	}
 	else {
-		temp = XMFLOAT3((LENGTHOFWALLS * ARENASQUARESIZE) / 2, (HEIGHTOFWALLS * ARENASQUARESIZE) / 2, ARENASQUARESIZE / 2);
-		startPos.x = pos.x - temp.x;
-		startPos.y = pos.y - temp.y;
-		startPos.z = pos.z - temp.z;
-		//startPos = pos - XMFLOAT3((LENGTHOFWALLS * ARENASQUARESIZE) / 2, (HEIGHTOFWALLS * ARENASQUARESIZE) / 2, ARENASQUARESIZE / 2);
+		startPos = pos - XMFLOAT3((LENGTHOFWALLS * ARENASQUARESIZE) / 2, (HEIGHTOFWALLS * ARENASQUARESIZE) / 2, ARENASQUARESIZE / 2);
 		stepL = XMFLOAT3(ARENASQUARESIZE, 0.0f, 0.0f);
 		rotMH = DirectX::XMMatrixIdentity();
 		parallelStep = XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE);
@@ -550,11 +500,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		this->graphics.push_back(currentLine);
 
 		//Calculate the parallel line and do the same steps as above.
-		parallelPos.x = currPos.x - parallelStep.x;
-		parallelPos.y = currPos.y - parallelStep.y;
-		parallelPos.z = currPos.z - parallelStep.z;
-		
-		//parallelPos = currPos + parallelStep;
+		parallelPos = currPos + parallelStep;
 		nextID = this->arenaObjects.size();
 		object = new GameObject(nextID, parallelPos);
 		vec = DirectX::XMLoadFloat3(&parallelPos);
@@ -567,10 +513,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		this->graphics.push_back(currentLine);
 
 		//Prepare currPos for next iteration.
-		currPos.x = currPos.x + stepH.x;
-		currPos.y = currPos.y + stepH.y;
-		currPos.z = currPos.z + stepH.z;
-		//currPos = currPos + stepH;
+		currPos = currPos + stepH;
 	}
 	//Reset currPos to the startPos for the vertical lines.
 	currPos = startPos;
@@ -592,10 +535,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		this->graphics.push_back(currentLine);
 
 		//Calculate the parallel line and do the same steps as above.
-		parallelPos.x = currPos.x + parallelStep.x;
-		parallelPos.y = currPos.y + parallelStep.y;
-		parallelPos.z = currPos.z + parallelStep.z;
-		//parallelPos = currPos + parallelStep;
+		parallelPos = currPos + parallelStep;
 		nextID = this->arenaObjects.size();
 		object = new GameObject(nextID, parallelPos);
 		vec = DirectX::XMLoadFloat3(&parallelPos);
@@ -608,11 +548,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		this->graphics.push_back(currentLine);
 
 		//Prepare currPos for next iteration.
-		currPos.x = currPos.x + stepL.x;
-		currPos.y = currPos.y + stepL.y;
-		currPos.z = currPos.z + stepL.z;
-		
-		//currPos = currPos + stepL;
+		currPos = currPos + stepL;
 	}
 	
 }

@@ -24,7 +24,7 @@ private:
 	3. Creates normals for the vertices
 	4. Creates indices for the indexbuffer.
 	*/
-	void createVertices();
+	void createVertices(const float r, const float g, const float b, const float a);
 
 public:
 	/*--------<INFORMATION>--------

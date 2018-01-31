@@ -2,19 +2,13 @@
 #include "GameObject.h"
 #include "Locator.h"
 
-/*
-std::vector<Vertex> LineComponent::vertices;
-std::vector<Vertex> LineComponent::normals;
-std::vector<DWORD> LineComponent::indices;
-*/
-
 /*_____________________________
 |         START OF            |
 |     PRIVATE FUNCTIONS       |
 |_____________________________|
 */
 
-void LineComponent::createVertices()
+void LineComponent::createVertices(vColor startColor, vColor endColor)
 {
 	/*
 	p0_______________________p1
@@ -24,13 +18,8 @@ void LineComponent::createVertices()
 	*/
 	//Push the vertices of the line (p0, p1).
 	std::array<PrimitiveVertexData, 2> vertexData;
-	vertexData[0] = PrimitiveVertexData(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 255.0f);
-	vertexData[1] = PrimitiveVertexData(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 255.0f, 255.0f);
-
-	/*
-	LineComponent::vertices.push_back(Vertex(0.0f, 0.0f, 0.0f));
-	LineComponent::vertices.push_back(Vertex(1.0f, 0.0f, 0.0f));
-	*/
+	vertexData[0] = PrimitiveVertexData(0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, startColor.r, startColor.g, startColor.b, startColor.a);
+	vertexData[1] = PrimitiveVertexData(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, endColor.r, endColor.g, endColor.b, endColor.a);
 
 	//Create indices for the line.
 	DWORD index[] =
@@ -44,12 +33,7 @@ void LineComponent::createVertices()
 
 	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
 	Locator::getD3D()->createIndexBuffer(&this->gIndexBuffer, index, this->numIndices);
-	/*
-	//Push indices into the vector.
-	for (int i = 0; i < 2; i++) {
-		LineComponent::indices.push_back(index[i]);
-	}
-	*/
+	
 }
 
 /*_____________________________
@@ -66,7 +50,7 @@ void LineComponent::createVertices()
 
 LineComponent::LineComponent(GameObject& obj, vColor startColor, vColor endColor) : ID(obj.getID())
 {
-	this->createVertices();	
+	this->createVertices(startColor, endColor);	
 	this->head = &obj;
 }
 

@@ -15,7 +15,6 @@ private:
 	const size_t ID;
 	ID3D11Buffer* gVertexBuffer;
 	ID3D11Buffer* gIndexBuffer;
-	vColor color;
 	size_t stride;
 	size_t offset;
 	size_t numIndices;

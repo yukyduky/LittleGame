@@ -13,6 +13,7 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 	// Load all the data from the geo pass
 	LoadGeoPassData(screenCoords, pos_W, normal, color);
 
+	color = color / 255.0f;
 	return float4(color, 1.0f);
 	//return float4(pos_W, 1.0f);
 }

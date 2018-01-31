@@ -16,19 +16,13 @@ private:
 	size_t offset;
 	size_t numIndices;
 	GameObject* head;
-	/*
-	static std::vector<Vertex> vertices;
-	static std::vector<Vertex> normals;
-	static std::vector<DWORD> indices;
-	std::vector<vColor> colors;
-	*/
 
 	/*--------<INFORMATION>--------
 	1. Creates a line with points ranging from 0.0 to 1.0 in x-dimension.
 	2. All vertices is in modelspace with origin in first vertice of the line.
 	3. Creates indices for the indexBuffer.
 	*/
-	void createVertices();
+	void createVertices(vColor startColor, vColor endColor);
 public:
 	/*--------<INFORMATION>--------
 	1. Calls the private function createVertices() if it's the first time a LineComponent is being created.

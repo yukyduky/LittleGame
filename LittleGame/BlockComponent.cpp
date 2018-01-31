@@ -2,11 +2,6 @@
 #include "GameObject.h"
 #include "Locator.h"
 
-/*
-std::vector<Vertex> BlockComponent::vertices;
-std::vector<Vertex> BlockComponent::normals;
-std::vector<DWORD> BlockComponent::indices;
-*/
 /*_____________________________
  |         START OF            |
  |     PRIVATE FUNCTIONS       |
@@ -114,24 +109,6 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 	};
 	this->numIndices = 36;
 	
-	
-
-/*
-	std::array<PrimitiveVertexData, 4> vertexData;
-
-	vertexData[0] = PrimitiveVertexData(-1.0f, 1.0f, -8.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[1] = PrimitiveVertexData(1.0f, 1.0f, -8.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[2] = PrimitiveVertexData(-1.0f, -1.0f, -8.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[3] = PrimitiveVertexData(1.0f, -1.0f, -8.0f, 0.0f, 0.0f, -1.0f, 0.0f, 255.0f, 0.0f, 255.0f);
-
-	DWORD index[] =
-	{
-		0, 1, 2,
-		2, 1, 3,
-	};
-	this->numIndices = 6;
-*/
-	
 	this->offset = 0;
 	this->stride = sizeof(PrimitiveVertexData);
 
@@ -155,11 +132,6 @@ BlockComponent::BlockComponent(GameObject& obj, float r, float g, float b, float
 {
 	this->createVertices(r, g, b, a);
 	this->head = &obj;
-	//Set the color of the box
-	this->color.r = r;
-	this->color.g = g;
-	this->color.b = b;
-	this->color.a = a;
 }
 
 BlockComponent::~BlockComponent() 
