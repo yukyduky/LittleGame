@@ -3,6 +3,7 @@
 #define KEYBOARDCOMPONENT_H
 
 #include "InputComponent.h"
+#include "ActorObject.h"
 #include <DirectXMath.h>
 
 using namespace DirectX;
@@ -10,9 +11,13 @@ using namespace DirectX;
 class KeyboardComponent : public InputComponent
 {
 private:
+	ActorObject* pHead = nullptr;
+	const size_t ID;
 	XMFLOAT2 cursorPos;
 public:
 	KeyboardComponent(GameObject& obj);
+	virtual const size_t getID();
+	virtual void execute();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void generateCommands();
 	virtual XMFLOAT2 GETcursorPos();

@@ -6,12 +6,14 @@
 #include <Windows.h>
 #include <Xinput.h>
 #include <DirectXMath.h>
+#include "ActorObject.h"
 
 using namespace DirectX;
 
 class ControllerComponent : public InputComponent
 {
 private:
+	ActorObject* pHead = nullptr;
 	enum class THUMB { LTHUMB, RTHUMB };
 
 	size_t controllerID;
@@ -24,6 +26,7 @@ private:
 	float checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE state);
 public:
 	ControllerComponent(GameObject& obj, size_t controllerID);
+	virtual void execute();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void generateCommands();
 	virtual void vibrate(size_t left, size_t right);
@@ -31,6 +34,7 @@ public:
 	virtual XMFLOAT2 GETnormalizedVectorOfRightStick();
 	virtual float GETnormalizedValueOfLeftTrigger();
 	virtual float GETnormalizedValueOfRightTrigger();
+	virtual const size_t getID();
 };
 
 #endif // !CONTROLLERCOMPONENT_H
