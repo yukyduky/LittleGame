@@ -10,6 +10,34 @@
 #include <DirectXCollision.h>
 #include "GameObject.h"
 
+// COLLIDABLE ID-LIST:
+/*
+// P   L   A   Y   E   R
+// 1	=	PLAYER				+			PLAYER
+// 2	=	PLAYER				+			ENEMY
+// 3	=	PLAYER				+			DOODAD
+// 4	=	PLAYER				+			INDESTRUCTIBLE
+// 5	=	PLAYER				+			PROJECTILE
+
+// E   N   E   M   Y
+// 6	=	ENEMY				+			ENEMY
+// 7	=	ENEMY				+			DOODAD
+// 8	=	ENEMY				+			INDESCTRUCTIBLE
+// 9	=	ENEMY				+			PROJECTILE
+
+// D   O   O   D   A   D
+// 10	=	DOODAD				+			DOODAD
+// 11	=	DOODAD				+			INDESTRUCTIBLE
+// 12	=	DOODAD				+			PROJECTILE
+
+// I  N  D  E  S  T  R  U  C  T  I  B  L  E
+// 13	=	INDESTRUCTIBLE		+			INDESTRUCTIBLE
+// 14	=	INDESTRUCTIBLE		+			PROJECTILE
+
+// P   R   O   J   E   C   T   I   L   E
+// 15	=	PROJECTILE			+			PROJECTILE
+*/
+
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                                     |
   |         COLLISION HANDLER           |
