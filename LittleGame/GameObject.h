@@ -34,7 +34,6 @@ protected:
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
-	XMMATRIX world;
 	OBJECTTYPE type;
 
 public:

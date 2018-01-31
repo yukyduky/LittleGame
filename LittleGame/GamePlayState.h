@@ -11,7 +11,6 @@
 #include "GameObject.h"
 #include "ActorObject.h"
 #include "Camera.h"
-#include "IInputHandler.h"
 #include "PhysicsComponent.h"
 #include "CollisionHandler.h"
 #include <list>

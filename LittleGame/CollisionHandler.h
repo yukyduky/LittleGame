@@ -9,6 +9,10 @@
 #include "Component.h"
 #include <DirectXCollision.h>
 #include "GameObject.h"
+#include <SimpleMath.h>
+#include <DirectXMath.h>
+
+using namespace SimpleMath;
 
 // COLLIDABLE ID-LIST:
 /*

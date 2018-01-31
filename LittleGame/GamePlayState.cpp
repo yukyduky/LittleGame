@@ -15,41 +15,6 @@ using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
 
-	// Shoot Abilities
-	Locator::getInputHandler()->mapCommandToMouseKey(MOUSE::LEFTCLICK, Key(this->commands[Commands::FIREABILITY0], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToMouseKey(MOUSE::RIGHTCLICK, Key(this->commands[Commands::FIREABILITYX], COMMANDTYPE::TAP));
-	
-	// Menu relevant
-	Locator::getInputHandler()->mapCommandToKeyboardKey(KEYBOARD::ESC, Key(this->commands[Commands::OPENMENU0], COMMANDTYPE::TAP));
-
-
-	// CONTROLLER -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-	// Movement & Rotation
-	Locator::getInputHandler()->mapCommandToLeftThumbStick(this->commands[Commands::CONTROLLERMOVE]);
-	Locator::getInputHandler()->mapCommandToRightThumbStick(this->commands[Commands::CONTROLLERROTATE]);
-	// DPAD
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADUP, Key(this->commands[Commands::MOVEUP], COMMANDTYPE::HOLD));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADDOWN, Key(this->commands[Commands::MOVEDOWN], COMMANDTYPE::HOLD));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADLEFT, Key(this->commands[Commands::MOVELEFT], COMMANDTYPE::HOLD));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::DPADRIGHT, Key(this->commands[Commands::MOVERIGHT], COMMANDTYPE::HOLD));
-
-	// Selecting Abilities
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::A, Key(this->commands[Commands::SELECTABILITY1], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::X, Key(this->commands[Commands::SELECTABILITY2], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::Y, Key(this->commands[Commands::SELECTABILITY3], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::B, Key(this->commands[Commands::SELECTABILITY4], COMMANDTYPE::TAP));
-
-	// Shoot Abilities
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::LTRIGGER, Key(this->commands[Commands::FIREABILITYX], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::RTRIGGER, Key(this->commands[Commands::FIREABILITY0], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToLeftShoulder(this->commands[Commands::FIREABILITYX]);
-	Locator::getInputHandler()->mapCommandToRightShoulder(this->commands[Commands::FIREABILITY0]);
-	
-	// Menu relevant
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::START, Key(this->commands[Commands::OPENMENU0], COMMANDTYPE::TAP));
-	Locator::getInputHandler()->mapCommandToControllerKey(CONTROLLER::BACK, Key(this->commands[Commands::OPENMENU1], COMMANDTYPE::TAP));*/
-}
-
 void GamePlayState::updatePhysicsComponents() {
 	for (auto&& i : gameObjectsArray) {
 		if (i->getState() != OBJECTSTATE::DEAD) {
@@ -86,18 +51,6 @@ void GamePlayState::checkCollisions() {
 		}
 	}
 }
-
-void GamePlayState::init()
-{
-	this->selectCommand = new GamePlaySelectCommand();
-void GamePlayState::initInputMapping() {
-	// TrueInput --> Internal 'Keys' --> Internal 'Commands' --> rest of system
-	// First we map the internal 'Keys' to commands.
-	this->mapCommands();
-	// Then we map the trueInput to the internal 'Keys'
-	this->mapKeys();
-}
-
 
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
@@ -591,7 +544,7 @@ void GamePlayState::initPlayer()
 {
 	ActorObject* actor;
 	BlockComponent* block;
-	KeyboardComponent* input;
+	InputComponent* input;		// THIS IS CORRECT!
 	int nextID = this->arenaObjects.size();
 	
 	//Create the new ActorObject
