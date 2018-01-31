@@ -9,6 +9,7 @@
 #include <SimpleMath.h>
 #include <DirectXMath.h>
 #include "ActorObject.h"
+#include "ArenaObject.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -24,7 +25,7 @@ void GamePlayState::init() {
 	// Everything initialized here (=new) should be deleted in cleanUp() below so that 
 	// memoryleaks can be found out instantly when they appear.
 
-	this->go = new GameObject(0);
+	this->go = new ArenaObject(0);
 	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
 	this->playerInput[0] = new KeyboardComponent(*this->actorObject);
 	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
@@ -40,6 +41,7 @@ void GamePlayState::init() {
 
 void GamePlayState::cleanup()
 {
+	this->go->cleanUp();
 	delete this->go;
 	delete this->actorObject;
 
@@ -112,7 +114,7 @@ void GamePlayState::createArenaFloor()
 	XMFLOAT3 pos(ARENAWIDTH / 2, -0.5f, ARENAHEIGHT / 2);
 	XMVECTOR vec = DirectX::XMLoadFloat3(&pos);
 	//Create the GameObject
-	object = new GameObject(nextID, pos);
+	object = new ArenaObject(nextID, pos);
 	//Prepare the worldMatrix for the RectangleComponent.
 	XMMATRIX worldM = DirectX::XMMatrixIdentity();
 	XMMATRIX rotationM = DirectX::XMMatrixIdentity();
@@ -126,7 +128,7 @@ void GamePlayState::createArenaFloor()
 	object->SETworldMatrix(worldM);
 	//Give the RectangleComponent to the new GameObject.
 	object->addComponent(rect);
-	//Push the new GameObject into the arenaObject vector and graphics vector.
+	//Push the new GameObject into the GameObject vector and graphics vector.
 	this->arenaObjects.push_back(object);
 	this->graphics.push_back(rect);
 
@@ -180,7 +182,7 @@ void GamePlayState::createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startCol
 	//Get ID for next object.
 	int nextID = this->arenaObjects.size();
 	//Create the GameObject
-	object = new GameObject(nextID, pos);
+	object = new ArenaObject(nextID, pos);
 	//Create the LineComponent and give it it's world matrix.
 	vColor startC(startColor.x, startColor.w, startColor.z, startColor.w);
 	vColor endC(startColor.x, startColor.w, startColor.z, startColor.w);
@@ -391,7 +393,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	//Get ID for next object.
 	int nextID = this->arenaObjects.size();
 	//Create the GameObject.
-	object = new GameObject(nextID, pos);
+	object = new ArenaObject(nextID, pos);
 	//Create the BlockComponent and give it it's world matrix.
 	block = new BlockComponent(*object, color.x, color.y, color.z, color.w);
 	object->SETworldMatrix(wMatrix);
@@ -441,7 +443,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	for (int i = 0; i < HEIGHTOFWALLS + 1; i++) {
 		//Get the ID for the next object.
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, currPos);
+		object = new ArenaObject(nextID, currPos);
 		vec = DirectX::XMLoadFloat3(&currPos);
 		//Prepare the new lines world matrix.
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
@@ -457,7 +459,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Calculate the parallel line and do the same steps as above.
 		parallelPos = currPos + parallelStep;
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, parallelPos);
+		object = new ArenaObject(nextID, parallelPos);
 		vec = DirectX::XMLoadFloat3(&parallelPos);
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMH * rotMH * translationM;
@@ -476,7 +478,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	for (int i = 0; i < LENGTHOFWALLS + 1; i++) {
 		//Get the ID for the next object.
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, currPos);
+		object = new ArenaObject(nextID, currPos);
 		vec = DirectX::XMLoadFloat3(&currPos);
 		//Prepare the lines world Matrix.
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
@@ -492,7 +494,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Calculate the parallel line and do the same steps as above.
 		parallelPos = currPos + parallelStep;
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, parallelPos);
+		object = new ArenaObject(nextID, parallelPos);
 		vec = DirectX::XMLoadFloat3(&parallelPos);
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMV * rotMV * translationM;

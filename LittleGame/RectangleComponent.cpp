@@ -84,6 +84,11 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 {
 }
 
+void RectangleComponent::cleanUp()
+{
+
+}
+
 ID3D11Buffer*& RectangleComponent::GETvertexBuffer()
 {
 	return this->gVertexBuffer;

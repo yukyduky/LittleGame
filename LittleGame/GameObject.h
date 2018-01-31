@@ -6,6 +6,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
 
 class Component;
@@ -41,7 +42,6 @@ public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE) {}
 	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE) {}
 
-	virtual ~GameObject();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Send the parameter 'msg'(obj) to all components that have been added to the object.

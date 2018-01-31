@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
@@ -145,9 +146,7 @@
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="KeyboardComponent.h" />
-
     <ClInclude Include="IAudioManager.h" />
-
     <ClInclude Include="LineComponent.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />
@@ -163,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="AbilityComponent.cpp" />
     <ClCompile Include="ActorObject.cpp" />
+    <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="D3D.cpp" />

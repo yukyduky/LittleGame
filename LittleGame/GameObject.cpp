@@ -2,11 +2,6 @@
 #include "Component.h"
 
 
-GameObject::~GameObject()
-{
-	this->cleanUp();
-}
-
 void GameObject::send(Message msg)
 {
 	// Send the message to all the components that have been added to the object
