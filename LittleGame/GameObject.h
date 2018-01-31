@@ -24,16 +24,14 @@ struct Message
 class GameObject
 {
 private:
-
+	XMMATRIX world;
+	XMMATRIX translationMatrix;
+	XMMATRIX scaleMatrix;
+	XMMATRIX rotationMatrix;
 
 protected:
-	// For every object it never has two identical components, only possibly two pointers,
-	// where 1 pointer relies in the componentList (and the other lies specificly
-	// if one doesn't want to use messages.)
 	std::list<Component*> components;
-
 	const size_t ID;
-	XMMATRIX world;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
@@ -67,7 +65,10 @@ public:
 	OBJECTSTATE getState() const { return this->state; }
 	XMMATRIX& getWorld() { return this->world; }
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
-
+	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
+	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
+	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	void updateWorldMatrix();
 };
 
 #endif // !GAMEOBJECT_H

@@ -42,6 +42,7 @@ private:
 	std::vector<GameObject*> arenaObjects;
 	std::vector<GraphicsComponent*> graphics;
 
+
 	Camera camera;
 	RenderInputOrganizer rio;
 	GameObject* go;
@@ -52,7 +53,7 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'GamePlayState'. <-- already in function name.
+	1. Initialize the 'GamePlayState'.
 	*/
 	virtual void init();
 
@@ -154,6 +155,9 @@ public:
 	4. We call it z-index because the depth in the grid is along the z-axis.
 	*/
 	XMFLOAT2 findGridIndexFromPosition(XMFLOAT3 pos);
+
+
+	void initPlayer();
 };
 
 #endif // !GAMEPLAYSTATE_H
