@@ -2,6 +2,8 @@
 #ifndef COLLISIONHANDLER_H
 #define COLLISIONHANDLER_H
 
+#define DISTANCE_FACTOR 1.4142135623730950488016887242097
+
 #include <d3d11.h>
 #include "D3D.h"
 #include "Component.h"
@@ -22,14 +24,24 @@ private:
 
 	// Needed for swapping places of collidable1 with collidable2
 	GameObject* tempCollidableHolder;
-	DirectX::XMFLOAT3 centerDistanceVector;
-	DirectX::XMFLOAT3 radiusDistanceVector;
+
+	DirectX::XMFLOAT3 centerToCenterVector;
 	DirectX::XMFLOAT3 resultVector;
-	float stepper = 0.01;
+	float radiusDistanceVector;
+	float divisionFactor;
+
+	// calculateDistance variables
+	double distance;
+	double xDiff;
+	double yDiff;
+	double minDiff;
+
+	float stepper = 2.0;
 
 	int collisionID;
 
 	int createCollisionID();
+	void calculateDistance(float x1, float y1, float x2, float y2);
 
 	void collisionPlayerPlayer();
 	void collisionPlayerEnemy();
