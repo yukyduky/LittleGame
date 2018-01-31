@@ -162,9 +162,6 @@
     <ClInclude Include="Projectile.h">
       <Filter>Header Files\Components\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="AutoAttackComponent.h">
-      <Filter>Header Files\Components\Ability</Filter>
-    </ClInclude>
     <ClInclude Include="AudioManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
@@ -179,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="Commands.h">
       <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileHandler.h">
+      <Filter>Header Files\Components\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +250,9 @@
     </ClCompile>
     <ClCompile Include="AbilityComponent.cpp">
       <Filter>Source Files\Components\Ability</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileHandler.cpp">
+      <Filter>Source Files\Components\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

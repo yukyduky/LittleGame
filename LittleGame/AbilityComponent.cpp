@@ -1,5 +1,5 @@
 #include "AbilityComponent.h"
-#include "GameObject.h"
+#include "Projectile.h"
 
 //AbilityComponent::AbilityComponent(GameObject* pHead, int testVariable) 
 //	: Component(pHead)
@@ -15,6 +15,14 @@ const size_t AbilityComponent::getID()
 
 void AbilityComponent::receive(GameObject & obj, Message msg)
 {
+	if (msg.compMsg == COMPMSG::CHE_RANGE)
+	{
+		Projectile* proj = dynamic_cast<Projectile*>(&obj);
+		if (proj->getTravelDist() < this->GETrange())
+		{
+			obj.setState(OBJECTSTATE::STOP);
+		}
 
+	}
 }
 

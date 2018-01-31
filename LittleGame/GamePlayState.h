@@ -22,8 +22,6 @@ private:
 	GameObject* go;
 	std::vector<GraphicsComponent*> blocks;
 
-	std::vector<GameObject*> projectiles;
-	std::vector<GraphicsComponent*> projGraph;
 
 	std::array<InputComponent*, 1> playerInput;
 

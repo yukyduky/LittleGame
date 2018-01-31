@@ -5,6 +5,8 @@
 #include "Component.h"
 #include <DirectXMath.h>
 
+struct Message;
+
 namespace ABILITYTYPE {
 	enum TYPE {SIZE};
 }

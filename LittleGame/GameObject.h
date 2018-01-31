@@ -8,10 +8,7 @@
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
 
-//enum class MSG {
-//	MOVE, FIREABILITY0, FIREABILITYX, 
-//	CHANGEABILITY1, CHANGEABILITY1,	CHANGEABILITY1,	CHANGEABILITY1
-//};
+enum class COMPMSG { CHE_RANGE, CHE_KOLISION };
 
 class Component;
 
@@ -21,7 +18,10 @@ using namespace DirectX::SimpleMath;
 struct Message
 {
 	OBJECTSTATE state;
+	COMPMSG compMsg;
+
 	Message(OBJECTSTATE state) : state(state) {}
+	Message(COMPMSG compMsg) : compMsg(compMsg) {}
 };
 
 class GameObject
