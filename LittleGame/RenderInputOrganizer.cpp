@@ -9,7 +9,7 @@ void RenderInputOrganizer::packageMatrices() {
 	);
 
 	this->rawMatrixData.worldViewProj = (*this->rawMatrixData.world) * (*this->rawMatrixData.view) * (*this->rawMatrixData.proj);
-
+	this->rawMatrixData.worldViewProj = DirectX::XMMatrixTranspose(this->rawMatrixData.worldViewProj);
 	DirectX::XMStoreFloat4x4(
 		&this->packagedMatrixData.worldViewProj,
 		this->rawMatrixData.worldViewProj

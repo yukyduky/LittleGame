@@ -29,10 +29,10 @@ VS_OUT VS(VS_IN input) {
 
 	// Convert the vertices pos from Model space to World space
 	// Uncomment once the constant buffers work
-	//output.pos_S = mul(float4(input.pos_M, 1.0f), wvp);
-	//output.pos_W = mul(float4(input.pos_M, 1.0f), world);
-	output.pos_S = float4(input.pos_M, 1.0f);
-	output.pos_W = float4(input.pos_M, 1.0f);
+	output.pos_S = mul(float4(input.pos_M, 1.0f), wvp);
+	output.pos_W = mul(float4(input.pos_M, 1.0f), world);
+	//output.pos_S = float4(input.pos_M, 1.0f);
+	//output.pos_W = float4(input.pos_M, 1.0f);
 	output.normal = input.normal;
 	output.color = input.color;
 

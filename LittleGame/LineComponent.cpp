@@ -35,9 +35,9 @@ void LineComponent::createVertices()
 	//Create indices for the line.
 	DWORD index[] =
 	{
-		0, 1
+		0, 1, 0
 	};
-	this->numIndices = 2;
+	this->numIndices = 3;
 
 	this->offset = 0;
 	this->stride = sizeof(PrimitiveVertexData);

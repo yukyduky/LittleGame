@@ -41,9 +41,9 @@ void RectangleComponent::createVertices()
 	std::array<PrimitiveVertexData, 4> vertexData;
 
 	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[0] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
-	vertexData[0] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[1] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[2] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
+	vertexData[3] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, 0.0f, 255.0f, 0.0f, 255.0f);
 
 	DWORD index[] = 
 	{

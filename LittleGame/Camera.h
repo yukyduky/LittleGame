@@ -22,8 +22,8 @@ private:
 
 	DirectX::XMFLOAT3 cameraPos_Float3;
 
-	DirectX::XMVECTOR cameraStartPos = { 0, 10, -10 };
-	DirectX::XMVECTOR cameraStartFacingDir = { 0, 0, 1 };
+	DirectX::XMVECTOR cameraStartPos;
+	DirectX::XMVECTOR cameraStartFacingDir;
 	DirectX::XMVECTOR cameraPos;
 	DirectX::XMVECTOR cameraFacingDir;
 	DirectX::XMVECTOR cameraUpDir;
@@ -64,7 +64,7 @@ private:
 	void rotateCameraHorizontally(POINT mouseMovement);
 
 public:
-	void init();
+	void init(float arenaWidth, float arenaDepth);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Receives a 'characterMessage' of type 'TCHAR', which can result in:
 	--- Camera Positional Movement: 'W', 'A', 'S', 'D', '32(SpaceBar)' = Up, 'R' = Reset Camera, 'H'.

@@ -230,20 +230,26 @@ void Camera::rotateCameraHorizontally(POINT mouseMovement) {
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 
-void Camera::init()
+void Camera::init(float arenaWidth, float arenaDepth)
 {
+	this->cameraStartPos = DirectX::XMVECTOR{ (float)(arenaWidth / 2), (float)(arenaDepth * 0.8), (float)(-(arenaDepth / 4) * 1.30) };
+	//this->cameraStartPos = DirectX::XMVECTOR{ 40, 40, 40 };
+	
+	this->cameraStartFacingDir = DirectX::XMVECTOR{ arenaWidth / 2, 0, arenaDepth / 2 };
+	//this->cameraStartFacingDir = DirectX::XMVECTOR{ 0, 0, 200 };
+
 	this->updateRequired = false;
 
 	this->cameraPos = this->cameraStartPos;
 	this->cameraFacingDir = this->cameraStartFacingDir;
 	this->cameraUpDir = { 0, 1, 0 };
 
-	this->angle = 0.45;
+	this->angle = 0.45 * DirectX::XM_PI;
 	this->nearPlane = 0.5;
-	this->farPlane = 200.0;
+	this->farPlane = 1000.0; //200
 
 	// Initiate the view matrix
-	this->view = DirectX::XMMatrixLookToLH(
+	this->view = DirectX::XMMatrixLookAtLH(
 		this->cameraPos,
 		this->cameraFacingDir,
 		this->cameraUpDir
@@ -251,7 +257,7 @@ void Camera::init()
 
 	// Initiate the projection matrix
 	this->projection = DirectX::XMMatrixPerspectiveFovLH(
-		(DirectX::XM_PI * this->angle),
+		(this->angle),
 		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
 		this->nearPlane,
 		this->farPlane
