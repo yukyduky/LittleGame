@@ -1,12 +1,9 @@
 #include "AbilityComponent.h"
-#include "GameObject.h"
 
-
-// -------------TEMPLATE
-AbilityComponent::AbilityComponent(GameObject* pHead)
+AbilityComponent::AbilityComponent(Projectile& pHead)
 {
+	this->pHead = &pHead;
 }
-// -------------TEMPLATE
 
 const size_t AbilityComponent::getID()
 {

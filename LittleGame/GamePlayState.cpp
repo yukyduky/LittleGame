@@ -561,7 +561,7 @@ void GamePlayState::initPlayer()
 	//Create the new ActorObject
 	XMFLOAT3 playerScales(10.0f, 30.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y / 2.0f, (float)(ARENAHEIGHT / 2));
-	actor = new ActorObject(nextID, playerPos);
+	actor = new ActorObject(nextID, playerPos, this);
 	XMFLOAT3 playerVelocity(100.0f, 100.0f, 100.0f);
 	actor->setVelocity(playerVelocity);
 
@@ -598,7 +598,50 @@ void GamePlayState::initPlayer()
 	*/
 }
 
-void GamePlayState::shootProjectile(XMFLOAT3 pos, XMFLOAT3 dir)
+void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 {
+	Projectile* proj;
+	int nextID = this->newID();
 
+	// Declare Components
+	BlockComponent* block;
+	PhysicsComponent* phyComp;
+	AbilityComponent* abiliComp;
+
+	proj = new Projectile(nextID, pos, 10);
+	proj->setVelocity(dir);
+
+	//input for blockComp
+	XMFLOAT3 scale(props.size, props.size, props.size);
+	XMFLOAT3 position = pos;
+	block = new BlockComponent(*proj, props.color.x, props.color.y, props.color.z, 1.0f);
+	
+	// Create matrixes for world-matrix
+	XMVECTOR translation = XMLoadFloat3(&position);
+	XMMATRIX worldMatrix;
+	XMMATRIX translationM = XMMatrixTranslationFromVector(translation);
+	XMMATRIX rotationM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(scale.x, scale.y, scale.z);
+	worldMatrix = scaleM * rotationM * translationM;
+
+	// Apply matrixes
+	proj->SETtranslationMatrix(translationM);
+	proj->SETscaleMatrix(scaleM);
+	proj->SETrotationMatrix(rotationM);
+	proj->SETworldMatrix(worldMatrix);
+
+	// Bind components
+	proj->addComponent(block);
+
+	//Add the block to the objects that will be rendered
+	this->graphics.push_back(block);
+
+	//Template of components that are beeing worked on by other users
+	abiliComp = new FireballComponent(*proj, 1);
+	phyComp = new PhysicsComponent(pos, props.size, *proj);
+	this->physicsComponentsArray.push_back(phyComp);
+	
+	//Add proj to objectArrays
+	this->arenaObjects.push_back(proj);
+	this->projectiles.push_back(proj);
 }

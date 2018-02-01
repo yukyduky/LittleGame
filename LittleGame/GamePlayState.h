@@ -14,6 +14,7 @@
 #include "Camera.h"
 #include "PhysicsComponent.h"
 #include "CollisionHandler.h"
+#include "FireballComponent.h"
 #include <list>
 
 
@@ -37,6 +38,15 @@ namespace WALLTYPE {
 class Command;
 class InputComponent;
 
+struct ProjProp {
+	float size;
+	XMFLOAT3 color;
+
+	//ProjProp(float s, XMFLOAT3 c) : size(5), color(XMFLOAT3(0.5, 0.5, 0.5)) {}
+	ProjProp(float s, XMFLOAT3 c) : size(s), color(c) {}
+};
+
+
 class GamePlayState : public State
 {
 private:
@@ -45,8 +55,10 @@ private:
 	Camera camera;
 	RenderInputOrganizer rio;
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
+	//everything that will exist in this level
 	std::vector<GameObject*> arenaObjects;
 
+	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
@@ -56,8 +68,10 @@ private:
 	CollisionHandler collisionHandler;
 
 	std::vector<GameObject*> gameObjectsArray;
+	//All componenets that needs to have collision
 	std::vector<PhysicsComponent*> physicsComponentsArray;
 
+	std::vector<Projectile*> projectiles;
 
 	void updatePhysicsComponents();
 	
@@ -175,7 +189,7 @@ public:
 	int newID() { return this->arenaObjects.size(); }
 
 	/*Actors call to shoot projectile*/
-	void shootProjectile(XMFLOAT3 pos, XMFLOAT3 dir);
+	void initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
 };
 
 #endif // !GAMEPLAYSTATE_H

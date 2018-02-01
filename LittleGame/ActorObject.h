@@ -8,10 +8,13 @@
 //#include "GraphicsComponent.h"
 //#include "KeyboardComponent.h"
 //*#include "ControllerComponent.h"
+//#include "GamePlayState.h"
 
 #include "D3D.h"
 #include "list"
 #include <vector>
+
+class GamePlayState;
 
 
 namespace ABILITIES {
@@ -31,13 +34,14 @@ private:
 	float hp;
 	float energy;
 
+	GamePlayState* pGPS = nullptr;
 
 public:
 	ActorObject(const size_t ID);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, XMFLOAT3 pos);
+	ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS);
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();

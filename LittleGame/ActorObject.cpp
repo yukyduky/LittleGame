@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ControllerComponent.h"
 #include "Locator.h"
+#include "GamePlayState.h"
 
 ActorObject::ActorObject(const size_t ID)
 	: GameObject(ID)
@@ -12,9 +13,10 @@ ActorObject::ActorObject(const size_t ID)
 }
 
 
-ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos)
+ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS)
 	: GameObject(ID, pos)
 {
+	this->pGPS = pGPS;
 	this->pos = pos;
 	for (auto it : this->abilities) {
 		it = nullptr;
@@ -123,7 +125,8 @@ void ActorObject::rotate()
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		ProjProp props(5, XMFLOAT3(0.5, 0.5, 0.5));
+		pGPS->initProjectile(this->pos, XMFLOAT3(1.5, 1.5, 1.5), props);
 	}
 	else {
 
