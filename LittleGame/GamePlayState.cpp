@@ -123,9 +123,10 @@ GamePlayState* GamePlayState::getInstance() {
 
 void GamePlayState::initArena()
 {
-	this->createArenaFloor();
-	this->createArenaNeonGrid();
-	this->createArenaWalls();
+	lm.initArena(ARENAWIDTH, ARENAHEIGHT, this->grid, this->arenaObjects, this->graphics, this->physicsComponentsArray);
+	//this->createArenaFloor();
+	//this->createArenaNeonGrid();
+	//this->createArenaWalls();
 
 	int test23 = 1;
 }

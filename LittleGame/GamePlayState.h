@@ -15,6 +15,7 @@
 #include "CollisionHandler.h"
 #include <list>
 #include "ArenaGlobals.h"
+#include "LevelManager.h"
 
 
 
@@ -37,8 +38,10 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
+	LevelManager lm;
 	Camera camera;
 	RenderInputOrganizer rio;
+	std::array<int*, 0> grid;
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
 	std::vector<GameObject*> arenaObjects;
 

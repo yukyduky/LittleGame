@@ -94,6 +94,9 @@
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h">
@@ -190,6 +193,9 @@
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ArenaGlobals.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>
