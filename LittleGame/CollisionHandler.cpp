@@ -7,7 +7,7 @@
   |           PRIVATE           |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-int CollisionHandler::createCollisionID() {
+void CollisionHandler::createCollisionID() {
 
 	switch (this->collidable1->getType()) {
 		// COLLIDABLE ID-LIST:
@@ -42,101 +42,131 @@ int CollisionHandler::createCollisionID() {
 	case OBJECTTYPE::PLAYER: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // PLAYER <--> PLAYER
-			return 1;
+			this->collisionID = 1;
+			break;
 		}
 		case OBJECTTYPE::ENEMY: { // PLAYER <--> ENEMY
-			return 2;
+			this->collisionID = 2;
+			break;
 		}
 		case OBJECTTYPE::DOODAD: { // PLAYER <--> DOODAD
-			return 3;
+			this->collisionID = 3;
+			break;
 		}
 		case OBJECTTYPE::INDESTRUCTIBLE: { // PLAYER <--> INDESTRUCTIBLE
-			return 4;
+			this->collisionID = 4;
+			break;
 		}
 		case OBJECTTYPE::PROJECTILE: { // PLAYER <--> PROJECTILE
-			return 5;
+			this->collisionID = 5;
+			break;
 		}
 		}
+		break;
 	}
 		// Collidable #1 = ENEMY
 	case OBJECTTYPE::ENEMY: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // ENEMY <--> PLAYER
-			return 2;
+			this->collisionID = 2;
+			break;
 		}
 		case OBJECTTYPE::ENEMY: { // ENEMY <--> ENEMY
-			return 6;
+			this->collisionID = 6;
+			break;
 		}
 		case OBJECTTYPE::DOODAD: { // ENEMY <--> DOODAD
-			return 7;
+			this->collisionID = 7;
+			break;
 		}
 		case OBJECTTYPE::INDESTRUCTIBLE: { // ENEMY <--> INDESTRUCTIBLE
-			return 8;
+			this->collisionID = 8;
+			break;
 		}
 		case OBJECTTYPE::PROJECTILE: { // ENEMY <--> PROJECTILE
-			return 9;
+			this->collisionID = 9;
+			break;
 		}
 		}
+		break;
 	}
 		// Collidable #1 = DOODAD
 	case OBJECTTYPE::DOODAD: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // DOODAD <--> PLAYER
-			return 3;
+			this->collisionID = 3;
+			break;
 		}
 		case OBJECTTYPE::ENEMY: { // DOODAD <--> ENEMY
-			return 7;
+			this->collisionID = 7;
+			break;
 		}
 		case OBJECTTYPE::DOODAD: { // DOODAD <--> DOODAD
-			return 10;
+			this->collisionID = 10;
+			break;
 		}
 		case OBJECTTYPE::INDESTRUCTIBLE: { // DOODAD <--> INDESTRUCTIBLE
-			return 11;
+			this->collisionID = 11;
+			break;
 		}
 		case OBJECTTYPE::PROJECTILE: { // DOODAD <--> PROJECTILE
-			return 12;
+			this->collisionID = 12;
+			break;
 		}
 		}
+		break;
 	}
 		// Collidable #1 = INDESTRUCTIBLE
 	case OBJECTTYPE::INDESTRUCTIBLE: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // INDESTRUCTIBLE <--> PLAYER
-			return 4;
+			this->collisionID = 4;
+			break;
 		}
 		case OBJECTTYPE::ENEMY: { // INDESTRUCTIBLE <--> ENEMY
-			return 8;
+			this->collisionID = 8;
+			break;
 		}
 		case OBJECTTYPE::DOODAD: { // INDESTRUCTIBLE <--> DOODAD
-			return 11;
+			this->collisionID = 11;
+			break;
 		}
 		case OBJECTTYPE::INDESTRUCTIBLE: { // INDESTRUCTIBLE <--> INDESTRUCTIBLE
-			return 13;
+			this->collisionID = 13;
+			break;
 		}
 		case OBJECTTYPE::PROJECTILE: { // INDESTRUCTIBLE <--> PROJECTILE
-			return 14;
+			this->collisionID = 14;
+			break;
 		}
 		}
+		break;
 	}
 		// Collidable #1 = PROJECTILE
 	case OBJECTTYPE::PROJECTILE: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // PROJECTILE <--> PLAYER
-			return 5;
+			this->collisionID = 5;
+			break;
 		}
 		case OBJECTTYPE::ENEMY: { // PROJECTILE <--> ENEMY
-			return 9;
+			this->collisionID = 9;
+			break;
 		}
 		case OBJECTTYPE::DOODAD: { // PROJECTILE <--> DOODAD
-			return 12;
+			this->collisionID = 12;
+			break;
 		}
 		case OBJECTTYPE::INDESTRUCTIBLE: { // PROJECTILE <--> INDESTRUCTIBLE
-			return 14;
+			this->collisionID = 14;
+			break;
 		}
 		case OBJECTTYPE::PROJECTILE: { // PROJECTILE <--> PROJECTILE
-			return 15;
+			this->collisionID = 15;
+			break;
 		}
 		}
+		break;
 	}
 	}
 }
@@ -174,8 +204,6 @@ void CollisionHandler::collisionPlayerPlayer() {
 
 	this->collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
 	this->collidable2->setPosition(this->collidable2->getPosition() + (this->resultVector * this->stepper));
-
-	return;
 }
 
 void CollisionHandler::collisionPlayerEnemy() {
@@ -204,8 +232,6 @@ void CollisionHandler::collisionPlayerEnemy() {
 
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->getPosition() + this->resultVector);
-
-	return;
 }
 
 void CollisionHandler::collisionPlayerDoodad() {
@@ -219,8 +245,6 @@ void CollisionHandler::collisionPlayerDoodad() {
 
 	// Currently interacting with a doodad does nothing,
 	// since 99% of the time they are invisible, invincible, etc. etc.
-
-	return;
 }
 
 void CollisionHandler::collisionPlayerIndestruct() {
@@ -249,8 +273,6 @@ void CollisionHandler::collisionPlayerIndestruct() {
 
 	// Moving the player only, since the indestructibles cannot move.
 	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-
-	return;
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
@@ -263,8 +285,6 @@ void CollisionHandler::collisionPlayerProjectile() {
 	}
 
 	// CODE GOES HERE
-
-	return;
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
@@ -286,8 +306,6 @@ void CollisionHandler::collisionEnemyEnemy() {
 
 	this->collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
 	this->collidable2->setPosition(this->collidable2->getPosition() + (this->resultVector * this->stepper));
-
-	return;
 }
 
 void CollisionHandler::collisionEnemyDoodad() {
@@ -331,8 +349,6 @@ void CollisionHandler::collisionEnemyIndestruct() {
 
 	// Moving the enemy only, since the indestructibles cannot move.
 	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-
-	return;
 }
 
 void CollisionHandler::collisionEnemyProjectile() {
@@ -345,16 +361,12 @@ void CollisionHandler::collisionEnemyProjectile() {
 	}
 
 	// CODE GOES HERE
-
-	return;
 }
 
 void CollisionHandler::collisionDoodadDoodad() {
 	// A doodad colliding with another doodad?
 	// Now that just sounds silly.
 	/// Does nothing for the time being.
-	
-	return;
 }
 
 void CollisionHandler::collisionDoodadIndestruct() {
@@ -369,8 +381,6 @@ void CollisionHandler::collisionDoodadIndestruct() {
 	// A doodad colliding with an indestructible?
 	// Also seems kinda silly.
 	/// Does nothing for the time being.
-
-	return;
 }
 
 void CollisionHandler::collisionDoodadProjectile() {
@@ -384,15 +394,11 @@ void CollisionHandler::collisionDoodadProjectile() {
 
 	// There's potential here I suppose, mostly in terms of graphical effects, perhaps.
 	/// Regardless, this too does nothing for now.
-
-	return;
 }
 
 void CollisionHandler::collisionIndestructIndestruct() {
 	// Seems somewhat unlikely.
 	/// Does nothing for now.
-
-	return;
 }
 
 void CollisionHandler::collisionIndestrucProjectile() {
@@ -405,16 +411,12 @@ void CollisionHandler::collisionIndestrucProjectile() {
 	}
 
 	// CODE GOES HERE
-	
-	return;
 }
 
 void CollisionHandler::collisionProjectileProjectile() {
 	// Somewhat skillfull if you manage to pull this off.
 	// At least assuming that the game is still single player.
 	/// Does nothing for now.
-
-	return;
 }
 //_________________________________________//
 //                                         //
@@ -453,7 +455,7 @@ void CollisionHandler::executeCollision(
 	this->boundingArea1 = boundingArea1;
 	this->boundingArea2 = boundingArea2;
 
-	this->collisionID = this->createCollisionID();
+	this->createCollisionID();
 
 	switch (collisionID) {
 		// PLAYER
