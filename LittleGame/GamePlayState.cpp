@@ -553,3 +553,8 @@ void GamePlayState::initPlayer()
 	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
 	*/
 }
+
+void GamePlayState::shootProjectile(XMFLOAT3 pos, XMFLOAT3 dir)
+{
+
+}

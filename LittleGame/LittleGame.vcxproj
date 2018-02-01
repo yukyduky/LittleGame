@@ -137,6 +137,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="ID3D.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -145,9 +146,7 @@
     <ClInclude Include="IGameTime.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="KeyboardComponent.h" />
-
     <ClInclude Include="IAudioManager.h" />
-
     <ClInclude Include="LineComponent.h" />
     <ClInclude Include="Locator.h" />
     <ClInclude Include="GameManager.h" />

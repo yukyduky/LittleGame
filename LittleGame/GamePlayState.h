@@ -10,6 +10,7 @@
 #include "GraphicsComponent.h"
 #include "GameObject.h"
 #include "ActorObject.h"
+#include "Projectile.h"
 #include "Camera.h"
 
 
@@ -60,6 +61,7 @@ private:
 	*/
 	void mapKeys();
 
+	//std::vector<Projectile*> projectiles;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -168,6 +170,12 @@ public:
 
 
 	void initPlayer();
+
+	/*RETURNS THE NEW ID*/
+	int newID() { return this->arenaObjects.size(); }
+
+	/*Actors call to shoot projectile*/
+	void shootProjectile(XMFLOAT3 pos, XMFLOAT3 dir);
 };
 
 #endif // !GAMEPLAYSTATE_H
