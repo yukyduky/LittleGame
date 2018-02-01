@@ -24,8 +24,10 @@ class ActorObject : public GameObject
 {
 private:
 	InputComponent * pInput;
+	// -------------TEMPLATE
 	AbilityComponent* abilities[5];
 	AbilityComponent* ability0;
+	// -------------TEMPLATE
 	float hp;
 	float energy;
 
@@ -36,11 +38,9 @@ public:
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
 	ActorObject(const size_t ID, XMFLOAT3 pos);
-	
-	/* You get these from GameObject
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
-	*/
+	virtual void cleanUp();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent
@@ -62,6 +62,9 @@ public:
 	void selectAbilityX();
 	void fireAbilityX();
 
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Sets pInputComponent as both a directlink and components.push_back()
+	*/
 	void SETinputComponent(InputComponent* pInputComponent);
 	InputComponent* GETinputComponent();
 

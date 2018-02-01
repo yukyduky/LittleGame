@@ -21,7 +21,6 @@ ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos)
 	}
 }
 
-/* You get these from GameObject
 const size_t ActorObject::getID()
 {
 	return this->ID;
@@ -31,7 +30,19 @@ void ActorObject::receive(GameObject & obj, Message msg)
 {
 
 }
-*/
+
+void ActorObject::cleanUp()
+{
+	// Clean up all internal data
+
+	// Cleanup all the components
+	for (auto &c : this->components) {
+		c->getID();
+		c->cleanUp();
+		delete c;
+	}
+}
+
 void ActorObject::move()
 {
 	DirectX::XMFLOAT2 MovementVector;

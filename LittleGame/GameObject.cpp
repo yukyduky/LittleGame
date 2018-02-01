@@ -2,14 +2,6 @@
 #include "Component.h"
 
 
-GameObject::~GameObject()
-{
-	// Cleanup all the components
-	for (auto &c : this->components) {
-		delete c;
-	}
-}
-
 void GameObject::send(Message msg)
 {
 	// Send the message to all the components that have been added to the object

@@ -31,7 +31,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Delete the 'gameTime'(obj) object.
 	*/
-	void cleanup();
+	void cleanUp();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Change the current state.

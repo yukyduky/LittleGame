@@ -3,6 +3,7 @@
 #include "Locator.h"
 #include "Commands.h"
 
+
 std::unordered_map<KEYBOARD::KEY, size_t> InputComponent::keyboardKeyMap;
 std::unordered_map<MOUSE::KEY, size_t> InputComponent::mouseKeyMap;
 std::unordered_map<CONTROLLER::KEY, size_t> InputComponent::controllerKeyMap;

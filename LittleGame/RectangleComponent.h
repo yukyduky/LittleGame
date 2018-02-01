@@ -43,6 +43,8 @@ public:
 	*/
 	virtual void receive(GameObject& obj, Message msg);
 
+	virtual void cleanUp();
+
 	virtual ID3D11Buffer*& GETvertexBuffer();
 
 	virtual ID3D11Buffer*& GETindexBuffer();

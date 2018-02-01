@@ -62,6 +62,11 @@ void LineComponent::receive(GameObject& obj, Message msg)
 {
 }
 
+void LineComponent::cleanUp()
+{
+
+}
+
 const size_t LineComponent::getID()
 {
 	return this->ID;

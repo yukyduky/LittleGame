@@ -1,12 +1,12 @@
 #include "AbilityComponent.h"
 #include "GameObject.h"
 
-//AbilityComponent::AbilityComponent(GameObject* pHead, int testVariable) 
-//	: Component(pHead)
-//{
-//	// this->head = pHead  <-- is set by Component(pHead)
-//	int blah = testVariable;
-//}
+
+// -------------TEMPLATE
+AbilityComponent::AbilityComponent(GameObject* pHead)
+{
+}
+// -------------TEMPLATE
 
 const size_t AbilityComponent::getID()
 {
@@ -18,3 +18,7 @@ void AbilityComponent::receive(GameObject & obj, Message msg)
 
 }
 
+void AbilityComponent::cleanUp()
+{
+
+}

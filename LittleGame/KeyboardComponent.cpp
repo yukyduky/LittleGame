@@ -35,6 +35,11 @@ void KeyboardComponent::receive(GameObject & obj, Message msg)
 {
 }
 
+void KeyboardComponent::cleanUp()
+{
+
+}
+
 void KeyboardComponent::generateCommands()
 {
 	// Keyboard

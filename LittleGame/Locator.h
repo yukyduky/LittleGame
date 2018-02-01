@@ -23,7 +23,12 @@ public:
 	*/
 	static void provide(IGameTime* gameTime) { sGT = gameTime; }
 	static void provide(ID3D* d3d) { sID3D = d3d; }
-	static void provide(IAudioManager* audioManager) { sAM = audioManager; }
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Provides the address of 'audioManager'(obj) to the 'sAM'(ptr) Locator object.
+	2. Passes the pointer to 'gameTime'(obj) as a parameter.
+	3. Also initializes via AudioManager->init();
+	*/
+	static void provide(IAudioManager* audioManager) { sAM = audioManager; sAM->init(); }
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the 'sGT'(ptr).

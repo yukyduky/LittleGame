@@ -2,6 +2,7 @@
 #include "GraphicsComponent.h"
 #include "Locator.h"
 
+
 void RenderInputOrganizer::packageMatrices() {
 	DirectX::XMStoreFloat4x4(
 		&this->packagedMatrixData.world,

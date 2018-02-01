@@ -66,6 +66,13 @@ void ControllerComponent::receive(GameObject & obj, Message msg)
 
 }
 
+void ControllerComponent::cleanUp()
+{
+	this->keyboardCommandMap.clear();
+	this->mouseCommandMap.clear();
+	this->controllerCommandMap.clear();
+}
+
 void ControllerComponent::generateCommands()
 {
 	XINPUT_STATE nextState;

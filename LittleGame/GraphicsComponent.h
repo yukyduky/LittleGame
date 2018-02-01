@@ -30,7 +30,7 @@ struct PrimitiveVertexData
 	PrimitiveVertexData() {}
 };
 
-class RenderInputOrganizer;
+//class RenderInputOrganizer;
 
 class GraphicsComponent : public Component
 {
