@@ -48,8 +48,10 @@ void ActorObject::moveUp()
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z += playerVelocity.z * dt;
-		this->setPosition(playerPos);
-		this->updateWorldMatrix();
+		if (playerPos.z < 400.0f - 10.0f - 5.0f) {
+			this->setPosition(playerPos);
+			this->updateWorldMatrix();
+		}
 	}
 	else {
 
