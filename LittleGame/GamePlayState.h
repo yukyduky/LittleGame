@@ -11,6 +11,9 @@
 #include "GameObject.h"
 #include "ActorObject.h"
 #include "Camera.h"
+#include "PhysicsComponent.h"
+#include "CollisionHandler.h"
+#include <list>
 
 
 #define ARENAWIDTH 600		//The arenas "length" (x-dimension)
@@ -38,39 +41,37 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
-	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
-	std::vector<GameObject*> arenaObjects;
-	std::vector<GraphicsComponent*> graphics;
-
-
 	Camera camera;
 	RenderInputOrganizer rio;
-	GameObject* go;
-	GameObject* actorObject;
+	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
+	std::vector<GameObject*> arenaObjects;
+
+	std::vector<GraphicsComponent*> graphics;
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 	Command* selectCommand;
+	
+	CollisionHandler collisionHandler;
 
-	void mapCommands();
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Calls the 'getInputHandler()' in-order to call the 'mapCommandToKeyboardKey()' function.
-	2. Calls the 'getInputHandler()' in-order to call the 'mapCommandToControllerKey()' function.
-	3. Calls the 'getInputHandler()' in-order to call the 'mapCommandToLeftThumbStick()' function.
-	*/
-	void mapKeys();
+	std::vector<GameObject*> gameObjectsArray;
+	std::vector<PhysicsComponent*> physicsComponentsArray;
 
+
+	void updatePhysicsComponents();
+	
+	void checkCollisions();
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'GamePlayState'. <-- already in function name.
+	1. Initialize the 'GamePlayState'.
 	*/
 	virtual void init();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleanup the 'GamePlayState'; freeing memory, default settings, etc.
 	*/
-	virtual void cleanup();
+	virtual void cleanUp();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Pause the 'GamePlayState'.

@@ -1,20 +1,16 @@
 #include <Windows.h>
 #include "GameManager.h"
 #include "Locator.h"
-#include <crtdbg.h>
 #include "ID3D.h"
 #include "D3D.h"
 
-// ----- TEST
-#include "ActorObject.h"
-#include "ControllerComponent.h"
-#include "KeyboardComponent.h"
-// ----- TEST
+
 
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//	_CrtSetBreakAlloc(323); // 1134 1133 1132
 
 	ID3D* d3d = new D3D();
 	Locator::provide(d3d);
@@ -50,11 +46,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			OutputDebugStringA(msgbuf);
 		}
 
-		//controller.execute();
-		//keyboard.execute();
 	}
 
-	gm.cleanup();
+	gm.cleanUp();
 	d3d->cleanup();
 	delete d3d;
 

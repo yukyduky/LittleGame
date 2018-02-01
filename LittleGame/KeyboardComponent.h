@@ -19,6 +19,7 @@ public:
 	virtual const size_t getID();
 	virtual void execute();
 	virtual void receive(GameObject & obj, Message msg);
+	virtual void cleanUp();
 	virtual void generateCommands();
 	virtual XMFLOAT2 GETcursorPos();
 };

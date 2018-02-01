@@ -10,12 +10,13 @@ private:
 
 
 public:
-	AbilityComponent();
+	// -------------TEMPLATE
+	AbilityComponent(GameObject* pHead); 
+	// -------------TEMPLATE
 
-	// Constructor for AbilityComponent
-	/*AbilityComponent(GameObject* pHead, int testVariable);*/
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
+	virtual void cleanUp();
 
 };
 

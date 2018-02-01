@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Locator.h"
 
+
 /*_____________________________
  |         START OF            |
  |     PRIVATE FUNCTIONS       |
@@ -141,6 +142,12 @@ BlockComponent::~BlockComponent()
 void BlockComponent::receive(GameObject& obj, Message msg)
 {
 }
+
+void BlockComponent::cleanUp()
+{
+	// Maybe release this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else
+}
+
 
 ID3D11Buffer *& BlockComponent::GETvertexBuffer()
 {

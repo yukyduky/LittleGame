@@ -8,13 +8,50 @@
 #include "ControllerComponent.h"
 #include <SimpleMath.h>
 #include <DirectXMath.h>
+#include "ActorObject.h"
+#include "ArenaObject.h"
 
 using namespace DirectX::SimpleMath;
 
-#include "ActorObject.h"
-
 GamePlayState GamePlayState::sGamePlayState;
 
+void GamePlayState::updatePhysicsComponents()
+{
+	for (auto&& i : gameObjectsArray) {
+		if (i->getState() != OBJECTSTATE::DEAD) {
+			this->physicsComponentsArray.at(i->getID())->updateBoundingArea(i->getPosition());
+		}
+	}
+}
+
+void GamePlayState::checkCollisions() {
+	// LOOP 1: Looping through each physicsComponent
+	for (auto&& i : physicsComponentsArray) {
+
+		// If the object is NOT DEAD, we compare its physComponent vs. all other physComponents
+		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+
+			// LOOP 2: Comparing NON-DEAD object from pevious loop to all remaining NON-DEAD objects
+			for (auto&& k : physicsComponentsArray) {
+
+				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+					/// Need a bool(collision detected or not detected?)
+					if (this->physicsComponentsArray.at(i->getID())->checkCollision(
+						this->physicsComponentsArray.at(k->getID())->getBoundingSphere())) {
+
+						// CALL COLLISION-CLASS FUNCITON
+						this->collisionHandler.executeCollision(
+							this->gameObjectsArray.at(i->getID()),
+							this->gameObjectsArray.at(k->getID()),
+							&this->physicsComponentsArray.at(i->getID())->getBoundingSphere(),
+							&this->physicsComponentsArray.at(k->getID())->getBoundingSphere()
+						);
+					}
+				}
+			}
+		}
+	}
+}
 
 
 void GamePlayState::init() {
@@ -28,10 +65,18 @@ void GamePlayState::init() {
 	}
 }
 
-
-void GamePlayState::cleanup()
+void GamePlayState::cleanUp()
 {
+	// Direct internal objects
+	// this->rio.cleanUp();
+	// this->camera.cleanUp();
 
+
+	// GameObjects which will on their own clean up all of their connected components
+	for (auto &iterator : this->arenaObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
 }
 
 void GamePlayState::pause() {
@@ -73,6 +118,7 @@ void GamePlayState::render(GameManager * gm) {
 
 GamePlayState* GamePlayState::getInstance() {
 	return &sGamePlayState;
+	
 }
 
 void GamePlayState::initArena()
@@ -93,7 +139,7 @@ void GamePlayState::createArenaFloor()
 	XMFLOAT3 pos(ARENAWIDTH / 2, -0.5f, ARENAHEIGHT / 2);
 	XMVECTOR vec = DirectX::XMLoadFloat3(&pos);
 	//Create the GameObject
-	object = new GameObject(nextID, pos);
+	object = new ArenaObject(nextID, pos);
 	//Prepare the worldMatrix for the RectangleComponent.
 	XMMATRIX worldM = DirectX::XMMatrixIdentity();
 	XMMATRIX rotationM = DirectX::XMMatrixIdentity();
@@ -107,7 +153,7 @@ void GamePlayState::createArenaFloor()
 	object->SETworldMatrix(worldM);
 	//Give the RectangleComponent to the new GameObject.
 	object->addComponent(rect);
-	//Push the new GameObject into the arenaObject vector and graphics vector.
+	//Push the new GameObject into the GameObject vector and graphics vector.
 	this->arenaObjects.push_back(object);
 	this->graphics.push_back(rect);
 
@@ -161,7 +207,7 @@ void GamePlayState::createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startCol
 	//Get ID for next object.
 	int nextID = this->arenaObjects.size();
 	//Create the GameObject
-	object = new GameObject(nextID, pos);
+	object = new ArenaObject(nextID, pos);
 	//Create the LineComponent and give it it's world matrix.
 	vColor startC(startColor.x, startColor.w, startColor.z, startColor.w);
 	vColor endC(startColor.x, startColor.w, startColor.z, startColor.w);
@@ -372,7 +418,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	//Get ID for next object.
 	int nextID = this->arenaObjects.size();
 	//Create the GameObject.
-	object = new GameObject(nextID, pos);
+	object = new ArenaObject(nextID, pos);
 	//Create the BlockComponent and give it it's world matrix.
 	block = new BlockComponent(*object, color.x, color.y, color.z, color.w);
 	object->SETworldMatrix(wMatrix);
@@ -423,7 +469,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	for (int i = 0; i < HEIGHTOFWALLS + 1; i++) {
 		//Get the ID for the next object.
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, currPos);
+		object = new ArenaObject(nextID, currPos);
 		vec = DirectX::XMLoadFloat3(&currPos);
 		//Prepare the new lines world matrix.
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
@@ -439,7 +485,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Calculate the parallel line and do the same steps as above.
 		parallelPos = currPos + parallelStep;
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, parallelPos);
+		object = new ArenaObject(nextID, parallelPos);
 		vec = DirectX::XMLoadFloat3(&parallelPos);
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMH * rotMH * translationM;
@@ -458,7 +504,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 	for (int i = 0; i < LENGTHOFWALLS + 1; i++) {
 		//Get the ID for the next object.
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, currPos);
+		object = new ArenaObject(nextID, currPos);
 		vec = DirectX::XMLoadFloat3(&currPos);
 		//Prepare the lines world Matrix.
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
@@ -474,7 +520,7 @@ void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, 
 		//Calculate the parallel line and do the same steps as above.
 		parallelPos = currPos + parallelStep;
 		nextID = this->arenaObjects.size();
-		object = new GameObject(nextID, parallelPos);
+		object = new ArenaObject(nextID, parallelPos);
 		vec = DirectX::XMLoadFloat3(&parallelPos);
 		translationM = DirectX::XMMatrixTranslationFromVector(vec);
 		worldMatrix = scaleMV * rotMV * translationM;
@@ -509,7 +555,7 @@ void GamePlayState::initPlayer()
 {
 	ActorObject* actor;
 	BlockComponent* block;
-	KeyboardComponent* input;
+	InputComponent* input;		// THIS IS CORRECT!
 	int nextID = this->arenaObjects.size();
 	
 	//Create the new ActorObject
@@ -538,18 +584,7 @@ void GamePlayState::initPlayer()
 
 	//Create the new KeyboardComponent
 	input = new KeyboardComponent(*actor);
-	this->playerInput[0] = new KeyboardComponent(*actor);
-	actor->addComponent(input);
-
+	this->playerInput[0] = input;
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
-
-
-	/*
-	this->go = new GameObject(0);
-	this->actorObject = new ActorObject(0);		// HAS TO BE 0 FOR THE ACTOR OBJECT!!!! ControllerComponent::generateCommands() --> XInputGetState()
-	
-	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
-	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
-	*/
 }

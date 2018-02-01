@@ -17,7 +17,7 @@ public:
 	1. Virtual Function.
 	2. Cleanup this state; freeing memory and setting settings for it back to default.
 	*/
-	virtual void cleanup() = 0;
+	virtual void cleanUp() = 0;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Virtual Function.

@@ -28,6 +28,7 @@ public:
 	ControllerComponent(GameObject& obj, size_t controllerID);
 	virtual void execute();
 	virtual void receive(GameObject & obj, Message msg);
+	virtual void cleanUp();
 	virtual void generateCommands();
 	virtual void vibrate(size_t left, size_t right);
 	virtual XMFLOAT2 GETnormalizedVectorOfLeftStick();

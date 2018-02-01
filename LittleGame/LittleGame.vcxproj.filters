@@ -1,210 +1,83 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Commands">
-      <UniqueIdentifier>{d89408ae-638b-4de3-a7c5-1b3149147206}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components">
-      <UniqueIdentifier>{ea949785-98d7-4d29-b153-691fd545be68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\States">
-      <UniqueIdentifier>{6b34a509-760e-4d17-a954-faac7219adf7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\Objects">
-      <UniqueIdentifier>{ef5cfca0-7c30-490f-be6f-c3443dfbd5e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\General">
-      <UniqueIdentifier>{01dcb898-608a-445e-a0e7-e30c9c59a550}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components">
-      <UniqueIdentifier>{de86dc0d-3eab-4142-80c2-82d7d23682d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Commands">
-      <UniqueIdentifier>{665884a3-b9c1-45ec-8686-021b360653f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\States">
-      <UniqueIdentifier>{0962cc56-d59b-49a4-93ce-dfaefbf6780e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\General">
-      <UniqueIdentifier>{a73bef4f-2a8d-4bbf-98e9-6423c9e08324}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\Object">
-      <UniqueIdentifier>{094d125b-795d-448c-b8c3-b5dc959faf74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\Graphics">
-      <UniqueIdentifier>{15f36d79-36f3-437f-8958-4cf2c4684a99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\Ability">
-      <UniqueIdentifier>{7387f45c-00db-45bc-b1fd-ad17b99612d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\Physics">
-      <UniqueIdentifier>{3c69d92f-86f5-427c-b4c4-f43ae4d1072f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\UI">
-      <UniqueIdentifier>{caa28303-65b3-4b09-b92a-a14267fb721e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\Pathing">
-      <UniqueIdentifier>{908ef0f6-d6f3-470f-bbc4-ada29e22ccf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\Graphics">
-      <UniqueIdentifier>{234efab2-15b5-4fa8-82ee-34929070f53d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\Physics">
-      <UniqueIdentifier>{cdf9c6bd-d62f-44ec-ad69-2c13e43f117d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\Ability">
-      <UniqueIdentifier>{c85281ad-d507-4c00-bfb5-0079f66de6b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\UI">
-      <UniqueIdentifier>{fef96ffd-a712-4053-93ff-11be5a46719d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Components\Input">
-      <UniqueIdentifier>{38df6225-ef13-4daf-afb2-074665f63db2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Components\Input">
-      <UniqueIdentifier>{ea3c4574-f4e4-44bf-9375-15c9c70ac82e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders">
-      <UniqueIdentifier>{8eaaedc2-d371-40e6-a02d-eeb06e74b554}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders\Color">
-      <UniqueIdentifier>{376d95bb-6573-4846-9dc5-7245e123fe03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders\Texture">
-      <UniqueIdentifier>{ff166191-654d-4081-bbc1-4720628a12bc}</UniqueIdentifier>
-    </Filter>
+    <FxCompile Include="geoPassPixelColor.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="geoPassPixelTex.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="geoPassVertColor.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="geoPassVertTex.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassPixel.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="lightPassVert.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Components\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="StateManager.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTime.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="IGameTime.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Locator.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePlayState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderInputOrganizer.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="ID3D.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardComponent.h">
-      <Filter>Header Files\Components\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="InputComponent.h">
-      <Filter>Header Files\Components\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="ControllerComponent.h">
-      <Filter>Header Files\Components\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="IAudioManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="ActorObject.h">
-      <Filter>Header Files\Components\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="AbilityComponent.h">
-      <Filter>Header Files\Components\Ability</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="RectangleComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="LineComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Components\Object</Filter>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AbilityComponent.cpp">
+      <Filter>Source Files\Components\Abilities</Filter>
     </ClCompile>
-    <ClCompile Include="GameTime.cpp">
+    <ClCompile Include="ActorObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ArenaObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="BlockComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files\States</Filter>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="Locator.cpp">
+    <ClCompile Include="D3D.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
     <ClCompile Include="GamePlayState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="BlockComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
+    <ClCompile Include="GameTime.cpp">
       <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="LineComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Locator.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\General</Filter>
@@ -212,61 +85,171 @@
     <ClCompile Include="RenderInputOrganizer.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="D3D.cpp">
+    <ClCompile Include="Shader.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
-    <ClCompile Include="KeyboardComponent.cpp">
-      <Filter>Source Files\Components\Input</Filter>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>Source Files\States</Filter>
     </ClCompile>
-    <ClCompile Include="InputComponent.cpp">
-      <Filter>Source Files\Components\Input</Filter>
-    <ClCompile Include="BlockComponent.cpp">
+    <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="RectangleComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="ControllerComponent.cpp">
-      <Filter>Source Files\Components\Input</Filter>
-    <ClCompile Include="LineComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioManager.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorObject.cpp">
-      <Filter>Source Files\Components\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="AbilityComponent.cpp">
-      <Filter>Source Files\Components\Ability</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClInclude Include="ActorObject.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ArenaObject.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="ControllerComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GamePlayState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardComponent.h">
+      <Filter>Header Files\Components\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="LineComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Locator.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RectangleComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioManager.h">
+      <Filter>Header Files\General\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ID3D.h">
+      <Filter>Header Files\General\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameTime.h">
+      <Filter>Header Files\General\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityComponent.h">
+      <Filter>Header Files\Components\Abilities</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderInputOrganizer.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="StateManager.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureComponent.h">
+      <Filter>Header Files\Components\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="geoPassPixelColor.hlsl">
-      <Filter>Resource Files\Shaders\Color</Filter>
-    </FxCompile>
-    <FxCompile Include="geoPassPixelTex.hlsl">
-      <Filter>Resource Files\Shaders\Texture</Filter>
-    </FxCompile>
-    <FxCompile Include="lightPassPixel.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="lightPassVert.hlsl">
-      <Filter>Resource Files\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="geoPassVertColor.hlsl">
-      <Filter>Resource Files\Shaders\Color</Filter>
-    </FxCompile>
-    <FxCompile Include="geoPassVertTex.hlsl">
-      <Filter>Resource Files\Shaders\Texture</Filter>
-    </FxCompile>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{72da0b20-2c11-43cd-84fc-c1c92829187e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{35241a10-5b7a-4765-8e8e-f73551816cf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Commands">
+      <UniqueIdentifier>{2ef3f503-edda-410e-8721-daa3835eb382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\General">
+      <UniqueIdentifier>{94d52272-f7d0-4937-91f3-b9746aae771a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\States">
+      <UniqueIdentifier>{daebf881-dbc3-4437-a118-a3a659479005}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{a7d52a83-76f3-49e7-a183-f9a0f37d5f7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Graphics">
+      <UniqueIdentifier>{03adcbe5-0fda-4160-a6ed-4729dec1b319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Abilities">
+      <UniqueIdentifier>{deea9801-054b-4c2f-9f8c-75a415c20786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{7727ccdc-59da-49ec-aaea-bfc794590e3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{a2ab22f5-2d2d-46aa-91a9-78c2fdf1b775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\General">
+      <UniqueIdentifier>{4e5859cc-f963-4e95-b9bf-21d2ba60661f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{e5aadacb-9bbd-4178-84aa-567c830573f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{9a01b884-ce7a-4f1c-85b2-7f2972645fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Graphics">
+      <UniqueIdentifier>{7521e75f-f16c-4330-a715-b91fca1770e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Abilities">
+      <UniqueIdentifier>{66ca1d9a-a9a6-46b2-b927-9838e59a2e9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components\Input">
+      <UniqueIdentifier>{449e5882-61f3-4efa-ad0c-af01b107266c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Input">
+      <UniqueIdentifier>{ed0b9536-3a65-4659-b457-e6adb54e1dbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\General\Interfaces">
+      <UniqueIdentifier>{d20a9efa-0faa-4328-9f77-758b6fe58b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{52f64ef6-827d-4d80-aaba-ee1ed98dc415}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

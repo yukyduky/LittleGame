@@ -52,6 +52,7 @@ public:
 	1. Returns the ID of the component.
 	*/
 	virtual const size_t getID();
+	virtual void cleanUp();
 };
 
 
