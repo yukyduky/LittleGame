@@ -17,34 +17,45 @@ GamePlayState GamePlayState::sGamePlayState;
 
 void GamePlayState::updatePhysicsComponents()
 {
-	for (auto&& i : gameObjectsArray) {
-		if (i->getState() != OBJECTSTATE::DEAD) {
-			this->physicsComponentsArray.at(i->getID())->updateBoundingArea(i->getPosition());
+	for (auto&& i : physicsListDynamic) {
+		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+			i->updateBoundingArea(this->gameObjectsArray.at(i->getID())->getPosition());
 		}
 	}
 }
 
 void GamePlayState::checkCollisions() {
-	// LOOP 1: Looping through each physicsComponent
-	for (auto&& i : physicsComponentsArray) {
-
-		// If the object is NOT DEAD, we compare its physComponent vs. all other physComponents
+	// LOOP 1: Looping through each DYNAMIC physicsComponent
+	for (auto&& i : this->physicsListDynamic) {
+		// Comparing to all other DYNAMIC & STATIC physComponents.
+		// NOTE: Skipping if object state = DEAD.
 		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
-
-			// LOOP 2: Comparing NON-DEAD object from pevious loop to all remaining NON-DEAD objects
-			for (auto&& k : physicsComponentsArray) {
-
+			// LOOP 2.1: DYNAMIC <--> DYNAMIC Collision
+			for (auto&& k : this->physicsListDynamic) {
 				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
-					/// Need a bool(collision detected or not detected?)
-					if (this->physicsComponentsArray.at(i->getID())->checkCollision(
-						this->physicsComponentsArray.at(k->getID())->getBoundingSphere())) {
 
-						// CALL COLLISION-CLASS FUNCITON
+					if (i->checkCollision(k->getBoundingSphere())) {
+						// Call COLLISION-CLASS function
 						this->collisionHandler.executeCollision(
 							this->gameObjectsArray.at(i->getID()),
 							this->gameObjectsArray.at(k->getID()),
-							&this->physicsComponentsArray.at(i->getID())->getBoundingSphere(),
-							&this->physicsComponentsArray.at(k->getID())->getBoundingSphere()
+							&i->getBoundingSphere(),
+							&k->getBoundingSphere()
+						);
+					}
+				}
+			}
+			// LOOP 2.2: DYNAMIC <--> STATIC Collision
+			for (auto&& k : this->physicsListStatic) {
+				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+
+					if (i->checkCollision(k->getBoundingSphere())) {
+						// Call COLLISION-CLASS function
+						this->collisionHandler.executeCollision(
+							this->gameObjectsArray.at(i->getID()),
+							this->gameObjectsArray.at(k->getID()),
+							&i->getBoundingSphere(),
+							&k->getBoundingSphere()
 						);
 					}
 				}
@@ -556,12 +567,23 @@ void GamePlayState::initPlayer()
 	ActorObject* actor;
 	BlockComponent* block;
 	InputComponent* input;		// THIS IS CORRECT!
+	PhysicsComponent* physics;
 	int nextID = this->arenaObjects.size();
 	
 	//Create the new ActorObject
 	XMFLOAT3 playerScales(10.0f, 30.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y / 2.0f, (float)(ARENAHEIGHT / 2));
+	
 	actor = new ActorObject(nextID, playerPos);
+
+	/// PHYSICS COMPONENT:
+	// 1: We new a PhysicsComponent, using the actor's address as a parameter.
+	physics = new PhysicsComponent(*actor);
+	// 2: We add this component to the Dynamic list because actor = dynamic.
+	this->physicsListDynamic.push_back(physics);
+	// 3: We add this component to actor's list of components.
+	actor->addComponent(this->physicsListDynamic.back());
+
 	XMFLOAT3 playerVelocity(100.0f, 100.0f, 100.0f);
 	actor->setVelocity(playerVelocity);
 

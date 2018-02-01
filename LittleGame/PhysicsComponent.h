@@ -34,6 +34,7 @@ public:
 
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
+	virtual void cleanUp();
 };
 //______________________________________________//
 //                                              //
