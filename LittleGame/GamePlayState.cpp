@@ -124,7 +124,7 @@ GamePlayState* GamePlayState::getInstance() {
 void GamePlayState::initArena()
 {
 	this->createArenaFloor();
-	//this->createArenaNeonGrid();
+	this->createArenaNeonGrid();
 	this->createArenaWalls();
 
 	int test23 = 1;
@@ -165,6 +165,45 @@ void GamePlayState::createArenaNeonGrid()
 	//Calculate the number of vertical and horizontal lines.
 	int nrOfVerticalLines = (ARENAWIDTH / ARENASQUARESIZE) + 1; //+1 to get a start line at 0
 	int nrOfHorizontalLines = (ARENAHEIGHT / ARENASQUARESIZE) + 1;//+1 to get a start line at 0
+																  //Create startColor and endColor
+	XMFLOAT4 color(255.0f, 0.0f, 0.0f, 255.0f);
+	//Prepare matrixes
+	float rectWidth = 1.5f;
+	XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
+	XMMATRIX translationM = DirectX::XMMatrixIdentity();
+	XMMATRIX scaleMV = XMMatrixScaling(rectWidth, 0.0f, ARENAHEIGHT / 2.0f);
+	XMMATRIX scaleMH = XMMatrixScaling(ARENAWIDTH / 2.0f, 0.0f, rectWidth);
+	XMMATRIX rotationM = DirectX::XMMatrixIdentity();
+
+
+	//Prepare current position variable and vec variable.
+	XMFLOAT3 currentPos;
+	XMVECTOR vec;
+	//Create the vertical lines.
+	for (int i = 0; i < nrOfVerticalLines; i++)
+	{
+		currentPos = XMFLOAT3(i * ARENASQUARESIZE, 0.0f, ARENAHEIGHT / 2.0f);
+		vec = DirectX::XMLoadFloat3(&currentPos);
+		translationM = DirectX::XMMatrixTranslationFromVector(vec);
+		//scaleMV = DirectX::XMMatrixScaling(ARENAHEIGHT, 0.0f, 0.0f);
+		worldMatrix = scaleMV * rotationM * translationM;
+		this->createRectLine(currentPos, worldMatrix, color);
+	}
+	for (int i = 0; i < nrOfHorizontalLines; i++)
+	{
+		currentPos = XMFLOAT3(ARENAWIDTH / 2.0f , 0.0f, i * ARENASQUARESIZE);
+		vec = DirectX::XMLoadFloat3(&currentPos);
+		translationM = DirectX::XMMatrixTranslationFromVector(vec);
+		//scaleMH = DirectX::XMMatrixScaling(ARENAWIDTH, 0.0f, 0.0f);
+		worldMatrix = scaleMH * rotationM * translationM;
+		this->createRectLine(currentPos, worldMatrix, color);
+	}
+
+
+	/*
+	//Calculate the number of vertical and horizontal lines.
+	int nrOfVerticalLines = (ARENAWIDTH / ARENASQUARESIZE) + 1; //+1 to get a start line at 0
+	int nrOfHorizontalLines = (ARENAHEIGHT / ARENASQUARESIZE) + 1;//+1 to get a start line at 0
 	//Create startColor and endColor
 	XMFLOAT4 startColor(155.0f, 48.0f, 255.0f, 255.0f);
 	XMFLOAT4 endColor(155.0f, 48.0f, 255.0f, 255.0f);
@@ -197,6 +236,7 @@ void GamePlayState::createArenaNeonGrid()
 		worldMatrix = scaleM * rotHorizontal * translationM;
 		this->createLine(currentPos, worldMatrix, startColor, endColor);
 	}
+	*/
 	int test3 = 4;
 }
 
@@ -219,6 +259,22 @@ void GamePlayState::createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startCol
 	this->arenaObjects.push_back(object);
 }
 
+void GamePlayState::createRectLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color)
+{
+	GameObject* object = nullptr;
+	RectangleComponent* rect;
+	//Get the next id
+	int nextID = this->arenaObjects.size();
+	//Create the ArenaObject and the RectangleComponent
+	object = new ArenaObject(nextID, pos);
+	rect = new RectangleComponent(*object, color.x, color.y, color.z, color.w);
+	//Add the RectangleComponent to the GameObject and push the GameObject into the vectors.
+	object->SETworldMatrix(wMatrix);
+	object->addComponent(rect);
+	this->graphics.push_back(rect);
+	this->arenaObjects.push_back(object);
+}
+
 void GamePlayState::createArenaWalls()
 {
 	//Calculate the number of walls in each row based on the arenas width, height,
@@ -227,12 +283,6 @@ void GamePlayState::createArenaWalls()
 	int nrOfWallsTB = ARENAWIDTH / (ARENASQUARESIZE * LENGTHOFWALLS); //Should be 12 during testing
 	//Prepare the ID for the first GameObject we will create.
 	int nextID = this->arenaObjects.size();
-	//Create an array with the index of the walls that will not be created. 
-	//These will be the openings where the monsters can spawn.
-	//The array is hardcoded to open the middle sections of each wall until
-	//the randomized function is implemented.
-	int skip[8] = { 3, 4, 11, 12, 21, 22, 33, 34 };
-	int skipChecker = 0; //shitty implementation until we make the real one.
 
 	//Create rotation matrix for Left and right row of walls. Rotates 90 degres around Y-axis.
 	XMMATRIX rotLR = DirectX::XMMatrixRotationY((float)(PI / 2));
@@ -246,7 +296,7 @@ void GamePlayState::createArenaWalls()
 	//Inititalize worldMatrix that will be passed to the BlockComponent.
 	XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
 	//Create a color to be used in the BlockComponent.
-	XMFLOAT4 wallColor(255.0f, 48.0f, 48.0f, 255.0f);
+	XMFLOAT4 wallColor(155.0f, 48.0f, 255.0f, 255.0f);
 
 	
 	XMFLOAT3 currPos;
@@ -259,7 +309,7 @@ void GamePlayState::createArenaWalls()
 		currPos = XMFLOAT3(ARENASQUARESIZE / 2.0f, (ARENASQUARESIZE * HEIGHTOFWALLS) / 2.0f, ((ARENASQUARESIZE * LENGTHOFWALLS) / 2.0f) + i * LENGTHOFWALLS * ARENASQUARESIZE);
 		
 		//Check if the new position is a spawn location.
-		if (skipChecker == skip[0] || skipChecker == skip[1]) {
+		if (i == nrOfWallsLR / 2 || i == nrOfWallsLR / 2 - 1) {
 			//Find the index of the spawn locations first square
 			currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
 			
@@ -289,7 +339,6 @@ void GamePlayState::createArenaWalls()
 				currPos.z += ARENASQUARESIZE;
 			}
 		}
-		skipChecker++;//remove when we implement the real random openings.
 	}
 	//Creates right row of arena walls
 	for (int i = 0; i < nrOfWallsLR; i++) {
@@ -297,7 +346,7 @@ void GamePlayState::createArenaWalls()
 		currPos = XMFLOAT3(ARENAWIDTH - ARENASQUARESIZE / 2.0f, (ARENASQUARESIZE * HEIGHTOFWALLS) / 2.0f, ((ARENASQUARESIZE * LENGTHOFWALLS) / 2.0f) + i * LENGTHOFWALLS * ARENASQUARESIZE);
 		
 		//Check if the new position is a spawn location.
-		if (skipChecker == skip[2] || skipChecker == skip[3]) {
+		if (i == nrOfWallsLR / 2 || i == nrOfWallsLR / 2 - 1) {
 			//Find the index of the spawn locations first square
 			currPos = currPos - XMFLOAT3(0.0f, 0.0f, ARENASQUARESIZE * LENGTHOFWALLS / 2);
 			
@@ -327,7 +376,6 @@ void GamePlayState::createArenaWalls()
 				currPos.z += ARENASQUARESIZE;
 			}
 		}
-		skipChecker++;//remove when we implement the real random openings.
 	}
 	//Creates bottom row of arena walls
 	for (int i = 0; i < nrOfWallsTB; i++) {
@@ -335,7 +383,7 @@ void GamePlayState::createArenaWalls()
 		currPos = XMFLOAT3(((ARENASQUARESIZE * LENGTHOFWALLS) / 2.0f) + i * LENGTHOFWALLS * ARENASQUARESIZE, (ARENASQUARESIZE * HEIGHTOFWALLS) / 2.0f, ARENASQUARESIZE / 2.0f);
 
 		//Check if the new position is a spawn location.
-		if (skipChecker == skip[4] || skipChecker == skip[5]) {
+		if (i == nrOfWallsTB / 2 || i == nrOfWallsTB / 2 - 1) {
 			//Find the index of the spawn locations first square
 			currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
 
@@ -365,7 +413,6 @@ void GamePlayState::createArenaWalls()
 				currPos.x += ARENASQUARESIZE;
 			}
 		}
-		skipChecker++; //remove when we implement the real random openings.
 	}
 	
 	
@@ -375,7 +422,7 @@ void GamePlayState::createArenaWalls()
 		currPos = XMFLOAT3(((ARENASQUARESIZE * LENGTHOFWALLS) / 2.0f) + i * LENGTHOFWALLS * ARENASQUARESIZE, (ARENASQUARESIZE * HEIGHTOFWALLS) / 2.0f, ARENAHEIGHT - ARENASQUARESIZE / 2.0f);
 	
 		//Check if the new position is a spawn location.
-		if (skipChecker == skip[6] || skipChecker == skip[7]) {
+		if (i == nrOfWallsTB / 2 || i == nrOfWallsTB / 2 - 1) {
 			//Find the index of the spawn locations first square
 			currPos = currPos - XMFLOAT3(ARENASQUARESIZE * LENGTHOFWALLS / 2, 0.0f, 0.0f);
 
@@ -405,7 +452,6 @@ void GamePlayState::createArenaWalls()
 				currPos.x += ARENASQUARESIZE;
 			}
 		}
-		skipChecker++;//remove when we implement the real random openings.
 	}
 	
 	int test2 = 2;
@@ -559,16 +605,17 @@ void GamePlayState::initPlayer()
 	int nextID = this->arenaObjects.size();
 	
 	//Create the new ActorObject
-	XMFLOAT3 playerScales(10.0f, 30.0f, 10.0f);
+	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
 	actor = new ActorObject(nextID, playerPos);
-	XMFLOAT3 playerVelocity(100.0f, 100.0f, 100.0f);
+	XMFLOAT3 playerVelocity(300.0f, 300.0f, 300.0f);
 	actor->setVelocity(playerVelocity);
 
 	//Create the playerColor and the new BlockComponent that will represent the players body.
-	vColor playerColor(0.0f, 0.0f, 0.0f, 255.0f);
+	vColor playerColor(50.0f, 205.0f, 50.0f, 255.0f);
 	block = new BlockComponent(*actor, playerColor.r, playerColor.g, playerColor.b, playerColor.a);
 	
+	//Create the world-, scale-, translation- and rotationmatrix and hand them to the ActorObject.
 	XMVECTOR playerTranslation = XMLoadFloat3(&playerPos);
 	XMMATRIX worldMatrix;
 	XMMATRIX translationM = XMMatrixTranslationFromVector(playerTranslation);
@@ -582,7 +629,7 @@ void GamePlayState::initPlayer()
 	actor->SETworldMatrix(worldMatrix);
 	actor->addComponent(block);
 
-	//Create the new KeyboardComponent
+	//Create the new InputComponent (KeyboardComponent or ControllerComponent) and hand it to the ActorObject.
 	input = new ControllerComponent(*actor, 0);
 	this->playerInput[0] = input;
 	this->arenaObjects.push_back(actor);
