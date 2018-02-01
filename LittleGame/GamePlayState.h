@@ -16,14 +16,10 @@
 #include "CollisionHandler.h"
 #include "FireballComponent.h"
 #include <list>
+#include "ArenaGlobals.h"
 
 
-#define ARENAWIDTH 600		//The arenas "length" (x-dimension)
-#define ARENAHEIGHT 400		//The arenas "height" (z-dimension)
-#define ARENASQUARESIZE 10	//Have to be able to divide ARENAHEIGHT and ARENAWIDTH
-#define LENGTHOFWALLS 5		//Will be multiplied with ARENASQUARESIZE for total length of a wall.
-#define HEIGHTOFWALLS 8		//Will be multiplied with ARENASQUARESIZE for total height of a wall.
-#define PI 3.14159265358979323846
+
 
 //Defines what a specific space contains
 namespace SQUARETYPE {
@@ -140,6 +136,8 @@ public:
 	*/
 	void createArenaNeonGrid();
 
+	void createRectLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color);
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates the new GameObject and the new LineComponent
 	2. Gives the world matrix to the LineComponent.
@@ -183,7 +181,10 @@ public:
 	*/
 	XMFLOAT2 findGridIndexFromPosition(XMFLOAT3 pos);
 
-
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Creates the ActorObject and all it's matrices that will represent the player.
+	2. Creates a BlockComponent that will represent the players body.
+	*/
 	void initPlayer();
 
 	/*RETURNS THE NEW ID*/

@@ -51,10 +51,12 @@ public:
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent
+	2. Only called when the player is using a controller
 	*/
 	void move();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Affects the position of the ActorObject
+	2. Only called when the player is using a keyboard
 	*/
 	void moveUp();
 	void moveLeft();
