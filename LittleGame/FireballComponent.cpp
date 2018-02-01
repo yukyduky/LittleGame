@@ -2,8 +2,11 @@
 
 FireballComponent::FireballComponent(Projectile& pHead, float modi) : AbilityComponent(pHead)
 {
-	this->damage *= modi;
-	this->range *= modi;
+	this->damage = 10 * modi;
+	this->range *= 100 * modi;
+
+
+	this->type = ABILITYTYPE::FIRE;
 }
 
 const size_t FireballComponent::getID()

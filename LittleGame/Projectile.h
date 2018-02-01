@@ -3,6 +3,7 @@
 #define PROJECTILE_H
 
 #include "GameObject.h"
+#include "Locator.h"
 
 
 
@@ -12,6 +13,7 @@ public:
 	Projectile(const size_t ID, XMFLOAT3 pos, float spd);
 	~Projectile();
 
+	void update();
 	virtual void cleanUp();
 private:
 	XMFLOAT3 direction;

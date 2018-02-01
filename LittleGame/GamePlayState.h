@@ -71,6 +71,7 @@ private:
 	//All componenets that needs to have collision
 	std::vector<PhysicsComponent*> physicsComponentsArray;
 
+	//Array with all active projectiles
 	std::vector<Projectile*> projectiles;
 
 	void updatePhysicsComponents();

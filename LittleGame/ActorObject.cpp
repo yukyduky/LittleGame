@@ -125,8 +125,16 @@ void ActorObject::rotate()
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		ProjProp props(5, XMFLOAT3(0.5, 0.5, 0.5));
-		pGPS->initProjectile(this->pos, XMFLOAT3(1.5, 1.5, 1.5), props);
+		if (autoAttCD[0] <= 0)
+		{
+			ProjProp props(5, XMFLOAT3(0.5, 0.5, 0.5));
+			pGPS->initProjectile(this->pos, this->velocity, props);
+			autoAttCD[0] = autoAttCD[1];
+		}
+		else
+		{
+			this->decCD();
+		}
 	}
 	else {
 
@@ -157,5 +165,13 @@ void ActorObject::SETinputComponent(InputComponent* pInputComponent)
 InputComponent* ActorObject::GETinputComponent()
 {
 	return this->pInput;
+}
+
+void ActorObject::decCD()
+{
+	if (autoAttCD[0] >= 0)
+	{
+		autoAttCD[0] -= Locator::getGameTime()->getDeltaTime();
+	}
 }
 

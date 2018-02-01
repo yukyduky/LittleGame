@@ -34,6 +34,9 @@ private:
 	float hp;
 	float energy;
 
+	//Cooldown counters, {time of cast, cooldown}
+	size_t autoAttCD[2] = {0, 20 };
+
 	GamePlayState* pGPS = nullptr;
 
 public:
@@ -72,7 +75,9 @@ public:
 	void SETinputComponent(InputComponent* pInputComponent);
 	InputComponent* GETinputComponent();
 
-
+	//Lowers the cooldown of each ability
+	void decCD();	//To be implemented into actors update from another branch
+					//Is in fireability0() i nthis version
 
 };
 

@@ -13,8 +13,9 @@ class AbilityComponent : public Component
 protected:
 	Projectile * pHead;
 
-	float range = 10;
-	float damage = 100;
+	size_t cooldown = 0;
+	float range = 0;
+	float damage = 0;
 	ABILITYTYPE type;
 
 public:

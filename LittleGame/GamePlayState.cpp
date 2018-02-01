@@ -77,6 +77,10 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	for (auto &iterator : this->projectiles) {
+		//iterator->cleanUp();
+		//delete iterator;
+	}
 }
 
 void GamePlayState::pause() {
@@ -108,6 +112,11 @@ void GamePlayState::update(GameManager * gm)
 	for (auto &iterator : playerInput) {
 		iterator->generateCommands();
 		iterator->execute();
+	}
+
+	for (auto &iterator : projectiles)
+	{
+		iterator->update();
 	}
 }
 
@@ -614,7 +623,7 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	XMFLOAT3 position = pos;
-	block = new BlockComponent(*proj, props.color.x, props.color.y, props.color.z, 1.0f);
+	block = new BlockComponent(*proj, props.color.x, props.color.y, props.color.z, 255.0f);
 	
 	// Create matrixes for world-matrix
 	XMVECTOR translation = XMLoadFloat3(&position);
@@ -635,6 +644,7 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 
 	//Add the block to the objects that will be rendered
 	this->graphics.push_back(block);
+	this->rio.addGraphics(block);
 
 	//Template of components that are beeing worked on by other users
 	abiliComp = new FireballComponent(*proj, 1);
@@ -644,4 +654,5 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	//Add proj to objectArrays
 	this->arenaObjects.push_back(proj);
 	this->projectiles.push_back(proj);
+
 }
