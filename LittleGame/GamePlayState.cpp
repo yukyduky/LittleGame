@@ -113,6 +113,8 @@ void GamePlayState::update(GameManager * gm)
 
 void GamePlayState::render(GameManager * gm) {
 	this->rio.render();
+	gm->setupSecondRenderPass();
+	this->rio.injectResourcesIntoSecondPass();
 	gm->display(this);
 }
 

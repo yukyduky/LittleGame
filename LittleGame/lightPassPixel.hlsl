@@ -2,6 +2,17 @@ Texture2D texPosition	: register(t0);
 Texture2D texNormal		: register(t1);
 Texture2D texColor		: register(t2);
 
+struct Light : register (b0) {
+	float3 pos;
+	float pad0;
+	float3 diffuse;
+	float pad1
+	float3 ambient;
+	float pad2;
+	float3 attenuation;
+	float specPower;
+};
+
 void LoadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 color);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET

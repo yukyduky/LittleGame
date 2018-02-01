@@ -3,7 +3,20 @@
 #define RENDERINPUTORGANIZER_H
 
 #include <vector>
+#include <list>
 #include "Camera.h"
+
+struct Light
+{
+	XMVECTOR pos;
+	float pad0;
+	XMVECTOR diffuse;
+	float pad1;
+	XMVECTOR ambient;
+	float pad2;
+	XMVECTOR attenuation;
+	float specPower;
+};
 
 struct MatrixBufferCalc {
 	DirectX::XMMATRIX* world;
@@ -35,10 +48,12 @@ class RenderInputOrganizer
 {
 private:
 	std::vector<GraphicsComponent*> graphics;
+	std::list<Light>* lights;
 
 	MatrixBufferCalc	rawMatrixData;
 	MatrixBufferPack	packagedMatrixData;
-	ID3D11Buffer*		constantBuffer;
+	ID3D11Buffer*		cMatrixBuffer;
+	ID3D11Buffer*		cLightBuffer;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Re-formats the WORLD, VIEW, & PROJECTION matrix data.
@@ -49,8 +64,9 @@ private:
 	void drawGraphics(GraphicsComponent*& graphics);
 
 public:
-	void initialize(Camera& camera);
+	void initialize(Camera& camera, std::list<Light>*& lights);
 	void render();
+	void injectResourcesIntoSecondPass();
 	void addGraphics(GraphicsComponent* graphics);
 };
 

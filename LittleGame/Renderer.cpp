@@ -245,7 +245,7 @@ void Renderer::firstPass()
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(NUM_DEFERRED_OUTPUTS, this->gRTVs.data(), this->gDSV);
 }
 
-void Renderer::secondPass()
+void Renderer::secondPassSetup()
 {
 	// Set the light shaders as the current shaders
 	this->currentLightShaders->SetShaders(Locator::getD3D()->GETgDevCon());
@@ -263,7 +263,10 @@ void Renderer::secondPass()
 
 	// Set the rendertarget to the final rendertarget
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, nullptr);
+}
 
+void Renderer::secondPass()
+{
 	// Draw the final texture over the whole screen
 	Locator::getD3D()->GETgDevCon()->Draw(4, 0);
 	// Present the backbuffer to the screen
