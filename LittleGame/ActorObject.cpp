@@ -5,6 +5,8 @@
 #include "GamePlayState.h"
 #include "ArenaGlobals.h"
 
+#include <DirectXMath.h>
+
 ActorObject::ActorObject(const size_t ID)
 	: GameObject(ID)
 {
@@ -137,7 +139,17 @@ void ActorObject::moveRight()
 void ActorObject::rotate()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->rotation += 0.1;
+		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
+		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+		//this->dir = 
 		
+		XMVECTOR xmVecdir = XMVector3Transform(XMLoadFloat3(&this->dir), rotateM);
+		this->dir.x = XMVectorGetByIndex(xmVecdir, 0);
+		this->dir.y = XMVectorGetByIndex(xmVecdir, 1);
+		this->dir.z = XMVectorGetByIndex(xmVecdir, 2);
+		
+		this->updateWorldMatrix(this->pos);
 	}
 	else {
 
@@ -149,8 +161,8 @@ void ActorObject::fireAbility0()
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		if (autoAttCD[0] <= 0)
 		{
-			ProjProp props(5, XMFLOAT3(0.5, 0.5, 0.5));
-			pGPS->initProjectile(this->pos, this->velocity, props);
+			ProjProp props(5, XMFLOAT3(200.5f, 200.5f, 0.5f));
+			pGPS->initProjectile(this->pos, this->dir, props);
 			autoAttCD[0] = autoAttCD[1];
 		}
 		else
@@ -171,7 +183,7 @@ void ActorObject::selectAbilityX()
 void ActorObject::fireAbilityX()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		this->rotate();
 	}
 	else {
 

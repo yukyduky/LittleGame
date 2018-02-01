@@ -1,9 +1,9 @@
 #include "Projectile.h"
 #include "Component.h"
 
-Projectile::Projectile(const size_t ID, XMFLOAT3 pos, float spd) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, XMFLOAT3 pos) : GameObject(ID, pos)
 {
-	this->speed = spd;
+	//this->speed = spd;
 	this->setState(OBJECTSTATE::MOVING);
 }
 

@@ -89,7 +89,7 @@ class CommandFireAbilityX : public Command
 {
 public:
 	virtual void execute(ActorObject& actor) {
-
+		actor.fireAbilityX();
 	}
 };
 // -+-+-+

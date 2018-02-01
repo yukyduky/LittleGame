@@ -34,7 +34,9 @@ private:
 	float hp;
 	float energy;
 
+	//Direction used to fire
 	XMFLOAT3 dir = XMFLOAT3(0, 0, 1);
+	float rotation = 0;
 
 	//Cooldown counters, {time of cast, cooldown}
 	size_t autoAttCD[2] = {0, 20 };

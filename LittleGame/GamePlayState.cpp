@@ -666,8 +666,8 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	PhysicsComponent* phyComp;
 	AbilityComponent* abiliComp;
 
-	proj = new Projectile(nextID, pos, 10);
-	proj->setVelocity(dir);
+	proj = new Projectile(nextID, pos);
+	proj->setDirection(dir);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
@@ -697,6 +697,9 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 
 	//Template of components that are beeing worked on by other users
 	abiliComp = new FireballComponent(*proj, 1);
+	proj->setVelocity(dir * proj->getSpeed());
+
+	//Template for Physics
 	phyComp = new PhysicsComponent(pos, props.size, *proj);
 	this->physicsComponentsArray.push_back(phyComp);
 	
