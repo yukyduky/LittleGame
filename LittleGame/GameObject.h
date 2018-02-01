@@ -45,7 +45,7 @@ public:
 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Send the parameter 'msg'(obj) to all components that have been added to the object.
+	1. Send the parameter ' msg '(obj) to all components that have been added to the object.
 	*/
 	void send(Message msg);
 
