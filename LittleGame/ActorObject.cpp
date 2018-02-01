@@ -48,9 +48,25 @@ void ActorObject::move()
 {
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
+	float deltaTime = Locator::getGameTime()->getDeltaTime();
+	XMFLOAT3 playerPos = this->getPosition();
+	XMFLOAT3 playerVelocity = this->getVelocity();
+	XMFLOAT3 tempPos = playerPos;
+	tempPos.x += MovementVector.x * playerVelocity.x * deltaTime;
+	tempPos.z += MovementVector.y * playerVelocity.z * deltaTime;
 	
+	XMFLOAT3 playerNewPos;
+	if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+		playerNewPos.z = tempPos.z;
+	}
+	else { playerNewPos.z = playerPos.z; }
+	if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+		playerNewPos.x = tempPos.x;
+	} 
+	else { playerNewPos.x = playerPos.x; }
+	playerNewPos.y = playerPos.y;
+	this->updateWorldMatrix(playerNewPos);
 	// Affect position based on movement vector
-
 }
 
 void ActorObject::moveUp()
