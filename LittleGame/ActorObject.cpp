@@ -46,6 +46,7 @@ void ActorObject::cleanUp()
 
 void ActorObject::move()
 {
+	//Create the new objects we will need for the calculations.
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	float deltaTime = Locator::getGameTime()->getDeltaTime();
@@ -54,8 +55,9 @@ void ActorObject::move()
 	XMFLOAT3 tempPos = playerPos;
 	tempPos.x += MovementVector.x * playerVelocity.x * deltaTime;
 	tempPos.z += MovementVector.y * playerVelocity.z * deltaTime;
-	
 	XMFLOAT3 playerNewPos;
+
+	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
 		playerNewPos.z = tempPos.z;
 	}
@@ -66,7 +68,6 @@ void ActorObject::move()
 	else { playerNewPos.x = playerPos.x; }
 	playerNewPos.y = playerPos.y;
 	this->updateWorldMatrix(playerNewPos);
-	// Affect position based on movement vector
 }
 
 void ActorObject::moveUp()
