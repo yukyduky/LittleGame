@@ -560,7 +560,7 @@ void GamePlayState::initPlayer()
 	
 	//Create the new ActorObject
 	XMFLOAT3 playerScales(10.0f, 30.0f, 10.0f);
-	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y / 2.0f, (float)(ARENAHEIGHT / 2));
+	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
 	actor = new ActorObject(nextID, playerPos);
 	XMFLOAT3 playerVelocity(100.0f, 100.0f, 100.0f);
 	actor->setVelocity(playerVelocity);

@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ControllerComponent.h"
 #include "Locator.h"
+#include "ArenaGlobals.h"
 
 ActorObject::ActorObject(const size_t ID)
 	: GameObject(ID)
@@ -59,9 +60,8 @@ void ActorObject::moveUp()
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z += playerVelocity.z * dt;
-		if (playerPos.z < 400.0f - 10.0f - 5.0f) {
-			this->setPosition(playerPos);
-			this->updateWorldMatrix();
+		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+			this->updateWorldMatrix(playerPos);
 		}
 	}
 	else {
@@ -76,8 +76,9 @@ void ActorObject::moveLeft()
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.x -= playerVelocity.x * dt;
-		this->setPosition(playerPos);
-		this->updateWorldMatrix();
+		if (playerPos.x > ARENASQUARESIZE) {
+			this->updateWorldMatrix(playerPos);
+		}
 	}
 	else {
 
@@ -90,8 +91,9 @@ void ActorObject::moveDown()
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z -= playerVelocity.z * dt;
-		this->setPosition(playerPos);
-		this->updateWorldMatrix();
+		if (playerPos.z > ARENASQUARESIZE) {
+			this->updateWorldMatrix(playerPos);
+		}
 	}
 	else {
 
@@ -104,8 +106,9 @@ void ActorObject::moveRight()
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.x += playerVelocity.x * dt;
-		this->setPosition(playerPos);
-		this->updateWorldMatrix();
+		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+			this->updateWorldMatrix(playerPos);
+		}
 	}
 	else {
 

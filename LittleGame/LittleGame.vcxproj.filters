@@ -189,6 +189,9 @@
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="ArenaGlobals.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />

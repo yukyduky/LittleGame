@@ -71,7 +71,7 @@ public:
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
-	void updateWorldMatrix();
+	void updateWorldMatrix(XMFLOAT3 newPos);
 
 	OBJECTTYPE getType() const { return this->type; }
 
