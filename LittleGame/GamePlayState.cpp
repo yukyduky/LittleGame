@@ -630,7 +630,8 @@ void GamePlayState::initPlayer()
 	actor->addComponent(block);
 
 	//Create the new InputComponent (KeyboardComponent or ControllerComponent) and hand it to the ActorObject.
-	input = new ControllerComponent(*actor, 0);
+	//input = new ControllerComponent(*actor, 0);
+	input = new KeyboardComponent(*actor);
 	this->playerInput[0] = input;
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
