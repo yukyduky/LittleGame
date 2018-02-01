@@ -18,6 +18,11 @@ void AbilityComponent::receive(GameObject & obj, Message msg)
 
 }
 
+void AbilityComponent::update()
+{
+
+}
+
 void AbilityComponent::cleanUp()
 {
 

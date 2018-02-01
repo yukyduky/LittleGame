@@ -78,6 +78,11 @@ void PhysicsComponent::receive(GameObject & obj, Message msg) {
 	// Switch case that depends on the message being received
 }
 
+void PhysicsComponent::update()
+{
+
+}
+
 //_________________________________________//
 //                                         //
 //              END OF PUBLIC              //
