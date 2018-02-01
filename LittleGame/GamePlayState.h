@@ -19,7 +19,7 @@
 
 
 
-
+/*
 //Defines what a specific space contains
 namespace SQUARETYPE {
 	enum TYPE { EMPTY, WALL, SPAWN, SIZE };
@@ -29,7 +29,7 @@ namespace SQUARETYPE {
 namespace WALLTYPE {
 	enum TYPE {VERTICAL, HORIZONTAL, SIZE};
 }
-
+*/
 class Command;
 class InputComponent;
 
@@ -42,7 +42,7 @@ private:
 	LevelManager lm;
 	Camera camera;
 	RenderInputOrganizer rio;
-	std::array<int*, 0> grid;
+	std::vector<std::vector<SQUARETYPE::TYPE>> grid;
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
 	std::vector<GameObject*> arenaObjects;
 

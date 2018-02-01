@@ -85,12 +85,40 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 	graphics.push_back(rect);
 }
 
-void LevelManager::createLevelWalls(std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics, std::vector<PhysicsComponent*>& physics)
+void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics, std::list<PhysicsComponent*>& physics)
 {
+	//Prepare variables that we will need
+	int nextID = objects.size();
+	XMMATRIX rotLR = XMMatrixRotationY(XM_PI / 2.0f);
+	XMMATRIX rotTB = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2.0f, this->wallHeight, this->squareSize / 2.0f);
+	XMMATRIX translationM;
+	XMMATRIX worldM;
+	XMFLOAT4 color(155.0f, 48.0f, 255.0f, 255.0f);
+	XMFLOAT3 currPos;
+	XMVECTOR vec;
+	XMFLOAT2 posIndex;
+	XMFLOAT3 temp;
+	int nrOfVerticalSquares = grid[0].size();
+	int nrOfHorizontalSquares = grid.size();
+	
+	//Create pillars in the corners
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			currPos = XMFLOAT3((j * (this->arenaWidth - this->squareSize)) + this->squareSize / 2.0f, this->wallHeight / 2.0f, (i * (this->arenaDepth - this->squareSize)) + this->squareSize / 2.0f);
+			vec = XMLoadFloat3(&currPos);
+			translationM = XMMatrixTranslationFromVector(vec);
+			worldM = scaleM * rotTB*  translationM;
+			this->createAWall(currPos, worldM, color, objects, graphics, physics);
+		}
+	}
+	
 
 }
 
-void LevelManager::createAWall(XMFLOAT3 pos, XMFLOAT3 scale, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics, std::vector<PhysicsComponent*>& physics)
+void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics, std::list<PhysicsComponent*>& physics)
 {
 	GameObject* object;
 	BlockComponent* block;
@@ -104,18 +132,27 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMFLOAT3 scale, XMMATRIX worldM, XM
 	graphics.push_back(block);
 }
 
-void LevelManager::initArena(int width, int depth, std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics, std::vector<PhysicsComponent*>& physics)
+void LevelManager::initArena(int width, int depth, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics, std::list<PhysicsComponent*>& physics)
 {
 	this->squareSize = 50;
 	this->arenaWidth = width;
 	this->arenaDepth = depth;
-	this->wallHeight = 150;
+	this->wallHeight = 100;
 	
-	
+	//Create the grid for the level
+	std::vector<SQUARETYPE::TYPE> temp;
+	for (int i = 0; i < depth / this->squareSize; i++)
+	{
+		temp.push_back(SQUARETYPE::EMPTY);
+	}
+	for (int i = 0; i < width / this->squareSize; i++)
+	{
+		grid.push_back(temp);
+	}
 
 	this->createFloor(objects, graphics);
 	this->createNeonFloorGrid(objects, graphics);
-	this->createLevelWalls(objects, graphics, physics);
+	this->createLevelWalls(grid, objects, graphics, physics);
 
 }
 

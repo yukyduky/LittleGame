@@ -134,7 +134,7 @@ GamePlayState* GamePlayState::getInstance() {
 
 void GamePlayState::initArena()
 {
-	lm.initArena(ARENAWIDTH, ARENAHEIGHT, this->grid, this->arenaObjects, this->graphics, this->physicsComponentsArray);
+	lm.initArena(ARENAWIDTH, ARENAHEIGHT, this->grid, this->arenaObjects, this->graphics, this->physicsListStatic);
 	//this->createArenaFloor();
 	//this->createArenaNeonGrid();
 	//this->createArenaWalls();
