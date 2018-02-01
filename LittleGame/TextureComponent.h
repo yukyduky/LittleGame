@@ -18,6 +18,7 @@ public:
 
 	virtual const size_t getID();
 	virtual void receive(GameObject& obj, Message msg);
+	virtual void update();
 	virtual void cleanUp();
 
 	ID3D11ShaderResourceView* getSRV();

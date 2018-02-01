@@ -37,6 +37,7 @@ class GraphicsComponent : public Component
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
+	virtual void update() = 0;
 	virtual ID3D11Buffer*& GETvertexBuffer() = 0;
 	virtual ID3D11Buffer*& GETindexBuffer() = 0;
 	virtual size_t& GETstride() = 0;

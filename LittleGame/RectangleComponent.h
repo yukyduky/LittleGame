@@ -42,7 +42,7 @@ public:
 	1. Something.
 	*/
 	virtual void receive(GameObject& obj, Message msg);
-
+	virtual void update();
 	virtual void cleanUp();
 
 	virtual ID3D11Buffer*& GETvertexBuffer();

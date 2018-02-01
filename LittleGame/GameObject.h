@@ -48,7 +48,7 @@ public:
 	1. Send the parameter 'msg'(obj) to all components that have been added to the object.
 	*/
 	void send(Message msg);
-
+	void update();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleans up the GameObject and all the attached components.
 	*/

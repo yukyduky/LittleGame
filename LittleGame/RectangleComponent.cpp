@@ -84,6 +84,11 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 {
 }
 
+void RectangleComponent::update()
+{
+
+}
+
 void RectangleComponent::cleanUp()
 {
 	// Maybe clean up this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else

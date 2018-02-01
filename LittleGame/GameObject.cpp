@@ -10,6 +10,13 @@ void GameObject::send(Message msg)
 	}
 }
 
+void GameObject::update()
+{
+	for (auto &i : this->components) {
+		i->update();
+	}
+}
+
 void GameObject::addComponent(Component* component)
 {
 	this->components.push_back(component);

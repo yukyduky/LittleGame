@@ -138,6 +138,11 @@ void InputComponent::mapKeyCodesToEnums()
 	controllerKeyMap.insert(controllerKeyMap.end(), std::pair<CONTROLLER::KEY, size_t>(static_cast<CONTROLLER::KEY>(i++), 16));
 }
 
+void InputComponent::update()
+{
+
+}
+
 void InputComponent::init()
 {
 	mapKeyCodesToEnums();
