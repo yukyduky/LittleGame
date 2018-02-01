@@ -15,6 +15,12 @@ void TextureComponent::receive(GameObject& obj, Message msg)
 {
 
 }
+
+void TextureComponent::update()
+{
+
+}
+
 void TextureComponent::cleanUp()
 {
 	// Maybe release this->gSRV here, maybe somewhere else

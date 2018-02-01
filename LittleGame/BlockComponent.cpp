@@ -143,6 +143,11 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 {
 }
 
+void BlockComponent::update()
+{
+
+}
+
 void BlockComponent::cleanUp()
 {
 	// Maybe release this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else
