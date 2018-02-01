@@ -29,6 +29,6 @@ void Projectile::update()
 	//this->pos.y += this->velocity.y * dt;
 	this->pos.z += this->velocity.z * dt;
 
-	this->updateWorldMatrix();
+	this->updateWorldMatrix(pos);
 }
 

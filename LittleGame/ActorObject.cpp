@@ -137,7 +137,7 @@ void ActorObject::moveRight()
 void ActorObject::rotate()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-
+		
 	}
 	else {
 
