@@ -56,9 +56,11 @@ void GamePlayState::checkCollisions() {
 
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
-	this->rio.initialize(this->camera);
+	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->initArena();
+
+	this->pointLights.push_back(Light(XMFLOAT3(3.0f, 3.0f, 3.0f), XMFLOAT3(255.0f, 0.0f, 0.0f), XMFLOAT3(255.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.2f, 0.01f), 1.0f));
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -139,14 +141,14 @@ void GamePlayState::createArenaFloor()
 	int nextID = this->arenaObjects.size();
 	//Calculate center position of the arena
 	XMFLOAT3 pos(ARENAWIDTH / 2, -0.5f, ARENAHEIGHT / 2);
-	XMVECTOR vec = DirectX::XMLoadFloat3(&pos);
+	XMVECTOR vec = XMLoadFloat3(&pos);
 	//Create the GameObject
 	object = new ArenaObject(nextID, pos);
 	//Prepare the worldMatrix for the RectangleComponent.
-	XMMATRIX worldM = DirectX::XMMatrixIdentity();
-	XMMATRIX rotationM = DirectX::XMMatrixIdentity();
-	XMMATRIX scaleM = DirectX::XMMatrixScaling(ARENAWIDTH / 2, 0, ARENAHEIGHT / 2);
-	XMMATRIX translationM = DirectX::XMMatrixTranslationFromVector(vec);
+	XMMATRIX worldM = XMMatrixIdentity();
+	XMMATRIX rotationM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(ARENAWIDTH / 2, 0, ARENAHEIGHT / 2);
+	XMMATRIX translationM = XMMatrixTranslationFromVector(vec);
 	worldM = scaleM * rotationM * translationM;
 	//Prepare the color of the rectangle.
 	vColor color(72.0f, 118.0f, 255.0f, 255.0f);
@@ -171,11 +173,11 @@ void GamePlayState::createArenaNeonGrid()
 	XMFLOAT4 startColor(155.0f, 48.0f, 255.0f, 255.0f);
 	XMFLOAT4 endColor(155.0f, 48.0f, 255.0f, 255.0f);
 	//Prepare matrixes
-	XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
-	XMMATRIX translationM = DirectX::XMMatrixIdentity();
-	XMMATRIX scaleM = DirectX::XMMatrixIdentity();
-	XMMATRIX rotVertical = DirectX::XMMatrixRotationY((float)(PI / 2));
-	XMMATRIX rotHorizontal = DirectX::XMMatrixIdentity();
+	XMMATRIX worldMatrix = XMMatrixIdentity();
+	XMMATRIX translationM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixIdentity();
+	XMMATRIX rotVertical = XMMatrixRotationY((float)(PI / 2));
+	XMMATRIX rotHorizontal = XMMatrixIdentity();
 
 	//Prepare current position variable and vec variable.
 	XMFLOAT3 currentPos;
@@ -184,18 +186,18 @@ void GamePlayState::createArenaNeonGrid()
 	for (int i = 0; i < nrOfVerticalLines; i++)
 	{
 		currentPos = XMFLOAT3(i * ARENASQUARESIZE, 0.0f, 0.0f);
-		vec = DirectX::XMLoadFloat3(&currentPos);
-		translationM = DirectX::XMMatrixTranslationFromVector(vec);
-		scaleM = DirectX::XMMatrixScaling(ARENAHEIGHT, 0.0f, 0.0f);
+		vec = XMLoadFloat3(&currentPos);
+		translationM = XMMatrixTranslationFromVector(vec);
+		scaleM = XMMatrixScaling(ARENAHEIGHT, 0.0f, 0.0f);
 		worldMatrix = scaleM * rotVertical * translationM;
 		this->createLine(currentPos, worldMatrix, startColor, endColor);
 	}
 	for (int i = 0; i < nrOfHorizontalLines; i++)
 	{
 		currentPos = XMFLOAT3(0.0f, i * ARENASQUARESIZE, 0.0f);
-		vec = DirectX::XMLoadFloat3(&currentPos);
-		translationM = DirectX::XMMatrixTranslationFromVector(vec);
-		scaleM = DirectX::XMMatrixScaling(ARENAWIDTH, 0.0f, 0.0f);
+		vec = XMLoadFloat3(&currentPos);
+		translationM = XMMatrixTranslationFromVector(vec);
+		scaleM = XMMatrixScaling(ARENAWIDTH, 0.0f, 0.0f);
 		worldMatrix = scaleM * rotHorizontal * translationM;
 		this->createLine(currentPos, worldMatrix, startColor, endColor);
 	}
@@ -237,16 +239,16 @@ void GamePlayState::createArenaWalls()
 	int skipChecker = 0; //shitty implementation until we make the real one.
 
 	//Create rotation matrix for Left and right row of walls. Rotates 90 degres around Y-axis.
-	XMMATRIX rotLR = DirectX::XMMatrixRotationY((float)(PI / 2));
+	XMMATRIX rotLR = XMMatrixRotationY((float)(PI / 2));
 	//Create rotation matrix for Top and Bottom row of walls. No rotation so it will be identity matrix.
-	XMMATRIX rotTB = DirectX::XMMatrixIdentity();
+	XMMATRIX rotTB = XMMatrixIdentity();
 	//Create scale matrix for all of the walls.
-	//XMMATRIX scaleM = DirectX::XMMatrixIdentity();
-	XMMATRIX scaleM = DirectX::XMMatrixScaling(LENGTHOFWALLS * ARENASQUARESIZE / 2, HEIGHTOFWALLS * ARENASQUARESIZE / 2, ARENASQUARESIZE / 2);
+	//XMMATRIX scaleM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(LENGTHOFWALLS * ARENASQUARESIZE / 2, HEIGHTOFWALLS * ARENASQUARESIZE / 2, ARENASQUARESIZE / 2);
 	//Initialize a translation matrix for future use.
-	XMMATRIX translationM = DirectX::XMMatrixIdentity();
+	XMMATRIX translationM = XMMatrixIdentity();
 	//Inititalize worldMatrix that will be passed to the BlockComponent.
-	XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
+	XMMATRIX worldMatrix = XMMatrixIdentity();
 	//Create a color to be used in the BlockComponent.
 	XMFLOAT4 wallColor(255.0f, 48.0f, 48.0f, 255.0f);
 
@@ -275,8 +277,8 @@ void GamePlayState::createArenaWalls()
 		}
 		else {
 			//Prepare the worldMatrix for the new wall and create the wall.
-			vec = DirectX::XMLoadFloat3(&currPos);
-			translationM = DirectX::XMMatrixTranslationFromVector(vec);
+			vec = XMLoadFloat3(&currPos);
+			translationM = XMMatrixTranslationFromVector(vec);
 			worldMatrix = scaleM * rotLR * translationM;
 			this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::VERTICAL);
 
@@ -313,7 +315,7 @@ void GamePlayState::createArenaWalls()
 		}
 		else {
 			//Prepare the worldMatrix for the new wall and create the wall.
-			vec = DirectX::XMLoadFloat3(&currPos);
+			vec = XMLoadFloat3(&currPos);
 			translationM = DirectX::XMMatrixTranslationFromVector(vec);
 			worldMatrix = scaleM * rotLR * translationM;
 			this->createAWall(currPos, worldMatrix, wallColor, WALLTYPE::VERTICAL);

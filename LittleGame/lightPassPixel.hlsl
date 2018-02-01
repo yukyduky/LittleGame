@@ -2,11 +2,11 @@ Texture2D texPosition	: register(t0);
 Texture2D texNormal		: register(t1);
 Texture2D texColor		: register(t2);
 
-struct Light : register (b0) {
+cbuffer Light : register (b0) {
 	float3 pos;
 	float pad0;
 	float3 diffuse;
-	float pad1
+	float pad1;
 	float3 ambient;
 	float pad2;
 	float3 attenuation;
@@ -20,6 +20,8 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 	float3 pos_W, normal, color;
 	// position_S.xy is literally screen coords
 	float2 screenCoords = position_S.xy;
+
+
 
 	// Load all the data from the geo pass
 	LoadGeoPassData(screenCoords, pos_W, normal, color);

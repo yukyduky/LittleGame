@@ -50,6 +50,8 @@ private:
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	std::list<Light> pointLights;
+
 	Command* selectCommand;
 	
 	CollisionHandler collisionHandler;

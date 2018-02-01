@@ -4,38 +4,47 @@
 
 #include <vector>
 #include <list>
+#include <array>
 #include "Camera.h"
+
+constexpr int MAX_NUM_POINTLIGHTS = 50;
+
+using namespace DirectX;
 
 struct Light
 {
-	XMVECTOR pos;
+	XMFLOAT3 pos;
 	float pad0;
-	XMVECTOR diffuse;
+	XMFLOAT3 diffuse;
 	float pad1;
-	XMVECTOR ambient;
+	XMFLOAT3 ambient;
 	float pad2;
-	XMVECTOR attenuation;
+	XMFLOAT3 attenuation;
 	float specPower;
+
+	Light() {}
+	Light(XMFLOAT3 pos, XMFLOAT3 diffuse, XMFLOAT3 ambient, XMFLOAT3 attenuation, float specPower) : 
+		pos(pos), diffuse(diffuse), ambient(ambient), attenuation(attenuation), specPower(specPower) {}
 };
 
 struct MatrixBufferCalc {
-	DirectX::XMMATRIX* world;
-	DirectX::XMMATRIX* view;
-	DirectX::XMMATRIX* proj;
+	XMMATRIX* world;
+	XMMATRIX* view;
+	XMMATRIX* proj;
 
-	DirectX::XMMATRIX worldView;
-	DirectX::XMMATRIX worldViewProj;
+	XMMATRIX worldView;
+	XMMATRIX worldViewProj;
 };
 
 struct MatrixBufferPack {
-	DirectX::XMFLOAT4X4 world;
-	DirectX::XMFLOAT4X4 worldViewProj;
+	XMFLOAT4X4 world;
+	XMFLOAT4X4 worldViewProj;
 
-	DirectX::XMFLOAT3 ka;
+	XMFLOAT3 ka;
 	float padding1;
-	DirectX::XMFLOAT3 kd;
+	XMFLOAT3 kd;
 	float padding2;
-	DirectX::XMFLOAT3 ks;
+	XMFLOAT3 ks;
 	float padding3;
 };
 
@@ -50,10 +59,10 @@ private:
 	std::vector<GraphicsComponent*> graphics;
 	std::list<Light>* lights;
 
-	MatrixBufferCalc	rawMatrixData;
-	MatrixBufferPack	packagedMatrixData;
-	ID3D11Buffer*		cMatrixBuffer;
-	ID3D11Buffer*		cLightBuffer;
+	MatrixBufferCalc rawMatrixData;
+	MatrixBufferPack packagedMatrixData;
+	ID3D11Buffer* cMatrixBuffer;
+	std::array<ID3D11Buffer*, MAX_NUM_POINTLIGHTS> cLightBuffer;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Re-formats the WORLD, VIEW, & PROJECTION matrix data.
@@ -64,7 +73,7 @@ private:
 	void drawGraphics(GraphicsComponent*& graphics);
 
 public:
-	void initialize(Camera& camera, std::list<Light>*& lights);
+	void initialize(Camera& camera, std::list<Light>& lights);
 	void render();
 	void injectResourcesIntoSecondPass();
 	void addGraphics(GraphicsComponent* graphics);
