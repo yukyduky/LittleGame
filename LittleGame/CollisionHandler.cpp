@@ -285,11 +285,7 @@ void CollisionHandler::collisionPlayerProjectile() {
 	}
 
 	// CODE GOES HERE
-	if (this->collidable2->getType() == this->collidable1->getType())
-	{
-		this->collidable2->setPosition(
-			this->collidable2->getPosition() + DirectX::XMFLOAT3{ -30, 0, 0 });
-	}
+	this->collidable2->setPosition(this->collidable2->getPosition() + DirectX::XMFLOAT3{ 0, 30, 0 });
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
@@ -465,24 +461,39 @@ void CollisionHandler::executeCollision(
 	switch (collisionID) {
 		// PLAYER
 	case 1: this->collisionPlayerPlayer();
+		break;
 	case 2: this->collisionPlayerEnemy();
+		break;
 	case 3: this->collisionPlayerDoodad();
+		break;
 	case 4: this->collisionPlayerIndestruct();
+		break;
 	case 5: this->collisionPlayerProjectile();
+		break;
 		// ENEMY
 	case 6: this->collisionEnemyEnemy();
+		break;
 	case 7: this->collisionEnemyDoodad();
+		break;
 	case 8: this->collisionEnemyIndestruct();
+		break;
 	case 9: this->collisionEnemyProjectile();
+		break;
 		// DOODAD
 	case 10: this->collisionDoodadDoodad();
+		break;
 	case 11: this->collisionDoodadIndestruct();
+		break;
 	case 12: this->collisionDoodadProjectile();
+		break;
 		// INDESTRUCTIBLE
 	case 13: this->collisionIndestructIndestruct();
+		break;
 	case 14: this->collisionIndestrucProjectile();
+		break;
 		// PROJECTILE
 	case 15: this->collisionProjectileProjectile();
+		break;
 	}
 }
 //_________________________________________//

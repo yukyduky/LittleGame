@@ -156,7 +156,7 @@ void ActorObject::fireAbility0()
 		if (autoAttCD[0] <= 0)
 		{
 			XMFLOAT3 direction = XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
-			ProjProp props(5, XMFLOAT3(200.5f, 200.5f, 0.5f));
+			ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f));
 			pGPS->initProjectile(this->pos + DirectX::XMFLOAT3{ -40, 0, 0 }, direction, props);
 			autoAttCD[0] = autoAttCD[1];
 		}
