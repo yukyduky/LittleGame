@@ -48,6 +48,7 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
+	CollisionHandler collisionHandler;
 	Camera camera;
 	RenderInputOrganizer rio;
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
@@ -60,13 +61,11 @@ private:
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 	Command* selectCommand;
-	
-	CollisionHandler collisionHandler;
 
 	std::vector<GameObject*> gameObjectsArray;
-	//All componenets that needs to have collision
-	std::vector<PhysicsComponent*> physicsComponentsArray;
 
+	std::list<PhysicsComponent*> physicsListStatic;
+	std::list<PhysicsComponent*> physicsListDynamic;
 	//Array with all active projectiles
 	std::vector<Projectile*> projectiles;
 

@@ -17,11 +17,12 @@ class PhysicsComponent : public Component
 {
 private:
 	DirectX::BoundingSphere selfBoundingSphere;
+	//DirectX::BoundingBox selfBoundingBox;
 	const size_t ID;
 
 public:
 	PhysicsComponent(GameObject& obj);
-	PhysicsComponent(DirectX::XMFLOAT3 boundingSphereCenter, float radius, GameObject& obj);
+	PhysicsComponent(GameObject& obj, float boundingSphereRadius);
 	~PhysicsComponent();
 
 	DirectX::BoundingSphere getBoundingSphere();
@@ -35,8 +36,7 @@ public:
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void update();
-
-	virtual void cleanUp() {};
+	virtual void cleanUp();
 };
 //______________________________________________//
 //                                              //
