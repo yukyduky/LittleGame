@@ -30,15 +30,17 @@ void Projectile::update()
 		float dt = Locator::getGameTime()->getDeltaTime();
 		this->pos.x += this->velocity.x * dt;
 		// Projectiles dosnt move in Y
-		//this->pos.y += this->velocity.y * dt;
 		this->pos.z += this->velocity.z * dt;
 
 		this->updateWorldMatrix(pos);
 	}
 	else
 	{
+		//----TEMPLATE will fix after rio has been remade
 		this->setVelocity(XMFLOAT3(0,0,0));
-		this->cleanUp();
+		this->updateWorldMatrix(XMFLOAT3(0, -200, 0));
+		//this->cleanUp();
+		this->send(OBJECTSTATE::DEAD);
 	}
 }
 

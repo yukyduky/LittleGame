@@ -4,7 +4,7 @@ FireballComponent::FireballComponent(Projectile& pHead, float modi) : AbilityCom
 {
 	this->damage = 10 * modi;
 	this->range *= 100 * modi;
-	this->speed = 20;
+	this->speed = 50;
 
 	pHead.setSpeed(this->speed);
 

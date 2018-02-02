@@ -139,15 +139,9 @@ void ActorObject::moveRight()
 void ActorObject::rotate()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		this->rotation += 0.1;
+		this->rotation += 0.1f;
 		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
 		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
-		//this->dir = 
-		
-		XMVECTOR xmVecdir = XMVector3Transform(XMLoadFloat3(&this->dir), rotateM);
-		this->dir.x = XMVectorGetByIndex(xmVecdir, 0);
-		this->dir.y = XMVectorGetByIndex(xmVecdir, 1);
-		this->dir.z = XMVectorGetByIndex(xmVecdir, 2);
 		
 		this->updateWorldMatrix(this->pos);
 	}
@@ -161,8 +155,9 @@ void ActorObject::fireAbility0()
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		if (autoAttCD[0] <= 0)
 		{
+			XMFLOAT3 direction = XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
 			ProjProp props(5, XMFLOAT3(200.5f, 200.5f, 0.5f));
-			pGPS->initProjectile(this->pos, this->dir, props);
+			pGPS->initProjectile(this->pos, direction, props);
 			autoAttCD[0] = autoAttCD[1];
 		}
 		else
