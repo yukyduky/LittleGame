@@ -26,3 +26,10 @@ void FireballComponent::cleanUp()
 
 }
 
+void FireballComponent::update()
+{
+	int hej = 0;
+	int hejhej = hej + hej;
+	
+}
+

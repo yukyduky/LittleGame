@@ -16,6 +16,7 @@ public:
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
 
+	void update();
 
 
 };

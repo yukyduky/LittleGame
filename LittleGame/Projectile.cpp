@@ -23,12 +23,22 @@ void Projectile::cleanUp()
 
 void Projectile::update()
 {
-	float dt = Locator::getGameTime()->getDeltaTime();
-	this->pos.x += this->velocity.x * dt;
-	// Projectiles dosnt move in Y
-	//this->pos.y += this->velocity.y * dt;
-	this->pos.z += this->velocity.z * dt;
+	GameObject::update();
 
-	this->updateWorldMatrix(pos);
+	if (this->state != OBJECTSTATE::DEAD)
+	{
+		float dt = Locator::getGameTime()->getDeltaTime();
+		this->pos.x += this->velocity.x * dt;
+		// Projectiles dosnt move in Y
+		//this->pos.y += this->velocity.y * dt;
+		this->pos.z += this->velocity.z * dt;
+
+		this->updateWorldMatrix(pos);
+	}
+	else
+	{
+		this->setVelocity(XMFLOAT3(0,0,0));
+		this->cleanUp();
+	}
 }
 

@@ -698,10 +698,13 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	//Template of components that are beeing worked on by other users
 	abiliComp = new FireballComponent(*proj, 1);
 	proj->setVelocity(dir * proj->getSpeed());
+	proj->addComponent(abiliComp);
 
 	//Template for Physics
 	phyComp = new PhysicsComponent(pos, props.size, *proj);
 	this->physicsComponentsArray.push_back(phyComp);
+	proj->addComponent(phyComp);
+
 	
 	//Add proj to objectArrays
 	this->arenaObjects.push_back(proj);
