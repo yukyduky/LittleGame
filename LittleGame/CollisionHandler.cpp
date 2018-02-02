@@ -285,6 +285,11 @@ void CollisionHandler::collisionPlayerProjectile() {
 	}
 
 	// CODE GOES HERE
+	if (this->collidable2->getType() == this->collidable1->getType())
+	{
+		this->collidable2->setPosition(
+			this->collidable2->getPosition() + DirectX::XMFLOAT3{ -30, 0, 0 });
+	}
 }
 
 void CollisionHandler::collisionEnemyEnemy() {

@@ -5,6 +5,7 @@ Projectile::Projectile(const size_t ID, XMFLOAT3 pos) : GameObject(ID, pos)
 {
 	//this->speed = spd;
 	this->setState(OBJECTSTATE::MOVING);
+	this->setType(OBJECTTYPE::PROJECTILE);
 }
 
 Projectile::~Projectile()

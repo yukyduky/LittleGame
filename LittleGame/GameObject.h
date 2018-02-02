@@ -74,6 +74,7 @@ public:
 	void updateWorldMatrix(XMFLOAT3 newPos);
 
 	OBJECTTYPE getType() const { return this->type; }
+	void setType(OBJECTTYPE type) { this->type = type; }
 
 };
 

@@ -18,8 +18,8 @@ GamePlayState GamePlayState::sGamePlayState;
 void GamePlayState::updatePhysicsComponents()
 {
 	for (auto&& i : physicsListDynamic) {
-		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
-			i->updateBoundingArea(this->gameObjectsArray.at(i->getID())->getPosition());
+		if (this->arenaObjects.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+			i->updateBoundingArea(this->arenaObjects.at(i->getID())->getPosition());
 		}
 	}
 }
@@ -29,31 +29,37 @@ void GamePlayState::checkCollisions() {
 	for (auto&& i : this->physicsListDynamic) {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
 		// NOTE: Skipping if object state = DEAD.
-		if (this->gameObjectsArray.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
+		int iID = i->getID();
+		if (this->arenaObjects.at(iID)->getState() != OBJECTSTATE::DEAD) {
 			// LOOP 2.1: DYNAMIC <--> DYNAMIC Collision
 			for (auto&& k : this->physicsListDynamic) {
-				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+				int kID = k->getID();
+				if (iID != kID)
+				{
+					if (this->arenaObjects.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
 
-					if (i->checkCollision(k->getBoundingSphere())) {
-						// Call COLLISION-CLASS function
-						this->collisionHandler.executeCollision(
-							this->gameObjectsArray.at(i->getID()),
-							this->gameObjectsArray.at(k->getID()),
-							&i->getBoundingSphere(),
-							&k->getBoundingSphere()
-						);
+						if (i->checkCollision(k->getBoundingSphere())) {
+							// Call COLLISION-CLASS function
+							this->collisionHandler.executeCollision(
+								this->arenaObjects.at(i->getID()),
+								this->arenaObjects.at(k->getID()),
+								&i->getBoundingSphere(),
+								&k->getBoundingSphere()
+							);
+						}
 					}
 				}
+				
 			}
 			// LOOP 2.2: DYNAMIC <--> STATIC Collision
 			for (auto&& k : this->physicsListStatic) {
-				if (this->gameObjectsArray.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+				if (this->arenaObjects.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
 
 					if (i->checkCollision(k->getBoundingSphere())) {
 						// Call COLLISION-CLASS function
 						this->collisionHandler.executeCollision(
-							this->gameObjectsArray.at(i->getID()),
-							this->gameObjectsArray.at(k->getID()),
+							this->arenaObjects.at(i->getID()),
+							this->arenaObjects.at(k->getID()),
 							&i->getBoundingSphere(),
 							&k->getBoundingSphere()
 						);
@@ -120,6 +126,9 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {
+	this->updatePhysicsComponents();
+	this->checkCollisions();
+
 	for (auto &iterator : playerInput) {
 		iterator->generateCommands();
 		iterator->execute();
@@ -657,6 +666,8 @@ void GamePlayState::initPlayer()
 	actor->SETworldMatrix(worldMatrix);
 	actor->addComponent(block);
 
+	actor->setType(OBJECTTYPE::PLAYER);
+
 	//Create the new InputComponent (KeyboardComponent or ControllerComponent) and hand it to the ActorObject.
 	//input = new ControllerComponent(*actor, 0);
 	input = new KeyboardComponent(*actor);
@@ -720,8 +731,8 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(pos, props.size, *proj);
-	this->physicsComponentsArray.push_back(phyComp);
+	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
+	this->physicsListDynamic.push_back(phyComp);
 	proj->addComponent(phyComp);
 
 	
