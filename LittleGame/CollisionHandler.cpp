@@ -272,7 +272,8 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	};
 
 	// Moving the player only, since the indestructibles cannot move.
-	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	//collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	collidable1->setPosition(XMFLOAT3(200.0f, 40.0f, 200.0f));
 }
 
 void CollisionHandler::collisionPlayerProjectile() {

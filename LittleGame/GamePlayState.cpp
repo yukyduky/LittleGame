@@ -164,7 +164,10 @@ void GamePlayState::initPlayer()
 	actor = new ActorObject(nextID, playerPos, this);
 	/// PHYSICS COMPONENT:
 	// 1: We new a PhysicsComponent, using the actor's address as a parameter.
-	physics = new PhysicsComponent(*actor);
+	physics = new PhysicsComponent(*actor, playerScales.x);
+	XMFLOAT3 physPos = playerPos;
+	physPos.y = 25.0f;
+	physics->updateBoundingArea(physPos);
 	// 2: We add this component to the Dynamic list because actor = dynamic.
 	this->physicsListDynamic.push_back(physics);
 	// 3: We add this component to actor's list of components.

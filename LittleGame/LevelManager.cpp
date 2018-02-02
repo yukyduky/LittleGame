@@ -224,6 +224,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	int nextID = objects.size();
 	//Create the new ArenaObject and the new BlockComponent
 	object = new ArenaObject(nextID, pos);
+	object->setType(OBJECTTYPE::INDESTRUCTIBLE);
 	block = new BlockComponent(*object, color.x, color.y, color.z, color.w);
 	bSphere = new PhysicsComponent(*object, this->squareSize / 2.0f);
 	XMFLOAT3 bSpherePos = pos;
