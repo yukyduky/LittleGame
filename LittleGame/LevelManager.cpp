@@ -5,32 +5,43 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 
-void LevelManager::createFloor(std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics)
+void LevelManager::createFloor(std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics)
 {
+	//Prepare the matrices and variables
 	GameObject* object;
 	RectangleComponent* rect;
-	int nextID = objects.size();
-	//Calculate center position of the arena
-	XMFLOAT3 pos(this->arenaWidth / 2, -0.5f, this->arenaDepth / 2);
-	XMVECTOR vec = XMLoadFloat3(&pos);
-	//Create the GameObject
-	object = new ArenaObject(nextID, pos);
-	//Prepare the worldMatrix for the RectangleComponent
+	int nextID;
+	XMFLOAT3 pos;
+	XMVECTOR vec;
 	XMMATRIX worldM;
 	XMMATRIX rotationM = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(this->arenaWidth / 2, 0, this->arenaDepth / 2);
-	XMMATRIX translationM = XMMatrixTranslationFromVector(vec);
-	worldM = scaleM * rotationM * translationM;
+	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2, 0, this->squareSize / 2);
+	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(72.0f, 118.0f, 255.0f, 255.0f);
-	//Create the RectangleComponent and set the world matrix
-	rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
-	//Give the RectangleComponent to the ArenaObject and set it's world matrix
-	object->addComponent(rect);
-	object->SETworldMatrix(worldM);
-	//Push the new ArenaObject and GraphicsComponent into the vector arrays
-	objects.push_back(object);
-	graphics.push_back(rect);
+	//Create all the squares representing the floor
+	for (int i = 0; i < grid.size(); i++)
+	{
+		for (int j = 0; j < grid[i].size(); j++)
+		{
+			//Calculate center position of the next grid space
+			pos = XMFLOAT3(this->squareSize / 2.0f + i * this->squareSize, -0.5f, this->squareSize /2.0f + j * this->squareSize);
+			nextID = objects.size();
+			//Create the GameObject and calculate the world matrix
+			object = new ArenaObject(nextID, pos);
+			vec = XMLoadFloat3(&pos);
+			translationM = XMMatrixTranslationFromVector(vec);
+			worldM = scaleM * rotationM * translationM;
+			//Create the RectangleComponent
+			rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
+			//Give the RectangleComponent to the ArenaObject and set it's world matrix
+			object->addComponent(rect);
+			object->SETworldMatrix(worldM);
+			//Push the new ArenaObject and GraphicsComponent into the vector arrays
+			objects.push_back(object);
+			graphics.push_back(rect);
+		}
+	}
 }
 
 void LevelManager::createNeonFloorGrid(std::vector<GameObject*>& objects, std::vector<GraphicsComponent*>& graphics)
@@ -114,7 +125,94 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 			this->createAWall(currPos, worldM, color, objects, graphics, physics);
 		}
 	}
+
+	int* rowLR = new int[nrOfVerticalSquares];
+	/*randomize numbers between 0 and 1 for every square in leftRow*/
+	// this is just for test
+	for (int i = 0; i < nrOfVerticalSquares; i++)
+	{
+		rowLR[i] = SQUARETYPE::WALL;
+	}
+	rowLR[nrOfVerticalSquares / 2] = SQUARETYPE::SPAWN;
+	rowLR[nrOfVerticalSquares / 2 - 1] = SQUARETYPE::SPAWN;
+
+
+	int* rowTB = new int[nrOfHorizontalSquares];
+	for (int i = 0; i < nrOfHorizontalSquares; i++)
+	{
+		rowTB[i] = SQUARETYPE::WALL;
+	}
+	rowTB[nrOfHorizontalSquares / 2] = SQUARETYPE::SPAWN;
+	rowTB[nrOfHorizontalSquares / 2 - 1] = SQUARETYPE::SPAWN;
 	
+	//Create left row of walls
+	for (int i = 0; i < nrOfVerticalSquares; i++)
+	{
+		if (rowLR[i] == SQUARETYPE::WALL)
+		{
+			currPos = XMFLOAT3(this->squareSize /2.0f, this->wallHeight / 2.0f, this->squareSize / 2.0f + i * this->squareSize);
+			vec = XMLoadFloat3(&currPos);
+			translationM = XMMatrixTranslationFromVector(vec);
+			worldM = scaleM * rotTB * translationM;
+			this->createAWall(currPos, worldM, color, objects, graphics, physics);
+			grid[0][i] = SQUARETYPE::WALL;
+		}
+		else 
+		{
+			grid[0][i] = SQUARETYPE::SPAWN;
+		}
+	}
+	//Create right row of walls
+	for (int i = 0; i < nrOfVerticalSquares; i++)
+	{
+		if (rowLR[i] == SQUARETYPE::WALL)
+		{
+			currPos = XMFLOAT3(this->arenaWidth - this->squareSize / 2.0f, this->wallHeight / 2.0f, this->squareSize / 2.0f + i * this->squareSize);
+			vec = XMLoadFloat3(&currPos);
+			translationM = XMMatrixTranslationFromVector(vec);
+			worldM = scaleM * rotTB * translationM;
+			this->createAWall(currPos, worldM, color, objects, graphics, physics);
+			grid[nrOfHorizontalSquares - 1][i] = SQUARETYPE::WALL;
+		}
+		else
+		{
+			grid[nrOfHorizontalSquares - 1][i] = SQUARETYPE::SPAWN;
+		}
+	}
+	//Create top row of walls
+	for (int i = 0; i < nrOfHorizontalSquares; i++)
+	{
+		if (rowTB[i] == SQUARETYPE::WALL)
+		{
+			currPos = XMFLOAT3(this->squareSize / 2.0f + i * this->squareSize, this->wallHeight / 2.0f, this->arenaDepth - this->squareSize / 2.0f);
+			vec = XMLoadFloat3(&currPos);
+			translationM = XMMatrixTranslationFromVector(vec);
+			worldM = scaleM * rotTB * translationM;
+			this->createAWall(currPos, worldM, color, objects, graphics, physics);
+			grid[i][nrOfVerticalSquares - 1] = SQUARETYPE::WALL;
+		}
+		else
+		{
+			grid[i][nrOfVerticalSquares - 1] = SQUARETYPE::SPAWN;
+		}
+	}
+	//Create bottom row of walls
+	for (int i = 0; i < nrOfHorizontalSquares; i++)
+	{
+		if (rowTB[i] == SQUARETYPE::WALL)
+		{
+			currPos = XMFLOAT3(this->squareSize / 2.0f + i * this->squareSize, this->wallHeight / 2.0f, this->squareSize / 2.0f);
+			vec = XMLoadFloat3(&currPos);
+			translationM = XMMatrixTranslationFromVector(vec);
+			worldM = scaleM * rotTB * translationM;
+			this->createAWall(currPos, worldM, color, objects, graphics, physics);
+			grid[i][0] = SQUARETYPE::WALL;
+		}
+		else
+		{
+			grid[i][0] = SQUARETYPE::SPAWN;
+		}
+	}
 
 }
 
@@ -122,12 +220,18 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 {
 	GameObject* object;
 	BlockComponent* block;
+	PhysicsComponent* bSphere;
 	int nextID = objects.size();
 	//Create the new ArenaObject and the new BlockComponent
 	object = new ArenaObject(nextID, pos);
 	block = new BlockComponent(*object, color.x, color.y, color.z, color.w);
+	bSphere = new PhysicsComponent(*object, this->squareSize / 2.0f);
+	XMFLOAT3 bSpherePos = pos;
+	bSpherePos.y = this->squareSize / 2.0f;
+	bSphere->updateBoundingArea(bSpherePos);
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	object->SETworldMatrix(worldM);
+	physics.push_back(bSphere);
 	objects.push_back(object);
 	graphics.push_back(block);
 }
@@ -150,7 +254,7 @@ void LevelManager::initArena(int width, int depth, std::vector<std::vector<SQUAR
 		grid.push_back(temp);
 	}
 
-	this->createFloor(objects, graphics);
+	this->createFloor(grid, objects, graphics);
 	this->createNeonFloorGrid(objects, graphics);
 	this->createLevelWalls(grid, objects, graphics, physics);
 
