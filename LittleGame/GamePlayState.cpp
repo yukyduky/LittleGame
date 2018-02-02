@@ -60,7 +60,8 @@ void GamePlayState::init() {
 	this->initPlayer();
 	this->initArena();
 
-	this->pointLights.push_back(Light(XMFLOAT3(3.0f, 3.0f, 3.0f), XMFLOAT3(255.0f, 0.0f, 0.0f), XMFLOAT3(255.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.2f, 0.01f), 1.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(5.0f, 10.0f, 5.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.2f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(0.0f, 5.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.2f, 0.0f, 0.0f), 50.0f));
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -151,7 +152,7 @@ void GamePlayState::createArenaFloor()
 	XMMATRIX translationM = XMMatrixTranslationFromVector(vec);
 	worldM = scaleM * rotationM * translationM;
 	//Prepare the color of the rectangle.
-	vColor color(72.0f, 118.0f, 255.0f, 255.0f);
+	vColor color(72.0f / 255.0f, 118.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	//Create the RectangleComponent and give it the finished world matrix.
 	rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
 	object->SETworldMatrix(worldM);
@@ -250,7 +251,7 @@ void GamePlayState::createArenaWalls()
 	//Inititalize worldMatrix that will be passed to the BlockComponent.
 	XMMATRIX worldMatrix = XMMatrixIdentity();
 	//Create a color to be used in the BlockComponent.
-	XMFLOAT4 wallColor(255.0f, 48.0f, 48.0f, 255.0f);
+	XMFLOAT4 wallColor(255.0f / 255.0f, 48.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f);
 
 	
 	XMFLOAT3 currPos;
@@ -570,7 +571,7 @@ void GamePlayState::initPlayer()
 	actor->setVelocity(playerVelocity);
 
 	//Create the playerColor and the new BlockComponent that will represent the players body.
-	vColor playerColor(0.0f, 0.0f, 0.0f, 255.0f);
+	vColor playerColor(0.0f / 255.0f, 0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	block = new BlockComponent(*actor, playerColor.r, playerColor.g, playerColor.b, playerColor.a);
 	
 	XMVECTOR playerTranslation = XMLoadFloat3(&playerPos);

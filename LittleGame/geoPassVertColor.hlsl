@@ -31,6 +31,7 @@ VS_OUT VS(VS_IN input) {
 	// Uncomment once the constant buffers work
 	output.pos_S = mul(float4(input.pos_M, 1.0f), wvp);
 	output.pos_W = mul(float4(input.pos_M, 1.0f), world);
+	output.normal = normalize(mul(float4(input.normal, 1.0f), world));
 	//output.pos_S = float4(input.pos_M, 1.0f);
 	//output.pos_W = float4(input.pos_M, 1.0f);
 	output.normal = input.normal;
