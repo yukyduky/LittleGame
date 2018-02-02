@@ -141,6 +141,7 @@
     <ClInclude Include="D3D.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Renderer.cpp" />

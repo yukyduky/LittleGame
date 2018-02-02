@@ -9,33 +9,82 @@
     <FxCompile Include="lightPassVert.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbilityComponent.cpp" />
-    <ClCompile Include="ActorObject.cpp" />
-    <ClCompile Include="ArenaObject.cpp" />
-    <ClCompile Include="ControllerComponent.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CollisionHandler.cpp" />
-    <ClCompile Include="D3D.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GamePlayState.cpp" />
-    <ClCompile Include="GameTime.cpp" />
-    <ClCompile Include="InputComponent.cpp" />
-    <ClCompile Include="KeyboardComponent.cpp" />
-    <ClCompile Include="LineComponent.cpp" />
-    <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="BlockComponent.cpp" />
-    <ClCompile Include="RenderInputOrganizer.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="AudioManager.cpp" />
-    <ClCompile Include="RectangleComponent.cpp" />
-    <ClCompile Include="PhysicsComponent.cpp" />
-    <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="TextureComponent.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="FireballComponent.cpp" />
+    <ClCompile Include="AbilityComponent.cpp">
+      <Filter>Source Files\Components\Abilities</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="ArenaObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GamePlayState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTime.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="LineComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ControllerComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardComponent.cpp">
+      <Filter>Source Files\Components\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Locator.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RectangleComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderInputOrganizer.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
+    <ClCompile Include="StateManager.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureComponent.cpp">
+      <Filter>Source Files\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h">
@@ -132,6 +181,9 @@
       <Filter>Header Files\Components\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="ArenaGlobals.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>
