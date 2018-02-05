@@ -17,7 +17,7 @@ public:
 
 	bool castSpell();
 	void upgrade(float modif);
-	void spawnProj();
+	void spawnProj(ProjProp props);
 	void update();
 
 	void collision(GameObject* target);

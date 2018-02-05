@@ -46,6 +46,7 @@ struct ProjProp {
 	float speed;
 
 	ProjProp(float s, XMFLOAT3 c, float spd) : size(s), color(c), speed(spd){}
+	ProjProp() {}
 };
 
 
@@ -198,7 +199,7 @@ public:
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->arenaObjects.size(); }
 
-	/*Actors call to shoot projectile*/
+	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
 };
 

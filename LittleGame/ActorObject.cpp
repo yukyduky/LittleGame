@@ -166,13 +166,17 @@ void ActorObject::rotate()
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		if (autoAttCD[0] <= 0)
+		if (this->spells.front()->getState() == SPELLSTATE::READY)
 		{
-			ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 400);
-			this->pGPS->initProjectile(this->pos + DirectX::XMFLOAT3{ -40, 0, 0 }, this->getDirection(), props)->SETrotationMatrix(this->getRotationMatrix());
-
-			this->autoAttCD[0] = this->autoAttCD[1];
+			spells.front()->castSpell();
 		}
+		//if (autoAttCD[0] <= 0)
+		//{
+		//	ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 400);
+		//	this->pGPS->initProjectile(this->pos + DirectX::XMFLOAT3{ -40, 0, 0 }, this->getDirection(), props)->SETrotationMatrix(this->getRotationMatrix());
+
+		//	this->autoAttCD[0] = this->autoAttCD[1];
+		//}
 	}
 	else {
 

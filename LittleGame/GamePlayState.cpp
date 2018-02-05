@@ -681,10 +681,15 @@ void GamePlayState::initPlayer()
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
 
-	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
-	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
-	actor->addSpell(explosionSpell);
-	actor->addSpell(dashSpell);
+	//Create the spell
+	DamageSpell* autoAttackSpell = new DamageSpell(actor, NAME::AUTOATTACK);
+	//DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
+	//MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
+
+	//Add the spell to the player
+	actor->addSpell(autoAttackSpell);
+	//actor->addSpell(explosionSpell);
+	//actor->addSpell(dashSpell);
 
 	player1 = actor;
 
@@ -707,12 +712,13 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	PhysicsComponent* phyComp;
 	AbilityComponent* abiliComp;
 
-	proj = new Projectile(nextID, pos);
+	XMFLOAT3 position = {pos.x + dir.x * props.size, pos.y + dir.y * props.size , pos.z + dir.z * props.size};
+	proj = new Projectile(nextID, position);
 	proj->setDirection(dir);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
-	XMFLOAT3 position = pos;
+	//XMFLOAT3 position = pos;
 	block = new BlockComponent(*proj, props.color.x, props.color.y, props.color.z, 255.0f);
 	
 	// Create matrixes for world-matrix

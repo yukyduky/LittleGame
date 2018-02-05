@@ -6,6 +6,15 @@ DamageSpell::DamageSpell(ActorObject* player, NAME name) : Spell(player)
 	this->strength = 1;
 	this->name = name;
 	this->setType(SPELLTYPE::DAMAGE);
+	this->setState(SPELLSTATE::READY);
+	switch (this->name)
+	{
+	case NAME::AUTOATTACK:
+		this->setCoolDown(0.3);
+		break;
+	case NAME::EXPLOSION:
+		break;
+	}
 }
 
 DamageSpell::~DamageSpell()
@@ -21,12 +30,22 @@ bool DamageSpell::castSpell()
 	}
 	else
 	{
+		ProjProp props;
 		switch (this->name)
 		{
+		case NAME::AUTOATTACK:
+			props = ProjProp(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 40);
+			this->spawnProj(props);
+
+			this->setState(SPELLSTATE::COOLDOWN);
+
+			break;
 		case NAME::EXPLOSION:
-
 			//Spawn a projectile and fire it in direction
+			props = ProjProp(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 5);
+			this->spawnProj(props);
 
+			this->setState(SPELLSTATE::COOLDOWN);
 			break;
 		}
 
@@ -40,14 +59,11 @@ void DamageSpell::upgrade(float modif)
 	this->strength *= modif;
 }
 
-void DamageSpell::spawnProj()
+void DamageSpell::spawnProj(ProjProp props)
 {
-	ProjProp props(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 5);
-
 	this->proj = this->getPlayer()->getPGPS()->initProjectile(this->getPlayer()->getPosition(), this->getPlayer()->getDirection(), props);
 	this->proj->setSpell(this);
 
-	this->setState(SPELLSTATE::TRAVLING);
 
 }
 
@@ -57,6 +73,9 @@ void DamageSpell::update()
 	
 	switch (this->name)
 	{
+	case NAME::AUTOATTACK:
+		//While travling
+		break;
 	case NAME::EXPLOSION:
 		if (this->getTSC() > 3)
 		{
@@ -72,6 +91,11 @@ void DamageSpell::collision(GameObject * target)
 {
 	switch (this->name)
 	{
+	case NAME::AUTOATTACK:
+		if(target->getType() == OBJECTTYPE::PLAYER)
+		this->proj->setPosition(XMFLOAT3(200, 0, 200));
+		break;
+	
 	case NAME::EXPLOSION:
 		//Template behavior
 		
@@ -80,5 +104,5 @@ void DamageSpell::collision(GameObject * target)
 		break;
 	}
 
-	this->proj->cleanUp();
+	//this->proj->cleanUp();
 }
