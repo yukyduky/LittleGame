@@ -32,14 +32,13 @@ void Projectile::update()
 		this->pos.x += this->velocity.x * dt;
 		// Projectiles dosnt move in Y
 		this->pos.z += this->velocity.z * dt;
-
-		this->updateWorldMatrix(pos);
+		this->setPosition(pos);
 	}
 	else
 	{
 		//----TEMPLATE will fix after rio has been remade
 		this->setVelocity(XMFLOAT3(0,0,0));
-		this->updateWorldMatrix(XMFLOAT3(0, -200, 0));
+		this->setPosition(XMFLOAT3(0, -200, 0));
 		//this->cleanUp();
 		this->send(OBJECTSTATE::DEAD);
 	}

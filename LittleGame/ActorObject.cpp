@@ -71,7 +71,7 @@ void ActorObject::move()
 	} 
 	else { playerNewPos.x = playerPos.x; }
 	playerNewPos.y = playerPos.y;
-	this->updateWorldMatrix(playerNewPos);
+	this->setPosition(playerNewPos);
 }
 
 void ActorObject::moveUp()
@@ -82,7 +82,7 @@ void ActorObject::moveUp()
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z += playerVelocity.z * dt;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -98,7 +98,7 @@ void ActorObject::moveLeft()
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.x -= playerVelocity.x * dt;
 		if (playerPos.x > ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -113,7 +113,7 @@ void ActorObject::moveDown()
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z -= playerVelocity.z * dt;
 		if (playerPos.z > ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -128,7 +128,7 @@ void ActorObject::moveRight()
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.x += playerVelocity.x * dt;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -142,8 +142,6 @@ void ActorObject::rotate()
 		this->rotation += 0.1f;
 		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
 		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
-		
-		this->updateWorldMatrix(this->pos);
 	}
 	else {
 

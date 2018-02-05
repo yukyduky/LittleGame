@@ -39,13 +39,6 @@ struct MatrixBufferCalc {
 struct MatrixBufferPack {
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 worldViewProj;
-
-	XMFLOAT3 ka;
-	float padding1;
-	XMFLOAT3 kd;
-	float padding2;
-	XMFLOAT3 ks;
-	float padding3;
 };
 
 // This is the 'packaged' format of the matrices, which we send to the shaders.

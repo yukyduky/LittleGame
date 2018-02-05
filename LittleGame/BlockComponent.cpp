@@ -47,6 +47,13 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 	XMFLOAT3 p6(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 p7(1.0f, -1.0f, 1.0f);
 
+	/*XMFLOAT3 normalFront(0.0f, 0.0f, -1.0f);
+	XMFLOAT3 normalLeft(-1.0f, 0.0f, 0.0f);
+	XMFLOAT3 normalRight(1.0f, 0.0f, 0.0f);
+	XMFLOAT3 normalBack(0.0f, 0.0f, 1.0f);
+	XMFLOAT3 normalTop(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 normalBottom(0.0f, -1.0f, 0.0f);*/
+
 	XMFLOAT3 normalFront(0.0f, 0.0f, -1.0f);
 	XMFLOAT3 normalLeft(-1.0f, 0.0f, 0.0f);
 	XMFLOAT3 normalRight(1.0f, 0.0f, 0.0f);
@@ -145,7 +152,7 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 
 void BlockComponent::update()
 {
-
+	this->head->updateWorldMatrix();
 }
 
 void BlockComponent::cleanUp()

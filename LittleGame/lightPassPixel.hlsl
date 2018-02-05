@@ -29,11 +29,10 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 	// Load all the data from the geo pass
 	loadGeoPassData(screenCoords, pos_W, normal, diffuse);
 
-	float4 finalColor = calcLight(pos_W, normal, diffuse);
+	//float4 finalColor = calcLight(pos_W, normal, diffuse);
 
-	//color = color / 255.0f;
-	return finalColor;
-	//return float4(diffuse, 1.0f);
+	return float4(normal, 1.0f);
+	//return finalColor;
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse)
@@ -47,8 +46,6 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse)
 {
-	float3 pointLighting = float3(0.0f, 0.0f, 0.0f);
-
 	// Vector from object to light
 	float3 pToL = pointLight.pos - pos;
 	// Vector from object to camera
@@ -69,7 +66,7 @@ float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse)
 	float3 finalAmbient = diffuse * pointLight.ambient;
 
 	// Add the ambient and the specular
-	pointLighting = finalColor + finalAmbient;
+	float3 pointLighting = finalColor + finalAmbient;
 
 	return float4(saturate(pointLighting), 1.0f);
 }

@@ -5,7 +5,6 @@
 #include <list>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <SimpleMath.h>
 
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
@@ -71,7 +70,7 @@ public:
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
-	void updateWorldMatrix(XMFLOAT3 newPos);
+	void updateWorldMatrix();
 
 	OBJECTTYPE getType() const { return this->type; }
 	void setType(OBJECTTYPE type) { this->type = type; }

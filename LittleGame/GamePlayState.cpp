@@ -77,8 +77,9 @@ void GamePlayState::init() {
 	this->initPlayer();
 	this->initArena();
 
-	this->pointLights.push_back(Light(XMFLOAT3(5.0f, 10.0f, 5.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.2f, 0.0f, 0.0f), 50.0f));
-	//this->pointLights.push_back(Light(XMFLOAT3(0.0f, 5.0f, 0.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.2f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 2, ARENAHEIGHT / 2.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.001f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH, ARENASQUARESIZE * 2, ARENAHEIGHT / 2.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.2f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(100.0f, 150.0f, 100.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.001f, 0.0f), 50.0f));
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -132,14 +133,17 @@ void GamePlayState::update(GameManager * gm)
 	this->updatePhysicsComponents();
 	this->checkCollisions();
 
+	for (auto &i : this->gameObjectsArray) {
+		i->update();
+	}
+
 	for (auto &iterator : playerInput) {
 		iterator->generateCommands();
 		iterator->execute();
 	}
 
-	for (auto &iterator : projectiles)
-	{
-		iterator->update();
+	for (auto &i : this->projectiles) {
+		i->update();
 	}
 }
 
@@ -160,8 +164,6 @@ void GamePlayState::initArena()
 	this->createArenaFloor();
 	this->createArenaNeonGrid();
 	this->createArenaWalls();
-
-	int test23 = 1;
 }
 
 void GamePlayState::createArenaFloor()
@@ -190,8 +192,6 @@ void GamePlayState::createArenaFloor()
 	//Push the new GameObject into the GameObject vector and graphics vector.
 	this->arenaObjects.push_back(object);
 	this->graphics.push_back(rect);
-
-	int test = 2;
 }
 
 void GamePlayState::createArenaNeonGrid()
@@ -271,7 +271,6 @@ void GamePlayState::createArenaNeonGrid()
 		this->createLine(currentPos, worldMatrix, startColor, endColor);
 	}
 	*/
-	int test3 = 4;
 }
 
 void GamePlayState::createLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 startColor, XMFLOAT4 endColor)
@@ -319,7 +318,7 @@ void GamePlayState::createArenaWalls()
 	int nextID = this->arenaObjects.size();
 
 	//Create rotation matrix for Left and right row of walls. Rotates 90 degres around Y-axis.
-	XMMATRIX rotLR = XMMatrixRotationY((float)(PI / 2));
+	XMMATRIX rotLR = XMMatrixRotationY(XMConvertToRadians(static_cast<float>(90)));
 	//Create rotation matrix for Top and Bottom row of walls. No rotation so it will be identity matrix.
 	XMMATRIX rotTB = XMMatrixIdentity();
 	//Create scale matrix for all of the walls.
@@ -488,7 +487,6 @@ void GamePlayState::createArenaWalls()
 		}
 	}
 	
-	int test2 = 2;
 }
 
 void GamePlayState::createAWall(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color, WALLTYPE::TYPE wType)
