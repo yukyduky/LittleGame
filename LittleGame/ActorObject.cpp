@@ -31,6 +31,16 @@ const size_t ActorObject::getID()
 	return this->ID;
 }
 
+GamePlayState * ActorObject::getPGPS()
+{
+	return this->pGPS;
+}
+
+float ActorObject::getRotation()
+{
+	return this->rotation;
+}
+
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 

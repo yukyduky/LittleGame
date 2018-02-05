@@ -49,6 +49,8 @@ public:
 	*/
 	ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS);
 	virtual const size_t getID();
+	virtual GamePlayState* getPGPS();
+	virtual float getRotation();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
 
@@ -82,7 +84,7 @@ public:
 
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
-					//Is in fireability0() i nthis version
+					//Is in fireability0() in this version
 
 };
 

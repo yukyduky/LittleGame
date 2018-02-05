@@ -5,32 +5,28 @@
 #include "Spell.h"
 #include "Projectile.h"
 
+class GamePlayState;
+
 enum class NAME { EXPLOSION };
 
 class DamageSpell : public Spell
 {
 public:
-	DamageSpell(NAME name);
+	DamageSpell(ActorObject* player, NAME name);
 	~DamageSpell();
 
 	bool castSpell();
 	void upgrade(float modif);
+	void spawnProj();
+	void update();
 
 private:
 	float strength;
 	NAME name;
+	Projectile* proj;
+	GamePlayState* pGPS;
 
 };
 
-DamageSpell::DamageSpell(NAME name)
-{
-	this->strength = 1;
-	this->name = name;
-
-}
-
-DamageSpell::~DamageSpell()
-{
-}
 
 #endif // !DAMAGESPELL_H

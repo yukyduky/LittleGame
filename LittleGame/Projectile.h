@@ -6,7 +6,6 @@
 #include "Locator.h"
 
 
-
 class Projectile : public GameObject
 {
 public:

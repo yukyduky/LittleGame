@@ -54,6 +54,9 @@
     <ClCompile Include="MobilitySpell.cpp">
       <Filter>New work</Filter>
     </ClCompile>
+    <ClCompile Include="DamageSpell.cpp">
+      <Filter>New work</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArenaGlobals.h" />

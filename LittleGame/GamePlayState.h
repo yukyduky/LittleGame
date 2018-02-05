@@ -190,7 +190,7 @@ public:
 	int newID() { return this->arenaObjects.size(); }
 
 	/*Actors call to shoot projectile*/
-	void initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
 };
 
 #endif // !GAMEPLAYSTATE_H

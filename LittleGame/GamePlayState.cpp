@@ -686,7 +686,7 @@ void GamePlayState::initPlayer()
 	*/
 }
 
-void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 {
 	Projectile* proj;
 	int nextID = this->newID();
@@ -740,4 +740,5 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	this->arenaObjects.push_back(proj);
 	this->projectiles.push_back(proj);
 
+	return proj;
 }

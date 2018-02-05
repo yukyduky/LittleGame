@@ -1,8 +1,9 @@
 
 #include "Spell.h"
 
-Spell::Spell()
+Spell::Spell(ActorObject* player)
 {
+	this->player = player;
 }
 
 Spell::~Spell()

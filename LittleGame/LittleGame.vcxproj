@@ -175,6 +175,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="DamageSpell.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="MobilitySpell.cpp" />
     <ClCompile Include="Projectile.cpp" />
