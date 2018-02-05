@@ -1,11 +1,13 @@
 #include "Projectile.h"
 #include "Component.h"
+#include "DamageSpell.h"
 
 Projectile::Projectile(const size_t ID, XMFLOAT3 pos) : GameObject(ID, pos)
 {
 	//this->speed = spd;
 	this->setState(OBJECTSTATE::MOVING);
 	this->setType(OBJECTTYPE::PROJECTILE);
+	this->spell = nullptr;
 }
 
 Projectile::~Projectile()
@@ -21,6 +23,13 @@ void Projectile::cleanUp()
 		delete c;
 	}
 }
+
+DamageSpell * Projectile::getSpell()
+{
+	return this->spell;
+}
+
+
 
 void Projectile::update()
 {

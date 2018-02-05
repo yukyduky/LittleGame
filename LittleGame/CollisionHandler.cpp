@@ -1,5 +1,5 @@
 #include "CollisionHandler.h"
-
+#include "DamageSpell.h"
 
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
@@ -284,8 +284,10 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// CODE GOES HERE
-	this->collidable2->setPosition(this->collidable2->getPosition() + DirectX::XMFLOAT3{ 0, 30, 0 });
+	// Template untill AA is implemented
+	//if(dynamic_cast<Projectile*>(this->collidable2)->getSpell() != nullptr)
+		dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
+	;
 }
 
 void CollisionHandler::collisionEnemyEnemy() {

@@ -5,9 +5,9 @@
 #include "Spell.h"
 #include "Projectile.h"
 
+
 class GamePlayState;
 
-enum class NAME { EXPLOSION };
 
 class DamageSpell : public Spell
 {
@@ -19,6 +19,8 @@ public:
 	void upgrade(float modif);
 	void spawnProj();
 	void update();
+
+	void collision(GameObject* target);
 
 private:
 	float strength;

@@ -8,7 +8,8 @@
 
 enum class GLYPHTYPE {GLYPH1, GLYPH2, GLYPH3};
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
-enum class SPELLSTATE {READY, COOLDOWN, LOCKED};
+enum class SPELLSTATE {READY, COOLDOWN, TRAVLING, LOCKED};
+
 
 class Spell
 {
@@ -24,10 +25,13 @@ public:
 
 	ActorObject* getPlayer() { return this->player; };
 	void setType(SPELLTYPE input) { this->type = input; };
+	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(size_t input) { this->coolDown = input; };
+
+	size_t getTSC() { return this->timeSinceCast; };
 
 private:
 	//Array of glyphs

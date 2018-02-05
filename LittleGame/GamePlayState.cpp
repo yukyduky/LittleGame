@@ -11,6 +11,9 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 
+#include "DamageSpell.h"
+#include "MobilitySpell.h"
+
 using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
@@ -128,6 +131,8 @@ void GamePlayState::update(GameManager * gm)
 {
 	this->updatePhysicsComponents();
 	this->checkCollisions();
+
+	player1->decCD();
 
 	for (auto &iterator : playerInput) {
 		iterator->generateCommands();
@@ -676,6 +681,12 @@ void GamePlayState::initPlayer()
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
 
+	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
+	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
+	actor->addSpell(explosionSpell);
+	actor->addSpell(dashSpell);
+
+	player1 = actor;
 
 	/*
 	this->go = new GameObject(0);
@@ -726,9 +737,10 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	this->rio.addGraphics(block);
 
 	//Template of components that are beeing worked on by other users
-	abiliComp = new FireballComponent(*proj, 1);
-	proj->setVelocity(dir * proj->getSpeed());
-	proj->addComponent(abiliComp);
+	//abiliComp = new FireballComponent(*proj, 1);
+	//proj->addComponent(abiliComp);
+	proj->setSpeed(props.speed);
+	proj->setVelocity(dir * props.speed);
 
 	//Template for Physics
 	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);

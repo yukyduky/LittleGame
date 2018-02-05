@@ -4,7 +4,6 @@
 
 #include "Spell.h"
 
-enum class NAME { DASH };
 
 class MobilitySpell : public Spell
 {

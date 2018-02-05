@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Locator.h"
 
+class DamageSpell;
 
 class Projectile : public GameObject
 {
@@ -19,9 +20,13 @@ public:
 	float getSpeed() { return this->speed; }
 	void setDirection(XMFLOAT3 dir) { this->direction = dir; }
 	XMFLOAT3 getDirection() { return this->direction; }
+	void setSpell(DamageSpell* spell) { this->spell = spell; }
+
+	DamageSpell* getSpell() ;
 private:
 	XMFLOAT3 direction;
 	float speed;
+	DamageSpell* spell;
 };
 
 

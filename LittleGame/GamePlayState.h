@@ -19,7 +19,12 @@
 #include "ArenaGlobals.h"
 
 
-
+//Spells
+enum class NAME { 
+	//Damage
+	AUTOATTACK, EXPLOSION, 
+	//Mobility
+	DASH };
 
 //Defines what a specific space contains
 namespace SQUARETYPE {
@@ -34,12 +39,13 @@ namespace WALLTYPE {
 class Command;
 class InputComponent;
 
+//(Size of cube, color in XMFLOAT3, travelSpeed)
 struct ProjProp {
 	float size;
 	XMFLOAT3 color;
+	float speed;
 
-	//ProjProp(float s, XMFLOAT3 c) : size(5), color(XMFLOAT3(0.5, 0.5, 0.5)) {}
-	ProjProp(float s, XMFLOAT3 c) : size(s), color(c) {}
+	ProjProp(float s, XMFLOAT3 c, float spd) : size(s), color(c), speed(spd){}
 };
 
 
@@ -59,6 +65,9 @@ private:
 	std::vector<GraphicsComponent*> graphics;
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
+
+	//Template to be able to update player1, changed to vector when multiplayer is implemented
+	ActorObject* player1;
 
 	Command* selectCommand;
 

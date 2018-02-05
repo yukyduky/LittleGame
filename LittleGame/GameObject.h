@@ -8,7 +8,7 @@
 #include <SimpleMath.h>
 
 
-enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
+enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP, COLLISION };
 enum class OBJECTTYPE { PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE, PROJECTILE };
 
 class Component;

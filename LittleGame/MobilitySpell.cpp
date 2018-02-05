@@ -5,6 +5,8 @@ MobilitySpell::MobilitySpell(ActorObject* player, NAME name) : Spell(player)
 {
 	this->strength = 1;
 	this->name = name;
+	this->setType(SPELLTYPE::MOBILITY);
+
 }
 
 MobilitySpell::~MobilitySpell()

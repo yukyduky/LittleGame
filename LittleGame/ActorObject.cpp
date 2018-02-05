@@ -1,18 +1,18 @@
 #include "ActorObject.h"
-#include "GameObject.h"
 #include "ControllerComponent.h"
-#include "Locator.h"
 #include "GamePlayState.h"
 #include "ArenaGlobals.h"
+
+//Include spells
+#include "DamageSpell.h"
+#include "MobilitySpell.h"
 
 #include <DirectXMath.h>
 
 ActorObject::ActorObject(const size_t ID)
 	: GameObject(ID)
 {
-	for (auto it : this->abilities) {
-		it = nullptr;
-	}
+	
 }
 
 
@@ -21,9 +21,7 @@ ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS)
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
-	for (auto it : this->abilities) {
-		it = nullptr;
-	}
+	
 }
 
 const size_t ActorObject::getID()
@@ -39,6 +37,11 @@ GamePlayState * ActorObject::getPGPS()
 float ActorObject::getRotation()
 {
 	return this->rotation;
+}
+
+XMFLOAT3 ActorObject::getDirection()
+{
+	return XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
 }
 
 void ActorObject::receive(GameObject & obj, Message msg)
@@ -165,14 +168,9 @@ void ActorObject::fireAbility0()
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		if (autoAttCD[0] <= 0)
 		{
-			XMFLOAT3 direction = XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
-			ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f));
-			pGPS->initProjectile(this->pos + DirectX::XMFLOAT3{ -40, 0, 0 }, direction, props);
-			autoAttCD[0] = autoAttCD[1];
-		}
-		else
-		{
-			this->decCD();
+			ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 400);
+			this->pGPS->initProjectile(this->pos + DirectX::XMFLOAT3{ -40, 0, 0 }, this->getDirection(), props);
+			this->autoAttCD[0] = this->autoAttCD[1];
 		}
 	}
 	else {
@@ -208,9 +206,21 @@ InputComponent* ActorObject::GETinputComponent()
 
 void ActorObject::decCD()
 {
-	if (autoAttCD[0] >= 0)
+	for (auto itteration : spells)
+	{
+		itteration->updateCD();
+	}
+
+	//Below should be changed to work with above
+	if (autoAttCD[0] > 0)
 	{
 		autoAttCD[0] -= Locator::getGameTime()->getDeltaTime();
 	}
+}
+
+void ActorObject::addSpell(Spell * spell)
+{
+	int next = this->spells.size();
+	this->spells.push_back(spell);
 }
 

@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "AbilityComponent.h"
 #include "InputComponent.h"
+#include "Locator.h"
 //#include "GraphicsComponent.h"
 //#include "KeyboardComponent.h"
 //*#include "ControllerComponent.h"
@@ -15,6 +16,7 @@
 #include <vector>
 
 class GamePlayState;
+class Spell;
 
 
 namespace ABILITIES {
@@ -27,10 +29,7 @@ class ActorObject : public GameObject
 {
 private:
 	InputComponent * pInput;
-	// -------------TEMPLATE
-	AbilityComponent* abilities[5];
-	AbilityComponent* ability0;
-	// -------------TEMPLATE
+	std::vector<Spell*> spells;
 	float hp;
 	float energy;
 
@@ -51,6 +50,7 @@ public:
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
+	virtual XMFLOAT3 getDirection();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
 
@@ -85,7 +85,9 @@ public:
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
 					//Is in fireability0() in this version
-
+	
+	// SPELLS
+	void addSpell(Spell* spell);
 };
 
 
