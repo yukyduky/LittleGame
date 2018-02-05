@@ -284,10 +284,8 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// Template untill AA is implemented
-	if(dynamic_cast<Projectile*>(this->collidable2)->getSpell() != nullptr)
-		dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
-	;
+	dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
+	
 }
 
 void CollisionHandler::collisionEnemyEnemy() {

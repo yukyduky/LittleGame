@@ -11,8 +11,11 @@ DamageSpell::DamageSpell(ActorObject* player, NAME name) : Spell(player)
 	{
 	case NAME::AUTOATTACK:
 		this->setCoolDown(0.3);
+		this->damage = 10;
 		break;
 	case NAME::EXPLOSION:
+		this->setCoolDown(1.3);
+		this->damage = 50;
 		break;
 	}
 }
@@ -42,7 +45,7 @@ bool DamageSpell::castSpell()
 			break;
 		case NAME::EXPLOSION:
 			//Spawn a projectile and fire it in direction
-			props = ProjProp(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 5);
+			props = ProjProp(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 500);
 			this->spawnProj(props);
 
 			this->setState(SPELLSTATE::COOLDOWN);
@@ -100,7 +103,7 @@ void DamageSpell::collision(GameObject * target)
 		//Template behavior
 		
 
-		target->setPosition(XMFLOAT3 (200, 100, 200));
+		//target->setPosition(XMFLOAT3 (200, 100, 200));
 		break;
 	}
 

@@ -28,6 +28,7 @@ private:
 	Projectile* proj;
 	GamePlayState* pGPS;
 
+	float damage;
 };
 
 

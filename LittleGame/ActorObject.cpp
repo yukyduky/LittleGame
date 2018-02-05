@@ -166,9 +166,9 @@ void ActorObject::rotate()
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		if (this->spells.front()->getState() == SPELLSTATE::READY)
+		if (this->spells.at(size_t(NAME::EXPLOSION))->getState() == SPELLSTATE::READY)
 		{
-			spells.front()->castSpell();
+			spells.at(size_t(NAME::EXPLOSION))->castSpell();
 		}
 		//if (autoAttCD[0] <= 0)
 		//{
@@ -192,6 +192,10 @@ void ActorObject::fireAbilityX()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		this->rotate();
+		if (this->spells.at(size_t(NAME::AUTOATTACK))->getState() == SPELLSTATE::READY)
+		{
+			spells.at(size_t(NAME::AUTOATTACK))->castSpell();
+		}
 	}
 	else {
 

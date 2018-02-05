@@ -683,13 +683,13 @@ void GamePlayState::initPlayer()
 
 	//Create the spell
 	DamageSpell* autoAttackSpell = new DamageSpell(actor, NAME::AUTOATTACK);
-	//DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
-	//MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
+	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
+	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
 
 	//Add the spell to the player
 	actor->addSpell(autoAttackSpell);
-	//actor->addSpell(explosionSpell);
-	//actor->addSpell(dashSpell);
+	actor->addSpell(explosionSpell);
+	actor->addSpell(dashSpell);
 
 	player1 = actor;
 
