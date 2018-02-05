@@ -20,8 +20,9 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->currentWaveCount = 5;
-	this->currentWaveSize = 5;
+	this->spawnInterval = 0.5;
+	this->currentWaveCount = 3;
+	this->currentWaveSize = 2;
 	Wave* currentWave;
 
 	// Per wave
@@ -49,7 +50,7 @@ void EnemyManager::cleanLevel()
 	for (auto &currentWave : this->waves) {
 
 		// Since enemies are actors which SHOULD HAVE been added to the dynamicObjectsArray,
-		// they'll be cleaned and deleted from there.
+		// they'll be cleaned and deleted from there, so we only need to delete the 'Waves' here
 		delete currentWave;
 	}
 }
@@ -78,6 +79,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE)
 
 	// Physics
 	physics = new PhysicsComponent(*enemy);
+	enemy->addComponent(physics);
 	/* this->physicsListDynamic.push_back(physics); kanske om det behövs */
 
 	// Input
@@ -97,7 +99,7 @@ void EnemyManager::update()
 	if (this->waves.size() > 0) {
 
 		// If the currentwave has any enemies left
-		if (this->waves.back()->enemies.size() > 0) {
+		if (this->waves.front()->enemies.size() > 0) {
 
 			// Update timePassed
 			timePassed += Locator::getGameTime()->GetTime() - startTime;
@@ -110,15 +112,21 @@ void EnemyManager::update()
 				timePassed = 0;
 
 				// Grab the next enemy in line
-				// Pop him!
+				// Remove his homelink
 				// Send him out into the real world
-				/*
-				ActorObject* freshEnemy = this->currentWaves.front()->enemies.front();
-				this->currentWaves.front()->enemies.pop_front;
-				this->pGPS->GetDynamicObjectsVector().push_back(freshEnemy);
-				*/
+				
+				ActorObject* freshEnemy = this->waves.front()->enemies.front();
+				this->waves.front()->enemies.pop_front();
+			//	this->pGPS->GetDynamicObjectsVector().push_back(freshEnemy);
+				
 
 			}
+		}
+		// No enemies in this wave? Move on to the next wave
+		else {
+			// Goodbye wave!
+			delete this->waves.front();
+			this->waves.pop_front();
 		}
 	}
 }
