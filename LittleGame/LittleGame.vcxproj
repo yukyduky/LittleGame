@@ -139,6 +139,7 @@
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="Projectile.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Renderer.cpp" />

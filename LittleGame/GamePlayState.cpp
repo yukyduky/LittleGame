@@ -74,6 +74,7 @@ void GamePlayState::checkCollisions() {
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera);
+	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
 	this->initArena();
 
@@ -87,6 +88,7 @@ void GamePlayState::cleanUp()
 	// Direct internal objects
 	// this->rio.cleanUp();
 	// this->camera.cleanUp();
+	this->enemyManager.cleanUp();
 
 
 	// GameObjects which will on their own clean up all of their connected components
@@ -128,6 +130,8 @@ void GamePlayState::update(GameManager * gm)
 {
 	this->updatePhysicsComponents();
 	this->checkCollisions();
+
+	this->enemyManager.update();
 
 	for (auto &iterator : playerInput) {
 		iterator->generateCommands();
@@ -628,6 +632,12 @@ XMFLOAT2 GamePlayState::findGridIndexFromPosition(XMFLOAT3 pos)
 
 void GamePlayState::initPlayer()
 {
+	/* WARNING:
+	Updates who change behavior here will also be needed to be taken account for in
+	'EnemyManager::createEnemy()' who needs to be aware if we change the current standard
+	for creating actors.
+	*/
+
 	ActorObject* actor;
 	BlockComponent* block;
 	InputComponent* input;		// THIS IS CORRECT!
