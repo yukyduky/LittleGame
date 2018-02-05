@@ -34,20 +34,16 @@ float ControllerComponent::checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE
 
 	float mag = sqrt(pow(axis.x, 2) + pow(axis.y, 2));
 
-	axis.x /= mag;
-	axis.y /= mag;
-
 	if (mag > deadzone) {
 		if (mag > 32767) {
 			mag = 32767;
 		}
-
-		mag -= deadzone;
-
-		mag /= 32767 - deadzone;
 	}
 	else {
 		mag = 0.0f;
+		if (thumb == THUMB::LTHUMB) {
+			int test = 0;
+		}
 	}
 
 	return mag;
@@ -80,7 +76,7 @@ void ControllerComponent::generateCommands()
 
 	DWORD result = XInputGetState(this->controllerID, &nextState);
 	
-	if (result == ERROR_SUCCESS && this->currentState.dwPacketNumber != nextState.dwPacketNumber) {
+	if (result == ERROR_SUCCESS) {
 		// Iterates through all the controller buttons except LSHOULDER & RSHOULDER
 		for (auto &it : this->controllerCommandMap) {
 

@@ -10,18 +10,16 @@
 #include "GraphicsComponent.h"
 #include "GameObject.h"
 #include "ActorObject.h"
+#include "Projectile.h"
 #include "Camera.h"
 #include "PhysicsComponent.h"
 #include "CollisionHandler.h"
+#include "FireballComponent.h"
 #include <list>
+#include "ArenaGlobals.h"
 
 
-#define ARENAWIDTH 600		//The arenas "length" (x-dimension)
-#define ARENAHEIGHT 400		//The arenas "height" (z-dimension)
-#define ARENASQUARESIZE 10	//Have to be able to divide ARENAHEIGHT and ARENAWIDTH
-#define LENGTHOFWALLS 5		//Will be multiplied with ARENASQUARESIZE for total length of a wall.
-#define HEIGHTOFWALLS 8		//Will be multiplied with ARENASQUARESIZE for total height of a wall.
-#define PI 3.14159265358979323846
+
 
 //Defines what a specific space contains
 namespace SQUARETYPE {
@@ -36,16 +34,28 @@ namespace WALLTYPE {
 class Command;
 class InputComponent;
 
+struct ProjProp {
+	float size;
+	XMFLOAT3 color;
+
+	//ProjProp(float s, XMFLOAT3 c) : size(5), color(XMFLOAT3(0.5, 0.5, 0.5)) {}
+	ProjProp(float s, XMFLOAT3 c) : size(s), color(c) {}
+};
+
+
 class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
 	
+	CollisionHandler collisionHandler;
 	Camera camera;
 	RenderInputOrganizer rio;
 	int arenaGrid[ARENAWIDTH/ARENASQUARESIZE][ARENAHEIGHT/ARENASQUARESIZE];
+	//everything that will exist in this level
 	std::vector<GameObject*> arenaObjects;
 
+	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
 	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
@@ -53,12 +63,13 @@ private:
 	std::list<Light> pointLights;
 
 	Command* selectCommand;
-	
-	CollisionHandler collisionHandler;
 
 	std::vector<GameObject*> gameObjectsArray;
-	std::vector<PhysicsComponent*> physicsComponentsArray;
 
+	std::list<PhysicsComponent*> physicsListStatic;
+	std::list<PhysicsComponent*> physicsListDynamic;
+	//Array with all active projectiles
+	std::vector<Projectile*> projectiles;
 
 	void updatePhysicsComponents();
 	
@@ -126,6 +137,8 @@ public:
 	*/
 	void createArenaNeonGrid();
 
+	void createRectLine(XMFLOAT3 pos, XMMATRIX wMatrix, XMFLOAT4 color);
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates the new GameObject and the new LineComponent
 	2. Gives the world matrix to the LineComponent.
@@ -169,8 +182,17 @@ public:
 	*/
 	XMFLOAT2 findGridIndexFromPosition(XMFLOAT3 pos);
 
-
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Creates the ActorObject and all it's matrices that will represent the player.
+	2. Creates a BlockComponent that will represent the players body.
+	*/
 	void initPlayer();
+
+	/*RETURNS THE NEW ID*/
+	int newID() { return this->arenaObjects.size(); }
+
+	/*Actors call to shoot projectile*/
+	void initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
 };
 
 #endif // !GAMEPLAYSTATE_H

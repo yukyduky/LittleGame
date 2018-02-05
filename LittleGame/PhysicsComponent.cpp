@@ -29,16 +29,13 @@
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
-	this->selfBoundingSphere.Center = DirectX::XMFLOAT3{ 0, 0, 0 };
+	this->selfBoundingSphere.Center = obj.getPosition();
 	this->selfBoundingSphere.Radius = 1.0f;
 }
 
-PhysicsComponent::PhysicsComponent(
-	DirectX::XMFLOAT3 boundingSphereCenter,
-	float radius,
-	GameObject& obj) : ID(obj.getID()) {
-	this->selfBoundingSphere.Center = boundingSphereCenter;
-	this->selfBoundingSphere.Radius = radius;
+PhysicsComponent::PhysicsComponent(GameObject& obj, float boundingSphereRadius) : ID(obj.getID()) {
+	this->selfBoundingSphere.Center = obj.getPosition();
+	this->selfBoundingSphere.Radius = boundingSphereRadius;
 }
 
 PhysicsComponent::~PhysicsComponent() {
@@ -76,6 +73,15 @@ const size_t PhysicsComponent::getID() {
 
 void PhysicsComponent::receive(GameObject & obj, Message msg) {
 	// Switch case that depends on the message being received
+}
+
+void PhysicsComponent::update()
+{
+
+}
+
+void PhysicsComponent::cleanUp() {
+
 }
 
 //_________________________________________//

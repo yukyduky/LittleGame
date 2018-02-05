@@ -62,6 +62,11 @@ void LineComponent::receive(GameObject& obj, Message msg)
 {
 }
 
+void LineComponent::update()
+{
+
+}
+
 void LineComponent::cleanUp()
 {
 

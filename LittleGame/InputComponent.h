@@ -101,6 +101,7 @@ public:
 
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
+	virtual void update();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	WARNING Has to be run once before any other use of this class WARNING
 	1. Initializes the mappings between keycodes and enums

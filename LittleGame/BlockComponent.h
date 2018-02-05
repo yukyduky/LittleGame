@@ -47,7 +47,7 @@ public:
 	1. Something
 	*/
 	virtual void receive(GameObject& obj, Message msg);
-	
+	virtual void update();
 	/*--------<INFORMATION>--------
 	1. Returns the ID of the component.
 	*/

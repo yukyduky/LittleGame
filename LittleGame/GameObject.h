@@ -45,10 +45,10 @@ public:
 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Send the parameter 'msg'(obj) to all components that have been added to the object.
+	1. Send the parameter ' msg '(obj) to all components that have been added to the object.
 	*/
 	void send(Message msg);
-
+	void update();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleans up the GameObject and all the attached components.
 	*/
@@ -71,9 +71,10 @@ public:
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
-	void updateWorldMatrix();
+	void updateWorldMatrix(XMFLOAT3 newPos);
 
 	OBJECTTYPE getType() const { return this->type; }
+	void setType(OBJECTTYPE type) { this->type = type; }
 
 };
 
