@@ -29,11 +29,15 @@
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
+	this->entityPointer = &obj;
+	obj.addComponent(this);
 	this->selfBoundingSphere.Center = obj.getPosition();
 	this->selfBoundingSphere.Radius = 1.0f;
 }
 
 PhysicsComponent::PhysicsComponent(GameObject& obj, float boundingSphereRadius) : ID(obj.getID()) {
+	this->entityPointer = &obj;
+	obj.addComponent(this);
 	this->selfBoundingSphere.Center = obj.getPosition();
 	this->selfBoundingSphere.Radius = boundingSphereRadius;
 }
@@ -42,7 +46,11 @@ PhysicsComponent::~PhysicsComponent() {
 
 }
 
-DirectX::BoundingSphere PhysicsComponent::getBoundingSphere() {
+GameObject* PhysicsComponent::GETEntityPointer() {
+	return this->entityPointer;
+}
+
+DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() {
 	return this->selfBoundingSphere;
 }
 

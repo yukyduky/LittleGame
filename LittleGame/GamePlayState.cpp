@@ -18,50 +18,56 @@ GamePlayState GamePlayState::sGamePlayState;
 void GamePlayState::updatePhysicsComponents()
 {
 	for (auto&& i : physicsListDynamic) {
-		if (this->arenaObjects.at(i->getID())->getState() != OBJECTSTATE::DEAD) {
-			i->updateBoundingArea(this->arenaObjects.at(i->getID())->getPosition());
+		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+			i->updateBoundingArea(i->GETEntityPointer()->getPosition());
 		}
 	}
 }
 
 void GamePlayState::checkCollisions() {
-	// LOOP 1: Looping through each DYNAMIC physicsComponent
+	//--------//
+	// LOOP 1 //   : Looping through each DYNAMIC physicsComponent
+	//--------//
 	for (auto&& i : this->physicsListDynamic) {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
 		// NOTE: Skipping if object state = DEAD.
 		int iID = i->getID();
-		if (this->arenaObjects.at(iID)->getState() != OBJECTSTATE::DEAD) {
-			// LOOP 2.1: DYNAMIC <--> DYNAMIC Collision
+		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+			//----------//
+			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
+			//----------//
 			for (auto&& k : this->physicsListDynamic) {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (this->arenaObjects.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+					if (k->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
 
-						if (i->checkCollision(k->getBoundingSphere())) {
+						if (i->checkCollision(k->GETBoundingSphere())) {
 							// Call COLLISION-CLASS function
 							this->collisionHandler.executeCollision(
-								this->arenaObjects.at(i->getID()),
-								this->arenaObjects.at(k->getID()),
-								&i->getBoundingSphere(),
-								&k->getBoundingSphere()
+								i->GETEntityPointer(),
+								k->GETEntityPointer(),
+								&i->GETBoundingSphere(),
+								&k->GETBoundingSphere()
 							);
 						}
 					}
 				}
 				
 			}
-			// LOOP 2.2: DYNAMIC <--> STATIC Collision
+			//----------//
+			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
+			//----------//
 			for (auto&& k : this->physicsListStatic) {
-				if (this->arenaObjects.at(k->getID())->getState() != OBJECTSTATE::DEAD) {
+				if (k->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
 
-					if (i->checkCollision(k->getBoundingSphere())) {
+					if (i->checkCollision(k->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
 						this->collisionHandler.executeCollision(
-							this->arenaObjects.at(i->getID()),
-							this->arenaObjects.at(k->getID()),
-							&i->getBoundingSphere(),
-							&k->getBoundingSphere()
+							i->GETEntityPointer(),
+							k->GETEntityPointer(),
+							&i->GETBoundingSphere(),
+							&k->GETBoundingSphere()
 						);
 					}
 				}
@@ -639,12 +645,11 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
 	actor = new ActorObject(nextID, playerPos, this);
 	/// PHYSICS COMPONENT:
-	// 1: We new a PhysicsComponent, using the actor's address as a parameter.
-	physics = new PhysicsComponent(*actor);
-	// 2: We add this component to the Dynamic list because actor = dynamic.
+	// 1: We new a PhysicsComponent, using the actor-POINTER'S address as a parameter.
+	physics = new PhysicsComponent(*actor, 20.0f);
+	// 2: We add this component to the Dynamic list because this actor = dynamic.
 	this->physicsListDynamic.push_back(physics);
-	// 3: We add this component to actor's list of components.
-	actor->addComponent(this->physicsListDynamic.back());
+
 	XMFLOAT3 playerVelocity(300.0f, 300.0f, 300.0f);
 	actor->setVelocity(playerVelocity);
 
@@ -697,6 +702,7 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	AbilityComponent* abiliComp;
 
 	proj = new Projectile(nextID, pos);
+	proj->setType(OBJECTTYPE::PROJECTILE);
 	proj->setDirection(dir);
 
 	//input for blockComp
@@ -731,9 +737,8 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
+	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
 	this->physicsListDynamic.push_back(phyComp);
-	proj->addComponent(phyComp);
 
 	
 	//Add proj to objectArrays

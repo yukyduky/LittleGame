@@ -16,8 +16,10 @@
 class PhysicsComponent : public Component
 {
 private:
+	GameObject* entityPointer;
 	DirectX::BoundingSphere selfBoundingSphere;
 	//DirectX::BoundingBox selfBoundingBox;
+	int quadTreeIndex;
 	const size_t ID;
 
 public:
@@ -25,7 +27,9 @@ public:
 	PhysicsComponent(GameObject& obj, float boundingSphereRadius);
 	~PhysicsComponent();
 
-	DirectX::BoundingSphere getBoundingSphere();
+	GameObject* GETEntityPointer();
+
+	DirectX::BoundingSphere GETBoundingSphere();
 	bool checkCollision(DirectX::BoundingSphere boundingSphere_in);
 	bool checkCollision(DirectX::BoundingBox boundingBox_in);
 

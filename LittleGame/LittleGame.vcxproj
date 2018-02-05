@@ -142,6 +142,7 @@
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
