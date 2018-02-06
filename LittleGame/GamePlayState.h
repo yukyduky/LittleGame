@@ -64,7 +64,7 @@ private:
 
 	Command* selectCommand;
 
-	std::vector<GameObject*> gameObjectsArray;
+	//std::vector<GameObject*> gameObjectsArray;
 
 	std::list<PhysicsComponent*> physicsListStatic;
 	std::list<PhysicsComponent*> physicsListDynamic;

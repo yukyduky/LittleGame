@@ -10,6 +10,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="BlockComponent.cpp" />
+    <ClCompile Include="RenderInputOrganizer.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="RectangleComponent.cpp" />
+    <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="TextureComponent.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="FireballComponent.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="AbilityComponent.cpp">
       <Filter>Source Files\Components\Abilities</Filter>
     </ClCompile>
@@ -186,6 +198,41 @@
     <ClInclude Include="LevelManager.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
+    <ClInclude Include="AbilityComponent.h" />
+    <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="ArenaGlobals.h" />
+    <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="Commands.h" />
+    <ClInclude Include="CollisionHandler.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="ControllerComponent.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="D3D.h" />
+    <ClInclude Include="FireballComponent.h" />
+    <ClInclude Include="ID3D.h" />
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GamePlayState.h" />
+    <ClInclude Include="GameTime.h" />
+    <ClInclude Include="GraphicsComponent.h" />
+    <ClInclude Include="IGameTime.h" />
+    <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="KeyboardComponent.h" />
+    <ClInclude Include="IAudioManager.h" />
+    <ClInclude Include="LineComponent.h" />
+    <ClInclude Include="Locator.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="BlockComponent.h" />
+    <ClInclude Include="RectangleComponent.h" />
+    <ClInclude Include="RenderInputOrganizer.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="TextureComponent.h" />
+    <ClInclude Include="QuadTree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

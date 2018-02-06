@@ -1,6 +1,5 @@
 #include "CollisionHandler.h"
-
-
+#include <cassert>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
@@ -286,7 +285,7 @@ void CollisionHandler::collisionPlayerProjectile() {
 	}
 
 	// CODE GOES HERE
-	this->collidable2->setPosition(this->collidable2->getPosition() + DirectX::XMFLOAT3{ 0, 30, 0 });
+	this->collidable2->setPosition(this->collidable2->getPosition() + DirectX::XMFLOAT3{ 0, 100, 0 });
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
@@ -496,6 +495,10 @@ void CollisionHandler::executeCollision(
 	case 15: this->collisionProjectileProjectile();
 		break;
 	}
+
+	// If an object never had it's type set, these assertions will go off, crashing the program
+	assert(this->collidable2->getType() != OBJECTTYPE::NOT_SET && "WARNING: 'Collidable1' has not had it's objectType set!!!");
+	assert(this->collidable1->getType() != OBJECTTYPE::NOT_SET && "WARNING: 'Collidable1' has not had it's objectType set!!!");
 }
 //_________________________________________//
 //                                         //
