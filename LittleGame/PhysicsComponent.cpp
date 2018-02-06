@@ -46,14 +46,6 @@ PhysicsComponent::~PhysicsComponent() {
 
 }
 
-GameObject* PhysicsComponent::GETEntityPointer() {
-	return this->entityPointer;
-}
-
-DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() {
-	return this->selfBoundingSphere;
-}
-
 bool PhysicsComponent::checkCollision(DirectX::BoundingSphere boundingSphere_in) {
 	return this->selfBoundingSphere.Intersects(boundingSphere_in);
 }
@@ -73,6 +65,14 @@ void PhysicsComponent::updateBoundingArea(float radius) {
 void PhysicsComponent::updateBoundingArea(DirectX::XMFLOAT3 centerPos, float radius) {
 	this->selfBoundingSphere.Center = centerPos;
 	this->selfBoundingSphere.Radius = radius;
+}
+
+GameObject* PhysicsComponent::GETEntityPointer() {
+	return this->entityPointer;
+}
+
+DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() {
+	return this->selfBoundingSphere;
 }
 
 const size_t PhysicsComponent::getID() {

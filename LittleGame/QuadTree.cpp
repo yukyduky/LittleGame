@@ -1,5 +1,5 @@
-#include "QuadTree.h"
-
+//#include "QuadTree.h"
+//
 //QuadTreeSquare::QuadTreeSquare() {
 //	this->sideLength = 0;
 //	this->x = 0;

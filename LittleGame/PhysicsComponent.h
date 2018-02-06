@@ -27,15 +27,15 @@ public:
 	PhysicsComponent(GameObject& obj, float boundingSphereRadius);
 	~PhysicsComponent();
 
-	GameObject* GETEntityPointer();
-
-	DirectX::BoundingSphere GETBoundingSphere();
 	bool checkCollision(DirectX::BoundingSphere boundingSphere_in);
 	bool checkCollision(DirectX::BoundingBox boundingBox_in);
 
 	void updateBoundingArea(DirectX::XMFLOAT3 centerPos);
 	void updateBoundingArea(float radius);
 	void updateBoundingArea(DirectX::XMFLOAT3 centerPos, float radius);
+
+	GameObject*				GETEntityPointer();
+	DirectX::BoundingSphere	GETBoundingSphere();
 
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);
