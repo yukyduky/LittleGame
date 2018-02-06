@@ -5,12 +5,12 @@
 #include "GameObject.h"
 #include "Locator.h"
 
-
+class DamageSpell;
 
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, XMFLOAT3 pos);
+	Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
 	~Projectile();
 
 	void update();
@@ -20,9 +20,13 @@ public:
 	float getSpeed() { return this->speed; }
 	void setDirection(XMFLOAT3 dir) { this->direction = dir; }
 	XMFLOAT3 getDirection() { return this->direction; }
+	void setSpell(DamageSpell* spell) { this->spell = spell; }
+
+	DamageSpell* getSpell() ;
 private:
 	XMFLOAT3 direction;
 	float speed;
+	DamageSpell* spell;
 };
 
 

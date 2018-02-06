@@ -32,7 +32,7 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION);
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
 		}
 
@@ -55,31 +55,32 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE)
+ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
-	/*
-	NOT FINISHED. Waiting for Static/Dynamic-objects 
-	*/
-
 	ActorObject* enemy;
 	BlockComponent* block;
 	InputComponent* input;
 	PhysicsComponent* physics;
 
-	// Graphics
-	XMFLOAT3 enemyScale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 enemyPos(0.0f, 0.0f, 0.0f);	// Position is randomed!
-
+	// Values
+	int ID = this->pGPS->newID();
+	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
+	XMFLOAT3 pos((float)(ARENAWIDTH / 2), scale.y, (float)(ARENAHEIGHT / 2));
+	XMFLOAT3 velocity(0, 0, 0);
+	XMFLOAT4 enemyColor(10.0f, 10.0f, 10.0f, 255.0f);
+	XMFLOAT3 rotation(0, 0, 0);
+	
 	// Object
-	enemy = new ActorObject(0);
+	enemy = new ActorObject(ID, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
 
-	// Physics
+	// Graphics Component
+	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
+
+	// Physics Component
 	physics = new PhysicsComponent(*enemy);
-	enemy->addComponent(physics);
-	/* this->physicsListDynamic.push_back(physics); kanske om det behövs */
 
-	// Input
-	input = new AIComponent(*enemy, AIBEHAVIOR::STRAIGHTTOWARDS);
+	// Input Component
+	input = new AIComponent(*enemy, aiBehavior);
 
 	return enemy;
 }
@@ -108,14 +109,11 @@ void EnemyManager::update()
 				timePassed = 0;
 
 				// Grab the next enemy in line
-				// Remove his homelink
-				// Send him out into the real world and let him handle himself (gl hf bobby!)
-				
 				ActorObject* freshEnemy = this->waves.front()->enemies.front();
+				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
-			//	this->pGPS->GetDynamicObjectsVector().push_back(freshEnemy);
-				
-
+				// Send him out into the real world and let him handle himself (gl hf bobby!)
+				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 			}
 		}
 		// No enemies in this wave? Move on to the next wave

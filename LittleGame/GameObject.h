@@ -9,7 +9,13 @@
 
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
-enum class OBJECTTYPE { PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE, PROJECTILE };
+namespace OBJECTTYPE {
+	enum TYPE {
+		PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE,
+		PROJECTILE, NOT_SET,
+		SIZE
+	};
+}
 
 class Component;
 
@@ -37,11 +43,11 @@ protected:
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
-	OBJECTTYPE type;
+	OBJECTTYPE::TYPE type;
 
 public:
-	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE) {}
-	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE) {}
+	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE), type(OBJECTTYPE::NOT_SET) {}
+	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE), type(OBJECTTYPE::NOT_SET) {}
 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -71,10 +77,11 @@ public:
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	XMMATRIX getRotationMatrix() { return this->rotationMatrix; }
 	void updateWorldMatrix(XMFLOAT3 newPos);
 
-	OBJECTTYPE getType() const { return this->type; }
-	void setType(OBJECTTYPE type) { this->type = type; }
+	OBJECTTYPE::TYPE getType() const { return this->type; }
+	void setType(OBJECTTYPE::TYPE type) { this->type = type; }
 
 };
 

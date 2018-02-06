@@ -5,6 +5,7 @@
 #include <deque>
 #include "GameObject.h"
 #include "ActorObject.h"
+#include "AIComponent.h"
 
 // Forward declaration to prevent double includes
 class GamePlayState;
@@ -40,7 +41,11 @@ private:
 	double startTime;
 
 	void cleanLevel();
-	ActorObject* createEnemy(ENEMYTYPE::TYPE);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Creates an Actor, attaches
+	*/
+	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();
@@ -58,7 +63,9 @@ public:
 	void initialize(GamePlayState& pGPS);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. 
+	1. Spawns enemies to dynamicObjects according to the spawnInterval and waves
+	(If there are waves/enemies left).
+	- Doesn't currently have any time in between waves.
 	*/
 	void update();
 

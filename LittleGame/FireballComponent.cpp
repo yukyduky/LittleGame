@@ -3,7 +3,7 @@
 FireballComponent::FireballComponent(Projectile& pHead, float modi) : AbilityComponent(pHead)
 {
 	this->damage = 10 * modi;
-	this->range *= 100 * modi;
+	this->range = 10 * modi;
 	this->speed = 50;
 
 	pHead.setSpeed(this->speed);
@@ -28,8 +28,6 @@ void FireballComponent::cleanUp()
 
 void FireballComponent::update()
 {
-	int hej = 0;
-	int hejhej = hej + hej;
 	
 }
 

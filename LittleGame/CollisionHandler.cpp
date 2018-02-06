@@ -1,6 +1,8 @@
 #include "CollisionHandler.h"
+#include "DamageSpell.h"
 
 
+#include <cassert>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
@@ -272,7 +274,8 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	};
 
 	// Moving the player only, since the indestructibles cannot move.
-	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	//collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	collidable1->setPosition(XMFLOAT3(200.0f, 40.0f, 200.0f));
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
@@ -284,8 +287,8 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// CODE GOES HERE
-	this->collidable2->setPosition(this->collidable2->getPosition() + DirectX::XMFLOAT3{ 0, 30, 0 });
+	dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
+	
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
@@ -495,6 +498,10 @@ void CollisionHandler::executeCollision(
 	case 15: this->collisionProjectileProjectile();
 		break;
 	}
+
+	// If an object never had it's type set, these assertions will go off, crashing the program
+	assert(this->collidable2->getType() != OBJECTTYPE::NOT_SET && "WARNING: 'Collidable1' has not had it's objectType set!!!");
+	assert(this->collidable1->getType() != OBJECTTYPE::NOT_SET && "WARNING: 'Collidable1' has not had it's objectType set!!!");
 }
 //_________________________________________//
 //                                         //

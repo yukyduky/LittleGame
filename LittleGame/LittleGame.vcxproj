@@ -140,10 +140,14 @@
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="DamageSpell.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
+    <ClInclude Include="MobilitySpell.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -162,6 +166,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="Spell.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -176,8 +181,12 @@
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="DamageSpell.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
+    <ClCompile Include="MobilitySpell.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GamePlayState.cpp" />
@@ -194,6 +203,7 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="RectangleComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="Spell.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
