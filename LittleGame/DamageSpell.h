@@ -20,12 +20,12 @@ public:
 	void spawnProj(ProjProp props);
 	void update();
 
-	void collision(GameObject* target);
+	//void collision(GameObject* target);
+	void collision(GameObject* target, Projectile* proj);
 
 private:
 	float strength;
 	NAME name;
-	Projectile* proj;
 	GamePlayState* pGPS;
 
 	float damage;

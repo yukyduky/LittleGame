@@ -15,9 +15,11 @@ public:
 	void upgrade(float modif);
 
 private:
+	//Modifier to be upgraded
 	float strength;
 	NAME name;
-
+	//For balance
+	float power;
 };
 
 #endif // !MOBILITYSPELL_H

@@ -286,7 +286,9 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
+	Projectile* proj = dynamic_cast<Projectile*>(this->collidable2);
+	DamageSpell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 	
 }
 

@@ -14,7 +14,7 @@ enum class NAME {
 	//Damage
 	AUTOATTACK, EXPLOSION,
 	//Mobility
-	DASH
+	DASH, SPEEDBUFF
 };
 
 class Spell

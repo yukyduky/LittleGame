@@ -139,7 +139,7 @@ class CommandOpenMenu0 : public Command
 {
 public:
 	virtual void execute(ActorObject& actor) {
-
+		actor.rotate();
 	}
 };
 // -+-+-+

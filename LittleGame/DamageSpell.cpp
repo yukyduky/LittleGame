@@ -64,8 +64,12 @@ void DamageSpell::upgrade(float modif)
 
 void DamageSpell::spawnProj(ProjProp props)
 {
-	this->proj = this->getPlayer()->getPGPS()->initProjectile(this->getPlayer()->getPosition(), this->getPlayer()->getDirection(), props);
-	this->proj->setSpell(this);
+	Projectile* proj;
+	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
+	XMFLOAT3 newPos = { this->getPlayer()->getPosition() + distance };
+
+	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
+	proj->setSpell(this);
 
 
 }
@@ -90,13 +94,17 @@ void DamageSpell::update()
 	}
 }
 
-void DamageSpell::collision(GameObject * target)
+void DamageSpell::collision(GameObject * target, Projectile* proj)
 {
 	switch (this->name)
 	{
 	case NAME::AUTOATTACK:
-		if(target->getType() == OBJECTTYPE::PLAYER)
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
+		if (target->getType() == OBJECTTYPE::PLAYER)
+		{
+			//this->proj->setPosition(XMFLOAT3(200, 40, 200));
+			proj->setState(OBJECTSTATE::DEAD);
+		}
+
 		break;
 	
 	case NAME::EXPLOSION:

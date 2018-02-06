@@ -30,8 +30,10 @@ class ActorObject : public GameObject
 private:
 	InputComponent * pInput;
 	std::vector<Spell*> spells;
+	Spell* selectedSpell;
 	float hp;
 	float energy;
+	float speed;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -51,6 +53,8 @@ public:
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
+	virtual void setSpeed(float speed);
+
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
 

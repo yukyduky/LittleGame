@@ -657,6 +657,7 @@ void GamePlayState::initPlayer()
 
 	XMFLOAT3 playerVelocity(300.0f, 300.0f, 300.0f);
 	actor->setVelocity(playerVelocity);
+	actor->setSpeed(1);
 
 	//Create the playerColor and the new BlockComponent that will represent the players body.
 	vColor playerColor(50.0f, 205.0f, 50.0f, 255.0f);
@@ -690,11 +691,15 @@ void GamePlayState::initPlayer()
 	DamageSpell* autoAttackSpell = new DamageSpell(actor, NAME::AUTOATTACK);
 	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
 	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
+	MobilitySpell* speedSpell = new MobilitySpell(actor, NAME::SPEEDBUFF);
 
 	//Add the spell to the player
 	actor->addSpell(autoAttackSpell);
 	actor->addSpell(explosionSpell);
 	actor->addSpell(dashSpell);
+	actor->addSpell(speedSpell);
+
+	actor->selectAbility1();
 
 	player1 = actor;
 
