@@ -687,11 +687,17 @@ void GamePlayState::initPlayer()
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
 
-	//Add the spell to the player
+	//Add the spell to the player, numbers are used to in different places
+	// Slots:
+	// 0 (Autoattack):
 	actor->addSpell(new DamageSpell(actor, NAME::AUTOATTACK));
+	// 1:
 	actor->addSpell(new DamageSpell(actor, NAME::EXPLOSION));
+	// 2: 
 	actor->addSpell(new DamageSpell(actor, NAME::BOMB));
+	// 3:
 	actor->addSpell(new MobilitySpell(actor, NAME::DASH));
+	// 4:
 	actor->addSpell(new MobilitySpell(actor, NAME::SPEEDBUFF));
 
 	actor->selectAbility1();

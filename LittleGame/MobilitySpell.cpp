@@ -11,10 +11,12 @@ MobilitySpell::MobilitySpell(ActorObject* player, NAME name) : Spell(player)
 	{
 	case NAME::DASH:
 		this->setCoolDown(1.3);
+		// Distance to jump
 		this->power = 150;
 		break;
 	case NAME::SPEEDBUFF:
 		this->setCoolDown(3.3);
+		// Speedmultiplier of the players movment
 		this->power = 2;
 		break;
 	}

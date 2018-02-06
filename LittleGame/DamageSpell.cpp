@@ -49,13 +49,11 @@ bool DamageSpell::castSpell()
 
 			break;
 		case NAME::EXPLOSION:
-			//Spawn a projectile and fire it in direction
 			props = ProjProp(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 500);
 			this->spawnProj(props);
 
 			break;
 		case NAME::BOMB:
-			//Spawn a projectile and fire it in direction
 			props = ProjProp(30, XMFLOAT3(0.5f, 0.5f, 0.5f), 0);
 			this->spawnProj(props);
 
@@ -122,8 +120,8 @@ void DamageSpell::collision(GameObject * target, Projectile* proj)
 	
 	case NAME::EXPLOSION:
 		
-
-		//target->setPosition(XMFLOAT3 (200, 100, 200));
+		//target->applyDamage(this->damage);
+		
 		break;
 	case NAME::BOMB:
 

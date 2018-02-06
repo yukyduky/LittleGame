@@ -29,18 +29,20 @@ class ActorObject : public GameObject
 {
 private:
 	InputComponent * pInput;
+	//Vector with all Spells that the player can cast
 	std::vector<Spell*> spells;
+	//Current spell that wil be cast by fireAbilityX
 	Spell* selectedSpell;
 	float hp;
 	float energy;
+
+	//Varible to be changed by Spells
 	float speed;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
 
-	//Cooldown counters, {time of cast, cooldown}
-	size_t autoAttCD[2] = {0, 20 };
-
+	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
 
 public:
@@ -91,9 +93,8 @@ public:
 
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
-					//Is in fireability0() in this version
 	
-	// SPELLS
+	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);
 };
 

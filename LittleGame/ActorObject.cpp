@@ -170,10 +170,7 @@ void ActorObject::rotate()
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		if (this->spells.at(size_t(NAME::AUTOATTACK))->getState() == SPELLSTATE::READY)
-		{
-			spells.at(size_t(NAME::AUTOATTACK))->castSpell();
-		}
+		this->spells[0]->castSpell();
 	}
 	else {
 
@@ -214,7 +211,6 @@ void ActorObject::selectAbility3()
 void ActorObject::selectAbility4()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		
 		this->selectedSpell = this->spells[4];
 	}
 	else {
@@ -225,10 +221,7 @@ void ActorObject::selectAbility4()
 void ActorObject::fireAbilityX()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		if (this->selectedSpell->getState() == SPELLSTATE::READY)
-		{
-			this->selectedSpell->castSpell();
-		}
+		this->selectedSpell->castSpell();
 	}
 	else {
 
@@ -252,6 +245,7 @@ void ActorObject::decCD()
 	{
 		itteration->updateCD();
 	}
+	// Resets the player to the original movmentspeed, before the CD runs out
 	if (this->spells.at(size_t(NAME::SPEEDBUFF))->getState() == SPELLSTATE::COOLDOWN)
 	{
 		if (this->spells.at(size_t(NAME::SPEEDBUFF))->getTSC() > 1.5)
