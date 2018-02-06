@@ -18,40 +18,40 @@ using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
 
-void GamePlayState::updatePhysicsComponents()
-{
-	for (auto&& i : physicsListDynamic) {
-		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
-			i->updateBoundingArea(i->GETEntityPointer()->getPosition());
-		}
-	}
-}
+//void GamePlayState::updatePhysicsComponents()
+//{
+//	for (auto&& i : physicsListDynamic) {
+//		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+//			i->updateBoundingArea(i->GETEntityPointer()->GETPosition());
+//		}
+//	}
+//}
 
 void GamePlayState::checkCollisions() {
 	//--------//
 	// LOOP 1 //   : Looping through each DYNAMIC physicsComponent
 	//--------//
-	for (auto&& i : this->physicsListDynamic) {
+	for (auto&& i : this->dynamicObjects) {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
 		// NOTE: Skipping if object state = DEAD.
 		int iID = i->getID();
-		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+		if (i->getState() != OBJECTSTATE::DEAD) {
 			//----------//
 			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
 			//----------//
-			for (auto&& k : this->physicsListDynamic) {
+			for (auto&& k : this->dynamicObjects) {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+					if (k->getState() != OBJECTSTATE::DEAD) {
 
-						if (i->checkCollision(k->GETBoundingSphere())) {
+						if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
 							// Call COLLISION-CLASS function
 							this->collisionHandler.executeCollision(
-								i->GETEntityPointer(),
-								k->GETEntityPointer(),
-								&i->GETBoundingSphere(),
-								&k->GETBoundingSphere()
+								i,
+								k,
+								&i->GETphysicsComponent()->GETBoundingSphere(),
+								&k->GETphysicsComponent()->GETBoundingSphere()
 							);
 						}
 					}
@@ -61,16 +61,16 @@ void GamePlayState::checkCollisions() {
 			//----------//
 			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
 			//----------//
-			for (auto&& k : this->physicsListStatic) {
-				if (k->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+			for (int k = 0; k < this->staticPhysicsCount; k++) {
+				if (this->staticObjects[k]->getState() != OBJECTSTATE::DEAD) {
 
-					if (i->checkCollision(k->GETBoundingSphere())) {
+					if (i->GETphysicsComponent()->checkCollision(this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
 						this->collisionHandler.executeCollision(
-							i->GETEntityPointer(),
-							k->GETEntityPointer(),
-							&i->GETBoundingSphere(),
-							&k->GETBoundingSphere()
+							i,
+							this->staticObjects[k],
+							&i->GETphysicsComponent()->GETBoundingSphere(),
+							&this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere()
 						);
 					}
 				}
@@ -84,7 +84,7 @@ void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera);
 	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), ARENAWIDTH, ARENAHEIGHT, this->grid, this->staticObjects, this->graphics, this->physicsListStatic);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, this->grid, this->staticObjects, this->graphics);
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -139,7 +139,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {
-	this->updatePhysicsComponents();
+	//this->updatePhysicsComponents();
 	this->checkCollisions();
 
 	player1->decCD();
@@ -180,8 +180,6 @@ void GamePlayState::initPlayer()
 	/// PHYSICS COMPONENT:
 	// 1: We new a PhysicsComponent, using the actor-POINTER'S address as a parameter.
 	physics = new PhysicsComponent(*actor, 20.0f);
-	// 2: We add this component to the Dynamic list because this actor = dynamic.
-	this->physicsListDynamic.push_back(physics);
 
 	XMFLOAT3 playerVelocity(300.0f, 300.0f, 300.0f);
 	actor->setVelocity(playerVelocity);
@@ -284,7 +282,6 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	//Template for Physics
 	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
-	this->physicsListDynamic.push_back(phyComp);
 
 	
 	//Add proj to objectArrays

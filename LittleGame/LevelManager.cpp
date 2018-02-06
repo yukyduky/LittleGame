@@ -96,7 +96,7 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 	graphics.push_back(rect);
 }
 
-void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics, std::list<PhysicsComponent*>& physics)
+void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
 //	int nextID = this->nextID();
@@ -122,7 +122,8 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB*  translationM;
-			this->createAWall(currPos, worldM, color, staticObjects, graphics, physics);
+			this->createAWall(currPos, worldM, color, staticObjects, graphics);
+			staticPhysicsCount++;
 		}
 	}
 
@@ -154,8 +155,9 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
-			this->createAWall(currPos, worldM, color, staticObjects, graphics, physics);
+			this->createAWall(currPos, worldM, color, staticObjects, graphics);
 			grid[0][i] = SQUARETYPE::WALL;
+			staticPhysicsCount++;
 		}
 		else 
 		{
@@ -171,8 +173,9 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
-			this->createAWall(currPos, worldM, color, staticObjects, graphics, physics);
+			this->createAWall(currPos, worldM, color, staticObjects, graphics);
 			grid[nrOfHorizontalSquares - 1][i] = SQUARETYPE::WALL;
+			staticPhysicsCount++;
 		}
 		else
 		{
@@ -188,8 +191,9 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
-			this->createAWall(currPos, worldM, color, staticObjects, graphics, physics);
+			this->createAWall(currPos, worldM, color, staticObjects, graphics);
 			grid[i][nrOfVerticalSquares - 1] = SQUARETYPE::WALL;
+			staticPhysicsCount++;
 		}
 		else
 		{
@@ -205,8 +209,9 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
-			this->createAWall(currPos, worldM, color, staticObjects, graphics, physics);
+			this->createAWall(currPos, worldM, color, staticObjects, graphics);
 			grid[i][0] = SQUARETYPE::WALL;
+			staticPhysicsCount++;
 		}
 		else
 		{
@@ -216,7 +221,7 @@ void LevelManager::createLevelWalls(std::vector<std::vector<SQUARETYPE::TYPE>>& 
 
 }
 
-void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics, std::list<PhysicsComponent*>& physics)
+void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
 {
 	GameObject* object;
 	BlockComponent* block;
@@ -232,7 +237,6 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	bSphere->updateBoundingArea(bSpherePos);
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	object->SETworldMatrix(worldM);
-	physics.push_back(bSphere);
 	staticObjects.push_back(object);
 	graphics.push_back(block);
 }
@@ -242,7 +246,7 @@ int LevelManager::nextID()
 	return this->tempID++;
 }
 
-int LevelManager::initArena(int ID, int width, int depth, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics, std::list<PhysicsComponent*>& physics)
+int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
 {
 	this->squareSize = 50;
 	this->arenaWidth = width;
@@ -260,10 +264,11 @@ int LevelManager::initArena(int ID, int width, int depth, std::vector<std::vecto
 	{
 		grid.push_back(temp);
 	}
-
+	
+	// createLevelWalls needs to come first
+	this->createLevelWalls(staticPhysicsCount, grid, staticObjects, graphics);
 	this->createFloor(grid, staticObjects, graphics);
 	this->createNeonFloorGrid(staticObjects, graphics);
-	this->createLevelWalls(grid, staticObjects, graphics, physics);
 
 	return this->tempID;
 }

@@ -29,7 +29,7 @@ bool MobilitySpell::castSpell()
 			XMFLOAT3 distance = {this->getPlayer()->getDirection() * 2 * this->strength};
 			XMFLOAT3 newPos = {};
 
-			this->getPlayer()->setPosition(this->getPlayer()->getPosition() /*INSERT POS + DIRECTION * DISTANCE * STREGTH*/);
+			this->getPlayer()->setPosition(this->getPlayer()->GETPosition() /*INSERT POS + DIRECTION * DISTANCE * STREGTH*/);
 
 			break;
 		}

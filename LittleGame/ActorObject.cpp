@@ -67,7 +67,7 @@ void ActorObject::move()
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	float deltaTime = Locator::getGameTime()->getDeltaTime();
-	XMFLOAT3 playerPos = this->getPosition();
+	XMFLOAT3 playerPos = this->GETPosition();
 	XMFLOAT3 playerVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = playerPos;
 	tempPos.x += MovementVector.x * playerVelocity.x * deltaTime;
@@ -91,7 +91,7 @@ void ActorObject::moveUp()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z += playerVelocity.z * dt;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
@@ -107,7 +107,7 @@ void ActorObject::moveLeft()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.x -= playerVelocity.x * dt;
 		if (playerPos.x > ARENASQUARESIZE) {
@@ -122,7 +122,7 @@ void ActorObject::moveDown()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.z -= playerVelocity.z * dt;
 		if (playerPos.z > ARENASQUARESIZE) {
@@ -137,7 +137,7 @@ void ActorObject::moveRight()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
+		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
 		playerPos.x += playerVelocity.x * dt;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {

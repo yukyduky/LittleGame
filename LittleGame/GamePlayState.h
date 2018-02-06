@@ -60,6 +60,7 @@ private:
 	//everything that will exist in this level
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
+	int staticPhysicsCount = 0;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
@@ -72,12 +73,12 @@ private:
 
 	//std::vector<GameObject*> gameObjectsArray;
 
-	std::list<PhysicsComponent*> physicsListStatic;
-	std::list<PhysicsComponent*> physicsListDynamic;
+	///std::list<PhysicsComponent*> physicsListStatic;
+	///std::list<PhysicsComponent*> physicsListDynamic;
 	//Array with all active projectiles
 	std::vector<Projectile*> projectiles;
 
-	void updatePhysicsComponents();
+	//void updatePhysicsComponents();
 	
 	void checkCollisions();
 

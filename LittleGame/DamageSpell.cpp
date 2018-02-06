@@ -64,7 +64,7 @@ void DamageSpell::upgrade(float modif)
 
 void DamageSpell::spawnProj(ProjProp props)
 {
-	this->proj = this->getPlayer()->getPGPS()->initProjectile(this->getPlayer()->getPosition(), this->getPlayer()->getDirection(), props);
+	this->proj = this->getPlayer()->getPGPS()->initProjectile(this->getPlayer()->GETPosition(), this->getPlayer()->getDirection(), props);
 	this->proj->setSpell(this);
 
 
