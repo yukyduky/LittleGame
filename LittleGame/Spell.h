@@ -9,7 +9,13 @@
 enum class GLYPHTYPE {GLYPH1, GLYPH2, GLYPH3};
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 enum class SPELLSTATE {READY, COOLDOWN, TRAVLING, LOCKED};
-
+//Spells
+enum class NAME {
+	//Damage
+	AUTOATTACK, EXPLOSION,
+	//Mobility
+	DASH
+};
 
 class Spell
 {

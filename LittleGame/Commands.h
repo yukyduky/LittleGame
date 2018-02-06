@@ -99,7 +99,7 @@ class CommandSelectAbility1 : public Command
 {
 public:
 	virtual void execute(ActorObject& actor) {
-
+		actor.selectAbility1();
 	}
 };
 // -+-+-+
@@ -109,7 +109,7 @@ class CommandSelectAbility2 : public Command
 {
 public:
 	virtual void execute(ActorObject& actor) {
-
+		actor.selectAbility2();
 	}
 };
 // -+-+-+
@@ -119,7 +119,7 @@ class CommandSelectAbility3 : public Command
 {
 public:
 	virtual void execute(ActorObject& actor) {
-
+		actor.selectAbility3();
 	}
 };
 // -+-+-+
@@ -129,7 +129,7 @@ class CommandSelectAbility4 : public Command
 {
 public:
 	virtual void execute(ActorObject& actor) {
-
+		actor.selectAbility4();
 	}
 };
 // -+-+-+

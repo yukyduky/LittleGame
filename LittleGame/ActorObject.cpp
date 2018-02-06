@@ -183,18 +183,52 @@ void ActorObject::fireAbility0()
 	}
 }
 
-void ActorObject::selectAbilityX()
+void ActorObject::selectAbility1()
 {
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->rotate();
+	}
+	else {
 
+	}
+}
+
+void ActorObject::selectAbility2()
+{
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->rotate();
+	}
+	else {
+
+	}
+}
+
+void ActorObject::selectAbility3()
+{
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->rotate();
+	}
+	else {
+
+	}
+}
+
+void ActorObject::selectAbility4()
+{
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->rotate();
+	}
+	else {
+
+	}
 }
 
 void ActorObject::fireAbilityX()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		this->rotate();
-		if (this->spells.at(size_t(NAME::AUTOATTACK))->getState() == SPELLSTATE::READY)
+		if (spells.at(size_t(NAME::AUTOATTACK))->castSpell())
 		{
-			spells.at(size_t(NAME::AUTOATTACK))->castSpell();
+			
 		}
 	}
 	else {

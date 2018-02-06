@@ -96,7 +96,7 @@ void DamageSpell::collision(GameObject * target)
 	{
 	case NAME::AUTOATTACK:
 		if(target->getType() == OBJECTTYPE::PLAYER)
-		this->proj->setPosition(XMFLOAT3(200, 0, 200));
+		this->proj->setPosition(XMFLOAT3(200, 40, 200));
 		break;
 	
 	case NAME::EXPLOSION:

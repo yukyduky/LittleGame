@@ -19,12 +19,7 @@
 #include "ArenaGlobals.h"
 
 
-//Spells
-enum class NAME { 
-	//Damage
-	AUTOATTACK, EXPLOSION, 
-	//Mobility
-	DASH };
+
 
 //Defines what a specific space contains
 namespace SQUARETYPE {

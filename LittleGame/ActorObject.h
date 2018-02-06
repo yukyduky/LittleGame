@@ -73,7 +73,10 @@ public:
 	*/
 	void rotate();
 	void fireAbility0();
-	void selectAbilityX();
+	void selectAbility1();
+	void selectAbility2();
+	void selectAbility3();
+	void selectAbility4();
 	void fireAbilityX();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
