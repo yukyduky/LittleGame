@@ -37,6 +37,7 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="AIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -74,6 +75,7 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="AIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -4,7 +4,7 @@
 #include "Locator.h"
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
-// #include "AIComponent.h"
+#include "AIComponent.h"
 
 EnemyManager::EnemyManager()
 {
@@ -58,11 +58,7 @@ void EnemyManager::cleanLevel()
 ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE)
 {
 	/*
-	Creation relies on:
-	GamePlayState->arenaObjects.size for nextID();
-	GamePlayState->physicsListDynamic
-	GamePlayState->graphics
-	&GamePlayState;
+	NOT FINISHED. Waiting for Static/Dynamic-objects 
 	*/
 
 	ActorObject* enemy;
@@ -83,7 +79,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE)
 	/* this->physicsListDynamic.push_back(physics); kanske om det behövs */
 
 	// Input
-	/* input = new AIComponent(ENUM::BEHAVIOR); */
+	input = new AIComponent(*enemy, AIBEHAVIOR::STRAIGHTTOWARDS);
 
 	return enemy;
 }
@@ -113,7 +109,7 @@ void EnemyManager::update()
 
 				// Grab the next enemy in line
 				// Remove his homelink
-				// Send him out into the real world
+				// Send him out into the real world and let him handle himself (gl hf bobby!)
 				
 				ActorObject* freshEnemy = this->waves.front()->enemies.front();
 				this->waves.front()->enemies.pop_front();

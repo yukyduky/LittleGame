@@ -10,6 +10,7 @@
 class GamePlayState;
 
 struct Wave {
+	// Push to the back, pop from the front, [0] is the first enemy and [n] is the last enemy.
 	std::deque<ActorObject*> enemies;
 };
 
@@ -30,7 +31,7 @@ private:
 	// it has since then been divided into several arrays, the pointer here should be to the Actors
 	std::vector<GameObject*>* pGameObjectsArray = nullptr;
 
-	
+	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
 	int currentWaveCount;
 	int currentWaveSize;

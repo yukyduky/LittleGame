@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="Commands.h" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClCompile Include="AbilityComponent.cpp" />
     <ClCompile Include="ActorObject.cpp" />
+    <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
