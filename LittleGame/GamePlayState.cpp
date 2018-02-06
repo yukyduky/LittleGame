@@ -35,6 +35,7 @@ void GamePlayState::checkCollisions() {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
 		// NOTE: Skipping if object state = DEAD.
 		int iID = i->getID();
+		
 		if (i->getState() != OBJECTSTATE::DEAD) {
 			//----------//
 			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
@@ -44,7 +45,10 @@ void GamePlayState::checkCollisions() {
 				if (iID != kID)
 				{
 					if (k->getState() != OBJECTSTATE::DEAD) {
-
+						if (i->getType() == OBJECTTYPE::PROJECTILE)
+						{
+							int z = 0;
+						}
 						if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
 							// Call COLLISION-CLASS function
 							this->collisionHandler.executeCollision(
@@ -210,7 +214,6 @@ void GamePlayState::initPlayer()
 	input = new KeyboardComponent(*actor);
 
 	this->playerInput[0] = input;
-	this->dynamicObjects.push_back(actor);
 	this->graphics.push_back(block);
 
 	//Add the spell to the player, numbers are used to in different places
@@ -237,6 +240,7 @@ void GamePlayState::initPlayer()
 	//this->playerInput[0] = new ControllerComponent(*this->actorObject, 0);
 	this->blocks.push_back(new BlockComponent(*this->go, 0.0f, 1.0f, 0.0f, 1.0f));
 	*/
+	this->dynamicObjects.push_back(actor);
 }
 
 Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
@@ -247,7 +251,6 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	// Declare Components
 	BlockComponent* block;
 	PhysicsComponent* phyComp;
-	AbilityComponent* abiliComp;
 
 	XMFLOAT3 position = {pos.x + dir.x * props.size, pos.y + dir.y * props.size , pos.z + dir.z * props.size};
 	proj = new Projectile(nextID, position);

@@ -76,7 +76,7 @@ void DamageSpell::spawnProj(ProjProp props)
 {
 	Projectile* proj;
 	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
-	XMFLOAT3 newPos = { this->getPlayer()->getPosition() + distance };
+	XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
 
 	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
 	proj->setSpell(this);

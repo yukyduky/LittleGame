@@ -89,7 +89,7 @@ void PhysicsComponent::receive(GameObject & obj, Message msg) {
 
 void PhysicsComponent::update()
 {
-
+	this->updateBoundingArea(this->entityPointer->GETPosition());
 }
 
 void PhysicsComponent::cleanUp() {

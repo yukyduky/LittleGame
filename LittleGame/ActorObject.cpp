@@ -81,10 +81,12 @@ void ActorObject::move()
 	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
 		playerNewPos.z = tempPos.z;
+		this->physicsComponent->updateBoundingArea(playerPos);
 	}
 	else { playerNewPos.z = playerPos.z; }
 	if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
 		playerNewPos.x = tempPos.x;
+		this->physicsComponent->updateBoundingArea(playerPos);
 	} 
 	else { playerNewPos.x = playerPos.x; }
 	playerNewPos.y = playerPos.y;
@@ -100,6 +102,7 @@ void ActorObject::moveUp()
 		playerPos.z += playerVelocity.z * dt;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -116,6 +119,7 @@ void ActorObject::moveLeft()
 		playerPos.x -= playerVelocity.x * dt;
 		if (playerPos.x > ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -131,6 +135,7 @@ void ActorObject::moveDown()
 		playerPos.z -= playerVelocity.z * dt;
 		if (playerPos.z > ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -146,6 +151,7 @@ void ActorObject::moveRight()
 		playerPos.x += playerVelocity.x * dt;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {

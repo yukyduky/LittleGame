@@ -40,7 +40,7 @@ bool MobilitySpell::castSpell()
 		case NAME::DASH:
 
 			XMFLOAT3 distance = {this->getPlayer()->getDirection() * this->power * this->strength};
-			XMFLOAT3 newPos = { this->getPlayer()->getPosition() + distance};
+			XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance};
 
 			/*Check for OOB*/
 
