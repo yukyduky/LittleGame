@@ -51,17 +51,18 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
+	int ID = 0;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
 	RenderInputOrganizer rio;
 	std::vector<std::vector<SQUARETYPE::TYPE>> grid;
 	//everything that will exist in this level
-	std::vector<GameObject*> arenaObjects;
+	std::vector<GameObject*> staticObjects;
+	std::vector<GameObject*> dynamicObjects;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
-	std::vector<GraphicsComponent*> blocks;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
@@ -125,7 +126,7 @@ public:
 	void initPlayer();
 
 	/*RETURNS THE NEW ID*/
-	int newID() { return this->arenaObjects.size(); }
+	int newID() { return this->ID++; }
 
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);

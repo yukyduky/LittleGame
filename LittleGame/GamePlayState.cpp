@@ -84,7 +84,7 @@ void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera);
 	this->initPlayer();
-	lm.initArena(ARENAWIDTH, ARENAHEIGHT, this->grid, this->arenaObjects, this->graphics, this->physicsListStatic);
+	this->ID = lm.initArena(this->newID(), ARENAWIDTH, ARENAHEIGHT, this->grid, this->staticObjects, this->graphics, this->physicsListStatic);
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -99,7 +99,11 @@ void GamePlayState::cleanUp()
 
 
 	// GameObjects which will on their own clean up all of their connected components
-	for (auto &iterator : this->arenaObjects) {
+	for (auto &iterator : this->staticObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	for (auto &iterator : this->dynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
 	}
@@ -167,7 +171,7 @@ void GamePlayState::initPlayer()
 	BlockComponent* block;
 	InputComponent* input;		// THIS IS CORRECT!
 	PhysicsComponent* physics;
-	int nextID = this->arenaObjects.size();
+	int nextID = this->newID();
 	
 	//Create the new ActorObject
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
@@ -207,7 +211,7 @@ void GamePlayState::initPlayer()
 	input = new KeyboardComponent(*actor);
 
 	this->playerInput[0] = input;
-	this->arenaObjects.push_back(actor);
+	this->dynamicObjects.push_back(actor);
 	this->graphics.push_back(block);
 
 	//Create the spell
@@ -284,7 +288,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	
 	//Add proj to objectArrays
-	this->arenaObjects.push_back(proj);
+	this->dynamicObjects.push_back(proj);
 	this->projectiles.push_back(proj);
 
 	return proj;
