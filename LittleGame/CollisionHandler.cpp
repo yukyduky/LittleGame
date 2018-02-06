@@ -1,4 +1,7 @@
 #include "CollisionHandler.h"
+#include "DamageSpell.h"
+
+
 #include <cassert>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
@@ -284,8 +287,8 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// CODE GOES HERE
-	this->collidable2->setPosition(this->collidable2->getPosition() + DirectX::XMFLOAT3{ 0, 100, 0 });
+	dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
+	
 }
 
 void CollisionHandler::collisionEnemyEnemy() {

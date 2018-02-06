@@ -11,6 +11,9 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 
+#include "DamageSpell.h"
+#include "MobilitySpell.h"
+
 using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
@@ -135,6 +138,8 @@ void GamePlayState::update(GameManager * gm)
 	this->updatePhysicsComponents();
 	this->checkCollisions();
 
+	player1->decCD();
+
 	for (auto &iterator : playerInput) {
 		iterator->generateCommands();
 		iterator->execute();
@@ -205,6 +210,17 @@ void GamePlayState::initPlayer()
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
 
+	//Create the spell
+	DamageSpell* autoAttackSpell = new DamageSpell(actor, NAME::AUTOATTACK);
+	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
+	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
+
+	//Add the spell to the player
+	actor->addSpell(autoAttackSpell);
+	actor->addSpell(explosionSpell);
+	actor->addSpell(dashSpell);
+
+	player1 = actor;
 
 	/*
 	this->go = new GameObject(0);
@@ -215,7 +231,7 @@ void GamePlayState::initPlayer()
 	*/
 }
 
-void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 {
 	Projectile* proj;
 	int nextID = this->newID();
@@ -225,13 +241,14 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	PhysicsComponent* phyComp;
 	AbilityComponent* abiliComp;
 
-	proj = new Projectile(nextID, pos);
-	proj->setType(OBJECTTYPE::PROJECTILE);
+	XMFLOAT3 position = {pos.x + dir.x * props.size, pos.y + dir.y * props.size , pos.z + dir.z * props.size};
+	proj = new Projectile(nextID, position);
 	proj->setDirection(dir);
+	proj->setType(OBJECTTYPE::PROJECTILE);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
-	XMFLOAT3 position = pos;
+	//XMFLOAT3 position = pos;
 	block = new BlockComponent(*proj, props.color.x, props.color.y, props.color.z, 255.0f);
 	
 	// Create matrixes for world-matrix
@@ -256,9 +273,10 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	this->rio.addGraphics(block);
 
 	//Template of components that are beeing worked on by other users
-	abiliComp = new FireballComponent(*proj, 1);
-	proj->setVelocity(dir * proj->getSpeed());
-	proj->addComponent(abiliComp);
+	//abiliComp = new FireballComponent(*proj, 1);
+	//proj->addComponent(abiliComp);
+	proj->setSpeed(props.speed);
+	proj->setVelocity(dir * props.speed);
 
 	//Template for Physics
 	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
@@ -269,4 +287,5 @@ void GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 	this->arenaObjects.push_back(proj);
 	this->projectiles.push_back(proj);
 
+	return proj;
 }

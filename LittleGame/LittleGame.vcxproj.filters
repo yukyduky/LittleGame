@@ -9,6 +9,17 @@
     <FxCompile Include="lightPassVert.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="ControllerComponent.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CollisionHandler.cpp" />
+    <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="GameTime.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="KeyboardComponent.cpp" />
+    <ClCompile Include="LineComponent.cpp" />
+    <ClCompile Include="Locator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="BlockComponent.cpp" />
