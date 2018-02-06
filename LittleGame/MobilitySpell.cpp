@@ -42,8 +42,8 @@ bool MobilitySpell::castSpell()
 
 			/*Check for OOB*/
 
-			//this->getPlayer()->setPosition(newPos /*INSERT POS + DIRECTION * DISTANCE * STREGTH*/);
-			this->getPlayer()->updateWorldMatrix(newPos);
+			this->getPlayer()->setPosition(newPos);
+			//this->getPlayer()->updateWorldMatrix(newPos);
 			break;
 		case NAME::SPEEDBUFF:
 

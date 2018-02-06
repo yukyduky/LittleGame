@@ -12,9 +12,9 @@ enum class SPELLSTATE {READY, COOLDOWN, TRAVLING, LOCKED};
 //Spells
 enum class NAME {
 	//Damage
-	AUTOATTACK, EXPLOSION,
+	AUTOATTACK, EXPLOSION, BOMB
 	//Mobility
-	DASH, SPEEDBUFF
+	, DASH, SPEEDBUFF
 };
 
 class Spell

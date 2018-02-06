@@ -687,17 +687,12 @@ void GamePlayState::initPlayer()
 	this->arenaObjects.push_back(actor);
 	this->graphics.push_back(block);
 
-	//Create the spell
-	DamageSpell* autoAttackSpell = new DamageSpell(actor, NAME::AUTOATTACK);
-	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
-	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
-	MobilitySpell* speedSpell = new MobilitySpell(actor, NAME::SPEEDBUFF);
-
 	//Add the spell to the player
-	actor->addSpell(autoAttackSpell);
-	actor->addSpell(explosionSpell);
-	actor->addSpell(dashSpell);
-	actor->addSpell(speedSpell);
+	actor->addSpell(new DamageSpell(actor, NAME::AUTOATTACK));
+	actor->addSpell(new DamageSpell(actor, NAME::EXPLOSION));
+	actor->addSpell(new DamageSpell(actor, NAME::BOMB));
+	actor->addSpell(new MobilitySpell(actor, NAME::DASH));
+	actor->addSpell(new MobilitySpell(actor, NAME::SPEEDBUFF));
 
 	actor->selectAbility1();
 

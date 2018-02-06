@@ -17,6 +17,12 @@ DamageSpell::DamageSpell(ActorObject* player, NAME name) : Spell(player)
 		this->setCoolDown(1.3);
 		this->damage = 50;
 		break;
+	case NAME::BOMB:
+		this->setCoolDown(5.3);
+		this->varible0 = 30;
+		this->varible1 = 100;
+		this->damage = this->varible0;
+		break;
 	}
 }
 
@@ -40,7 +46,6 @@ bool DamageSpell::castSpell()
 			props = ProjProp(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 40);
 			this->spawnProj(props);
 
-			this->setState(SPELLSTATE::COOLDOWN);
 
 			break;
 		case NAME::EXPLOSION:
@@ -48,9 +53,16 @@ bool DamageSpell::castSpell()
 			props = ProjProp(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 500);
 			this->spawnProj(props);
 
-			this->setState(SPELLSTATE::COOLDOWN);
+			break;
+		case NAME::BOMB:
+			//Spawn a projectile and fire it in direction
+			props = ProjProp(30, XMFLOAT3(0.5f, 0.5f, 0.5f), 0);
+			this->spawnProj(props);
+
 			break;
 		}
+
+		this->setState(SPELLSTATE::COOLDOWN);
 
 	}
 
@@ -70,6 +82,7 @@ void DamageSpell::spawnProj(ProjProp props)
 
 	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
 	proj->setSpell(this);
+	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
 
 
 }
@@ -108,8 +121,25 @@ void DamageSpell::collision(GameObject * target, Projectile* proj)
 		break;
 	
 	case NAME::EXPLOSION:
-		//Template behavior
 		
+
+		//target->setPosition(XMFLOAT3 (200, 100, 200));
+		break;
+	case NAME::BOMB:
+
+		if (this->damage < this->varible1)
+		{
+			this->damage++;
+			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
+			proj->SETscaleMatrix(scaleM);
+			//proj->getPhyComp()->updateBounding(this->damage);
+		}
+		else
+		{
+			target->setPosition(XMFLOAT3(400, 100, 200));
+			this->damage = this->varible0;
+			proj->setState(OBJECTSTATE::DEAD);
+		}
 
 		//target->setPosition(XMFLOAT3 (200, 100, 200));
 		break;

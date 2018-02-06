@@ -29,6 +29,8 @@ private:
 	GamePlayState* pGPS;
 
 	float damage;
+	float varible0;
+	float varible1;
 };
 
 
