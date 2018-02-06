@@ -244,8 +244,22 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="QuadTree.h" />
+    <ClInclude Include="DamageSpell.h">
+      <Filter>Kommentera</Filter>
+    </ClInclude>
+    <ClInclude Include="MobilitySpell.h">
+      <Filter>Kommentera</Filter>
+    </ClInclude>
+    <ClInclude Include="Spell.h">
+      <Filter>Kommentera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Kommentera">
+      <UniqueIdentifier>{7eabaef9-7285-4cbc-8c7f-deaa1cdbd07e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -17,6 +17,12 @@ DamageSpell::DamageSpell(ActorObject* player, NAME name) : Spell(player)
 		this->setCoolDown(1.3);
 		this->damage = 50;
 		break;
+	case NAME::BOMB:
+		this->setCoolDown(5.3);
+		this->varible0 = 30;
+		this->varible1 = 100;
+		this->damage = this->varible0;
+		break;
 	}
 }
 
@@ -40,17 +46,21 @@ bool DamageSpell::castSpell()
 			props = ProjProp(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 40);
 			this->spawnProj(props);
 
-			this->setState(SPELLSTATE::COOLDOWN);
 
 			break;
 		case NAME::EXPLOSION:
-			//Spawn a projectile and fire it in direction
 			props = ProjProp(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 500);
 			this->spawnProj(props);
 
-			this->setState(SPELLSTATE::COOLDOWN);
+			break;
+		case NAME::BOMB:
+			props = ProjProp(30, XMFLOAT3(0.5f, 0.5f, 0.5f), 0);
+			this->spawnProj(props);
+
 			break;
 		}
+
+		this->setState(SPELLSTATE::COOLDOWN);
 
 	}
 
@@ -64,8 +74,13 @@ void DamageSpell::upgrade(float modif)
 
 void DamageSpell::spawnProj(ProjProp props)
 {
-	this->proj = this->getPlayer()->getPGPS()->initProjectile(this->getPlayer()->GETPosition(), this->getPlayer()->getDirection(), props);
-	this->proj->setSpell(this);
+	Projectile* proj;
+	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
+	XMFLOAT3 newPos = { this->getPlayer()->getPosition() + distance };
+
+	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
+	proj->setSpell(this);
+	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
 
 
 }
@@ -90,18 +105,39 @@ void DamageSpell::update()
 	}
 }
 
-void DamageSpell::collision(GameObject * target)
+void DamageSpell::collision(GameObject * target, Projectile* proj)
 {
 	switch (this->name)
 	{
 	case NAME::AUTOATTACK:
-		if(target->getType() == OBJECTTYPE::PLAYER)
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
+		if (target->getType() == OBJECTTYPE::PLAYER)
+		{
+			//this->proj->setPosition(XMFLOAT3(200, 40, 200));
+			proj->setState(OBJECTSTATE::DEAD);
+		}
+
 		break;
 	
 	case NAME::EXPLOSION:
-		//Template behavior
 		
+		//target->applyDamage(this->damage);
+		
+		break;
+	case NAME::BOMB:
+
+		if (this->damage < this->varible1)
+		{
+			this->damage++;
+			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
+			proj->SETscaleMatrix(scaleM);
+			//proj->getPhyComp()->updateBounding(this->damage);
+		}
+		else
+		{
+			target->setPosition(XMFLOAT3(400, 100, 200));
+			this->damage = this->varible0;
+			proj->setState(OBJECTSTATE::DEAD);
+		}
 
 		//target->setPosition(XMFLOAT3 (200, 100, 200));
 		break;

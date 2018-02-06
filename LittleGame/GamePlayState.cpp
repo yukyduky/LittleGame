@@ -183,6 +183,7 @@ void GamePlayState::initPlayer()
 
 	XMFLOAT3 playerVelocity(300.0f, 300.0f, 300.0f);
 	actor->setVelocity(playerVelocity);
+	actor->setSpeed(1);
 
 	//Create the playerColor and the new BlockComponent that will represent the players body.
 	vColor playerColor(50.0f, 205.0f, 50.0f, 255.0f);
@@ -212,15 +213,20 @@ void GamePlayState::initPlayer()
 	this->dynamicObjects.push_back(actor);
 	this->graphics.push_back(block);
 
-	//Create the spell
-	DamageSpell* autoAttackSpell = new DamageSpell(actor, NAME::AUTOATTACK);
-	DamageSpell* explosionSpell = new DamageSpell(actor, NAME::EXPLOSION);
-	MobilitySpell* dashSpell = new MobilitySpell(actor, NAME::DASH);
+	//Add the spell to the player, numbers are used to in different places
+	// Slots:
+	// 0 (Autoattack):
+	actor->addSpell(new DamageSpell(actor, NAME::AUTOATTACK));
+	// 1:
+	actor->addSpell(new DamageSpell(actor, NAME::EXPLOSION));
+	// 2: 
+	actor->addSpell(new DamageSpell(actor, NAME::BOMB));
+	// 3:
+	actor->addSpell(new MobilitySpell(actor, NAME::DASH));
+	// 4:
+	actor->addSpell(new MobilitySpell(actor, NAME::SPEEDBUFF));
 
-	//Add the spell to the player
-	actor->addSpell(autoAttackSpell);
-	actor->addSpell(explosionSpell);
-	actor->addSpell(dashSpell);
+	actor->selectAbility1();
 
 	player1 = actor;
 
