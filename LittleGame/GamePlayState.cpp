@@ -141,21 +141,25 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	int ID;
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {
-		this->dynamicObjects[i]->update();
+		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			this->dynamicObjects[i]->update();
+		}
+		else {
+		/*
+			ID = this->dynamicObjects[i]->getID();
+			for (int j = 0; j < this->graphics.size(); j++) {
+				if (this->graphics[j]->getID() == ID) {
+					this->graphics.erase(this->graphics.begin() + j - 1, this->graphics.begin() + j - 1);
+				}
+			}
+			this->dynamicObjects[i]->cleanUp();
+			this->dynamicObjects.erase(this->dynamicObjects.begin() + i, this->dynamicObjects.begin() + i);
+		*/
+		}
 	}
 	this->checkCollisions();
-
-	/*
-	for (auto &iterator : this->dynamicObjects) {
-		iterator->update();
-	}
-
-	for (auto &iterator : projectiles)
-	{
-		iterator->update();
-	}
-	*/
 }
 
 void GamePlayState::render(GameManager * gm) {
