@@ -6,8 +6,9 @@
 #include <list>
 #include <d3d11.h>
 
-#define OBJECTS_MAX = 20
-#define LAYERS_MAX = 5
+// Currently initializing entire QuadTree at the start; OBJECT_MAX is unnecessary
+///#define OBJECTS_MAX 20
+#define LAYERS_MAX 5
 
 struct QuadTreeSquare {
 	float widthLength;
@@ -23,6 +24,9 @@ class QuadTree {
 private:
 	enum QUADTREEINDEX { BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, SIZE };
 
+	float midpointX;
+	float midpointY;
+
 	int level;
 	std::list<GameObject*> staticObjectsList;
 	std::list<GameObject*> dynamicObjectsList;
@@ -36,12 +40,15 @@ public:
 	~QuadTree();
 
 	void split();
+	void splitRecursively(QuadTree* currentQuad);
+	void initializeQuadTree();
+
 	void insertStaticObject(GameObject* staticObject);
 	void insertDynamicObject(GameObject* dynamicObject);
 	void removeStaticObject();
 	void removeDynamicObject();
 
-	int GETIndex();
+	int GETindex(GameObject* object);
 
 	void cleanup();
 };
