@@ -101,13 +101,12 @@ void EnemyManager::update()
 		if (this->waves.front()->enemies.size() > 0) {
 
 			// Update timePassed
-			timePassed += Locator::getGameTime()->GetTime() - startTime;
+			timePassed += Locator::getGameTime()->getDeltaTime();
 
 			// If the spawnInterval is met
 			if (timePassed > spawnInterval) {
 
 				// Reset the timer
-				startTime = Locator::getGameTime()->GetTime();
 				timePassed = 0;
 
 				// Grab the next enemy in line
@@ -115,6 +114,7 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
+				freshEnemy->setState(OBJECTSTATE::TYPE::IDLE);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
 				char msgbuf[20];

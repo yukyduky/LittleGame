@@ -93,7 +93,7 @@ void GamePlayState::init() {
 		this->rio.addGraphics(i);
 	}
 
-	this->enemyManager.startLevel1();
+	//this->enemyManager.startLevel1();
 }
 
 void GamePlayState::cleanUp()
@@ -146,6 +146,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 void GamePlayState::update(GameManager * gm)
 {	
 	int ID;
+
+	//this->enemyManager.update();
+
+
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {
 		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			this->dynamicObjects[i]->update();
