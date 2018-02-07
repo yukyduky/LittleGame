@@ -20,7 +20,7 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 0.5;
+	this->spawnInterval = 3;
 	this->currentWaveCount = 3;
 	this->currentWaveSize = 2;
 	Wave* currentWave;
@@ -32,7 +32,7 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, 0.1*(i+j));
 			currentWave->enemies.push_back(enemy);
 		}
 
@@ -55,7 +55,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, float posScale)
 {
 	ActorObject* enemy;
 	BlockComponent* block;
@@ -65,7 +65,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Values
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos((float)(ARENAWIDTH / 2), scale.y, (float)(ARENAHEIGHT / 2));
+	XMFLOAT3 pos((float)(ARENAWIDTH / 2 *posScale), scale.y, (float)(ARENAHEIGHT / 2 * posScale));
 	XMFLOAT3 velocity(0, 0, 0);
 	XMFLOAT4 enemyColor(10.0f, 10.0f, 10.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
@@ -82,6 +82,8 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior);
 
+	// Make the enemy inactive
+	enemy->setState(OBJECTSTATE::DEAD);
 	return enemy;
 }
 
@@ -99,7 +101,7 @@ void EnemyManager::update()
 		if (this->waves.front()->enemies.size() > 0) {
 
 			// Update timePassed
-			timePassed += Locator::getGameTime()->GetTime() - startTime;
+			timePassed += Locator::getGameTime()->getDeltaTime();
 
 			// If the spawnInterval is met
 			if (timePassed > spawnInterval) {
@@ -113,7 +115,12 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
+				freshEnemy->setState(OBJECTSTATE::IDLE);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
+
+				char msgbuf[20];
+				sprintf_s(msgbuf, "SPAWNED\n");
+				OutputDebugStringA(msgbuf);
 			}
 		}
 		// No enemies in this wave? Move on to the next wave

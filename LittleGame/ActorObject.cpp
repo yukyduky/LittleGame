@@ -21,6 +21,7 @@ ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, XMFLOAT3 velocity, GameP
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
+	this->setState(OBJECTSTATE::IDLE);
 
 	this->type = objectType;
 	this->velocity = velocity;	
