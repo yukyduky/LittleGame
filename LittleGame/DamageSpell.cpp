@@ -12,16 +12,19 @@ DamageSpell::DamageSpell(ActorObject* player, NAME name) : Spell(player)
 	case NAME::AUTOATTACK:
 		this->setCoolDown(0.3);
 		this->damage = 10;
+		this->range = 230;
 		break;
 	case NAME::EXPLOSION:
 		this->setCoolDown(1.3);
 		this->damage = 50;
+		this->range = 230;
 		break;
 	case NAME::BOMB:
 		this->setCoolDown(5.3);
 		this->varible0 = 30;
 		this->varible1 = 100;
 		this->damage = this->varible0;
+		this->range = -1;
 		break;
 	}
 }
@@ -81,6 +84,7 @@ void DamageSpell::spawnProj(ProjProp props)
 	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
 	proj->setSpell(this);
 	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
+	proj->setRange(this->range);
 
 
 }

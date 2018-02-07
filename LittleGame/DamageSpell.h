@@ -38,6 +38,9 @@ private:
 	// Damge of skill to be applied on collision
 	float damage;
 
+	// Travel-range of spell
+	int range;
+
 	// Varibles for spells to use
 	float varible0;
 	float varible1;
