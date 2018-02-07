@@ -23,6 +23,7 @@ public:
 	void setDirection(XMFLOAT3 dir) { this->direction = dir; }
 	XMFLOAT3 getDirection() { return this->direction; }
 	void setSpell(DamageSpell* spell) { this->spell = spell; }
+	void setRange(int range) { this->range = range; }
 
 	DamageSpell* getSpell() ;
 private:
@@ -32,6 +33,9 @@ private:
 	float speed;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	DamageSpell* spell;
+	// Range of travel
+	int range;
+	int rangeCoutner;
 };
 
 
