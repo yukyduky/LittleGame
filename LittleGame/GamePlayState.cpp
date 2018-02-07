@@ -150,7 +150,7 @@ void GamePlayState::update(GameManager * gm)
 	//this->updatePhysicsComponents();
 	this->checkCollisions();
 
-	this->enemyManager.update();
+	//this->enemyManager.update();
 
 	player1->decCD();
 

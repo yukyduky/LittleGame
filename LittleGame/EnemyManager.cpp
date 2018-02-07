@@ -20,7 +20,7 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 3;
+	this->spawnInterval = 5;
 	this->currentWaveCount = 3;
 	this->currentWaveSize = 2;
 	Wave* currentWave;
@@ -32,7 +32,7 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, 0.2*(i+j));
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, 0.1*(i+j));
 			currentWave->enemies.push_back(enemy);
 		}
 
@@ -115,6 +115,10 @@ void EnemyManager::update()
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
+
+				char msgbuf[20];
+				sprintf_s(msgbuf, "SPAWNED\n");
+				OutputDebugStringA(msgbuf);
 			}
 		}
 		// No enemies in this wave? Move on to the next wave
