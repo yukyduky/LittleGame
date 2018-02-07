@@ -93,7 +93,7 @@ void GamePlayState::init() {
 		this->rio.addGraphics(i);
 	}
 
-	//this->enemyManager.startLevel1();
+	this->enemyManager.startLevel1();
 }
 
 void GamePlayState::cleanUp()

@@ -20,7 +20,7 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 5;
+	this->spawnInterval = 3;
 	this->currentWaveCount = 3;
 	this->currentWaveSize = 2;
 	Wave* currentWave;
@@ -83,7 +83,8 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior);
 
-	enemy->setState(OBJECTSTATE::TYPE::DEAD);
+	// Make the enemy inactive
+	enemy->setState(OBJECTSTATE::DEAD);
 	return enemy;
 }
 
@@ -114,7 +115,7 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
-				freshEnemy->setState(OBJECTSTATE::TYPE::IDLE);
+				freshEnemy->setState(OBJECTSTATE::IDLE);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
 				char msgbuf[20];
