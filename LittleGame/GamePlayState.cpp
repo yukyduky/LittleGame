@@ -155,19 +155,19 @@ void GamePlayState::update(GameManager * gm)
 			this->dynamicObjects[i]->update();
 		}
 		else {
-		/*
+		
 			ID = this->dynamicObjects[i]->getID();
-			for (auto it : this->graphics) {
-				if (it->getID() == ID) {
-					//this->graphics.erase(it);
+			for (int j = 0; j < this->graphics.size(); j++) {
+				if (this->graphics[j]->getID() == ID) {
+					this->graphics.erase(this->graphics.begin() + j);
 				}
 				else {
 
 				}
 			}
-			//this->dynamicObjects[i]->cleanUp();
-			//this->dynamicObjects.erase();
-		*/
+			this->dynamicObjects[i]->cleanUp();
+			this->dynamicObjects.erase(this->dynamicObjects.begin() + i);
+		
 		}
 	}
 	this->checkCollisions();
@@ -264,7 +264,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 
 	//Add the block to the objects that will be rendered
-	this->graphics.push_back(block);
+//	this->graphics.push_back(block);
 //	this->rio.addGraphics(block);
 
 	//Template of components that are beeing worked on by other users
