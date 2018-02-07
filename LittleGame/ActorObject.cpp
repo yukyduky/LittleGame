@@ -1,18 +1,18 @@
 #include "ActorObject.h"
-#include "GameObject.h"
 #include "ControllerComponent.h"
-#include "Locator.h"
 #include "GamePlayState.h"
 #include "ArenaGlobals.h"
+
+//Include spells
+#include "DamageSpell.h"
+#include "MobilitySpell.h"
 
 #include <DirectXMath.h>
 
 ActorObject::ActorObject(const size_t ID)
 	: GameObject(ID)
 {
-	for (auto it : this->abilities) {
-		it = nullptr;
-	}
+	
 }
 
 
@@ -21,14 +21,31 @@ ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS)
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
-	for (auto it : this->abilities) {
-		it = nullptr;
-	}
 }
 
 const size_t ActorObject::getID()
 {
 	return this->ID;
+}
+
+GamePlayState * ActorObject::getPGPS()
+{
+	return this->pGPS;
+}
+
+float ActorObject::getRotation()
+{
+	return this->rotation;
+}
+
+XMFLOAT3 ActorObject::getDirection()
+{
+	return XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
+}
+
+void ActorObject::setSpeed(float speed)
+{
+	this->speed = speed;
 }
 
 void ActorObject::receive(GameObject & obj, Message msg)
@@ -54,7 +71,7 @@ void ActorObject::move()
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	float deltaTime = Locator::getGameTime()->getDeltaTime();
-	XMFLOAT3 playerPos = this->getPosition();
+	XMFLOAT3 playerPos = this->GETPosition();
 	XMFLOAT3 playerVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = playerPos;
 	tempPos.x += MovementVector.x * playerVelocity.x * deltaTime;
@@ -64,10 +81,12 @@ void ActorObject::move()
 	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
 		playerNewPos.z = tempPos.z;
+		this->physicsComponent->updateBoundingArea(playerPos);
 	}
 	else { playerNewPos.z = playerPos.z; }
 	if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
 		playerNewPos.x = tempPos.x;
+		this->physicsComponent->updateBoundingArea(playerPos);
 	} 
 	else { playerNewPos.x = playerPos.x; }
 	playerNewPos.y = playerPos.y;
@@ -78,11 +97,12 @@ void ActorObject::moveUp()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
-		XMFLOAT3 playerVelocity = this->getVelocity();
+		XMFLOAT3 playerPos = this->GETPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;
 		playerPos.z += playerVelocity.z * dt;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -94,11 +114,12 @@ void ActorObject::moveLeft()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
-		XMFLOAT3 playerVelocity = this->getVelocity();
+		XMFLOAT3 playerPos = this->GETPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.x -= playerVelocity.x * dt;
 		if (playerPos.x > ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -109,11 +130,12 @@ void ActorObject::moveDown()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
-		XMFLOAT3 playerVelocity = this->getVelocity();
+		XMFLOAT3 playerPos = this->GETPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.z -= playerVelocity.z * dt;
 		if (playerPos.z > ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -124,11 +146,12 @@ void ActorObject::moveRight()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
-		XMFLOAT3 playerPos = this->getPosition();
-		XMFLOAT3 playerVelocity = this->getVelocity();
+		XMFLOAT3 playerPos = this->GETPosition();
+		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.x += playerVelocity.x * dt;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
 			this->updateWorldMatrix(playerPos);
+			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
 	else {
@@ -153,32 +176,58 @@ void ActorObject::rotate()
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		if (autoAttCD[0] <= 0)
-		{
-			XMFLOAT3 direction = XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
-			ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f));
-			pGPS->initProjectile(this->pos + DirectX::XMFLOAT3{ -40, 0, 0 }, direction, props);
-			autoAttCD[0] = autoAttCD[1];
-		}
-		else
-		{
-			this->decCD();
-		}
+		this->spells[0]->castSpell();
 	}
 	else {
 
 	}
 }
 
-void ActorObject::selectAbilityX()
+void ActorObject::selectAbility1()
 {
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->selectedSpell = this->spells[1];
+	}
+	else {
 
+	}
+}
+
+void ActorObject::selectAbility2()
+{
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->selectedSpell = this->spells[2];
+	}
+	else {
+
+	}
+}
+
+void ActorObject::selectAbility3()
+{
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->selectedSpell = this->spells[3];
+		
+	}
+	else {
+
+	}
+}
+
+void ActorObject::selectAbility4()
+{
+	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+		this->selectedSpell = this->spells[4];
+	}
+	else {
+
+	}
 }
 
 void ActorObject::fireAbilityX()
 {
 	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
-		this->rotate();
+		this->selectedSpell->castSpell();
 	}
 	else {
 
@@ -198,9 +247,23 @@ InputComponent* ActorObject::GETinputComponent()
 
 void ActorObject::decCD()
 {
-	if (autoAttCD[0] >= 0)
+	for (auto itteration : spells)
 	{
-		autoAttCD[0] -= Locator::getGameTime()->getDeltaTime();
+		itteration->updateCD();
 	}
+	// Resets the player to the original movmentspeed, before the CD runs out
+	if (this->spells.at(size_t(NAME::SPEEDBUFF))->getState() == SPELLSTATE::COOLDOWN)
+	{
+		if (this->spells.at(size_t(NAME::SPEEDBUFF))->getTSC() > 1.5)
+		{
+			this->speed = 1;
+		}
+	}
+}
+
+void ActorObject::addSpell(Spell * spell)
+{
+	int next = this->spells.size();
+	this->spells.push_back(spell);
 }
 

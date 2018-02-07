@@ -30,15 +30,19 @@
 
 PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
 	this->entityPointer = &obj;
+	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
-	this->selfBoundingSphere.Center = obj.getPosition();
+
+	this->selfBoundingSphere.Center = obj.GETPosition();
 	this->selfBoundingSphere.Radius = 1.0f;
 }
 
 PhysicsComponent::PhysicsComponent(GameObject& obj, float boundingSphereRadius) : ID(obj.getID()) {
 	this->entityPointer = &obj;
+	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
-	this->selfBoundingSphere.Center = obj.getPosition();
+
+	this->selfBoundingSphere.Center = obj.GETPosition();
 	this->selfBoundingSphere.Radius = boundingSphereRadius;
 }
 
@@ -85,7 +89,7 @@ void PhysicsComponent::receive(GameObject & obj, Message msg) {
 
 void PhysicsComponent::update()
 {
-
+	this->updateBoundingArea(this->entityPointer->GETPosition());
 }
 
 void PhysicsComponent::cleanUp() {

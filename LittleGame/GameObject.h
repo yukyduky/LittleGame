@@ -12,6 +12,7 @@ enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
 enum class OBJECTTYPE { PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE, PROJECTILE, NOT_SET};
 
 class Component;
+class PhysicsComponent;
 
 using namespace DirectX;
 
@@ -33,6 +34,8 @@ private:
 
 protected:
 	std::list<Component*> components;
+	PhysicsComponent* physicsComponent;
+
 	const size_t ID;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
@@ -61,7 +64,7 @@ public:
 	const size_t getID() const { return this->ID; }
 
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
-	XMFLOAT3 getPosition() const { return this->pos; }
+	XMFLOAT3 GETPosition() const { return this->pos; }
 	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE state) { this->state = state; }
@@ -71,11 +74,14 @@ public:
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	XMMATRIX getRotationMatrix() { return this->rotationMatrix; }
 	void updateWorldMatrix(XMFLOAT3 newPos);
 
 	OBJECTTYPE getType() const { return this->type; }
 	void setType(OBJECTTYPE type) { this->type = type; }
 
+	void SETphysicsComponent(PhysicsComponent* physicsComponent_in) { this->physicsComponent = physicsComponent_in; }
+	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }
 };
 
 #endif // !GAMEOBJECT_H
