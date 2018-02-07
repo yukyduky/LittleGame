@@ -78,7 +78,3 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 	Locator::getD3D()->setConstantBuffer(this->cLightBuffer, SHADER::PIXEL, 1, 1);
 }
 
-void RenderInputOrganizer::addGraphics(GraphicsComponent * graphics)
-{
-	this->graphics.push_back(graphics);
-}

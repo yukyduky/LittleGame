@@ -55,7 +55,6 @@ class GraphicsComponent;
 class RenderInputOrganizer
 {
 private:
-	std::vector<GraphicsComponent*> graphics;
 	std::vector<Light>* lights;
 
 	MatrixBufferCalc rawMatrixData;
@@ -78,7 +77,6 @@ public:
 	void initialize(Camera& camera, std::vector<Light>& lights);
 	void render(std::vector<GraphicsComponent*>& graphics);
 	void injectResourcesIntoSecondPass();
-	void addGraphics(GraphicsComponent* graphics);
 };
 
 #endif // !RENDERINPUTORGANIZER_H

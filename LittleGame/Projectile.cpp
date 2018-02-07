@@ -49,7 +49,7 @@ void Projectile::update()
 	{
 		//----TEMPLATE will fix after rio has been remade
 		this->setVelocity(XMFLOAT3(0, 0, 0));
-		this->updateWorldMatrix(XMFLOAT3(0, -200, 0));
+		this->setPosition(XMFLOAT3(0, -200, 0));
 		//this->cleanUp();
 		this->send(OBJECTSTATE::TYPE::DEAD);
 	}
