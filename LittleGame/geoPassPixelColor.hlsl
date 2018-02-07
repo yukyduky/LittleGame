@@ -2,7 +2,7 @@ struct PS_IN
 {
 	float4 pos_S		: SV_POSITION;
 	float4 pos_W		: POSITION;
-	float4 normal		: NORMAL;
+	float3 normal		: NORMAL;
 	float4 color		: COLOR;
 };
 
@@ -18,7 +18,7 @@ PS_OUT PS(PS_IN input)
 	PS_OUT output;
 
 	output.pos_W = input.pos_W;
-	output.normal = input.normal;
+	output.normal = float4(input.normal, 1.0f);
 	output.diffuse = input.color;
 
 	return output;

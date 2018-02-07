@@ -194,9 +194,9 @@ void Renderer::createDepthStencilView(size_t width, size_t height, ID3D11DepthSt
 void Renderer::init()
 {
 	// Set the clear color
-	this->clearColor[0] = 255.0f;
+	this->clearColor[0] = 0.0f;
 	this->clearColor[1] = 0.0f;
-	this->clearColor[2] = 255.0f;
+	this->clearColor[2] = 0.0f;
 	this->clearColor[3] = 255.0f;
 
 	// Set current shaders to handle color objects

@@ -11,8 +11,7 @@ constexpr int MAX_NUM_POINTLIGHTS = 50;
 
 using namespace DirectX;
 
-struct Light
-{
+struct Light {
 	XMFLOAT3 pos;
 	float pad0;
 	XMFLOAT3 diffuse;
@@ -25,6 +24,13 @@ struct Light
 	Light() {}
 	Light(XMFLOAT3 pos, XMFLOAT3 diffuse, XMFLOAT3 ambient, XMFLOAT3 attenuation, float specPower) : 
 		pos(pos), diffuse(diffuse), ambient(ambient), attenuation(attenuation), specPower(specPower) {}
+};
+
+struct LightPassData {
+	float nrOfLights;
+	XMFLOAT3 pad0;
+
+	LightPassData() {}
 };
 
 struct MatrixBufferCalc {
@@ -50,12 +56,15 @@ class RenderInputOrganizer
 {
 private:
 	std::vector<GraphicsComponent*> graphics;
-	std::list<Light>* lights;
+	std::vector<Light>* lights;
 
 	MatrixBufferCalc rawMatrixData;
 	MatrixBufferPack packagedMatrixData;
+	LightPassData lightPassData;
 	ID3D11Buffer* cMatrixBuffer;
-	std::array<ID3D11Buffer*, MAX_NUM_POINTLIGHTS> cLightBuffer;
+	ID3D11Buffer* cLightBuffer;
+	ID3D11Buffer* cLightPassDataBuffer;
+
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Re-formats the WORLD, VIEW, & PROJECTION matrix data.
@@ -66,7 +75,7 @@ private:
 	void drawGraphics(GraphicsComponent*& graphics);
 
 public:
-	void initialize(Camera& camera, std::list<Light>& lights);
+	void initialize(Camera& camera, std::vector<Light>& lights);
 	void render();
 	void injectResourcesIntoSecondPass();
 	void addGraphics(GraphicsComponent* graphics);

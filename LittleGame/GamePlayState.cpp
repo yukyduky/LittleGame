@@ -77,9 +77,10 @@ void GamePlayState::init() {
 	this->initPlayer();
 	this->initArena();
 
-	//this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 2, ARENAHEIGHT / 2.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.001f, 0.0f), 50.0f));
-	//this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH, ARENASQUARESIZE * 2, ARENAHEIGHT / 2.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.2f, 0.0f, 0.0f), 50.0f));
-	//this->pointLights.push_back(Light(XMFLOAT3(100.0f, 150.0f, 100.0f), XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.001f, 0.0f), 50.0f));
+	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -179,7 +180,7 @@ void GamePlayState::createArenaFloor()
 	//Prepare the worldMatrix for the RectangleComponent.
 	XMMATRIX worldM = XMMatrixIdentity();
 	XMMATRIX rotationM = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(ARENAWIDTH / 2, 0, ARENAHEIGHT / 2);
+	XMMATRIX scaleM = XMMatrixScaling(ARENAWIDTH / 2, ARENAWIDTH / 2, ARENAWIDTH / 2);
 	XMMATRIX translationM = XMMatrixTranslationFromVector(vec);
 	worldM = scaleM * rotationM * translationM;
 	//Prepare the color of the rectangle.
@@ -205,8 +206,8 @@ void GamePlayState::createArenaNeonGrid()
 	float rectWidth = 1.5f;
 	XMMATRIX worldMatrix = DirectX::XMMatrixIdentity();
 	XMMATRIX translationM = DirectX::XMMatrixIdentity();
-	XMMATRIX scaleMV = XMMatrixScaling(rectWidth, 0.0f, ARENAHEIGHT / 2.0f);
-	XMMATRIX scaleMH = XMMatrixScaling(ARENAWIDTH / 2.0f, 0.0f, rectWidth);
+	XMMATRIX scaleMV = XMMatrixScaling(rectWidth, 1.0f, ARENAHEIGHT / 2.0f);
+	XMMATRIX scaleMH = XMMatrixScaling(ARENAWIDTH / 2.0f, 1.0f, rectWidth);
 	XMMATRIX rotationM = DirectX::XMMatrixIdentity();
 
 
@@ -335,7 +336,6 @@ void GamePlayState::createArenaWalls()
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
 	XMFLOAT2 posIndex; // used to find all the indexes of a wall section.
-	XMFLOAT3 temp;
 	//Creates left row of arena walls
 	for (int i = 0; i < nrOfWallsLR; i++) {
 		//Calculate new pos

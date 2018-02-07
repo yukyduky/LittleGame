@@ -4,9 +4,11 @@
 
 
 void RenderInputOrganizer::packageMatrices() {
+	XMMATRIX world = *this->rawMatrixData.world;
+	world = XMMatrixTranspose(world);
 	XMStoreFloat4x4(
 		&this->packagedMatrixData.world,
-		*this->rawMatrixData.world
+		world
 	);
 
 	this->rawMatrixData.worldViewProj = (*this->rawMatrixData.world) * (*this->rawMatrixData.view) * (*this->rawMatrixData.proj);
@@ -22,6 +24,7 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 	// Get world matrix
 	this->rawMatrixData.world = &graphics->getWorld();
 	// Calculate matrices and convert to XMFLOAT4x4
+
 	this->packageMatrices();
 
 	// Map the matrix package to the buffer
@@ -37,7 +40,7 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 	Locator::getD3D()->GETgDevCon()->DrawIndexed(graphics->GETnumIndices(), 0, 0);
 }
 
-void RenderInputOrganizer::initialize(Camera& camera, std::list<Light>& lights) {
+void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights) {
 	this->lights = &lights;
 
 	this->rawMatrixData.view = &camera.GETviewMatrix();
@@ -45,15 +48,11 @@ void RenderInputOrganizer::initialize(Camera& camera, std::list<Light>& lights) 
 
 	Locator::getD3D()->createConstantBuffer(
 		&this->cMatrixBuffer,
-		sizeof(this->packagedMatrixData)
+		sizeof(MatrixBufferPack)
 	);
 
-	for (auto &i : this->cLightBuffer) {
-		Locator::getD3D()->createConstantBuffer(
-			&i,
-			sizeof(Light)
-		);
-	}
+	Locator::getD3D()->createConstantBuffer(&this->cLightPassDataBuffer, sizeof(LightPassData));
+	Locator::getD3D()->createConstantBuffer(&this->cLightBuffer, sizeof(Light) * MAX_NUM_POINTLIGHTS);
 }
 
 void RenderInputOrganizer::render()
@@ -65,13 +64,15 @@ void RenderInputOrganizer::render()
 
 void RenderInputOrganizer::injectResourcesIntoSecondPass()
 {
-	int i = 0;
-	for (std::list<Light>::iterator it = this->lights->begin(); i < MAX_NUM_POINTLIGHTS, i < this->lights->size(); i++, it++) {
-		Locator::getD3D()->mapConstantBuffer(&cLightBuffer[i], &(*it), sizeof(Light));
-	}
-
 	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
-	Locator::getD3D()->setConstantBuffer(*this->cLightBuffer.data(), SHADER::PIXEL, 0, size);
+
+	this->lightPassData.nrOfLights = size;
+
+	Locator::getD3D()->mapConstantBuffer(&this->cLightPassDataBuffer, &this->lightPassData, sizeof(LightPassData));
+	Locator::getD3D()->setConstantBuffer(this->cLightPassDataBuffer, SHADER::PIXEL, 0, 1);
+
+	Locator::getD3D()->mapConstantBuffer(&this->cLightBuffer, this->lights->data(), sizeof(Light) * size);
+	Locator::getD3D()->setConstantBuffer(this->cLightBuffer, SHADER::PIXEL, 1, 1);
 }
 
 void RenderInputOrganizer::addGraphics(GraphicsComponent * graphics)
