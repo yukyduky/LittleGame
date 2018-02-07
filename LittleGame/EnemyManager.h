@@ -27,6 +27,7 @@ class EnemyManager
 private:
 	// Necessary since creation of actors is dependant on our std::vectors which rely in the GPS.
 	GamePlayState * pGPS;
+	std::vector<ActorObject*> players;
 
 	// Assumes that all the gameObjects are updated through this pointer, if 
 	// it has since then been divided into several arrays, the pointer here should be to the Actors
@@ -45,11 +46,11 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches
 	*/
-	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, float posScale);
+	ActorObject* createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();
-	EnemyManager(GamePlayState& pGPS);
+	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players);
 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

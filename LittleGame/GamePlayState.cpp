@@ -147,7 +147,7 @@ void GamePlayState::update(GameManager * gm)
 {	
 	int ID;
 
-	//this->enemyManager.update();
+	this->enemyManager.update();
 
 
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {

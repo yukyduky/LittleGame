@@ -18,13 +18,14 @@ class AIComponent : public InputComponent
 private:
 	size_t ID = -1;
 	ActorObject* pHead = nullptr;
+	std::vector<ActorObject*> players;
 	AIBEHAVIOR::KEY behavior;
 
 	XMFLOAT2 simulatedMovement;
 	XMFLOAT2 simulatedRotation;
 
 public:
-	AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior);
+	AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players);
 	
 	void init();
 

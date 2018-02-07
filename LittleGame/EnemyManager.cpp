@@ -11,9 +11,10 @@ EnemyManager::EnemyManager()
 	this->pGPS = nullptr;
 }
 
-EnemyManager::EnemyManager(GamePlayState& pGPS)
+EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
 	this->pGPS = &pGPS;
+	this->players = players; 
 }
 
 void EnemyManager::startLevel1()
@@ -23,6 +24,7 @@ void EnemyManager::startLevel1()
 	this->spawnInterval = 3;
 	this->currentWaveCount = 3;
 	this->currentWaveSize = 2;
+	int testScale = 1;
 	Wave* currentWave;
 
 	// Per wave
@@ -32,8 +34,9 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, 0.1*(i+j));
+			ActorObject* enemy = this->createEnemy(0.1*(testScale), ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
+			testScale++;
 		}
 
 		// Attach the currentWave to our waves
@@ -55,7 +58,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, float posScale)
+ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	ActorObject* enemy;
 	BlockComponent* block;
@@ -81,10 +84,10 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	physics = new PhysicsComponent(*enemy);
 
 	// Input Component
-	input = new AIComponent(*enemy, aiBehavior);
+	input = new AIComponent(*enemy, aiBehavior, this->players);
 
 	// Make the enemy inactive
-	enemy->setState(OBJECTSTATE::DEAD);
+	enemy->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemy;
 }
 
@@ -115,7 +118,7 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
-				freshEnemy->setState(OBJECTSTATE::IDLE);
+				freshEnemy->setState(OBJECTSTATE::TYPE::IDLE);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
 				char msgbuf[20];
