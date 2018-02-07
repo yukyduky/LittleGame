@@ -29,7 +29,7 @@ private:
 
 	int level;
 	std::list<GameObject*> staticObjectsList;
-	std::list<GameObject*> dynamicObjectsList;
+	//std::list<GameObject*> dynamicObjectsList;
 	QuadTreeSquare nodeBounds;
 	QuadTree* nodes[4];
 	QuadTree* parentPointer;
@@ -44,9 +44,12 @@ public:
 	void initializeQuadTree();
 
 	void insertStaticObject(GameObject* staticObject);
-	void insertDynamicObject(GameObject* dynamicObject);
-	void removeStaticObject();
-	void removeDynamicObject();
+	void removeStaticObject(GameObject* staticObject);
+
+	std::list<GameObject*> retrieveStaticList();
+	/// Don't need a retrieveDynamicList; we're looping through and calling 'getIndex'-ish function
+	/// to see where every dynamic object is. Still needs thought to it though.
+
 
 	int GETindex(GameObject* object);
 
@@ -54,3 +57,7 @@ public:
 };
 
 #endif
+
+
+//void insertDynamicObject(GameObject* dynamicObject);
+//void removeDynamicObject();

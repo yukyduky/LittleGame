@@ -18,18 +18,9 @@ using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
 
-//void GamePlayState::updatePhysicsComponents()
-//{
-//	for (auto&& i : physicsListDynamic) {
-//		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
-//			i->updateBoundingArea(i->GETEntityPointer()->GETPosition());
-//		}
-//	}
-//}
-
 void GamePlayState::checkCollisions() {
 	//--------//
-	// LOOP 1 //   : Looping through each DYNAMIC physicsComponent
+	// LOOP 1 //   :	Looping through each DYNAMIC physicsComponent
 	//--------//
 	for (auto&& i : this->dynamicObjects) {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
@@ -38,7 +29,7 @@ void GamePlayState::checkCollisions() {
 		
 		if (i->getState() != OBJECTSTATE::DEAD) {
 			//----------//
-			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
+			// LOOP 2.1 //   :	DYNAMIC <--> DYNAMIC Collision
 			//----------//
 			for (auto&& k : this->dynamicObjects) {
 				int kID = k->getID();
@@ -63,7 +54,7 @@ void GamePlayState::checkCollisions() {
 				
 			}
 			//----------//
-			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
+			// LOOP 2.2 //   :	DYNAMIC <--> STATIC Collision
 			//----------//
 			for (int k = 0; k < this->staticPhysicsCount; k++) {
 				if (this->staticObjects[k]->getState() != OBJECTSTATE::DEAD) {
