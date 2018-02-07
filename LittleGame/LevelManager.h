@@ -11,7 +11,7 @@
 #include "PhysicsComponent.h"
 
 using namespace DirectX::SimpleMath;
-
+class GamePlayState;
 
 //Defines what a specific space contains
 namespace SQUARETYPE {
@@ -27,6 +27,8 @@ namespace WALLTYPE {
 class LevelManager
 {
 private:
+	GamePlayState * pGPS;
+
 	int arenaWidth;
 	int arenaDepth;
 	int squareSize;
@@ -45,7 +47,7 @@ private:
 	//void randomize();
 
 public:
-	int initArena(int ID, int &staticPhysicsCount, int width, int depth, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 
 
 };

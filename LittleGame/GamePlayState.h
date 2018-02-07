@@ -17,6 +17,7 @@
 #include "FireballComponent.h"
 #include <list>
 #include "ArenaGlobals.h"
+#include "EnemyManager.h"
 #include "LevelManager.h"
 
 
@@ -51,6 +52,7 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
+	EnemyManager enemyManager;
 	int ID = 0;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
@@ -123,6 +125,13 @@ public:
 	*/
 	static GamePlayState* getInstance();
 
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns a reference to the internal dynamicObjects vector.
+	- Currently only used by EnemyHandler for creation of enemies.
+	*/
+	std::vector<GameObject*>* getDynamicObjects();
+
+	void addGraphicsToRio(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
 

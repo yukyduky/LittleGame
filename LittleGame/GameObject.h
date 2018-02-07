@@ -9,7 +9,13 @@
 
 
 enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
-enum class OBJECTTYPE { PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE, PROJECTILE, NOT_SET};
+namespace OBJECTTYPE {
+	enum TYPE {
+		PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE,
+		PROJECTILE, NOT_SET,
+		SIZE
+	};
+}
 
 class Component;
 class PhysicsComponent;
@@ -40,7 +46,7 @@ protected:
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTSTATE state;
-	OBJECTTYPE type;
+	OBJECTTYPE::TYPE type;
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE), type(OBJECTTYPE::NOT_SET) {}
@@ -77,8 +83,8 @@ public:
 	XMMATRIX getRotationMatrix() { return this->rotationMatrix; }
 	void updateWorldMatrix(XMFLOAT3 newPos);
 
-	OBJECTTYPE getType() const { return this->type; }
-	void setType(OBJECTTYPE type) { this->type = type; }
+	OBJECTTYPE::TYPE getType() const { return this->type; }
+	void setType(OBJECTTYPE::TYPE type) { this->type = type; }
 
 	void SETphysicsComponent(PhysicsComponent* physicsComponent_in) { this->physicsComponent = physicsComponent_in; }
 	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }

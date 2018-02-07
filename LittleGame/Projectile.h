@@ -10,7 +10,7 @@ class DamageSpell;
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, XMFLOAT3 pos);
+	Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
 	~Projectile();
 
 	/*Moves the projectile in the direction of the velocity with speed of this->speed, 
