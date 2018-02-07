@@ -15,7 +15,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ID3D* d3d = new D3D();
 	Locator::provide(d3d);
 
-	Locator::getD3D()->initializeWindow(hInstance, true, 800, 600, true);
+	Locator::getD3D()->initializeWindow(hInstance, true, 1920, 1080, true);
 	Locator::getD3D()->createSwapChain();
 
 	GameManager gm;

@@ -84,10 +84,15 @@ void GamePlayState::checkCollisions() {
 
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
-	this->rio.initialize(this->camera);
+	this->rio.initialize(this->camera, this->pointLights);
 	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
+
+	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);

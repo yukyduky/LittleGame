@@ -59,14 +59,13 @@ void Projectile::update()
 		this->pos.x += this->velocity.x * dt;
 		// Projectiles dosnt move in Y
 		this->pos.z += this->velocity.z * dt;
+		this->setPosition(pos);
 
 		this->rangeCoutner++;
 		if (this->rangeCoutner >= this->range && this->range != -1)
 		{
 			this->setState(OBJECTSTATE::TYPE::DEAD);
 		}
-
-		this->updateWorldMatrix(pos);
 	}
 }
 

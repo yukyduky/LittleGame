@@ -18,7 +18,7 @@ public:
 	virtual void setIndexBuffer(ID3D11Buffer* gIndexBuffer, size_t offset) = 0;
 	virtual void createConstantBuffer(ID3D11Buffer ** gBuffer, int bufferSize) = 0;
 	virtual void mapConstantBuffer(ID3D11Buffer** gBuffer, void* cbPtr, int structSize) = 0;
-	virtual void setConstantBuffer(ID3D11Buffer *& cBuffer, SHADER shader, size_t slot) = 0;
+	virtual void setConstantBuffer(ID3D11Buffer *& cBuffer, SHADER shader, size_t slot, size_t numBuffers) = 0;
 	virtual void cleanup() = 0;
 
 	virtual size_t& GETwWidth() = 0;

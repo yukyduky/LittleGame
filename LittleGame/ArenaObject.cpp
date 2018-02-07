@@ -23,11 +23,6 @@ const size_t ArenaObject::getID()
 	return this->ID;
 }
 
-void ArenaObject::receive(GameObject &obj, Message msg)
-{
-
-}
-
 void ArenaObject::cleanUp()
 {
 	int asdf = 3;

@@ -194,9 +194,9 @@ void Renderer::createDepthStencilView(size_t width, size_t height, ID3D11DepthSt
 void Renderer::init()
 {
 	// Set the clear color
-	this->clearColor[0] = 255.0f;
+	this->clearColor[0] = 0.0f;
 	this->clearColor[1] = 0.0f;
-	this->clearColor[2] = 255.0f;
+	this->clearColor[2] = 0.0f;
 	this->clearColor[3] = 255.0f;
 
 	// Set current shaders to handle color objects
@@ -245,7 +245,7 @@ void Renderer::firstPass()
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(NUM_DEFERRED_OUTPUTS, this->gRTVs.data(), this->gDSV);
 }
 
-void Renderer::secondPass()
+void Renderer::secondPassSetup()
 {
 	// Set the light shaders as the current shaders
 	this->currentLightShaders->SetShaders(Locator::getD3D()->GETgDevCon());
@@ -263,7 +263,10 @@ void Renderer::secondPass()
 
 	// Set the rendertarget to the final rendertarget
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, nullptr);
+}
 
+void Renderer::secondPass()
+{
 	// Draw the final texture over the whole screen
 	Locator::getD3D()->GETgDevCon()->Draw(4, 0);
 	// Present the backbuffer to the screen

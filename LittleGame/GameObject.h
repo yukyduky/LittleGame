@@ -5,7 +5,6 @@
 #include <list>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <SimpleMath.h>
 
 
 namespace OBJECTSTATE {
@@ -82,8 +81,8 @@ public:
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	void updateWorldMatrix();
 	XMMATRIX getRotationMatrix() { return this->rotationMatrix; }
-	void updateWorldMatrix(XMFLOAT3 newPos);
 
 	OBJECTTYPE::TYPE getType() const { return this->type; }
 	void setType(OBJECTTYPE::TYPE type) { this->type = type; }
