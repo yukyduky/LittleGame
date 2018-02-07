@@ -36,7 +36,7 @@ void GamePlayState::checkCollisions() {
 		// NOTE: Skipping if object state = DEAD.
 		int iID = i->getID();
 		
-		if (i->getState() != OBJECTSTATE::DEAD) {
+		if (i->getState() != OBJECTSTATE::TYPE::DEAD) {
 			//----------//
 			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
 			//----------//
@@ -44,7 +44,7 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->getState() != OBJECTSTATE::DEAD) {
+					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
 							// Call COLLISION-CLASS function
@@ -63,7 +63,7 @@ void GamePlayState::checkCollisions() {
 			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
 			//----------//
 			for (int k = 0; k < this->staticPhysicsCount; k++) {
-				if (this->staticObjects[k]->getState() != OBJECTSTATE::DEAD) {
+				if (this->staticObjects[k]->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 					if (i->GETphysicsComponent()->checkCollision(this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
@@ -107,10 +107,12 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+/*
 	for (auto &iterator : this->projectiles) {
 		//iterator->cleanUp();
 		//delete iterator;
 	}
+*/
 }
 
 void GamePlayState::pause() {
@@ -139,14 +141,21 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	for (int i = 0; i < this->dynamicObjects.size(); i++) {
+		this->dynamicObjects[i]->update();
+	}
+	this->checkCollisions();
+
+	/*
 	for (auto &iterator : this->dynamicObjects) {
 		iterator->update();
 	}
-	this->checkCollisions();
+
 	for (auto &iterator : projectiles)
 	{
 		iterator->update();
 	}
+	*/
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -285,8 +294,8 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	
 	//Add proj to objectArrays
-//	this->dynamicObjects.push_back(proj);
-	this->projectiles.push_back(proj);
+	this->dynamicObjects.push_back(proj);
+//	this->projectiles.push_back(proj);
 
 	return proj;
 }

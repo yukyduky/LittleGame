@@ -79,7 +79,7 @@ private:
 	///std::list<PhysicsComponent*> physicsListStatic;
 	///std::list<PhysicsComponent*> physicsListDynamic;
 	//Array with all active projectiles
-	std::vector<Projectile*> projectiles;
+	//std::vector<Projectile*> projectiles;
 	std::vector<int> deadProjectileID;
 
 	//void updatePhysicsComponents();

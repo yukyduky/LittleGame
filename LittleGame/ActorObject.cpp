@@ -183,7 +183,7 @@ void ActorObject::rotate()
 
 void ActorObject::fireAbility0()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->spells[0]->castSpell();
 	}
 	else {
@@ -193,7 +193,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::selectAbility1()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[1];
 	}
 	else {
@@ -203,7 +203,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[2];
 	}
 	else {
@@ -213,7 +213,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[3];
 		
 	}
@@ -224,7 +224,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[4];
 	}
 	else {
@@ -234,7 +234,7 @@ void ActorObject::selectAbility4()
 
 void ActorObject::fireAbilityX()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell->castSpell();
 	}
 	else {
@@ -273,6 +273,5 @@ void ActorObject::addSpell(Spell * spell)
 {
 	int next = this->spells.size();
 	this->spells.push_back(spell);
-	this->addComponent(spell);
 }
 
