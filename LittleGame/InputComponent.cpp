@@ -140,7 +140,8 @@ void InputComponent::mapKeyCodesToEnums()
 
 void InputComponent::update()
 {
-
+	this->generateCommands();
+	this->execute();
 }
 
 void InputComponent::init()

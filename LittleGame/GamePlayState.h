@@ -52,6 +52,8 @@ private:
 	static GamePlayState sGamePlayState;
 	
 	int ID = 0;
+	int arenaWidth;
+	int arenaDepth;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
@@ -60,6 +62,7 @@ private:
 	//everything that will exist in this level
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
+	std::vector<int> deadObjectsID;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
@@ -76,6 +79,7 @@ private:
 	std::list<PhysicsComponent*> physicsListDynamic;
 	//Array with all active projectiles
 	std::vector<Projectile*> projectiles;
+	std::vector<int> deadProjectileID;
 
 	void updatePhysicsComponents();
 	

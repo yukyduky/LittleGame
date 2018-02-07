@@ -21,7 +21,7 @@ GamePlayState GamePlayState::sGamePlayState;
 void GamePlayState::updatePhysicsComponents()
 {
 	for (auto&& i : physicsListDynamic) {
-		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+		if (i->GETEntityPointer()->getState() != OBJECTSTATE::TYPE::DEAD) {
 			i->updateBoundingArea(i->GETEntityPointer()->getPosition());
 		}
 	}
@@ -35,7 +35,7 @@ void GamePlayState::checkCollisions() {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
 		// NOTE: Skipping if object state = DEAD.
 		int iID = i->getID();
-		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+		if (i->GETEntityPointer()->getState() != OBJECTSTATE::TYPE::DEAD) {
 			//----------//
 			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
 			//----------//
@@ -43,7 +43,7 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+					if (k->GETEntityPointer()->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						if (i->checkCollision(k->GETBoundingSphere())) {
 							// Call COLLISION-CLASS function
@@ -62,7 +62,7 @@ void GamePlayState::checkCollisions() {
 			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
 			//----------//
 			for (auto&& k : this->physicsListStatic) {
-				if (k->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
+				if (k->GETEntityPointer()->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 					if (i->checkCollision(k->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
@@ -96,7 +96,6 @@ void GamePlayState::cleanUp()
 	// Direct internal objects
 	// this->rio.cleanUp();
 	// this->camera.cleanUp();
-
 
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->staticObjects) {
@@ -138,17 +137,11 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 
 void GamePlayState::update(GameManager * gm)
-{
-	this->updatePhysicsComponents();
-	this->checkCollisions();
-
-	player1->decCD();
-
-	for (auto &iterator : playerInput) {
-		iterator->generateCommands();
-		iterator->execute();
+{	
+	for (auto &iterator : this->dynamicObjects) {
+		iterator->update();
 	}
-
+	this->checkCollisions();
 	for (auto &iterator : projectiles)
 	{
 		iterator->update();
@@ -156,7 +149,7 @@ void GamePlayState::update(GameManager * gm)
 }
 
 void GamePlayState::render(GameManager * gm) {
-	this->rio.render();
+	rio.render(this->graphics);
 	gm->display(this);
 }
 
@@ -209,6 +202,7 @@ void GamePlayState::initPlayer()
 	//Create the new InputComponent (KeyboardComponent or ControllerComponent) and hand it to the ActorObject.
 	//input = new ControllerComponent(*actor, 0);
 	input = new KeyboardComponent(*actor);
+	//actor->SETinputComponent(input);
 
 	this->playerInput[0] = input;
 	this->dynamicObjects.push_back(actor);
@@ -288,7 +282,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	
 	//Add proj to objectArrays
-	this->dynamicObjects.push_back(proj);
+//	this->dynamicObjects.push_back(proj);
 	this->projectiles.push_back(proj);
 
 	return proj;

@@ -45,12 +45,6 @@ int AudioManager::mapMusic(std::string filename, MUSIC::NAME name)
 
 void AudioManager::update()
 {
-
-	for (size_t i = 0; i < this->soundQueue.size(); i++)
-	{
-		this->soundQueue[i].play();
-	}
-	this->soundQueue.clear();
 }
 
 void AudioManager::play(MUSIC::NAME name)
@@ -61,10 +55,6 @@ void AudioManager::play(MUSIC::NAME name)
 
 void AudioManager::play(SOUND::NAME name)
 {
-	//Used to add sound to the queue but not used in current version
-	//this->soundQueue.push_back(sf::Sound(this->sounds[name]));
-	//this->soundQueue.back().setVolume(this->volume);
-
 	this->currentSound.setBuffer(this->sounds[name]);
 	this->currentSound.play();
 }

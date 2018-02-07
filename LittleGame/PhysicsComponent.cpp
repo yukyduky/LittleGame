@@ -85,7 +85,9 @@ void PhysicsComponent::receive(GameObject & obj, Message msg) {
 
 void PhysicsComponent::update()
 {
-
+	if (this->entityPointer->getState() != OBJECTSTATE::TYPE::DEAD) {
+		this->updateBoundingArea(this->entityPointer->getPosition());
+	}
 }
 
 void PhysicsComponent::cleanUp() {

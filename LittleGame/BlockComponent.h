@@ -53,6 +53,8 @@ public:
 	*/
 	virtual const size_t getID();
 	virtual void cleanUp();
+	virtual bool checkIfDead();
+	
 };
 
 

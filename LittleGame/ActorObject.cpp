@@ -61,6 +61,14 @@ void ActorObject::cleanUp()
 	}
 }
 
+void ActorObject::update()
+{
+	for (auto &i : this->components) {
+		i->update();
+	}
+	this->decCD();
+}
+
 void ActorObject::move()
 {
 	//Create the new objects we will need for the calculations.
@@ -89,7 +97,7 @@ void ActorObject::move()
 
 void ActorObject::moveUp()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
@@ -105,7 +113,7 @@ void ActorObject::moveUp()
 
 void ActorObject::moveLeft()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
@@ -120,7 +128,7 @@ void ActorObject::moveLeft()
 }
 void ActorObject::moveDown()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
@@ -135,7 +143,7 @@ void ActorObject::moveDown()
 }
 void ActorObject::moveRight()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->getPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity();
@@ -151,7 +159,7 @@ void ActorObject::moveRight()
 
 void ActorObject::rotate()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->rotation += 0.1f;
 		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
 		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
@@ -165,7 +173,7 @@ void ActorObject::rotate()
 
 void ActorObject::fireAbility0()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		if (this->spells.at(size_t(NAME::EXPLOSION))->getState() == SPELLSTATE::READY)
 		{
 			spells.at(size_t(NAME::EXPLOSION))->castSpell();
@@ -185,7 +193,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::selectAbility1()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->rotate();
 	}
 	else {
@@ -195,7 +203,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->rotate();
 	}
 	else {
@@ -205,7 +213,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->rotate();
 	}
 	else {
@@ -215,7 +223,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->rotate();
 	}
 	else {
@@ -225,7 +233,7 @@ void ActorObject::selectAbility4()
 
 void ActorObject::fireAbilityX()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		if (spells.at(size_t(NAME::AUTOATTACK))->castSpell())
 		{
 			
@@ -265,5 +273,6 @@ void ActorObject::addSpell(Spell * spell)
 {
 	int next = this->spells.size();
 	this->spells.push_back(spell);
+	this->addComponent(spell);
 }
 

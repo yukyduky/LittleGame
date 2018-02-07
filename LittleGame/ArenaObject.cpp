@@ -1,5 +1,5 @@
 #include "ArenaObject.h"
-
+#include "Component.h"
 
 ArenaObject::ArenaObject(const size_t ID)
 	: GameObject(ID)
@@ -15,7 +15,7 @@ ArenaObject::ArenaObject(const size_t ID, XMFLOAT3 pos)
 
 ArenaObject::~ArenaObject()
 {
-	this->cleanUp();
+
 }
 
 const size_t ArenaObject::getID()
@@ -31,4 +31,11 @@ void ArenaObject::receive(GameObject &obj, Message msg)
 void ArenaObject::cleanUp()
 {
 	int asdf = 3;
+}
+
+void ArenaObject::update()
+{
+	for (auto &i : this->components) {
+		i->update();
+	}	
 }

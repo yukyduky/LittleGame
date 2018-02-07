@@ -13,7 +13,7 @@ public:
 	Projectile(const size_t ID, XMFLOAT3 pos);
 	~Projectile();
 
-	void update();
+	virtual void update();
 	virtual void cleanUp();
 
 	void setSpeed(float spd) { this->speed = spd; }

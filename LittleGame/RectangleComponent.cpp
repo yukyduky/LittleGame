@@ -129,6 +129,15 @@ vColor& RectangleComponent::GETcolor()
 	return this->color;
 }
 
+bool RectangleComponent::checkIfDead()
+{
+	bool returnValue = false;
+	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
+	{
+		returnValue = true;
+	}
+	return returnValue;
+}
 
 /*_____________________________
 |          END OF             |
