@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="Commands.h" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="DamageSpell.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
@@ -172,11 +174,13 @@
   <ItemGroup>
     <ClCompile Include="AbilityComponent.cpp" />
     <ClCompile Include="ActorObject.cpp" />
+    <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="DamageSpell.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />

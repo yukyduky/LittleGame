@@ -230,7 +230,9 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	//Create the new ArenaObject and the new BlockComponent
 	object = new ArenaObject(nextID, pos);
 	object->setType(OBJECTTYPE::INDESTRUCTIBLE);
-	block = new BlockComponent(*object, color.x, color.y, color.z, color.w);
+	XMFLOAT3 tempScale(1, 1, 1);						// TOBE DELETED
+	XMFLOAT3 tempRotation(0, 0, 0);
+	block = new BlockComponent(*this->pGPS, *object, color, tempScale, tempRotation);
 	bSphere = new PhysicsComponent(*object, this->squareSize / 2.0f);
 	XMFLOAT3 bSpherePos = pos;
 	bSpherePos.y = this->squareSize / 2.0f;
@@ -246,8 +248,9 @@ int LevelManager::nextID()
 	return this->tempID++;
 }
 
-int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
+int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
 {
+	this->pGPS = &pGPS;
 	this->squareSize = 50;
 	this->arenaWidth = width;
 	this->arenaDepth = depth;

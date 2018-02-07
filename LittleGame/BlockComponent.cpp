@@ -1,4 +1,5 @@
 #include "BlockComponent.h"
+#include "GamePlayState.h"
 #include "GameObject.h"
 #include "Locator.h"
 
@@ -10,8 +11,14 @@
  */
 
 
-void BlockComponent::createVertices(float r, float g, float b, float a)
+void BlockComponent::createVertices(XMFLOAT4 color)
 {
+	float r, g, b, a;
+	r = color.x;
+	g = color.y;
+	b = color.z;
+	a = color.w;
+
 	/*--------<INFORMATION>--------
 	1. Creates a box with points ranging from -1.0 to 1.0 in x,y,z dimensions.
 	2. Sets the color of every vertex to the r,g,b in the paramaters.
@@ -129,10 +136,38 @@ void BlockComponent::createVertices(float r, float g, float b, float a)
 |_____________________________|
 */
 
-BlockComponent::BlockComponent(GameObject& obj, float r, float g, float b, float a) : ID(obj.getID())
+BlockComponent::BlockComponent(
+	GamePlayState &pGPS, GameObject& obj, XMFLOAT4 color,
+	XMFLOAT3 scale, XMFLOAT3 rotation
+
+) : ID(obj.getID())
 {
-	this->createVertices(r, g, b, a);
+	// Connections
 	this->head = &obj;
+	obj.addComponent(this);
+	pGPS.addGraphics(this);
+	
+	this->createVertices(color);
+
+	// Create matrixes for world-matrix
+	XMVECTOR translation = XMLoadFloat3(&obj.GETPosition());
+	XMMATRIX worldMatrix;
+	XMMATRIX translationM = XMMatrixTranslationFromVector(translation);
+
+	XMMATRIX rotationX = XMMatrixRotationX(rotation.x);
+	XMMATRIX rotationY = XMMatrixRotationY(rotation.y);
+	XMMATRIX rotationZ = XMMatrixRotationZ(rotation.z);
+	XMMATRIX totalRotation = rotationX * rotationY * rotationZ;
+
+	XMMATRIX scaleM = XMMatrixScaling(scale.x, scale.y, scale.z);
+	worldMatrix = scaleM * totalRotation * translationM;
+
+	// Apply matrixes
+	obj.SETtranslationMatrix(translationM);
+	obj.SETscaleMatrix(scaleM);
+	obj.SETrotationMatrix(totalRotation);
+	obj.SETworldMatrix(worldMatrix);
+	
 }
 
 BlockComponent::~BlockComponent() 

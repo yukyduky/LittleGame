@@ -16,11 +16,15 @@ ActorObject::ActorObject(const size_t ID)
 }
 
 
-ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS)
+ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
+	this->speed = speed;
+	this->velocity = velocity;
+	this->type = objectType;
+	this->state = OBJECTSTATE::TYPE::IDLE;
 }
 
 const size_t ActorObject::getID()
