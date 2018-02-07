@@ -6,7 +6,20 @@ MobilitySpell::MobilitySpell(ActorObject* player, NAME name) : Spell(player)
 	this->strength = 1;
 	this->name = name;
 	this->setType(SPELLTYPE::MOBILITY);
-
+	this->setState(SPELLSTATE::READY);
+	switch (this->name)
+	{
+	case NAME::DASH:
+		this->setCoolDown(1.3);
+		// Distance to jump
+		this->power = 150;
+		break;
+	case NAME::SPEEDBUFF:
+		this->setCoolDown(3.3);
+		// Speedmultiplier of the players movment
+		this->power = 2;
+		break;
+	}
 }
 
 MobilitySpell::~MobilitySpell()
@@ -26,13 +39,20 @@ bool MobilitySpell::castSpell()
 		{
 		case NAME::DASH:
 
-			XMFLOAT3 distance = {this->getPlayer()->getDirection() * 2 * this->strength};
-			XMFLOAT3 newPos = {};
+			XMFLOAT3 distance = {this->getPlayer()->getDirection() * this->power * this->strength};
+			XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance};
 
-			this->getPlayer()->setPosition(this->getPlayer()->getPosition() /*INSERT POS + DIRECTION * DISTANCE * STREGTH*/);
+			/*Check for OOB*/
 
+			this->getPlayer()->setPosition(newPos);
+			//this->getPlayer()->updateWorldMatrix(newPos);
+			break;
+		case NAME::SPEEDBUFF:
+
+			this->getPlayer()->setSpeed(this->power * this->strength);
 			break;
 		}
+		this->setState(SPELLSTATE::COOLDOWN);
 		
 	}
 

@@ -13,7 +13,9 @@ public:
 	Projectile(const size_t ID, XMFLOAT3 pos);
 	~Projectile();
 
-	virtual void update();
+	/*Moves the projectile in the direction of the velocity with speed of this->speed, 
+	if it is dead it will cleanup and send the state to the components*/
+	void update();
 	virtual void cleanUp();
 
 	void setSpeed(float spd) { this->speed = spd; }
@@ -24,8 +26,11 @@ public:
 
 	DamageSpell* getSpell() ;
 private:
+	// traveldirection of the projectile
 	XMFLOAT3 direction;
+	// The speed of the projectile
 	float speed;
+	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	DamageSpell* spell;
 };
 

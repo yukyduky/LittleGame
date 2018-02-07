@@ -6,15 +6,25 @@
 #include "ActorObject.h"
 #include "GamePlayState.h"
 
+/* --- HOW TO ADD SPELLS
+1. Add the name in the NAME enum
+2. Add it to one of the slots in the initiation of the player
+3. Make seperate switch-cases in the functions of the correct sub-class
+*/
+
+//Template for when glyphs become relevant
 enum class GLYPHTYPE {GLYPH1, GLYPH2, GLYPH3};
+// Type to not need to check dynamic_cast
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
+// State to have stages of spells
 enum class SPELLSTATE {READY, COOLDOWN, TRAVLING, LOCKED};
-//Spells
+
+// Names of spells, usd in switchcase
 enum class NAME {
 	//Damage
-	AUTOATTACK, EXPLOSION,
+	AUTOATTACK, EXPLOSION, BOMB
 	//Mobility
-	DASH
+	, DASH, SPEEDBUFF
 };
 
 class Spell
@@ -23,10 +33,11 @@ public:
 	Spell(ActorObject* player);
 	~Spell();
 
-	//Returns false if spell in unavalible to cast
+	// Returns false if spell in unavalible to cast
 	virtual bool castSpell() = 0;
-	//adds a glyph (template version of glyph so only has a float to modiy strength)
+	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	virtual void upgrade(float modif) = 0;
+	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
 
 	ActorObject* getPlayer() { return this->player; };
@@ -37,6 +48,7 @@ public:
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(double input) { this->coolDown = input; };
 
+	// TSC = TimeSinceCast
 	size_t getTSC() { return this->timeSinceCast; };
 
 private:
@@ -48,6 +60,7 @@ private:
 
 	double coolDown;
 	double timeSinceCast;
+	// EnergyCost
 	size_t cost;
 };
 

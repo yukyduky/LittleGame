@@ -187,13 +187,13 @@ void CollisionHandler::calculateDistance(float x1, float y1, float x2, float y2)
 void CollisionHandler::collisionPlayerPlayer() {
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition().x,
+		this->collidable1->GETPosition().y,
+		this->collidable2->GETPosition().x,
+		this->collidable2->GETPosition().y
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -204,8 +204,8 @@ void CollisionHandler::collisionPlayerPlayer() {
 	/// Might be needed if we upgrade this code
 	//this->radiusDistanceVector = (this->boundingArea1->Radius + this->boundingArea2->Radius);
 
-	this->collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-	this->collidable2->setPosition(this->collidable2->getPosition() + (this->resultVector * this->stepper));
+	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable2->setPosition(this->collidable2->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerEnemy() {
@@ -218,13 +218,13 @@ void CollisionHandler::collisionPlayerEnemy() {
 	}
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition().x,
+		this->collidable1->GETPosition().y,
+		this->collidable2->GETPosition().x,
+		this->collidable2->GETPosition().y
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -233,7 +233,7 @@ void CollisionHandler::collisionPlayerEnemy() {
 	};
 
 	// Enemies are moved out of the way of players
-	this->collidable2->setPosition(this->collidable2->getPosition() + this->resultVector);
+	this->collidable2->setPosition(this->collidable2->GETPosition() + this->resultVector);
 }
 
 void CollisionHandler::collisionPlayerDoodad() {
@@ -259,13 +259,13 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	}
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition().x,
+		this->collidable1->GETPosition().y,
+		this->collidable2->GETPosition().x,
+		this->collidable2->GETPosition().y
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -287,20 +287,22 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	dynamic_cast<Projectile*>(this->collidable2)->getSpell()->collision(this->collidable1);
+	Projectile* proj = dynamic_cast<Projectile*>(this->collidable2);
+	DamageSpell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 	
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition().x,
+		this->collidable1->GETPosition().y,
+		this->collidable2->GETPosition().x,
+		this->collidable2->GETPosition().y
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -308,8 +310,8 @@ void CollisionHandler::collisionEnemyEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	this->collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-	this->collidable2->setPosition(this->collidable2->getPosition() + (this->resultVector * this->stepper));
+	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable2->setPosition(this->collidable2->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyDoodad() {
@@ -337,13 +339,13 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	}
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition().x,
+		this->collidable1->GETPosition().y,
+		this->collidable2->GETPosition().x,
+		this->collidable2->GETPosition().y
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -352,7 +354,7 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	};
 
 	// Moving the enemy only, since the indestructibles cannot move.
-	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyProjectile() {
