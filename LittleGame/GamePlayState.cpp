@@ -149,13 +149,16 @@ void GamePlayState::update(GameManager * gm)
 		else {
 		/*
 			ID = this->dynamicObjects[i]->getID();
-			for (int j = 0; j < this->graphics.size(); j++) {
-				if (this->graphics[j]->getID() == ID) {
-					this->graphics.erase(this->graphics.begin() + j - 1, this->graphics.begin() + j - 1);
+			for (auto it : this->graphics) {
+				if (it->getID() == ID) {
+					//this->graphics.erase(it);
+				}
+				else {
+
 				}
 			}
-			this->dynamicObjects[i]->cleanUp();
-			this->dynamicObjects.erase(this->dynamicObjects.begin() + i, this->dynamicObjects.begin() + i);
+			//this->dynamicObjects[i]->cleanUp();
+			//this->dynamicObjects.erase();
 		*/
 		}
 	}
