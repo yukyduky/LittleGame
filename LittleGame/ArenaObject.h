@@ -21,6 +21,7 @@ public:
 	virtual void receive(GameObject &obj, Message msg);
 	// CURRENTLY EMPTY
 	virtual void cleanUp();
+	virtual void update();
 
 };
 

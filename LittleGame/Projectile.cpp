@@ -5,7 +5,7 @@
 Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
 {
 	//this->speed = spd;
-	this->setState(OBJECTSTATE::MOVING);
+	this->setState(OBJECTSTATE::TYPE::MOVING);
 	this->setType(OBJECTTYPE::PROJECTILE);
 	this->spell = nullptr;
 
@@ -13,6 +13,7 @@ Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir,
 	this->direction = dir;
 	this->speed = speed;
 	this->velocity = this->direction * this->speed;
+	this->rangeCoutner = 0;
 }
 
 Projectile::~Projectile()
@@ -38,24 +39,34 @@ DamageSpell * Projectile::getSpell()
 
 void Projectile::update()
 {
-	GameObject::update();
+	//GameObject::update();
 
-	if (this->state != OBJECTSTATE::DEAD)
+	for (auto &i : this->components) {
+		i->update();
+	}
+
+	if (this->state == OBJECTSTATE::TYPE::DEAD)
+	{
+		//----TEMPLATE will fix after rio has been remade
+		this->setVelocity(XMFLOAT3(0, 0, 0));
+		this->updateWorldMatrix(XMFLOAT3(0, -200, 0));
+		//this->cleanUp();
+		this->send(OBJECTSTATE::TYPE::DEAD);
+	}
+	else
 	{
 		float dt = Locator::getGameTime()->getDeltaTime();
 		this->pos.x += this->velocity.x * dt;
 		// Projectiles dosnt move in Y
 		this->pos.z += this->velocity.z * dt;
 
+		this->rangeCoutner++;
+		if (this->rangeCoutner >= this->range && this->range != -1)
+		{
+			this->setState(OBJECTSTATE::TYPE::DEAD);
+		}
+
 		this->updateWorldMatrix(pos);
-	}
-	else
-	{
-		//----TEMPLATE will fix after rio has been remade
-		this->setVelocity(XMFLOAT3(0,0,0));
-		this->updateWorldMatrix(XMFLOAT3(0, -200, 0));
-		//this->cleanUp();
-		this->send(OBJECTSTATE::DEAD);
 	}
 }
 

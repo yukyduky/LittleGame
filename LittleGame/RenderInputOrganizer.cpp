@@ -19,6 +19,7 @@ void RenderInputOrganizer::packageMatrices() {
 
 void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
+	
 	// Get world matrix
 	this->rawMatrixData.world = &graphics->getWorld();
 	// Calculate matrices and convert to XMFLOAT4x4
@@ -47,10 +48,12 @@ void RenderInputOrganizer::initialize(Camera& camera) {
 	);
 }
 
-void RenderInputOrganizer::render()
+void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
 {
-	for (auto &i : this->graphics) {
-		this->drawGraphics(i);
+	for (auto &i : graphics) {
+		if (!i->checkIfDead()) {
+			this->drawGraphics(i);
+		}
 	}
 }
 

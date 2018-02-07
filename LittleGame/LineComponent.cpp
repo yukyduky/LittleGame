@@ -107,6 +107,16 @@ XMMATRIX& LineComponent::getWorld()
 	return this->head->getWorld();
 }
 
+bool LineComponent::checkIfDead()
+{
+	bool returnValue = false;
+	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
+	{
+		returnValue = true;
+	}
+	return returnValue;
+}
+
 /*_____________________________
 |          END OF             |
 |      PUBLIC FUNCTIONS       |

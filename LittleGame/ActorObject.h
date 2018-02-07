@@ -59,6 +59,7 @@ public:
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
+	virtual void update();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent

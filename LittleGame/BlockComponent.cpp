@@ -145,7 +145,7 @@ BlockComponent::BlockComponent(
 	// Connections
 	this->head = &obj;
 	obj.addComponent(this);
-	pGPS.addGraphicsToRio(this);
+	pGPS.addGraphics(this);
 	
 	this->createVertices(color);
 
@@ -224,6 +224,15 @@ const size_t BlockComponent::getID()
 	return this->ID;
 }
 
+bool BlockComponent::checkIfDead()
+{
+	bool returnValue = false;
+	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
+	{
+		returnValue = true;
+	}
+	return returnValue;
+}
 
 /*_____________________________
 |          END OF             |

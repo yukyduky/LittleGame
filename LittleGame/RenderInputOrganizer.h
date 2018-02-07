@@ -50,7 +50,7 @@ private:
 
 public:
 	void initialize(Camera& camera);
-	void render();
+	void render(std::vector<GraphicsComponent*>& graphics);
 	void addGraphics(GraphicsComponent* graphics);
 };
 

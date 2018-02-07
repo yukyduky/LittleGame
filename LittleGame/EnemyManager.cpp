@@ -83,6 +83,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior);
 
+	enemy->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemy;
 }
 

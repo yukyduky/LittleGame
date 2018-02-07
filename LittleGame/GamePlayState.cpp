@@ -37,7 +37,7 @@ void GamePlayState::checkCollisions() {
 		// NOTE: Skipping if object state = DEAD.
 		int iID = i->getID();
 		
-		if (i->getState() != OBJECTSTATE::DEAD) {
+		if (i->getState() != OBJECTSTATE::TYPE::DEAD) {
 			//----------//
 			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
 			//----------//
@@ -45,11 +45,8 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->getState() != OBJECTSTATE::DEAD) {
-						if (i->getType() == OBJECTTYPE::PROJECTILE)
-						{
-							int z = 0;
-						}
+					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
+
 						if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
 							// Call COLLISION-CLASS function
 							this->collisionHandler.executeCollision(
@@ -67,7 +64,7 @@ void GamePlayState::checkCollisions() {
 			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
 			//----------//
 			for (int k = 0; k < this->staticPhysicsCount; k++) {
-				if (this->staticObjects[k]->getState() != OBJECTSTATE::DEAD) {
+				if (this->staticObjects[k]->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 					if (i->GETphysicsComponent()->checkCollision(this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
@@ -96,7 +93,7 @@ void GamePlayState::init() {
 		this->rio.addGraphics(i);
 	}
 
-	//this->enemyManager.startLevel1();
+	this->enemyManager.startLevel1();
 }
 
 void GamePlayState::cleanUp()
@@ -105,7 +102,6 @@ void GamePlayState::cleanUp()
 	// this->rio.cleanUp();
 	// this->camera.cleanUp();
 	this->enemyManager.cleanUp();
-
 
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->staticObjects) {
@@ -116,10 +112,12 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+/*
 	for (auto &iterator : this->projectiles) {
 		//iterator->cleanUp();
 		//delete iterator;
 	}
+*/
 }
 
 void GamePlayState::pause() {
@@ -146,27 +144,30 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 
 void GamePlayState::update(GameManager * gm)
-{
-	//this->updatePhysicsComponents();
+{	
+	int ID;
+	for (int i = 0; i < this->dynamicObjects.size(); i++) {
+		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			this->dynamicObjects[i]->update();
+		}
+		else {
+		/*
+			ID = this->dynamicObjects[i]->getID();
+			for (int j = 0; j < this->graphics.size(); j++) {
+				if (this->graphics[j]->getID() == ID) {
+					this->graphics.erase(this->graphics.begin() + j - 1, this->graphics.begin() + j - 1);
+				}
+			}
+			this->dynamicObjects[i]->cleanUp();
+			this->dynamicObjects.erase(this->dynamicObjects.begin() + i, this->dynamicObjects.begin() + i);
+		*/
+		}
+	}
 	this->checkCollisions();
-
-	//this->enemyManager.update();
-
-	player1->decCD();
-
-	for (auto &iterator : playerInput) {
-		iterator->generateCommands();
-		iterator->execute();
-	}
-
-	for (auto &iterator : projectiles)
-	{
-		iterator->update();
-	}
 }
 
 void GamePlayState::render(GameManager * gm) {
-	this->rio.render();
+	rio.render(this->graphics);
 	gm->display(this);
 }
 
@@ -180,9 +181,9 @@ std::vector<GameObject*>* GamePlayState::getDynamicObjects()
 	return &this->dynamicObjects;
 }
 
-void GamePlayState::addGraphicsToRio(GraphicsComponent * graphicsComponent)
+void GamePlayState::addGraphics(GraphicsComponent * graphicsComponent)
 {
-	this->rio.addGraphics(graphicsComponent);
+	this->graphics.push_back(graphicsComponent);
 }
 
 void GamePlayState::initPlayer()
@@ -269,7 +270,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	
 	//Add proj to objectArrays
 	this->dynamicObjects.push_back(proj);
-	this->projectiles.push_back(proj);
+//	this->projectiles.push_back(proj);
 
 	return proj;
 }

@@ -61,6 +61,7 @@ public:
 	1. Returns the color of the rectangle.
 	*/
 	vColor& GETcolor();
+	virtual bool checkIfDead();
 	
 };
 
