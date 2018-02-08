@@ -19,6 +19,7 @@
 #include "ArenaGlobals.h"
 #include "EnemyManager.h"
 #include "LevelManager.h"
+#include "QuadTree.h"
 
 
 
@@ -56,6 +57,7 @@ private:
 	int ID = 0;
 	int arenaWidth;
 	int arenaDepth;
+	QuadTree quadTree;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
@@ -64,6 +66,7 @@ private:
 	//everything that will exist in this level
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
+	// Count below represents static objects that have collision (see 'checkCollisions()' function)
 	int staticPhysicsCount = 0;
 
 	//All objects that wants to be renederd

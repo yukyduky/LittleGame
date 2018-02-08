@@ -31,16 +31,15 @@ private:
 	std::list<GameObject*> staticObjectsList;
 	QuadTreeSquare nodeBounds;
 	QuadTree* nodes[4];
-	QuadTree* parentPointer;
 
 public:
 	QuadTree();
-	QuadTree(int level_in, float widthLength_in, float heightLength_in, float x_bottomLeftCorner, float y_bottomLeftCorner, QuadTree* parentPointer_in);
+	QuadTree(int level_in, float widthLength_in, float heightLength_in, float x_bottomLeftCorner, float y_bottomLeftCorner);
 	~QuadTree();
 
-	void split();
+	void split(QuadTree* currentQuad);
 	void splitRecursively(QuadTree* currentQuad);
-	void initializeQuadTree();
+	void initializeQuadTree(int level_in, float widthLength_in, float heightLength_in, float x_bottomLeftCorner, float y_bottomLeftCorner);
 
 	void insertStaticObject(GameObject* staticObject);
 	void removeStaticObject(GameObject* staticObject);
@@ -51,10 +50,7 @@ public:
 	int GETindex(GameObject* object);
 
 	void cleanup();
+	void deleteToEnd(QuadTree* quadTree);
 };
 
 #endif
-
-
-//void insertDynamicObject(GameObject* dynamicObject);
-//void removeDynamicObject();

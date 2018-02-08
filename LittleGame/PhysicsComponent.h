@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include "D3D.h"
 #include "Component.h"
+#include "QuadTree.h"
 #include <DirectXCollision.h>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_

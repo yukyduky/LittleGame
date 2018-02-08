@@ -51,31 +51,27 @@ QuadTree::QuadTree() {
 	this->nodes[BOTTOM_RIGHT] = nullptr;
 	this->nodes[TOP_LEFT] = nullptr;
 	this->nodes[TOP_RIGHT] = nullptr;
-
-	this->parentPointer = nullptr;
 }
 
 QuadTree::QuadTree(
 	int level_in,
 	float widthLength_in, float heightLength_in,
-	float x_bottomLeftCorner, float y_bottomLeftCorner,
-	QuadTree* parentPointer_in)
+	float x_bottomLeftCorner, float y_bottomLeftCorner)
 {
 	this->level = level_in;
-	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5));
-	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5));
 
 	this->nodeBounds.widthLength = widthLength_in;
 	this->nodeBounds.heightLength = heightLength_in;
 	this->nodeBounds.x = x_bottomLeftCorner;
 	this->nodeBounds.y = y_bottomLeftCorner;
 
+	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5));
+	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5));
+
 	this->nodes[BOTTOM_LEFT] = nullptr;
 	this->nodes[BOTTOM_RIGHT] = nullptr;
 	this->nodes[TOP_LEFT] = nullptr;
 	this->nodes[TOP_RIGHT] = nullptr;
-
-	this->parentPointer = parentPointer_in;
 }
 
 QuadTree::~QuadTree() {
@@ -85,146 +81,147 @@ QuadTree::~QuadTree() {
 //--------------------------------------------------------//
 //  HELP-FUNCTIONS FOR THE 'initializeQuadTree' FUNCTION //
 //------------------------------------------------------//
-void QuadTree::split() {
-	float tempWidth = (this->nodeBounds.widthLength * 0.5);
-	float tempHeight = (this->nodeBounds.heightLength * 0.5);
+void QuadTree::split(QuadTree* currentQuad) {
+	float width = (currentQuad->nodeBounds.widthLength * 0.5);
+	float height = (currentQuad->nodeBounds.heightLength * 0.5);
 
 	// Storing these so we don't have to 'get' them over and over
-	float tempX = this->nodeBounds.x;
-	float tempY = this->nodeBounds.y;
+	float storedX = currentQuad->nodeBounds.x;
+	float storedY = currentQuad->nodeBounds.y;
 
-	this->nodes[BOTTOM_LEFT] = new QuadTree(
-		(this->level + 1), tempWidth, tempHeight, tempX, tempY, this
+	currentQuad->nodes[BOTTOM_LEFT] = new QuadTree(
+		(currentQuad->level + 1), width, height, storedX, storedY
 	);
-	this->nodes[BOTTOM_RIGHT] = new QuadTree(
-		(this->level + 1), tempWidth, tempHeight, (tempX + tempWidth), tempY, this
+	currentQuad->nodes[BOTTOM_RIGHT] = new QuadTree(
+		(currentQuad->level + 1), width, height, (storedX + width), storedY
 	);
-	this->nodes[TOP_LEFT] = new QuadTree(
-		(this->level + 1), tempWidth, tempHeight, tempX, (tempY + tempHeight), this
+	currentQuad->nodes[TOP_LEFT] = new QuadTree(
+		(currentQuad->level + 1), width, height, storedX, (storedY + height)
 	);
-	this->nodes[TOP_RIGHT] = new QuadTree(
-		(this->level + 1), tempWidth, tempHeight, (tempX + tempWidth), (tempY + tempHeight), this
+	currentQuad->nodes[TOP_RIGHT] = new QuadTree(
+		(currentQuad->level + 1), width, height, (storedX + width), (storedY + height)
 	);
 }
 
 void QuadTree::splitRecursively(QuadTree* currentQuad) {
-	for (int i = 0; i < 4; i++) {
-		currentQuad->nodes[i]->split();
+	currentQuad->split(currentQuad);
 
-		if (currentQuad->nodes[i]->level < LAYERS_MAX) {
-			this->splitRecursively(currentQuad->nodes[i]);
+	// '0' represents an arbitrary number from 0 to 3
+	if (currentQuad->nodes[0]->level < LAYERS_MAX) {
+		for (int i = 0; i < 4; i++) {
+			currentQuad->splitRecursively(currentQuad->nodes[i]);
 		}
 	}
 }
 //-----------------------------------------------------//
 
-void QuadTree::initializeQuadTree() {
+void QuadTree::initializeQuadTree(
+	int level_in,
+	float widthLength_in, float heightLength_in,
+	float x_bottomLeftCorner, float y_bottomLeftCorner) {
+
+	this->level = level_in;
+
+	this->nodeBounds.widthLength = widthLength_in;
+	this->nodeBounds.heightLength = heightLength_in;
+	this->nodeBounds.x = x_bottomLeftCorner;
+	this->nodeBounds.y = y_bottomLeftCorner;
+
+	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5));
+	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5));
+
 	if (LAYERS_MAX > 0) {
 		this->splitRecursively(this);
 	}
 }
 
 void QuadTree::insertStaticObject(GameObject* staticObject) {
-	QuadTree* tempQuadTreePointer = this;
-	int tempIndex;
+	QuadTree* quadTreePointer = this;
+	int index;
 
 	// Check if Quad Tree has additional Quad Tree nodes.
 	// (Arbitrary node # from 0 and 3)
-	if (tempQuadTreePointer->nodes[0] != nullptr) {
-		tempIndex = tempQuadTreePointer->GETindex(staticObject);
+	if (quadTreePointer->nodes[0] != nullptr) {
+		index = quadTreePointer->GETindex(staticObject);
 
-		while (tempIndex != -1) {
-			tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndex];
-			tempIndex = tempQuadTreePointer->GETindex(staticObject);
+		while (index != -1) {
+			quadTreePointer = quadTreePointer->nodes[index];
+			index = quadTreePointer->GETindex(staticObject);
 		}
 
-		if (tempIndex == BOTTOM_LEFT)
-			tempQuadTreePointer->nodes[BOTTOM_LEFT]->insertStaticObject(staticObject);
-
-		else if (tempIndex == BOTTOM_RIGHT)
-			tempQuadTreePointer->nodes[BOTTOM_RIGHT]->insertStaticObject(staticObject);
-
-		else if (tempIndex == TOP_LEFT)
-			tempQuadTreePointer->nodes[TOP_LEFT]->insertStaticObject(staticObject);
-
-		else if (tempIndex == TOP_RIGHT)
-			tempQuadTreePointer->nodes[TOP_RIGHT]->insertStaticObject(staticObject);
-
-		// Object did not fully fit anywhere; pushing into parent QuadTree
-		else if (tempIndex == -1)
-			tempQuadTreePointer->staticObjectsList.push_back(staticObject);
+		quadTreePointer->staticObjectsList.push_back(staticObject);
 	}
 	// First QuadTree did not have any additional nodes, so it gets the object
 	else {
-		tempQuadTreePointer->staticObjectsList.push_back(staticObject);
+		quadTreePointer->staticObjectsList.push_back(staticObject);
 	}
 }
 
 void QuadTree::removeStaticObject(GameObject* staticObject) {
-	QuadTree* tempQuadTreePointer = this;
-	int tempIndex = this->GETindex(staticObject);
+	QuadTree* quadTreePointer = this;
+	int index = this->GETindex(staticObject);
 
-	// tempIndex != -1 means that we need to traverse deeper into the QuadTree
-	while (tempIndex != -1) {
+	// index != -1 means that we need to traverse deeper into the QuadTree
+	while (index != -1) {
 		// Take one step further down into the QuadTree
-		tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndex];
-		tempIndex = tempQuadTreePointer->GETindex(staticObject);
+		quadTreePointer = quadTreePointer->nodes[index];
+		index = quadTreePointer->GETindex(staticObject);
 	}
 
-	tempQuadTreePointer->staticObjectsList.remove(staticObject);
+	quadTreePointer->staticObjectsList.remove(staticObject);
 }
 
 std::list<GameObject*> QuadTree::retrieveStaticList(GameObject* collidingObject) {
-	QuadTree* tempQuadTreePointer = this;
-	std::list<GameObject*> tempStaticObjectList;
-	int tempIndexHolder = this->GETindex(collidingObject);
+	QuadTree* quadTreePointer = this;
+	std::list<GameObject*> staticObjectList;
+	int indexHolder = this->GETindex(collidingObject);
 
-	while (tempIndexHolder != -1) {
+	while (indexHolder != -1) {
 		// We grab all objects in the parent QuadTree, then continue traversing
-		tempStaticObjectList.insert(
-			tempStaticObjectList.end(),
-			tempQuadTreePointer->staticObjectsList.begin(),
-			tempQuadTreePointer->staticObjectsList.end()
+		staticObjectList.insert(
+			staticObjectList.end(),
+			quadTreePointer->staticObjectsList.begin(),
+			quadTreePointer->staticObjectsList.end()
 		);
 
-		tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndexHolder];
-		tempIndexHolder = tempQuadTreePointer->GETindex(collidingObject);
+		quadTreePointer = quadTreePointer->nodes[indexHolder];
+		indexHolder = quadTreePointer->GETindex(collidingObject);
 	}
 	// This catches the last list, which we wouldn't get otherwise
-	tempStaticObjectList.insert(
-		tempStaticObjectList.end(),
-		tempQuadTreePointer->staticObjectsList.begin(),
-		tempQuadTreePointer->staticObjectsList.end()
+	staticObjectList.insert(
+		staticObjectList.end(),
+		quadTreePointer->staticObjectsList.begin(),
+		quadTreePointer->staticObjectsList.end()
 	);
 
-	return tempStaticObjectList;
+	return staticObjectList;
 }
 
 bool QuadTree::checkDynamicObject(GameObject* dynamicObject, GameObject* comparedObject) {
-	QuadTree* tempQuadTreePointer = this;
-	bool tempReturnValue = false;
-	int tempIndexDynamic = tempQuadTreePointer->GETindex(dynamicObject);
-	int tempIndexCompared = tempQuadTreePointer->GETindex(comparedObject);
+	QuadTree* quadTreePointer = this;
+	bool returnValue = false;
+	int indexDynamic = quadTreePointer->GETindex(dynamicObject);
+	int indexCompared = quadTreePointer->GETindex(comparedObject);
 
-	while (tempIndexDynamic == tempIndexCompared) {
-		tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndexDynamic];
+	while (indexDynamic == indexCompared) {
+		quadTreePointer = quadTreePointer->nodes[indexDynamic];
 
-		int tempIndexDynamic = tempQuadTreePointer->GETindex(dynamicObject);
-		int tempIndexCompared = tempQuadTreePointer->GETindex(comparedObject);
+		int indexDynamic = quadTreePointer->GETindex(dynamicObject);
+		int indexCompared = quadTreePointer->GETindex(comparedObject);
 
-		if (tempIndexDynamic == -1) {
-			tempReturnValue = true;
+		if (indexDynamic == -1) {
+			returnValue = true;
 			break;
 		}
 	}
 
-	return tempReturnValue;
+	return returnValue;
 }
 
 int QuadTree::GETindex(GameObject* object) {
-	// NOTE:	'tempIndex = -1' means that the object is within multiple quads simultaneously.
+	// NOTE:	'index = -1' means that the object is within multiple quads simultaneously.
 	//			The above case results in the parent quad holding the object.
-	int tempIndex = -1;
+	int index = -1;
 	bool bottomHalf, topHalf;
 
 	// If 'this' QuadTree doesn't have nodes, return -1
@@ -241,34 +238,40 @@ int QuadTree::GETindex(GameObject* object) {
 		// TRUE if object is FULLY ...
 		if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointX) {
 			if (bottomHalf)
-				tempIndex = BOTTOM_LEFT;
+				index = BOTTOM_LEFT;
 			else if (topHalf)
-				tempIndex = TOP_LEFT;
+				index = TOP_LEFT;
 		}
 		// RIGHT HALF
 		// TRUE if object is FULLY ...
 		else if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointX) {
 			if (bottomHalf)
-				tempIndex = BOTTOM_RIGHT;
+				index = BOTTOM_RIGHT;
 			else if (topHalf)
-				tempIndex = TOP_RIGHT;
+				index = TOP_RIGHT;
 		}
 	}
 
-	return tempIndex;
+	return index;
 }
 
 void QuadTree::cleanup() {
 	// Loops through one node at a time, looping through those nodes' 4 nodes, one at a time... etc.
-	for (int i = 0; i < 4; i++) {
-		if (this->nodes[i] != nullptr) {
-			this->nodes[i]->cleanup();
-		}
-		// Delete each node as long as it's not the 'master Quad Tree' node, in which case we are done.
-		if (this->level != 0) {
-			delete this;
+	if (LAYERS_MAX > 0) {
+		for (int i = 0; i < 4; i++) {
+			this->deleteToEnd(this->nodes[i]);
 		}
 	}
+}
+
+void QuadTree::deleteToEnd(QuadTree* currentQuad) {
+	if (currentQuad->nodes[0] != nullptr) {
+		for (int i = 0; i < 4; i++) {
+			currentQuad->deleteToEnd(currentQuad->nodes[i]);
+		}
+	}
+
+	delete currentQuad;
 }
 
 //_________________________________________//
@@ -284,33 +287,3 @@ void QuadTree::cleanup() {
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                                      QUAD TREE          \
 ////////////////////////////////////////////////////////////
-
-//void QuadTree::insertDynamicObject(GameObject* dynamicObject) {
-//	int tempIndex;
-//
-//	// Check if Quad Tree has additional Quad Tree nodes.
-//	// (Arbitrary node # from 0 and 3)
-//	if (this->nodes[0] != nullptr) {
-//		tempIndex = this->GETindex(dynamicObject);
-//
-//		if (tempIndex == BOTTOM_LEFT)
-//			this->nodes[BOTTOM_LEFT]->insertStaticObject(dynamicObject);
-//
-//		else if (tempIndex == BOTTOM_RIGHT)
-//			this->nodes[BOTTOM_RIGHT]->insertStaticObject(dynamicObject);
-//
-//		else if (tempIndex == TOP_LEFT)
-//			this->nodes[TOP_LEFT]->insertStaticObject(dynamicObject);
-//
-//		else if (tempIndex == TOP_RIGHT)
-//			this->nodes[TOP_RIGHT]->insertStaticObject(dynamicObject);
-//
-//		// Object did not fully fit anywhere; pushing into parent QuadTree
-//		else if (tempIndex == -1)
-//			this->dynamicObjectsList.push_back(dynamicObject);
-//	}
-//	// nodes[0] = nullptr which means we've reached the end/bottom of our Quad Tree
-//	else {
-//		this->dynamicObjectsList.push_back(dynamicObject);
-//	}
-//}
