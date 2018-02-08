@@ -37,28 +37,53 @@ void AIComponent::generateCommands()
 {
 	XMVECTOR direction;
 
-	if (this->behavior == AIBEHAVIOR::STRAIGHTTOWARDS) {
-		XMVECTOR closestPosition = XMLoadFloat3(&players.front()->GETPosition());
-		XMVECTOR candidate;
+	if (this->pHead->getState() == OBJECTSTATE::TYPE::ATTACKING) {
 
-		for (int i = 0; i < players.size(); i++) {
-			candidate = XMLoadFloat3(&players[i]->GETPosition());
+	}
+	else {
 
-			// If candidate is closer
-			if (XMVector3Greater(closestPosition, candidate)) {
-				closestPosition = candidate;
+		switch (this->behavior) {
+			case AIBEHAVIOR::STRAIGHTTOWARDS: {
+
+				XMVECTOR closestPosition = XMLoadFloat3(&players.front()->GETPosition());
+				XMVECTOR candidate;
+
+				for (int i = 0; i < players.size(); i++) {
+					candidate = XMLoadFloat3(&players[i]->GETPosition());
+
+					// If candidate is closer
+					if (XMVector3Greater(closestPosition, candidate)) {
+						closestPosition = candidate;
+					}
+				}
+
+				// Move straight towards 
+				XMVECTOR position = XMLoadFloat3(&this->pHead->GETPosition());
+				direction = XMVector3Normalize(closestPosition - position);
+				break;
+			}
+			case AIBEHAVIOR::TEMPLATE0: {
+
+				break;
+			}
+			case AIBEHAVIOR::TEMPLATE1: {
+
+				break;
 			}
 		}
 
-		// Move straight towards 
-		XMVECTOR position = XMLoadFloat3(&this->pHead->GETPosition());
-		direction = XMVector3Normalize(closestPosition - position);
+
 	}
+
+
 	
-	// Update values
+	// Update Movement
 	XMFLOAT3 formattedDirection;
-	XMStoreFloat3(&formattedDirection, direction);
+	DirectX::XMStoreFloat3(&formattedDirection, direction);
 	this->simulatedMovement = XMFLOAT2(formattedDirection.x, formattedDirection.z);
+
+	// Update Rotation
+	
 
 	// Push back the command!
 	this->commandQueue.push_back(new CommandControllerMove);
