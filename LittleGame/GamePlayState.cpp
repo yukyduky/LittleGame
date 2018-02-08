@@ -95,6 +95,8 @@ void GamePlayState::init() {
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	//this->enemyManager.startLevel1();
+
+	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), this->camera.GETfacingDir());
 }
 
 void GamePlayState::cleanUp()

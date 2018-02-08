@@ -208,6 +208,8 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
+	this->pGPS->GETMouseInput()->getWorldPosition();
+
 	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[2];
 	}
