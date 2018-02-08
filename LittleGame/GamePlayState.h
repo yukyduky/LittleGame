@@ -21,6 +21,8 @@
 #include "LevelManager.h"
 #include "QuadTree.h"
 
+#include "MouseInput.h"
+
 
 
 /*
@@ -86,6 +88,9 @@ private:
 	
 	void checkCollisions();
 
+
+	MouseInput* mousePicker;
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'GamePlayState'.
@@ -142,6 +147,9 @@ public:
 
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+
+	MouseInput* GETMouseInput() { return this->mousePicker; }
+
 };
 
 #endif // !GAMEPLAYSTATE_H

@@ -114,18 +114,25 @@ void GamePlayState::init() {
 	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera, this->pointLights);
-	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
+	for (int i = 0; i < this->staticPhysicsCount; i++) {
+		this->quadTree.insertStaticObject(this->staticObjects[i]);
+	}
+
+	std::vector<ActorObject*> allPlayers;
+	allPlayers.push_back(player1);
+	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
-	for (int i = 0; i < this->staticPhysicsCount; i++) {
-		this->quadTree.insertStaticObject(this->staticObjects[i]);
-	}
+	//this->enemyManager.startLevel1();
+
+	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), this->camera.GETfacingDir());
+	this->enemyManager.startLevel1();
 }
 
 void GamePlayState::cleanUp()
@@ -166,6 +173,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
+		else if (msg.message == WM_MOUSEMOVE) {
+			// Needs overlook for multiplayer
+			this->player1->rotate(this->mousePicker->getWorldPosition());
+		}
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
@@ -177,7 +188,7 @@ void GamePlayState::update(GameManager * gm)
 {	
 	int ID;
 
-	//this->enemyManager.update();
+	this->enemyManager.update();
 
 
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {
@@ -202,6 +213,9 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 	this->checkCollisions();
+
+	//fak ju shellow
+	this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -250,7 +264,7 @@ void GamePlayState::initPlayer()
 	/// BLOCK COMPONENT
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
-	/// KEYBOARD COMPONENT:
+	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
 	input = new KeyboardComponent(*actor);
 
@@ -305,7 +319,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
+	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
 
 	
 	//Add proj to objectArrays
