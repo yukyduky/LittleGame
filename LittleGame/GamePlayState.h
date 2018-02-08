@@ -17,6 +17,7 @@
 #include "FireballComponent.h"
 #include <list>
 #include "ArenaGlobals.h"
+#include "EnemyManager.h"
 #include "LevelManager.h"
 
 
@@ -51,7 +52,10 @@ class GamePlayState : public State
 private:
 	static GamePlayState sGamePlayState;
 	
+	EnemyManager enemyManager;
 	int ID = 0;
+	int arenaWidth;
+	int arenaDepth;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
@@ -66,17 +70,14 @@ private:
 	std::vector<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	std::vector<Light> pointLights;
+
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1;
-
 	Command* selectCommand;
-
-	//std::vector<GameObject*> gameObjectsArray;
 
 	///std::list<PhysicsComponent*> physicsListStatic;
 	///std::list<PhysicsComponent*> physicsListDynamic;
-	//Array with all active projectiles
-	std::vector<Projectile*> projectiles;
 
 	//void updatePhysicsComponents();
 	
@@ -123,6 +124,13 @@ public:
 	*/
 	static GamePlayState* getInstance();
 
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns a reference to the internal dynamicObjects vector.
+	- Currently only used by EnemyHandler for creation of enemies.
+	*/
+	std::vector<GameObject*>* getDynamicObjects();
+
+	void addGraphics(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
 

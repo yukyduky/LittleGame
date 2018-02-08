@@ -32,7 +32,6 @@ PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
 	this->pHead = &obj;
 	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
-
 	this->selfBoundingSphere.Center = obj.GETPosition();
 	this->selfBoundingSphere.Radius = 1.0f;
 }

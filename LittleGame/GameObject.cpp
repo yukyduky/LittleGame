@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "Component.h"
+#include "Locator.h"
 
 
 void GameObject::send(Message msg)
@@ -10,21 +11,13 @@ void GameObject::send(Message msg)
 	}
 }
 
-void GameObject::update()
-{
-	for (auto &i : this->components) {
-		i->update();
-	}
-}
-
 void GameObject::addComponent(Component* component)
 {
 	this->components.push_back(component);
 }
 
-void GameObject::updateWorldMatrix(XMFLOAT3 newPos)
+void GameObject::updateWorldMatrix()
 {
-	this->setPosition(newPos);
 	this->translationMatrix = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
 	this->world = this->scaleMatrix * this->rotationMatrix * this->translationMatrix;
 }

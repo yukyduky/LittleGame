@@ -22,7 +22,7 @@ void AbilityComponent::update()
 
 	if (this->range < 0)
 	{
-		this->pHead->setState(OBJECTSTATE::DEAD);
+		this->pHead->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }
 

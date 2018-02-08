@@ -5,11 +5,18 @@
 #include <list>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <SimpleMath.h>
 
 
-enum class OBJECTSTATE { IDLE, MOVING, DEAD, FROZEN, STOP };
-enum class OBJECTTYPE { PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE, PROJECTILE, NOT_SET};
+namespace OBJECTSTATE {
+	enum class TYPE { IDLE, MOVING, DEAD, FROZEN, STOP };
+}
+namespace OBJECTTYPE {
+	enum TYPE {
+		PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE,
+		PROJECTILE, NOT_SET,
+		SIZE
+	};
+}
 
 class Component;
 class PhysicsComponent;
@@ -18,8 +25,8 @@ using namespace DirectX;
 
 struct Message
 {
-	OBJECTSTATE state;
-	Message(OBJECTSTATE state) : state(state) {}
+	OBJECTSTATE::TYPE state;
+	Message(OBJECTSTATE::TYPE state) : state(state) {}
 };
 
 
@@ -39,19 +46,19 @@ protected:
 	const size_t ID;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
-	OBJECTSTATE state;
-	OBJECTTYPE type;
+	OBJECTTYPE::TYPE type;
+	OBJECTSTATE::TYPE state;
 
 public:
-	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::IDLE), type(OBJECTTYPE::NOT_SET) {}
-	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::IDLE), type(OBJECTTYPE::NOT_SET) {}
+	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::TYPE::IDLE), type(OBJECTTYPE::NOT_SET) {}
+	GameObject(const size_t ID, XMFLOAT3 pos) : ID(ID), pos(pos), state(OBJECTSTATE::TYPE::IDLE), type(OBJECTTYPE::NOT_SET) {}
 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Send the parameter ' msg '(obj) to all components that have been added to the object.
 	*/
 	void send(Message msg);
-	void update();
+	virtual void update() = 0;
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleans up the GameObject and all the attached components.
 	*/
@@ -67,18 +74,18 @@ public:
 	XMFLOAT3 GETPosition() const { return this->pos; }
 	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	XMFLOAT3 getVelocity() const { return this->velocity; }
-	void setState(OBJECTSTATE state) { this->state = state; }
-	OBJECTSTATE getState() const { return this->state; }
+	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
+	OBJECTSTATE::TYPE getState() const { return this->state; }
 	XMMATRIX& getWorld() { return this->world; }
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
 	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	void updateWorldMatrix();
 	XMMATRIX getRotationMatrix() { return this->rotationMatrix; }
-	void updateWorldMatrix(XMFLOAT3 newPos);
 
-	OBJECTTYPE getType() const { return this->type; }
-	void setType(OBJECTTYPE type) { this->type = type; }
+	OBJECTTYPE::TYPE getType() const { return this->type; }
+	void setType(OBJECTTYPE::TYPE type) { this->type = type; }
 
 	void SETphysicsComponent(PhysicsComponent* physicsComponent_in) { this->physicsComponent = physicsComponent_in; }
 	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }

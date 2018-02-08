@@ -63,6 +63,7 @@ public:
 	5. Sets the rendertarget to the deferred rendertargetview
 	*/
 	void firstPass();
+	void secondPassSetup();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Sets current shaders to light shaders
 	2. Sets the vertex buffer for the Quad
@@ -76,6 +77,7 @@ public:
 	*/
 	void secondPass();
 	void setShaderType(SHADERTYPE type);
+	void cleanUp();
 private:
 	const D3D11_INPUT_ELEMENT_DESC geoTexInputDesc[GEOTEX_INPUT_DESC_SIZE] =
 	{

@@ -99,8 +99,6 @@ public:
 	//virtual void fireAbility0();
 	//virtual void fireAbilityX();
 
-	virtual const size_t getID() = 0;
-	virtual void receive(GameObject & obj, Message msg) = 0;
 	virtual void update();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	WARNING Has to be run once before any other use of this class WARNING

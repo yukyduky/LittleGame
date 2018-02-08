@@ -17,9 +17,6 @@ PS_OUT PS(PS_IN input)
 {
 	PS_OUT output;
 
-	// Sample the texture for the diffuse light
-	float4 diffuse = input.color;
-
 	output.pos_W = input.pos_W;
 	output.normal = float4(input.normal, 1.0f);
 	output.diffuse = input.color;

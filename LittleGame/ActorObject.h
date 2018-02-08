@@ -50,7 +50,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS);
+	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType);
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
@@ -59,6 +59,7 @@ public:
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
+	virtual void update();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent

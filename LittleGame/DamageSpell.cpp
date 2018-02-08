@@ -117,7 +117,7 @@ void DamageSpell::collision(GameObject * target, Projectile* proj)
 		if (target->getType() == OBJECTTYPE::PLAYER)
 		{
 			//this->proj->setPosition(XMFLOAT3(200, 40, 200));
-			proj->setState(OBJECTSTATE::DEAD);
+			proj->setState(OBJECTSTATE::TYPE::DEAD);
 		}
 
 		break;
@@ -140,7 +140,7 @@ void DamageSpell::collision(GameObject * target, Projectile* proj)
 		{
 			target->setPosition(XMFLOAT3(400, 100, 200));
 			this->damage = this->varible0;
-			proj->setState(OBJECTSTATE::DEAD);
+			proj->setState(OBJECTSTATE::TYPE::DEAD);
 		}
 
 		//target->setPosition(XMFLOAT3 (200, 100, 200));

@@ -16,11 +16,15 @@ ActorObject::ActorObject(const size_t ID)
 }
 
 
-ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, GamePlayState* pGPS)
+ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
+	this->speed = speed;
+	this->velocity = velocity;
+	this->type = objectType;
+	this->state = OBJECTSTATE::TYPE::IDLE;
 }
 
 const size_t ActorObject::getID()
@@ -56,13 +60,24 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-
+	for (int i = 0; i < this->spells.size(); i++) {
+		delete this->spells[i];
+	}
 	// Cleanup all the components
 	for (auto &c : this->components) {
 		c->getID();
 		c->cleanUp();
 		delete c;
 	}
+	
+}
+
+void ActorObject::update()
+{
+	for (auto &i : this->components) {
+		i->update();
+	}
+	this->decCD();
 }
 
 void ActorObject::move()
@@ -90,19 +105,19 @@ void ActorObject::move()
 	} 
 	else { playerNewPos.x = playerPos.x; }
 	playerNewPos.y = playerPos.y;
-	this->updateWorldMatrix(playerNewPos);
+	this->setPosition(playerNewPos);
 }
 
 void ActorObject::moveUp()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;
 		playerPos.z += playerVelocity.z * dt;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -112,14 +127,14 @@ void ActorObject::moveUp()
 
 void ActorObject::moveLeft()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.x -= playerVelocity.x * dt;
 		if (playerPos.x > ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -128,13 +143,13 @@ void ActorObject::moveLeft()
 }
 void ActorObject::moveDown()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.z -= playerVelocity.z * dt;
 		if (playerPos.z > ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
@@ -144,13 +159,13 @@ void ActorObject::moveDown()
 }
 void ActorObject::moveRight()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.x += playerVelocity.x * dt;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
@@ -161,12 +176,10 @@ void ActorObject::moveRight()
 
 void ActorObject::rotate()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->rotation += 0.1f;
 		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
 		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
-		
-		this->updateWorldMatrix(this->pos);
 	}
 	else {
 
@@ -175,7 +188,7 @@ void ActorObject::rotate()
 
 void ActorObject::fireAbility0()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->spells[0]->castSpell();
 	}
 	else {
@@ -185,7 +198,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::selectAbility1()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[1];
 	}
 	else {
@@ -195,7 +208,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[2];
 	}
 	else {
@@ -205,7 +218,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[3];
 		
 	}
@@ -216,7 +229,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[4];
 	}
 	else {
@@ -226,7 +239,7 @@ void ActorObject::selectAbility4()
 
 void ActorObject::fireAbilityX()
 {
-	if (this->state == OBJECTSTATE::IDLE || this->state == OBJECTSTATE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell->castSpell();
 	}
 	else {

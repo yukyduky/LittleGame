@@ -48,6 +48,7 @@ public:
 	virtual size_t& GEToffset();
 	virtual size_t& GETnumIndices();
 	virtual XMMATRIX& getWorld();
+	virtual bool checkIfDead();
 	
 };
 

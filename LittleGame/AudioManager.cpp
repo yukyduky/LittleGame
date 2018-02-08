@@ -3,6 +3,7 @@
 
 int AudioManager::init()
 {
+	
 	int error = 0;
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
@@ -45,12 +46,6 @@ int AudioManager::mapMusic(std::string filename, MUSIC::NAME name)
 
 void AudioManager::update()
 {
-
-	for (size_t i = 0; i < this->soundQueue.size(); i++)
-	{
-		this->soundQueue[i].play();
-	}
-	this->soundQueue.clear();
 }
 
 void AudioManager::play(MUSIC::NAME name)
@@ -61,10 +56,6 @@ void AudioManager::play(MUSIC::NAME name)
 
 void AudioManager::play(SOUND::NAME name)
 {
-	//Used to add sound to the queue but not used in current version
-	//this->soundQueue.push_back(sf::Sound(this->sounds[name]));
-	//this->soundQueue.back().setVolume(this->volume);
-
 	this->currentSound.setBuffer(this->sounds[name]);
 	this->currentSound.play();
 }
@@ -110,4 +101,20 @@ void AudioManager::adjustEffects(size_t volume)
 void AudioManager::setRepeatMusic(bool repeat)
 {
 	this->repeatMusic = repeat;
+}
+
+void AudioManager::cleanUp()
+{
+	this->soundQueue.clear();
+	for (int i = 0; i < this->sounds.size(); i++) {
+		sounds[i].~SoundBuffer();
+	}
+	for (int i = 0; i < this->musicFilenames.size(); i++) {
+		musicFilenames[i].clear();
+	}
+	for (int i = 0; i < this->currentMusic.size(); i++) {
+		this->currentMusic[i].~Music();
+	}
+	this->currentSound.~Sound();
+
 }

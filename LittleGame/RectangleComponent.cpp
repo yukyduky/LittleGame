@@ -91,7 +91,8 @@ void RectangleComponent::update()
 
 void RectangleComponent::cleanUp()
 {
-	// Maybe clean up this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else
+	this->gVertexBuffer->Release();
+	this->gIndexBuffer->Release();
 }
 
 ID3D11Buffer*& RectangleComponent::GETvertexBuffer()
@@ -129,6 +130,15 @@ vColor& RectangleComponent::GETcolor()
 	return this->color;
 }
 
+bool RectangleComponent::checkIfDead()
+{
+	bool returnValue = false;
+	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
+	{
+		returnValue = true;
+	}
+	return returnValue;
+}
 
 /*_____________________________
 |          END OF             |

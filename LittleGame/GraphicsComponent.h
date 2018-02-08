@@ -44,6 +44,8 @@ public:
 	virtual size_t& GEToffset() = 0;
 	virtual size_t& GETnumIndices() = 0;
 	virtual XMMATRIX& getWorld() = 0;
+	virtual bool checkIfDead() = 0;
+	
 };
 
 #endif // !GRAPHICSCOMPONENT_H
