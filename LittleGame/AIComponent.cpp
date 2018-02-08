@@ -63,9 +63,6 @@ void AIComponent::generateCommands()
 	// Push back the command!
 	this->commandQueue.push_back(new CommandControllerMove);
 
-	//XMFLOAT3 originalFormat;
-	//XMStoreFloat3(&originalFormat, current);
-	//this->pHead->setPosition(originalFormat);
 }
 
 void AIComponent::update()

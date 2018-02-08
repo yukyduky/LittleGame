@@ -69,9 +69,9 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos((float)(ARENAWIDTH*posScale), scale.y, (float)(ARENAHEIGHT / 2 * posScale));
-	float speed = 10;
+	float speed = 80;
 	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 enemyColor(10.0f, 10.0f, 10.0f, 255.0f);
+	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	
 	// Object
