@@ -14,7 +14,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-	_CrtSetBreakAlloc(393); // 1134 1133 1132
+	//_CrtSetBreakAlloc(246); // 1134 1133 1132
 
 	ID3D* d3d = new D3D();
 	Locator::provide(d3d);

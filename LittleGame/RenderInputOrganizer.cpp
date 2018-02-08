@@ -80,5 +80,4 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 
 void RenderInputOrganizer::cleanUp()
 {
-	this->constantBuffer->Release();
 }
