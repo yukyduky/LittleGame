@@ -136,6 +136,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
+		else if (msg.message == WM_MOUSEMOVE) {
+			// Needs overlook for multiplayer
+			this->player1->rotate(this->mousePicker->getWorldPosition());
+		}
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
@@ -275,7 +279,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
+	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
 
 	
 	//Add proj to objectArrays

@@ -14,7 +14,6 @@ public:
 	DirectX::XMFLOAT3 getWorldPosition();
 
 private:
-	//BITMAP mBitmap;
 	DirectX::XMFLOAT3 cameraPos;
 	DirectX::XMFLOAT3 cameraDirNor;
 	DirectX::XMFLOAT2 mousePoint;
@@ -22,7 +21,6 @@ private:
 
 	DirectX::XMVECTOR surface;
 
-	//XMPlaneFromPointNormal();
 
 	bool check;
 

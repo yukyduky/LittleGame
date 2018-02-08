@@ -44,6 +44,7 @@ private:
 	// Varibles for spells to use
 	float varible0;
 	float varible1;
+	bool flag0;
 };
 
 
