@@ -125,32 +125,38 @@ void QuadTree::initializeQuadTree() {
 }
 
 void QuadTree::insertStaticObject(GameObject* staticObject) {
+	QuadTree* tempQuadTreePointer = this;
 	int tempIndex;
 
 	// Check if Quad Tree has additional Quad Tree nodes.
 	// (Arbitrary node # from 0 and 3)
-	if (this->nodes[0] != nullptr) {
-		tempIndex = this->GETindex(staticObject);
+	if (tempQuadTreePointer->nodes[0] != nullptr) {
+		tempIndex = tempQuadTreePointer->GETindex(staticObject);
+
+		while (tempIndex != -1) {
+			tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndex];
+			tempIndex = tempQuadTreePointer->GETindex(staticObject);
+		}
 
 		if (tempIndex == BOTTOM_LEFT)
-			this->nodes[BOTTOM_LEFT]->insertStaticObject(staticObject);
+			tempQuadTreePointer->nodes[BOTTOM_LEFT]->insertStaticObject(staticObject);
 
 		else if (tempIndex == BOTTOM_RIGHT)
-			this->nodes[BOTTOM_RIGHT]->insertStaticObject(staticObject);
+			tempQuadTreePointer->nodes[BOTTOM_RIGHT]->insertStaticObject(staticObject);
 
 		else if (tempIndex == TOP_LEFT)
-			this->nodes[TOP_LEFT]->insertStaticObject(staticObject);
+			tempQuadTreePointer->nodes[TOP_LEFT]->insertStaticObject(staticObject);
 
 		else if (tempIndex == TOP_RIGHT)
-			this->nodes[TOP_RIGHT]->insertStaticObject(staticObject);
+			tempQuadTreePointer->nodes[TOP_RIGHT]->insertStaticObject(staticObject);
 
 		// Object did not fully fit anywhere; pushing into parent QuadTree
 		else if (tempIndex == -1)
-			this->staticObjectsList.push_back(staticObject);
+			tempQuadTreePointer->staticObjectsList.push_back(staticObject);
 	}
-	// nodes[0] = nullptr which means we've reached the end/bottom of our Quad Tree
+	// First QuadTree did not have any additional nodes, so it gets the object
 	else {
-		this->staticObjectsList.push_back(staticObject);
+		tempQuadTreePointer->staticObjectsList.push_back(staticObject);
 	}
 }
 
@@ -158,19 +164,61 @@ void QuadTree::removeStaticObject(GameObject* staticObject) {
 	QuadTree* tempQuadTreePointer = this;
 	int tempIndex = this->GETindex(staticObject);
 
-	// If there are nodes further down, then we...
-	// Check if tempIndex = -1 (-1 = current QuadTree is holding the object)...
-	// If both TRUE, search one level further down for the object.
+	// tempIndex != -1 means that we need to traverse deeper into the QuadTree
 	while (tempIndex != -1) {
 		// Take one step further down into the QuadTree
-		tempQuadTreePointer = this->nodes[tempIndex];
-		// Find new index in the next layer, if another layer exists
-		// ('0' here represents an arbitrary number from 0 to 3)
-		if (tempQuadTreePointer->nodes[0] != nullptr)
-			tempIndex = this->GETindex(staticObject);
+		tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndex];
+		tempIndex = tempQuadTreePointer->GETindex(staticObject);
 	}
 
 	tempQuadTreePointer->staticObjectsList.remove(staticObject);
+}
+
+std::list<GameObject*> QuadTree::retrieveStaticList(GameObject* collidingObject) {
+	QuadTree* tempQuadTreePointer = this;
+	std::list<GameObject*> tempStaticObjectList;
+	int tempIndexHolder = this->GETindex(collidingObject);
+
+	while (tempIndexHolder != -1) {
+		// We grab all objects in the parent QuadTree, then continue traversing
+		tempStaticObjectList.insert(
+			tempStaticObjectList.end(),
+			tempQuadTreePointer->staticObjectsList.begin(),
+			tempQuadTreePointer->staticObjectsList.end()
+		);
+
+		tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndexHolder];
+		tempIndexHolder = tempQuadTreePointer->GETindex(collidingObject);
+	}
+	// This catches the last list, which we wouldn't get otherwise
+	tempStaticObjectList.insert(
+		tempStaticObjectList.end(),
+		tempQuadTreePointer->staticObjectsList.begin(),
+		tempQuadTreePointer->staticObjectsList.end()
+	);
+
+	return tempStaticObjectList;
+}
+
+bool QuadTree::checkDynamicObject(GameObject* dynamicObject, GameObject* comparedObject) {
+	QuadTree* tempQuadTreePointer = this;
+	bool tempReturnValue = false;
+	int tempIndexDynamic = tempQuadTreePointer->GETindex(dynamicObject);
+	int tempIndexCompared = tempQuadTreePointer->GETindex(comparedObject);
+
+	while (tempIndexDynamic == tempIndexCompared) {
+		tempQuadTreePointer = tempQuadTreePointer->nodes[tempIndexDynamic];
+
+		int tempIndexDynamic = tempQuadTreePointer->GETindex(dynamicObject);
+		int tempIndexCompared = tempQuadTreePointer->GETindex(comparedObject);
+
+		if (tempIndexDynamic == -1) {
+			tempReturnValue = true;
+			break;
+		}
+	}
+
+	return tempReturnValue;
 }
 
 int QuadTree::GETindex(GameObject* object) {
@@ -179,29 +227,32 @@ int QuadTree::GETindex(GameObject* object) {
 	int tempIndex = -1;
 	bool bottomHalf, topHalf;
 
-	// BOTTOM HALF
-	// TRUE if object is FULLY under parent-quad's 'midpointY'
-	bottomHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointY);
+	// If 'this' QuadTree doesn't have nodes, return -1
+	if (this->nodes[0] != nullptr) {
+		// BOTTOM HALF
+		// TRUE if object is FULLY under parent-quad's 'midpointY'
+		bottomHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointY);
 
-	// TOP HALF
-	// TRUE if object is FULLY above parent-quad's 'midpointY'
-	topHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointY);
+		// TOP HALF
+		// TRUE if object is FULLY above parent-quad's 'midpointY'
+		topHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointY);
 
-	// LEFT HALF
-	// TRUE if object is FULLY ...
-	if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointX) {
-		if (bottomHalf)
-			tempIndex = BOTTOM_LEFT;
-		else if (topHalf)
-			tempIndex = TOP_LEFT;
-	}
-	// RIGHT HALF
-	// TRUE if object is FULLY ...
-	else if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointX) {
-		if (bottomHalf)
-			tempIndex = BOTTOM_RIGHT;
-		else if (topHalf)
-			tempIndex = TOP_RIGHT;
+		// LEFT HALF
+		// TRUE if object is FULLY ...
+		if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointX) {
+			if (bottomHalf)
+				tempIndex = BOTTOM_LEFT;
+			else if (topHalf)
+				tempIndex = TOP_LEFT;
+		}
+		// RIGHT HALF
+		// TRUE if object is FULLY ...
+		else if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointX) {
+			if (bottomHalf)
+				tempIndex = BOTTOM_RIGHT;
+			else if (topHalf)
+				tempIndex = TOP_RIGHT;
+		}
 	}
 
 	return tempIndex;

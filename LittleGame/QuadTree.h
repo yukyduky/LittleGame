@@ -6,7 +6,7 @@
 #include <list>
 #include <d3d11.h>
 
-// Currently initializing entire QuadTree at the start; OBJECT_MAX is unnecessary
+// Currently initializing entire QuadTree at the start; OBJECT_MAX is withheld
 ///#define OBJECTS_MAX 20
 #define LAYERS_MAX 5
 
@@ -29,7 +29,6 @@ private:
 
 	int level;
 	std::list<GameObject*> staticObjectsList;
-	//std::list<GameObject*> dynamicObjectsList;
 	QuadTreeSquare nodeBounds;
 	QuadTree* nodes[4];
 	QuadTree* parentPointer;
@@ -46,10 +45,8 @@ public:
 	void insertStaticObject(GameObject* staticObject);
 	void removeStaticObject(GameObject* staticObject);
 
-	std::list<GameObject*> retrieveStaticList();
-	/// Don't need a retrieveDynamicList; we're looping through and calling 'getIndex'-ish function
-	/// to see where every dynamic object is. Still needs thought to it though.
-
+	std::list<GameObject*> retrieveStaticList(GameObject* collidingObject);
+	bool checkDynamicObject(GameObject* dynamicObject, GameObject* comparedObject);
 
 	int GETindex(GameObject* object);
 
