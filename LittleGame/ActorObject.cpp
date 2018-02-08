@@ -172,19 +172,68 @@ void ActorObject::moveRight()
 
 void ActorObject::rotate()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
-		this->rotation += 0.1f;
-		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
-		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
-	}
-	else {
+	DirectX::XMFLOAT2 aimVec;
+	aimVec = this->pInput->GETnormalizedVectorOfRightStick();
+	XMVECTOR aimNor = XMLoadFloat2(&aimVec);
+	XMFLOAT2 tempFloatVec = XMFLOAT2(-1.0f, 0.0f);
+	XMVECTOR dir = XMLoadFloat2(&tempFloatVec);
 
+	//XMVECTOR aimNor = XMVector3Normalize(aim);
+	XMVECTOR angle = XMVector3AngleBetweenVectors(aimNor, dir);
+
+	float temp;
+	XMStoreFloat(&temp, angle);
+
+	if (aimVec.y < 0.0f)
+	{
+		temp *= -1.0f;
 	}
+
+	this->rotation = temp;
+	//this->rotation = 0.5;
+
+	//this->rotate();
+
+	this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+}
+
+void ActorObject::rotate(XMFLOAT3 aimVec)
+{
+	XMVECTOR cursor = XMLoadFloat3(&aimVec);
+	XMVECTOR posVec = XMLoadFloat3(&this->pos);
+	XMVECTOR aim = XMVectorSubtract(cursor, posVec);
+	//XMVECTOR dir = XMLoadFloat3(&this->getDirection());
+	XMFLOAT3 tempFloatVec = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+	XMVECTOR dir = XMLoadFloat3(&tempFloatVec);
+
+	XMVECTOR aimNor = XMVector3Normalize(aim);
+	XMVECTOR angle = XMVector3AngleBetweenVectors(aimNor, dir);
+
+	float temp;
+	XMStoreFloat(&temp, angle);
+
+	if (this->pos.z > aimVec.z)
+	{
+		temp *= -1.0f;
+	}
+
+	this->rotation = temp;
+	//this->rotation = 0.5;
+
+	//this->rotate();
+
+	this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+}
+
+void ActorObject::rotate(XMFLOAT2 aimVec)
+{
+	
 }
 
 void ActorObject::fireAbility0()
 {
 	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+		//this->rotate(this->pGPS->GETMouseInput()->getWorldPosition());
 		this->spells[0]->castSpell();
 	}
 	else {
@@ -204,6 +253,8 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
+	this->pGPS->GETMouseInput()->getWorldPosition();
+
 	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[2];
 	}
@@ -236,6 +287,7 @@ void ActorObject::selectAbility4()
 void ActorObject::fireAbilityX()
 {
 	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+		//this->rotate(this->pGPS->GETMouseInput()->getWorldPosition());
 		this->selectedSpell->castSpell();
 	}
 	else {

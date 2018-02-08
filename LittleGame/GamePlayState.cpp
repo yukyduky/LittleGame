@@ -97,6 +97,9 @@ void GamePlayState::init() {
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
+	//this->enemyManager.startLevel1();
+
+	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1();
 }
 
@@ -136,6 +139,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		// Exit the application when 'X' is pressed
 		if (msg.message == WM_QUIT) {
 			gm->quit();
+		}
+		else if (msg.message == WM_MOUSEMOVE) {
+			// Needs overlook for multiplayer
+			this->player1->rotate(this->mousePicker->getWorldPosition());
 		}
 
 		TranslateMessage(&msg);
@@ -276,7 +283,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
+	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
 
 	
 	//Add proj to objectArrays
