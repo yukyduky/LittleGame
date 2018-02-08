@@ -3,6 +3,7 @@
 
 int AudioManager::init()
 {
+	
 	int error = 0;
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
@@ -100,4 +101,20 @@ void AudioManager::adjustEffects(size_t volume)
 void AudioManager::setRepeatMusic(bool repeat)
 {
 	this->repeatMusic = repeat;
+}
+
+void AudioManager::cleanUp()
+{
+	this->soundQueue.clear();
+	for (int i = 0; i < this->sounds.size(); i++) {
+		sounds[i].~SoundBuffer();
+	}
+	for (int i = 0; i < this->musicFilenames.size(); i++) {
+		musicFilenames[i].clear();
+	}
+	for (int i = 0; i < this->currentMusic.size(); i++) {
+		this->currentMusic[i].~Music();
+	}
+	this->currentSound.~Sound();
+
 }

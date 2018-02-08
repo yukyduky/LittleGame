@@ -65,7 +65,6 @@ private:
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
 	int staticPhysicsCount = 0;
-	std::vector<int> deadObjectsID;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
@@ -73,16 +72,10 @@ private:
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1;
-
 	Command* selectCommand;
-
-	//std::vector<GameObject*> gameObjectsArray;
 
 	///std::list<PhysicsComponent*> physicsListStatic;
 	///std::list<PhysicsComponent*> physicsListDynamic;
-	//Array with all active projectiles
-	//std::vector<Projectile*> projectiles;
-	std::vector<int> deadProjectileID;
 
 	//void updatePhysicsComponents();
 	

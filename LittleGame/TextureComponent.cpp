@@ -23,7 +23,7 @@ void TextureComponent::update()
 
 void TextureComponent::cleanUp()
 {
-	// Maybe release this->gSRV here, maybe somewhere else
+	this->gSRV->Release();
 }
 
 ID3D11ShaderResourceView * TextureComponent::getSRV()

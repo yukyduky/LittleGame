@@ -60,13 +60,16 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-
+	for (int i = 0; i < this->spells.size(); i++) {
+		delete this->spells[i];
+	}
 	// Cleanup all the components
 	for (auto &c : this->components) {
 		c->getID();
 		c->cleanUp();
 		delete c;
 	}
+	
 }
 
 void ActorObject::update()

@@ -57,7 +57,7 @@ void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
 	}
 }
 
-void RenderInputOrganizer::addGraphics(GraphicsComponent * graphics)
+void RenderInputOrganizer::cleanUp()
 {
-	this->graphics.push_back(graphics);
+	this->constantBuffer->Release();
 }

@@ -23,9 +23,9 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	//// Create the AudioManager
 	this->audio = new AudioManager;
 	// Provide the audioManager object to the service locator
-	Locator::provide(this->audio);
+//	Locator::provide(this->audio);
 	// Play music (MVP, this will/should be changed later on)
-	this->audio->play(MUSIC::ONEPUNCH);
+//	this->audio->play(MUSIC::ONEPUNCH);
 
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
@@ -38,13 +38,10 @@ void GameManager::cleanUp()
 {
 	// this->gameTime.cleanUp(); --Not necessary at the moment
 	delete this->gameTime;
-
-	// this->renderer.cleanUp();
-
-	// this->audio.cleanUp(); --Not necessary at the moment
-//	delete this->audio; -- Fucks everything up if deleted before cleaned up
-
-	//StateManager::cleanUp();
+	this->renderer.cleanUp();
+	this->audio->cleanUp(); //--Not necessary at the moment
+//	delete this->audio; //-- Fucks everything up if deleted before cleaned up
+	StateManager::cleanUp();
 }
 
 void GameManager::changeState(State* state)

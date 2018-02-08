@@ -287,3 +287,15 @@ void Renderer::setShaderType(SHADERTYPE type)
 		break;
 	}
 }
+
+void Renderer::cleanUp()
+{
+	this->gFinalRTV->Release();
+	this->gDSV->Release();
+	this->gDSB->Release();
+	this->gSampler->Release();
+	this->gQuadVertexBuffer->Release();
+	this->geoColorShaders.Release();
+	this->geoTexShaders.Release();
+	this->lightShaders.Release();
+}

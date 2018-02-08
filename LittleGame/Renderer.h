@@ -76,6 +76,7 @@ public:
 	*/
 	void secondPass();
 	void setShaderType(SHADERTYPE type);
+	void cleanUp();
 private:
 	const D3D11_INPUT_ELEMENT_DESC geoTexInputDesc[GEOTEX_INPUT_DESC_SIZE] =
 	{

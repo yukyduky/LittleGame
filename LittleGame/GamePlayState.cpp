@@ -89,35 +89,28 @@ void GamePlayState::init() {
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
 
-	for (auto &i : this->graphics) {
-		this->rio.addGraphics(i);
-	}
-
 	//this->enemyManager.startLevel1();
 }
 
 void GamePlayState::cleanUp()
 {
 	// Direct internal objects
-	// this->rio.cleanUp();
+	 this->rio.cleanUp();
 	// this->camera.cleanUp();
 	this->enemyManager.cleanUp();
 
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->staticObjects) {
 		iterator->cleanUp();
-//		delete iterator;
+		delete iterator;
 	}
 	for (auto &iterator : this->dynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
 	}
-/*
-	for (auto &iterator : this->projectiles) {
-		//iterator->cleanUp();
-		//delete iterator;
-	}
-*/
+	this->staticObjects.clear();
+	this->dynamicObjects.clear();
+	this->graphics.clear();
 }
 
 void GamePlayState::pause() {
@@ -157,7 +150,7 @@ void GamePlayState::update(GameManager * gm)
 		else {
 		
 			ID = this->dynamicObjects[i]->getID();
-			for (int j = 0; j < this->graphics.size(); j++) {
+			for (int j = this->staticPhysicsCount; j < this->graphics.size(); j++) {
 				if (this->graphics[j]->getID() == ID) {
 					this->graphics.erase(this->graphics.begin() + j);
 				}
@@ -166,6 +159,7 @@ void GamePlayState::update(GameManager * gm)
 				}
 			}
 			this->dynamicObjects[i]->cleanUp();
+			delete this->dynamicObjects[i];
 			this->dynamicObjects.erase(this->dynamicObjects.begin() + i);
 		
 		}

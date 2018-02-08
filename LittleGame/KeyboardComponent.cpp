@@ -37,7 +37,9 @@ void KeyboardComponent::receive(GameObject & obj, Message msg)
 
 void KeyboardComponent::cleanUp()
 {
-
+	this->keyboardCommandMap.clear();
+	this->mouseCommandMap.clear();
+	this->controllerCommandMap.clear();
 }
 
 void KeyboardComponent::generateCommands()

@@ -185,7 +185,8 @@ void BlockComponent::update()
 
 void BlockComponent::cleanUp()
 {
-	// Maybe release this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else
+	this->gVertexBuffer->Release();
+	this->gIndexBuffer->Release();
 }
 
 

@@ -218,7 +218,8 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 			grid[i][0] = SQUARETYPE::SPAWN;
 		}
 	}
-
+	delete rowTB;
+	delete rowLR;
 }
 
 void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)

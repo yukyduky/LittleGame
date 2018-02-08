@@ -34,8 +34,6 @@ class GraphicsComponent;
 class RenderInputOrganizer
 {
 private:
-	std::vector<GraphicsComponent*> graphics;
-
 	MatrixBufferCalc	rawMatrixData;
 	MatrixBufferPack	packagedMatrixData;
 	ID3D11Buffer*		constantBuffer;
@@ -51,7 +49,7 @@ private:
 public:
 	void initialize(Camera& camera);
 	void render(std::vector<GraphicsComponent*>& graphics);
-	void addGraphics(GraphicsComponent* graphics);
+	void cleanUp();
 };
 
 #endif // !RENDERINPUTORGANIZER_H
