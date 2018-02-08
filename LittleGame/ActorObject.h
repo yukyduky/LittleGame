@@ -46,7 +46,6 @@ private:
 	GamePlayState* pGPS = nullptr;
 
 public:
-	ActorObject(const size_t ID);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/

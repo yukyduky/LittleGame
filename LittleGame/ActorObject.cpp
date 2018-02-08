@@ -9,12 +9,6 @@
 
 #include <DirectXMath.h>
 
-ActorObject::ActorObject(const size_t ID)
-	: GameObject(ID)
-{
-	
-}
-
 
 ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
 	: GameObject(ID, pos)
@@ -79,7 +73,7 @@ void ActorObject::update()
 	for (auto &i : this->components) {
 		i->update();
 	}
-	this->decCD();
+	// this->decCD(); -- turned off while enemies are being implemented.
 }
 
 void ActorObject::move()
