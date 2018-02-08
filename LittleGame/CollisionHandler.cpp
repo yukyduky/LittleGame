@@ -1,6 +1,6 @@
 #include "CollisionHandler.h"
 #include "DamageSpell.h"
-
+#include "GameObject.h"
 
 #include <cassert>
 
@@ -233,7 +233,7 @@ void CollisionHandler::collisionPlayerEnemy() {
 	};
 
 	// Enemies are moved out of the way of players
-	this->collidable2->setPosition(this->collidable2->GETPosition() + this->resultVector);
+	this->collidable2->setPosition(this->collidable2->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerDoodad() {
@@ -274,8 +274,7 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	};
 
 	// Moving the player only, since the indestructibles cannot move.
-	//collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-	collidable1->setPosition(XMFLOAT3(200.0f, 40.0f, 200.0f));
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
@@ -310,7 +309,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 	this->collidable2->setPosition(this->collidable2->GETPosition() + (this->resultVector * this->stepper));
 }
 
@@ -366,7 +365,7 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// CODE GOES HERE
+	collidable1->setState(OBJECTSTATE::TYPE::DEAD);
 }
 
 void CollisionHandler::collisionDoodadDoodad() {
