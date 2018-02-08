@@ -69,7 +69,8 @@ void LineComponent::update()
 
 void LineComponent::cleanUp()
 {
-
+	this->gVertexBuffer->Release();
+	this->gIndexBuffer->Release();
 }
 
 const size_t LineComponent::getID()

@@ -9,12 +9,24 @@
     <FxCompile Include="lightPassVert.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbilityComponent.cpp" />
+    <ClCompile Include="ActorObject.cpp" />
+    <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="DamageSpell.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="FireballComponent.cpp" />
+    <ClCompile Include="MobilitySpell.cpp" />
+    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GamePlayState.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="KeyboardComponent.cpp" />
@@ -28,189 +40,14 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="RectangleComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="Spell.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
-    <ClCompile Include="Projectile.cpp" />
-    <ClCompile Include="FireballComponent.cpp" />
-    <ClCompile Include="QuadTree.cpp" />
-    <ClCompile Include="AbilityComponent.cpp">
-      <Filter>Source Files\Components\Abilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorObject.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="ArenaObject.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioManager.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="BlockComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionHandler.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePlayState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTime.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="LineComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="InputComponent.cpp">
-      <Filter>Source Files\Components\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="ControllerComponent.cpp">
-      <Filter>Source Files\Components\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyboardComponent.cpp">
-      <Filter>Source Files\Components\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Locator.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsComponent.cpp">
-      <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="RectangleComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderInputOrganizer.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
-    <ClCompile Include="StateManager.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureComponent.cpp">
-      <Filter>Source Files\Components\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Source Files\General</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActorObject.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="ArenaObject.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="BlockComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionHandler.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="ControllerComponent.h">
-      <Filter>Header Files\Components\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePlayState.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTime.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="GraphicsComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="InputComponent.h">
-      <Filter>Header Files\Components\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyboardComponent.h">
-      <Filter>Header Files\Components\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="LineComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Locator.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="RectangleComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="IAudioManager.h">
-      <Filter>Header Files\General\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="ID3D.h">
-      <Filter>Header Files\General\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="IGameTime.h">
-      <Filter>Header Files\General\Interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="AbilityComponent.h">
-      <Filter>Header Files\Components\Abilities</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderInputOrganizer.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="StateManager.h">
-      <Filter>Header Files\States</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureComponent.h">
-      <Filter>Header Files\Components\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="ArenaGlobals.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelManager.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
     <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
+    <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="Commands.h" />
@@ -219,9 +56,14 @@
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="DamageSpell.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
+    <ClInclude Include="MobilitySpell.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GamePlayState.h" />
@@ -240,26 +82,12 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="Spell.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
-    <ClInclude Include="QuadTree.h" />
-    <ClInclude Include="DamageSpell.h">
-      <Filter>Kommentera</Filter>
-    </ClInclude>
-    <ClInclude Include="MobilitySpell.h">
-      <Filter>Kommentera</Filter>
-    </ClInclude>
-    <ClInclude Include="Spell.h">
-      <Filter>Kommentera</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Kommentera">
-      <UniqueIdentifier>{7eabaef9-7285-4cbc-8c7f-deaa1cdbd07e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

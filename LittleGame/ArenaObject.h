@@ -18,8 +18,6 @@ public:
 	
 	virtual const size_t getID();
 	// CURRENTLY EMPTY
-	virtual void receive(GameObject &obj, Message msg);
-	// CURRENTLY EMPTY
 	virtual void cleanUp();
 	virtual void update();
 

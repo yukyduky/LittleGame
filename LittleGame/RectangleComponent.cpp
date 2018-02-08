@@ -91,7 +91,8 @@ void RectangleComponent::update()
 
 void RectangleComponent::cleanUp()
 {
-	// Maybe clean up this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else
+	this->gVertexBuffer->Release();
+	this->gIndexBuffer->Release();
 }
 
 ID3D11Buffer*& RectangleComponent::GETvertexBuffer()

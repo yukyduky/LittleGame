@@ -62,13 +62,16 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-
+	for (int i = 0; i < this->spells.size(); i++) {
+		delete this->spells[i];
+	}
 	// Cleanup all the components
 	for (auto &c : this->components) {
 		c->getID();
 		c->cleanUp();
 		delete c;
 	}
+	
 }
 
 void ActorObject::update()
@@ -104,7 +107,7 @@ void ActorObject::move()
 	} 
 	else { playerNewPos.x = playerPos.x; }
 	playerNewPos.y = playerPos.y;
-	this->updateWorldMatrix(playerNewPos);
+	this->setPosition(playerNewPos);
 }
 
 void ActorObject::moveUp()
@@ -115,8 +118,8 @@ void ActorObject::moveUp()
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;
 		playerPos.z += playerVelocity.z * dt;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -132,8 +135,8 @@ void ActorObject::moveLeft()
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.x -= playerVelocity.x * dt;
 		if (playerPos.x > ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
+			this->setPosition(playerPos);
 		}
 	}
 	else {
@@ -148,7 +151,7 @@ void ActorObject::moveDown()
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.z -= playerVelocity.z * dt;
 		if (playerPos.z > ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
@@ -164,7 +167,7 @@ void ActorObject::moveRight()
 		XMFLOAT3 playerVelocity = this->getVelocity() * this->speed;;
 		playerPos.x += playerVelocity.x * dt;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
-			this->updateWorldMatrix(playerPos);
+			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
 	}
@@ -179,8 +182,6 @@ void ActorObject::rotate()
 		this->rotation += 0.1f;
 		XMMATRIX rotateM = XMMatrixRotationY(this->rotation);
 		this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
-		
-		this->updateWorldMatrix(this->pos);
 	}
 	else {
 

@@ -84,14 +84,15 @@ void GamePlayState::checkCollisions() {
 
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
-	this->rio.initialize(this->camera);
+	this->rio.initialize(this->camera, this->pointLights);
 	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
 
-	for (auto &i : this->graphics) {
-		this->rio.addGraphics(i);
-	}
+	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	this->enemyManager.startLevel1();
 }
@@ -99,25 +100,22 @@ void GamePlayState::init() {
 void GamePlayState::cleanUp()
 {
 	// Direct internal objects
-	// this->rio.cleanUp();
+	 this->rio.cleanUp();
 	// this->camera.cleanUp();
 	this->enemyManager.cleanUp();
 
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->staticObjects) {
 		iterator->cleanUp();
-//		delete iterator;
+		delete iterator;
 	}
 	for (auto &iterator : this->dynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
 	}
-/*
-	for (auto &iterator : this->projectiles) {
-		//iterator->cleanUp();
-		//delete iterator;
-	}
-*/
+	this->staticObjects.clear();
+	this->dynamicObjects.clear();
+	this->graphics.clear();
 }
 
 void GamePlayState::pause() {
@@ -155,16 +153,20 @@ void GamePlayState::update(GameManager * gm)
 			this->dynamicObjects[i]->update();
 		}
 		else {
-		/*
+		
 			ID = this->dynamicObjects[i]->getID();
-			for (int j = 0; j < this->graphics.size(); j++) {
+			for (int j = this->staticPhysicsCount; j < this->graphics.size(); j++) {
 				if (this->graphics[j]->getID() == ID) {
-					this->graphics.erase(this->graphics.begin() + j - 1, this->graphics.begin() + j - 1);
+					this->graphics.erase(this->graphics.begin() + j);
+				}
+				else {
+
 				}
 			}
 			this->dynamicObjects[i]->cleanUp();
-			this->dynamicObjects.erase(this->dynamicObjects.begin() + i, this->dynamicObjects.begin() + i);
-		*/
+			delete this->dynamicObjects[i];
+			this->dynamicObjects.erase(this->dynamicObjects.begin() + i);
+		
 		}
 	}
 	this->checkCollisions();
@@ -172,6 +174,8 @@ void GamePlayState::update(GameManager * gm)
 
 void GamePlayState::render(GameManager * gm) {
 	rio.render(this->graphics);
+	gm->setupSecondRenderPass();
+	rio.injectResourcesIntoSecondPass();
 	gm->display(this);
 }
 
@@ -198,7 +202,7 @@ void GamePlayState::initPlayer()
 	PhysicsComponent* physics;
 	int nextID = this->newID();
 
-	XMFLOAT4 playerColor(50.0f, 205.0f, 50.0f, 255.0f);
+	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
@@ -261,7 +265,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 
 	//Add the block to the objects that will be rendered
-	this->graphics.push_back(block);
+//	this->graphics.push_back(block);
 //	this->rio.addGraphics(block);
 
 	//Template of components that are beeing worked on by other users

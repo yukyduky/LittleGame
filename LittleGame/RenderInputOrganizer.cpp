@@ -4,14 +4,16 @@
 
 
 void RenderInputOrganizer::packageMatrices() {
-	DirectX::XMStoreFloat4x4(
+	XMMATRIX world = *this->rawMatrixData.world;
+	world = XMMatrixTranspose(world);
+	XMStoreFloat4x4(
 		&this->packagedMatrixData.world,
-		*this->rawMatrixData.world
+		world
 	);
 
 	this->rawMatrixData.worldViewProj = (*this->rawMatrixData.world) * (*this->rawMatrixData.view) * (*this->rawMatrixData.proj);
-	this->rawMatrixData.worldViewProj = DirectX::XMMatrixTranspose(this->rawMatrixData.worldViewProj);
-	DirectX::XMStoreFloat4x4(
+	this->rawMatrixData.worldViewProj = XMMatrixTranspose(this->rawMatrixData.worldViewProj);
+	XMStoreFloat4x4(
 		&this->packagedMatrixData.worldViewProj,
 		this->rawMatrixData.worldViewProj
 	);
@@ -23,13 +25,14 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 	// Get world matrix
 	this->rawMatrixData.world = &graphics->getWorld();
 	// Calculate matrices and convert to XMFLOAT4x4
+
 	this->packageMatrices();
 
 	// Map the matrix package to the buffer
-	Locator::getD3D()->mapConstantBuffer(&this->constantBuffer,	&this->packagedMatrixData, sizeof(this->packagedMatrixData));
+	Locator::getD3D()->mapConstantBuffer(&this->cMatrixBuffer,	&this->packagedMatrixData, sizeof(this->packagedMatrixData));
 
 	// Set the current constant buffer to the matrix package buffer
-	Locator::getD3D()->setConstantBuffer(this->constantBuffer, SHADER::VERTEX, 0);
+	Locator::getD3D()->setConstantBuffer(this->cMatrixBuffer, SHADER::VERTEX, 0, 1);
 
 	Locator::getD3D()->setVertexBuffer(&graphics->GETvertexBuffer(), graphics->GETstride(), graphics->GEToffset());
 	Locator::getD3D()->setIndexBuffer(graphics->GETindexBuffer(), 0);
@@ -38,14 +41,19 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 	Locator::getD3D()->GETgDevCon()->DrawIndexed(graphics->GETnumIndices(), 0, 0);
 }
 
-void RenderInputOrganizer::initialize(Camera& camera) {
+void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights) {
+	this->lights = &lights;
+
 	this->rawMatrixData.view = &camera.GETviewMatrix();
 	this->rawMatrixData.proj = &camera.GETprojMatrix();
 
 	Locator::getD3D()->createConstantBuffer(
-		&this->constantBuffer,
-		sizeof(this->packagedMatrixData)
+		&this->cMatrixBuffer,
+		sizeof(MatrixBufferPack)
 	);
+
+	Locator::getD3D()->createConstantBuffer(&this->cLightPassDataBuffer, sizeof(LightPassData));
+	Locator::getD3D()->createConstantBuffer(&this->cLightBuffer, sizeof(Light) * MAX_NUM_POINTLIGHTS);
 }
 
 void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
@@ -57,7 +65,19 @@ void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
 	}
 }
 
-void RenderInputOrganizer::addGraphics(GraphicsComponent * graphics)
+void RenderInputOrganizer::injectResourcesIntoSecondPass()
 {
-	this->graphics.push_back(graphics);
+	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
+
+	this->lightPassData.nrOfLights = size;
+
+	Locator::getD3D()->mapConstantBuffer(&this->cLightPassDataBuffer, &this->lightPassData, sizeof(LightPassData));
+	Locator::getD3D()->setConstantBuffer(this->cLightPassDataBuffer, SHADER::PIXEL, 0, 1);
+
+	Locator::getD3D()->mapConstantBuffer(&this->cLightBuffer, this->lights->data(), sizeof(Light) * size);
+	Locator::getD3D()->setConstantBuffer(this->cLightBuffer, SHADER::PIXEL, 1, 1);
+}
+
+void RenderInputOrganizer::cleanUp()
+{
 }

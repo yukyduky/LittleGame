@@ -180,12 +180,13 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 
 void BlockComponent::update()
 {
-
+	this->head->updateWorldMatrix();
 }
 
 void BlockComponent::cleanUp()
 {
-	// Maybe release this->gVertexBuffer & this->gIndexBuffer here, maybe somewhere else
+	this->gVertexBuffer->Release();
+	this->gIndexBuffer->Release();
 }
 
 

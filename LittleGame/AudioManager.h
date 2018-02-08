@@ -53,6 +53,8 @@ public:
 	void adjustEffects(size_t volume);
 
 	void setRepeatMusic(bool repeat);
+
+	void cleanUp();
 };
 
 #endif // !SOUNDMANAGER_H
