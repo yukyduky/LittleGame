@@ -79,6 +79,8 @@ public:
 	1. Moves the Actor according to data fetched from the internal InputComponent
 	*/
 	void rotate();
+	void rotate(XMFLOAT3 aimVec);
+	void rotate(XMFLOAT2 aimVec);
 	void fireAbility0();
 	void selectAbility1();
 	void selectAbility2();
