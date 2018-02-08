@@ -180,7 +180,7 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 
 void BlockComponent::update()
 {
-
+	this->head->updateWorldMatrix();
 }
 
 void BlockComponent::cleanUp()

@@ -75,6 +75,11 @@ void GameManager::display(State* state)
 	this->renderer.secondPass();
 }
 
+void GameManager::setupSecondRenderPass()
+{
+	this->renderer.secondPassSetup();
+}
+
 bool GameManager::getIsRunning()
 {
 	return this->isRunning;

@@ -49,7 +49,7 @@ void Projectile::update()
 	{
 		//----TEMPLATE will fix after rio has been remade
 		this->setVelocity(XMFLOAT3(0, 0, 0));
-		this->updateWorldMatrix(XMFLOAT3(0, -200, 0));
+		this->setPosition(XMFLOAT3(0, -200, 0));
 		//this->cleanUp();
 		this->send(OBJECTSTATE::TYPE::DEAD);
 	}
@@ -59,14 +59,13 @@ void Projectile::update()
 		this->pos.x += this->velocity.x * dt;
 		// Projectiles dosnt move in Y
 		this->pos.z += this->velocity.z * dt;
+		this->setPosition(pos);
 
 		this->rangeCoutner++;
 		if (this->rangeCoutner >= this->range && this->range != -1)
 		{
 			this->setState(OBJECTSTATE::TYPE::DEAD);
 		}
-
-		this->updateWorldMatrix(pos);
 	}
 }
 
