@@ -84,7 +84,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	input = new AIComponent(*enemy, aiBehavior);
 
 	// Make the enemy inactive
-	enemy->setState(OBJECTSTATE::DEAD);
+	enemy->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemy;
 }
 
@@ -115,7 +115,7 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
-				freshEnemy->setState(OBJECTSTATE::IDLE);
+				freshEnemy->setState(OBJECTSTATE::TYPE::IDLE);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
 				char msgbuf[20];
