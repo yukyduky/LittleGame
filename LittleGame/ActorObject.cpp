@@ -9,12 +9,6 @@
 
 #include <DirectXMath.h>
 
-ActorObject::ActorObject(const size_t ID)
-	: GameObject(ID)
-{
-	
-}
-
 
 ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
 	: GameObject(ID, pos)

@@ -1,10 +1,12 @@
 #include "AIComponent.h"
+#include "Commands.h"
 #include "ActorObject.h"
 
 AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players)
 {
 	// Set up head
 	this->pHead = &obj;
+	this->pHead->SETinputComponent(this);
 	this->ID = obj.getID();
 	this->behavior = aiBehavior;
 	this->players = players;
@@ -36,11 +38,10 @@ void AIComponent::generateCommands()
 	XMVECTOR direction;
 
 	if (this->behavior == AIBEHAVIOR::STRAIGHTTOWARDS) {
-		// Loop starts at 1 because, the first time is always the shortest one that loop, so no comparison needed.
 		XMVECTOR closestPosition = XMLoadFloat3(&players.front()->GETPosition());
 		XMVECTOR candidate;
 
-		for (int i = 1; i < players.size(), i++;) {
+		for (int i = 0; i < players.size(); i++) {
 			candidate = XMLoadFloat3(&players[i]->GETPosition());
 
 			// If candidate is closer
@@ -51,18 +52,39 @@ void AIComponent::generateCommands()
 
 		// Move straight towards 
 		XMVECTOR position = XMLoadFloat3(&this->pHead->GETPosition());
-		direction = XMVector3Normalize(position - closestPosition);
+		direction = XMVector3Normalize(closestPosition - position);
 	}
 	
 	// Update values
-	XMFLOAT3 current = this->pHead->GETPosition();
-	current.x +=
-	this->pHead->setPosition()
+	XMFLOAT3 formattedDirection;
+	XMStoreFloat3(&formattedDirection, direction);
+	this->simulatedMovement = XMFLOAT2(formattedDirection.x, formattedDirection.z);
+
+	// Push back the command!
+	this->commandQueue.push_back(new CommandControllerMove);
+
+	//XMFLOAT3 originalFormat;
+	//XMStoreFloat3(&originalFormat, current);
+	//this->pHead->setPosition(originalFormat);
+}
+
+void AIComponent::update()
+{
+	this->generateCommands();
+	this->execute();
 }
 
 void AIComponent::execute()
 {
+	for (auto &command : this->commandQueue) {
+		command->execute(*this->pHead);
+	}
+	this->commandQueue.clear();
+}
 
+void AIComponent::SETnormalizedVectorOfLeftStick(XMFLOAT2 simulatedMovement)
+{
+	this->simulatedMovement = simulatedMovement;
 }
 
 const size_t AIComponent::getID()

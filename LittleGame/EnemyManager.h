@@ -61,7 +61,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
 	*/
-	void initialize(GamePlayState& pGPS);
+	void initialize(GamePlayState& pGPS, std::vector<ActorObject*> players);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Spawns enemies to dynamicObjects according to the spawnInterval and waves

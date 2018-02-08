@@ -85,9 +85,12 @@ void GamePlayState::checkCollisions() {
 void GamePlayState::init() {
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera);
-	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
+
+	std::vector<ActorObject*> allPlayers;
+	allPlayers.push_back(player1);
+	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	for (auto &i : this->graphics) {
 		this->rio.addGraphics(i);
@@ -214,7 +217,7 @@ void GamePlayState::initPlayer()
 	/// BLOCK COMPONENT
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
-	/// KEYBOARD COMPONENT:
+	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
 	input = new KeyboardComponent(*actor);
 

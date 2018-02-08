@@ -69,10 +69,10 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos((float)(ARENAWIDTH*posScale), scale.y, (float)(ARENAHEIGHT / 2 * posScale));
-	XMFLOAT3 velocity(0, 0, 0);
+	float speed = 10;
+	XMFLOAT3 velocity(speed, speed, speed);
 	XMFLOAT4 enemyColor(10.0f, 10.0f, 10.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float speed = 5;
 	
 	// Object
 	enemy = new ActorObject(ID, speed, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
@@ -81,7 +81,7 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
 
 	// Physics Component
-	physics = new PhysicsComponent(*enemy);
+	physics = new PhysicsComponent(*enemy, 10);
 
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior, this->players);
@@ -91,9 +91,10 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	return enemy;
 }
 
-void EnemyManager::initialize(GamePlayState& pGPS)
+void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
 	this->pGPS = &pGPS;
+	this->players = players;
 }
 
 void EnemyManager::update()
