@@ -44,6 +44,12 @@
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="MouseInput.cpp" />
+    <ClCompile Include="EnemyObject.cpp">
+      <Filter>newshit</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyGhostObject.cpp">
+      <Filter>newshit\SubShit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -88,8 +94,22 @@
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="MouseInput.h" />
+    <ClInclude Include="EnemyObject.h">
+      <Filter>newshit</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyGhostObject.h">
+      <Filter>newshit\SubShit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="newshit">
+      <UniqueIdentifier>{1916f500-2507-4e58-9ea5-040ad0d07f1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="newshit\SubShit">
+      <UniqueIdentifier>{c2413d82-3e1e-40f2-816d-401dd4d5cb46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

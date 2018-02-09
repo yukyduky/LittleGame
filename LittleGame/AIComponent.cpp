@@ -87,7 +87,6 @@ void AIComponent::generateCommands()
 
 	// Push back the command!
 	this->commandQueue.push_back(new CommandControllerMove);
-
 }
 
 void AIComponent::update()
@@ -100,6 +99,7 @@ void AIComponent::execute()
 {
 	for (auto &command : this->commandQueue) {
 		command->execute(*this->pHead);
+		delete command;
 	}
 	this->commandQueue.clear();
 }

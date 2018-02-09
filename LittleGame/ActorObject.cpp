@@ -73,7 +73,6 @@ void ActorObject::update()
 	for (auto &i : this->components) {
 		i->update();
 	}
-	// this->decCD(); -- turned off while enemies are being implemented.
 }
 
 void ActorObject::move()

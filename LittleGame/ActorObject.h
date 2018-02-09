@@ -27,7 +27,7 @@ namespace ABILITIES {
 
 class ActorObject : public GameObject
 {
-private:
+protected:
 	InputComponent * pInput;
 	//Vector with all Spells that the player can cast
 	std::vector<Spell*> spells;
