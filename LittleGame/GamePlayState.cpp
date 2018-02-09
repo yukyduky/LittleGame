@@ -15,22 +15,27 @@
 #include "DamageSpell.h"
 #include "MobilitySpell.h"
 
+
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//                                 GAMEPLAY STATE          /
+///////////////////////////////////////////////////////////
+//////////////////////////////
+///////////////
+///////
+//
+
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                             |
+  |           PRIVATE           |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
 using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
 
-//void GamePlayState::updatePhysicsComponents()
-//{
-//	for (auto&& i : physicsListDynamic) {
-//		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
-//			i->updateBoundingArea(i->GETEntityPointer()->GETPosition());
-//		}
-//	}
-//}
-
 void GamePlayState::checkCollisions() {
 	//--------//
-	// LOOP 1 //   : Looping through each DYNAMIC physicsComponent
+	// LOOP 1 //   :	Looping through each DYNAMIC physicsComponent
 	//--------//
 	for (auto&& i : this->dynamicObjects) {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
@@ -39,7 +44,7 @@ void GamePlayState::checkCollisions() {
 		
 		if (i->getState() != OBJECTSTATE::TYPE::DEAD) {
 			//----------//
-			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
+			// LOOP 2.1 //   :	DYNAMIC <--> DYNAMIC Collision
 			//----------//
 			for (auto&& k : this->dynamicObjects) {
 				int kID = k->getID();
@@ -47,7 +52,13 @@ void GamePlayState::checkCollisions() {
 				{
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
-						if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
+						// Dynamic Object must be within the same part of the quad tree
+						// AND
+						// Collision between the objects must return true.
+						if (
+							this->quadTree.checkDynamicObject(i, k) &&
+							i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())
+							) {
 							// Call COLLISION-CLASS function
 							this->collisionHandler.executeCollision(
 								i,
@@ -61,18 +72,18 @@ void GamePlayState::checkCollisions() {
 				
 			}
 			//----------//
-			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
+			// LOOP 2.2 //   :	DYNAMIC <--> STATIC Collision
 			//----------//
-			for (int k = 0; k < this->staticPhysicsCount; k++) {
-				if (this->staticObjects[k]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			for (auto && k : this->quadTree.retrieveStaticList(i)) {
+				if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
-					if (i->GETphysicsComponent()->checkCollision(this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere())) {
+					if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
 						this->collisionHandler.executeCollision(
 							i,
-							this->staticObjects[k],
+							k,
 							&i->GETphysicsComponent()->GETBoundingSphere(),
-							&this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere()
+							&k->GETphysicsComponent()->GETBoundingSphere()
 						);
 					}
 				}
@@ -81,12 +92,30 @@ void GamePlayState::checkCollisions() {
 	}
 }
 
+//_________________________________________//
+//                                         //
+//             END OF PRIVATE              //
+//_________________________________________//
+/////////////////////////////////////////////
+
+
+
+
+
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                             |
+  |           PUBLIC            |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void GamePlayState::init() {
+	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
+	for (int i = 0; i < this->staticPhysicsCount; i++) {
+		this->quadTree.insertStaticObject(this->staticObjects[i]);
+	}
 
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
@@ -97,6 +126,9 @@ void GamePlayState::init() {
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
+	//this->enemyManager.startLevel1();
+
+	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1();
 }
 
@@ -116,6 +148,7 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->quadTree.cleanup();
 	this->staticObjects.clear();
 	this->dynamicObjects.clear();
 	this->graphics.clear();
@@ -136,6 +169,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		// Exit the application when 'X' is pressed
 		if (msg.message == WM_QUIT) {
 			gm->quit();
+		}
+		else if (msg.message == WM_MOUSEMOVE) {
+			// Needs overlook for multiplayer
+			this->player1->rotate(this->mousePicker->getWorldPosition());
 		}
 
 		TranslateMessage(&msg);
@@ -173,6 +210,9 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 	this->checkCollisions();
+
+	//fak ju shellow
+	this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -276,7 +316,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
+	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
 
 	
 	//Add proj to objectArrays
@@ -285,3 +325,16 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	return proj;
 }
+//_________________________________________//
+//                                         //
+//              END OF PUBLIC              //
+//_________________________________________//
+/////////////////////////////////////////////
+
+//
+//\\\\\
+//\\\\\\\\\\\\\
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//                                 GAMEPLAY STATE          \
+////////////////////////////////////////////////////////////

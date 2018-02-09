@@ -19,6 +19,9 @@
 #include "ArenaGlobals.h"
 #include "EnemyManager.h"
 #include "LevelManager.h"
+#include "QuadTree.h"
+
+#include "MouseInput.h"
 
 
 
@@ -56,6 +59,7 @@ private:
 	int ID = 0;
 	int arenaWidth;
 	int arenaDepth;
+	QuadTree quadTree;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
@@ -64,6 +68,7 @@ private:
 	//everything that will exist in this level
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
+	// Count below represents static objects that have collision (see 'checkCollisions()' function)
 	int staticPhysicsCount = 0;
 
 	//All objects that wants to be renederd
@@ -82,6 +87,9 @@ private:
 	//void updatePhysicsComponents();
 	
 	void checkCollisions();
+
+
+	MouseInput* mousePicker;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -139,6 +147,9 @@ public:
 
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+
+	MouseInput* GETMouseInput() { return this->mousePicker; }
+
 };
 
 #endif // !GAMEPLAYSTATE_H
