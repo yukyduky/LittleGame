@@ -30,15 +30,22 @@ enum class NAME {
 class Spell
 {
 public:
-	Spell(ActorObject* player);
+	Spell(ActorObject* player, NAME name);
 	~Spell();
 
 	// Returns false if spell in unavalible to cast
 	virtual bool castSpell() = 0;
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	virtual void upgrade(float modif) = 0;
+	//What the spell will do with the target
+	virtual void collision(GameObject* target, Projectile* proj) = 0;
+	virtual void update() = 0;
+
 	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
+	// Spawns a projectile infront of the player
+	void spawnProj(ProjProp props);
+
 
 	ActorObject* getPlayer() { return this->player; };
 	void setType(SPELLTYPE input) { this->type = input; };
@@ -57,6 +64,8 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	ActorObject * player;
+
+	NAME name;
 
 	double coolDown;
 	double timeSinceCast;

@@ -146,8 +146,9 @@
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
-    <ClInclude Include="DamageSpell.h" />
-    <ClInclude Include="EnemyGhostObject.h" />
+    <ClInclude Include="IncludeSpells.h" />
+    <ClInclude Include="SpBomb.h" />
+    <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="FireballComponent.h" />
@@ -175,7 +176,10 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="SpBuff.h" />
+    <ClInclude Include="SpDash.h" />
     <ClInclude Include="Spell.h" />
+    <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
@@ -191,6 +195,7 @@
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EnemyGhostObject.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="DamageSpell.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="LevelManager.cpp" />
@@ -215,7 +220,11 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="RectangleComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="SpBomb.cpp" />
+    <ClCompile Include="SpBuff.cpp" />
+    <ClCompile Include="SpDash.cpp" />
     <ClCompile Include="Spell.cpp" />
+    <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
