@@ -12,8 +12,7 @@
 #include "ArenaObject.h"
 #include "GameObject.h"
 
-#include "DamageSpell.h"
-#include "MobilitySpell.h"
+#include "IncludeSpells.h"
 
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -268,15 +267,15 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0 (Autoattack):
-	actor->addSpell(new DamageSpell(actor, NAME::AUTOATTACK));
+	actor->addSpell(new SpAutoAttack(actor, NAME::AUTOATTACK));
 	// 1:
-	actor->addSpell(new DamageSpell(actor, NAME::EXPLOSION));
+	actor->addSpell(new SpFire(actor, NAME::EXPLOSION));
 	// 2: 
-	actor->addSpell(new DamageSpell(actor, NAME::BOMB));
+	actor->addSpell(new SpBomb(actor, NAME::BOMB));
 	// 3:
-	actor->addSpell(new MobilitySpell(actor, NAME::DASH));
+	actor->addSpell(new SpDash(actor, NAME::DASH));
 	// 4:
-	actor->addSpell(new MobilitySpell(actor, NAME::SPEEDBUFF));
+	actor->addSpell(new SpBuff(actor, NAME::SPEEDBUFF));
 
 	actor->selectAbility1();
 

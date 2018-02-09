@@ -5,7 +5,7 @@
 #include "GameObject.h"
 #include "Locator.h"
 
-class DamageSpell;
+class Spell;
 
 class Projectile : public GameObject
 {
@@ -22,17 +22,17 @@ public:
 	float getSpeed() { return this->speed; }
 	void setDirection(XMFLOAT3 dir) { this->direction = dir; }
 	XMFLOAT3 getDirection() { return this->direction; }
-	void setSpell(DamageSpell* spell) { this->spell = spell; }
+	void setSpell(Spell* spell) { this->spell = spell; }
 	void setRange(int range) { this->range = range; }
 
-	DamageSpell* getSpell() ;
+	Spell* getSpell() ;
 private:
 	// traveldirection of the projectile
 	XMFLOAT3 direction;
 	// The speed of the projectile
 	float speed;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
-	DamageSpell* spell;
+	Spell* spell;
 	// Range of travel
 	int range;
 	int rangeCoutner;

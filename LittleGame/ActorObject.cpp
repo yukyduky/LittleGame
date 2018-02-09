@@ -4,8 +4,7 @@
 #include "ArenaGlobals.h"
 
 //Include spells
-#include "DamageSpell.h"
-#include "MobilitySpell.h"
+#include "Spell.h"
 
 #include <DirectXMath.h>
 
@@ -312,14 +311,7 @@ void ActorObject::decCD()
 	{
 		itteration->updateCD();
 	}
-	// Resets the player to the original movmentspeed, before the CD runs out
-	if (this->spells.at(size_t(NAME::SPEEDBUFF))->getState() == SPELLSTATE::COOLDOWN)
-	{
-		if (this->spells.at(size_t(NAME::SPEEDBUFF))->getTSC() > 1.5)
-		{
-			this->speed = 1;
-		}
-	}
+	
 }
 
 void ActorObject::addSpell(Spell * spell)
