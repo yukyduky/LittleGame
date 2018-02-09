@@ -27,7 +27,7 @@ struct Message
 {
 	OBJECTSTATE::TYPE state;
 	Message(OBJECTSTATE::TYPE state) : state(state) {}
-};
+};  
 
 
 

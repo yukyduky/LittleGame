@@ -117,6 +117,12 @@ void DamageSpell::collision(GameObject * target, Projectile* proj)
 		if (target->getType() == OBJECTTYPE::PLAYER)
 		{
 			//this->proj->setPosition(XMFLOAT3(200, 40, 200));
+			/* Notes by Daniel.
+			this->befall(*target);
+			befall() {
+				target->hp -= this->dmg;
+			}
+			*/
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
 		}
 
