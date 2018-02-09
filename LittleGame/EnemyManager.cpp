@@ -81,7 +81,7 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
 
 	// Physics Component
-	physics = new PhysicsComponent(*enemy, 10);
+	physics = new PhysicsComponent(*enemy, 20);
 
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior, this->players);
