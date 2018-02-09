@@ -1,6 +1,5 @@
 #include "Projectile.h"
 #include "Component.h"
-#include "DamageSpell.h"
 
 Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
 {
@@ -12,7 +11,7 @@ Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir,
 	this->type = objectType;
 	this->direction = dir;
 	this->speed = speed;
-	this->velocity = this->direction * this->speed;
+	this->velocity = XMFLOAT3(this->direction.x * this->speed, this->direction.y * this->speed, this->direction.z * this->speed);
 	this->rangeCoutner = 0;
 }
 
@@ -30,7 +29,7 @@ void Projectile::cleanUp()
 	}
 }
 
-DamageSpell * Projectile::getSpell()
+Spell * Projectile::getSpell()
 {
 	return this->spell;
 }

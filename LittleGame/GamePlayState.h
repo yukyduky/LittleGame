@@ -44,8 +44,14 @@ struct ProjProp {
 	float size;
 	XMFLOAT3 color;
 	float speed;
+	float range;
 
-	ProjProp(float s, XMFLOAT3 c, float spd) : size(s), color(c), speed(spd){}
+	ProjProp(float s, XMFLOAT3 c, float spd, float r) 
+		: size(s)
+		, color(c)
+		, speed(spd)
+		, range(r) 
+	{}
 	ProjProp() {}
 };
 
