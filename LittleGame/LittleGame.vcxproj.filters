@@ -111,9 +111,6 @@
     <ClInclude Include="EnemyObject.h">
       <Filter>newshit</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyGhostObject.h">
-      <Filter>newshit\SubShit</Filter>
-    </ClInclude>
     <ClInclude Include="SpAutoAttack.h">
       <Filter>Spells</Filter>
     </ClInclude>
