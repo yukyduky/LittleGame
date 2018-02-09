@@ -47,7 +47,10 @@
     <ClCompile Include="EnemyObject.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyGhostObject.cpp">
+    <ClCompile Include="ExplosionEnemyAttack.cpp">
+      <Filter>Enemy\SubEnemy\AttackComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyAttackComponent.h">
       <Filter>Enemy\SubEnemy</Filter>
     </ClCompile>
   </ItemGroup>
@@ -97,8 +100,8 @@
     <ClInclude Include="EnemyObject.h">
       <Filter>Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyGhostObject.h">
-      <Filter>Enemy\SubEnemy</Filter>
+    <ClInclude Include="ExplosionEnemyAttack.h">
+      <Filter>Enemy\SubEnemy\AttackComponents</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +113,9 @@
     </Filter>
     <Filter Include="Enemy\SubEnemy">
       <UniqueIdentifier>{c2413d82-3e1e-40f2-816d-401dd4d5cb46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemy\SubEnemy\AttackComponents">
+      <UniqueIdentifier>{3381ffbb-fd4b-4f4e-955c-6765bdf24bb1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
