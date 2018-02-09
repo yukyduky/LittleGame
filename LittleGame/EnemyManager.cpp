@@ -5,6 +5,8 @@
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
 #include "AIComponent.h"
+#include "EnemyAttackComponent.h"
+#include "ExplosionEnemyAttack.h"
 
 EnemyManager::EnemyManager()
 {
@@ -64,6 +66,7 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	BlockComponent* block;
 	InputComponent* input;
 	PhysicsComponent* physics;
+	EnemyAttackComponent* attack;
 
 	// Values
 	int ID = this->pGPS->newID();
@@ -85,6 +88,9 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior, this->players);
+
+	// Attack
+	attack = new ExplosionEnemyAttack(*enemy);
 
 	// Make the enemy inactive
 	enemy->setState(OBJECTSTATE::TYPE::DEAD);
