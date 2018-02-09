@@ -72,6 +72,10 @@ void ActorObject::update()
 	for (auto &i : this->components) {
 		i->update();
 	}
+	for (auto &i : this->spells) {
+		i->update();
+		i->updateCD();
+	}
 	// this->decCD(); -- turned off while enemies are being implemented.
 }
 

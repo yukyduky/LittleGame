@@ -77,7 +77,7 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 		}
 		else
 		{
-			target->setPosition(XMFLOAT3(400, 100, 200));
+			target->setPosition(XMFLOAT3(400, 40, 200));
 			this->damage = this->start;
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
 			this->active = false;
