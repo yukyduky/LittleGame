@@ -45,10 +45,10 @@
     <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="EnemyObject.cpp">
-      <Filter>newshit</Filter>
+      <Filter>Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemyGhostObject.cpp">
-      <Filter>newshit\SubShit</Filter>
+      <Filter>Enemy\SubEnemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,20 +95,20 @@
     <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="EnemyObject.h">
-      <Filter>newshit</Filter>
+      <Filter>Enemy</Filter>
     </ClInclude>
     <ClInclude Include="EnemyGhostObject.h">
-      <Filter>newshit\SubShit</Filter>
+      <Filter>Enemy\SubEnemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="newshit">
+    <Filter Include="Enemy">
       <UniqueIdentifier>{1916f500-2507-4e58-9ea5-040ad0d07f1e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="newshit\SubShit">
+    <Filter Include="Enemy\SubEnemy">
       <UniqueIdentifier>{c2413d82-3e1e-40f2-816d-401dd4d5cb46}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

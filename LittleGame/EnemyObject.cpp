@@ -14,10 +14,16 @@ void EnemyObject::update()
 
 			Locator::getGameTime()->getDeltaTime();
 
+			
+
+
 			break;
 		}
 		case OBJECTSTATE::TYPE::MOVING: {
 
+			for (auto &component : this->components) {
+				component->update();
+			}
 
 			break;
 		}
