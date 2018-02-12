@@ -244,7 +244,7 @@ void GamePlayState::initPlayer()
 	PhysicsComponent* physics;
 	int nextID = this->newID();
 
-	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 255.0f / 255.0f);
+	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 0.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
@@ -301,7 +301,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	//XMFLOAT3 position = pos;
-	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 255.0f);
+	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 0.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
