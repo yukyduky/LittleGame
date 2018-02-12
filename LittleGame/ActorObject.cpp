@@ -273,7 +273,6 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	this->switchSpell();
 	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[3];
 		
