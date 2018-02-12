@@ -59,13 +59,14 @@ private:
 
 	DirectX::XMFLOAT3 centerToCenterVector;
 	DirectX::XMFLOAT3 resultVector;
+	DirectX::XMFLOAT3 resultVector1;
 	float radiusDistanceVector;
 	float divisionFactor;
 
 	// calculateDistance variables
 	double distance;
 	double xDiff;
-	double yDiff;
+	double zDiff;
 	double minDiff;
 
 	float stepper = 2.0;
@@ -73,7 +74,8 @@ private:
 	int collisionID;
 
 	void createCollisionID();
-	void calculateDistance(float x1, float y1, float x2, float y2);
+	void calculateDistance(DirectX::XMFLOAT3 collidable1, DirectX::XMFLOAT3 collidable2);
+	/*void calculateDistance(float x1, float y1, float x2, float y2);*/
 
 	void collisionPlayerPlayer();
 	void collisionPlayerEnemy();

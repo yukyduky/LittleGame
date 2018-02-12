@@ -18,7 +18,7 @@ void LevelManager::createFloor(std::vector<std::vector<SQUARETYPE::TYPE>>& grid,
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2, 0, this->squareSize / 2);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
-	vColor color(72.0f / 255.0f, 118.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
+	vColor color(72.0f / 255.0f, 118.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
 	//Create all the squares representing the floor
 	for (int i = 0; i < grid.size(); i++)
 	{
@@ -50,7 +50,7 @@ void LevelManager::createNeonFloorGrid(std::vector<GameObject*>& staticObjects, 
 	int nrOfVerticalLines = this->arenaWidth / this->squareSize + 1;
 	int nrOfHorizontalLines = this->arenaDepth / this->squareSize + 1;
 
-	XMFLOAT4 color(255.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 255.0f / 255.0f);
+	XMFLOAT4 color(0.0f / 255.0f, 150.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	//Prepare matrices and variables
 	float rectWidth = 1.5f;
 	XMMATRIX worldM;
@@ -105,7 +105,7 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2.0f, this->wallHeight, this->squareSize / 2.0f);
 	XMMATRIX translationM;
 	XMMATRIX worldM;
-	XMFLOAT4 color(155.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
+	XMFLOAT4 color(155.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
 	XMFLOAT2 posIndex;
@@ -234,7 +234,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	XMFLOAT3 tempScale(1, 1, 1);						// TOBE DELETED
 	XMFLOAT3 tempRotation(0, 0, 0);
 	block = new BlockComponent(*this->pGPS, *object, color, tempScale, tempRotation);
-	bSphere = new PhysicsComponent(*object, this->squareSize / 2.0f);
+	bSphere = new PhysicsComponent(*object, this->squareSize * 2.0f);
 	XMFLOAT3 bSpherePos = pos;
 	bSpherePos.y = this->squareSize / 2.0f;
 	bSphere->updateBoundingArea(bSpherePos);

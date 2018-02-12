@@ -24,35 +24,38 @@ cbuffer Light : register (b1) {
 	PointLight Lights[MAX_NUM_LIGHTS];
 }
 
-void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse);
-float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse);
+void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
+float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 {
 	float3 pos_W, normal, diffuse;
+	float emission;
 	// position_S.xy is literally screen coords
 	float2 screenCoords = position_S.xy;
 
 	// Load all the data from the geo pass
-	loadGeoPassData(screenCoords, pos_W, normal, diffuse);
+	loadGeoPassData(screenCoords, pos_W, normal, diffuse, emission);
 
-	float4 finalColor = calcLight(pos_W, normal, diffuse);
+	float4 finalColor = calcLight(pos_W, normal, diffuse, emission);
 
 	return finalColor;
 }
 
-void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse)
+void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission)
 {
 	int3 texCoords = int3(screenCoords, 0.0f);
 
 	pos_W = texPosition.Load(texCoords).xyz;
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
+	emission = texDiffuse.Load(texCoords).w;
 }
 
-float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse)
+float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission)
 {
-	float3 pointLighting = float3(0.0f, 0.0f, 0.0f);
+	//float3 pointLighting = float3(0.0f, 0.0f, 0.0f);
+	float3 pointLighting = diffuse * emission;
 
 	for (int i = 0; i < nrOfLights; i++) {
 		// Vector from object to light

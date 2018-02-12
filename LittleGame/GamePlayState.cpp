@@ -12,8 +12,7 @@
 #include "ArenaObject.h"
 #include "GameObject.h"
 
-#include "DamageSpell.h"
-#include "MobilitySpell.h"
+#include "IncludeSpells.h"
 
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -170,10 +169,6 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
-		else if (msg.message == WM_MOUSEMOVE) {
-			// Needs overlook for multiplayer
-			this->player1->rotate(this->mousePicker->getWorldPosition());
-		}
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
@@ -212,7 +207,7 @@ void GamePlayState::update(GameManager * gm)
 	this->checkCollisions();
 
 	//fak ju shellow
-	this->player1->decCD();
+	//this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -245,7 +240,7 @@ void GamePlayState::initPlayer()
 	PhysicsComponent* physics;
 	int nextID = this->newID();
 
-	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 255.0f / 255.0f);
+	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 0.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
@@ -263,20 +258,22 @@ void GamePlayState::initPlayer()
 
 	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
+	//actor->setKeyBoardInput(false);
 	input = new KeyboardComponent(*actor);
+	actor->setKeyBoardInput(true);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0 (Autoattack):
-	actor->addSpell(new DamageSpell(actor, NAME::AUTOATTACK));
+	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
-	actor->addSpell(new DamageSpell(actor, NAME::EXPLOSION));
+	actor->addSpell(new SpFire(actor));
 	// 2: 
-	actor->addSpell(new DamageSpell(actor, NAME::BOMB));
+	actor->addSpell(new SpBomb(actor));
 	// 3:
-	actor->addSpell(new MobilitySpell(actor, NAME::DASH));
+	actor->addSpell(new SpDash(actor));
 	// 4:
-	actor->addSpell(new MobilitySpell(actor, NAME::SPEEDBUFF));
+	actor->addSpell(new SpBuff(actor));
 
 	actor->selectAbility1();
 
@@ -302,18 +299,9 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	//XMFLOAT3 position = pos;
-	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 255.0f);
+	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 0.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
-
-
-	//Add the block to the objects that will be rendered
-//	this->graphics.push_back(block);
-//	this->rio.addGraphics(block);
-
-	//Template of components that are beeing worked on by other users
-	//abiliComp = new FireballComponent(*proj, 1);
-	//proj->addComponent(abiliComp);
 
 	//Template for Physics
 	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);

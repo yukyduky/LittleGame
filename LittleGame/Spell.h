@@ -13,7 +13,7 @@
 */
 
 //Template for when glyphs become relevant
-enum class GLYPHTYPE {GLYPH1, GLYPH2, GLYPH3};
+enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
 // Type to not need to check dynamic_cast
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
@@ -30,20 +30,28 @@ enum class NAME {
 class Spell
 {
 public:
-	Spell(ActorObject* player);
+	Spell(ActorObject* player, NAME name);
 	~Spell();
 
 	// Returns false if spell in unavalible to cast
 	virtual bool castSpell() = 0;
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	virtual void upgrade(float modif) = 0;
+	//What the spell will do with the target
+	virtual void collision(GameObject* target, Projectile* proj) = 0;
+	virtual void update() = 0;
+
 	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
+	// Spawns a projectile infront of the player
+	void spawnProj(ProjProp props);
 
 	ActorObject* getPlayer() { return this->player; };
 	void setType(SPELLTYPE input) { this->type = input; };
 	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
+	GLYPHTYPE getGlyph() { return this->glyph; };
+	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(double input) { this->coolDown = input; };
@@ -57,6 +65,9 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	ActorObject * player;
+
+
+	NAME name;
 
 	double coolDown;
 	double timeSinceCast;
