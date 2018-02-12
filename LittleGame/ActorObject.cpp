@@ -15,6 +15,7 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->pGPS = pGPS;
 	this->pos = pos;
 	this->setState(OBJECTSTATE::TYPE::IDLE);
+	this->keyBoardInput = false;
 
 	this->type = objectType;
 	this->velocity = velocity;	
@@ -47,6 +48,11 @@ void ActorObject::setSpeed(float speed)
 	this->speed = speed;
 }
 
+void ActorObject::setKeyBoardInput(bool input)
+{
+	this->keyBoardInput = input;
+}
+
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
@@ -76,7 +82,6 @@ void ActorObject::update()
 		i->update();
 		i->updateCD();
 	}
-	// this->decCD(); -- turned off while enemies are being implemented.
 }
 
 void ActorObject::move()

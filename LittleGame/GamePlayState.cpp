@@ -169,10 +169,6 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
-		else if (msg.message == WM_MOUSEMOVE) {
-			// Needs overlook for multiplayer
-			this->player1->rotate(this->mousePicker->getWorldPosition());
-		}
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
@@ -262,7 +258,9 @@ void GamePlayState::initPlayer()
 
 	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
+	//actor->setKeyBoardInput(false);
 	input = new KeyboardComponent(*actor);
+	actor->setKeyBoardInput(true);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:

@@ -1,5 +1,6 @@
 #include "KeyboardComponent.h"
 #include "GameObject.h"
+#include "GamePlayState.h"
 #include "Locator.h"
 #include "Commands.h"
 
@@ -16,6 +17,14 @@ KeyboardComponent::KeyboardComponent(GameObject& obj) : ID(obj.getID())
 	this->cursorPos.y = p.y;
 
 	this->init();
+}
+
+void KeyboardComponent::update()
+{
+	this->generateCommands();
+	this->execute();
+
+	this->pHead->rotate(this->pHead->getPGPS()->GETMouseInput()->getWorldPosition());
 }
 
 const size_t KeyboardComponent::getID()

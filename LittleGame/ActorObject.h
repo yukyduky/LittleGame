@@ -45,6 +45,8 @@ private:
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
 
+	bool keyBoardInput;
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
@@ -55,6 +57,7 @@ public:
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
 	virtual void setSpeed(float speed);
+	virtual void setKeyBoardInput(bool input);
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
