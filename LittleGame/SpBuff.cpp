@@ -1,7 +1,7 @@
 
 #include "SpBuff.h"
 
-SpBuff::SpBuff(ActorObject* player, NAME name) : Spell(player, name)
+SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::SPEEDBUFF)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);

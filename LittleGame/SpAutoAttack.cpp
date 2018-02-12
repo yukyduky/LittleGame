@@ -1,7 +1,7 @@
 
 #include "SpAutoAttack.h"
 
-SpAutoAttack::SpAutoAttack(ActorObject* player, NAME name) : Spell(player, name)
+SpAutoAttack::SpAutoAttack(ActorObject* player) : Spell(player, NAME::AUTOATTACK)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);

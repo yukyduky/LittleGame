@@ -267,15 +267,15 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0 (Autoattack):
-	actor->addSpell(new SpAutoAttack(actor, NAME::AUTOATTACK));
+	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
-	actor->addSpell(new SpFire(actor, NAME::EXPLOSION));
+	actor->addSpell(new SpFire(actor));
 	// 2: 
-	actor->addSpell(new SpBomb(actor, NAME::BOMB));
+	actor->addSpell(new SpBomb(actor));
 	// 3:
-	actor->addSpell(new SpDash(actor, NAME::DASH));
+	actor->addSpell(new SpDash(actor));
 	// 4:
-	actor->addSpell(new SpBuff(actor, NAME::SPEEDBUFF));
+	actor->addSpell(new SpBuff(actor));
 
 	actor->selectAbility1();
 
@@ -304,15 +304,6 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
-
-
-	//Add the block to the objects that will be rendered
-//	this->graphics.push_back(block);
-//	this->rio.addGraphics(block);
-
-	//Template of components that are beeing worked on by other users
-	//abiliComp = new FireballComponent(*proj, 1);
-	//proj->addComponent(abiliComp);
 
 	//Template for Physics
 	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);

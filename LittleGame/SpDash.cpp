@@ -1,7 +1,7 @@
 
 #include "SpDash.h"
 
-SpDash::SpDash(ActorObject* player, NAME name) : Spell(player, name)
+SpDash::SpDash(ActorObject* player) : Spell(player, NAME::DASH)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);

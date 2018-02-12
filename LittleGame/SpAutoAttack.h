@@ -11,7 +11,7 @@ class GamePlayState;
 class SpAutoAttack : public Spell
 {
 public:
-	SpAutoAttack(ActorObject* player, NAME name);
+	SpAutoAttack(ActorObject* player);
 	~SpAutoAttack();
 
 	bool castSpell();
