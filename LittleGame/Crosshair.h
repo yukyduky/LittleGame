@@ -29,7 +29,7 @@ Crosshair::Crosshair(ActorObject* player, const size_t ID, XMFLOAT3 color) : Gam
 	this->color = color;
 	this->type = OBJECTTYPE::DOODAD;
 
-	this->radius = 50;
+	this->radius = 60;
 }
 
 Crosshair::~Crosshair()
