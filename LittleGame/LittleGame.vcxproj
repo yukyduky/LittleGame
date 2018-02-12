@@ -149,6 +149,7 @@
     <ClInclude Include="DamageSpell.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="FireballComponent.h" />
+    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="DamageSpell.cpp" />
+    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="MobilitySpell.cpp" />

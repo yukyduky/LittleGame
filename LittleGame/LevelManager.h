@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
+#include "FloorFallPatterns.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
@@ -23,33 +24,48 @@ namespace WALLTYPE {
 	enum TYPE { VERTICAL, HORIZONTAL, SIZE };
 }
 
+struct tileData {
+	OBJECTSTATE::TYPE state;
+	SQUARETYPE::TYPE type;
+	GameObject* ptr;
+
+	tileData() {};
+
+	tileData(OBJECTSTATE::TYPE state, SQUARETYPE::TYPE type) {
+		this->state = state;
+		this->type = type;
+	}
+};
+
 
 class LevelManager
 {
 private:
 	GamePlayState * pGPS;
+	FFPattern ffp;
 
 	int arenaWidth;
 	int arenaDepth;
 	int squareSize;
 	int wallHeight;
 	int tempID;
+	int nrOfWalls;
 	
 
-	void createFloor(std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	void createFloor(std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createNeonFloorGrid(std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
-	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	int nextID();
-
-
+	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+	void setFallPattern(FloorFallData& pattern);
 	//void randomize();
 
 public:
-	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
-
-
+	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects, std::vector<GraphicsComponent*>& graphics);
+	int changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects);
+	int changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects);
 };
 
 

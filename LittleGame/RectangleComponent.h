@@ -17,7 +17,10 @@ private:
 	size_t numIndices;
 	vColor color;
 	GameObject* head;
-
+	XMFLOAT3 points[4];
+	XMFLOAT3 normal;
+	double counter;
+	double transitionTime;
 	/*--------<INFORMATION>--------
 	1. Creates a rectangle with points ranging from -1.0 to 1.0 in x and z dimensions.
 	2. All vertices is in modelspace with origin in the center of the rectangle.
@@ -61,7 +64,8 @@ public:
 	1. Returns the color of the rectangle.
 	*/
 	vColor& GETcolor();
-	virtual bool checkIfDead();
+	virtual OBJECTSTATE::TYPE GETstate();
+	void updateColor(vColor newColor);
 	
 };
 

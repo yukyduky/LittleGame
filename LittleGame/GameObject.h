@@ -8,7 +8,7 @@
 
 
 namespace OBJECTSTATE {
-	enum class TYPE { IDLE, MOVING, DEAD, FROZEN, STOP };
+	enum class TYPE { IDLE, MOVING, DEAD, FROZEN, STOP, FALLING, TFALLING, INVISIBLE, RECOVER };
 }
 namespace OBJECTTYPE {
 	enum TYPE {

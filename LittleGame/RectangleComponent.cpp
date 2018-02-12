@@ -25,6 +25,14 @@ void RectangleComponent::createVertices(const float r, const float g, const floa
 	p3 = (1.0, 0.0, -1.0)
 	*/
 
+	this->points[0] = XMFLOAT3(-1.0f, 0.0f, 1.0f);
+	this->points[1] = XMFLOAT3(1.0f, 0.0f, 1.0f);
+	this->points[2] = XMFLOAT3(-1.0f, 0.0f, -1.0f);
+	this->points[3] = XMFLOAT3(1.0f, 0.0f, -1.0f);
+
+	this->normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+
+
 	std::array<PrimitiveVertexData, 4> vertexData;
 
 	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
@@ -69,6 +77,8 @@ RectangleComponent::RectangleComponent(GameObject& obj, const float r, const flo
 	this->color.g = g;
 	this->color.b = b;
 	this->color.a = a;
+	this->counter = 0.0f;
+	this->transitionTime = 5.0f;
 }
 
 RectangleComponent::~RectangleComponent()
@@ -86,7 +96,38 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 
 void RectangleComponent::update()
 {
+	OBJECTSTATE::TYPE state = this->head->getState();
+	double dt = Locator::getGameTime()->getDeltaTime();
 
+	switch (state)	
+	{
+	case OBJECTSTATE::TYPE::TFALLING:
+		if (dt < 1.0) {
+			this->counter += dt;
+			if (this->counter < this->transitionTime) {
+				vColor finalColor(0.0f, 0.0f, 0.0f, 1.0f);
+				vColor aCol = this->color;
+				vColor bCol(1.0f, 0.0f, 0.0f, 1.0f);
+
+				aCol.r = aCol.r - (aCol.r / this->transitionTime) * counter;
+				aCol.g = aCol.g - (aCol.g / this->transitionTime) * counter;
+				aCol.b = aCol.b - (aCol.b / this->transitionTime) * counter;
+				bCol.r = (bCol.r / this->transitionTime) * counter;
+				finalColor.r = aCol.r + bCol.r;
+				finalColor.g = aCol.g + bCol.g;
+				finalColor.b = aCol.b + bCol.b;
+
+				this->updateColor(finalColor);
+			}
+			else {
+				this->updateColor(this->color);
+				this->head->setState(OBJECTSTATE::TYPE::FALLING);
+			}
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 void RectangleComponent::cleanUp()
@@ -130,14 +171,23 @@ vColor& RectangleComponent::GETcolor()
 	return this->color;
 }
 
-bool RectangleComponent::checkIfDead()
+OBJECTSTATE::TYPE RectangleComponent::GETstate()
 {
-	bool returnValue = false;
-	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
-	{
-		returnValue = true;
-	}
-	return returnValue;
+	return this->head->getState();
+}
+
+void RectangleComponent::updateColor(vColor newColor)
+{
+	std::array<PrimitiveVertexData, 4> vertexData;
+
+	vertexData[0] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normal.x, this->normal.y, this->normal.z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[1] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normal.x, this->normal.y, this->normal.z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[2] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normal.x, this->normal.y, this->normal.z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[3] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normal.x, this->normal.y, this->normal.z, newColor.r, newColor.g, newColor.b, newColor.a);
+
+	this->gVertexBuffer->Release();
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
 }
 
 /*_____________________________

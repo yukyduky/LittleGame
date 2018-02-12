@@ -43,6 +43,7 @@
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
+    <ClCompile Include="FloorFallPatterns.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -86,6 +87,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
+    <ClInclude Include="FloorFallPatterns.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

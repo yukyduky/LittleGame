@@ -7,12 +7,12 @@
 #include <array>
 #include "Commands.h"
 #include "RenderInputOrganizer.h"
-#include "GraphicsComponent.h"
-#include "GameObject.h"
+//#include "GraphicsComponent.h"
+//#include "GameObject.h"
 #include "ActorObject.h"
 #include "Projectile.h"
 #include "Camera.h"
-#include "PhysicsComponent.h"
+//#include "PhysicsComponent.h"
 #include "CollisionHandler.h"
 #include "FireballComponent.h"
 #include <list>
@@ -21,18 +21,6 @@
 #include "LevelManager.h"
 
 
-
-/*
-//Defines what a specific space contains
-namespace SQUARETYPE {
-	enum TYPE { EMPTY, WALL, SPAWN, SIZE };
-}
-
-//Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
-namespace WALLTYPE {
-	enum TYPE {VERTICAL, HORIZONTAL, SIZE};
-}
-*/
 class Command;
 class InputComponent;
 
@@ -60,11 +48,16 @@ private:
 	LevelManager lm;
 	Camera camera;
 	RenderInputOrganizer rio;
-	std::vector<std::vector<SQUARETYPE::TYPE>> grid;
+	std::vector<std::vector<tileData>> grid;
 	//everything that will exist in this level
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
+	std::vector<GameObject*> noCollisionDynamicObjects;
 	int staticPhysicsCount = 0;
+	
+	//Variables for falling floor
+	FloorFallData fallData;
+	double counter = 0;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;

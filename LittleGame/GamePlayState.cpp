@@ -87,7 +87,7 @@ void GamePlayState::init() {
 	this->rio.initialize(this->camera, this->pointLights);
 	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
@@ -113,8 +113,13 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	for (auto &iterator : this->noCollisionDynamicObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
 	this->staticObjects.clear();
 	this->dynamicObjects.clear();
+	this->noCollisionDynamicObjects.clear();
 	this->graphics.clear();
 }
 
@@ -143,11 +148,34 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	this->counter += Locator::getGameTime()->getDeltaTime();
+	if (this->counter > this->fallData.time && this->fallData.pattern.size() > 0) {
+		Index index(this->fallData.pattern[0].x, this->fallData.pattern[0].y);
+		this->fallData.pattern.erase(this->fallData.pattern.begin());
+		this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+		this->counter = 0;
+	}
+
 	int ID;
 
 	//this->enemyManager.update();
-
-
+	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
+		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			noCollisionDynamicObjects[i]->update();
+		}
+		else {
+			ID = this->noCollisionDynamicObjects[i]->getID();
+			for (int j = 0; j < this->graphics.size(); j++) {
+				if (this->graphics[j]->getID() == ID) {
+					this->graphics.erase(this->graphics.begin() + j);
+					break;
+				}
+			}
+			this->noCollisionDynamicObjects[i]->cleanUp();
+			delete this->noCollisionDynamicObjects[i];
+			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
+		}
+	}
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {
 		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			this->dynamicObjects[i]->update();
@@ -158,9 +186,7 @@ void GamePlayState::update(GameManager * gm)
 			for (int j = this->staticPhysicsCount; j < this->graphics.size(); j++) {
 				if (this->graphics[j]->getID() == ID) {
 					this->graphics.erase(this->graphics.begin() + j);
-				}
-				else {
-
+					break;
 				}
 			}
 			this->dynamicObjects[i]->cleanUp();

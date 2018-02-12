@@ -9,7 +9,8 @@
 class ArenaObject : public GameObject
 {
 private:
-
+	double counter;
+	double transitionTime;
 
 public:
 	ArenaObject(const size_t ID);
