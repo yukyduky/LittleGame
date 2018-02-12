@@ -21,7 +21,7 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 3;
+	this->spawnInterval = 0.1;
 	this->currentWaveCount = 3;
 	this->currentWaveSize = 2;
 	int testScale = 1;
