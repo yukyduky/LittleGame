@@ -12,25 +12,29 @@
 #include "ArenaObject.h"
 #include "GameObject.h"
 
-#include "DamageSpell.h"
-#include "MobilitySpell.h"
+#include "IncludeSpells.h"
+
+
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//                                 GAMEPLAY STATE          /
+///////////////////////////////////////////////////////////
+//////////////////////////////
+///////////////
+///////
+//
+
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                             |
+  |           PRIVATE           |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 using namespace DirectX::SimpleMath;
 
 GamePlayState GamePlayState::sGamePlayState;
 
-//void GamePlayState::updatePhysicsComponents()
-//{
-//	for (auto&& i : physicsListDynamic) {
-//		if (i->GETEntityPointer()->getState() != OBJECTSTATE::DEAD) {
-//			i->updateBoundingArea(i->GETEntityPointer()->GETPosition());
-//		}
-//	}
-//}
-
 void GamePlayState::checkCollisions() {
 	//--------//
-	// LOOP 1 //   : Looping through each DYNAMIC physicsComponent
+	// LOOP 1 //   :	Looping through each DYNAMIC physicsComponent
 	//--------//
 	for (auto&& i : this->dynamicObjects) {
 		// Comparing to all other DYNAMIC & STATIC physComponents.
@@ -39,7 +43,7 @@ void GamePlayState::checkCollisions() {
 		
 		if (i->getState() != OBJECTSTATE::TYPE::DEAD) {
 			//----------//
-			// LOOP 2.1 //   :  DYNAMIC <--> DYNAMIC Collision
+			// LOOP 2.1 //   :	DYNAMIC <--> DYNAMIC Collision
 			//----------//
 			for (auto&& k : this->dynamicObjects) {
 				int kID = k->getID();
@@ -47,7 +51,13 @@ void GamePlayState::checkCollisions() {
 				{
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
-						if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
+						// Dynamic Object must be within the same part of the quad tree
+						// AND
+						// Collision between the objects must return true.
+						if (
+							this->quadTree.checkDynamicObject(i, k) &&
+							i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())
+							) {
 							// Call COLLISION-CLASS function
 							this->collisionHandler.executeCollision(
 								i,
@@ -61,18 +71,18 @@ void GamePlayState::checkCollisions() {
 				
 			}
 			//----------//
-			// LOOP 2.2 //   :  DYNAMIC <--> STATIC Collision
+			// LOOP 2.2 //   :	DYNAMIC <--> STATIC Collision
 			//----------//
-			for (int k = 0; k < this->staticPhysicsCount; k++) {
-				if (this->staticObjects[k]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			for (auto && k : this->quadTree.retrieveStaticList(i)) {
+				if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
-					if (i->GETphysicsComponent()->checkCollision(this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere())) {
+					if (i->GETphysicsComponent()->checkCollision(k->GETphysicsComponent()->GETBoundingSphere())) {
 						// Call COLLISION-CLASS function
 						this->collisionHandler.executeCollision(
 							i,
-							this->staticObjects[k],
+							k,
 							&i->GETphysicsComponent()->GETBoundingSphere(),
-							&this->staticObjects[k]->GETphysicsComponent()->GETBoundingSphere()
+							&k->GETphysicsComponent()->GETBoundingSphere()
 						);
 					}
 				}
@@ -81,13 +91,35 @@ void GamePlayState::checkCollisions() {
 	}
 }
 
+//_________________________________________//
+//                                         //
+//             END OF PRIVATE              //
+//_________________________________________//
+/////////////////////////////////////////////
+
+
+
+
+
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                             |
+  |           PUBLIC            |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void GamePlayState::init() {
+	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera, this->pointLights);
-	this->enemyManager.initialize(sGamePlayState);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
+	for (int i = 0; i < this->staticPhysicsCount; i++) {
+		this->quadTree.insertStaticObject(this->staticObjects[i]);
+	}
+	
+
+	std::vector<ActorObject*> allPlayers;
+	allPlayers.push_back(player1);
+	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
@@ -95,6 +127,9 @@ void GamePlayState::init() {
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	//this->enemyManager.startLevel1();
+
+	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), this->camera.GETfacingDir());
+	this->enemyManager.startLevel1();
 }
 
 void GamePlayState::cleanUp()
@@ -117,6 +152,7 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->quadTree.cleanup();
 	this->staticObjects.clear();
 	this->dynamicObjects.clear();
 	this->noCollisionDynamicObjects.clear();
@@ -138,6 +174,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		// Exit the application when 'X' is pressed
 		if (msg.message == WM_QUIT) {
 			gm->quit();
+		}
+		else if (msg.message == WM_MOUSEMOVE) {
+			// Needs overlook for multiplayer
+			this->player1->rotate(this->mousePicker->getWorldPosition());
 		}
 
 		TranslateMessage(&msg);
@@ -176,6 +216,9 @@ void GamePlayState::update(GameManager * gm)
 			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
 		}
 	}
+	this->enemyManager.update();
+
+
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {
 		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			this->dynamicObjects[i]->update();
@@ -196,6 +239,9 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 	this->checkCollisions();
+
+	//fak ju shellow
+	//this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -228,7 +274,7 @@ void GamePlayState::initPlayer()
 	PhysicsComponent* physics;
 	int nextID = this->newID();
 
-	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 255.0f / 255.0f);
+	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 0.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
@@ -244,22 +290,22 @@ void GamePlayState::initPlayer()
 	/// BLOCK COMPONENT
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
-	/// KEYBOARD COMPONENT:
+	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
 	input = new KeyboardComponent(*actor);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0 (Autoattack):
-	actor->addSpell(new DamageSpell(actor, NAME::AUTOATTACK));
+	actor->addSpell(new SpAutoAttack(actor, NAME::AUTOATTACK));
 	// 1:
-	actor->addSpell(new DamageSpell(actor, NAME::EXPLOSION));
+	actor->addSpell(new SpFire(actor, NAME::EXPLOSION));
 	// 2: 
-	actor->addSpell(new DamageSpell(actor, NAME::BOMB));
+	actor->addSpell(new SpBomb(actor, NAME::BOMB));
 	// 3:
-	actor->addSpell(new MobilitySpell(actor, NAME::DASH));
+	actor->addSpell(new SpDash(actor, NAME::DASH));
 	// 4:
-	actor->addSpell(new MobilitySpell(actor, NAME::SPEEDBUFF));
+	actor->addSpell(new SpBuff(actor, NAME::SPEEDBUFF));
 
 	actor->selectAbility1();
 
@@ -285,7 +331,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	//XMFLOAT3 position = pos;
-	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 255.0f);
+	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 0.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
@@ -299,7 +345,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//proj->addComponent(abiliComp);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, 20.0f);
+	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
 
 	
 	//Add proj to objectArrays
@@ -308,3 +354,16 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	return proj;
 }
+//_________________________________________//
+//                                         //
+//              END OF PUBLIC              //
+//_________________________________________//
+/////////////////////////////////////////////
+
+//
+//\\\\\
+//\\\\\\\\\\\\\
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//                                 GAMEPLAY STATE          \
+////////////////////////////////////////////////////////////

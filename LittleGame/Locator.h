@@ -13,7 +13,6 @@ class Locator
 private:
 	static IGameTime* sGT;
 	static ID3D* sID3D;
-
 	static IAudioManager* sAM;
 
 public:

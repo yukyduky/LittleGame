@@ -11,18 +11,20 @@ EnemyManager::EnemyManager()
 	this->pGPS = nullptr;
 }
 
-EnemyManager::EnemyManager(GamePlayState& pGPS)
+EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
 	this->pGPS = &pGPS;
+	this->players = players; 
 }
 
 void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 5;
+	this->spawnInterval = 3;
 	this->currentWaveCount = 3;
 	this->currentWaveSize = 2;
+	int testScale = 1;
 	Wave* currentWave;
 
 	// Per wave
@@ -32,8 +34,9 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, 0.1*(i+j));
+			ActorObject* enemy = this->createEnemy(0.1*(testScale), ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
+			testScale++;
 		}
 
 		// Attach the currentWave to our waves
@@ -55,7 +58,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, float posScale)
+ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	ActorObject* enemy;
 	BlockComponent* block;
@@ -66,10 +69,10 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos((float)(ARENAWIDTH*posScale), scale.y, (float)(ARENAHEIGHT / 2 * posScale));
-	XMFLOAT3 velocity(0, 0, 0);
-	XMFLOAT4 enemyColor(10.0f, 10.0f, 10.0f, 255.0f);
+	float speed = 80;
+	XMFLOAT3 velocity(speed, speed, speed);
+	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float speed = 5;
 	
 	// Object
 	enemy = new ActorObject(ID, speed, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
@@ -78,18 +81,20 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
 
 	// Physics Component
-	physics = new PhysicsComponent(*enemy);
+	physics = new PhysicsComponent(*enemy, 10);
 
 	// Input Component
-	input = new AIComponent(*enemy, aiBehavior);
+	input = new AIComponent(*enemy, aiBehavior, this->players);
 
+	// Make the enemy inactive
 	enemy->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemy;
 }
 
-void EnemyManager::initialize(GamePlayState& pGPS)
+void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
 	this->pGPS = &pGPS;
+	this->players = players;
 }
 
 void EnemyManager::update()

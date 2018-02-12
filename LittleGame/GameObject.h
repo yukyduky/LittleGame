@@ -8,7 +8,7 @@
 
 
 namespace OBJECTSTATE {
-	enum class TYPE { IDLE, MOVING, DEAD, FROZEN, STOP, FALLING, TFALLING, INVISIBLE, RECOVER };
+	enum class TYPE { IDLE, MOVING, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, INVISIBLE, RECOVER };
 }
 namespace OBJECTTYPE {
 	enum TYPE {
@@ -27,7 +27,7 @@ struct Message
 {
 	OBJECTSTATE::TYPE state;
 	Message(OBJECTSTATE::TYPE state) : state(state) {}
-};
+};  
 
 
 

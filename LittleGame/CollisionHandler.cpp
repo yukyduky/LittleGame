@@ -1,5 +1,5 @@
 #include "CollisionHandler.h"
-#include "DamageSpell.h"
+#include "Spell.h"
 
 
 #include <cassert>
@@ -288,7 +288,7 @@ void CollisionHandler::collisionPlayerProjectile() {
 	}
 
 	Projectile* proj = dynamic_cast<Projectile*>(this->collidable2);
-	DamageSpell* spell = proj->getSpell();
+	Spell* spell = proj->getSpell();
 	spell->collision(this->collidable1, proj);
 	
 }

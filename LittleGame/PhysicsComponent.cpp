@@ -29,7 +29,7 @@
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
-	this->entityPointer = &obj;
+	this->pHead = &obj;
 	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
 	this->selfBoundingSphere.Center = obj.GETPosition();
@@ -37,7 +37,7 @@ PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
 }
 
 PhysicsComponent::PhysicsComponent(GameObject& obj, float boundingSphereRadius) : ID(obj.getID()) {
-	this->entityPointer = &obj;
+	this->pHead = &obj;
 	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
 
@@ -70,8 +70,8 @@ void PhysicsComponent::updateBoundingArea(DirectX::XMFLOAT3 centerPos, float rad
 	this->selfBoundingSphere.Radius = radius;
 }
 
-GameObject* PhysicsComponent::GETEntityPointer() {
-	return this->entityPointer;
+GameObject* PhysicsComponent::GETpHead() {
+	return this->pHead;
 }
 
 DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() {
@@ -88,7 +88,7 @@ void PhysicsComponent::receive(GameObject & obj, Message msg) {
 
 void PhysicsComponent::update()
 {
-	this->updateBoundingArea(this->entityPointer->GETPosition());
+	this->updateBoundingArea(this->pHead->GETPosition());
 }
 
 void PhysicsComponent::cleanUp() {

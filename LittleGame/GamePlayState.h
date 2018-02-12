@@ -19,6 +19,9 @@
 #include "ArenaGlobals.h"
 #include "EnemyManager.h"
 #include "LevelManager.h"
+#include "QuadTree.h"
+
+#include "MouseInput.h"
 
 
 class Command;
@@ -29,8 +32,14 @@ struct ProjProp {
 	float size;
 	XMFLOAT3 color;
 	float speed;
+	float range;
 
-	ProjProp(float s, XMFLOAT3 c, float spd) : size(s), color(c), speed(spd){}
+	ProjProp(float s, XMFLOAT3 c, float spd, float r) 
+		: size(s)
+		, color(c)
+		, speed(spd)
+		, range(r) 
+	{}
 	ProjProp() {}
 };
 
@@ -44,6 +53,7 @@ private:
 	int ID = 0;
 	int arenaWidth;
 	int arenaDepth;
+	QuadTree quadTree;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
@@ -52,6 +62,7 @@ private:
 	//everything that will exist in this level
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
+	// Count below represents static objects that have collision (see 'checkCollisions()' function)
 	std::vector<GameObject*> noCollisionDynamicObjects;
 	int staticPhysicsCount = 0;
 	
@@ -75,6 +86,9 @@ private:
 	//void updatePhysicsComponents();
 	
 	void checkCollisions();
+
+
+	MouseInput* mousePicker;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -132,6 +146,9 @@ public:
 
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+
+	MouseInput* GETMouseInput() { return this->mousePicker; }
+
 };
 
 #endif // !GAMEPLAYSTATE_H

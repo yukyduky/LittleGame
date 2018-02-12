@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include "D3D.h"
 #include "Component.h"
+#include "QuadTree.h"
 #include <DirectXCollision.h>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
@@ -16,10 +17,9 @@
 class PhysicsComponent : public Component
 {
 private:
-	GameObject* entityPointer;
+	GameObject* pHead;
 	DirectX::BoundingSphere selfBoundingSphere;
 	//DirectX::BoundingBox selfBoundingBox;
-	int quadTreeIndex;
 	const size_t ID;
 
 public:
@@ -34,7 +34,7 @@ public:
 	void updateBoundingArea(float radius);
 	void updateBoundingArea(DirectX::XMFLOAT3 centerPos, float radius);
 
-	GameObject*				GETEntityPointer();
+	GameObject*				GETpHead();
 	DirectX::BoundingSphere	GETBoundingSphere();
 
 	virtual const size_t getID();
