@@ -69,7 +69,8 @@ void LineComponent::update()
 
 void LineComponent::cleanUp()
 {
-
+	this->gVertexBuffer->Release();
+	this->gIndexBuffer->Release();
 }
 
 const size_t LineComponent::getID()
@@ -105,6 +106,16 @@ size_t& LineComponent::GETnumIndices()
 XMMATRIX& LineComponent::getWorld()
 {
 	return this->head->getWorld();
+}
+
+bool LineComponent::checkIfDead()
+{
+	bool returnValue = false;
+	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
+	{
+		returnValue = true;
+	}
+	return returnValue;
 }
 
 /*_____________________________

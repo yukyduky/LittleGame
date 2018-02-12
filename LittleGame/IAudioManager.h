@@ -56,6 +56,7 @@ public:
 	virtual void adjustEffects(size_t volume) = 0;
 
 	virtual void setRepeatMusic(bool repeat) = 0;
+	virtual void cleanUp() = 0;
 };
 
 #endif // !IAUDIOMANAGER_H

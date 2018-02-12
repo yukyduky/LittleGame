@@ -5,6 +5,7 @@
 
 
 
+
 ControllerComponent::ControllerComponent(GameObject& obj, size_t controllerID)
 	: controllerID(obj.getID())
 {
@@ -16,6 +17,12 @@ ControllerComponent::ControllerComponent(GameObject& obj, size_t controllerID)
 	XInputGetState(this->controllerID, &this->currentState);
 
 	this->init();
+}
+
+void ControllerComponent::update()
+{
+	this->generateCommands();
+	this->execute();
 }
 
 float ControllerComponent::checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE state)

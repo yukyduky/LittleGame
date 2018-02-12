@@ -8,6 +8,7 @@
 #include <Windows.h>
 
 struct PrimitiveVertexData;
+class GamePlayState;
 
 class BlockComponent : public GraphicsComponent
 {
@@ -28,10 +29,10 @@ private:
 	3. Creates normals for the vertices
 	4. Creates indices for the indexBuffer.
 	*/
-	void createVertices(float r, float g, float b, float a);
+	void createVertices(XMFLOAT4 color);
 	
 public:
-	BlockComponent(GameObject& obj, float r, float g, float b, float a);
+	BlockComponent(GamePlayState& pGPS, GameObject& obj, XMFLOAT4 color, XMFLOAT3 scale, XMFLOAT3 rotation);
 	~BlockComponent();
 
 
@@ -53,6 +54,8 @@ public:
 	*/
 	virtual const size_t getID();
 	virtual void cleanUp();
+	virtual bool checkIfDead();
+	
 };
 
 

@@ -67,6 +67,8 @@ public:
 	*/
 	void display(State* state);
 
+	void setupSecondRenderPass();
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the 'isRunning'(obj) boolean, to see if the game is currently running.
 	*/

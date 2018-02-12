@@ -29,21 +29,24 @@
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
-	this->selfBoundingSphere.Center = obj.getPosition();
+	this->pHead = &obj;
+	obj.SETphysicsComponent(this);
+	obj.addComponent(this);
+	this->selfBoundingSphere.Center = obj.GETPosition();
 	this->selfBoundingSphere.Radius = 1.0f;
 }
 
 PhysicsComponent::PhysicsComponent(GameObject& obj, float boundingSphereRadius) : ID(obj.getID()) {
-	this->selfBoundingSphere.Center = obj.getPosition();
+	this->pHead = &obj;
+	obj.SETphysicsComponent(this);
+	obj.addComponent(this);
+
+	this->selfBoundingSphere.Center = obj.GETPosition();
 	this->selfBoundingSphere.Radius = boundingSphereRadius;
 }
 
 PhysicsComponent::~PhysicsComponent() {
 
-}
-
-DirectX::BoundingSphere PhysicsComponent::getBoundingSphere() {
-	return this->selfBoundingSphere;
 }
 
 bool PhysicsComponent::checkCollision(DirectX::BoundingSphere boundingSphere_in) {
@@ -67,6 +70,14 @@ void PhysicsComponent::updateBoundingArea(DirectX::XMFLOAT3 centerPos, float rad
 	this->selfBoundingSphere.Radius = radius;
 }
 
+GameObject* PhysicsComponent::GETpHead() {
+	return this->pHead;
+}
+
+DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() {
+	return this->selfBoundingSphere;
+}
+
 const size_t PhysicsComponent::getID() {
 	return this->ID;
 }
@@ -77,7 +88,7 @@ void PhysicsComponent::receive(GameObject & obj, Message msg) {
 
 void PhysicsComponent::update()
 {
-
+	this->updateBoundingArea(this->pHead->GETPosition());
 }
 
 void PhysicsComponent::cleanUp() {

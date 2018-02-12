@@ -1,6 +1,8 @@
 #include "CollisionHandler.h"
+#include "Spell.h"
+#include "GameObject.h"
 
-
+#include <cassert>
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
   |                             |
@@ -171,27 +173,36 @@ void CollisionHandler::createCollisionID() {
 	}
 }
 
-void CollisionHandler::calculateDistance(float x1, float y1, float x2, float y2) {
+void CollisionHandler::calculateDistance(DirectX::XMFLOAT3 collidable1, DirectX::XMFLOAT3 collidable2) {
 	// This method calculates the approximate distance between two points.
 	// NOTE: It does NOT use the 'sqrt()' function resulting in optimization!
-	this->xDiff = std::abs(x2 - x1);
-	this->yDiff = std::abs(y2 - y1);
-	this->minDiff = std::_Min_value(this->xDiff, this->yDiff);
+	this->xDiff = std::abs(collidable2.x - collidable1.x);
+	this->zDiff = std::abs(collidable2.z - collidable1.z);
+	this->minDiff = std::_Min_value(this->xDiff, this->zDiff);
 
 	this->distance = (this->minDiff * DISTANCE_FACTOR);
-	this->distance += ((this->xDiff - this->minDiff) + (this->yDiff - this->minDiff));
+	this->distance += ((this->xDiff - this->minDiff) + (this->zDiff - this->minDiff));
 }
+
+//void CollisionHandler::calculateDistance(float x1, float y1, float x2, float y2) {
+//	// This method calculates the approximate distance between two points.
+//	// NOTE: It does NOT use the 'sqrt()' function resulting in optimization!
+//	this->xDiff = std::abs(x2 - x1);
+//	this->yDiff = std::abs(y2 - y1);
+//	this->minDiff = std::_Min_value(this->xDiff, this->yDiff);
+//
+//	this->distance = (this->minDiff * DISTANCE_FACTOR);
+//	this->distance += ((this->xDiff - this->minDiff) + (this->yDiff - this->minDiff));
+//}
 
 void CollisionHandler::collisionPlayerPlayer() {
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -202,8 +213,8 @@ void CollisionHandler::collisionPlayerPlayer() {
 	/// Might be needed if we upgrade this code
 	//this->radiusDistanceVector = (this->boundingArea1->Radius + this->boundingArea2->Radius);
 
-	this->collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-	this->collidable2->setPosition(this->collidable2->getPosition() + (this->resultVector * this->stepper));
+	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable2->setPosition(this->collidable2->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerEnemy() {
@@ -216,22 +227,23 @@ void CollisionHandler::collisionPlayerEnemy() {
 	}
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
-		this->centerToCenterVector.y * this->divisionFactor,
+		0.0,
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
+	PhysicsComponent* temp123 = this->collidable2->GETphysicsComponent();
+
 	// Enemies are moved out of the way of players
-	this->collidable2->setPosition(this->collidable2->getPosition() + this->resultVector);
+	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
+	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 
 void CollisionHandler::collisionPlayerDoodad() {
@@ -257,22 +269,20 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	}
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
-		this->centerToCenterVector.y * this->divisionFactor,
+		0.0,
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
 	// Moving the player only, since the indestructibles cannot move.
-	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
@@ -284,28 +294,35 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// CODE GOES HERE
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
 
+	//this->collidable1->GETphysicsComponent()->updateBoundingArea(this->collidable1->GETPosition());
+	//this->collidable2->GETphysicsComponent()->updateBoundingArea(this->collidable2->GETPosition());
+
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+
 	this->divisionFactor = (1.0 / this->distance);
-	this->resultVector = {
+	this->resultVector1 = {
 		this->centerToCenterVector.x * this->divisionFactor,
-		this->centerToCenterVector.y * this->divisionFactor,
+		0.0,
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	this->collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
-	this->collidable2->setPosition(this->collidable2->getPosition() + (this->resultVector * this->stepper));
+	if (this->resultVector1.x > 2.0 || this->resultVector1.z > 2.0)
+		int tester123 = 2;
+
+	//this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
+	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector1 * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyDoodad() {
@@ -333,13 +350,11 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	}
 
 	this->calculateDistance(
-		this->collidable1->getPosition().x,
-		this->collidable1->getPosition().y,
-		this->collidable2->getPosition().x,
-		this->collidable2->getPosition().y
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
 	);
 
-	this->centerToCenterVector = (collidable1->getPosition() - collidable2->getPosition());
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0 / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
@@ -348,7 +363,7 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	};
 
 	// Moving the enemy only, since the indestructibles cannot move.
-	collidable1->setPosition(this->collidable1->getPosition() - (this->resultVector * this->stepper));
+	//collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyProjectile() {
@@ -359,8 +374,10 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable1 = this->collidable2;
 		this->collidable2 = this->tempCollidableHolder;
 	}
-
-	// CODE GOES HERE
+	
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 }
 
 void CollisionHandler::collisionDoodadDoodad() {
@@ -460,25 +477,44 @@ void CollisionHandler::executeCollision(
 	switch (collisionID) {
 		// PLAYER
 	case 1: this->collisionPlayerPlayer();
+		break;
 	case 2: this->collisionPlayerEnemy();
+		break;
 	case 3: this->collisionPlayerDoodad();
+		break;
 	case 4: this->collisionPlayerIndestruct();
+		break;
 	case 5: this->collisionPlayerProjectile();
+		break;
 		// ENEMY
 	case 6: this->collisionEnemyEnemy();
+		break;
 	case 7: this->collisionEnemyDoodad();
+		break;
 	case 8: this->collisionEnemyIndestruct();
+		break;
 	case 9: this->collisionEnemyProjectile();
+		break;
 		// DOODAD
 	case 10: this->collisionDoodadDoodad();
+		break;
 	case 11: this->collisionDoodadIndestruct();
+		break;
 	case 12: this->collisionDoodadProjectile();
+		break;
 		// INDESTRUCTIBLE
 	case 13: this->collisionIndestructIndestruct();
+		break;
 	case 14: this->collisionIndestrucProjectile();
+		break;
 		// PROJECTILE
 	case 15: this->collisionProjectileProjectile();
+		break;
 	}
+
+	// If an object never had it's type set, these assertions will go off, crashing the program
+	assert(this->collidable2->getType() != OBJECTTYPE::NOT_SET && "WARNING: 'Collidable1' has not had it's objectType set!!!");
+	assert(this->collidable1->getType() != OBJECTTYPE::NOT_SET && "WARNING: 'Collidable1' has not had it's objectType set!!!");
 }
 //_________________________________________//
 //                                         //

@@ -1,12 +1,10 @@
 #include "AbilityComponent.h"
-#include "GameObject.h"
 
-
-// -------------TEMPLATE
-AbilityComponent::AbilityComponent(GameObject* pHead)
+AbilityComponent::AbilityComponent(Projectile& pHead)
 {
+	this->pHead = &pHead;
+
 }
-// -------------TEMPLATE
 
 const size_t AbilityComponent::getID()
 {
@@ -20,7 +18,12 @@ void AbilityComponent::receive(GameObject & obj, Message msg)
 
 void AbilityComponent::update()
 {
+	this->range -= Locator::getGameTime()->getDeltaTime();
 
+	if (this->range < 0)
+	{
+		this->pHead->setState(OBJECTSTATE::TYPE::DEAD);
+	}
 }
 
 void AbilityComponent::cleanUp()
