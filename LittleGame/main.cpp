@@ -28,6 +28,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	double deltaTime;
 	double timeLastFrame = 0;
 	int frames = 0;
+	float tester123 = 0.0f;
 	char msgbuf[20];
 
 	// Game loop
@@ -43,10 +44,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		gm.render();
 		frames++;
 
-		if (timeLastFrame > 1000.0) {
+		if (timeLastFrame > 300.0) {
 			sprintf_s(msgbuf, "FPS: %d\n", frames);
 			frames = 0;
 			timeLastFrame = 0;
+			OutputDebugStringA(msgbuf);
+			tester123 = Locator::getRandomGenerator()->GenerateFloat(32, 38);
+			sprintf_s(msgbuf, "FLOAT: %f\n", tester123);
 			OutputDebugStringA(msgbuf);
 		}
 

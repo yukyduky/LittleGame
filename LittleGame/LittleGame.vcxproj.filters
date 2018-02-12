@@ -66,6 +66,7 @@
     <ClCompile Include="SpBuff.cpp">
       <Filter>Spells</Filter>
     </ClCompile>
+    <ClCompile Include="RandomGeneration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -132,6 +133,8 @@
     <ClInclude Include="IncludeSpells.h">
       <Filter>Spells</Filter>
     </ClInclude>
+    <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="RandomGeneration.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

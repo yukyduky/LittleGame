@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Locator.h"
 #include "GameTime.h"
+#include "RandomGeneration.h"
 #include "GamePlayState.h"
 #include "Renderer.h"
 #include "AudioManager.h"
@@ -17,8 +18,10 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 
 	// Creation of gameTime;
 	this->gameTime = new GameTime;
+	this->randomGenerator = new RandomGeneration;
 	// Provide the gametime object to the service locator
 	Locator::provide(this->gameTime);
+	Locator::provide(this->randomGenerator);
 
 	//// Create the AudioManager
 	this->audio = new AudioManager;

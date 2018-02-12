@@ -147,6 +147,8 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="IncludeSpells.h" />
+    <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EnemyManager.h" />
@@ -195,6 +197,7 @@
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EnemyGhostObject.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="LevelManager.cpp" />

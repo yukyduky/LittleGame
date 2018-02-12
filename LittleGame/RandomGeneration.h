@@ -4,7 +4,7 @@
 
 #include "IRandomGeneration.h"
 
-class RandomGeneration
+class RandomGeneration : public IRandomGeneration
 {
 private:
 
@@ -12,6 +12,9 @@ private:
 public:
 	RandomGeneration();
 
+	int GenerateInt(int rangeStart, int rangeEnd);
+
+	float GenerateFloat(float rangeStart, float rangeEnd);
 };
 
 #endif
