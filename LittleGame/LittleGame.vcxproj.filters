@@ -66,6 +66,7 @@
     <ClCompile Include="SpBuff.cpp">
       <Filter>Spells</Filter>
     </ClCompile>
+    <ClCompile Include="Crosshair.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -132,6 +133,7 @@
     <ClInclude Include="IncludeSpells.h">
       <Filter>Spells</Filter>
     </ClInclude>
+    <ClInclude Include="Crosshair.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -10,6 +10,7 @@
 //#include "KeyboardComponent.h"
 //*#include "ControllerComponent.h"
 //#include "GamePlayState.h"
+//#include "Crosshair.h"
 
 #include "D3D.h"
 #include "list"
@@ -17,7 +18,7 @@
 
 class GamePlayState;
 class Spell;
-
+class Crosshair;
 
 namespace ABILITIES {
 	enum KEYS {
@@ -45,7 +46,7 @@ protected:
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
 
-	bool keyBoardInput;
+	Crosshair* crossHair;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -57,7 +58,6 @@ public:
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
 	virtual void setSpeed(float speed);
-	virtual void setKeyBoardInput(bool input);
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
@@ -103,6 +103,9 @@ public:
 	void addSpell(Spell* spell);
 	// Goes over each spell and switches to new spells, depending on what glyph is on it
 	void switchSpell();
+
+	//Crosshair
+	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }
 };
 
 

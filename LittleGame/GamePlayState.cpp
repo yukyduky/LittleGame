@@ -11,6 +11,7 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 #include "GameObject.h"
+#include "Crosshair.h"
 
 #include "IncludeSpells.h"
 
@@ -258,9 +259,7 @@ void GamePlayState::initPlayer()
 
 	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
-	//actor->setKeyBoardInput(false);
 	input = new KeyboardComponent(*actor);
-	actor->setKeyBoardInput(true);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
@@ -278,8 +277,25 @@ void GamePlayState::initPlayer()
 	actor->selectAbility1();
 
 	this->playerInput[0] = input;
-	player1 = actor;
 
+	/// CROSSHAIR	
+		Crosshair* crossHair;
+		BlockComponent* crossX;
+		//RectangleComponent* crossX;
+		PhysicsComponent* crossPhy;
+
+		crossHair = new Crosshair(actor, this->newID(), XMFLOAT3(250.0f, 0.0f, 0.0f));
+
+		crossX = new BlockComponent(*this, *crossHair, XMFLOAT4(1.0f, 1.0f, 0.1f, 0.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
+		//crossX = new RectangleComponent(*crossHair, 100.0f, 0.0f, 0.0f, 100.0f);
+		
+		// This is to be removed in no collision check:
+		crossPhy = new PhysicsComponent(*crossHair, 0.0f);
+
+		this->dynamicObjects.push_back(crossHair);
+	/// END OF CROSSHAIR
+
+	player1 = actor;
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);
 }
