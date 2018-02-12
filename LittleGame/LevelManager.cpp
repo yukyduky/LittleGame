@@ -234,7 +234,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	XMFLOAT3 tempScale(1, 1, 1);						// TOBE DELETED
 	XMFLOAT3 tempRotation(0, 0, 0);
 	block = new BlockComponent(*this->pGPS, *object, color, tempScale, tempRotation);
-	bSphere = new PhysicsComponent(*object, this->squareSize / 2.0f);
+	bSphere = new PhysicsComponent(*object, this->squareSize * 2.0f);
 	XMFLOAT3 bSpherePos = pos;
 	bSpherePos.y = this->squareSize / 2.0f;
 	bSphere->updateBoundingArea(bSpherePos);

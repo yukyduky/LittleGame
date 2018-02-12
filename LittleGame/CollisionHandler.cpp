@@ -239,8 +239,11 @@ void CollisionHandler::collisionPlayerEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
+	PhysicsComponent* temp123 = this->collidable2->GETphysicsComponent();
+
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
+	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 
 void CollisionHandler::collisionPlayerDoodad() {
@@ -373,7 +376,10 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
+	//collidable2->get
+
 	collidable1->setState(OBJECTSTATE::TYPE::DEAD);
+	collidable2->setState(OBJECTSTATE::TYPE::DEAD);
 }
 
 void CollisionHandler::collisionDoodadDoodad() {

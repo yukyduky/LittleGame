@@ -27,9 +27,10 @@ void AIComponent::receive(GameObject & obj, Message msg)
 void AIComponent::cleanUp()
 {
 	this->commandQueue.clear();
-	this->controllerCommandMap.clear();
-	this->keyboardCommandMap.clear();
-	this->mouseCommandMap.clear();
+	/// The 3 functions below cause the infamous 'NO-INPUT BUG'
+//	this->controllerCommandMap.clear();
+//	this->keyboardCommandMap.clear();
+//	this->mouseCommandMap.clear();
 	// Might be missing things in accordance with vector!
 }
 
