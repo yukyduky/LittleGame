@@ -44,7 +44,7 @@ private:
 	void cleanLevel();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Creates an Actor, attaches
+	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
 	ActorObject* createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 

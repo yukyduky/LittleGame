@@ -60,6 +60,7 @@ class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
+	GameManager* pGM;
 	
 	EnemyManager enemyManager;
 	int ID = 0;

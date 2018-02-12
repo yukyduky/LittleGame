@@ -205,9 +205,6 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 	this->checkCollisions();
-
-	//fak ju shellow
-	//this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) {

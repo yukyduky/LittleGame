@@ -98,11 +98,15 @@ public:
 
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
+	// Deals dmg to the Actors Hp
+	void dealDmg(float dmg);
 	
 	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);
 	// Goes over each spell and switches to new spells, depending on what glyph is on it
 	void switchSpell();
+
+	
 };
 
 

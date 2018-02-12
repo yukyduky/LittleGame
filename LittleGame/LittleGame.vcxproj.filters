@@ -45,7 +45,10 @@
     <ClCompile Include="EnemyObject.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="ExplosionEnemyAttack.cpp">
+    <ClCompile Include="EnemyAttackComponent.h">
+      <Filter>Enemy\SubEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="ImmolationEnemyAttack.cpp">
       <Filter>Enemy\SubEnemy\AttackComponents</Filter>
     </ClCompile>
     <ClCompile Include="SpAutoAttack.cpp">
@@ -65,6 +68,8 @@
     </ClCompile>
     <ClCompile Include="SpBuff.cpp">
       <Filter>Spells</Filter>
+    <ClCompile Include="EndState.cpp">
+      <Filter>Enemy\SubEnemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +136,11 @@
     </ClInclude>
     <ClInclude Include="IncludeSpells.h">
       <Filter>Spells</Filter>
+    <ClInclude Include="ImmolationEnemyAttack.h">
+      <Filter>Enemy\SubEnemy\AttackComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="EndState.h">
+      <Filter>Enemy\SubEnemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

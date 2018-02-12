@@ -4,9 +4,18 @@
 
 #include "InputComponent.h"
 
+class Command;
+
 namespace AIBEHAVIOR {
 	enum KEY {
 		STRAIGHTTOWARDS, TEMPLATE0, TEMPLATE1,
+		SIZE
+	};
+}
+
+namespace AICOMMANDS {
+	enum KEY {
+		MOVE, 
 		SIZE
 	};
 }
@@ -20,9 +29,13 @@ private:
 	ActorObject* pHead = nullptr;
 	std::vector<ActorObject*> players;
 	AIBEHAVIOR::KEY behavior;
+	Command* commands[AICOMMANDS::SIZE];
 
 	XMFLOAT2 simulatedMovement;
 	XMFLOAT2 simulatedRotation;
+
+	void bindCommands();
+
 
 public:
 	AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players);

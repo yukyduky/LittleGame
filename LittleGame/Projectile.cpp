@@ -4,7 +4,7 @@
 Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
 {
 	//this->speed = spd;
-	this->setState(OBJECTSTATE::TYPE::MOVING);
+	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
 	this->spell = nullptr;
 
