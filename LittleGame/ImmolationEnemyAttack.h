@@ -1,16 +1,19 @@
 #pragma once
-#ifndef EXPLOSIONENEMYATTACK_H
-#define EXPLOSIONENEMYATTACK_H
+#ifndef IMMOLATIONENEMYATTACK_H
+#define IMMOLATIONENEMYATTACK_H
 
 #include "EnemyAttackComponent.h"
 
-class ExplosionEnemyAttack : public EnemyAttackComponent
+class EnemyObject;
+
+class ImmolationEnemyAttack : public EnemyAttackComponent
 {
 private:
-
+	// Saved Dynamic_casted head so that we don't need to dynamic cast each loop!
+	EnemyObject * pHead2;
 
 public:
-	ExplosionEnemyAttack(ActorObject& pHead);
+	ImmolationEnemyAttack(EnemyObject& pHead, std::vector<ActorObject*>* players);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the id of the actor on which this component is attached to!

@@ -147,9 +147,10 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="DamageSpell.h" />
+    <ClInclude Include="EndState.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyObject.h" />
-    <ClInclude Include="ExplosionEnemyAttack.h" />
+    <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
@@ -189,11 +190,12 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="EndState.cpp" />
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="DamageSpell.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
-    <ClCompile Include="ExplosionEnemyAttack.cpp" />
+    <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="MobilitySpell.cpp" />

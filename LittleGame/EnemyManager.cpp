@@ -5,8 +5,10 @@
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
 #include "AIComponent.h"
+#include "EnemyObject.h"
 #include "EnemyAttackComponent.h"
-#include "ExplosionEnemyAttack.h"
+#include "ImmolationEnemyAttack.h"
+
 
 EnemyManager::EnemyManager()
 {
@@ -62,7 +64,7 @@ void EnemyManager::cleanLevel()
 
 ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
-	ActorObject* enemy;
+	EnemyObject* enemy;
 	BlockComponent* block;
 	InputComponent* input;
 	PhysicsComponent* physics;
@@ -78,8 +80,11 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	XMFLOAT3 rotation(0, 0, 0);
 	
 	// Object
-	enemy = new ActorObject(ID, speed, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
+	enemy = new EnemyObject(ID, speed, pos, velocity, this->pGPS, &this->players, OBJECTTYPE::ENEMY);
 
+	// Attack
+	attack = new ImmolationEnemyAttack(*enemy, &players);
+	
 	// Graphics Component
 	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
 
@@ -89,9 +94,7 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	// Input Component
 	input = new AIComponent(*enemy, aiBehavior, this->players);
 
-	// Attack
-	attack = new ExplosionEnemyAttack(*enemy);
-
+	
 	// Make the enemy inactive
 	enemy->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemy;
@@ -125,7 +128,7 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
-				freshEnemy->setState(OBJECTSTATE::TYPE::IDLE);
+				freshEnemy->setState(OBJECTSTATE::TYPE::ACTIVATED);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
 				char msgbuf[20];

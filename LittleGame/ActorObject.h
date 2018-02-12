@@ -98,6 +98,8 @@ public:
 	
 	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);
+
+	void dealDmg(float dmg);
 };
 
 

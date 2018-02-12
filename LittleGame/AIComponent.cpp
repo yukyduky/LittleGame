@@ -1,6 +1,12 @@
 #include "AIComponent.h"
 #include "Commands.h"
 #include "ActorObject.h"
+#include "EnemyObject.h"
+
+void AIComponent::bindCommands()
+{
+	this->commands[AICOMMANDS::MOVE] = new CommandControllerMove;
+}
 
 AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players)
 {
@@ -8,15 +14,18 @@ AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vect
 	this->pHead = &obj;
 	this->pHead->SETinputComponent(this);
 	this->ID = obj.getID();
+
+	// Set internal data
 	this->behavior = aiBehavior;
 	this->players = players;
 
+	// Initialize
 	this->init();
 }
 
 void AIComponent::init()
 {
-
+	this->bindCommands();
 }
 
 void AIComponent::receive(GameObject & obj, Message msg)
@@ -27,66 +36,41 @@ void AIComponent::receive(GameObject & obj, Message msg)
 void AIComponent::cleanUp()
 {
 	this->commandQueue.clear();
-	this->controllerCommandMap.clear();
-	this->keyboardCommandMap.clear();
-	this->mouseCommandMap.clear();
-	// Might be missing things in accordance with vector!
+	//this->controllerCommandMap.clear();
+	//this->keyboardCommandMap.clear();
+	//this->mouseCommandMap.clear();
 }
 
 void AIComponent::generateCommands()
 {
 	XMVECTOR direction;
 
-	if (this->pHead->getState() == OBJECTSTATE::TYPE::ATTACKING) {
 
-	}
-	else {
+	switch (this->behavior) {
+		case AIBEHAVIOR::STRAIGHTTOWARDS: {
+			/// Update Movement
+			EnemyObject* pHead = dynamic_cast<EnemyObject*>(this->pHead);
+			this->simulatedMovement = pHead->getVectorToPlayer();
 
-		switch (this->behavior) {
-			case AIBEHAVIOR::STRAIGHTTOWARDS: {
+			/// Update Rotation
 
-				XMVECTOR closestPosition = XMLoadFloat3(&players.front()->GETPosition());
-				XMVECTOR candidate;
-
-				for (int i = 0; i < players.size(); i++) {
-					candidate = XMLoadFloat3(&players[i]->GETPosition());
-
-					// If candidate is closer
-					if (XMVector3Greater(closestPosition, candidate)) {
-						closestPosition = candidate;
-					}
-				}
-
-				// Move straight towards 
-				XMVECTOR position = XMLoadFloat3(&this->pHead->GETPosition());
-				direction = XMVector3Normalize(closestPosition - position);
-				break;
-			}
-			case AIBEHAVIOR::TEMPLATE0: {
-
-				break;
-			}
-			case AIBEHAVIOR::TEMPLATE1: {
-
-				break;
-			}
+			// Push back the command!
+			this->commandQueue.push_back(this->commands[AICOMMANDS::MOVE]);
+			break;
 		}
+		case AIBEHAVIOR::TEMPLATE0: {
 
+			break;
+		}
+		case AIBEHAVIOR::TEMPLATE1: {
 
+			break;
+		}
 	}
 
 
-	
-	// Update Movement
-	XMFLOAT3 formattedDirection;
-	DirectX::XMStoreFloat3(&formattedDirection, direction);
-	this->simulatedMovement = XMFLOAT2(formattedDirection.x, formattedDirection.z);
 
-	// Update Rotation
 	
-
-	// Push back the command!
-	this->commandQueue.push_back(new CommandControllerMove);
 }
 
 void AIComponent::update()
@@ -99,7 +83,6 @@ void AIComponent::execute()
 {
 	for (auto &command : this->commandQueue) {
 		command->execute(*this->pHead);
-		delete command;
 	}
 	this->commandQueue.clear();
 }
