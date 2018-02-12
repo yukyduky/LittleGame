@@ -17,10 +17,16 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="D3D.cpp" />
+    <ClCompile Include="EndState.cpp" />
+    <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="SpAutoAttack.cpp" />
+    <ClCompile Include="EnemyObject.cpp" />
+    <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
     <ClCompile Include="MobilitySpell.cpp" />
+    <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -39,37 +45,15 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="RectangleComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
+    <ClCompile Include="SpBomb.cpp" />
+    <ClCompile Include="SpBuff.cpp" />
+    <ClCompile Include="SpDash.cpp" />
+    <ClCompile Include="Spell.cpp" />
+    <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
-    <ClCompile Include="MouseInput.cpp" />
-    <ClCompile Include="EnemyObject.cpp">
-      <Filter>Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyAttackComponent.h">
-      <Filter>Enemy\SubEnemy</Filter>
-    </ClCompile>
-    <ClCompile Include="ImmolationEnemyAttack.cpp">
-      <Filter>Enemy\SubEnemy\AttackComponents</Filter>
-    </ClCompile>
-    <ClCompile Include="SpAutoAttack.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="Spell.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="SpFire.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="SpBomb.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="SpDash.cpp">
-      <Filter>Spells</Filter>
-    </ClCompile>
-    <ClCompile Include="SpBuff.cpp">
-      <Filter>Spells</Filter>
-    <ClCompile Include="EndState.cpp">
-      <Filter>Enemy\SubEnemy</Filter>
+    <ClCompile Include="EnemyState.cpp">
+      <Filter>EnemyStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,11 +68,18 @@
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="IncludeSpells.h" />
+    <ClInclude Include="SpBomb.h" />
+    <ClInclude Include="SpAutoAttack.h" />
+    <ClInclude Include="EndState.h" />
     <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="EnemyObject.h" />
+    <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="MouseInput.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Renderer.h" />
@@ -109,57 +100,23 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="SpBuff.h" />
+    <ClInclude Include="SpDash.h" />
+    <ClInclude Include="Spell.h" />
+    <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
-    <ClInclude Include="MouseInput.h" />
-    <ClInclude Include="EnemyObject.h">
-      <Filter>Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="SpAutoAttack.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="Spell.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="SpFire.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="SpBomb.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="SpDash.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="SpBuff.h">
-      <Filter>Spells</Filter>
-    </ClInclude>
-    <ClInclude Include="IncludeSpells.h">
-      <Filter>Spells</Filter>
-    <ClInclude Include="ImmolationEnemyAttack.h">
-      <Filter>Enemy\SubEnemy\AttackComponents</Filter>
-    </ClInclude>
-    <ClInclude Include="EndState.h">
-      <Filter>Enemy\SubEnemy</Filter>
+    <ClInclude Include="EnemyState.h">
+      <Filter>EnemyStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Enemy">
-      <UniqueIdentifier>{1916f500-2507-4e58-9ea5-040ad0d07f1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy\SubEnemy">
-      <UniqueIdentifier>{c2413d82-3e1e-40f2-816d-401dd4d5cb46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Enemy\SubEnemy\AttackComponents">
-      <UniqueIdentifier>{3381ffbb-fd4b-4f4e-955c-6765bdf24bb1}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Spells">
-      <UniqueIdentifier>{45c911f7-b852-4628-b859-4e6dd6199f24}</UniqueIdentifier>
+    <Filter Include="EnemyStates">
+      <UniqueIdentifier>{46f08af3-2cb4-4d05-aa85-f1c8cc631ae7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

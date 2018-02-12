@@ -12,6 +12,7 @@ class EnemyObject : public ActorObject
 private:
 	EnemyAttackComponent * attackComponent;
 	std::vector<ActorObject*>* players;
+	std::vector<State*> states;
 
 	XMFLOAT2 normalizedVectorToPlayer;
 	float distanceToPlayer;
