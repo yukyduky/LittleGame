@@ -8,8 +8,8 @@ SpAutoAttack::SpAutoAttack(ActorObject* player) : Spell(player, NAME::AUTOATTACK
 	this->setState(SPELLSTATE::READY);
 	
 	this->setCoolDown(0.3);
-	this->damage = 10;
-	this->range = 230;
+	this->damage = 1;
+	this->range = 50;
 	//case NAME::EXPLOSION:
 	//	this->setCoolDown(1.3);
 	//	this->damage = 50;
@@ -43,7 +43,7 @@ bool SpAutoAttack::castSpell()
 	}
 	else
 	{
-		ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 40, this->range);
+		ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 1000, this->range);
 		this->spawnProj(props);
 
 		this->setState(SPELLSTATE::COOLDOWN);
@@ -92,48 +92,13 @@ void SpAutoAttack::update()
 
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::PLAYER)
-	{
+	if (target->getType() == OBJECTTYPE::PLAYER) {
 		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 
-	//switch (this->name)
-	//{
-	//case NAME::AUTOATTACK:
-	//	if (target->getType() == OBJECTTYPE::PLAYER)
-	//	{
-	//		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
-	//		proj->setState(OBJECTSTATE::TYPE::DEAD);
-	//	}
-
-	//	break;
-	//
-	//case NAME::EXPLOSION:
-	//	
-	//	//target->applyDamage(this->damage);
-	//	
-	//	break;
-	//case NAME::BOMB:
-
-	//	if (this->damage < this->varible1)
-	//	{
-	//		this->damage += 20 * Locator::getGameTime()->getDeltaTime();
-	//		XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-	//		proj->GETphysicsComponent()->updateBoundingArea(this->damage);
-	//		proj->SETscaleMatrix(scaleM);
-	//		//proj->getPhyComp()->updateBounding(this->damage);
-	//	}
-	//	else
-	//	{
-	//		target->setPosition(XMFLOAT3(400, 100, 200));
-	//		this->damage = this->varible0;
-	//		proj->setState(OBJECTSTATE::TYPE::DEAD);
-	//		this->flag0 = true;
-	//	}
-
-	//	//target->setPosition(XMFLOAT3 (200, 100, 200));
-	//	break;
-	//}
-
+	else if (target->getType() == OBJECTTYPE::ENEMY) {
+		target->setState(OBJECTSTATE::TYPE::DEAD);
+		proj->setState(OBJECTSTATE::TYPE::DEAD);
+	}
 }
