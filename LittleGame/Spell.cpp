@@ -3,6 +3,7 @@
 
 Spell::Spell(ActorObject* player, NAME name)
 {
+	this->glyph = GLYPHTYPE::NONE;
 	this->player = player;
 	this->name = name;
 	this->timeSinceCast = 0.0;

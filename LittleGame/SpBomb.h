@@ -11,7 +11,7 @@ class GamePlayState;
 class SpBomb : public Spell
 {
 public:
-	SpBomb(ActorObject* player, NAME name);
+	SpBomb(ActorObject* player);
 	~SpBomb();
 
 	bool castSpell();

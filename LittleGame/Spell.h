@@ -13,7 +13,7 @@
 */
 
 //Template for when glyphs become relevant
-enum class GLYPHTYPE {GLYPH1, GLYPH2, GLYPH3};
+enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
 // Type to not need to check dynamic_cast
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
@@ -46,11 +46,12 @@ public:
 	// Spawns a projectile infront of the player
 	void spawnProj(ProjProp props);
 
-
 	ActorObject* getPlayer() { return this->player; };
 	void setType(SPELLTYPE input) { this->type = input; };
 	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
+	GLYPHTYPE getGlyph() { return this->glyph; };
+	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(double input) { this->coolDown = input; };
@@ -64,6 +65,7 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	ActorObject * player;
+
 
 	NAME name;
 

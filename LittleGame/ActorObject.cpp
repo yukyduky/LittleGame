@@ -4,8 +4,8 @@
 #include "ArenaGlobals.h"
 
 //Include spells
-#include "Spell.h"
-
+//#include "Spell.h"
+#include "IncludeSpells.h"
 #include <DirectXMath.h>
 
 
@@ -15,6 +15,7 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->pGPS = pGPS;
 	this->pos = pos;
 	this->setState(OBJECTSTATE::TYPE::IDLE);
+	this->keyBoardInput = false;
 
 	this->type = objectType;
 	this->velocity = velocity;	
@@ -47,6 +48,11 @@ void ActorObject::setSpeed(float speed)
 	this->speed = speed;
 }
 
+void ActorObject::setKeyBoardInput(bool input)
+{
+	this->keyBoardInput = input;
+}
+
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
@@ -76,7 +82,6 @@ void ActorObject::update()
 		i->update();
 		i->updateCD();
 	}
-	// this->decCD(); -- turned off while enemies are being implemented.
 }
 
 void ActorObject::move()
@@ -268,6 +273,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
+	this->switchSpell();
 	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
 		this->selectedSpell = this->spells[3];
 		
@@ -320,7 +326,122 @@ void ActorObject::decCD()
 
 void ActorObject::addSpell(Spell * spell)
 {
-	int next = this->spells.size();
 	this->spells.push_back(spell);
 }
 
+void ActorObject::switchSpell()
+{
+	// new vector with spells that will replace the old once
+	std::vector<Spell*> newSpells;
+
+	for (auto j : this->spells)
+	{
+		Spell* i = nullptr;
+
+		switch (j->getName())
+		{
+
+		case NAME::AUTOATTACK:
+			switch (j->getGlyph())
+			{
+			case GLYPHTYPE::NONE:
+				i = new SpAutoAttack(this);
+				break;
+			case GLYPHTYPE::GLYPH1:
+				i = new SpAutoAttack(this);
+				break;
+			case GLYPHTYPE::GLYPH2:
+				i = new SpAutoAttack(this);
+				break;
+			case GLYPHTYPE::GLYPH3:
+				i = new SpAutoAttack(this);
+				break;
+			}
+			break;
+
+		case NAME::EXPLOSION:
+			switch (j->getGlyph())
+			{
+			case GLYPHTYPE::NONE:
+				i = new SpFire(this);
+				break;
+			case GLYPHTYPE::GLYPH1:
+				i = new SpFire(this);
+				break;
+			case GLYPHTYPE::GLYPH2:
+				i = new SpFire(this);
+				break;
+			case GLYPHTYPE::GLYPH3:
+				i = new SpFire(this);
+				break;
+			}
+			break;
+
+		case NAME::BOMB:
+			switch (j->getGlyph())
+			{
+			case GLYPHTYPE::NONE:
+				i = new SpBomb(this);
+				break;
+			case GLYPHTYPE::GLYPH1:
+				i = new SpBomb(this);
+				break;
+			case GLYPHTYPE::GLYPH2:
+				i = new SpBomb(this);
+				break;
+			case GLYPHTYPE::GLYPH3:
+				i = new SpBomb(this);
+				break;
+			}
+			break;
+
+		case NAME::DASH:
+			switch (j->getGlyph())
+			{
+			case GLYPHTYPE::NONE:
+				i = new SpDash(this);
+				break;
+			case GLYPHTYPE::GLYPH1:
+				i = new SpDash(this);
+				break;
+			case GLYPHTYPE::GLYPH2:
+				i = new SpDash(this);
+				break;
+			case GLYPHTYPE::GLYPH3:
+				i = new SpDash(this);
+				break;
+			}
+			break;
+
+		case NAME::SPEEDBUFF:
+			switch (j->getGlyph())
+			{
+			case GLYPHTYPE::NONE:
+				i = new SpBuff(this);
+				break;
+			case GLYPHTYPE::GLYPH1:
+				i = new SpBuff(this);
+				break;
+			case GLYPHTYPE::GLYPH2:
+				i = new SpBuff(this);
+				break;
+			case GLYPHTYPE::GLYPH3:
+				i = new SpBuff(this);
+				break;
+			}
+			break;
+		}// i is holding the new Spell
+
+		newSpells.push_back(i);
+
+	}
+	
+	this->spells.clear();
+	
+	for (auto i : newSpells)
+	{
+		this->spells.push_back(i);
+	}
+	
+	newSpells.clear();
+}
