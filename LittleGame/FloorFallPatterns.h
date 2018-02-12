@@ -19,6 +19,7 @@ struct FloorFallData {
 	double time;
 	int popsPerIteration;
 	std::vector<Index> pattern;
+	std::vector<Index> recoverPattern;
 };
 
 class FFPattern 

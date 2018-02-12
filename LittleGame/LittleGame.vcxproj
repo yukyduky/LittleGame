@@ -198,7 +198,6 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
-    <ClCompile Include="DamageSpell.cpp" />
     <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
