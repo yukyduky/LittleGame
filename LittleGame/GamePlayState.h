@@ -75,6 +75,7 @@ private:
 	std::vector<GameObject*> staticObjects;
 	std::vector<GameObject*> dynamicObjects;
 	// Count below represents static objects that have collision (see 'checkCollisions()' function)
+	std::vector<GameObject*> noCollisionDynamicObjects;
 	int staticPhysicsCount = 0;
 
 	//All objects that wants to be renederd

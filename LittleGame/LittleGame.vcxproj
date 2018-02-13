@@ -145,6 +145,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Crosshair.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
@@ -194,6 +195,7 @@
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EnemyGhostObject.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
