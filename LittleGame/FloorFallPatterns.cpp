@@ -22,8 +22,8 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 			}
 			
 		}
-		pattern.time = 0.1;
-		pattern.popsPerIteration = 1;
+		pattern.time = 3;
+		pattern.popsPerIteration = 4;
 		pattern.recoverMode = false;
 		break;
 	//Floor falls in a spiral pattern inwards.
@@ -42,7 +42,7 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 				pattern.pattern.push_back(Index(width - j - 2, i));
 			}
 		}
-		pattern.time = 5;
+		pattern.time = 3;
 		pattern.popsPerIteration = 4;
 		pattern.recoverMode = false;
 		break;
@@ -55,7 +55,7 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 		}
 		std::random_shuffle(pattern.pattern.begin(), pattern.pattern.end());
 		pattern.time = 3;
-		pattern.popsPerIteration = 2;
+		pattern.popsPerIteration = 4;
 		pattern.recoverMode = false;
 		break;
 	//If a faulty nr is entered the floor will not fall at all.
