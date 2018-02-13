@@ -42,11 +42,11 @@ class InputComponent;
 //(Size of cube, color in XMFLOAT3, travelSpeed)
 struct ProjProp {
 	float size;
-	XMFLOAT3 color;
+	XMFLOAT4 color;
 	float speed;
 	float range;
 
-	ProjProp(float s, XMFLOAT3 c, float spd, float r) 
+	ProjProp(float s, XMFLOAT4 c, float spd, float r) 
 		: size(s)
 		, color(c)
 		, speed(spd)

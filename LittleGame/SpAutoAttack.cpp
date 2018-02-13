@@ -43,7 +43,7 @@ bool SpAutoAttack::castSpell()
 	}
 	else
 	{
-		ProjProp props(10, XMFLOAT3(200.5f, 200.5f, 0.5f), 1000, this->range);
+		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000, this->range);
 		this->spawnProj(props);
 
 		this->setState(SPELLSTATE::COOLDOWN);

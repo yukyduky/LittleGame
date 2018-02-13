@@ -30,7 +30,7 @@ bool SpDash::castSpell()
 	else if (!this->burning)
 	{
 		XMFLOAT3 oldPos = this->getPlayer()->GETPosition();
-		XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range * this->strength };
+		XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range};
 		XMFLOAT3 newPos = { oldPos + distance };
 
 		XMFLOAT3 playerNewPos;
@@ -55,7 +55,7 @@ bool SpDash::castSpell()
 
 		for (int i = 0; i < this->nrOfFlames; i++)
 		{
-			ProjProp props(flameSize, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
+			ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1);
 			flames.push_back(this->spawnProj(props));
 			flames[i]->setPosition(oldPos + (flames[i]->getDirection() * i * flameSize * 2));
 		}

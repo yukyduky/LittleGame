@@ -333,7 +333,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	//XMFLOAT3 position = pos;
-	XMFLOAT4 tempColor(props.color.x, props.color.y, props.color.z, 0.0f);
+	XMFLOAT4 tempColor(props.color);
 	XMFLOAT3 rotation(0, 0, 0);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 

@@ -25,8 +25,8 @@ bool SpFire::castSpell()
 	}
 	else
 	{
-		ProjProp props(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 500, this->range);
-			this->spawnProj(props);
+		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range);
+		this->spawnProj(props);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 
@@ -52,6 +52,7 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
+
 		this->hits--;
 		if (this->hits == 0)
 		{
