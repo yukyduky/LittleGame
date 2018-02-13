@@ -421,7 +421,9 @@ void CollisionHandler::collisionIndestrucProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// CODE GOES HERE
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 }
 
 void CollisionHandler::collisionProjectileProjectile() {
