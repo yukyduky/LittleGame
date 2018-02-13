@@ -17,19 +17,20 @@ struct Index
 };
 
 struct FloorFallData {
-	double time;
-	int popsPerIteration;
-	bool recoverMode;
-	std::vector<Index> pattern;
-	std::vector<Index> recoverPattern;
+	double time; //Time between each iteration.
+	int popsPerIteration; //Nr of tiles that falls per iteration.
+	bool recoverMode; //Determines if the floor is going to fall or be restored at the end of the stage.
+	std::vector<Index> pattern; //Fall order.
+	std::vector<Index> recoverPattern; //Recovery order.
 };
 
 class FFPattern 
 {
 private:
-
+	int maxNum = 2;
 public:
 	 void createPattern(int nr, FloorFallData& pattern);
+	 int GETmaxNum();
 };
 
 

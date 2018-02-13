@@ -200,7 +200,6 @@ void GamePlayState::update(GameManager * gm)
 					this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
 					this->fallData.pattern.erase(this->fallData.pattern.begin());
 					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-
 				}
 			}
 			this->counter = 0;
@@ -218,6 +217,7 @@ void GamePlayState::update(GameManager * gm)
 			this->counter = 0;
 		}
 	}
+	//Check if the player is on a active floor tile or if he fell of the map.
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
 		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
@@ -228,9 +228,11 @@ void GamePlayState::update(GameManager * gm)
 	int ID;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
-		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+		//if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			noCollisionDynamicObjects[i]->update();
-		}
+		//}
+		/* THIS CODE IS HERE IF WE EVER WANT TO REMOVE DEAD OBJECTS FROM noCollisionDynamicObjects. 
+			UNTIL THAT DAY COMES LET THIS BE COMMENTED OUT!!!
 		else {
 			ID = this->noCollisionDynamicObjects[i]->getID();
 			for (int j = 0; j < this->graphics.size(); j++) {
@@ -243,6 +245,7 @@ void GamePlayState::update(GameManager * gm)
 			delete this->noCollisionDynamicObjects[i];
 			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
 		}
+		*/
 	}
 	this->enemyManager.update();
 
@@ -302,7 +305,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
-	XMFLOAT3 playerVelocity(300.0f, 0.0f, 300.0f);
+	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:

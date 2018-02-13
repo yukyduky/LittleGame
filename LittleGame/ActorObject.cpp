@@ -22,7 +22,6 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->state = OBJECTSTATE::TYPE::IDLE;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
-	this->velocityLastFrame = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 const size_t ActorObject::getID()
@@ -80,19 +79,14 @@ void ActorObject::update()
 	{
 	//State used to make a object fall and after a set time the object becomes "invisible"
 	case OBJECTSTATE::TYPE::FALLING:
-		this->counter += dt;
-		if (this->counter < this->transitionTime) {
-			this->velocity.y += gravity * dt;
-			this->pos.x += this->velocityLastFrame.x * dt;
-			this->pos.y += this->velocity.y * dt;
-			this->pos.z += this->velocityLastFrame.z * dt;
-			this->updateWorldMatrix();
-		}
-		else {
-			this->velocity.y = 0.0;
-			this->counter = 0.0;
+		this->velocity.y += gravity * dt * 4;
+		this->pos.y += this->velocity.y * dt;
+		if (this->pos.y < -500.0f) {
+			this->pos.y = -500.0f;
+			this->velocity.y = 0.0f;
 			this->state = OBJECTSTATE::TYPE::INVISIBLE;
 		}
+		this->updateWorldMatrix();
 		break;
 	default:
 		for (auto &i : this->components) {
@@ -117,8 +111,6 @@ void ActorObject::move()
 	XMFLOAT3 tempPos = actorPos;
 	tempPos.x += MovementVector.x * actorVelocity.x * deltaTime;
 	tempPos.z += MovementVector.y * actorVelocity.z * deltaTime;
-	this->velocityLastFrame.x = MovementVector.x * actorVelocity.x * deltaTime;
-	this->velocityLastFrame.z = MovementVector.y * actorVelocity.z * deltaTime;
 	XMFLOAT3 actorNewPos;
 
 	//Check so that the player still is inside the arena in x- and z-dimension.
@@ -156,7 +148,6 @@ void ActorObject::moveUp()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z += actorVelocity.z * dt;
-		this->velocityLastFrame.z = actorVelocity.z;
 		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
 			this->physicsComponent->updateBoundingArea(playerPos);
 			this->setPosition(playerPos);
@@ -174,7 +165,6 @@ void ActorObject::moveLeft()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x -= actorVelocity.x * dt;
-		this->velocityLastFrame.x = -(actorVelocity.x);
 		if (playerPos.x > ARENASQUARESIZE) {
 			this->physicsComponent->updateBoundingArea(playerPos);
 			this->setPosition(playerPos);
@@ -191,7 +181,6 @@ void ActorObject::moveDown()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z -= actorVelocity.z * dt;
-		this->velocityLastFrame.z = -(actorVelocity.z);
 		if (playerPos.z > ARENASQUARESIZE) {
 			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
@@ -208,7 +197,6 @@ void ActorObject::moveRight()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x += actorVelocity.x * dt;
-		this->velocityLastFrame.x = actorVelocity.x;
 		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
 			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);

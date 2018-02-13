@@ -14,6 +14,8 @@ ArenaObject::ArenaObject(const size_t ID, XMFLOAT3 pos)
 {
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
+	this->startPos = pos;
+	this->maxFallDepth = -500.0f;
 }
 
 ArenaObject::~ArenaObject()
@@ -46,12 +48,12 @@ void ArenaObject::update()
 	
 	switch (this->state)
 	{
-	//State used to make a object fall and after a set time the object "dies"
+	//State used to make a object fall and after the object reaches a set distance it turns "INVISIBLE"
 	case OBJECTSTATE::TYPE::FALLING:
 		this->velocity.y += gravity * dt * 4;
 		this->pos.y += this->velocity.y * dt;
-		if (this->pos.y < -500.0f) {
-			this->pos.y = -500.0f;
+		if (this->pos.y < this->maxFallDepth) {
+			this->pos.y = this->maxFallDepth;
 			this->velocity.y = 0.0f;
 			this->state = OBJECTSTATE::TYPE::INVISIBLE;
 		}
@@ -61,8 +63,8 @@ void ArenaObject::update()
 	case OBJECTSTATE::TYPE::RECOVER:
 		this->velocity.y += gravity * dt * 4;
 		this->pos.y -= this->velocity.y * dt;
-		if (this->pos.y > -0.5) {
-			this->pos.y = -0.5;
+		if (this->pos.y > this->startPos.y) {
+			this->pos.y = this->startPos.y;
 			this->state = OBJECTSTATE::TYPE::RESETCOLOR;
 		}
 		this->updateWorldMatrix();

@@ -101,6 +101,7 @@ void RectangleComponent::update()
 
 	switch (state)	
 	{
+	//This case changes the color of the object from it's start color to red over a set time
 	case OBJECTSTATE::TYPE::TFALLING:
 		if (dt < 1.0) {
 			this->counter += dt;
@@ -124,6 +125,7 @@ void RectangleComponent::update()
 			}
 		}
 		break;
+	//This case sets the objects color to it's original color
 	case OBJECTSTATE::TYPE::RESETCOLOR:
 		this->updateColor(this->color);
 		this->head->setState(OBJECTSTATE::TYPE::IDLE);

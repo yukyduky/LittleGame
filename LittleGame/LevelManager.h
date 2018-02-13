@@ -49,23 +49,55 @@ private:
 	int tempID;
 	int nrOfWalls;
 	
-
+	/*--------<INFORMATION>--------
+	1. Creates all the RectangleComponents representing the arena floor.
+	*/
 	void createFloor(std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Creates all the RectangleComponents representing the neon grid on the arena floor 
+		by calling createARectLine function for each line.
+	*/
 	void createNeonFloorGrid(std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Creates all the outer walls of the level by calling createAWall function for each wall.
+	*/
 	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+
 	int nextID();
+
+	/*--------<INFORMATION>--------
+	1. Returns the grid index pos for a given position.
+	*/
 	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+	/*--------<INFORMATION>--------
+	1. Creates the fall pattern for the floor by calling the createPattern function in FloorFallPattern
+	*/
 	void setFallPattern(FloorFallData& pattern);
-	//void randomize();
 
 public:
+	/*--------<INFORMATION>--------
+	1. Creates the arena by calling the following private functions
+		createLevelWalls,
+		createFloor,
+		createNeonFloorGrid,
+		setFallPattern.
+	2. returns the latest used ID.
+	*/
 	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Changes the state of a floor tile from a given position.
+	*/
 	void changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects);
+	/*--------<INFORMATION>--------
+	1. Changes the state of a floor tile from a given grid index.
+	*/
 	void changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects);
+	/*--------<INFORMATION>--------
+	1. Returns the state of a floor tile from a given position.
+	*/
 	OBJECTSTATE::TYPE checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
-	void recoverFloor(int ID, Index index, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& noCollisionDynamicObjects, std::vector<GraphicsComponent*>& graphics);
 };
 
 

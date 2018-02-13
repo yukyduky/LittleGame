@@ -9,8 +9,8 @@
 class ArenaObject : public GameObject
 {
 private:
-
-
+	XMFLOAT3 startPos;
+	float maxFallDepth;
 public:
 	ArenaObject(const size_t ID);
 	ArenaObject(const size_t ID, XMFLOAT3 pos);
