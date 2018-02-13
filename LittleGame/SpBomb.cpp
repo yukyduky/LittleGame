@@ -1,7 +1,7 @@
 
 #include "SpBomb.h"
 
-SpBomb::SpBomb(ActorObject* player, NAME name) : Spell(player, name)
+SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);

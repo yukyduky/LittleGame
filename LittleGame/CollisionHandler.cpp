@@ -294,10 +294,9 @@ void CollisionHandler::collisionPlayerProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	Projectile* proj = dynamic_cast<Projectile*>(this->collidable2);
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
 	spell->collision(this->collidable1, proj);
-	
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
@@ -375,11 +374,10 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable1 = this->collidable2;
 		this->collidable2 = this->tempCollidableHolder;
 	}
-
-	//collidable2->get
-
-	collidable1->setState(OBJECTSTATE::TYPE::DEAD);
-	collidable2->setState(OBJECTSTATE::TYPE::DEAD);
+	
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 }
 
 void CollisionHandler::collisionDoodadDoodad() {

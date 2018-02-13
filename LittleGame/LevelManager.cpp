@@ -53,7 +53,7 @@ void LevelManager::createNeonFloorGrid(std::vector<GameObject*>& staticObjects, 
 	int nrOfVerticalLines = this->arenaWidth / this->squareSize + 1;
 	int nrOfHorizontalLines = this->arenaDepth / this->squareSize + 1;
 
-	XMFLOAT4 color(255.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 255.0f / 255.0f);
+	XMFLOAT4 color(0.0f / 255.0f, 150.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	//Prepare matrices and variables
 	float rectWidth = 1.5f;
 	XMMATRIX worldM;

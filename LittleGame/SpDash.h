@@ -11,7 +11,7 @@ class GamePlayState;
 class SpDash : public Spell
 {
 public:
-	SpDash(ActorObject* player, NAME name);
+	SpDash(ActorObject* player);
 	~SpDash();
 
 	bool castSpell();

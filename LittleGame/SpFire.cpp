@@ -1,15 +1,15 @@
 
 #include "SpFire.h"
 
-SpFire::SpFire(ActorObject* player, NAME name) : Spell(player, name)
+SpFire::SpFire(ActorObject* player) : Spell(player, NAME::EXPLOSION)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
 		this->setCoolDown(1.3);
-		this->damage = 50;
-		this->range = 230;
+		this->damage = 10;
+		this->range = 100;
 
 }
 
@@ -50,10 +50,13 @@ void SpFire::update()
 
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::PLAYER)
-	{
+	if (target->getType() == OBJECTTYPE::PLAYER){
 		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
+	}
+
+	else if (target->getType() == OBJECTTYPE::ENEMY) {
+		target->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 
 

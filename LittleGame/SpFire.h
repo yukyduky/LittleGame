@@ -11,7 +11,7 @@ class GamePlayState;
 class SpFire : public Spell
 {
 public:
-	SpFire(ActorObject* player, NAME name);
+	SpFire(ActorObject* player);
 	~SpFire();
 
 	bool castSpell();
