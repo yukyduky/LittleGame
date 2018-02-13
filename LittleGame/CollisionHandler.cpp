@@ -239,10 +239,9 @@ void CollisionHandler::collisionPlayerEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	PhysicsComponent* temp123 = this->collidable2->GETphysicsComponent();
-
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable1->setState(OBJECTSTATE::TYPE::DEAD);
 	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 
@@ -300,6 +299,9 @@ void CollisionHandler::collisionPlayerProjectile() {
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
+	/// LEFT OUT FOR NOW; PROBABLY ENOUGH WITH THE IF-STATEMENT ABOVE
+	//if (this->collidable1->GETPosition().y == this->collidable2->GETPosition().y)
+	//	this->collidable2->nudgePos();
 
 	this->calculateDistance(
 		this->collidable1->GETPosition(),
@@ -315,7 +317,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
+	//this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector1 * this->stepper));
 }
 
@@ -421,9 +423,9 @@ void CollisionHandler::collisionIndestrucProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	/*Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
-	spell->collision(this->collidable1, proj);
+	spell->collision(this->collidable1, proj);*/
 }
 
 void CollisionHandler::collisionProjectileProjectile() {
@@ -469,6 +471,10 @@ void CollisionHandler::executeCollision(
 	this->boundingArea2 = boundingArea2;
 
 	this->createCollisionID();
+
+	if (this->collidable1->GETPosition().x == this->collidable2->GETPosition().x &&
+		this->collidable1->GETPosition().z == this->collidable2->GETPosition().z)
+		this->collidable1->nudgePos();
 
 	switch (collisionID) {
 		// PLAYER

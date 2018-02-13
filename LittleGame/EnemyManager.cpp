@@ -21,9 +21,9 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 0.1;
+	this->spawnInterval = 0.2;
 	this->currentWaveCount = 3;
-	this->currentWaveSize = 2;
+	this->currentWaveSize = 10;
 	int testScale = 1;
 	Wave* currentWave;
 
@@ -34,7 +34,7 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(0.1*(testScale), ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
 			testScale++;
 		}
@@ -58,7 +58,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	ActorObject* enemy;
 	BlockComponent* block;
@@ -68,8 +68,26 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	// Values
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos((float)(ARENAWIDTH*posScale), scale.y, (float)(ARENAHEIGHT / 2 * posScale));
-	float speed = 80;
+	XMFLOAT3 pos = { 200.0f, scale.y, 200.0f };
+
+	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(1, 10);
+
+	if (spawnLocation == 1)
+		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+
+	else if (spawnLocation == 2)
+		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
+
+	else if (spawnLocation == 3)
+		pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+
+	else if (spawnLocation == 4)
+		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+
+	//else 
+
+	float speed = 200;
 	XMFLOAT3 velocity(speed, speed, speed);
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
@@ -77,14 +95,14 @@ ActorObject* EnemyManager::createEnemy(float posScale, ENEMYTYPE::TYPE enemyType
 	// Object
 	enemy = new ActorObject(ID, speed, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
 
-	// Graphics Component
-	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
+	// Input Component
+	input = new AIComponent(*enemy, aiBehavior, this->players);
 
 	// Physics Component
 	physics = new PhysicsComponent(*enemy, 14);
 
-	// Input Component
-	input = new AIComponent(*enemy, aiBehavior, this->players);
+	// Graphics Component
+	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
 
 	// Make the enemy inactive
 	enemy->setState(OBJECTSTATE::TYPE::DEAD);

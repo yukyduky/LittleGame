@@ -16,6 +16,13 @@ void GameObject::addComponent(Component* component)
 	this->components.push_back(component);
 }
 
+void GameObject::nudgePos() {
+	int nudgeValue = Locator::getRandomGenerator()->GenerateFloat(1, 3);
+
+	this->pos.x += nudgeValue;
+	this->pos.y += (nudgeValue * 0.5);
+}
+
 void GameObject::updateWorldMatrix()
 {
 	this->translationMatrix = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
