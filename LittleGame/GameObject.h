@@ -70,6 +70,7 @@ public:
 	1. Adds a component using the 'components.push_back()' function.
 	*/
 	void addComponent(Component* component);
+	void nudgePos();
 	const size_t getID() const { return this->ID; }
 
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }

@@ -15,7 +15,6 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->pGPS = pGPS;
 	this->pos = pos;
 	this->setState(OBJECTSTATE::TYPE::IDLE);
-	this->keyBoardInput = false;
 
 	this->type = objectType;
 	this->velocity = velocity;	
@@ -51,10 +50,6 @@ void ActorObject::setSpeed(float speed)
 	this->speed = speed;
 }
 
-void ActorObject::setKeyBoardInput(bool input)
-{
-	this->keyBoardInput = input;
-}
 
 void ActorObject::receive(GameObject & obj, Message msg)
 {
@@ -127,18 +122,45 @@ void ActorObject::move()
 	XMFLOAT3 playerNewPos;
 
 	//Check so that the player still is inside the arena in x- and z-dimension.
-	if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
-		playerNewPos.z = tempPos.z;
-		this->physicsComponent->updateBoundingArea(playerPos);
+	if (this->getType() == OBJECTTYPE::ENEMY) {
+		actorNewPos.z = tempPos.z;
+		this->physicsComponent->updateBoundingArea(actorPos);
+
+		actorNewPos.x = tempPos.x;
+		this->physicsComponent->updateBoundingArea(actorPos);
+
+		actorNewPos.y = actorPos.y;
+		this->setPosition(actorNewPos);
 	}
-	else { playerNewPos.z = playerPos.z; }
-	if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
-		playerNewPos.x = tempPos.x;
-		this->physicsComponent->updateBoundingArea(playerPos);
-	} 
-	else { playerNewPos.x = playerPos.x; }
-	playerNewPos.y = playerPos.y;
-	this->setPosition(playerNewPos);
+
+	else {
+		if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+			actorNewPos.z = tempPos.z;
+			this->physicsComponent->updateBoundingArea(actorPos);
+		}
+		else { actorNewPos.z = actorPos.z; }
+		if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+			actorNewPos.x = tempPos.x;
+			this->physicsComponent->updateBoundingArea(actorPos);
+		}
+		else { actorNewPos.x = actorPos.x; }
+		actorNewPos.y = actorPos.y;
+		this->setPosition(actorNewPos);
+	}
+
+	////Check so that the player still is inside the arena in x- and z-dimension.
+	//if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+	//	actorNewPos.z = tempPos.z;
+	//	this->physicsComponent->updateBoundingArea(actorPos);
+	//}
+	//else { actorNewPos.z = actorPos.z; }
+	//if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+	//	actorNewPos.x = tempPos.x;
+	//	this->physicsComponent->updateBoundingArea(actorPos);
+	//} 
+	//else { actorNewPos.x = actorPos.x; }
+	//actorNewPos.y = actorPos.y;
+	//this->setPosition(actorNewPos);
 }
 
 void ActorObject::moveUp()

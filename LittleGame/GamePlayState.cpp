@@ -11,6 +11,7 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 #include "GameObject.h"
+#include "Crosshair.h"
 
 #include "IncludeSpells.h"
 
@@ -297,7 +298,7 @@ void GamePlayState::initPlayer()
 	PhysicsComponent* physics;
 	int nextID = this->newID();
 
-	XMFLOAT4 playerColor(50.0f / 255.0f, 205.0f / 255.0f, 50.0f / 255.0f, 0.0f / 255.0f);
+	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
@@ -315,9 +316,7 @@ void GamePlayState::initPlayer()
 
 	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
-	//actor->setKeyBoardInput(false);
 	input = new KeyboardComponent(*actor);
-	actor->setKeyBoardInput(true);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
@@ -335,8 +334,25 @@ void GamePlayState::initPlayer()
 	actor->selectAbility1();
 
 	this->playerInput[0] = input;
-	this->player1 = actor;
 
+	/// CROSSHAIR	
+		Crosshair* crossHair;
+		BlockComponent* crossX;
+		//RectangleComponent* crossX;
+		PhysicsComponent* crossPhy;
+
+		crossHair = new Crosshair(actor, this->newID(), XMFLOAT3(250.0f, 0.0f, 0.0f));
+
+		crossX = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
+		//crossX = new RectangleComponent(*crossHair, 100.0f, 0.0f, 0.0f, 100.0f);
+		
+		// This is to be removed in no collision check:
+		//crossPhy = new PhysicsComponent(*crossHair, 0.0f);
+
+		this->noCollisionDynamicObjects.push_back(crossHair);
+	/// END OF CROSSHAIR
+
+	this->player1 = actor;
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);
 }
@@ -350,7 +366,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	BlockComponent* block;
 	PhysicsComponent* phyComp;
 
-	XMFLOAT3 position = {pos.x + dir.x * props.size, pos.y + dir.y * props.size , pos.z + dir.z * props.size};
+	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
 	proj = new Projectile(nextID, props.speed, position, dir, OBJECTTYPE::PROJECTILE);
 
 	//input for blockComp
@@ -361,7 +377,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, props.size);
+	phyComp = new PhysicsComponent(/*pos, */*proj, (props.size + 5));
 
 	
 	//Add proj to objectArrays

@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include "IGameTime.h"
+#include "IRandomGeneration.h"
 #include "Renderer.h"
 #include "IAudioManager.h"
 
@@ -15,6 +16,7 @@ class GameManager
 private:
 	bool isRunning;
 	IGameTime* gameTime;
+	IRandomGeneration* randomGenerator;
 	Renderer renderer;
 
 	IAudioManager* audio;
