@@ -68,10 +68,10 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Values
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 200.0f, scale.y, 200.0f };
+	XMFLOAT3 pos = { 0, 0, 0 };
 
 	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(1, 10);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 800);
 
 	if (spawnLocation == 1)
 		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
