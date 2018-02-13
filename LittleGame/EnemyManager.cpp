@@ -22,8 +22,9 @@ void EnemyManager::startLevel1()
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
 	this->spawnInterval = 0.2;
-	this->currentWaveCount = 3;
-	this->currentWaveSize = 10;
+	this->waveInterval = 5;
+	this->currentWaveCount = 4;
+	this->currentWaveSize = 20;
 	int testScale = 1;
 	Wave* currentWave;
 
@@ -71,7 +72,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	XMFLOAT3 pos = { 0, 0, 0 };
 
 	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 800);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
 
 	if (spawnLocation == 1)
 		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
@@ -85,9 +86,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	else if (spawnLocation == 4)
 		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
 
-	//else 
-
-	float speed = 200;
+	float speed = 180;
 	XMFLOAT3 velocity(speed, speed, speed);
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
@@ -124,13 +123,13 @@ void EnemyManager::update()
 		if (this->waves.front()->enemies.size() > 0) {
 
 			// Update timePassed
-			timePassed += Locator::getGameTime()->getDeltaTime();
+			this->timePassed += Locator::getGameTime()->getDeltaTime();
 
 			// If the spawnInterval is met
-			if (timePassed > spawnInterval) {
+			if (this->timePassed > spawnInterval) {
 
 				// Reset the timer
-				timePassed = 0;
+				this->timePassed = 0;
 
 				// Grab the next enemy in line
 				ActorObject* freshEnemy = this->waves.front()->enemies.front();
@@ -146,10 +145,16 @@ void EnemyManager::update()
 			}
 		}
 		// No enemies in this wave? Move on to the next wave
-		else {
+		else if (this->timePassed > this->waveInterval) {
+			this->timePassed = 0;
+
 			// Goodbye wave!
 			delete this->waves.front();
 			this->waves.pop_front();
+		}
+
+		else {
+			this->timePassed += Locator::getGameTime()->getDeltaTime();
 		}
 	}
 }
