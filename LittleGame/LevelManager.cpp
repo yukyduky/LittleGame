@@ -284,7 +284,6 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int dept
 		grid[i].resize(depth / this->squareSize);
 		for (int k = 0; k < grid[i].size(); k++) {
 			grid[i][k].type = SQUARETYPE::EMPTY;
-			grid[i][k].state = OBJECTSTATE::TYPE::IDLE;
 		}
 	}
 	
@@ -300,7 +299,6 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int dept
 void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
 {
 	XMFLOAT2 index = this->findTileIndexFromPos(pos);
-	grid[(int)index.x][(int)index.y].state = state;
 	grid[(int)index.x][(int)index.y].ptr->setState(state);
 
 
@@ -322,8 +320,8 @@ void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state,
 
 void LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
 {
-	grid[(int)index.x][(int)index.y].state = state;
-	grid[(int)index.x][(int)index.y].ptr->setState(state);
+
+	//grid[(int)index.x][(int)index.y].ptr->setState(state);
 
 
 	int ID = grid[(int)index.x][(int)index.y].ptr->getID();
@@ -332,8 +330,17 @@ void LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE st
 	case OBJECTSTATE::TYPE::TFALLING:
 		for (int i = this->nrOfWalls; i < staticObjects.size(); i++) {
 			if (staticObjects[i]->getID() == ID) {
+				staticObjects[i]->setState(state);
 				dynamicObjects.push_back(staticObjects[i]);
 				staticObjects.erase(staticObjects.begin() + i);
+			}
+		}
+		break;
+
+	case OBJECTSTATE::TYPE::RECOVER:
+		for (int i = 0; i < dynamicObjects.size(); i++) {
+			if (dynamicObjects[i]->getID() == ID) {
+				dynamicObjects[i]->setState(state);
 			}
 		}
 		break;

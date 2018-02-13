@@ -23,6 +23,7 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 		}
 		pattern.time = 0.1;
 		pattern.popsPerIteration = 1;
+		pattern.recoverMode = false;
 		break;
 		
 	case 1:
@@ -30,18 +31,19 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 			for (int j = i; j < depth - i; j++) {
 				pattern.pattern.push_back(Index(i, j));
 			}
-			for (int j = i; j < width - i; j++) {
+			for (int j = i + 1; j < width - i; j++) {
 				pattern.pattern.push_back(Index(j, depth - i - 1));
 			}
 			for (int j = i; j < depth - i; j++) {
-				pattern.pattern.push_back(Index(width - i - 1, depth - j - 1));
+				pattern.pattern.push_back(Index(width - i - 1, depth - j - 2));
 			}
 			for (int j = i; j < width - i - 1; j++) {
-				pattern.pattern.push_back(Index(width - j - 1, i));
+				pattern.pattern.push_back(Index(width - j - 2, i));
 			}
 		}
 		pattern.time = 0.1;
 		pattern.popsPerIteration = 1;
+		pattern.recoverMode = false;
 		break;
 
 	case 2:
@@ -54,6 +56,7 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 		std::random_shuffle(pattern.pattern.begin(), pattern.pattern.end());
 		pattern.time = 0.1;
 		pattern.popsPerIteration = 1;
+		pattern.recoverMode = false;
 		break;
 
 

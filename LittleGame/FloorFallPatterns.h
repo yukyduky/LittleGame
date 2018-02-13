@@ -18,6 +18,7 @@ struct Index
 struct FloorFallData {
 	double time;
 	int popsPerIteration;
+	bool recoverMode;
 	std::vector<Index> pattern;
 	std::vector<Index> recoverPattern;
 };

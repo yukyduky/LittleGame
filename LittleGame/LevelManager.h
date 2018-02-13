@@ -25,14 +25,12 @@ namespace WALLTYPE {
 }
 
 struct tileData {
-	OBJECTSTATE::TYPE state;
 	SQUARETYPE::TYPE type;
 	GameObject* ptr;
 
 	tileData() {};
 
-	tileData(OBJECTSTATE::TYPE state, SQUARETYPE::TYPE type) {
-		this->state = state;
+	tileData(SQUARETYPE::TYPE type) {
 		this->type = type;
 	}
 };
