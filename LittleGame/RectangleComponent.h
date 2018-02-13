@@ -31,7 +31,7 @@ public:
 	1. Calls the private function createVertices() if it's the first time a RectangleComponent is being created.
 	*/
 	RectangleComponent(GameObject& obj, const float r, const float g, const float b, const float a);
-	~RectangleComponent();
+	virtual ~RectangleComponent();
 
 	/*--------<INFORMATION>--------
 	1. Returns the ID of the component.

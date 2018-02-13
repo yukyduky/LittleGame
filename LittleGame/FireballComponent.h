@@ -11,6 +11,7 @@ private:
 	
 public:
 	FireballComponent(Projectile& pHead, float modi);
+	virtual ~FireballComponent() {}
 
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);

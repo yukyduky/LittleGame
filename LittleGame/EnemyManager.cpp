@@ -11,7 +11,7 @@ EnemyManager::EnemyManager()
 	this->pGPS = nullptr;
 }
 
-EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players)
+EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& players)
 {
 	this->pGPS = &pGPS;
 	this->players = players; 
@@ -139,5 +139,4 @@ void EnemyManager::update()
 void EnemyManager::cleanUp()
 {
 	this->cleanLevel();
-
 }

@@ -28,7 +28,7 @@ public:
 	1. Calls the private function createVertices() if it's the first time a LineComponent is being created.
 	*/
 	LineComponent(GameObject& obj, vColor startColor, vColor endColor);
-	~LineComponent();
+	virtual ~LineComponent();
 	
 	/*--------<INFORMATION>--------
 	1. Something

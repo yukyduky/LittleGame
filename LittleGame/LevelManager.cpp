@@ -29,6 +29,7 @@ void LevelManager::createFloor(std::vector<std::vector<SQUARETYPE::TYPE>>& grid,
 			nextID = this->nextID();
 			//Create the GameObject and calculate the world matrix
 			object = new ArenaObject(nextID, pos);
+			int test = sizeof(ArenaObject);
 			vec = XMLoadFloat3(&pos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotationM * translationM;

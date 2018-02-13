@@ -33,7 +33,7 @@ private:
 	
 public:
 	BlockComponent(GamePlayState& pGPS, GameObject& obj, XMFLOAT4 color, XMFLOAT3 scale, XMFLOAT3 rotation);
-	~BlockComponent();
+	virtual ~BlockComponent();
 
 
 	virtual ID3D11Buffer*& GETvertexBuffer();

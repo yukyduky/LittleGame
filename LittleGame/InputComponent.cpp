@@ -256,3 +256,10 @@ XMFLOAT2 InputComponent::GETcursorPos()
 {
 	return XMFLOAT2(0.0f, 0.0f);
 }
+
+void InputComponent::cleanup()
+{
+	for (auto &i : commands) {
+		delete i;
+	}
+}

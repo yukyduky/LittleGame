@@ -134,7 +134,7 @@ void GamePlayState::init() {
 void GamePlayState::cleanUp()
 {
 	// Direct internal objects
-	 this->rio.cleanUp();
+	this->rio.cleanUp();
 	// this->camera.cleanUp();
 	this->enemyManager.cleanUp();
 
@@ -148,9 +148,8 @@ void GamePlayState::cleanUp()
 		delete iterator;
 	}
 	this->quadTree.cleanup();
-	this->staticObjects.clear();
-	this->dynamicObjects.clear();
-	this->graphics.clear();
+
+	InputComponent::cleanup();
 }
 
 void GamePlayState::pause() {
@@ -214,16 +213,17 @@ void GamePlayState::update(GameManager * gm)
 	//this->player1->decCD();
 }
 
-void GamePlayState::render(GameManager * gm) {
+void GamePlayState::render(GameManager * gm) 
+{
 	rio.render(this->graphics);
 	gm->setupSecondRenderPass();
 	rio.injectResourcesIntoSecondPass();
 	gm->display(this);
 }
 
-GamePlayState* GamePlayState::getInstance() {
+GamePlayState* GamePlayState::getInstance() 
+{
 	return &sGamePlayState;
-	
 }
 
 std::vector<GameObject*>* GamePlayState::getDynamicObjects()
@@ -280,7 +280,7 @@ void GamePlayState::initPlayer()
 	actor->selectAbility1();
 
 	this->playerInput[0] = input;
-	player1 = actor;
+	this->player1 = actor;
 
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);

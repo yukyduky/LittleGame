@@ -2,7 +2,7 @@
 #include "Commands.h"
 #include "ActorObject.h"
 
-AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players)
+AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*>& players)
 {
 	// Set up head
 	this->pHead = &obj;
@@ -27,9 +27,6 @@ void AIComponent::receive(GameObject & obj, Message msg)
 void AIComponent::cleanUp()
 {
 	this->commandQueue.clear();
-	this->controllerCommandMap.clear();
-	this->keyboardCommandMap.clear();
-	this->mouseCommandMap.clear();
 	// Might be missing things in accordance with vector!
 }
 
@@ -86,7 +83,7 @@ void AIComponent::generateCommands()
 	
 
 	// Push back the command!
-	this->commandQueue.push_back(new CommandControllerMove);
+	this->commandQueue.push_back(new CommandControllerMove); // LEAK
 }
 
 void AIComponent::update()

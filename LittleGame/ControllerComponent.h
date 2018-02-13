@@ -26,6 +26,7 @@ private:
 	float checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE state);
 public:
 	ControllerComponent(GameObject& obj, size_t controllerID);
+	virtual ~ControllerComponent() {}
 	virtual void execute();
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();

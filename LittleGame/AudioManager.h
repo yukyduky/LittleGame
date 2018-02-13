@@ -2,13 +2,10 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 
-#include <string>
 #include <SFML\Audio.hpp>
 #include <array>
 #include <deque>
 #include "IAudioManager.h"
-
-
 
 /*	---:INFO:---
 Sound: Plays sound from the buffer, more lightweght
@@ -32,6 +29,8 @@ private:
 
 	size_t currState;
 public:
+	AudioManager();
+	~AudioManager() {}
 	//Loads in all music and sound
 	int init();
 	//Adds a posible sound

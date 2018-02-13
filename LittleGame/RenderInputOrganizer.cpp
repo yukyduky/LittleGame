@@ -80,4 +80,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 
 void RenderInputOrganizer::cleanUp()
 {
+	this->cLightBuffer->Release();
+	this->cLightPassDataBuffer->Release();
+	this->cMatrixBuffer->Release();
 }

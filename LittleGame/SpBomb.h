@@ -12,7 +12,7 @@ class SpBomb : public Spell
 {
 public:
 	SpBomb(ActorObject* player, NAME name);
-	~SpBomb();
+	virtual ~SpBomb();
 
 	bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)

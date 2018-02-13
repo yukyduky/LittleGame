@@ -93,6 +93,7 @@ protected:
 
 public:
 //	InputComponent(InputComponent& obj);
+	virtual ~InputComponent() {}
 	
 	//virtual void move() = 0;
 	//virtual void rotate() = 0;
@@ -137,6 +138,7 @@ public:
 	virtual float GETnormalizedValueOfLeftTrigger();
 	virtual float GETnormalizedValueOfRightTrigger();
 	virtual XMFLOAT2 GETcursorPos();
+	static void cleanup();
 };
 
 #endif // !INPUTCOMPONENT_H
