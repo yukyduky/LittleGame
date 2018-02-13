@@ -27,5 +27,11 @@ private:
 	float damage;
 	// Travel-range of spell
 	int range;
+
+	std::vector<Projectile*> flames;
+	int nrOfFlames;
+	float flameSize;
+	// Workaround to making sure that the flames are gone before the user spawns new
+	bool burning;
 };
 #endif // !SPDASH_H

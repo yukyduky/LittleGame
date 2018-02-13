@@ -1,16 +1,15 @@
 
 #include "SpFire.h"
 
-SpFire::SpFire(ActorObject* player) : Spell(player, NAME::EXPLOSION)
+SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-		this->setCoolDown(1.3);
-		this->damage = 10;
-		this->range = 100;
-
+	this->setCoolDown(1.3);
+	this->damage = 10;
+	this->range = 100;
 }
 
 SpFire::~SpFire()
@@ -26,11 +25,12 @@ bool SpFire::castSpell()
 	}
 	else
 	{
-		ProjProp props(15, XMFLOAT3(200.5f, 0.5f, 0.5f), 500, this->range);
-			this->spawnProj(props);
+		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range);
+		this->spawnProj(props);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 
+		this->hits = 3;
 
 	}
 
@@ -52,6 +52,12 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
+
+		this->hits--;
+		if (this->hits == 0)
+		{
+			proj->setState(OBJECTSTATE::TYPE::DEAD);
+		}
 	}
 
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {

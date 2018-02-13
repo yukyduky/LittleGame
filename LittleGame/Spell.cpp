@@ -16,7 +16,7 @@ Spell::~Spell()
 
 void Spell::updateCD()
 {
-	if (this->state == SPELLSTATE::COOLDOWN)
+	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
 		this->timeSinceCast += Locator::getGameTime()->getDeltaTime();
 		if (this->timeSinceCast >= this->coolDown)
@@ -27,7 +27,7 @@ void Spell::updateCD()
 	}
 }
 
-void Spell::spawnProj(ProjProp props)
+Projectile* Spell::spawnProj(ProjProp props)
 {
 	Projectile* proj;
 	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
@@ -37,4 +37,6 @@ void Spell::spawnProj(ProjProp props)
 	proj->setSpell(this);
 	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
 	proj->setRange(props.range);
+
+	return proj;
 }
