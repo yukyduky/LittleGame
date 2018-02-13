@@ -40,9 +40,6 @@ void FFPattern::createPattern(int nr, FloorFallData& pattern)
 				pattern.pattern.push_back(Index(width - j - 1, i));
 			}
 		}
-		for (int i = 0; i < pattern.pattern.size(); i++) {
-			pattern.recoverPattern.push_back(pattern.pattern[pattern.pattern.size() - i - 1]);
-		}
 		pattern.time = 0.1;
 		pattern.popsPerIteration = 1;
 		break;

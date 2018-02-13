@@ -46,6 +46,7 @@ void ArenaObject::update()
 	
 	switch (this->state)
 	{
+	//State used to make a object fall and after a set time the object "dies"
 	case OBJECTSTATE::TYPE::FALLING:
 		this->counter += dt;
 		if (this->counter < this->transitionTime) {
@@ -56,10 +57,10 @@ void ArenaObject::update()
 		else {
 			this->velocity.y = 0.0;
 			this->counter = 0.0;
-		//	this->state = OBJECTSTATE::TYPE::INVISIBLE;
-			this->state = OBJECTSTATE::TYPE::RECOVER;
+			this->state = OBJECTSTATE::TYPE::INVISIBLE;
 		}
 		break;
+	//State used to restore the arena floor at the end of the stage.
 	case OBJECTSTATE::TYPE::RECOVER:
 		this->counter += dt;
 		this->velocity.y += gravity * dt * 4;

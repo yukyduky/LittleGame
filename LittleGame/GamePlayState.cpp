@@ -188,17 +188,31 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	//Make the next floor tile fall if the time is right.
 	this->counter += Locator::getGameTime()->getDeltaTime();
-	if (this->counter > this->fallData.time && this->fallData.pattern.size() > 0) {
+	if (this->fallData.pattern.size() > 0 && this->counter > this->fallData.time) {
 		Index index(this->fallData.pattern[0].x, this->fallData.pattern[0].y);
+		this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
 		this->fallData.pattern.erase(this->fallData.pattern.begin());
 		this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
 		this->counter = 0;
 	}
+	//Reocover one of the fallen floor tiles if the game is over and the player is still alive.
+	else if (this->fallData.pattern.size() == 0 && this->fallData.recoverPattern.size() != 0) {
+		if (this->counter > this->fallData.time) {
+			this->lm.recoverFloor(this->newID(), this->fallData.recoverPattern[0], this->grid, this->noCollisionDynamicObjects, this->graphics);
+			this->fallData.recoverPattern.erase(this->fallData.recoverPattern.begin());
+			this->counter = 0;
+		}
+	}
+
+	if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
+		this->player1->setState(OBJECTSTATE::TYPE::FALLING);
+	}
+	
 
 	int ID;
-
-	//this->enemyManager.update();
+	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
 		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			noCollisionDynamicObjects[i]->update();
@@ -218,7 +232,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 	this->enemyManager.update();
 
-
+	//Update the dynamic objects if the object isn't dead. Else remove the object.
 	for (int i = 0; i < this->dynamicObjects.size(); i++) {
 		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			this->dynamicObjects[i]->update();
@@ -239,9 +253,6 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 	this->checkCollisions();
-
-	//fak ju shellow
-	//this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) {
@@ -253,7 +264,6 @@ void GamePlayState::render(GameManager * gm) {
 
 GamePlayState* GamePlayState::getInstance() {
 	return &sGamePlayState;
-	
 }
 
 std::vector<GameObject*>* GamePlayState::getDynamicObjects()
@@ -278,7 +288,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
-	XMFLOAT3 playerVelocity(300.0f, 300.0f, 300.0f);
+	XMFLOAT3 playerVelocity(300.0f, 0.0f, 300.0f);
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
@@ -310,7 +320,7 @@ void GamePlayState::initPlayer()
 	actor->selectAbility1();
 
 	this->playerInput[0] = input;
-	player1 = actor;
+	this->player1 = actor;
 
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);

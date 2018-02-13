@@ -48,6 +48,8 @@ protected:
 	XMFLOAT3 velocity;
 	OBJECTTYPE::TYPE type;
 	OBJECTSTATE::TYPE state;
+	double counter;
+	double transitionTime;
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::TYPE::IDLE), type(OBJECTTYPE::NOT_SET) {}

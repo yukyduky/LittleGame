@@ -20,6 +20,8 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->velocity = velocity;	
 	this->speed = speed;
 	this->state = OBJECTSTATE::TYPE::IDLE;
+	this->counter = 0.0f;
+	this->transitionTime = 5.0f;
 }
 
 const size_t ActorObject::getID()
@@ -69,12 +71,34 @@ void ActorObject::cleanUp()
 
 void ActorObject::update()
 {
-	for (auto &i : this->components) {
-		i->update();
-	}
-	for (auto &i : this->spells) {
-		i->update();
-		i->updateCD();
+	float gravity = -9.82;
+	double dt = Locator::getGameTime()->getDeltaTime();
+
+	switch (this->state)
+	{
+	//State used to make a object fall and after a set time the object becomes "invisible"
+	case OBJECTSTATE::TYPE::FALLING:
+		this->counter += dt;
+		if (this->counter < this->transitionTime) {
+			this->velocity.y += gravity * dt * 4;
+			this->pos.y += this->velocity.y * dt;
+			this->updateWorldMatrix();
+		}
+		else {
+			this->velocity.y = 0.0;
+			this->counter = 0.0;
+			this->state = OBJECTSTATE::TYPE::INVISIBLE;
+		}
+		break;
+	default:
+		for (auto &i : this->components) {
+			i->update();
+		}
+		for (auto &i : this->spells) {
+			i->update();
+			i->updateCD();
+		}
+		break;
 	}
 	// this->decCD(); -- turned off while enemies are being implemented.
 }

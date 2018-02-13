@@ -297,7 +297,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int dept
 	return this->tempID;
 }
 
-int LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
+void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
 {
 	XMFLOAT2 index = this->findTileIndexFromPos(pos);
 	grid[(int)index.x][(int)index.y].state = state;
@@ -318,13 +318,9 @@ int LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, 
 	default:
 		break;
 	}
-	
-
-
-	return 0;
 }
 
-int LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
+void LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
 {
 	grid[(int)index.x][(int)index.y].state = state;
 	grid[(int)index.x][(int)index.y].ptr->setState(state);
@@ -344,10 +340,48 @@ int LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE sta
 	default:
 		break;
 	}
+}
 
+OBJECTSTATE::TYPE LevelManager::checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
+{
+	return grid[pos.x / ARENASQUARESIZE][pos.z / ARENASQUARESIZE].ptr->getState();
+}
 
-
-	return 0;
+void LevelManager::recoverFloor(int ID, Index index, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& noCollisionDynamicObjects, std::vector<GraphicsComponent*>& graphics)
+{
+	//Prepare the matrices and variables
+	GameObject* object;
+	RectangleComponent* rect;
+	int nextID = ID;
+	XMFLOAT3 pos;
+	XMVECTOR vec;
+	XMMATRIX worldM;
+	XMMATRIX rotationM = XMMatrixIdentity();
+	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2, 0, this->squareSize / 2);
+	XMMATRIX translationM;
+	//Prepare the color of the rectangle
+	vColor color(72.0f / 255.0f, 118.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
+	//Recover floor tiles
+	//Calculate center position of the next grid space
+	pos = XMFLOAT3(this->squareSize / 2.0f + index.x * this->squareSize, -500.0f, this->squareSize / 2.0f + index.y * this->squareSize);
+	nextID = this->nextID();
+	//Create the GameObject and calculate the world matrix
+	object = new ArenaObject(nextID, pos);
+	vec = XMLoadFloat3(&pos);
+	translationM = XMMatrixTranslationFromVector(vec);
+	worldM = scaleM * rotationM * translationM;
+	//Create the RectangleComponent
+	rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
+	//Give the RectangleComponent to the ArenaObject and set it's world matrix
+	object->addComponent(rect);
+	object->SETworldMatrix(worldM);
+	object->SETrotationMatrix(rotationM);
+	object->SETscaleMatrix(scaleM);
+	object->setState(OBJECTSTATE::TYPE::RECOVER);
+	//Push the new ArenaObject and GraphicsComponent into the vector arrays
+	grid[index.x][index.y].ptr = object;
+	noCollisionDynamicObjects.push_back(object);
+	graphics.push_back(rect);
 }
  
 
