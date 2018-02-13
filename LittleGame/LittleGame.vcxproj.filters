@@ -65,7 +65,6 @@
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
-    <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
@@ -119,6 +118,9 @@
     <ClInclude Include="EnemyState.h">
       <Filter>EnemyStates</Filter>
     </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -126,6 +128,9 @@
   <ItemGroup>
     <Filter Include="EnemyStates">
       <UniqueIdentifier>{46f08af3-2cb4-4d05-aa85-f1c8cc631ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commands">
+      <UniqueIdentifier>{93f036e5-4317-4fa6-992f-34db81e43336}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

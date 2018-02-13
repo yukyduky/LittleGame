@@ -2,6 +2,7 @@
 #include "Locator.h"
 #include "CollisionHandler.h"
 #include "EnemyMovingState.h"
+#include "EnemyState.h"
 
 #define DISTANCE_FACTOR 1.4142135623730950488016887242097	// Fetched from CollisionHandler.h
 
@@ -28,7 +29,6 @@ EnemyObject::EnemyObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	: ActorObject(ID, speed, pos, velocity, pGPS, objectType)
 {
 	this->players = players;
-	this->attackComponent = attackComponent;
 }
 
 void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
@@ -58,33 +58,6 @@ std::vector<ActorObject*>* EnemyObject::getPlayers()
 
 void EnemyObject::update()
 {
-	//// O L D
-	//switch (this->state) {
-	//	case OBJECTSTATE::TYPE::ATTACKING: {
-
-	//		this->attackComponent->decreaseAttackTime();
-
-	//		break;
-	//	}
-	//	case OBJECTSTATE::TYPE::ACTIVATED: {
-
-	//		// Find out where you are in relevance to the player.
-	//		XMFLOAT3 playerPos = (*players)[0]->GETPosition();
-	//		this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
-
-	//		for (auto &component : this->components) {
-	//			component->update();
-	//		}
-
-	//		break;
-	//	}
-	//	default: {
-
-	//		break;
-	//	}
-	//}
-
-	/// N E W
 	// Find out where you are in relevance to the player.
 	XMFLOAT3 playerPos = (*players)[0]->GETPosition();
 	this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));

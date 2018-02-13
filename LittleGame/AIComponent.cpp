@@ -8,6 +8,7 @@
 void AIComponent::bindCommands()
 {
 	this->commands[AICOMMANDS::MOVE] = new CommandControllerMove;
+	this->commands[AICOMMANDS::ATTACK] = new CommandEnemyAttack;
 }
 
 AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior)

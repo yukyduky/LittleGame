@@ -19,7 +19,7 @@ namespace AIBEHAVIOR {
 
 namespace AICOMMANDS {
 	enum KEY {
-		MOVE, 
+		MOVE, ATTACK,
 		SIZE
 	};
 }

@@ -9,6 +9,9 @@ EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain, En
 	this->pHead = &pHead;
 	this->pBrain = &pBrain;
 	this->attackingStateTemplate = &attackState;
+
+	// Misc
+	this->attackRange = this->attackingStateTemplate->GETattackRange();
 	
 	// Activate this state
 	this->pBrain->pushState(*this);
@@ -21,8 +24,7 @@ void EnemyMovingState::executeBehavior()
 		// Push the attacking state
 		this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);
 		this->pBrain->pushState(*this->attackingStateTemplate);
-		// Start off the EnemyAttackingState
-		this->attackingStateTemplate->attack();
+		this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 	}
 	else {
 		// Move!

@@ -2,7 +2,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 #include "ActorObject.h"
-//#include "ControllerComponent.h"
+#include "EnemyObject.h"
 
 /* Command pattern */
 class ActorObject;
@@ -14,6 +14,17 @@ public:
 	// Executes the command
 	virtual void execute(ActorObject& actor) = 0;
 };
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+class CommandEnemyAttack : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) {
+		EnemyObject* trueObject = static_cast<EnemyObject*>(&actor);
+		trueObject->attack();
+	}
+};
+
 
 // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-

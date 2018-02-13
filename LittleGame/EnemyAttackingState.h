@@ -24,14 +24,19 @@ private:
 	AIComponent * pBrain;
 	EnemyAttackComponent* attackComponent;
 
-	float attackDuration;
-	float attackDamage;
+	float attackDamage;		// Not really needed, used to avoid "long" 'get->get->get' calls
+	float attackDuration;	//
+	float attackRange;		//
 
 public:
 	EnemyAttackingState(EnemyObject& pHead, AIComponent& pBrain, EnemyAttackComponent& attackComponent);
 	void attack();
 	virtual void executeBehavior();
 
+	float GETattackDamage();
+	float GETattackDuration();
+	float GETattackRange();
+	
 };
 
 #endif

@@ -13,9 +13,6 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	WARNING: THIS CLASS IS SET ONTO AN ENEMYSTATE WHICH DEALS WITH IT.
-	- This constructor does not attach itself onto an enemyobject, rather
-	it should be given to the state which should use it..
 	*/
 	ImmolationEnemyAttack(float damage, float attackDuration, float attackRange, EnemyObject& pHead);
 

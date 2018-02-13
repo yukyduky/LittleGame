@@ -11,8 +11,8 @@ class EnemyAttackComponent : public Component
 protected:
 	ActorObject * pHead = nullptr;
 	std::vector<ActorObject*>* players;
-	float damage;
 	float passedTime;
+	float attackDamage;
 	float attackDuration;
 	float attackRange;
 
@@ -26,17 +26,26 @@ public:
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns true if it's time to attack, and false otherwise.
-	2. Not complex, just peak it!
+	2. Determines this with an internal timer which compares with attackDuration
 	*/
 	virtual bool timeToAttack() {
 		this->passedTime += Locator::getGameTime()->getDeltaTime();
 		if (this->passedTime > attackDuration) {
 			this->passedTime = 0;
-			this->pHead->setState(OBJECTSTATE::TYPE::ACTIVATED);
 			return true;
 		}
 		return false;
 	};
+
+	float GETattackDamage() {
+		return this->attackDamage;
+	}
+	float GETattackDuration() {
+		return this->attackDuration;
+	}
+	float GETattackRange() {
+		return this->attackRange;
+	}
 };
 
 #endif 
