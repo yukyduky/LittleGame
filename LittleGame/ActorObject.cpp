@@ -235,9 +235,18 @@ void ActorObject::rotate(XMFLOAT2 aimVec)
 
 void ActorObject::fireAbility0()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
-		//this->rotate(this->pGPS->GETMouseInput()->getWorldPosition());
+	if ((this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
 		this->spells[0]->castSpell();
+	}
+	else {
+
+	}
+}
+
+void ActorObject::fireAbilityX()
+{
+	if ((this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
+		this->selectedSpell->castSpell();
 	}
 	else {
 
@@ -287,17 +296,6 @@ void ActorObject::selectAbility4()
 	}
 }
 
-void ActorObject::fireAbilityX()
-{
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
-		//this->rotate(this->pGPS->GETMouseInput()->getWorldPosition());
-		this->selectedSpell->castSpell();
-	}
-	else {
-
-	}
-}
-
 void ActorObject::SETinputComponent(InputComponent* pInputComponent)
 {
 	this->pInput = pInputComponent;
@@ -332,10 +330,12 @@ void ActorObject::switchSpell()
 	{
 		Spell* i = nullptr;
 
+		// First look at the name
 		switch (j->getName())
 		{
 
 		case NAME::AUTOATTACK:
+			// Looks at what new spell will replace depending on what glyph has been added to the spell
 			switch (j->getGlyph())
 			{
 			case GLYPHTYPE::NONE:
@@ -353,7 +353,7 @@ void ActorObject::switchSpell()
 			}
 			break;
 
-		case NAME::EXPLOSION:
+		case NAME::FIRE:
 			switch (j->getGlyph())
 			{
 			case GLYPHTYPE::NONE:

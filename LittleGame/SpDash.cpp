@@ -29,7 +29,25 @@ bool SpDash::castSpell()
 		XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range * this->strength };
 		XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
 
-		/*Check for OOB*/
+		XMFLOAT3 playerNewPos;
+
+		if (newPos.z > ARENAHEIGHT - ARENASQUARESIZE)
+		{
+			newPos.z = ARENAHEIGHT - ARENASQUARESIZE;
+		}
+		else if (newPos.z < ARENASQUARESIZE)
+		{
+			newPos.z = ARENASQUARESIZE;
+		}
+
+		if (newPos.x > ARENAWIDTH - ARENASQUARESIZE)
+		{
+			newPos.x = ARENAWIDTH - ARENASQUARESIZE;
+		}
+		else if (newPos.x < ARENASQUARESIZE)
+		{
+			newPos.x = ARENASQUARESIZE;
+		}
 
 		this->getPlayer()->setPosition(newPos);
 

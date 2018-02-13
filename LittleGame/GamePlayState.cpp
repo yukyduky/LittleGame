@@ -304,15 +304,11 @@ void GamePlayState::initPlayer()
 		Crosshair* crossHair;
 		BlockComponent* crossX;
 		//RectangleComponent* crossX;
-		PhysicsComponent* crossPhy;
 
 		crossHair = new Crosshair(actor, this->newID(), XMFLOAT3(250.0f, 0.0f, 0.0f));
 
 		crossX = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
 		//crossX = new RectangleComponent(*crossHair, 100.0f, 0.0f, 0.0f, 100.0f);
-		
-		// This is to be removed in no collision check:
-		//crossPhy = new PhysicsComponent(*crossHair, 0.0f);
 
 		this->noCollisionDynamicObjects.push_back(crossHair);
 	/// END OF CROSSHAIR

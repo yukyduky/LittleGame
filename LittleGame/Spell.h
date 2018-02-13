@@ -17,12 +17,12 @@ enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
 // Type to not need to check dynamic_cast
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
-enum class SPELLSTATE {READY, COOLDOWN, TRAVLING, LOCKED};
+enum class SPELLSTATE {READY, COOLDOWN, ACTIVE, LOCKED};
 
 // Names of spells, usd in switchcase
 enum class NAME {
 	//Damage
-	AUTOATTACK, EXPLOSION, BOMB
+	AUTOATTACK, FIRE, BOMB
 	//Mobility
 	, DASH, SPEEDBUFF
 };
@@ -44,7 +44,7 @@ public:
 	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
 	// Spawns a projectile infront of the player
-	void spawnProj(ProjProp props);
+	Projectile* spawnProj(ProjProp props);
 
 	ActorObject* getPlayer() { return this->player; };
 	void setType(SPELLTYPE input) { this->type = input; };

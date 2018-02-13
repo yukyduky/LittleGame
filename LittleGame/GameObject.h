@@ -71,6 +71,7 @@ public:
 	const size_t getID() const { return this->ID; }
 
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
+	void setPositionY(float value) { this->pos.y = value; }
 	XMFLOAT3 GETPosition() const { return this->pos; }
 	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	XMFLOAT3 getVelocity() const { return this->velocity; }

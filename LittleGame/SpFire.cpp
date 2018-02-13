@@ -1,7 +1,7 @@
 
 #include "SpFire.h"
 
-SpFire::SpFire(ActorObject* player) : Spell(player, NAME::EXPLOSION)
+SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);

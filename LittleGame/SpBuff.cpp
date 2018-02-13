@@ -3,14 +3,18 @@
 
 SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::SPEEDBUFF)
 {
-	this->strength = 1;
+	this->strength = 2.0f;
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCoolDown(3.3);
-	// Speedmultiplier of the players movment
-	this->range = 2;
+	this->setCoolDown(5.3f);
+	this->duration = 1.5f;
 
+	this->range = 20.0f;
+	this->oriRadius = this->getPlayer()->GETphysicsComponent()->GETBoundingSphere().Radius;
+	this->active = false;
+	this->floatingValue = 0.0f;
+	this->oriY = this->getPlayer()->GETPosition().y + this->range;
 }
 
 SpBuff::~SpBuff()
@@ -20,17 +24,17 @@ SpBuff::~SpBuff()
 bool SpBuff::castSpell()
 {
 	bool returnValue = true;
-	if (this->getState() == SPELLSTATE::COOLDOWN)
+	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
 		returnValue = false;
 	}
 	else
 	{
-		this->getPlayer()->setSpeed(this->range * this->strength);
+		this->active = true;
+		this->setState(SPELLSTATE::ACTIVE);
 
-		this->setState(SPELLSTATE::COOLDOWN);
-
-
+		this->getPlayer()->setSpeed(this->strength);
+		this->getPlayer()->GETphysicsComponent()->updateBoundingArea(0.0f);
 	}
 
 	return returnValue;
@@ -44,19 +48,28 @@ void SpBuff::upgrade(float modif)
 
 void SpBuff::update()
 {
-	if (this->getTSC() > 1.5)
+	if (this->active)
 	{
-		this->getPlayer()->setSpeed(1);
+		if (this->getTSC() > this->duration)
+		{
+			this->getPlayer()->setSpeed(1.0f);
+			this->active = false;
+			this->setState(SPELLSTATE::COOLDOWN);
+
+			this->getPlayer()->setPositionY(this->oriY - this->range);
+			this->getPlayer()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
+		}
+		else
+		{
+			this->floatingValue += 5.0f * Locator::getGameTime()->getDeltaTime();
+			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
+
+			this->getPlayer()->setPositionY(parameter);
+		}
 	}
 }
 
 void SpBuff::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::PLAYER)
-	{
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
-		proj->setState(OBJECTSTATE::TYPE::DEAD);
-	}
-
-
+	
 }

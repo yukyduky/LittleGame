@@ -35,20 +35,12 @@ bool SpBomb::castSpell()
 	{
 		if (!this->active)
 		{
+			this->active = true;
 			ProjProp props(30, XMFLOAT3(0.5f, 0.5f, 0.5f), 0, this->range);
-			this->spawnProj(props);
+			this->theProj = this->spawnProj(props);
 		}
 
-		//	if (this->flag0)
-		//	{
-		//		props = ProjProp(30, XMFLOAT3(0.5f, 0.5f, 0.5f), 0);
-		//		this->spawnProj(props);
-		//		this->flag0 = false;
-		//	}
-
 		this->setState(SPELLSTATE::COOLDOWN);
-
-
 	}
 
 	return returnValue;
@@ -62,26 +54,32 @@ void SpBomb::upgrade(float modif)
 
 void SpBomb::update()
 {
-
+	if (this->active)
+	{
+		if (this->damage < this->end)
+		{
+			this->damage += 40 * Locator::getGameTime()->getDeltaTime();
+			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
+			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage);
+			this->theProj->SETscaleMatrix(scaleM);
+		}
+		else if (this->damage < this->end + 0.1) // delay so that the explosion can kill targets
+		{
+			this->damage += 20 * Locator::getGameTime()->getDeltaTime();
+		}
+		else
+		{
+			this->active = false;
+			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
+			this->damage = this->start;
+		}
+	}
 }
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-		if (this->damage < this->end)
-		{
-			this->damage += 20 * Locator::getGameTime()->getDeltaTime();
-			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-			proj->GETphysicsComponent()->updateBoundingArea(this->damage);
-			proj->SETscaleMatrix(scaleM);
-			//proj->getPhyComp()->updateBounding(this->damage);
-		}
-		else
-		{
-			target->setPosition(XMFLOAT3(400, 40, 200));
-			this->damage = this->start;
-			proj->setState(OBJECTSTATE::TYPE::DEAD);
-			this->active = false;
-		}
-
-
+	if (this->damage >= this->end && target->getType() == OBJECTTYPE::ENEMY)
+	{
+		target->setState(OBJECTSTATE::TYPE::DEAD);
+	}
 }
