@@ -38,6 +38,7 @@ private:
 	int currentWaveCount;
 	int currentWaveSize;
 	double spawnInterval;
+	double waveInterval;
 	double timePassed;
 	double startTime;
 

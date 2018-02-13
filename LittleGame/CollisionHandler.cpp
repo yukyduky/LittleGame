@@ -299,10 +299,6 @@ void CollisionHandler::collisionPlayerProjectile() {
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
-
-	if (this->collidable1->GETPosition().x == this->collidable2->GETPosition().x)
-		this->collidable1->nudgePos();
-
 	/// LEFT OUT FOR NOW; PROBABLY ENOUGH WITH THE IF-STATEMENT ABOVE
 	//if (this->collidable1->GETPosition().y == this->collidable2->GETPosition().y)
 	//	this->collidable2->nudgePos();
@@ -321,7 +317,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
+	//this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector1 * this->stepper));
 }
 
@@ -475,6 +471,10 @@ void CollisionHandler::executeCollision(
 	this->boundingArea2 = boundingArea2;
 
 	this->createCollisionID();
+
+	if (this->collidable1->GETPosition().x == this->collidable2->GETPosition().x &&
+		this->collidable1->GETPosition().z == this->collidable2->GETPosition().z)
+		this->collidable1->nudgePos();
 
 	switch (collisionID) {
 		// PLAYER
