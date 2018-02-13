@@ -21,9 +21,9 @@ void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
-	this->spawnInterval = 0.3;
+	this->spawnInterval = 0.2;
 	this->currentWaveCount = 3;
-	this->currentWaveSize = 8;
+	this->currentWaveSize = 10;
 	int testScale = 1;
 	Wave* currentWave;
 
@@ -68,7 +68,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Values
 	int ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0.0f, 0.0f, 0.0f };
+	XMFLOAT3 pos = { 200.0f, scale.y, 200.0f };
 
 	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(1, 10);
@@ -95,14 +95,14 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Object
 	enemy = new ActorObject(ID, speed, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
 
-	// Graphics Component
-	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
+	// Input Component
+	input = new AIComponent(*enemy, aiBehavior, this->players);
 
 	// Physics Component
 	physics = new PhysicsComponent(*enemy, 14);
 
-	// Input Component
-	input = new AIComponent(*enemy, aiBehavior, this->players);
+	// Graphics Component
+	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
 
 	// Make the enemy inactive
 	enemy->setState(OBJECTSTATE::TYPE::DEAD);
