@@ -93,7 +93,6 @@ void SpAutoAttack::update()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::PLAYER) {
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 

@@ -8,7 +8,7 @@ RandomGeneration::RandomGeneration() {
 }
 
 int RandomGeneration::GenerateInt(int rangeStart, int rangeEnd) {
-	return rand() % rangeEnd + rangeStart;
+	return rand() % ((rangeEnd + 1) - rangeStart) + rangeStart;
 }
 
 float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {

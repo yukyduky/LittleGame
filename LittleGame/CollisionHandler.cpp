@@ -301,9 +301,6 @@ void CollisionHandler::collisionPlayerProjectile() {
 
 void CollisionHandler::collisionEnemyEnemy() {
 
-	//this->collidable1->GETphysicsComponent()->updateBoundingArea(this->collidable1->GETPosition());
-	//this->collidable2->GETphysicsComponent()->updateBoundingArea(this->collidable2->GETPosition());
-
 	this->calculateDistance(
 		this->collidable1->GETPosition(),
 		this->collidable2->GETPosition()
@@ -318,10 +315,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	if (this->resultVector1.x > 2.0 || this->resultVector1.z > 2.0)
-		int tester123 = 2;
-
-	//this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
+	this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector1 * this->stepper));
 }
 
