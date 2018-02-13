@@ -67,6 +67,7 @@
       <Filter>Spells</Filter>
     </ClCompile>
     <ClCompile Include="RandomGeneration.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -135,6 +136,7 @@
     </ClInclude>
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="RandomGeneration.h" />
+    <ClInclude Include="Crosshair.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

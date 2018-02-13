@@ -11,6 +11,7 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 #include "GameObject.h"
+#include "Crosshair.h"
 
 #include "IncludeSpells.h"
 
@@ -147,9 +148,14 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	for (auto &iterator : this->noCollisionDynamicObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
 	this->quadTree.cleanup();
 	this->staticObjects.clear();
 	this->dynamicObjects.clear();
+	this->noCollisionDynamicObjects.clear();
 	this->graphics.clear();
 }
 
@@ -179,7 +185,24 @@ void GamePlayState::handleEvents(GameManager * gm) {
 void GamePlayState::update(GameManager * gm)
 {	
 	int ID;
-
+	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
+	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
+		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			noCollisionDynamicObjects[i]->update();
+		}
+		else {
+			ID = this->noCollisionDynamicObjects[i]->getID();
+			for (int j = 0; j < this->graphics.size(); j++) {
+				if (this->graphics[j]->getID() == ID) {
+					this->graphics.erase(this->graphics.begin() + j);
+					break;
+				}
+			}
+			this->noCollisionDynamicObjects[i]->cleanUp();
+			delete this->noCollisionDynamicObjects[i];
+			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
+		}
+	}
 	this->enemyManager.update();
 
 
@@ -258,9 +281,7 @@ void GamePlayState::initPlayer()
 
 	/// INPUT COMPONENT:
 	//input = new ControllerComponent(*actor, 0);
-	//actor->setKeyBoardInput(false);
 	input = new KeyboardComponent(*actor);
-	actor->setKeyBoardInput(true);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
@@ -278,8 +299,25 @@ void GamePlayState::initPlayer()
 	actor->selectAbility1();
 
 	this->playerInput[0] = input;
-	player1 = actor;
 
+	/// CROSSHAIR	
+		Crosshair* crossHair;
+		BlockComponent* crossX;
+		//RectangleComponent* crossX;
+		PhysicsComponent* crossPhy;
+
+		crossHair = new Crosshair(actor, this->newID(), XMFLOAT3(250.0f, 0.0f, 0.0f));
+
+		crossX = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
+		//crossX = new RectangleComponent(*crossHair, 100.0f, 0.0f, 0.0f, 100.0f);
+		
+		// This is to be removed in no collision check:
+		//crossPhy = new PhysicsComponent(*crossHair, 0.0f);
+
+		this->noCollisionDynamicObjects.push_back(crossHair);
+	/// END OF CROSSHAIR
+
+	player1 = actor;
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);
 }
