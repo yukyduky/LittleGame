@@ -55,6 +55,7 @@ public:
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(double input) { this->coolDown = input; };
+	float getCoolDown() { return this->coolDown; };
 
 	// TSC = TimeSinceCast
 	size_t getTSC() { return this->timeSinceCast; };

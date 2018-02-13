@@ -241,7 +241,7 @@ void CollisionHandler::collisionPlayerEnemy() {
 
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
-	this->collidable1->setState(OBJECTSTATE::TYPE::DEAD);
+	//this->collidable1->setState(OBJECTSTATE::TYPE::DEAD);
 	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 

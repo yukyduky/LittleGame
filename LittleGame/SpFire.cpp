@@ -7,10 +7,9 @@ SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-		this->setCoolDown(1.3);
-		this->damage = 10;
-		this->range = 100;
-
+	this->setCoolDown(1.3);
+	this->damage = 10;
+	this->range = 100;
 }
 
 SpFire::~SpFire()
@@ -31,6 +30,7 @@ bool SpFire::castSpell()
 
 		this->setState(SPELLSTATE::COOLDOWN);
 
+		this->hits = 3;
 
 	}
 
@@ -52,6 +52,11 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
+		this->hits--;
+		if (this->hits == 0)
+		{
+			proj->setState(OBJECTSTATE::TYPE::DEAD);
+		}
 	}
 
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
