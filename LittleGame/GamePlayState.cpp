@@ -148,9 +148,14 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	for (auto &iterator : this->noCollisionDynamicObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
 	this->quadTree.cleanup();
 	this->staticObjects.clear();
 	this->dynamicObjects.clear();
+	this->noCollisionDynamicObjects.clear();
 	this->graphics.clear();
 }
 
@@ -180,7 +185,24 @@ void GamePlayState::handleEvents(GameManager * gm) {
 void GamePlayState::update(GameManager * gm)
 {	
 	int ID;
-
+	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
+	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
+		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+			noCollisionDynamicObjects[i]->update();
+		}
+		else {
+			ID = this->noCollisionDynamicObjects[i]->getID();
+			for (int j = 0; j < this->graphics.size(); j++) {
+				if (this->graphics[j]->getID() == ID) {
+					this->graphics.erase(this->graphics.begin() + j);
+					break;
+				}
+			}
+			this->noCollisionDynamicObjects[i]->cleanUp();
+			delete this->noCollisionDynamicObjects[i];
+			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
+		}
+	}
 	this->enemyManager.update();
 
 
@@ -290,9 +312,9 @@ void GamePlayState::initPlayer()
 		//crossX = new RectangleComponent(*crossHair, 100.0f, 0.0f, 0.0f, 100.0f);
 		
 		// This is to be removed in no collision check:
-		crossPhy = new PhysicsComponent(*crossHair, 0.0f);
+		//crossPhy = new PhysicsComponent(*crossHair, 0.0f);
 
-		this->dynamicObjects.push_back(crossHair);
+		this->noCollisionDynamicObjects.push_back(crossHair);
 	/// END OF CROSSHAIR
 
 	player1 = actor;
