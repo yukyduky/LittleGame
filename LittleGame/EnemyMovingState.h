@@ -12,13 +12,21 @@ state(n)^
 |-------------------------------------------------> t
 */
 
+class EnemyObject;
+class AIComponent;
+class EnemyAttackingState;
+
 class EnemyMovingState : public EnemyState
 {
 private:
-
+	EnemyObject * pHead;
+	AIComponent * pBrain;
+	float attackRange;	// Fetched from Head's attackComponent
+	EnemyAttackingState* attackingStateTemplate;	// Used instead of 'new' each frame
 
 public:
-	virtual void update();
+	EnemyMovingState(EnemyObject& pHead, AIComponent& pBrain, EnemyAttackingState& attackState);
+	virtual void executeBehavior();
 
 };
 

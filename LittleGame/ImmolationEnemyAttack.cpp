@@ -3,19 +3,23 @@
 #include "EnemyObject.h"
 #include "GamePlayState.h"
 
-ImmolationEnemyAttack::ImmolationEnemyAttack(EnemyObject& pHead, std::vector<ActorObject*>* players)
+ImmolationEnemyAttack::ImmolationEnemyAttack(
+	float damage, float attackDuration, float attackRange, 
+	EnemyObject& pHead
+)
 {
-	// Set up heads
+	/*
+	WARNING: THIS CLASS IS NOT MEANT TO BE SET OTHER COMPONENTS USUALLY ARE,
+	IT INSTEAD IS SET ONTO AN ENEMYSTATE WHICH DEALS WITH IT.
+	*/
+	// Set up pointers
 	this->pHead = &pHead;
-	pHead.addComponent(this);
-	this->pHead2 = dynamic_cast<EnemyObject*>(&pHead);
-	this->pHead2->SETattackComponent(this);
-	this->players = players;
+	this->players = pHead.getPlayers();
 
 	// this data might be given as input parameters if we want different kinds of immolation attackers
-	this->damage = 100;
-	this->attackDuration = 0.1;
-	this->attackRange = 100;
+	this->damage = damage;
+	this->attackDuration = attackDuration;
+	this->attackRange = attackRange;
 }
 
 const size_t ImmolationEnemyAttack::getID()
@@ -28,9 +32,7 @@ void ImmolationEnemyAttack::receive(GameObject & obj, Message msg)
 }
 void ImmolationEnemyAttack::update()
 {
-	if (this->pHead2->getDistanceToPlayer() < this->attackRange) {
-		this->attack();
-	}
+
 }
 void ImmolationEnemyAttack::cleanUp()
 {
@@ -38,8 +40,6 @@ void ImmolationEnemyAttack::cleanUp()
 }
 void ImmolationEnemyAttack::attack()
 {
-	this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);
-
 	// Only coded to work against 1 player atm!
 	(*this->players)[0]->dealDmg(this->damage);
 }

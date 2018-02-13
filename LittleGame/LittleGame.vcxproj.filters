@@ -52,7 +52,10 @@
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
-    <ClCompile Include="EnemyState.cpp">
+    <ClCompile Include="EnemyAttackingState.cpp">
+      <Filter>EnemyStates</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMovingState.cpp">
       <Filter>EnemyStates</Filter>
     </ClCompile>
   </ItemGroup>
@@ -107,6 +110,12 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="TextureComponent.h" />
+    <ClInclude Include="EnemyMovingState.h">
+      <Filter>EnemyStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAttackingState.h">
+      <Filter>EnemyStates</Filter>
+    </ClInclude>
     <ClInclude Include="EnemyState.h">
       <Filter>EnemyStates</Filter>
     </ClInclude>

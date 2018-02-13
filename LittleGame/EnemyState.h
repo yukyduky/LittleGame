@@ -2,11 +2,11 @@
 #ifndef ENEMYSTATE_H
 #define ENEMYSTATE_H
 
-/* Example of State-Timeline
+/* Example of a State-Timeline for an enemy
 state(n)^
-	[2]	| 						    ATTACK PHASE 2
-	[1]	| 			ATTACK PHASE 1		0
-	[0]	|  MOVING			     					MOVING
+	[2]	| 				push	    ATTACK PHASE 2	pop
+	[1]	| 	push	ATTACK PHASE 1					pop
+	[0]	|  MOVING			     						MOVING
 		|-------------------------------------------------> t
 */
 
@@ -14,10 +14,8 @@ class EnemyState
 {
 private:
 
-
 public:
-
-	virtual void update() = 0;
+	virtual void executeBehavior() = 0;
 
 };
 

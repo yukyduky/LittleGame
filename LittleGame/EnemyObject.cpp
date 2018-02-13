@@ -1,6 +1,7 @@
 #include "EnemyObject.h"
 #include "Locator.h"
 #include "CollisionHandler.h"
+#include "EnemyMovingState.h"
 
 #define DISTANCE_FACTOR 1.4142135623730950488016887242097	// Fetched from CollisionHandler.h
 
@@ -45,35 +46,56 @@ float EnemyObject::getDistanceToPlayer()
 	return this->distanceToPlayer;
 }
 
+void EnemyObject::dealDmgToPlayer(size_t playerID, float damage)
+{
+	(*this->players)[playerID]->dealDmg(damage);
+}
+
+std::vector<ActorObject*>* EnemyObject::getPlayers()
+{
+	return this->players;
+}
+
 void EnemyObject::update()
 {
-	switch (this->state) {
-		case OBJECTSTATE::TYPE::ATTACKING: {
+	//// O L D
+	//switch (this->state) {
+	//	case OBJECTSTATE::TYPE::ATTACKING: {
 
-			this->attackComponent->decreaseAttackTime();
+	//		this->attackComponent->decreaseAttackTime();
 
-			break;
-		}
-		case OBJECTSTATE::TYPE::ACTIVATED: {
+	//		break;
+	//	}
+	//	case OBJECTSTATE::TYPE::ACTIVATED: {
 
-			// Find out where you are in relevance to the player.
-			XMFLOAT3 playerPos = (*players)[0]->GETPosition();
-			this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
+	//		// Find out where you are in relevance to the player.
+	//		XMFLOAT3 playerPos = (*players)[0]->GETPosition();
+	//		this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
 
-			for (auto &component : this->components) {
-				component->update();
-			}
+	//		for (auto &component : this->components) {
+	//			component->update();
+	//		}
 
-			break;
-		}
-		default: {
+	//		break;
+	//	}
+	//	default: {
 
-			break;
-		}
+	//		break;
+	//	}
+	//}
+
+	/// N E W
+	// Find out where you are in relevance to the player.
+	XMFLOAT3 playerPos = (*players)[0]->GETPosition();
+	this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
+
+	// Act according to current state
+	for (auto &component : this->components) {
+		component->update();
 	}
 }
 
 void EnemyObject::attack()
 {
-
+	this->attackComponent->attack();
 }

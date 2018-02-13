@@ -23,12 +23,19 @@ public:
 	virtual void cleanUp() = 0;
 
 	virtual void attack() = 0;
-	virtual void decreaseAttackTime() {
+	
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns true if it's time to attack, and false otherwise.
+	2. Not complex, just peak it!
+	*/
+	virtual bool timeToAttack() {
 		this->passedTime += Locator::getGameTime()->getDeltaTime();
 		if (this->passedTime > attackDuration) {
 			this->passedTime = 0;
 			this->pHead->setState(OBJECTSTATE::TYPE::ACTIVATED);
+			return true;
 		}
+		return false;
 	};
 };
 
