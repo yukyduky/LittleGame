@@ -331,7 +331,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	BlockComponent* block;
 	PhysicsComponent* phyComp;
 
-	XMFLOAT3 position = {pos.x + dir.x * props.size, pos.y + dir.y * props.size , pos.z + dir.z * props.size};
+	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
 	proj = new Projectile(nextID, props.speed, position, dir, OBJECTTYPE::PROJECTILE);
 
 	//input for blockComp

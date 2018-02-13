@@ -97,12 +97,7 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 
-
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
-		proj->setState(OBJECTSTATE::TYPE::DEAD);
-	}
-
-	else if (target->getType() == OBJECTTYPE::PLAYER) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }

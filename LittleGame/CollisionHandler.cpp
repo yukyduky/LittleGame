@@ -239,10 +239,9 @@ void CollisionHandler::collisionPlayerEnemy() {
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	PhysicsComponent* temp123 = this->collidable2->GETphysicsComponent();
-
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable1->setState(OBJECTSTATE::TYPE::DEAD);
 	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 
@@ -300,6 +299,13 @@ void CollisionHandler::collisionPlayerProjectile() {
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
+
+	if (this->collidable1->GETPosition().x == this->collidable2->GETPosition().x)
+		this->collidable1->nudgePos();
+
+	/// LEFT OUT FOR NOW; PROBABLY ENOUGH WITH THE IF-STATEMENT ABOVE
+	//if (this->collidable1->GETPosition().y == this->collidable2->GETPosition().y)
+	//	this->collidable2->nudgePos();
 
 	this->calculateDistance(
 		this->collidable1->GETPosition(),
@@ -421,9 +427,9 @@ void CollisionHandler::collisionIndestrucProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	/*Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
-	spell->collision(this->collidable1, proj);
+	spell->collision(this->collidable1, proj);*/
 }
 
 void CollisionHandler::collisionProjectileProjectile() {
