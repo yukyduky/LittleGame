@@ -48,26 +48,22 @@ void ArenaObject::update()
 	{
 	//State used to make a object fall and after a set time the object "dies"
 	case OBJECTSTATE::TYPE::FALLING:
-		this->counter += dt;
-		if (this->counter < this->transitionTime) {
-			this->velocity.y += gravity * dt * 4;
-			this->pos.y += this->velocity.y * dt;
-			this->updateWorldMatrix();
-		}
-		else {
-			this->velocity.y = 0.0;
-			this->counter = 0.0;
+		this->velocity.y += gravity * dt * 4;
+		this->pos.y += this->velocity.y * dt;
+		if (this->pos.y < -500.0f) {
+			this->pos.y = -500.0f;
+			this->velocity.y = 0.0f;
 			this->state = OBJECTSTATE::TYPE::INVISIBLE;
 		}
+		this->updateWorldMatrix();
 		break;
 	//State used to restore the arena floor at the end of the stage.
 	case OBJECTSTATE::TYPE::RECOVER:
-		this->counter += dt;
 		this->velocity.y += gravity * dt * 4;
 		this->pos.y -= this->velocity.y * dt;
 		if (this->pos.y > -0.5) {
 			this->pos.y = -0.5;
-			this->state = OBJECTSTATE::TYPE::IDLE;
+			this->state = OBJECTSTATE::TYPE::RESETCOLOR;
 		}
 		this->updateWorldMatrix();
 		break;

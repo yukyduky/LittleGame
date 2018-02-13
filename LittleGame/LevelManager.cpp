@@ -264,7 +264,7 @@ XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 }
 
 void LevelManager::setFallPattern(FloorFallData& pattern) {
-	this->ffp.createPattern(1, pattern);
+	this->ffp.createPattern(2, pattern);
 }
 
 int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects, std::vector<GraphicsComponent*>& graphics)

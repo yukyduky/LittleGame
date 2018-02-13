@@ -185,49 +185,43 @@ void GamePlayState::handleEvents(GameManager * gm) {
 void GamePlayState::update(GameManager * gm)
 {	
 	this->counter += Locator::getGameTime()->getDeltaTime();
+	Index index;
 	//Make the next floor tile fall if the time is right.	
-	if (!this->fallData.recoverMode) {
-		if (this->fallData.pattern.size() > 0 && this->counter > this->fallData.time) {
-			Index index(this->fallData.pattern[0].x, this->fallData.pattern[0].y);
-			this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
-			this->fallData.pattern.erase(this->fallData.pattern.begin());
-			this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+	if (this->counter > this->fallData.time) {
+		if (!this->fallData.recoverMode) {
+			for (int i = 0; i < this->fallData.popsPerIteration; i++) {
+				if (this->fallData.pattern.size() == 0) { //Will be replaced by a check if all enemies are dead.
+					this->fallData.recoverMode = true;
+				}
+				else {
+					index.x = this->fallData.pattern[0].x;
+					index.y = this->fallData.pattern[0].y;
+					this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
+					this->fallData.pattern.erase(this->fallData.pattern.begin());
+					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+
+				}
+			}
 			this->counter = 0;
-			if (this->fallData.pattern.size() == 0) {
-				this->fallData.recoverMode = true;
-			}
 		}
-	}
-	else {
-		if (this->fallData.pattern.size() == 0 && this->fallData.recoverPattern.size() != 0) {
+		else {
 			//Recover a floor tile if the time is right
-			if (this->counter > this->fallData.time) {
-				Index index(this->fallData.recoverPattern[0].x, this->fallData.recoverPattern[0].y);
-				this->fallData.recoverPattern.erase(this->fallData.recoverPattern.begin());
-				this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::RECOVER, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-				this->counter = 0;
+			for (int i = 0; i < this->fallData.popsPerIteration; i++) {
+				if (this->fallData.recoverPattern.size() != 0) {
+					index.x = this->fallData.recoverPattern[0].x;
+					index.y = this->fallData.recoverPattern[0].y;
+					this->fallData.recoverPattern.erase(this->fallData.recoverPattern.begin());
+					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::RECOVER, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+				}
 			}
+			this->counter = 0;
 		}
 	}
-	/*
-	else if (this->fallData.recoverPattern.size() == 0) {
-		for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
-			if (this->noCollisionDynamicObjects[i]->getState() == OBJECTSTATE::TYPE::IDLE) {
-				this->staticObjects.push_back(this->noCollisionDynamicObjects[i]);
-				this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
-			}
-		}
-	}
-	*/
-
-
-	/*
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
 		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
 		}
 	}
-	*/
 	
 
 	int ID;

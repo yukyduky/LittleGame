@@ -120,10 +120,13 @@ void RectangleComponent::update()
 				this->updateColor(finalColor);
 			}
 			else {
-				this->updateColor(this->color);
 				this->head->setState(OBJECTSTATE::TYPE::FALLING);
 			}
 		}
+		break;
+	case OBJECTSTATE::TYPE::RESETCOLOR:
+		this->updateColor(this->color);
+		this->head->setState(OBJECTSTATE::TYPE::IDLE);
 		break;
 	default:
 		break;

@@ -12,6 +12,7 @@ struct Index
 	int x;
 	int y;
 
+	Index() {};
 	Index(int x, int y) { this->x = x; this->y = y; }
 };
 
