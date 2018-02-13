@@ -23,6 +23,7 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->state = OBJECTSTATE::TYPE::IDLE;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
+	this->velocityLastFrame = XMFLOAT3(0.0f, 0.0f, 0.0f);
 }
 
 const size_t ActorObject::getID()
@@ -119,6 +120,8 @@ void ActorObject::move()
 	XMFLOAT3 tempPos = playerPos;
 	tempPos.x += MovementVector.x * playerVelocity.x * deltaTime;
 	tempPos.z += MovementVector.y * playerVelocity.z * deltaTime;
+	this->velocityLastFrame.x = MovementVector.x * playerVelocity.x * deltaTime;
+	this->velocityLastFrame.z = MovementVector.y * playerVelocity.z * deltaTime;
 	XMFLOAT3 playerNewPos;
 
 	//Check so that the player still is inside the arena in x- and z-dimension.

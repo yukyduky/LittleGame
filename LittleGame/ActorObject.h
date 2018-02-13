@@ -46,6 +46,7 @@ protected:
 	GamePlayState* pGPS = nullptr;
 
 	bool keyBoardInput;
+	XMFLOAT3 velocityLastFrame;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
