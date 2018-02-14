@@ -15,7 +15,7 @@
 
 
 namespace SOUND {
-	enum NAME { AHEM, GULP, SIZE };
+	enum NAME { AHEM, GULP, BEEP0, BEEP1, BEEP2, BEEP3, BEEP4, SIZE };
 }
 namespace MUSIC {
 	enum NAME { ONEPUNCH, SIZE };
