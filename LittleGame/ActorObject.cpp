@@ -2,6 +2,8 @@
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
 #include "ArenaGlobals.h"
+#include "StateManager.h"
+#include "EndState.h"
 
 //Include spells
 //#include "Spell.h"
@@ -14,14 +16,16 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
-	this->setState(OBJECTSTATE::TYPE::IDLE);
 
 	this->type = objectType;
 	this->velocity = velocity;	
+	this->state = OBJECTSTATE::TYPE::ACTIVATED;
 	this->speed = speed;
-	this->state = OBJECTSTATE::TYPE::IDLE;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
+	
+	// Balance
+	this->hp = 100;
 }
 
 const size_t ActorObject::getID()
@@ -42,6 +46,11 @@ float ActorObject::getRotation()
 XMFLOAT3 ActorObject::getDirection()
 {
 	return XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
+}
+
+XMFLOAT3 ActorObject::getDirection(float length)
+{
+	return XMFLOAT3(-std::cos(this->rotation) * length, 0.0f, std::sin(this->rotation) * length);
 }
 
 void ActorObject::setSpeed(float speed)
@@ -67,7 +76,6 @@ void ActorObject::cleanUp()
 		c->cleanUp();
 		delete c;
 	}
-	
 }
 
 void ActorObject::update()
@@ -143,7 +151,7 @@ void ActorObject::move()
 
 void ActorObject::moveUp()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
@@ -160,7 +168,7 @@ void ActorObject::moveUp()
 
 void ActorObject::moveLeft()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
@@ -176,7 +184,7 @@ void ActorObject::moveLeft()
 }
 void ActorObject::moveDown()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
@@ -192,7 +200,7 @@ void ActorObject::moveDown()
 }
 void ActorObject::moveRight()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		double dt = Locator::getGameTime()->getDeltaTime();
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
@@ -269,7 +277,7 @@ void ActorObject::rotate(XMFLOAT2 aimVec)
 
 void ActorObject::fireAbility0()
 {
-	if ((this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[0]->castSpell();
 	}
 	else {
@@ -279,7 +287,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::fireAbilityX()
 {
-	if ((this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
+	if ((this->state == OBJECTSTATE::TYPE::ACTIVATED) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
 		this->selectedSpell->castSpell();
 	}
 	else {
@@ -289,7 +297,7 @@ void ActorObject::fireAbilityX()
 
 void ActorObject::selectAbility1()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[1];
 	}
 	else {
@@ -301,7 +309,7 @@ void ActorObject::selectAbility2()
 {
 	this->pGPS->GETMouseInput()->getWorldPosition();
 
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
 	}
 	else {
@@ -311,7 +319,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[3];
 		
 	}
@@ -322,7 +330,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	if (this->state == OBJECTSTATE::TYPE::IDLE || this->state == OBJECTSTATE::TYPE::MOVING) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
 	}
 	else {
@@ -348,6 +356,18 @@ void ActorObject::decCD()
 		itteration->updateCD();
 	}
 	
+}
+
+void ActorObject::dealDmg(float dmg)
+{
+	this->hp -= dmg;
+	if (this->hp <= 0) {
+		this->hp = 0;
+		this->state = OBJECTSTATE::TYPE::DEAD;
+
+		// Push the "EndState" which will end all!
+		StateManager::pushState(EndState::getInstance());
+	}
 }
 
 void ActorObject::addSpell(Spell * spell)
@@ -441,7 +461,7 @@ void ActorObject::switchSpell()
 			}
 			break;
 
-		case NAME::SPEEDBUFF:
+		case NAME::BUFF:
 			switch (j->getGlyph())
 			{
 			case GLYPHTYPE::NONE:

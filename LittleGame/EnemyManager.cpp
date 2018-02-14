@@ -5,6 +5,11 @@
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
 #include "AIComponent.h"
+#include "EnemyObject.h"
+#include "EnemyAttackComponent.h"
+#include "ImmolationEnemyAttack.h"
+#include "EnemyAttackingState.h"
+#include "EnemyMovingState.h"
 
 EnemyManager::EnemyManager()
 {
@@ -61,13 +66,22 @@ void EnemyManager::cleanLevel()
 
 ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
-	ActorObject* enemy;
-	BlockComponent* block;
+	/// D E C L A R A T I O N
+	// GRAND OBJECT
+	EnemyObject* enemyObject;
+	// COMPONENTS
+	BlockComponent* graphicsComponent;
+	AIComponent* aiComponent;
 	InputComponent* input;
-	PhysicsComponent* physics;
+	PhysicsComponent* physicsComponent;
+	EnemyAttackComponent* attackComponent;
+	// STATES
+	EnemyAttackingState* attackState;
+	EnemyMovingState* moveState;
 
-	// Values
-	int ID = this->pGPS->newID();
+
+	/// D E F I N I T I O N
+	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
@@ -86,26 +100,36 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	else if (spawnLocation == 4)
 		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
 
+
 	float speed = 180;
 	XMFLOAT3 velocity(speed, speed, speed);
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
+	float immolationDamage = 30;
+	float immolationDuration = 3;
+	float immolationRange = 40;
 	
-	// Object
-	enemy = new ActorObject(ID, speed, pos, velocity, this->pGPS, OBJECTTYPE::ENEMY);
+	// OBJECT
+	enemyObject = new EnemyObject(
+		ID, speed, pos, velocity, 
+		this->pGPS, &this->players, 
+		OBJECTTYPE::ENEMY
+	);
+	
+	// COMPONENTS
+	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
+	physicsComponent = new PhysicsComponent(*enemyObject, 20);
+	aiComponent = new AIComponent(*enemyObject, aiBehavior);
+	attackComponent = new ImmolationEnemyAttack(immolationDamage, immolationDuration, immolationRange, *enemyObject);
+	
+	// STATES
+	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
+	moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
 
-	// Input Component
-	input = new AIComponent(*enemy, aiBehavior, this->players);
-
-	// Physics Component
-	physics = new PhysicsComponent(*enemy, 14);
-
-	// Graphics Component
-	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
-
+	
 	// Make the enemy inactive
-	enemy->setState(OBJECTSTATE::TYPE::DEAD);
-	return enemy;
+	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return enemyObject;
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
@@ -136,7 +160,7 @@ void EnemyManager::update()
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
-				freshEnemy->setState(OBJECTSTATE::TYPE::IDLE);
+				freshEnemy->setState(OBJECTSTATE::TYPE::ACTIVATED);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
 				char msgbuf[20];

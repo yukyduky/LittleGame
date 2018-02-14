@@ -145,7 +145,6 @@ void BlockComponent::createVertices(XMFLOAT4 color)
 BlockComponent::BlockComponent(
 	GamePlayState &pGPS, GameObject& obj, XMFLOAT4 color,
 	XMFLOAT3 scale, XMFLOAT3 rotation
-
 ) : ID(obj.getID())
 {
 	// Connections

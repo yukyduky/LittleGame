@@ -89,10 +89,10 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 	GameObject* object;
 	RectangleComponent* rect;
 	int nextID = this->nextID();
-	//Create the ArenaObject and the RectangleComponent
+	// Create the ArenaObject and the RectangleComponent
 	object = new ArenaObject(nextID, pos);
 	rect = new RectangleComponent(*object, color.x, color.y, color.z, color.w);
-	//Add the RectangleComponent to the ArenaObject and store them in the vector arrays
+	// Add the RectangleComponent to the ArenaObject and store them in the vector arrays
 	object->SETworldMatrix(worldM);
 	object->addComponent(rect);
 	staticObjects.push_back(object);
@@ -102,7 +102,6 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
-//	int nextID = this->nextID();
 	XMMATRIX rotLR = XMMatrixRotationY(XM_PI * 0.5);
 	XMMATRIX rotTB = XMMatrixIdentity();
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5, this->wallHeight, this->squareSize * 0.5);
@@ -245,7 +244,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	object->SETworldMatrix(worldM);
 	staticObjects.push_back(object);
-	graphics.push_back(block);
+	//graphics.push_back(block);
 	this->nrOfWalls++;
 }
 
