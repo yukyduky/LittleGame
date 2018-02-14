@@ -2,9 +2,11 @@
 #include "ActorObject.h"
 #include "EnemyObject.h"
 #include "GamePlayState.h"
+#include "StateManager.h"
+#include "EndState.h"
 
 ImmolationEnemyAttack::ImmolationEnemyAttack(
-	float damage, float attackDuration, float attackRange, 
+	float damage, float attackDuration, float attackRange, int* pActiveEnemiesCount,
 	EnemyObject& pHead
 )
 {
@@ -13,6 +15,7 @@ ImmolationEnemyAttack::ImmolationEnemyAttack(
 	pHead.addComponent(this);
 	pHead.SETattackComponent(this);
 	this->players = pHead.getPlayers();
+	this->pActiveEnemiesCount = pActiveEnemiesCount;
 
 	// this data might be given as input parameters if we want different kinds of immolation attackers
 	this->attackDamage = damage;
@@ -34,7 +37,9 @@ void ImmolationEnemyAttack::update()
 }
 void ImmolationEnemyAttack::cleanUp()
 {
-
+	// The object this is attached to is getting cleaned, which means, IT'S DEAD.
+	(*this->pActiveEnemiesCount)--;
+	int test = 1;
 }
 void ImmolationEnemyAttack::attack()
 {
