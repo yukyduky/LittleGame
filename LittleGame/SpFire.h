@@ -27,5 +27,7 @@ private:
 	float damage;
 	// Travel-range of spell
 	int range;
+
+	int hits;
 };
 #endif // !SPFIRE_H

@@ -27,5 +27,13 @@ private:
 	float damage;
 	// Travel-range of spell
 	int range;
+	// If the efect is active
+	bool active;
+	// value to increase to make the player float
+	float floatingValue;
+	// to reset the player after efect wears of
+	float oriY, oriRadius;
+	// needs to be lower than CD.
+	float duration;
 };
 #endif // !SPBUFF_H

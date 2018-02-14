@@ -28,6 +28,7 @@ private:
 	// Travel-range of spell
 	int range;
 
+	Projectile* theProj;
 	float start, end;
 	bool active;
 };

@@ -60,8 +60,6 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 		vecO.y + mousePoint.y * vecY.y,
 		vecO.z + mousePoint.y * vecY.z);
 
-	//DirectX::XMFLOAT3 tempFloatVec(pointP.x - vecO.x, pointP.y - vecO.y, pointP.z - vecO.z);
-
 	DirectX::XMVECTOR vecCP = DirectX::XMLoadFloat3(&pointP);
 	DirectX::XMVECTOR vecCam = DirectX::XMLoadFloat3(&this->cameraPos);
 
@@ -69,19 +67,6 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 	vecPointInArena = DirectX::XMPlaneIntersectLine(this->surface, vecCP, vecCam);
 
 	DirectX::XMStoreFloat3(&result, vecPointInArena);
-
-	//result.x += 2.0f;
-	//result.z += 2.0f;
-
-	//result.x /= 4.0f;
-	//result.z /= 4.0f;
-
-
-	//result.x *= (ARENAWIDTH);
-	//result.z *= (ARENAHEIGHT);
-
-	//result.x -= 400.0f;
-	//result.z -= (600.0f);
 
 	return result;
 }
