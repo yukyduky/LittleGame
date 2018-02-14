@@ -25,7 +25,7 @@ bool SpFire::castSpell()
 	}
 	else
 	{
-		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range);
+		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, true);
 		this->spawnProj(props);
 
 		this->setState(SPELLSTATE::COOLDOWN);

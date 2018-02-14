@@ -7,16 +7,16 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-		// start-size
-		this->start = 30;
-		// end-size
-		this->end = 100;
-		// only 1 bomb out
-		this->active = false;
+	// start-size
+	this->start = 30;
+	// end-size
+	this->end = 100;
+	// only 1 bomb out
+	this->active = false;
 
-			this->setCoolDown(5.3);
-			this->damage = this->start;
-			this->range = -1;
+	this->setCoolDown(5.3);
+	this->damage = this->start;
+	this->range = -1;
 
 }
 
@@ -36,7 +36,7 @@ bool SpBomb::castSpell()
 		if (!this->active)
 		{
 			this->active = true;
-			ProjProp props(30, XMFLOAT4(0.9f, 0.4f, 0.0f, 0.2f), 0, this->range);
+			ProjProp props(30, XMFLOAT4(0.9f, 0.4f, 0.0f, 0.2f), 0, this->range, false);
 			this->theProj = this->spawnProj(props);
 		}
 
@@ -63,7 +63,7 @@ void SpBomb::update()
 			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage);
 			this->theProj->SETscaleMatrix(scaleM);
 		}
-		else if (this->damage < this->end + 0.1) // delay so that the explosion can kill targets
+		else if (this->damage < this->end + 0.2) // delay so that the explosion can kill targets
 		{
 			this->damage += 20 * Locator::getGameTime()->getDeltaTime();
 		}

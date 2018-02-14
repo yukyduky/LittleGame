@@ -18,7 +18,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::ve
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, 0, this->squareSize * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
-	vColor color(72.0f / 255.0f, 118.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
+	vColor color(0.0f / 255.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
 	//Create all the squares representing the floor
 	for (int i = 0; i < grid.size(); i++)
 	{
@@ -89,10 +89,10 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 	GameObject* object;
 	RectangleComponent* rect;
 	int nextID = this->nextID();
-	//Create the ArenaObject and the RectangleComponent
+	// Create the ArenaObject and the RectangleComponent
 	object = new ArenaObject(nextID, pos);
 	rect = new RectangleComponent(*object, color.x, color.y, color.z, color.w);
-	//Add the RectangleComponent to the ArenaObject and store them in the vector arrays
+	// Add the RectangleComponent to the ArenaObject and store them in the vector arrays
 	object->SETworldMatrix(worldM);
 	object->addComponent(rect);
 	staticObjects.push_back(object);
@@ -237,14 +237,14 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	XMFLOAT3 tempScale(1, 1, 1);						// TOBE DELETED
 	XMFLOAT3 tempRotation(0, 0, 0);
 	block = new BlockComponent(*this->pGPS, *object, color, tempScale, tempRotation);
-	bSphere = new PhysicsComponent(*object, this->squareSize * 2.0f);
+	bSphere = new PhysicsComponent(*object, this->squareSize * 0.5);
 	XMFLOAT3 bSpherePos = pos;
 	bSpherePos.y = this->squareSize * 0.5f;
 	bSphere->updateBoundingArea(bSpherePos);
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	object->SETworldMatrix(worldM);
 	staticObjects.push_back(object);
-	graphics.push_back(block);
+	//graphics.push_back(block);
 	this->nrOfWalls++;
 }
 

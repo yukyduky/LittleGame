@@ -30,6 +30,8 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Play music (MVP, this will/should be changed later on)
 //	this->audio->play(MUSIC::ONEPUNCH);
 
+
+
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 

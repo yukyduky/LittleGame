@@ -228,11 +228,11 @@ int QuadTree::GETindex(GameObject* object) {
 	if (this != nullptr && this->nodes[0] != nullptr) {
 		// BOTTOM HALF
 		// TRUE if object is FULLY under parent-quad's 'midpointY'
-		bottomHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointY);
+		bottomHalf = ((object->GETPosition().z + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointY);
 
 		// TOP HALF
 		// TRUE if object is FULLY above parent-quad's 'midpointY'
-		topHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointY);
+		topHalf = ((object->GETPosition().z - object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointY);
 
 		// LEFT HALF
 		// TRUE if object is FULLY ...
@@ -244,7 +244,7 @@ int QuadTree::GETindex(GameObject* object) {
 		}
 		// RIGHT HALF
 		// TRUE if object is FULLY ...
-		else if ((object->GETPosition().x + object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointX) {
+		else if ((object->GETPosition().x - object->GETphysicsComponent()->GETBoundingSphere().Radius) > this->midpointX) {
 			if (bottomHalf)
 				index = BOTTOM_RIGHT;
 			else if (topHalf)

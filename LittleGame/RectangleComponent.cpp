@@ -128,7 +128,7 @@ void RectangleComponent::update()
 	//This case sets the objects color to it's original color
 	case OBJECTSTATE::TYPE::RESETCOLOR:
 		this->updateColor(this->color);
-		this->head->setState(OBJECTSTATE::TYPE::IDLE);
+		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
 		break;
 	default:
 		break;

@@ -45,14 +45,13 @@ private:
 	void cleanLevel();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Creates an Actor, attaches
+	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
 	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();
 	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players);
-
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
