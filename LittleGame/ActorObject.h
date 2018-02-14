@@ -47,7 +47,6 @@ protected:
 	GamePlayState* pGPS = nullptr;
 
 	Crosshair* crossHair;
-	bool keyBoardInput;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -58,6 +57,7 @@ public:
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
+	virtual XMFLOAT3 getDirection(float length);
 	virtual void setSpeed(float speed);
 
 	virtual void receive(GameObject & obj, Message msg);

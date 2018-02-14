@@ -27,18 +27,20 @@
 class Command;
 class InputComponent;
 
-//(Size of cube, color in XMFLOAT3, travelSpeed)
+//(Size of cube, color in XMFLOAT4, travelSpeed, range(tiem alive), if it sould spinn)
 struct ProjProp {
 	float size;
 	XMFLOAT4 color;
 	float speed;
 	float range;
+	bool spinn;
 
-	ProjProp(float s, XMFLOAT4 c, float spd, float r) 
+	ProjProp(float s, XMFLOAT4 c, float spd, float r, bool spn) 
 		: size(s)
 		, color(c)
 		, speed(spd)
-		, range(r) 
+		, range(r)
+		, spinn(spn)
 	{}
 	ProjProp() {}
 };

@@ -10,7 +10,7 @@ class Spell;
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
+	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
 	~Projectile();
 
 	/*Moves the projectile in the direction of the velocity with speed of this->speed, 
@@ -20,17 +20,19 @@ public:
 
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
-	void setDirection(XMFLOAT3 dir) { this->direction = dir; }
-	XMFLOAT3 getDirection() { return this->direction; }
+	void setDirection(XMVECTOR dir) { this->direction = dir; }
+	XMVECTOR getDirection() { return this->direction; }
 	void setSpell(Spell* spell) { this->spell = spell; }
 	void setRange(int range) { this->range = range; }
 
 	Spell* getSpell() ;
 private:
 	// traveldirection of the projectile
-	XMFLOAT3 direction;
+	XMVECTOR direction;
 	// The speed of the projectile
 	float speed;
+	// If the pojectile should spinn around its X-axis
+	bool spinn;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell;
 	// Range of travel
