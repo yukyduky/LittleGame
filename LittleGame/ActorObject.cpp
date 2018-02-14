@@ -58,7 +58,6 @@ void ActorObject::setSpeed(float speed)
 	this->speed = speed;
 }
 
-
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
