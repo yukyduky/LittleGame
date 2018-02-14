@@ -64,6 +64,8 @@ bool SpDash::castSpell()
 
 		this->getPlayer()->setPosition(newPos);
 
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
+
 		this->setState(SPELLSTATE::COOLDOWN);
 		this->burning = true;
 

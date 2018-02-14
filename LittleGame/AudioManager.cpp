@@ -36,6 +36,15 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/AttackGrunt_8.wav"), SOUND::ATTACKGRUNT_8);
 	error += this->loadSound(std::string("include/Sound/AttackGrunt_9.wav"), SOUND::ATTACKGRUNT_9);
 
+	error += this->loadSound(std::string("include/Sound/EnemyDeath_1.wav"), SOUND::ENEMYDEATH_1);
+	error += this->loadSound(std::string("include/Sound/EnemyDeath_2.wav"), SOUND::ENEMYDEATH_2);
+	error += this->loadSound(std::string("include/Sound/EnemyDeath_3.wav"), SOUND::ENEMYDEATH_3);
+	error += this->loadSound(std::string("include/Sound/EnemyDeath_4.wav"), SOUND::ENEMYDEATH_4);
+	error += this->loadSound(std::string("include/Sound/EnemyDeath_5.wav"), SOUND::ENEMYDEATH_5);
+
+	error += this->loadSound(std::string("include/Sound/AbilitySound_SpeedBoost.wav"), SOUND::ABILITYSOUND_SPEEDBOOST);
+	error += this->loadSound(std::string("include/Sound/AbilitySound_Teleport.wav"), SOUND::ABILITYSOUND_TELEPORT);
+
 	error += this->mapMusic(std::string("include/Sound/OPM-OST.ogg"), MUSIC::ONEPUNCH);
 
 	this->adjustEffects(this->soundVolume);

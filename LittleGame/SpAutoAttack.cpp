@@ -51,6 +51,8 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
+		Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
+
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 

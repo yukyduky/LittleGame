@@ -54,6 +54,7 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
+		Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
 
 		this->hits--;
 		if (this->hits == 0)
