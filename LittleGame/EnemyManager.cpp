@@ -106,8 +106,8 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 1;
-	float immolationDuration = 0;
-	float immolationRange = 50;
+	float immolationDuration = 0.5;
+	float immolationRange = 80;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
