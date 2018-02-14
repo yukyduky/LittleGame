@@ -116,7 +116,9 @@ void AudioManager::setRepeatMusic(bool repeat)
 
 void AudioManager::cleanUp()
 {
-	//this->soundQueue.clear();
+	for (int i = 0; i < this->soundQueue.size(); i++) {
+		soundQueue[i].~Sound();
+	}
 	for (int i = 0; i < this->sounds.size(); i++) {
 		sounds[i].~SoundBuffer();
 	}
