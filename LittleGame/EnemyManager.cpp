@@ -8,7 +8,8 @@
 #include "EnemyObject.h"
 #include "EnemyAttackComponent.h"
 #include "ImmolationEnemyAttack.h"
-
+#include "EnemyAttackingState.h"
+#include "EnemyMovingState.h"
 
 EnemyManager::EnemyManager()
 {
@@ -65,14 +66,22 @@ void EnemyManager::cleanLevel()
 
 ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
-	EnemyObject* enemy;
-	BlockComponent* block;
+	/// D E C L A R A T I O N
+	// GRAND OBJECT
+	EnemyObject* enemyObject;
+	// COMPONENTS
+	BlockComponent* graphicsComponent;
+	AIComponent* aiComponent;
 	InputComponent* input;
-	PhysicsComponent* physics;
-	EnemyAttackComponent* attack;
+	PhysicsComponent* physicsComponent;
+	EnemyAttackComponent* attackComponent;
+	// STATES
+	EnemyAttackingState* attackState;
+	EnemyMovingState* moveState;
 
-	// Values
-	int ID = this->pGPS->newID();
+
+	/// D E F I N I T I O N
+	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
@@ -96,26 +105,31 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	XMFLOAT3 velocity(speed, speed, speed);
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
+	float immolationDamage = 30;
+	float immolationDuration = 3;
+	float immolationRange = 40;
 	
-	// Object
-	enemy = new EnemyObject(ID, speed, pos, velocity, this->pGPS, &this->players, OBJECTTYPE::ENEMY);
-
-	// Attack
-	attack = new ImmolationEnemyAttack(*enemy, &players);
+	// OBJECT
+	enemyObject = new EnemyObject(
+		ID, speed, pos, velocity, 
+		this->pGPS, &this->players, 
+		OBJECTTYPE::ENEMY
+	);
 	
-	// Graphics Component
-	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
-
-	// Physics Component
-	physics = new PhysicsComponent(*enemy, 14);
-
-	// Input Component
-	input = new AIComponent(*enemy, aiBehavior, this->players);
+	// COMPONENTS
+	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
+	physicsComponent = new PhysicsComponent(*enemyObject, 20);
+	aiComponent = new AIComponent(*enemyObject, aiBehavior);
+	attackComponent = new ImmolationEnemyAttack(immolationDamage, immolationDuration, immolationRange, *enemyObject);
 	
+	// STATES
+	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
+	moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
 
+	
 	// Make the enemy inactive
-	enemy->setState(OBJECTSTATE::TYPE::DEAD);
-	return enemy;
+	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return enemyObject;
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)

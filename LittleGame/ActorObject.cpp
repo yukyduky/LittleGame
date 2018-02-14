@@ -356,7 +356,7 @@ void ActorObject::decCD()
 void ActorObject::dealDmg(float dmg)
 {
 	this->hp -= dmg;
-	if (this->hp >= 0) {
+	if (this->hp <= 0) {
 		this->hp = 0;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 

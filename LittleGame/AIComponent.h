@@ -3,8 +3,12 @@
 #define AICOMPONENT_H
 
 #include "InputComponent.h"
+#include "EnemyState.h"
+#include "EnemyMovingState.h"
 
+class EnemyObject;
 class Command;
+class EnemyMoveState;
 
 namespace AIBEHAVIOR {
 	enum KEY {
@@ -15,7 +19,7 @@ namespace AIBEHAVIOR {
 
 namespace AICOMMANDS {
 	enum KEY {
-		MOVE, 
+		MOVE, ATTACK,
 		SIZE
 	};
 }
@@ -26,10 +30,13 @@ class AIComponent : public InputComponent
 {
 private:
 	size_t ID = -1;
-	ActorObject* pHead = nullptr;
-	std::vector<ActorObject*> players;
+	EnemyObject* pHead = nullptr;
+	std::vector<ActorObject*>* players;
 	AIBEHAVIOR::KEY behavior;
 	Command* commands[AICOMMANDS::SIZE];
+
+	// Same vector as the one which relies in pHead
+	std::vector<EnemyState*> states;
 
 	XMFLOAT2 simulatedMovement;
 	XMFLOAT2 simulatedRotation;
@@ -38,8 +45,12 @@ private:
 
 
 public:
-	AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players);
+	AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior);
 	
+	void pushCommand(AICOMMANDS::KEY command);
+	void pushState(EnemyState& state);
+	void popState();
+
 	void init();
 
 	void receive(GameObject & obj, Message msg);

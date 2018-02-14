@@ -5,14 +5,20 @@
 #include "ActorObject.h"
 #include "GameObject.h"
 #include "EnemyAttackComponent.h"
+#include "EnemyState.h"
 
+
+class EnemyMovingState;
 
 class EnemyObject : public ActorObject
 {
 private:
 	EnemyAttackComponent * attackComponent;
 	std::vector<ActorObject*>* players;
+	// Same vector as the one which relies in this, soon-to-be, AI-component
+	std::vector<EnemyState*> states;
 
+	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
 	float distanceToPlayer;
 
@@ -30,13 +36,12 @@ public:
 
 	XMFLOAT2 getVectorToPlayer();
 	float getDistanceToPlayer();
+	void dealDmgToPlayer(size_t playerID, float damage);
+	std::vector<ActorObject*>* getPlayers();
 
 	virtual void update();
 	virtual void attack();
 };
-
-
-
 
 
 #endif

@@ -2,25 +2,43 @@
 #include "Commands.h"
 #include "ActorObject.h"
 #include "EnemyObject.h"
+#include "EnemyMovingState.h"
+#include "EnemyAttackingState.h"
 
 void AIComponent::bindCommands()
 {
 	this->commands[AICOMMANDS::MOVE] = new CommandControllerMove;
+	this->commands[AICOMMANDS::ATTACK] = new CommandEnemyAttack;
 }
 
-AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players)
+AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior)
 {
-	// Set up head
+	/// Set up head
 	this->pHead = &obj;
 	this->pHead->SETinputComponent(this);
 	this->ID = obj.getID();
 
-	// Set internal data
+	/// Set internal data
 	this->behavior = aiBehavior;
-	this->players = players;
+	this->players = obj.getPlayers();
 
-	// Initialize
+	/// Initialize
 	this->init();
+}
+
+void AIComponent::pushCommand(AICOMMANDS::KEY command)
+{
+	this->commandQueue.push_back(this->commands[command]);
+}
+
+void AIComponent::pushState(EnemyState& state)
+{
+	this->states.push_back(&state);
+}
+
+void AIComponent::popState()
+{
+	this->states.pop_back();
 }
 
 void AIComponent::init()
@@ -47,32 +65,33 @@ void AIComponent::generateCommands()
 {
 	XMVECTOR direction;
 
+	//// O L D
+	//switch (this->behavior) {
+	//	case AIBEHAVIOR::STRAIGHTTOWARDS: {
+	//		// Update Movement
+	//		this->simulatedMovement = this->pHead->getVectorToPlayer();
 
-	switch (this->behavior) {
-		case AIBEHAVIOR::STRAIGHTTOWARDS: {
-			/// Update Movement
-			EnemyObject* pHead = dynamic_cast<EnemyObject*>(this->pHead);
-			this->simulatedMovement = pHead->getVectorToPlayer();
+	//		// Update Rotation
 
-			/// Update Rotation
+	//		// Push back the command!
+	//		this->commandQueue.push_back(this->commands[AICOMMANDS::MOVE]);
+	//		break;
+	//	}
+	//	case AIBEHAVIOR::TEMPLATE0: {
 
-			// Push back the command!
-			this->commandQueue.push_back(this->commands[AICOMMANDS::MOVE]);
-			break;
-		}
-		case AIBEHAVIOR::TEMPLATE0: {
+	//		break;
+	//	}
+	//	case AIBEHAVIOR::TEMPLATE1: {
 
-			break;
-		}
-		case AIBEHAVIOR::TEMPLATE1: {
+	//		break;
+	//	}
+	//}
 
-			break;
-		}
-	}
+	// Update Movement
+	this->simulatedMovement = this->pHead->getVectorToPlayer();
 
-
-
-	
+	/// Execute behavior according to current state
+	this->states.back()->executeBehavior();
 }
 
 void AIComponent::update()
