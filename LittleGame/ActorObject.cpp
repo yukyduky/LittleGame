@@ -44,6 +44,11 @@ XMFLOAT3 ActorObject::getDirection()
 	return XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
 }
 
+XMFLOAT3 ActorObject::getDirection(float length)
+{
+	return XMFLOAT3(-std::cos(this->rotation) * length, 0.0f, std::sin(this->rotation) * length);
+}
+
 void ActorObject::setSpeed(float speed)
 {
 	this->speed = speed;
@@ -441,7 +446,7 @@ void ActorObject::switchSpell()
 			}
 			break;
 
-		case NAME::SPEEDBUFF:
+		case NAME::BUFF:
 			switch (j->getGlyph())
 			{
 			case GLYPHTYPE::NONE:

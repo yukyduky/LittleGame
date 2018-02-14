@@ -340,11 +340,11 @@ void GamePlayState::initPlayer()
 
 	/// CROSSHAIR	
 		Crosshair* crossHair;
-		BlockComponent* crossX;
+		BlockComponent* cross;
 
-		crossHair = new Crosshair(actor, this->newID(), XMFLOAT3(250.0f, 0.0f, 0.0f));
+		crossHair = new Crosshair(actor, this->newID());
 
-		crossX = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
+		cross = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
 
 		this->noCollisionDynamicObjects.push_back(crossHair);
 	/// END OF CROSSHAIR
@@ -353,6 +353,7 @@ void GamePlayState::initPlayer()
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);
 }
+
 
 Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 {
@@ -364,7 +365,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	PhysicsComponent* phyComp;
 
 	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
-	proj = new Projectile(nextID, props.speed, position, dir, OBJECTTYPE::PROJECTILE);
+	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);

@@ -11,6 +11,7 @@ public:
 	MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMVECTOR cDir);
 	~MouseInput();
 
+	// Returns the position that the mouse is in on in the plane of the player
 	DirectX::XMFLOAT3 getWorldPosition();
 
 private:
@@ -20,10 +21,6 @@ private:
 	POINT mPoint;
 
 	DirectX::XMVECTOR surface;
-
-
-	bool check;
-
 };
 
 

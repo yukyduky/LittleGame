@@ -1,7 +1,7 @@
 #include "Projectile.h"
 #include "Component.h"
 
-Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
 {
 	//this->speed = spd;
 	this->setState(OBJECTSTATE::TYPE::MOVING);
@@ -9,9 +9,10 @@ Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir,
 	this->spell = nullptr;
 
 	this->type = objectType;
-	this->direction = dir;
+	this->direction = XMLoadFloat3(&dir);
 	this->speed = speed;
-	this->velocity = XMFLOAT3(this->direction.x * this->speed, this->direction.y * this->speed, this->direction.z * this->speed);
+	this->spinn = spinn;
+	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
 	this->rangeCoutner = 0;
 }
 
@@ -44,27 +45,21 @@ void Projectile::update()
 		i->update();
 	}
 
-	if (this->state == OBJECTSTATE::TYPE::DEAD)
+	float dt = Locator::getGameTime()->getDeltaTime();
+	this->pos.x += this->velocity.x * dt;
+	// Projectiles dosnt move in Y
+	this->pos.z += this->velocity.z * dt;
+	this->setPosition(pos);
+	if (this->spinn)
 	{
-		//----TEMPLATE will fix after rio has been remade
-		this->setVelocity(XMFLOAT3(0, 0, 0));
-		this->setPosition(XMFLOAT3(0, -200, 0));
-		//this->cleanUp();
-		this->send(OBJECTSTATE::TYPE::DEAD);
+		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->direction, this->rangeCoutner));
 	}
-	else
-	{
-		float dt = Locator::getGameTime()->getDeltaTime();
-		this->pos.x += this->velocity.x * dt;
-		// Projectiles dosnt move in Y
-		this->pos.z += this->velocity.z * dt;
-		this->setPosition(pos);
 
-		this->rangeCoutner++;
-		if (this->rangeCoutner >= this->range && this->range != -1)
-		{
-			this->setState(OBJECTSTATE::TYPE::DEAD);
-		}
+	this->rangeCoutner++;
+	if (this->rangeCoutner >= this->range && this->range != -1)
+	{
+		this->setState(OBJECTSTATE::TYPE::DEAD);
 	}
+	
 }
 
