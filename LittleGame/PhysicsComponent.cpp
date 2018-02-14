@@ -74,15 +74,18 @@ GameObject* PhysicsComponent::GETpHead() {
 	return this->pHead;
 }
 
-DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() {
+DirectX::BoundingSphere PhysicsComponent::GETBoundingSphere() 
+{
 	return this->selfBoundingSphere;
 }
 
-const size_t PhysicsComponent::getID() {
+const size_t PhysicsComponent::getID()
+{
 	return this->ID;
 }
 
-void PhysicsComponent::receive(GameObject & obj, Message msg) {
+void PhysicsComponent::receive(GameObject & obj, Message msg)
+{
 	// Switch case that depends on the message being received
 }
 

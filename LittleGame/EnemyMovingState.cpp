@@ -22,12 +22,11 @@ void EnemyMovingState::executeBehavior()
 	// If we're in range, switch state to attacking!
 	if (this->pHead->getDistanceToPlayer() < this->attackRange) {
 		// Push the attacking state
-		this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);
-		this->pBrain->pushState(*this->attackingStateTemplate);
+		//this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);		-- Immo shouldn't have an attackingState
+		//this->pBrain->pushState(*this->attackingStateTemplate);	-- //Shellow
 		this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 	}
-	else {
-		// Move!
-		this->pBrain->pushCommand(AICOMMANDS::MOVE);
-	}	
+
+	// Move!
+	this->pBrain->pushCommand(AICOMMANDS::MOVE);
 }

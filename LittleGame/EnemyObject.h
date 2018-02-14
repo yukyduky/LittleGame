@@ -21,7 +21,7 @@ private:
 	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
 	float distanceToPlayer;
-
+	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Updates internal 'normalizedVectorToPlayer' and 'distanceToPlayer'
 	*/
