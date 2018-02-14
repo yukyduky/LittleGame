@@ -14,7 +14,7 @@
 
 //Template for when glyphs become relevant
 enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
-// Type to not need to check dynamic_cast
+// Type to not need to check dynamic_cast NOT USED YET
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
 enum class SPELLSTATE {READY, COOLDOWN, ACTIVE, LOCKED};
