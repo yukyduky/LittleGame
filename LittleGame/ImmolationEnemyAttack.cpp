@@ -41,5 +41,5 @@ void ImmolationEnemyAttack::attack()
 	this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);
 
 	// Only coded to work against 1 player atm!
-	(*this->players)[0]->dealDmg(this->damage);
+	// (*this->players)[0]->dealDmg(this->damage);
 }

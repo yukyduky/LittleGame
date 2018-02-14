@@ -91,6 +91,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	else if (spawnLocation == 4)
 		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
 
+
 	float speed = 180;
 	XMFLOAT3 velocity(speed, speed, speed);
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
@@ -108,10 +109,10 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// Physics Component
 	physics = new PhysicsComponent(*enemy, 14);
 
-	// Graphics Component
-	block = new BlockComponent(*this->pGPS, *enemy, enemyColor, scale, rotation);
-
+	// Input Component
+	input = new AIComponent(*enemy, aiBehavior, this->players);
 	
+
 	// Make the enemy inactive
 	enemy->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemy;
