@@ -8,11 +8,19 @@ int AudioManager::init()
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
 	error += this->loadSound(std::string("include/Sound/gulp_x.wav"), SOUND::GULP);
+	error += this->loadSound(std::string("include/Sound/beep0.wav"), SOUND::BEEP0);
+	error += this->loadSound(std::string("include/Sound/beep1.wav"), SOUND::BEEP1);
+	error += this->loadSound(std::string("include/Sound/beep2.wav"), SOUND::BEEP2);
+	error += this->loadSound(std::string("include/Sound/beep3.wav"), SOUND::BEEP3);
+	error += this->loadSound(std::string("include/Sound/beep4.wav"), SOUND::BEEP4);
 
 	error += this->mapMusic(std::string("include/Sound/OPM-OST.ogg"), MUSIC::ONEPUNCH);
 
 	this->adjustEffects(this->soundVolume);
 	this->adjustMusic(this->musicVolume);
+
+	// What MUSICSTATE the game is in, declared as LEVEL1 in current version
+	this->currState = MUSICSTATE::LEVEL1;
 
 	return error;
 }
@@ -20,7 +28,11 @@ int AudioManager::init()
 int AudioManager::loadSound(std::string filename, SOUND::NAME name)
 {
 	int error = 0;
-	if (!this->sounds[name].loadFromFile(filename)) {
+	if (this->sounds[name].loadFromFile(filename)) {
+		this->soundQueue[name].setBuffer(this->sounds[name]);
+	}
+	else
+	{
 		error = -1;
 	}
 	return error;
@@ -56,8 +68,7 @@ void AudioManager::play(MUSIC::NAME name)
 
 void AudioManager::play(SOUND::NAME name)
 {
-	this->currentSound.setBuffer(this->sounds[name]);
-	this->currentSound.play();
+	this->soundQueue[name].play();
 }
 
 void AudioManager::stop(MUSIC::NAME name)
@@ -105,7 +116,7 @@ void AudioManager::setRepeatMusic(bool repeat)
 
 void AudioManager::cleanUp()
 {
-	this->soundQueue.clear();
+	//this->soundQueue.clear();
 	for (int i = 0; i < this->sounds.size(); i++) {
 		sounds[i].~SoundBuffer();
 	}

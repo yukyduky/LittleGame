@@ -28,6 +28,8 @@ bool SpAutoAttack::castSpell()
 		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000, this->range, true);
 		this->spawnProj(props);
 
+		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
+
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
 
