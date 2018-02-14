@@ -91,7 +91,8 @@ void PhysicsComponent::update()
 	this->updateBoundingArea(this->pHead->GETPosition());
 }
 
-void PhysicsComponent::cleanUp() {
+void PhysicsComponent::cleanUp() 
+{
 
 }
 

@@ -158,7 +158,8 @@ void GamePlayState::cleanUp()
 	this->graphics.clear();
 }
 
-void GamePlayState::pause() {
+void GamePlayState::pause()
+{
 
 }
 

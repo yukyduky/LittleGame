@@ -39,6 +39,7 @@ public:
 	void dealDmgToPlayer(size_t playerID, float damage);
 	std::vector<ActorObject*>* getPlayers();
 
+
 	virtual void update();
 	virtual void attack();
 };
