@@ -19,7 +19,12 @@ private:
 	size_t stride;
 	size_t offset;
 	size_t numIndices;
+	vColor color;
 	GameObject* head;
+	XMFLOAT3 points[8];
+	XMFLOAT3 normals[6];
+	double counter;
+	double transitionTime;
 
 	
 
@@ -54,7 +59,8 @@ public:
 	*/
 	virtual const size_t getID();
 	virtual void cleanUp();
-	virtual bool checkIfDead();
+	virtual OBJECTSTATE::TYPE GETstate();
+	void updateColor(vColor newColor);
 	
 };
 

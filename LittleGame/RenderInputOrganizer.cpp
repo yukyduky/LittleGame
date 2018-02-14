@@ -59,7 +59,7 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
 {
 	for (auto &i : graphics) {
-		if (!i->checkIfDead()) {
+		if (i->GETstate() != OBJECTSTATE::TYPE::INVISIBLE) {
 			this->drawGraphics(i);
 		}
 	}

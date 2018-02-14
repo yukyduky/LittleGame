@@ -50,14 +50,11 @@ void SpFire::update()
 
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::PLAYER){
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
-		proj->setState(OBJECTSTATE::TYPE::DEAD);
-	}
-
-	else if (target->getType() == OBJECTTYPE::ENEMY) {
+	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 
-
+	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
+		proj->setState(OBJECTSTATE::TYPE::DEAD);
+	}
 }

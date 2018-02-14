@@ -5,6 +5,7 @@
 #include "IGameTime.h"
 #include "ID3D.h"
 #include "IAudioManager.h"
+#include "IRandomGeneration.h"
 
 /* Service Locator pattern */
 
@@ -13,6 +14,7 @@ class Locator
 private:
 	static IGameTime* sGT;
 	static ID3D* sID3D;
+	static IRandomGeneration* sRandomGeneration;
 	static IAudioManager* sAM;
 
 public:
@@ -22,6 +24,7 @@ public:
 	*/
 	static void provide(IGameTime* gameTime) { sGT = gameTime; }
 	static void provide(ID3D* d3d) { sID3D = d3d; }
+	static void provide(IRandomGeneration* randomGeneration) { sRandomGeneration = randomGeneration; }
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Provides the address of 'audioManager'(obj) to the 'sAM'(ptr) Locator object.
 	2. Passes the pointer to 'gameTime'(obj) as a parameter.
@@ -35,6 +38,7 @@ public:
 	*/
 	static IGameTime* getGameTime() { return sGT; }
 	static ID3D* getD3D() { return sID3D; }
+	static IRandomGeneration* getRandomGenerator() { return sRandomGeneration; }
 	static IAudioManager* getAudioManager() { return sAM; }
 };
 

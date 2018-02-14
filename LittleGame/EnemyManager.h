@@ -38,6 +38,7 @@ private:
 	int currentWaveCount;
 	int currentWaveSize;
 	double spawnInterval;
+	double waveInterval;
 	double timePassed;
 	double startTime;
 
@@ -46,7 +47,7 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
-	ActorObject* createEnemy(float posScale, ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();

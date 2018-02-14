@@ -225,7 +225,7 @@ int QuadTree::GETindex(GameObject* object) {
 	bool bottomHalf, topHalf;
 
 	// If 'this' QuadTree doesn't have nodes, return -1
-	if (this->nodes[0] != nullptr) {
+	if (this != nullptr && this->nodes[0] != nullptr) {
 		// BOTTOM HALF
 		// TRUE if object is FULLY under parent-quad's 'midpointY'
 		bottomHalf = ((object->GETPosition().y + object->GETphysicsComponent()->GETBoundingSphere().Radius) < this->midpointY);

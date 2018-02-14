@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
+#include "FloorFallPatterns.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
@@ -23,33 +24,80 @@ namespace WALLTYPE {
 	enum TYPE { VERTICAL, HORIZONTAL, SIZE };
 }
 
+struct tileData {
+	SQUARETYPE::TYPE type;
+	GameObject* ptr;
+
+	tileData() {};
+
+	tileData(SQUARETYPE::TYPE type) {
+		this->type = type;
+	}
+};
+
 
 class LevelManager
 {
 private:
 	GamePlayState * pGPS;
+	FFPattern ffp;
 
 	int arenaWidth;
 	int arenaDepth;
 	int squareSize;
 	int wallHeight;
 	int tempID;
+	int nrOfWalls;
 	
-
-	void createFloor(std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Creates all the RectangleComponents representing the arena floor.
+	*/
+	void createFloor(std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Creates all the RectangleComponents representing the neon grid on the arena floor 
+		by calling createARectLine function for each line.
+	*/
 	void createNeonFloorGrid(std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
-	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Creates all the outer walls of the level by calling createAWall function for each wall.
+	*/
+	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
 	void createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
+
 	int nextID();
 
-
-	//void randomize();
+	/*--------<INFORMATION>--------
+	1. Returns the grid index pos for a given position.
+	*/
+	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+	/*--------<INFORMATION>--------
+	1. Creates the fall pattern for the floor by calling the createPattern function in FloorFallPattern
+	*/
+	void setFallPattern(FloorFallData& pattern);
 
 public:
-	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, std::vector<std::vector<SQUARETYPE::TYPE>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics);
-
-
+	/*--------<INFORMATION>--------
+	1. Creates the arena by calling the following private functions
+		createLevelWalls,
+		createFloor,
+		createNeonFloorGrid,
+		setFallPattern.
+	2. returns the latest used ID.
+	*/
+	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects, std::vector<GraphicsComponent*>& graphics);
+	/*--------<INFORMATION>--------
+	1. Changes the state of a floor tile from a given position.
+	*/
+	void changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects);
+	/*--------<INFORMATION>--------
+	1. Changes the state of a floor tile from a given grid index.
+	*/
+	void changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects);
+	/*--------<INFORMATION>--------
+	1. Returns the state of a floor tile from a given position.
+	*/
+	OBJECTSTATE::TYPE checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
 };
 
 

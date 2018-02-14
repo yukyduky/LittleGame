@@ -92,13 +92,12 @@ void SpAutoAttack::update()
 
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::PLAYER) {
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
+	if (target->getType() == OBJECTTYPE::ENEMY) {
+		target->setState(OBJECTSTATE::TYPE::DEAD);
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 
-	else if (target->getType() == OBJECTTYPE::ENEMY) {
-		target->setState(OBJECTSTATE::TYPE::DEAD);
+	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }

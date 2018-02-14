@@ -71,6 +71,9 @@
     <ClCompile Include="EndState.cpp">
       <Filter>Enemy\SubEnemy</Filter>
     </ClCompile>
+    <ClCompile Include="RandomGeneration.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
+    <ClCompile Include="FloorFallPatterns.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -142,6 +145,10 @@
     <ClInclude Include="EndState.h">
       <Filter>Enemy\SubEnemy</Filter>
     </ClInclude>
+    <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="RandomGeneration.h" />
+    <ClInclude Include="Crosshair.h" />
+    <ClInclude Include="FloorFallPatterns.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

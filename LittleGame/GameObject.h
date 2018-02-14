@@ -8,7 +8,7 @@
 
 
 namespace OBJECTSTATE {
-	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP };
+	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, INVISIBLE, RECOVER, RESETCOLOR };
 }
 namespace OBJECTTYPE {
 	enum TYPE {
@@ -48,6 +48,8 @@ protected:
 	XMFLOAT3 velocity;
 	OBJECTTYPE::TYPE type;
 	OBJECTSTATE::TYPE state;
+	double counter;
+	double transitionTime;
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::TYPE::ACTIVATED), type(OBJECTTYPE::NOT_SET) {}
@@ -68,6 +70,7 @@ public:
 	1. Adds a component using the 'components.push_back()' function.
 	*/
 	void addComponent(Component* component);
+	void nudgePos();
 	const size_t getID() const { return this->ID; }
 
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }

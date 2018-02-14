@@ -45,53 +45,59 @@ void BlockComponent::createVertices(XMFLOAT4 color)
 	p6 = (1.0, 1.0, 1.0)
 	p7 = (1.0, -1.0, 1.0)
 	*/
-	XMFLOAT3 p0(-1.0f, 1.0f, -1.0f);
-	XMFLOAT3 p1(1.0f, 1.0f, -1.0f);
-	XMFLOAT3 p2(-1.0f, -1.0f, -1.0f);
-	XMFLOAT3 p3(1.0f, -1.0f, -1.0f);
-	XMFLOAT3 p4(-1.0f, 1.0f, 1.0f);
-	XMFLOAT3 p5(-1.0f, -1.0f, 1.0f);
-	XMFLOAT3 p6(1.0f, 1.0f, 1.0f);
-	XMFLOAT3 p7(1.0f, -1.0f, 1.0f);
-
-	XMFLOAT3 normalFront(0.0f, 0.0f, -1.0f);
-	XMFLOAT3 normalLeft(-1.0f, 0.0f, 0.0f);
-	XMFLOAT3 normalRight(1.0f, 0.0f, 0.0f);
-	XMFLOAT3 normalBack(0.0f, 0.0f, 1.0f);
-	XMFLOAT3 normalTop(0.0f, 1.0f, 0.0f);
-	XMFLOAT3 normalBottom(0.0f, -1.0f, 0.0f);
+	this->points[0] = XMFLOAT3(-1.0f, 1.0f, -1.0f);
+	this->points[1] = XMFLOAT3(1.0f, 1.0f, -1.0f);
+	this->points[2] = XMFLOAT3(-1.0f, -1.0f, -1.0f);
+	this->points[3] = XMFLOAT3(1.0f, -1.0f, -1.0f);
+	this->points[4] = XMFLOAT3(-1.0f, 1.0f, 1.0f);
+	this->points[5] = XMFLOAT3(-1.0f, -1.0f, 1.0f);
+	this->points[6] = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	this->points[7] = XMFLOAT3(1.0f, -1.0f, 1.0f);
+	
+	//Front
+	this->normals[0] = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	//Left
+	this->normals[1] = XMFLOAT3(-1.0f, 0.0f, 0.0f);
+	//Right
+	this->normals[2] = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	//Back
+	this->normals[3] = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	//Top
+	this->normals[4] = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	//Bottom
+	this->normals[5] = XMFLOAT3(0.0f, -1.0f, 0.0f);
 	
 	std::array<PrimitiveVertexData, 24> vertexData;
 	//Front p0, p1, p2, p3
-	vertexData[0] = PrimitiveVertexData(p0.x, p0.y, p0.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
-	vertexData[1] = PrimitiveVertexData(p1.x, p1.y, p1.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
-	vertexData[2] = PrimitiveVertexData(p2.x, p2.y, p2.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
-	vertexData[3] = PrimitiveVertexData(p3.x, p3.y, p3.z, normalFront.x, normalFront.y, normalFront.z, r, g, b, a);
+	vertexData[0] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, r, g, b, a);
+	vertexData[1] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, r, g, b, a);
+	vertexData[2] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, r, g, b, a);
+	vertexData[3] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, r, g, b, a);
 	//Left p4, p0, p5, p2
-	vertexData[4] = PrimitiveVertexData(p4.x, p4.y, p4.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
-	vertexData[5] = PrimitiveVertexData(p0.x, p0.y, p0.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
-	vertexData[6] = PrimitiveVertexData(p5.x, p5.y, p5.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
-	vertexData[7] = PrimitiveVertexData(p2.x, p2.y, p2.z, normalLeft.x, normalLeft.y, normalLeft.z, r, g, b, a);
+	vertexData[4] = PrimitiveVertexData(this->points[4].x, this->points[4].y, this->points[4].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, r, g, b, a);
+	vertexData[5] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, r, g, b, a);
+	vertexData[6] = PrimitiveVertexData(this->points[5].x, this->points[5].y, this->points[5].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, r, g, b, a);
+	vertexData[7] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, r, g, b, a);
 	//Right p1, p6, p3, p7
-	vertexData[8] = PrimitiveVertexData(p1.x, p1.y, p1.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
-	vertexData[9] = PrimitiveVertexData(p6.x, p6.y, p6.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
-	vertexData[10] = PrimitiveVertexData(p3.x, p3.y, p3.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
-	vertexData[11] = PrimitiveVertexData(p7.x, p7.y, p7.z, normalRight.x, normalRight.y, normalRight.z, r, g, b, a);
+	vertexData[8] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, r, g, b, a);
+	vertexData[9] = PrimitiveVertexData(this->points[6].x, this->points[6].y, this->points[6].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, r, g, b, a);
+	vertexData[10] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, r, g, b, a);
+	vertexData[11] = PrimitiveVertexData(this->points[7].x, this->points[7].y, this->points[7].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, r, g, b, a);
 	//Back p6, p4, p7, p5
-	vertexData[12] = PrimitiveVertexData(p6.x, p6.y, p6.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
-	vertexData[13] = PrimitiveVertexData(p4.x, p4.y, p4.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
-	vertexData[14] = PrimitiveVertexData(p7.x, p7.y, p7.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
-	vertexData[15] = PrimitiveVertexData(p5.x, p5.y, p5.z, normalBack.x, normalBack.y, normalBack.z, r, g, b, a);
+	vertexData[12] = PrimitiveVertexData(this->points[6].x, this->points[6].y, this->points[6].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, r, g, b, a);
+	vertexData[13] = PrimitiveVertexData(this->points[4].x, this->points[4].y, this->points[4].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, r, g, b, a);
+	vertexData[14] = PrimitiveVertexData(this->points[7].x, this->points[7].y, this->points[7].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, r, g, b, a);
+	vertexData[15] = PrimitiveVertexData(this->points[5].x, this->points[5].y, this->points[5].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, r, g, b, a);
 	//Top p4, p6, p0, p1
-	vertexData[16] = PrimitiveVertexData(p4.x, p4.y, p4.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
-	vertexData[17] = PrimitiveVertexData(p6.x, p6.y, p6.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
-	vertexData[18] = PrimitiveVertexData(p0.x, p0.y, p0.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
-	vertexData[19] = PrimitiveVertexData(p1.x, p1.y, p1.z, normalTop.x, normalTop.y, normalTop.z, r, g, b, a);
+	vertexData[16] = PrimitiveVertexData(this->points[4].x, this->points[4].y, this->points[4].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, r, g, b, a);
+	vertexData[17] = PrimitiveVertexData(this->points[6].x, this->points[6].y, this->points[6].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, r, g, b, a);
+	vertexData[18] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, r, g, b, a);
+	vertexData[19] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, r, g, b, a);
 	//Bottom p2, p3, p5, p7
-	vertexData[20] = PrimitiveVertexData(p2.x, p2.y, p2.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
-	vertexData[21] = PrimitiveVertexData(p3.x, p3.y, p3.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
-	vertexData[22] = PrimitiveVertexData(p5.x, p5.y, p5.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
-	vertexData[23] = PrimitiveVertexData(p7.x, p7.y, p7.z, normalBottom.x, normalBottom.y, normalBottom.z, r, g, b, a);
+	vertexData[20] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, r, g, b, a);
+	vertexData[21] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, r, g, b, a);
+	vertexData[22] = PrimitiveVertexData(this->points[5].x, this->points[5].y, this->points[5].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, r, g, b, a);
+	vertexData[23] = PrimitiveVertexData(this->points[7].x, this->points[7].y, this->points[7].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, r, g, b, a);
 	
 	//Create indices for the box
 	DWORD index[] =
@@ -139,7 +145,6 @@ void BlockComponent::createVertices(XMFLOAT4 color)
 BlockComponent::BlockComponent(
 	GamePlayState &pGPS, GameObject& obj, XMFLOAT4 color,
 	XMFLOAT3 scale, XMFLOAT3 rotation
-
 ) : ID(obj.getID())
 {
 	// Connections
@@ -147,6 +152,10 @@ BlockComponent::BlockComponent(
 	obj.addComponent(this);
 	pGPS.addGraphics(this);
 	
+	this->color.r = color.x;
+	this->color.g = color.y;
+	this->color.b = color.z;
+	this->color.a = color.w;
 	this->createVertices(color);
 
 	// Create matrixes for world-matrix
@@ -225,16 +234,49 @@ const size_t BlockComponent::getID()
 	return this->ID;
 }
 
-bool BlockComponent::checkIfDead()
+OBJECTSTATE::TYPE BlockComponent::GETstate()
 {
-	bool returnValue = false;
-	if (this->head->getState() == OBJECTSTATE::TYPE::DEAD)
-	{
-		returnValue = true;
-	}
-	return returnValue;
+	return this->head->getState();
 }
 
+void BlockComponent::updateColor(vColor newColor)
+{
+	std::array<PrimitiveVertexData, 24> vertexData;
+	//Front p0, p1, p2, p3
+	vertexData[0] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[1] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[2] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[3] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	//Left p4, p0, p5, p2
+	vertexData[4] = PrimitiveVertexData(this->points[4].x, this->points[4].y, this->points[4].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[5] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[6] = PrimitiveVertexData(this->points[5].x, this->points[5].y, this->points[5].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[7] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normals[1].x, this->normals[1].y, this->normals[1].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	//Right p1, p6, p3, p7
+	vertexData[8] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[9] = PrimitiveVertexData(this->points[6].x, this->points[6].y, this->points[6].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[10] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[11] = PrimitiveVertexData(this->points[7].x, this->points[7].y, this->points[7].z, this->normals[2].x, this->normals[2].y, this->normals[2].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	//Back p6, p4, p7, p5
+	vertexData[12] = PrimitiveVertexData(this->points[6].x, this->points[6].y, this->points[6].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[13] = PrimitiveVertexData(this->points[4].x, this->points[4].y, this->points[4].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[14] = PrimitiveVertexData(this->points[7].x, this->points[7].y, this->points[7].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[15] = PrimitiveVertexData(this->points[5].x, this->points[5].y, this->points[5].z, this->normals[3].x, this->normals[3].y, this->normals[3].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	//Top p4, p6, p0, p1
+	vertexData[16] = PrimitiveVertexData(this->points[4].x, this->points[4].y, this->points[4].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[17] = PrimitiveVertexData(this->points[6].x, this->points[6].y, this->points[6].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[18] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[19] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normals[4].x, this->normals[4].y, this->normals[4].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	//Bottom p2, p3, p5, p7
+	vertexData[20] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[21] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[22] = PrimitiveVertexData(this->points[5].x, this->points[5].y, this->points[5].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, newColor.r, newColor.g, newColor.b, newColor.a);
+	vertexData[23] = PrimitiveVertexData(this->points[7].x, this->points[7].y, this->points[7].z, this->normals[5].x, this->normals[5].y, this->normals[5].z, newColor.r, newColor.g, newColor.b, newColor.a);
+
+	this->gVertexBuffer->Release();
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
+}
 /*_____________________________
 |          END OF             |
 |      PUBLIC FUNCTIONS       |

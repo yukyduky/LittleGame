@@ -145,8 +145,11 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Crosshair.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="IncludeSpells.h" />
+    <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EndState.h" />
@@ -154,6 +157,7 @@
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
+    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
@@ -194,12 +198,15 @@
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EndState.cpp" />
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
+    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
