@@ -29,7 +29,7 @@ private:
 	void createVertices(XMFLOAT4 color);
 
 public:
-	MenuRectComponent(MenuState& pMS, MenuObject& obj, Camera &cam, XMFLOAT4 color, XMFLOAT3 scale);
+	MenuRectComponent(Menu& pMenu, MenuObject& obj, Camera &cam, XMFLOAT4 color, XMFLOAT3 scale);
 	~MenuRectComponent();
 
 

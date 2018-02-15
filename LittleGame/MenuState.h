@@ -78,6 +78,8 @@ public:
 	*/
 	virtual void render(GameManager* gm);
 
+	void displayMenu(MENUS::TYPE menu);
+
 
 	static MenuState* getInstance();
 
@@ -90,6 +92,7 @@ public:
 
 
 	void initStartMenu();
+
 
 };
 

@@ -80,13 +80,13 @@ void MenuRectComponent::createVertices(XMFLOAT4 color)
 |_____________________________|
 */
 
-MenuRectComponent::MenuRectComponent(MenuState& pMS, MenuObject& obj, Camera &cam, XMFLOAT4 color, XMFLOAT3 scale)
+MenuRectComponent::MenuRectComponent(Menu& pMenu, MenuObject& obj, Camera &cam, XMFLOAT4 color, XMFLOAT3 scale)
 	: ID(obj.getID())
 {
 	// Connections
 	this->head = &obj;
 	obj.addComponent(this);
-	pMS.addGraphics(this);
+	pMenu.addGraphic(this);
 
 	this->color.r = color.x;
 	this->color.g = color.y;
@@ -101,7 +101,7 @@ MenuRectComponent::MenuRectComponent(MenuState& pMS, MenuObject& obj, Camera &ca
 	//XMVECTOR nor = XMLoadFloat3(&this->normal);
 	//XMVECTOR camDir = cam.GETfacingDir();
 	//XMMATRIX rotationX = XMMatrixRotationX((XMVector3AngleBetweenNormals(nor, camDir)));
-	XMMATRIX rotationX = XMMatrixRotationX(-.2);
+	XMMATRIX rotationX = XMMatrixRotationX(-0.2);
 	//XMMATRIX rotationX = XMMatrixIdentity();
 
 	XMMATRIX scaleM = XMMatrixScaling(scale.x, scale.y, scale.z);

@@ -24,6 +24,7 @@ void MenuState::init() {
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(this->camera.GETcameraPosFloat3() , XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
+	//this->displayMenu(MENUS::START);
 }
 
 void MenuState::cleanUp()
@@ -76,6 +77,14 @@ void MenuState::render(GameManager * gm) {
 	gm->display(this);
 }
 
+void MenuState::displayMenu(MENUS::TYPE menu)
+{
+	for ( auto &i : this->menus[menu]->getObjects())
+	{
+		this->menuObjects.push_back(i);
+	}
+}
+
 MenuState* MenuState::getInstance() {
 	return &sMenuState;
 }
@@ -101,10 +110,10 @@ void MenuState::initStartMenu()
 	XMFLOAT4 color(0.0f, 0.0f, 0.5f, 0.2f);
 
 	object = new MenuObject(nextID, pos);
-	background = new MenuRectComponent(*this, *object, this->camera, color, scaleM);
+	background = new MenuRectComponent(*stMenu, *object, this->camera, color, scaleM);
 
-	this->menuObjects.push_back(object);
+	//this->menuObjects.push_back(object);
 
-	//stMenu->addButton();
+	stMenu->addQuad(object);
 	this->menus[MENUS::START] = stMenu;
 }
