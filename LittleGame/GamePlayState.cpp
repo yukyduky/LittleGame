@@ -194,13 +194,11 @@ void GamePlayState::update(GameManager * gm)
 					this->fallData.recoverMode = true;
 				}
 				else {
-				/*
 					index.x = this->fallData.pattern[0].x;
 					index.y = this->fallData.pattern[0].y;
 					this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
 					this->fallData.pattern.erase(this->fallData.pattern.begin());
 					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-				*/
 				}
 			}
 			this->counter = 0;

@@ -113,8 +113,12 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMVECTOR vec;
 	XMFLOAT2 posIndex;
 	XMFLOAT3 temp;
+
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
+	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
+	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, ffp.GETmaxWallNum());
+	this->ffp.createWallPattern(caseNr, wData);
 	
 	//Create pillars in the corners
 	for (int i = 0; i < 2; i++)
@@ -130,30 +134,10 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 			staticPhysicsCount++;
 		}
 	}
-	
-	int* rowLR = new int[nrOfVerticalSquares];
-	/*randomize numbers between 0 and 1 for every square in leftRow*/
-	// this is just for test
-	for (int i = 0; i < nrOfVerticalSquares; i++)
-	{
-		rowLR[i] = SQUARETYPE::WALL;
-	}
-	rowLR[nrOfVerticalSquares / 2] = SQUARETYPE::SPAWN;
-	rowLR[nrOfVerticalSquares / 2 - 1] = SQUARETYPE::SPAWN;
-
-
-	int* rowTB = new int[nrOfHorizontalSquares];
-	for (int i = 0; i < nrOfHorizontalSquares; i++)
-	{
-		rowTB[i] = SQUARETYPE::WALL;
-	}
-	rowTB[nrOfHorizontalSquares / 2] = SQUARETYPE::SPAWN;
-	rowTB[nrOfHorizontalSquares / 2 - 1] = SQUARETYPE::SPAWN;
-	
 	//Create left row of walls
-	for (int i = 1; i < nrOfVerticalSquares - 1; i++)
+	for (int i = 1; i < wData.nrVertical - 1; i++)
 	{
-		if (rowLR[i] == SQUARETYPE::WALL)
+		if (wData.rowL[i] == SQUARETYPE::WALL)
 		{
 			currPos = XMFLOAT3(this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 			vec = XMLoadFloat3(&currPos);
@@ -169,9 +153,9 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 	}
 	//Create right row of walls
-	for (int i = 1; i < nrOfVerticalSquares - 1; i++)
+	for (int i = 1; i < wData.nrVertical - 1; i++)
 	{
-		if (rowLR[i] == SQUARETYPE::WALL)
+		if (wData.rowR[i] == SQUARETYPE::WALL)
 		{
 			currPos = XMFLOAT3(this->arenaWidth - this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 			vec = XMLoadFloat3(&currPos);
@@ -187,9 +171,9 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 	}
 	//Create top row of walls
-	for (int i = 1; i < nrOfHorizontalSquares - 1; i++)
+	for (int i = 1; i < wData.nrHorizontal - 1; i++)
 	{
-		if (rowTB[i] == SQUARETYPE::WALL)
+		if (wData.rowT[i] == SQUARETYPE::WALL)
 		{
 			currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->arenaDepth - this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
@@ -205,9 +189,9 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 	}
 	//Create bottom row of walls
-	for (int i = 1; i < nrOfHorizontalSquares - 1; i++)
+	for (int i = 1; i < wData.nrHorizontal - 1; i++)
 	{
-		if (rowTB[i] == SQUARETYPE::WALL)
+		if (wData.rowB[i] == SQUARETYPE::WALL)
 		{
 			currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
@@ -222,8 +206,6 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 			grid[i][0].type = SQUARETYPE::SPAWN;
 		}
 	}
-	delete rowTB;
-	delete rowLR;
 }
 
 void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
@@ -263,8 +245,8 @@ XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 }
 
 void LevelManager::setFallPattern(FloorFallData& pattern) {
-	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->ffp.GETmaxNum());
-	this->ffp.createPattern(patternNr, pattern);
+	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->ffp.GETmaxFloorNum());
+	this->ffp.createFloorPattern(patternNr, pattern);
 }
 
 int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects, std::vector<GraphicsComponent*>& graphics)
