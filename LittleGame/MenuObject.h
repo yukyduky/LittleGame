@@ -17,7 +17,7 @@ class MenuObject
 {
 public:
 	MenuObject();
-	MenuObject(size_t ID);
+	MenuObject(size_t ID, XMFLOAT3 pos);
 	~MenuObject();
 
 	// Needs to be filled
@@ -26,7 +26,7 @@ public:
 	const size_t getID() const { return this->ID; }
 
 	XMFLOAT3 GETPosition() { return this->pos; };
-	XMMATRIX GETWorld() { return this->world; };
+	XMMATRIX& GETWorld() { return this->world; };
 	//OBJECTSTATE::TYPE GETState() { return OBJECTSTATE::TYPE::ACTIVATED; };
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }

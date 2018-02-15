@@ -6,7 +6,7 @@
 #include <vector>
 
 // Template untill button is done
-//class Button;
+class Button;
 
 class Menu
 {
@@ -14,11 +14,12 @@ public:
 	Menu();
 	~Menu();
 
-	//void addButton();
+	void addButton(Button* newButton);
+	void addQuad(MenuObject* quad);
 
 protected:
-	//std::vector<Button*> buttons;
-	//std::vector<MenuObject*> objects;
+	std::vector<Button*> buttons;
+	std::vector<MenuObject*> objects;
 };
 
 

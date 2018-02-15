@@ -12,7 +12,12 @@
 
 #include "Menu.h"
 
-//enum class DIFFMENUS {START, OPTIONS, SIZE};
+namespace MENUS {
+	enum TYPE {
+		START, OPTIONS,
+		SIZE
+	};
+}
 
 class Command;
 
@@ -26,9 +31,8 @@ private:
 
 	Camera camera;
 	RenderInputOrganizer rio;
-	//everything that will exist in this level
 	std::vector<MenuObject*> menuObjects;
-	//std::array<Menu*, DIFFMENUS::SIZE> menus;
+	std::array<Menu*, MENUS::SIZE> menus;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;

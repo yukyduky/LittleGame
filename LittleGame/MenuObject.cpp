@@ -1,15 +1,16 @@
 #include "MenuObject.h"
 #include "Component.h"
 
-MenuObject::MenuObject(size_t ID) : ID(ID)
-{
-	this->pos = XMFLOAT3{ 100.0f, 100.0f, 100.0f };
-}
-
 MenuObject::MenuObject() : ID(0)
 {
 	this->pos = XMFLOAT3{ 100.0f, 100.0f, 100.0f };
 }
+
+MenuObject::MenuObject(size_t ID, XMFLOAT3 pos) : ID(ID)
+{
+	this->pos = pos;
+}
+
 
 MenuObject::~MenuObject()
 {

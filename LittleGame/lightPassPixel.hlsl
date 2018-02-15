@@ -40,6 +40,7 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 	float4 finalColor = calcLight(pos_W, normal, diffuse, emission);
 
 	return finalColor;
+	//return float4(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission)

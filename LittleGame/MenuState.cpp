@@ -16,9 +16,10 @@ using namespace DirectX::SimpleMath;
 MenuState MenuState::sMenuState;
 
 void MenuState::init() {
-	this->camera.init(Locator::getD3D()->GETwWidth(), Locator::getD3D()->GETwHeight());
+	this->camera.init(1000, 900);
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initStartMenu();
+	this->ID = 0;
 	
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(this->camera.GETcameraPosFloat3() , XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
@@ -49,17 +50,17 @@ void MenuState::resume()
 }
 
 void MenuState::handleEvents(GameManager * gm) {
-	//MSG msg;
+	MSG msg;
 
-	//while (gm->pollEvent(msg)) {
-	//	// Exit the application when 'X' is pressed
-	//	if (msg.message == WM_QUIT) {
-	//		gm->quit();
-	//	}
+	while (gm->pollEvent(msg)) {
+		// Exit the application when 'X' is pressed
+		if (msg.message == WM_QUIT) {
+			gm->quit();
+		}
 
-	//	TranslateMessage(&msg);
-	//	DispatchMessage(&msg);
-	//}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 }
 
 
@@ -86,7 +87,8 @@ void MenuState::addGraphics(GraphicsComponent * graphicsComponent)
 
 void MenuState::initStartMenu()
 {
-	//Menu* stMenu;
+	Menu* stMenu;
+	stMenu = new Menu();
 
 	MenuObject* object;
 	MenuRectComponent* background;
@@ -94,15 +96,15 @@ void MenuState::initStartMenu()
 	int nextID = newID();
 
 
-	XMFLOAT3 pos(100, -0.5f, 100);
-	XMFLOAT3 scaleM(100, 0, 100);
-	XMFLOAT4 color(1.0f, 0.0f, 1.0f, 1.0f);
+	XMFLOAT3 pos(500, 500.0f, 200);
+	XMFLOAT3 scaleM(100, 1, 100);
+	XMFLOAT4 color(0.0f, 0.0f, 0.5f, 0.2f);
 
-	object = new MenuObject(nextID);
+	object = new MenuObject(nextID, pos);
 	background = new MenuRectComponent(*this, *object, this->camera, color, scaleM);
 
 	this->menuObjects.push_back(object);
 
 	//stMenu->addButton();
-	//this->menus[DIFFMENUS::START] = stMenu;
+	this->menus[MENUS::START] = stMenu;
 }

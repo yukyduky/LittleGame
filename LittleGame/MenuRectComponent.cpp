@@ -32,13 +32,17 @@ void MenuRectComponent::createVertices(XMFLOAT4 color)
 	g = color.y;
 	b = color.z;
 	a = color.w;
+	//r = 200;
+	//g = 200;
+	//b = 200;
+	//a = 200;
 
 	this->points[0] = XMFLOAT3(-1.0f, 0.0f, 1.0f);
 	this->points[1] = XMFLOAT3(1.0f, 0.0f, 1.0f);
 	this->points[2] = XMFLOAT3(-1.0f, 0.0f, -1.0f);
 	this->points[3] = XMFLOAT3(1.0f, 0.0f, -1.0f);
 
-	this->normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
+	this->normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 
 	std::array<PrimitiveVertexData, 4> vertexData;
@@ -97,7 +101,8 @@ MenuRectComponent::MenuRectComponent(MenuState& pMS, MenuObject& obj, Camera &ca
 	//XMVECTOR nor = XMLoadFloat3(&this->normal);
 	//XMVECTOR camDir = cam.GETfacingDir();
 	//XMMATRIX rotationX = XMMatrixRotationX((XMVector3AngleBetweenNormals(nor, camDir)));
-	XMMATRIX rotationX = XMMatrixRotationX(1);
+	XMMATRIX rotationX = XMMatrixRotationX(-.2);
+	//XMMATRIX rotationX = XMMatrixIdentity();
 
 	XMMATRIX scaleM = XMMatrixScaling(scale.x, scale.y, scale.z);
 	XMMATRIX worldMatrix = scaleM * rotationX * translationM;
@@ -120,7 +125,7 @@ void MenuRectComponent::receive(GameObject& obj, Message msg)
 
 void MenuRectComponent::update()
 {
-	//this->head->updateWorldMatrix();
+	this->head->updateWorldMatrix();
 }
 
 void MenuRectComponent::cleanUp()
