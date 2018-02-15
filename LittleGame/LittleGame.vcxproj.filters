@@ -61,6 +61,10 @@
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="FloorFallPatterns.cpp" />
+    <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuObject.cpp" />
+    <ClCompile Include="MenuRectComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -128,6 +132,10 @@
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="FloorFallPatterns.h" />
+    <ClInclude Include="MenuState.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuObject.h" />
+    <ClInclude Include="MenuRectComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

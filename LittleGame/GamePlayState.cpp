@@ -373,12 +373,11 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, (props.size + 5));
+	phyComp = new PhysicsComponent(*proj, (props.size + 5));
 
 	
 	//Add proj to objectArrays
 	this->dynamicObjects.push_back(proj);
-//	this->projectiles.push_back(proj);
 
 	return proj;
 }

@@ -152,6 +152,10 @@
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuObject.h" />
+    <ClInclude Include="MenuRectComponent.h" />
+    <ClInclude Include="MenuState.h" />
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
@@ -207,6 +211,10 @@
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuObject.cpp" />
+    <ClCompile Include="MenuRectComponent.cpp" />
+    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
