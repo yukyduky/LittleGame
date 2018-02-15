@@ -153,6 +153,7 @@
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="RandomGeneration.h" />
+    <ClInclude Include="RestartState.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EndState.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />
+    <ClCompile Include="RestartState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="FloorFallPatterns.cpp" />

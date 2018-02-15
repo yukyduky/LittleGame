@@ -49,7 +49,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			timeLastFrame = 0;
 			OutputDebugStringA(msgbuf);
 		}
-
 	}
 
 	gm.cleanUp();

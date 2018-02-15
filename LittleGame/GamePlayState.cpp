@@ -12,6 +12,7 @@
 #include "ArenaObject.h"
 #include "GameObject.h"
 #include "Crosshair.h"
+#include "StateManager.h"
 
 #include "IncludeSpells.h"
 
@@ -156,6 +157,8 @@ void GamePlayState::cleanUp()
 	this->dynamicObjects.clear();
 	this->noCollisionDynamicObjects.clear();
 	this->graphics.clear();
+
+	this->staticPhysicsCount = 0;
 }
 
 void GamePlayState::pause()
