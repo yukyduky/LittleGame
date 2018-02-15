@@ -26,11 +26,11 @@ void EndState::resume()
 }
 void EndState::handleEvents(GameManager* gm)
 {
-
+	gm->quit();
 }
 void EndState::update(GameManager* gm)
 {
-	
+	gm->quit();
 }
 void EndState::render(GameManager* gm)
 {

@@ -4,9 +4,9 @@
 
 /* Example of a State-Timeline for an enemy
 state(n)^
-	[2]	| 				push	    ATTACK PHASE 2	pop
-	[1]	| 	push	ATTACK PHASE 1					pop
-	[0]	|  MOVING			     						MOVING
+	[2]	| 						SOUND
+	[1]	| 			OPTIONS				
+	[0]	|  MAIN			     			MAIN
 		|-------------------------------------------------> t
 */
 

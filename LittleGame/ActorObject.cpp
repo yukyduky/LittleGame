@@ -58,7 +58,6 @@ void ActorObject::setSpeed(float speed)
 	this->speed = speed;
 }
 
-
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
@@ -72,7 +71,6 @@ void ActorObject::cleanUp()
 	}
 	// Cleanup all the components
 	for (auto &c : this->components) {
-		c->getID();
 		c->cleanUp();
 		delete c;
 	}

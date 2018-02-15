@@ -59,6 +59,7 @@ public:
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void setSpeed(float speed);
+	virtual float GEThp() { return this->hp; }
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();

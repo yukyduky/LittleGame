@@ -35,6 +35,8 @@ bool SpBuff::castSpell()
 
 		this->getPlayer()->setSpeed(this->strength);
 		this->getPlayer()->GETphysicsComponent()->updateBoundingArea(0.0f);
+
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 	}
 
 	return returnValue;
