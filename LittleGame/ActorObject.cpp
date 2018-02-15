@@ -364,7 +364,10 @@ void ActorObject::dealDmg(float dmg)
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
 		// Push the "EndState" which will end all!
-		StateManager::pushState(EndState::getInstance());
+		//StateManager::pushState(EndState::getInstance());
+		//StateManager::cleanUp();
+		StateManager::popState();
+		StateManager::pushState(GamePlayState::getInstance());
 	}
 }
 

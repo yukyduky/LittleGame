@@ -48,6 +48,7 @@ void ImmolationEnemyAttack::attack()
 	// Only coded to work against 1 player atm!
 	(*this->players)[0]->dealDmg(this->attackDamage);
 
+	// Generates an ATTACK sound effect: 1 of 11 possibilities
 	switch (Locator::getRandomGenerator()->GenerateInt(1, 11)) {
 	case 1: {
 		Locator::getAudioManager()->play(SOUND::NAME::ENEMYATTACK_1);
@@ -95,7 +96,7 @@ void ImmolationEnemyAttack::attack()
 	}
 			 break;
 	}
-
+	// Generates an ATTACK-GRUNT sound effect: 1 of 9 possibilities
 	switch (Locator::getRandomGenerator()->GenerateInt(1, 9)) {
 	case 1: {
 		Locator::getAudioManager()->play(SOUND::NAME::ATTACKGRUNT_1);
