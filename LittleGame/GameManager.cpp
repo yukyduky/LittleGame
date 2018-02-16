@@ -8,6 +8,7 @@
 #include "GamePlayState.h"
 #include "Renderer.h"
 #include "AudioManager.h"
+#include "GlobalEvents.h"
 
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
@@ -19,9 +20,11 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Creation of gameTime;
 	this->gameTime = new GameTime;
 	this->randomGenerator = new RandomGeneration;
+	this->globalEvents = new GlobalEvents;
 	// Provide the gametime object to the service locator
 	Locator::provide(this->gameTime);
 	Locator::provide(this->randomGenerator);
+	Locator::provide(this->globalEvents);
 
 	//// Create the AudioManager
 	this->audio = new AudioManager;

@@ -98,6 +98,8 @@ public:
 	1. Returns the state of a floor tile from a given position.
 	*/
 	OBJECTSTATE::TYPE checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+
+	void clean();
 };
 
 

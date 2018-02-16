@@ -37,10 +37,5 @@ void RestartState::update(GameManager* gm)
 }
 void RestartState::render(GameManager* gm)
 {
-	int size = StateManager::GETallStates().size();
-	// -2 because GamePlayState is 1 step behind RestartState + an array starts at 0.
-	StateManager::GETallStates().at(size - 2)->cleanUp();
-	StateManager::GETallStates().at(size - 2)->init();
-
-	StateManager::popState();
+	StateManager::changeState(GamePlayState::getInstance());
 }

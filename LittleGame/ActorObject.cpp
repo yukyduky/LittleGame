@@ -362,11 +362,7 @@ void ActorObject::dealDmg(float dmg)
 		this->hp = 0;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
-		if (RestartState::GETflag()) {
-			StateManager::pushState(new RestartState);
-			RestartState::SETflag(true);
-			//StateManager::popState();
-		}
+		Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 	}
 }
 

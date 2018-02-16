@@ -15,7 +15,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::ve
 	XMVECTOR vec;
 	XMMATRIX worldM;
 	XMMATRIX rotationM = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2, 0, this->squareSize / 2);
+	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5, 0, this->squareSize * 0.5);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(0.0f / 255.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
@@ -25,7 +25,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::ve
 		for (int j = 0; j < grid[i].size(); j++)
 		{
 			//Calculate center position of the next grid space
-			pos = XMFLOAT3(this->squareSize / 2.0f + i * this->squareSize, -0.5f, this->squareSize /2.0f + j * this->squareSize);
+			pos = XMFLOAT3(this->squareSize * 0.5 + i * this->squareSize, -0.5f, this->squareSize * 0.5 + j * this->squareSize);
 			nextID = this->nextID();
 			//Create the GameObject and calculate the world matrix
 			object = new ArenaObject(nextID, pos);
@@ -59,7 +59,7 @@ void LevelManager::createNeonFloorGrid(std::vector<GameObject*>& staticObjects, 
 	XMMATRIX worldM;
 	XMMATRIX translationM;
 	XMMATRIX scaleMV = XMMatrixScaling(rectWidth, 0.0f, this->arenaDepth * 0.5);
-	XMMATRIX scaleMH = XMMatrixScaling(this->arenaWidth / 2.0f, 0.0f, rectWidth);
+	XMMATRIX scaleMH = XMMatrixScaling(this->arenaWidth * 0.5, 0.0f, rectWidth);
 	XMMATRIX rotationM = XMMatrixIdentity();
 	
 	XMFLOAT3 currentPos;
@@ -353,7 +353,10 @@ OBJECTSTATE::TYPE LevelManager::checkTileStateFromPos(XMFLOAT3 pos, std::vector<
 {
 	return grid[pos.x / ARENASQUARESIZE][pos.z / ARENASQUARESIZE].ptr->getState();
 }
- 
+
+void LevelManager::clean() {
+
+}
 
   //////////////////////////////////////////////////////////////
  ////         OLD CODE FOR MAKING LINES ON WALLS          /////
