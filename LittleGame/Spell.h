@@ -6,15 +6,10 @@
 #include "ActorObject.h"
 #include "GamePlayState.h"
 
-/* --- HOW TO ADD SPELLS
-1. Add the name in the NAME enum
-2. Add it to one of the slots in the initiation of the player
-3. Make seperate switch-cases in the functions of the correct sub-class
-*/
 
 //Template for when glyphs become relevant
 enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
-// Type to not need to check dynamic_cast
+// Type to not need to check dynamic_cast NOT USED YET
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
 enum class SPELLSTATE {READY, COOLDOWN, ACTIVE, LOCKED};
@@ -24,9 +19,15 @@ enum class NAME {
 	//Damage
 	AUTOATTACK, FIRE, BOMB
 	//Mobility
-	, DASH, SPEEDBUFF
+	, DASH, BUFF
 };
 
+/* --- SPELLS
+1. All spells inherits from Spell
+2. The player will call for castSpell when using a spell
+3. Has the collision for all projectiels
+4. Inserting a glyph into a spell will switch spell when actor calls "switchSpell()"
+*/
 class Spell
 {
 public:
@@ -37,7 +38,7 @@ public:
 	virtual bool castSpell() = 0;
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	virtual void upgrade(float modif) = 0;
-	//What the spell will do with the target
+	// Function called by the projectile, spells collision should be handeld here
 	virtual void collision(GameObject* target, Projectile* proj) = 0;
 	virtual void update() = 0;
 
@@ -65,10 +66,8 @@ private:
 	SPELLTYPE type;
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
-	ActorObject * player;
-
-
 	NAME name;
+	ActorObject * player;
 
 	double coolDown;
 	double timeSinceCast;

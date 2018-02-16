@@ -7,7 +7,9 @@
 #include "ActorObject.h"
 #include "AIComponent.h"
 
+
 // Forward declaration to prevent double includes
+class EndState;
 class GamePlayState;
 
 struct Wave {
@@ -27,7 +29,9 @@ class EnemyManager
 private:
 	// Necessary since creation of actors is dependant on our std::vectors which rely in the GPS.
 	GamePlayState * pGPS;
+	EndState * endState;
 	std::vector<ActorObject*> players;
+	int activeEnemiesCount = 0;
 
 	// Assumes that all the gameObjects are updated through this pointer, if 
 	// it has since then been divided into several arrays, the pointer here should be to the Actors
@@ -45,14 +49,13 @@ private:
 	void cleanLevel();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Creates an Actor, attaches
+	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
 	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();
 	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& players);
-
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

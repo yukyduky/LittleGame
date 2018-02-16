@@ -47,7 +47,6 @@ protected:
 	GamePlayState* pGPS = nullptr;
 
 	Crosshair* crossHair;
-	bool keyBoardInput;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -59,7 +58,9 @@ public:
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
+	virtual XMFLOAT3 getDirection(float length);
 	virtual void setSpeed(float speed);
+	virtual float GEThp() { return this->hp; }
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
@@ -100,6 +101,8 @@ public:
 
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
+	// Deals dmg to the Actors Hp
+	void dealDmg(float dmg);
 	
 	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);

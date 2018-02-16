@@ -13,6 +13,7 @@ MouseInput::MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMVECTOR cDir)
 
 	tempDir = DirectX::XMVector3Normalize(tempDir);
 
+	// a plane on hte same height as the middel of the player
 	DirectX::XMFLOAT4 floorNormal(0.0f, 1.0f, 0.0f, -40.f);
 	this->surface = DirectX::XMLoadFloat4(&floorNormal);
 
@@ -27,7 +28,7 @@ MouseInput::~MouseInput()
 
 DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 {
-	DirectX::XMFLOAT3 result(0, 0, 0);
+	DirectX::XMFLOAT3 result;
 
 	// Takes the position (in pixels) of the cursor in hte whole screen
 	GetCursorPos(&this->mPoint);
@@ -55,33 +56,19 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 
 	DirectX::XMFLOAT3 vecO(this->cameraPos.x + this->cameraDirNor.x, this->cameraPos.y + this->cameraDirNor.y, this->cameraPos.z + this->cameraDirNor.z);
 
+	// the cursors position in world cordinates
 	DirectX::XMFLOAT3 pointP(
 		vecO.x + mousePoint.x,
 		vecO.y + mousePoint.y * vecY.y,
 		vecO.z + mousePoint.y * vecY.z);
 
-	//DirectX::XMFLOAT3 tempFloatVec(pointP.x - vecO.x, pointP.y - vecO.y, pointP.z - vecO.z);
-
-	DirectX::XMVECTOR vecCP = DirectX::XMLoadFloat3(&pointP);
+	DirectX::XMVECTOR vecP = DirectX::XMLoadFloat3(&pointP);
 	DirectX::XMVECTOR vecCam = DirectX::XMLoadFloat3(&this->cameraPos);
 
 	DirectX::XMVECTOR vecPointInArena;
-	vecPointInArena = DirectX::XMPlaneIntersectLine(this->surface, vecCP, vecCam);
+	vecPointInArena = DirectX::XMPlaneIntersectLine(this->surface, vecP, vecCam);
 
 	DirectX::XMStoreFloat3(&result, vecPointInArena);
-
-	//result.x += 2.0f;
-	//result.z += 2.0f;
-
-	//result.x /= 4.0f;
-	//result.z /= 4.0f;
-
-
-	//result.x *= (ARENAWIDTH);
-	//result.z *= (ARENAHEIGHT);
-
-	//result.x -= 400.0f;
-	//result.z -= (600.0f);
 
 	return result;
 }

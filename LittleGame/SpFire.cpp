@@ -25,8 +25,10 @@ bool SpFire::castSpell()
 	}
 	else
 	{
-		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range);
+		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, true);
 		this->spawnProj(props);
+
+		Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 
@@ -52,6 +54,7 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
 		target->setState(OBJECTSTATE::TYPE::DEAD);
+		Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
 
 		this->hits--;
 		if (this->hits == 0)

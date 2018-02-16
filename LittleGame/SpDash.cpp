@@ -55,14 +55,16 @@ bool SpDash::castSpell()
 
 		for (int i = 0; i < this->nrOfFlames; i++)
 		{
-			ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1);
+			ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
 			flames.push_back(this->spawnProj(props));
-			flames[i]->setPosition(oldPos + (flames[i]->getDirection() * i * flameSize * 2));
+			flames[i]->setPosition(oldPos + (this->getPlayer()->getDirection(i * flameSize * 2)));
 		}
 		//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
 		//this->spawnProj(props)->SETscaleMatrix(XMMatrixScaling(this->range - 40.0f, props.size, props.size));
 
 		this->getPlayer()->setPosition(newPos);
+
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 		this->burning = true;
