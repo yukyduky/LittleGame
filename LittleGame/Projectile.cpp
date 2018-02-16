@@ -17,7 +17,6 @@ Projectile::Projectile(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 dir,
 
 Projectile::~Projectile()
 {
-	this->cleanUp();
 }
 
 void Projectile::cleanUp()

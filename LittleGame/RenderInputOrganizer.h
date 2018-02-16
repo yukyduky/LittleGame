@@ -75,7 +75,7 @@ private:
 
 public:
 	void initialize(Camera& camera, std::vector<Light>& lights);
-	void render(std::vector<GraphicsComponent*>& graphics);
+	void render(std::list<GraphicsComponent*>& graphics);
 	void injectResourcesIntoSecondPass();
 	void cleanUp();
 };

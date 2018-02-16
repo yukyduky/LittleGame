@@ -11,7 +11,7 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 #include "GameObject.h"
-
+#include <iterator>
 #include "IncludeSpells.h"
 
 
@@ -112,8 +112,10 @@ void GamePlayState::init() {
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->grid, this->staticObjects, this->graphics);
-	for (int i = 0; i < this->staticPhysicsCount; i++) {
-		this->quadTree.insertStaticObject(this->staticObjects[i]);
+	int i = 0;
+	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
+		this->quadTree.insertStaticObject(*it);
+		i++;
 	}
 
 	std::vector<ActorObject*> allPlayers;
@@ -185,32 +187,27 @@ void GamePlayState::update(GameManager * gm)
 
 	this->enemyManager.update();
 
-
-	for (int i = 0; i < this->dynamicObjects.size(); i++) {
-		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
-			this->dynamicObjects[i]->update();
+	for (std::list<GameObject*>::iterator it = this->dynamicObjects.begin(); it != this->dynamicObjects.end(); it++) {
+		if ((*it)->getState() != OBJECTSTATE::TYPE::DEAD) {
+			(*it)->update();
 		}
 		else {
-		
-			ID = this->dynamicObjects[i]->getID();
-			for (int j = this->staticPhysicsCount; j < this->graphics.size(); j++) {
-				if (this->graphics[j]->getID() == ID) {
-					this->graphics.erase(this->graphics.begin() + j);
+			ID = (*it)->getID();
+			int j = this->graphics.size();
+			for (std::list<GraphicsComponent*>::reverse_iterator rit = this->graphics.rbegin(); rit != this->graphics.rend() && j > this->staticPhysicsCount; rit++) {
+				if ((*rit)->getID() == ID) {
+					this->graphics.erase(std::next(rit).base());
+					j++;
 				}
-				else {
-
-				}
+				j--;
 			}
-			this->dynamicObjects[i]->cleanUp();
-			delete this->dynamicObjects[i];
-			this->dynamicObjects.erase(this->dynamicObjects.begin() + i);
-		
+			(*it)->cleanUp();
+			delete (*it);
+			it = this->dynamicObjects.erase(it);
+			it--;
 		}
 	}
 	this->checkCollisions();
-
-	//fak ju shellow
-	//this->player1->decCD();
 }
 
 void GamePlayState::render(GameManager * gm) 
@@ -226,7 +223,7 @@ GamePlayState* GamePlayState::getInstance()
 	return &sGamePlayState;
 }
 
-std::vector<GameObject*>* GamePlayState::getDynamicObjects()
+std::list<GameObject*>* GamePlayState::getDynamicObjects()
 {
 	return &this->dynamicObjects;
 }
