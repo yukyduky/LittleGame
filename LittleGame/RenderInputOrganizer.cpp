@@ -56,7 +56,7 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 	Locator::getD3D()->createConstantBuffer(&this->cLightBuffer, sizeof(Light) * MAX_NUM_POINTLIGHTS);
 }
 
-void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
+void RenderInputOrganizer::render(std::list<GraphicsComponent*>& graphics)
 {
 	for (auto &i : graphics) {
 		if (i->GETstate() != OBJECTSTATE::TYPE::INVISIBLE) {
@@ -80,4 +80,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 
 void RenderInputOrganizer::cleanUp()
 {
+	this->cLightBuffer->Release();
+	this->cLightPassDataBuffer->Release();
+	this->cMatrixBuffer->Release();
 }

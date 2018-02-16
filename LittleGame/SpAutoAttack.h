@@ -12,7 +12,7 @@ class SpAutoAttack : public Spell
 {
 public:
 	SpAutoAttack(ActorObject* player);
-	~SpAutoAttack();
+	virtual ~SpAutoAttack();
 
 	bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)

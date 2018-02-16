@@ -22,7 +22,8 @@ protected:
 	float speed = 0;
 
 public:
-	AbilityComponent(Projectile& pHead); 
+	AbilityComponent(Projectile& pHead);
+	virtual ~AbilityComponent() {}
 
 	virtual const size_t getID();
 	virtual void receive(GameObject & obj, Message msg);

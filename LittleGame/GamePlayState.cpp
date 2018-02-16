@@ -11,6 +11,7 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 #include "GameObject.h"
+#include <iterator>
 #include "Crosshair.h"
 #include "StateManager.h"
 
@@ -114,8 +115,10 @@ void GamePlayState::init() {
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
-	for (int i = 0; i < this->staticPhysicsCount; i++) {
-		this->quadTree.insertStaticObject(this->staticObjects[i]);
+	int i = 0;
+	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
+		this->quadTree.insertStaticObject(*it);
+		i++;
 	}
 	
 
@@ -135,7 +138,7 @@ void GamePlayState::init() {
 void GamePlayState::cleanUp()
 {
 	// Direct internal objects
-	 this->rio.cleanUp();
+	this->rio.cleanUp();
 	// this->camera.cleanUp();
 	this->enemyManager.cleanUp();
 
@@ -163,6 +166,8 @@ void GamePlayState::cleanUp()
 	this->noCollisionDynamicObjects.clear();
 	
 	this->graphics.clear();
+
+	InputComponent::cleanup();
 
 	this->staticPhysicsCount = 0;
 	this->counter = 0;
@@ -244,9 +249,12 @@ void GamePlayState::update(GameManager * gm)
 
 	int ID;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
-	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
+	for (std::list<GameObject*>::iterator it = this->noCollisionDynamicObjects.begin(); it != this->noCollisionDynamicObjects.end(); it++) {
+		(*it)->update();
+	}
+	//for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
 		//if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
-			noCollisionDynamicObjects[i]->update();
+			//noCollisionDynamicObjects[i]->update();
 		//}
 		/* THIS CODE IS HERE IF WE EVER WANT TO REMOVE DEAD OBJECTS FROM noCollisionDynamicObjects. 
 			UNTIL THAT DAY COMES LET THIS BE COMMENTED OUT!!!
@@ -263,44 +271,46 @@ void GamePlayState::update(GameManager * gm)
 			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
 		}
 		*/
-	}
+	//}
 	this->enemyManager.update();
 
-	//Update the dynamic objects if the object isn't dead. Else remove the object.
-	for (int i = 0; i < this->dynamicObjects.size(); i++) {
-		if (dynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
-			this->dynamicObjects[i]->update();
+	for (std::list<GameObject*>::iterator it = this->dynamicObjects.begin(); it != this->dynamicObjects.end(); it++) {
+		if ((*it)->getState() != OBJECTSTATE::TYPE::DEAD) {
+			(*it)->update();
 		}
 		else {
-		
-			ID = this->dynamicObjects[i]->getID();
-			for (int j = this->staticPhysicsCount; j < this->graphics.size(); j++) {
-				if (this->graphics[j]->getID() == ID) {
-					this->graphics.erase(this->graphics.begin() + j);
-					break;
+			ID = (*it)->getID();
+			int j = this->graphics.size();
+			for (std::list<GraphicsComponent*>::reverse_iterator rit = this->graphics.rbegin(); rit != this->graphics.rend() && j > this->staticPhysicsCount; rit++) {
+				if ((*rit)->getID() == ID) {
+					this->graphics.erase(std::next(rit).base());
+					j++;
 				}
+				j--;
 			}
-			this->dynamicObjects[i]->cleanUp();
-			delete this->dynamicObjects[i];
-			this->dynamicObjects.erase(this->dynamicObjects.begin() + i);
-		
+			(*it)->cleanUp();
+			delete (*it);
+			it = this->dynamicObjects.erase(it);
+			it--;
 		}
 	}
 	this->checkCollisions();
 }
 
-void GamePlayState::render(GameManager * gm) {
+void GamePlayState::render(GameManager * gm) 
+{
 	rio.render(this->graphics);
 	gm->setupSecondRenderPass();
 	rio.injectResourcesIntoSecondPass();
 	gm->display(this);
 }
 
-GamePlayState* GamePlayState::getInstance() {
+GamePlayState* GamePlayState::getInstance() 
+{
 	return &sGamePlayState;
 }
 
-std::vector<GameObject*>* GamePlayState::getDynamicObjects()
+std::list<GameObject*>* GamePlayState::getDynamicObjects()
 {
 	return &this->dynamicObjects;
 }

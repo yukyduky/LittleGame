@@ -20,7 +20,6 @@ private:
 	IRandomGeneration* randomGenerator;
 	IGlobalEvents* globalEvents;
 	Renderer renderer;
-
 	IAudioManager* audio;
 
 public:
