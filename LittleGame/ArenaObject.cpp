@@ -31,7 +31,6 @@ const size_t ArenaObject::getID()
 void ArenaObject::cleanUp()
 {
 	for (auto &c : this->components) {
-		c->getID();
 		c->cleanUp();
 		delete c;
 	}

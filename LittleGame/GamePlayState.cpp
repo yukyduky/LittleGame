@@ -161,11 +161,12 @@ void GamePlayState::cleanUp()
 	this->quadTree.cleanup();
 
 	this->noCollisionDynamicObjects.clear();
+	
 	this->graphics.clear();
 
-	
-
 	this->staticPhysicsCount = 0;
+	this->counter = 0;
+	this->ID = 0;
 }
 
 void GamePlayState::pause()
