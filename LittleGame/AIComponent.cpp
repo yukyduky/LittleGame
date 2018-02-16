@@ -2,7 +2,7 @@
 #include "Commands.h"
 #include "ActorObject.h"
 
-AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players)
+AIComponent::AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*>& players)
 {
 	// Set up head
 	this->pHead = &obj;
@@ -87,7 +87,7 @@ void AIComponent::generateCommands()
 	
 
 	// Push back the command!
-	this->commandQueue.push_back(new CommandControllerMove);
+	this->commandQueue.push_back(new CommandControllerMove); // LEAK
 }
 
 void AIComponent::update()

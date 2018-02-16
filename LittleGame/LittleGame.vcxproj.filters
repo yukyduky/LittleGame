@@ -40,7 +40,6 @@
     <ClCompile Include="RectangleComponent.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="TextureComponent.cpp" />
     <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="EnemyObject.cpp">
       <Filter>newshit</Filter>
@@ -109,7 +108,6 @@
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="TextureComponent.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="EnemyObject.h">
       <Filter>newshit</Filter>

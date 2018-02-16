@@ -25,7 +25,7 @@ private:
 public:
 	PhysicsComponent(GameObject& obj);
 	PhysicsComponent(GameObject& obj, float boundingSphereRadius);
-	~PhysicsComponent();
+	virtual ~PhysicsComponent();
 
 	bool checkCollision(DirectX::BoundingSphere boundingSphere_in);
 	bool checkCollision(DirectX::BoundingBox boundingBox_in);

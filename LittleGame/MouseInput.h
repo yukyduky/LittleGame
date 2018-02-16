@@ -9,7 +9,7 @@ class MouseInput
 {
 public:
 	MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMVECTOR cDir);
-	~MouseInput();
+	virtual ~MouseInput();
 
 	DirectX::XMFLOAT3 getWorldPosition();
 

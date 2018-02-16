@@ -25,7 +25,8 @@ private:
 	XMFLOAT2 simulatedRotation;
 
 public:
-	AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*> players);
+	AIComponent(ActorObject& obj, AIBEHAVIOR::KEY aiBehavior, std::vector<ActorObject*>& players);
+	virtual ~AIComponent() {}
 	
 	void init();
 

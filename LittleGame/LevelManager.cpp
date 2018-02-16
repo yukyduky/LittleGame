@@ -5,7 +5,7 @@
 #include "ActorObject.h"
 #include "ArenaObject.h"
 
-void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
+void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare the matrices and variables
 	GameObject* object;
@@ -29,6 +29,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::ve
 			nextID = this->nextID();
 			//Create the GameObject and calculate the world matrix
 			object = new ArenaObject(nextID, pos);
+			int test = sizeof(ArenaObject);
 			vec = XMLoadFloat3(&pos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotationM * translationM;
@@ -47,7 +48,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::ve
 	}
 }
 
-void LevelManager::createNeonFloorGrid(std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
+void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Calculate the number of vertical and horizontal lines needed
 	int nrOfVerticalLines = this->arenaWidth / this->squareSize + 1;
@@ -84,7 +85,7 @@ void LevelManager::createNeonFloorGrid(std::vector<GameObject*>& staticObjects, 
 	}
 }
 
-void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
+void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	GameObject* object;
 	RectangleComponent* rect;
@@ -99,7 +100,7 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 	graphics.push_back(rect);
 }
 
-void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
+void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
 //	int nextID = this->nextID();
@@ -226,7 +227,7 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	delete rowLR;
 }
 
-void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::vector<GameObject*>& staticObjects, std::vector<GraphicsComponent*>& graphics)
+void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	GameObject* object;
 	BlockComponent* block;
@@ -254,7 +255,7 @@ int LevelManager::nextID()
 	return this->tempID++;
 }
 
-XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
+DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 {
 	XMFLOAT2 index = XMFLOAT2(0.0f, 0.0f);
 	index.x = pos.x / this->squareSize;
@@ -268,7 +269,7 @@ void LevelManager::setFallPattern(FloorFallData& pattern) {
 	this->ffp.createPattern(patternNr, pattern);
 }
 
-int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects, std::vector<GraphicsComponent*>& graphics)
+int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics)
 {
 	this->pGPS = &pGPS;
 	this->squareSize = 50;
@@ -297,7 +298,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int dept
 	return this->tempID;
 }
 
-void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
+void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
 	XMFLOAT2 index = this->findTileIndexFromPos(pos);
 	grid[(int)index.x][(int)index.y].ptr->setState(state);
@@ -307,10 +308,11 @@ void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state,
 	switch (state)
 	{
 	case OBJECTSTATE::TYPE::TFALLING : 
-		for (int i = this->nrOfWalls; i < staticObjects.size(); i++) {
-			if (staticObjects[i]->getID() == ID) {
-				dynamicObjects.push_back(staticObjects[i]);
-				staticObjects.erase(staticObjects.begin() + i);
+		for (std::list<GameObject*>::iterator it = staticObjects.begin(); it != staticObjects.end(); it++) {
+			if ((*it)->getID() == ID) {
+				dynamicObjects.push_back((*it));
+				staticObjects.erase(it);
+				it--;
 			}
 		}
 		break;
@@ -319,30 +321,31 @@ void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state,
 	}
 }
 
-void LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::vector<GameObject*>& staticObjects, std::vector<GameObject*>& dynamicObjects)
+void LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
-
-	//grid[(int)index.x][(int)index.y].ptr->setState(state);
-
-
 	int ID = grid[(int)index.x][(int)index.y].ptr->getID();
+	std::list<GameObject*>::iterator it = staticObjects.begin();
 	switch (state)
 	{
 	case OBJECTSTATE::TYPE::TFALLING:
-		for (int i = this->nrOfWalls; i < staticObjects.size(); i++) {
-			if (staticObjects[i]->getID() == ID) {
-				staticObjects[i]->setState(state);
-				dynamicObjects.push_back(staticObjects[i]);
-				staticObjects.erase(staticObjects.begin() + i);
+		while (it != staticObjects.end()) {
+			if ((*it)->getID() == ID) {
+				(*it)->setState(state);
+				dynamicObjects.splice(dynamicObjects.end(), staticObjects, it);
+				break;
 			}
+			it++;
 		}
 		break;
 
 	case OBJECTSTATE::TYPE::RECOVER:
-		for (int i = 0; i < dynamicObjects.size(); i++) {
-			if (dynamicObjects[i]->getID() == ID) {
-				dynamicObjects[i]->setState(state);
+		while (it != staticObjects.end()) {
+			if ((*it)->getID() == ID) {
+				(*it)->setState(state);
+				dynamicObjects.push_back((*it));
+				break;
 			}
+			it++;
 		}
 		break;
 	default:

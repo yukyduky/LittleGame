@@ -60,10 +60,10 @@ private:
 	RenderInputOrganizer rio;
 	std::vector<std::vector<tileData>> grid;
 	//everything that will exist in this level
-	std::vector<GameObject*> staticObjects;
-	std::vector<GameObject*> dynamicObjects;
+	std::list<GameObject*> staticObjects;
+	std::list<GameObject*> dynamicObjects;
 	// Count below represents static objects that have collision (see 'checkCollisions()' function)
-	std::vector<GameObject*> noCollisionDynamicObjects;
+	std::list<GameObject*> noCollisionDynamicObjects;
 	int staticPhysicsCount = 0;
 	
 	//Variables for falling floor
@@ -71,7 +71,7 @@ private:
 	double counter = 0;
 
 	//All objects that wants to be renederd
-	std::vector<GraphicsComponent*> graphics;
+	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 	std::vector<Light> pointLights;
@@ -135,7 +135,7 @@ public:
 	1. Returns a reference to the internal dynamicObjects vector.
 	- Currently only used by EnemyHandler for creation of enemies.
 	*/
-	std::vector<GameObject*>* getDynamicObjects();
+	std::list<GameObject*>* getDynamicObjects();
 
 	void addGraphics(GraphicsComponent* graphicsComponent);
 
