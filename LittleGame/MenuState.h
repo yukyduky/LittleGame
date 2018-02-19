@@ -20,6 +20,7 @@ namespace MENUS {
 }
 
 class Command;
+class InputComponent;
 
 class MenuState : public State
 {
@@ -31,8 +32,15 @@ private:
 
 	Camera camera;
 	RenderInputOrganizer rio;
-	std::vector<MenuObject*> menuObjects;
+
+	// Handlers for different menus
 	std::array<Menu*, MENUS::SIZE> menus;
+	MENUS::TYPE currMenu;
+	// All objects
+	std::vector<MenuObject*> menuObjects;
+	// A pointer to the "highlited" area
+	MenuObject* highlight;
+	InputComponent* input;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
@@ -78,20 +86,19 @@ public:
 	*/
 	virtual void render(GameManager* gm);
 
-	void displayMenu(MENUS::TYPE menu);
-
-
 	static MenuState* getInstance();
 
-
-	void addGraphics(GraphicsComponent* graphicsComponent);
-
+	//void addGraphics(GraphicsComponent* graphicsComponent);
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }
 
 
+	void displayMenu(MENUS::TYPE menu);
+
+	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
 	void initStartMenu();
+	void initOptionsMenu();
 
 
 };

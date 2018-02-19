@@ -4,6 +4,8 @@
 #include "ActorObject.h"
 #include "EnemyObject.h"
 
+#include "Menu.h"
+
 /* Command pattern */
 class ActorObject;
 
@@ -14,6 +16,14 @@ public:
 	// Executes the command
 	virtual void execute(ActorObject& actor) = 0;
 };
+// +-+-+-+
+class MenuCommand
+{
+public:
+	// Executes the command
+	virtual void execute(Menu& obj) = 0;
+};
+
 // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 class CommandEnemyAttack : public Command
@@ -162,5 +172,35 @@ public:
 
 	}
 };
+
+
+/////////////////////////////////////////////
+//////////////MENU COMMANDS//////////////////
+/////////////////////////////////////////////
+
+class MenuCommandGoUp : public MenuCommand
+{
+public:
+	virtual void execute(Menu& obj) {
+		obj.goUp();
+	}
+};
+
+class MenuCommandGoDown : public MenuCommand
+{
+public:
+	virtual void execute(Menu& obj) {
+		obj.goDown();
+	}
+};
+
+class MenuCommandSelect : public MenuCommand
+{
+public:
+	virtual void execute(Menu& obj) {
+		obj.goUp();
+	}
+};
+
 
 #endif

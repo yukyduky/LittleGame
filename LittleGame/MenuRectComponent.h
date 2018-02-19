@@ -11,6 +11,7 @@
 
 struct PrimitiveVertexData;
 class MenuState;
+class Menu;
 
 class MenuRectComponent : public GraphicsComponent
 {

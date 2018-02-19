@@ -28,6 +28,8 @@ public:
 	XMFLOAT3 GETPosition() { return this->pos; };
 	XMMATRIX& GETWorld() { return this->world; };
 	//OBJECTSTATE::TYPE GETState() { return OBJECTSTATE::TYPE::ACTIVATED; };
+
+	void SETPosition(XMFLOAT3 pos) { this->pos = pos; }
 	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
 	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
 	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }

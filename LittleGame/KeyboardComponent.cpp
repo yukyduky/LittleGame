@@ -19,6 +19,19 @@ KeyboardComponent::KeyboardComponent(GameObject& obj) : ID(obj.getID())
 	this->init();
 }
 
+KeyboardComponent::KeyboardComponent(Menu& obj) : ID(1995)// hopefully this dosnt fak up
+{
+	// Set up head
+	this->pHeadMenu = &obj;
+
+	POINT p;
+	GetCursorPos(&p);
+	this->cursorPos.x = p.x;
+	this->cursorPos.y = p.y;
+
+	this->init();
+}
+
 void KeyboardComponent::update()
 {
 	this->generateCommands();

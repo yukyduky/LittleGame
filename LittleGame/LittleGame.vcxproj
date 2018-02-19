@@ -140,6 +140,7 @@
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Component.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
