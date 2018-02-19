@@ -41,13 +41,11 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 
 void GameManager::cleanUp()
 {
-	// this->gameTime.cleanUp(); --Not necessary at the moment
+	StateManager::cleanUp();
 	delete this->gameTime;
 	this->renderer.cleanUp();
-	this->audio->cleanUp(); //--Not necessary at the moment
+	this->audio->cleanUp();
 	delete this->audio;
-//	delete this->audio; //-- Fucks everything up if deleted before cleaned up
-	StateManager::cleanUp();
 }
 
 void GameManager::changeState(State* state)

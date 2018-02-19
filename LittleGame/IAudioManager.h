@@ -55,8 +55,9 @@ public:
 	virtual void play(MUSIC::NAME name) = 0;
 	//Puts a sound into soundQueue
 	virtual void play(SOUND::NAME name) = 0;
-	virtual void stop(MUSIC::NAME name) = 0;
-	virtual void stop(SOUND::NAME name) = 0;
+	virtual void stopAll() = 0;
+	virtual void stopMusic() = 0;
+	virtual void stopSound() = 0;
 	virtual void pause(MUSIC::NAME name) = 0;
 	virtual void pause(SOUND::NAME name) = 0;
 	//Changes both sound and music to parameter (0-100)
