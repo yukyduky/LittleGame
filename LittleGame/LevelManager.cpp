@@ -15,7 +15,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMVECTOR vec;
 	XMMATRIX worldM;
 	XMMATRIX rotationM = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(this->squareSize / 2, 0, this->squareSize / 2);
+	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, 0, this->squareSize * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(0.0f / 255.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
@@ -25,7 +25,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 		for (int j = 0; j < grid[i].size(); j++)
 		{
 			//Calculate center position of the next grid space
-			pos = XMFLOAT3(this->squareSize / 2.0f + i * this->squareSize, -0.5f, this->squareSize /2.0f + j * this->squareSize);
+			pos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, -0.5f, this->squareSize * 0.5f + j * this->squareSize);
 			nextID = this->nextID();
 			//Create the GameObject and calculate the world matrix
 			object = new ArenaObject(nextID, pos);
@@ -59,8 +59,8 @@ void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, st
 	float rectWidth = 1.5f;
 	XMMATRIX worldM;
 	XMMATRIX translationM;
-	XMMATRIX scaleMV = XMMatrixScaling(rectWidth, 0.0f, this->arenaDepth * 0.5);
-	XMMATRIX scaleMH = XMMatrixScaling(this->arenaWidth / 2.0f, 0.0f, rectWidth);
+	XMMATRIX scaleMV = XMMatrixScaling(rectWidth, 0.0f, this->arenaDepth * 0.5f);
+	XMMATRIX scaleMH = XMMatrixScaling(this->arenaWidth * 0.5f, 0.0f, rectWidth);
 	XMMATRIX rotationM = XMMatrixIdentity();
 	
 	XMFLOAT3 currentPos;
@@ -68,7 +68,7 @@ void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, st
 	//Create the vertical lines
 	for (int i = 0; i < nrOfVerticalLines; i++)
 	{
-		currentPos = XMFLOAT3(i * this->squareSize, 0.0f, this->arenaDepth * 0.5);
+		currentPos = XMFLOAT3(i * this->squareSize, 0.0f, this->arenaDepth * 0.5f);
 		vec = XMLoadFloat3(&currentPos);
 		translationM = XMMatrixTranslationFromVector(vec);
 		worldM = scaleMV * rotationM * translationM;
@@ -77,7 +77,7 @@ void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, st
 	//Create the horizontal lines
 	for (int i = 0; i < nrOfHorizontalLines; i++)
 	{
-		currentPos = XMFLOAT3(this->arenaWidth * 0.5, 0.0f, i * this->squareSize);
+		currentPos = XMFLOAT3(this->arenaWidth * 0.5f, 0.0f, i * this->squareSize);
 		vec = XMLoadFloat3(&currentPos);
 		translationM = XMMatrixTranslationFromVector(vec);
 		worldM = scaleMH * rotationM * translationM;
@@ -103,9 +103,10 @@ void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color
 void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
-	XMMATRIX rotLR = XMMatrixRotationY(XM_PI * 0.5);
+//	int nextID = this->nextID();
+	XMMATRIX rotLR = XMMatrixRotationY(XM_PI * 0.5f);
 	XMMATRIX rotTB = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5, this->wallHeight, this->squareSize * 0.5);
+	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, this->wallHeight, this->squareSize * 0.5f);
 	XMMATRIX translationM;
 	XMMATRIX worldM;
 	XMFLOAT4 color(155.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
@@ -113,15 +114,19 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMVECTOR vec;
 	XMFLOAT2 posIndex;
 	XMFLOAT3 temp;
+
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
+	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
+	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, ffp.GETmaxWallNum());
+	this->ffp.createWallPattern(caseNr, wData);
 	
 	//Create pillars in the corners
 	for (int i = 0; i < 2; i++)
 	{
 		for (int j = 0; j < 2; j++)
 		{
-			currPos = XMFLOAT3((j * (this->arenaWidth - this->squareSize)) + this->squareSize * 0.5, this->wallHeight * 0.5, (i * (this->arenaDepth - this->squareSize)) + this->squareSize * 0.5);
+			currPos = XMFLOAT3((j * (this->arenaWidth - this->squareSize)) + this->squareSize * 0.5f, this->wallHeight * 0.5f, (i * (this->arenaDepth - this->squareSize)) + this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB*  translationM;
@@ -130,32 +135,12 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 			staticPhysicsCount++;
 		}
 	}
-	
-	int* rowLR = new int[nrOfVerticalSquares];
-	/*randomize numbers between 0 and 1 for every square in leftRow*/
-	// this is just for test
-	for (int i = 0; i < nrOfVerticalSquares; i++)
-	{
-		rowLR[i] = SQUARETYPE::WALL;
-	}
-	rowLR[nrOfVerticalSquares / 2] = SQUARETYPE::SPAWN;
-	rowLR[nrOfVerticalSquares / 2 - 1] = SQUARETYPE::SPAWN;
-
-
-	int* rowTB = new int[nrOfHorizontalSquares];
-	for (int i = 0; i < nrOfHorizontalSquares; i++)
-	{
-		rowTB[i] = SQUARETYPE::WALL;
-	}
-	rowTB[nrOfHorizontalSquares / 2] = SQUARETYPE::SPAWN;
-	rowTB[nrOfHorizontalSquares / 2 - 1] = SQUARETYPE::SPAWN;
-	
 	//Create left row of walls
-	for (int i = 1; i < nrOfVerticalSquares - 1; i++)
+	for (int i = 1; i < wData.nrVertical - 1; i++)
 	{
-		if (rowLR[i] == SQUARETYPE::WALL)
+		if (wData.rowL[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->squareSize * 0.5, this->wallHeight * 0.5, this->squareSize * 0.5 + i * this->squareSize);
+			currPos = XMFLOAT3(this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -169,11 +154,11 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 	}
 	//Create right row of walls
-	for (int i = 1; i < nrOfVerticalSquares - 1; i++)
+	for (int i = 1; i < wData.nrVertical - 1; i++)
 	{
-		if (rowLR[i] == SQUARETYPE::WALL)
+		if (wData.rowR[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->arenaWidth - this->squareSize * 0.5, this->wallHeight * 0.5, this->squareSize * 0.5 + i * this->squareSize);
+			currPos = XMFLOAT3(this->arenaWidth - this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -187,11 +172,11 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 	}
 	//Create top row of walls
-	for (int i = 1; i < nrOfHorizontalSquares - 1; i++)
+	for (int i = 1; i < wData.nrHorizontal - 1; i++)
 	{
-		if (rowTB[i] == SQUARETYPE::WALL)
+		if (wData.rowT[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->squareSize * 0.5 + i * this->squareSize, this->wallHeight * 0.5, this->arenaDepth - this->squareSize * 0.5);
+			currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->arenaDepth - this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -205,11 +190,11 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 	}
 	//Create bottom row of walls
-	for (int i = 1; i < nrOfHorizontalSquares - 1; i++)
+	for (int i = 1; i < wData.nrHorizontal - 1; i++)
 	{
-		if (rowTB[i] == SQUARETYPE::WALL)
+		if (wData.rowB[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->squareSize * 0.5 + i * this->squareSize, this->wallHeight * 0.5, this->squareSize * 0.5);
+			currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -222,8 +207,6 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 			grid[i][0].type = SQUARETYPE::SPAWN;
 		}
 	}
-	delete rowTB;
-	delete rowLR;
 }
 
 void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
@@ -231,8 +214,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	GameObject* object;
 	BlockComponent* block;
 	PhysicsComponent* bSphere;
-	int nextID = this->nextID();
-	//Create the new ArenaObject and the new BlockComponent
+	int nextID = this->nextID();	//Create the new ArenaObject and the new BlockComponent
 	object = new ArenaObject(nextID, pos);
 	object->setType(OBJECTTYPE::INDESTRUCTIBLE);
 	XMFLOAT3 tempScale(1, 1, 1);						// TOBE DELETED
@@ -240,7 +222,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	block = new BlockComponent(*this->pGPS, *object, color, tempScale, tempRotation);
 	bSphere = new PhysicsComponent(*object, this->squareSize * 0.5);
 	XMFLOAT3 bSpherePos = pos;
-	bSpherePos.y = this->squareSize * 0.5;
+	bSpherePos.y = this->squareSize * 0.5f;
 	bSphere->updateBoundingArea(bSpherePos);
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	object->SETworldMatrix(worldM);
@@ -264,8 +246,8 @@ DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 }
 
 void LevelManager::setFallPattern(FloorFallData& pattern) {
-	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->ffp.GETmaxNum());
-	this->ffp.createPattern(patternNr, pattern);
+	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->ffp.GETmaxFloorNum());
+	this->ffp.createFloorPattern(patternNr, pattern);
 }
 
 int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics)
