@@ -137,6 +137,7 @@ void GamePlayState::init() {
 
 void GamePlayState::cleanUp()
 {
+	Locator::getAudioManager()->stopSound();
 	// Direct internal objects
 	this->rio.cleanUp();
 	// this->camera.cleanUp();

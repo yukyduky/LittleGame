@@ -44,8 +44,9 @@ public:
 	void play(MUSIC::NAME name);
 	//Plays the sound once per call
 	void play(SOUND::NAME name);
-	void stop(MUSIC::NAME name);
-	void stop(SOUND::NAME name);
+	void stopAll();
+	void stopMusic();
+	void stopSound();
 	void pause(MUSIC::NAME name);
 	void pause(SOUND::NAME name);
 	void adjustMaster(size_t volume);
