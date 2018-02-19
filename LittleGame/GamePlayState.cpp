@@ -208,6 +208,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+
 	this->counter += Locator::getGameTime()->getDeltaTime();
 	Index index;
 	//Make the next floor tile fall if the time is right.	
