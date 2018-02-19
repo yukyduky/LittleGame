@@ -18,13 +18,11 @@ Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, X
 
 Projectile::~Projectile()
 {
-	this->cleanUp();
 }
 
 void Projectile::cleanUp()
 {
 	for (auto &c : this->components) {
-		c->getID();
 		c->cleanUp();
 		delete c;
 	}

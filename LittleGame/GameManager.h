@@ -18,7 +18,6 @@ private:
 	IGameTime* gameTime;
 	IRandomGeneration* randomGenerator;
 	Renderer renderer;
-
 	IAudioManager* audio;
 
 public:

@@ -27,6 +27,7 @@ private:
 public:
 	
 	ControllerComponent(GameObject& obj, size_t controllerID);
+	virtual ~ControllerComponent() {}
 	virtual void update();
 	virtual void execute();
 	virtual void receive(GameObject & obj, Message msg);

@@ -46,7 +46,8 @@ private:
 
 public:
 	AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior);
-	
+	virtual ~AIComponent() {}
+
 	void pushCommand(AICOMMANDS::KEY command);
 	void pushState(EnemyState& state);
 	void popState();

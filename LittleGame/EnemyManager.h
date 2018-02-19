@@ -55,7 +55,7 @@ private:
 
 public:
 	EnemyManager();
-	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players);
+	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& players);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

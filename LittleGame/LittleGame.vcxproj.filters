@@ -16,12 +16,17 @@
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="D3D.cpp" />
     <ClCompile Include="EndState.cpp" />
     <ClCompile Include="EnemyAttackComponent.h" />
+    <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="RandomGeneration.cpp" />
+    <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
+    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
@@ -51,16 +56,6 @@
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="TextureComponent.cpp" />
-    <ClCompile Include="EnemyAttackingState.cpp">
-      <Filter>EnemyStates</Filter>
-    </ClCompile>
-    <ClCompile Include="EnemyMovingState.cpp">
-      <Filter>EnemyStates</Filter>
-    </ClCompile>
-    <ClCompile Include="RandomGeneration.cpp" />
-    <ClCompile Include="Crosshair.cpp" />
-    <ClCompile Include="FloorFallPatterns.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -68,12 +63,19 @@
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Crosshair.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="EnemyAttackingState.h" />
+    <ClInclude Include="EnemyMovingState.h" />
+    <ClInclude Include="EnemyState.h" />
     <ClInclude Include="IncludeSpells.h" />
+    <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EndState.h" />
@@ -81,6 +83,7 @@
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
+    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
@@ -111,33 +114,8 @@
     <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="TextureComponent.h" />
-    <ClInclude Include="EnemyMovingState.h">
-      <Filter>EnemyStates</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyAttackingState.h">
-      <Filter>EnemyStates</Filter>
-    </ClInclude>
-    <ClInclude Include="EnemyState.h">
-      <Filter>EnemyStates</Filter>
-    </ClInclude>
-    <ClInclude Include="Commands.h">
-      <Filter>commands</Filter>
-    </ClInclude>
-    <ClInclude Include="IRandomGeneration.h" />
-    <ClInclude Include="RandomGeneration.h" />
-    <ClInclude Include="Crosshair.h" />
-    <ClInclude Include="FloorFallPatterns.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="EnemyStates">
-      <UniqueIdentifier>{46f08af3-2cb4-4d05-aa85-f1c8cc631ae7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="commands">
-      <UniqueIdentifier>{93f036e5-4317-4fa6-992f-34db81e43336}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

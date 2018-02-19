@@ -9,7 +9,7 @@ class MouseInput
 {
 public:
 	MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMVECTOR cDir);
-	~MouseInput();
+	virtual ~MouseInput();
 
 	// Returns the position that the mouse is in on in the plane of the player
 	DirectX::XMFLOAT3 getWorldPosition();

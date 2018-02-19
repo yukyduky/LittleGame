@@ -32,7 +32,7 @@ class Spell
 {
 public:
 	Spell(ActorObject* player, NAME name);
-	~Spell();
+	virtual ~Spell();
 
 	// Returns false if spell in unavalible to cast
 	virtual bool castSpell() = 0;

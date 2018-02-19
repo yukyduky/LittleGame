@@ -293,11 +293,22 @@ void Renderer::setShaderType(SHADERTYPE type)
 
 void Renderer::cleanUp()
 {
+	for (auto &i : this->gRTVs) {
+		i->Release();
+	}
+	for (auto &i : this->gSRVs) {
+		i->Release();
+	}
+	for (auto &i : this->gDeferredTexs) {
+		i->Release();
+	}
+
 	this->gFinalRTV->Release();
 	this->gDSV->Release();
 	this->gDSB->Release();
 	this->gSampler->Release();
 	this->gQuadVertexBuffer->Release();
+
 	this->geoColorShaders.Release();
 	this->geoTexShaders.Release();
 	this->lightShaders.Release();

@@ -191,7 +191,6 @@
     <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="TextureComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbilityComponent.cpp" />
@@ -241,7 +240,6 @@
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="TextureComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -2,13 +2,10 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 
-#include <string>
 #include <SFML\Audio.hpp>
 #include <array>
 #include <deque>
 #include "IAudioManager.h"
-
-
 
 /*	---:INFO:---
 Sound: Plays sound from the buffer, more lightweght
@@ -33,6 +30,8 @@ private:
 	// What MUSICSTATE the game is in, declared as LEVEL1 in current version
 	size_t currState;
 public:
+	AudioManager();
+	~AudioManager() {}
 	//Loads in all music and sound
 	int init();
 	//Adds a posible sound
