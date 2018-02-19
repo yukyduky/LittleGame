@@ -8,7 +8,7 @@
 class MouseInput
 {
 public:
-	MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMVECTOR cDir);
+	MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMFLOAT3 cDir);
 	virtual ~MouseInput();
 
 	// Returns the position that the mouse is in on in the plane of the player
@@ -20,7 +20,7 @@ private:
 	DirectX::XMFLOAT2 mousePoint;
 	POINT mPoint;
 
-	DirectX::XMVECTOR surface;
+	DirectX::XMFLOAT4 surface;
 };
 
 

@@ -9,7 +9,7 @@ Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, X
 	this->spell = nullptr;
 
 	this->type = objectType;
-	this->direction = XMLoadFloat3(&dir);
+	this->direction = dir;
 	this->speed = speed;
 	this->spinn = spinn;
 	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
@@ -50,7 +50,7 @@ void Projectile::update()
 	this->setPosition(pos);
 	if (this->spinn)
 	{
-		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->direction, this->rangeCoutner));
+		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(XMLoadFloat3(&this->direction), this->rangeCoutner));
 	}
 
 	this->rangeCoutner++;
