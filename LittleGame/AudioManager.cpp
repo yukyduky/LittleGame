@@ -106,13 +106,20 @@ void AudioManager::play(SOUND::NAME name)
 	this->soundQueue[name].play();
 }
 
-void AudioManager::stop(MUSIC::NAME name)
+void AudioManager::stopAll()
+{
+	this->stopMusic();
+	this->stopSound();
+}
+
+void AudioManager::stopMusic()
 {
 	this->currentMusic[currState].stop();
 }
 
-void AudioManager::stop(SOUND::NAME name)
+void AudioManager::stopSound()
 {
+	this->currentSound.stop();
 }
 
 void AudioManager::pause(MUSIC::NAME name)
@@ -151,4 +158,5 @@ void AudioManager::setRepeatMusic(bool repeat)
 
 void AudioManager::cleanUp()
 {
+	this->stopAll();
 }
