@@ -18,7 +18,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, 0, this->squareSize * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
-	vColor color(0.0f / 255.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
+	vColor color(0.0f / 255.0f, 200.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
 	//Create all the squares representing the floor
 	for (int i = 0; i < grid.size(); i++)
 	{
@@ -227,6 +227,7 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, st
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	object->SETworldMatrix(worldM);
 	staticObjects.push_back(object);
+
 	//graphics.push_back(block);
 	this->nrOfWalls++;
 }
@@ -260,9 +261,10 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int dept
 	this->nrOfWalls = 0;
 	this->tempID = ID;
 	
+	
 	//Create the grid for the level
 	grid.resize(width / this->squareSize);
-	for (int i = 0; i < width / this->squareSize; i++)
+	for (int i = 0; i < grid.size(); i++)
 	{
 		grid[i].resize(depth / this->squareSize);
 		for (int k = 0; k < grid[i].size(); k++) {

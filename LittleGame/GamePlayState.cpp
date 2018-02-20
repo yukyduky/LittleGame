@@ -110,11 +110,11 @@ void GamePlayState::checkCollisions() {
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void GamePlayState::init() {
+	this->initPlayer();
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera, this->pointLights);
-	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -379,14 +379,14 @@ void GamePlayState::initPlayer()
 	this->playerInput[0] = input;
 
 	/// CROSSHAIR	
-		Crosshair* crossHair;
-		BlockComponent* cross;
+	Crosshair* crossHair = nullptr;
+	BlockComponent* cross = nullptr;
 
-		crossHair = new Crosshair(actor, this->newID());
+	crossHair = new Crosshair(actor, this->newID());
 
-		cross = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
+	cross = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
 
-		this->noCollisionDynamicObjects.push_back(crossHair);
+	this->noCollisionDynamicObjects.push_back(crossHair);
 	/// END OF CROSSHAIR
 
 	this->player1 = actor;
@@ -402,7 +402,7 @@ void GamePlayState::initPlayer()
 
 Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 {
-	Projectile* proj;
+	Projectile* proj = nullptr;
 	int nextID = this->newID();
 
 	// Declare Components

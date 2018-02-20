@@ -134,7 +134,4 @@ void ImmolationEnemyAttack::attack()
 			break;
 		}
 	}
-
-	sprintf_s(msgbuf, "HEALTH: %f\n", (*this->players)[0]->GEThp());
-	OutputDebugStringA(msgbuf);
 }
