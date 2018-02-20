@@ -28,9 +28,10 @@ class MenuState : public State
 {
 private:
 	static MenuState sMenuState;
-	GameManager* pGM;
+	//GameManager* pGM;
 
 	D2D objD2D;
+	
 
 	int ID = 0;
 
@@ -44,14 +45,11 @@ private:
 	std::vector<MenuObject*> menuObjects;
 	// A pointer to the "highlited" area
 	MenuObject* highlight;
-	InputComponent* input;
 
 	//All objects that wants to be renederd
 	std::vector<GraphicsComponent*> graphics;
 
 	std::vector<Light> pointLights;
-
-	Command* selectCommand;
 
 
 public:

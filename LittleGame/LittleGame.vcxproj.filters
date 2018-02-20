@@ -64,7 +64,6 @@
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
-    <ClCompile Include="MenuRectComponent.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="D2D.cpp" />
   </ItemGroup>
@@ -137,7 +136,6 @@
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
-    <ClInclude Include="MenuRectComponent.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="D2D.h" />
   </ItemGroup>

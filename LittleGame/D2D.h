@@ -4,34 +4,12 @@
 
 #include "Locator.h"
 
-// Windows Header Files:
-#include <windows.h>
-
-// C RunTime Header Files:
-#include <stdlib.h>
-#include <malloc.h>
-#include <memory.h>
-#include <wchar.h>
-#include <math.h>
-
-#include <d2d1.h>
-#include <d2d1helper.h>
-#include <dwrite.h>
-#include <wincodec.h>
-#pragma comment(lib, "d2d1")
 
 
-//SafeRealse function from the D2D tutorial that might be usefull in other parts of the program
-template<class Interface>
-inline void SafeRelease(Interface **ppInterfaceToRelease)
-{
-	if (*ppInterfaceToRelease != nullptr)
-	{
-		(*ppInterfaceToRelease)->Release();
+#include "MenuObject.h"
 
-		(*ppInterfaceToRelease) = nullptr;
-	}
-}
+
+
 
 
 #ifndef Assert
@@ -59,17 +37,16 @@ public:
 	// Register the window class and call methods for instantiating drawing resources
 	HRESULT Initialize();
 
-	// Process and dispatch messages
-	void RunMessageLoop();
-
 	// Draw content.
-	HRESULT OnRender();
+	HRESULT OnRender(std::vector<MenuObject*> objects);
+
+	ID2D1HwndRenderTarget* GETRenderTarget() { return this->m_pRenderTarget; }
+	IDWriteTextFormat* GETTextFormat() { return this->m_pTextFormat; }
 private:
-	HWND* m_hwnd;
-	ID2D1Factory* m_pDirect2dFactory;
-	ID2D1HwndRenderTarget* m_pRenderTarget;
-	ID2D1SolidColorBrush* m_pLightSlateGrayBrush;
-	ID2D1SolidColorBrush* m_pCornflowerBlueBrush;
+	ID2D1Factory* m_pDirect2dFactory = nullptr;
+	ID2D1HwndRenderTarget* m_pRenderTarget = nullptr;
+	IDWriteFactory* m_pDirectWriteFactory = nullptr;
+	IDWriteTextFormat* m_pTextFormat = nullptr;
 
 	// Initialize device-independent resources. Like factory
 	HRESULT CreateDeviceIndependentResources();
@@ -87,14 +64,8 @@ private:
 		UINT height
 	);
 
-	// The windows procedure.
-	static LRESULT CALLBACK WndProc(
-		HWND hWnd,
-		UINT message,
-		WPARAM wParam,
-		LPARAM lParam
-	);
-
+	//Background
+	ID2D1SolidColorBrush * pGridColor = nullptr;
 };
 
 

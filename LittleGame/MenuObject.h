@@ -7,6 +7,24 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+#include <d2d1.h>
+#include <d2d1helper.h>
+#include <Dwrite.h>
+#include <wincodec.h>
+#pragma comment(lib, "d2d1")
+#pragma comment(lib, "Dwrite")
+
+//SafeRealse function from the D2D tutorial that might be usefull in other parts of the program
+template<class Interface>
+inline void SafeRelease(Interface **ppInterfaceToRelease)
+{
+	if (*ppInterfaceToRelease != nullptr)
+	{
+		(*ppInterfaceToRelease)->Release();
+
+		(*ppInterfaceToRelease) = nullptr;
+	}
+}
 
 class Component;
 
@@ -16,8 +34,8 @@ using namespace DirectX;
 class MenuObject
 {
 public:
-	MenuObject();
-	MenuObject(size_t ID, XMFLOAT3 pos);
+	MenuObject(ID2D1HwndRenderTarget* RT);
+	MenuObject(ID2D1HwndRenderTarget* RT ,size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
 	~MenuObject();
 
 	// Needs to be filled
@@ -25,24 +43,17 @@ public:
 	void addComponent(Component* component);
 	const size_t getID() const { return this->ID; }
 
-	XMFLOAT3 GETPosition() { return this->pos; };
-	XMMATRIX& GETWorld() { return this->world; };
-	//OBJECTSTATE::TYPE GETState() { return OBJECTSTATE::TYPE::ACTIVATED; };
-
-	void SETPosition(XMFLOAT3 pos) { this->pos = pos; }
-	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
-	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
-	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
-	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
-	void updateWorldMatrix();
+	virtual void render();
+	
 
 private:
-	XMMATRIX world;
-	XMMATRIX translationMatrix;
-	XMMATRIX scaleMatrix;
-	XMMATRIX rotationMatrix;
+	ID2D1SolidColorBrush * pColorBrush;
 
 protected:
+	D2D1_RECT_F rectangle;
+	ID2D1HwndRenderTarget * pRT;
+	XMFLOAT2 menuSize = {150.0f, 350.0f};
+
 	std::list<Component*> components;
 
 	const size_t ID;

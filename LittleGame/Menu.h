@@ -27,15 +27,15 @@ public:
 	void SETCurrent(Button* current) { this->current = current; }
 
 	//Commands
-	void goUp() { this->current = this->current->GETPrev(); };
-	void goDown() { this->current = this->current->GETNext(); };
-	void selectButton() { this->current->onPress(); };
+	void goUp();
+	void goDown();
+	void pressButton() { this->current->onPress(); };
 
 
 protected:
 	std::list<Button*> buttons;
 	std::vector<MenuObject*> objects;
-	Button* current;
+	Button* current = nullptr;
 	std::vector<GraphicsComponent*> graphics;
 };
 

@@ -2,7 +2,6 @@
 #include "GamePlayState.h"
 #include "GameManager.h"
 #include "Locator.h"
-#include "MenuRectComponent.h"
 #include "LineComponent.h"
 #include "BlockComponent.h"
 #include "KeyboardComponent.h"
@@ -64,14 +63,20 @@ void MenuState::handleEvents(GameManager * gm) {
 		}
 		else if (msg.message == WM_KEYUP)
 		{
-			this->menus[this->currMenu]->goDown();
-			this->highlight->SETPosition(this->menus[this->currMenu]->GETCurrent()->GETPosition());
-
-			//this->graphics.pop_back();
-			this->menus[this->currMenu]->getGraphics().pop_back();
-			XMFLOAT3 scaleM(25, 1, 10);
-			XMFLOAT4 color(0.9f, 0.9f, 0.9f, 0.9f);
-			MenuRectComponent* quad = new MenuRectComponent(*this->menus[this->currMenu], *this->highlight, this->camera, color, scaleM);
+			switch (msg.wParam)
+			{
+			case VK_UP:
+				this->menus[this->currMenu]->goUp();
+				break;
+			case VK_DOWN:
+				this->menus[this->currMenu]->goDown();
+				break;
+			case VK_RETURN:
+				this->menus[this->currMenu]->pressButton();
+				break;
+			default:
+				break;
+			}
 		}
 
 		TranslateMessage(&msg);
@@ -82,35 +87,20 @@ void MenuState::handleEvents(GameManager * gm) {
 
 void MenuState::update(GameManager * gm)
 {
-	//The only object in each menu that will need to update
-	//this->highlight->updateWorldMatrix();
-
-	//displayMenu(this->currMenu);
-
-
 }
 
 void MenuState::render(GameManager * gm) {
-	//rio.render(this->graphics);
-	//gm->setupSecondRenderPass();
-	//rio.injectResourcesIntoSecondPass();
-	//gm->display(this);
-	this->objD2D.OnRender();
+	this->objD2D.OnRender(this->menuObjects);
 }
 
 void MenuState::displayMenu(MENUS::TYPE menu)
 {
 	this->menuObjects.clear();
-	this->graphics.clear();
 
 	this->currMenu = menu;
 	for ( auto &i : this->menus[menu]->getObjects())
 	{
 		this->menuObjects.push_back(i);
-	}
-	for (auto &i : this->menus[menu]->getGraphics())
-	{
-		this->graphics.push_back(i);
 	}
 }
 
@@ -126,49 +116,31 @@ void MenuState::initStartMenu()
 
 	MenuObject* object;
 	Button* pButton;
-	MenuRectComponent* quad;
+	WCHAR* text;
 
 	int nextID;
 
 	//Background
-	XMFLOAT3 pos(500, 500.0f, 200);
-	XMFLOAT3 scaleM(100, 1, 100);
-	XMFLOAT4 color(0.0f, 0.0f, 0.5f, 0.2f);
-	nextID = newID();
-	object = new MenuObject(nextID, pos);
-	quad = new MenuRectComponent(*stMenu, *object, this->camera, color, scaleM);
+	nextID = this->newID();
+	object = new MenuObject(this->objD2D.GETRenderTarget());
 	stMenu->addQuad(object);
 
-	//BUTTONS
-	//Options
-	pos = XMFLOAT3(450, 510.0f, 200);
-	scaleM = XMFLOAT3(20, 1, 10);
-	color = XMFLOAT4(0.0f, 1.0f, 0.5f, 0.2f);
-	nextID = newID();
-	pButton = new Button(nextID, pos, BEHAVIOR::GOOPTIONS, this);
-	quad = new MenuRectComponent(*stMenu, *pButton, this->camera, color, scaleM);
+	//Buttons
+	nextID = this->newID();
+	text = L"Options      ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, {50,50, 200,100}, D2D1::ColorF::Red, text, BEHAVIOR::GOOPTIONS);
 	stMenu->addButton(pButton);
 
-	//Start game
-	pos = XMFLOAT3(460, 510.0f, 170);
-	scaleM = XMFLOAT3(20, 1, 10);
-	color = XMFLOAT4(0.0f, 0.8f, 0.2f, 0.2f);
-	nextID = newID();
-	pButton = new Button(nextID, pos, BEHAVIOR::STARTGAME, this);
-	quad = new MenuRectComponent(*stMenu, *pButton, this->camera, color, scaleM);
+	nextID = this->newID();
+	text = L"Start      ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,150, 200,200 }, D2D1::ColorF::DarkRed, text, BEHAVIOR::GOSTART);
 	stMenu->addButton(pButton);
 
-	//Set button to select for highlight
-	stMenu->SETCurrent(stMenu->getButtons().front());
+	nextID = this->newID();
+	text = L"Start Game   ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,250, 200,300 }, D2D1::ColorF::Aqua, text, BEHAVIOR::STARTGAME);
+	stMenu->addButton(pButton);
 
-	//Highlighted button
-	pos = stMenu->GETCurrent()->GETPosition();
-	scaleM = XMFLOAT3(25, 1, 10);
-	color = XMFLOAT4(0.9f, 0.9f, 0.9f, 0.9f);
-	nextID = newID();
-	this->highlight = new MenuObject(nextID, pos);
-	quad = new MenuRectComponent(*stMenu, *this->highlight, this->camera, color, scaleM);
-	stMenu->addQuad(this->highlight);
 
 	this->menus[MENUS::START] = stMenu;
 }
@@ -180,41 +152,26 @@ void MenuState::initOptionsMenu()
 
 	MenuObject* object;
 	Button* pButton;
-	MenuRectComponent* quad;
+	WCHAR* text;
+	//MenuRectComponent* quad;
 
 	int nextID;
 
 	//Background
-	XMFLOAT3 pos(500, 500.0f, 200);
-	XMFLOAT3 scaleM(100, 1, 100);
-	XMFLOAT4 color(0.0f, 0.7f, 0.9f, 0.2f);
-	nextID = newID();
-	object = new MenuObject(nextID, pos);
-	quad = new MenuRectComponent(*opMenu, *object, this->camera, color, scaleM);
+	nextID = this->newID();
+	object = new MenuObject(this->objD2D.GETRenderTarget(), nextID, { 0,0, 300,500 }, D2D1::ColorF::Blue);
 	opMenu->addQuad(object);
 
-
-	//BUTTONS
-	//Startmenu
-	pos = XMFLOAT3(450, 510.0f, 200);
-	scaleM = XMFLOAT3(20, 1, 10);
-	color = XMFLOAT4(0.0f, 1.0f, 0.5f, 0.2f);
-	nextID = newID();
-	pButton = new Button(nextID, pos, BEHAVIOR::GOSTART, this);
-	quad = new MenuRectComponent(*opMenu, *pButton, this->camera, color, scaleM);
+	//Buttons
+	nextID = this->newID();
+	text = L"Options      ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,50, 200,100 }, D2D1::ColorF::Red, text, BEHAVIOR::GOOPTIONS);
 	opMenu->addButton(pButton);
 
-	//Set button to select for highlight
-	opMenu->SETCurrent(opMenu->getButtons().front());
-
-	//Highlighted button
-	pos = opMenu->GETCurrent()->GETPosition();
-	scaleM = XMFLOAT3(25, 1, 10);
-	color = XMFLOAT4(0.9f, 0.9f, 0.9f, 0.9f);
-	nextID = newID();
-	this->highlight = new MenuObject(nextID, pos);
-	quad = new MenuRectComponent(*opMenu, *this->highlight, this->camera, color, scaleM);
-	opMenu->addQuad(this->highlight);
+	nextID = this->newID();
+	text = L"Start      ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,150, 200,200 }, D2D1::ColorF::DarkRed, text, BEHAVIOR::GOSTART);
+	opMenu->addButton(pButton);
 
 
 	this->menus[MENUS::OPTIONS] = opMenu;
