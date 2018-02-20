@@ -66,6 +66,7 @@
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuRectComponent.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="D2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuRectComponent.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="D2D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

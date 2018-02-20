@@ -12,6 +12,8 @@
 
 #include "Menu.h"
 
+#include "D2D.h"
+
 namespace MENUS {
 	enum TYPE {
 		START, OPTIONS,
@@ -27,6 +29,8 @@ class MenuState : public State
 private:
 	static MenuState sMenuState;
 	GameManager* pGM;
+
+	D2D objD2D;
 
 	int ID = 0;
 

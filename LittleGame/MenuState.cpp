@@ -16,6 +16,8 @@ using namespace DirectX::SimpleMath;
 MenuState MenuState::sMenuState;
 
 void MenuState::init() {
+	this->objD2D.Initialize();
+
 	this->camera.init(1000, 900);
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initStartMenu();
@@ -81,9 +83,11 @@ void MenuState::handleEvents(GameManager * gm) {
 void MenuState::update(GameManager * gm)
 {
 	//The only object in each menu that will need to update
-	this->highlight->updateWorldMatrix();
+	//this->highlight->updateWorldMatrix();
 
-	displayMenu(this->currMenu);
+	//displayMenu(this->currMenu);
+
+
 }
 
 void MenuState::render(GameManager * gm) {
@@ -91,6 +95,7 @@ void MenuState::render(GameManager * gm) {
 	gm->setupSecondRenderPass();
 	rio.injectResourcesIntoSecondPass();
 	gm->display(this);
+	this->objD2D.OnRender();
 }
 
 void MenuState::displayMenu(MENUS::TYPE menu)

@@ -3,6 +3,7 @@
 #include "Locator.h"
 #include "ID3D.h"
 #include "D3D.h"
+#include "D2D.h"
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -17,6 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//_CrtSetBreakAlloc(246); // 1134 1133 1132
 
 	ID3D* d3d = new D3D();
+
 	Locator::provide(d3d);
 
 	Locator::getD3D()->initializeWindow(hInstance, true, 1920, 1080, true);
