@@ -10,11 +10,11 @@ class EnemyAttackComponent : public Component
 {
 protected:
 	ActorObject * pHead = nullptr;
-	std::vector<ActorObject*>* players;
-	float passedTime;
-	float attackDamage;
-	float attackDuration;
-	float attackRange;
+	std::vector<ActorObject*>* players = nullptr;
+	float passedTime = 0.0f;
+	float attackDamage = 0.0f;
+	float attackDuration = 0.0f;
+	float attackRange = 0.0f;
 
 public:
 	virtual const size_t getID() = 0;

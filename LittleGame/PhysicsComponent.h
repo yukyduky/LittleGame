@@ -17,7 +17,7 @@
 class PhysicsComponent : public Component
 {
 private:
-	GameObject* pHead;
+	GameObject* pHead = nullptr;
 	DirectX::BoundingSphere selfBoundingSphere;
 	//DirectX::BoundingBox selfBoundingBox;
 	const size_t ID;

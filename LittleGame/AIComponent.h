@@ -31,7 +31,7 @@ class AIComponent : public InputComponent
 private:
 	size_t ID = -1;
 	EnemyObject* pHead = nullptr;
-	std::vector<ActorObject*>* players;
+	std::vector<ActorObject*>* players = nullptr;
 	AIBEHAVIOR::KEY behavior;
 	Command* commands[AICOMMANDS::SIZE];
 

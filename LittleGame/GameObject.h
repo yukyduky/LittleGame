@@ -45,15 +45,15 @@ private:
 
 protected:
 	std::list<Component*> components;
-	PhysicsComponent* physicsComponent;
+	PhysicsComponent* physicsComponent = nullptr;
 
 	const size_t ID;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTTYPE::TYPE type;
 	OBJECTSTATE::TYPE state;
-	double counter;
-	double transitionTime;
+	double counter = 0;
+	double transitionTime = 0;
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::TYPE::ACTIVATED), type(OBJECTTYPE::NOT_SET) {}

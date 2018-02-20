@@ -15,7 +15,7 @@ Music: Streams from a file, saves memory
 class AudioManager : public IAudioManager
 {
 private:
-	bool repeatMusic;
+	bool repeatMusic = true;
 	std::array<sf::SoundBuffer, SOUND::SIZE> sounds;
 	std::array<std::string, MUSIC::SIZE> musicFilenames;
 	//Queue isnt neccesary and the game will play the sound instantly
@@ -24,11 +24,11 @@ private:
 	//Sound object that will play the sound
 	sf::Sound currentSound;
 
-	size_t soundVolume;
-	size_t musicVolume;
+	size_t soundVolume = 0;
+	size_t musicVolume = 0;
 
 	// What MUSICSTATE the game is in, declared as LEVEL1 in current version
-	size_t currState;
+	size_t currState = 0;
 public:
 	AudioManager();
 	~AudioManager() {}

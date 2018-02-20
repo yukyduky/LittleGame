@@ -9,12 +9,12 @@
 class D3D : public ID3D
 {
 private:
-	IDXGISwapChain* gSwapChain;
-	ID3D11Device* gDevice;
-	ID3D11DeviceContext* gDevCon;
+	IDXGISwapChain* gSwapChain = nullptr;
+	ID3D11Device* gDevice = nullptr;
+	ID3D11DeviceContext* gDevCon = nullptr;
 	HWND hwnd;
-	size_t wWidth;
-	size_t wHeight;
+	size_t wWidth = 0;
+	size_t wHeight = 0;
 public:
 	virtual void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed);
 	virtual void createSwapChain();

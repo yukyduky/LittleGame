@@ -10,7 +10,7 @@ class ArenaObject : public GameObject
 {
 private:
 	XMFLOAT3 startPos;
-	float maxFallDepth;
+	float maxFallDepth = 0.0f;
 public:
 	ArenaObject(const size_t ID);
 	ArenaObject(const size_t ID, XMFLOAT3 pos);

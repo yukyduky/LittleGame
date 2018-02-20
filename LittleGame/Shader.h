@@ -23,9 +23,9 @@ private:
 	void SetInputlayout(ID3D11DeviceContext* gDevCon) const;
 
 	// COMs
-	ID3D11VertexShader* gVertexShader;
-	ID3D11PixelShader* gPixelShader;
-	ID3D11InputLayout * gVertexLayout;
+	ID3D11VertexShader* gVertexShader = nullptr;
+	ID3D11PixelShader* gPixelShader = nullptr;
+	ID3D11InputLayout * gVertexLayout = nullptr;
 
 	// Error handling
 	HRESULT hr;
