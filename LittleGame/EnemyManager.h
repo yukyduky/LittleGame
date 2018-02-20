@@ -31,11 +31,14 @@ private:
 	GamePlayState * pGPS;
 	EndState * endState;
 	std::vector<ActorObject*> players;
+	std::vector<GameObject*>* pGameObjectsArray = nullptr;
 	int activeEnemiesCount = 0;
 
-	// Assumes that all the gameObjects are updated through this pointer, if 
-	// it has since then been divided into several arrays, the pointer here should be to the Actors
-	std::vector<GameObject*>* pGameObjectsArray = nullptr;
+	// Relevant to grid
+	int swarmerCount = -1;
+	EnemyObject** pAllSwarmers;
+
+
 
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
@@ -51,8 +54,8 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
-	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
-	ActorObject* createClusterer();
+	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+	EnemyObject* createClusterer();
 
 public:
 	EnemyManager();

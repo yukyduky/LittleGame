@@ -1,17 +1,18 @@
 #include "EnemyManager.h"
 #include "ActorObject.h"
+#include "EnemyObject.h"
 #include "GamePlayState.h"
 #include "Locator.h"
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
 #include "AIComponent.h"
-#include "EnemyObject.h"
 #include "EnemyAttackComponent.h"
 #include "ImmolationEnemyAttack.h"
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
 #include "EndState.h"
+#include "SwarmerEnemyAttack.h"
 
 EnemyManager::EnemyManager()
 {
@@ -39,6 +40,8 @@ void EnemyManager::startLevel1()
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;
+	this->swarmerCount = 0;
+	this->pAllSwarmers = new EnemyObject*[swarmerCount];
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -47,7 +50,7 @@ void EnemyManager::startLevel1()
 		// Per Normal Enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
@@ -55,11 +58,15 @@ void EnemyManager::startLevel1()
 		// --------------------------- NEW --------------------------- //
 		// --------------------------- NEW --------------------------- //
 		// Per clusterer
-		int clustererCount = 0;
-		for (int k = 0; k < clustererCount; k++) {
-			// clusterer = this->createClusterer();
+		for (int k = 0; k < swarmerCount; k++) {
+			EnemyObject* clusterer = this->createClusterer();
+			
+			(this->pAllSwarmers[k]) = clusterer;
+			
 			// currentWave->enemies.push_back(clusterer);
+
 			// this->activeEnemiesCount++;
+			
 		}
 		// --------------------------- NEW --------------------------- //
 		// --------------------------- NEW --------------------------- //
@@ -86,7 +93,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -154,7 +161,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	return enemyObject;
 }
 
-ActorObject* EnemyManager::createClusterer()
+EnemyObject* EnemyManager::createClusterer()
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -206,17 +213,17 @@ ActorObject* EnemyManager::createClusterer()
 		OBJECTTYPE::ENEMY
 	);
 	// COMPONENTS
-	graphicsComponent = new BlockComponent(*this->pGPS, *object, color, scale, rotation);
+	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
-	aiComponent = new AIComponent(*enemyObject, aiBehavior);
-	attackComponent = new ImmolationEnemyAttack(immolationDamage, immolationDuration, immolationRange, &this->activeEnemiesCount, *enemyObject);
+	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
+	attackComponent = new SwarmerEnemyAttack(*enemyObject, &this->activeEnemiesCount, projectileDamage, projectileDuration, projectileRange);
 	// STATES
 	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
 	moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
 
 	// Make the enemy inactive
-
-	return nullptr;
+	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return enemyObject;
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
@@ -277,11 +284,15 @@ void EnemyManager::update()
 			StateManager::pushState(this->endState);
 		}
 	}
+
+	// Clean up the Grid!
+
 }
 
 void EnemyManager::cleanUp()
 {
 	this->cleanLevel();
+	
 
 	// delete this->endState; -- States clean themselves
 }
