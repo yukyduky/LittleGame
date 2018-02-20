@@ -20,8 +20,8 @@ private:
 	XINPUT_STATE currentState;
 	XMFLOAT2 thumbLDir;
 	XMFLOAT2 thumbRDir;
-	float trigLValue;
-	float trigRValue;
+	float trigLValue = 0.0f;
+	float trigRValue = 0.0f;
 
 	float checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE state);
 public:

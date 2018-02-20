@@ -16,11 +16,11 @@ class GameManager
 {
 private:
 	bool isRunning;
-	IGameTime* gameTime;
-	IRandomGeneration* randomGenerator;
-	IGlobalEvents* globalEvents;
+	IGameTime* gameTime = nullptr;
+	IRandomGeneration* randomGenerator = nullptr;
+	IGlobalEvents* globalEvents = nullptr;
 	Renderer renderer;
-	IAudioManager* audio;
+	IAudioManager* audio = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

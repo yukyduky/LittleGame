@@ -67,12 +67,12 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	NAME name;
-	ActorObject * player;
+	ActorObject * player = nullptr;
 
-	double coolDown;
-	double timeSinceCast;
+	double coolDown = 0.0f;
+	double timeSinceCast = 0.0f;
 	// EnergyCost
-	size_t cost;
+	size_t cost = 0;
 };
 
 

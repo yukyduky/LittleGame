@@ -252,11 +252,11 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 	//Check if the player is on a active floor tile or if he fell of the map.
-	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
+	/*if (this->player1 != nullptr && this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
 		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
 		}
-	}
+	}*/
 
 	int ID;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.

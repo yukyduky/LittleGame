@@ -26,7 +26,7 @@ namespace WALLTYPE {
 
 struct tileData {
 	SQUARETYPE::TYPE type;
-	GameObject* ptr;
+	GameObject* ptr = nullptr;
 
 	tileData() {};
 
@@ -39,15 +39,15 @@ struct tileData {
 class LevelManager
 {
 private:
-	GamePlayState * pGPS;
+	GamePlayState * pGPS = nullptr;
 	FFPattern ffp;
 
-	int arenaWidth;
-	int arenaDepth;
-	int squareSize;
-	int wallHeight;
-	int tempID;
-	int nrOfWalls;
+	int arenaWidth = 0;
+	int arenaDepth = 0;
+	int squareSize = 0;
+	int wallHeight = 0;
+	int tempID = 0;
+	int nrOfWalls = 0;
 	
 	/*--------<INFORMATION>--------
 	1. Creates all the RectangleComponents representing the arena floor.

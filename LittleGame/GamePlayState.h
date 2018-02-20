@@ -50,12 +50,12 @@ class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
-	GameManager* pGM;
+	GameManager* pGM = nullptr;
 	
 	EnemyManager enemyManager;
 	int ID = 0;
-	int arenaWidth;
-	int arenaDepth;
+	int arenaWidth = 0;
+	int arenaDepth = 0;
 	QuadTree quadTree;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
@@ -80,8 +80,8 @@ private:
 	std::vector<Light> pointLights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
-	ActorObject* player1;
-	Command* selectCommand;
+	ActorObject* player1 = nullptr;
+	Command* selectCommand = nullptr;
 
 	///std::list<PhysicsComponent*> physicsListStatic;
 	///std::list<PhysicsComponent*> physicsListDynamic;
@@ -91,7 +91,7 @@ private:
 	void checkCollisions();
 
 
-	MouseInput* mousePicker;
+	MouseInput* mousePicker = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

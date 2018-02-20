@@ -55,7 +55,7 @@ public:
 	*/
 	virtual void render(GameManager* gm);
 
-		static bool GETflag() { return flag; }
+	static bool GETflag() { return flag; }
 	static void SETflag(bool inputValue) { flag = inputValue; }
 };
 
