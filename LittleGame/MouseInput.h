@@ -20,7 +20,7 @@ private:
 	DirectX::XMFLOAT2 mousePoint;
 	POINT mPoint;
 
-	DirectX::XMVECTOR surface;
+	DirectX::XMFLOAT4 surface;
 };
 
 

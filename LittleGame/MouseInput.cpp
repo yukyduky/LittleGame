@@ -14,8 +14,7 @@ MouseInput::MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMVECTOR cDir)
 	tempDir = DirectX::XMVector3Normalize(tempDir);
 
 	// a plane on hte same height as the middel of the player
-	DirectX::XMFLOAT4 floorNormal(0.0f, 1.0f, 0.0f, -40.f);
-	this->surface = DirectX::XMLoadFloat4(&floorNormal);
+	this->surface = { 0.0f, 1.0f, 0.0f, -40.f };
 
 	DirectX::XMStoreFloat3(&direction, tempDir);
 	this->cameraDirNor = direction;
@@ -66,7 +65,8 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 	DirectX::XMVECTOR vecCam = DirectX::XMLoadFloat3(&this->cameraPos);
 
 	DirectX::XMVECTOR vecPointInArena;
-	vecPointInArena = DirectX::XMPlaneIntersectLine(this->surface, vecP, vecCam);
+	DirectX::XMVECTOR surfaceVector = DirectX::XMLoadFloat4(&this->surface);
+	vecPointInArena = DirectX::XMPlaneIntersectLine(surfaceVector, vecP, vecCam);
 
 	DirectX::XMStoreFloat3(&result, vecPointInArena);
 

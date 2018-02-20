@@ -34,10 +34,14 @@ struct Message
 class GameObject
 {
 private:
-	XMMATRIX world;
-	XMMATRIX translationMatrix;
-	XMMATRIX scaleMatrix;
-	XMMATRIX rotationMatrix;
+	//XMMATRIX world;
+	//XMMATRIX translationMatrix;
+	//XMMATRIX scaleMatrix;
+	//XMMATRIX rotationMatrix;
+	XMFLOAT4X4 world;
+	XMFLOAT4X4 translationMatrix;
+	XMFLOAT4X4 scaleMatrix;
+	XMFLOAT4X4 rotationMatrix;
 
 protected:
 	std::list<Component*> components;
@@ -80,13 +84,13 @@ public:
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
-	XMMATRIX& getWorld() { return this->world; }
-	void SETworldMatrix(XMMATRIX wMatrix) { this->world = wMatrix; }
-	void SETtranslationMatrix(XMMATRIX translationM) { this->translationMatrix = translationM; }
-	void SETscaleMatrix(XMMATRIX scaleM) { this->scaleMatrix = scaleM; }
-	void SETrotationMatrix(XMMATRIX rotationM) { this->rotationMatrix = rotationM; }
+	XMMATRIX& getWorld();
+	void SETworldMatrix(XMMATRIX wMatrix);
+	void SETtranslationMatrix(XMMATRIX translationM);
+	void SETscaleMatrix(XMMATRIX scaleM);
+	void SETrotationMatrix(XMMATRIX rotationM);
 	void updateWorldMatrix();
-	XMMATRIX getRotationMatrix() { return this->rotationMatrix; }
+	XMMATRIX getRotationMatrix();
 
 	OBJECTTYPE::TYPE getType() const { return this->type; }
 	void setType(OBJECTTYPE::TYPE type) { this->type = type; }
