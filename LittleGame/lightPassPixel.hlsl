@@ -42,7 +42,7 @@ cbuffer Light : register (b1) {
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission, out float objectType);
-void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, in float3 normal, inout float3 diffuse, inout float emission, in float objectType);
+void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
@@ -71,10 +71,12 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	objectType = texNormal.Load(texCoords).xyz;
 }
 
-void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, in float3 normal, inout float3 diffuse, inout float emission, in float objectType)
+void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType)
 {
 	int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
 	int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+
+
 
 	if (pos_W.y < (grid[xGrid][yGrid].height * scaleHeight) + gridStartPos.y) {
 		diffuse = grid[xGrid][yGrid].color;
@@ -82,10 +84,15 @@ void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, in float3 no
 	else if (pos_W.y < (grid[xGrid][yGrid].height * scaleDepth) + gridStartPos.y)
 
 	if (objectType == 0.5f) {
-		if (grid[xGrid][yGrid].height < 0.0f) {
+		
+	}
+	else {
+		float3 pToC = camPos - pos_W;
 
-		}
-		else if (grid[xGrid][yGrid].height > 0.0f) {
+		int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
+		int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+
+		while (xGrid != MAX_NUM_FLOORGRIDS_X - 1 && yGrid != MAX_NUM_FLOORGRIDS_Y) {
 
 		}
 	}
