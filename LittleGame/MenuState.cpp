@@ -91,10 +91,10 @@ void MenuState::update(GameManager * gm)
 }
 
 void MenuState::render(GameManager * gm) {
-	rio.render(this->graphics);
-	gm->setupSecondRenderPass();
-	rio.injectResourcesIntoSecondPass();
-	gm->display(this);
+	//rio.render(this->graphics);
+	//gm->setupSecondRenderPass();
+	//rio.injectResourcesIntoSecondPass();
+	//gm->display(this);
 	this->objD2D.OnRender();
 }
 

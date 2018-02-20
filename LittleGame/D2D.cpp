@@ -43,9 +43,7 @@ void D2D::RunMessageLoop()
 
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
-		if (msg.message == WM_QUIT) {
-			break;
-		}
+		
 		this->OnRender();
 		ValidateRect(Locator::getD3D()->GEThwnd(), NULL);
 
