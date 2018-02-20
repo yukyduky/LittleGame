@@ -4,18 +4,25 @@
 
 
 void RenderInputOrganizer::packageMatrices() {
-	XMMATRIX world = *this->rawMatrixData.world;
-	world = XMMatrixTranspose(world);
+	XMMATRIX worldMatrix = XMLoadFloat4x4(&this->rawMatrixData.world);
+	XMMATRIX viewMatrix = XMLoadFloat4x4(this->rawMatrixData.view);
+	XMMATRIX projMatrix = XMLoadFloat4x4(this->rawMatrixData.proj);
+
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+
 	XMStoreFloat4x4(
 		&this->packagedMatrixData.world,
-		world
+		worldMatrix
 	);
 
-	this->rawMatrixData.worldViewProj = (*this->rawMatrixData.world) * (*this->rawMatrixData.view) * (*this->rawMatrixData.proj);
-	this->rawMatrixData.worldViewProj = XMMatrixTranspose(this->rawMatrixData.worldViewProj);
+	worldMatrix = XMLoadFloat4x4(&this->rawMatrixData.world);
+
+	XMMATRIX worldViewProj = worldMatrix * viewMatrix * projMatrix;
+	worldViewProj = XMMatrixTranspose(worldViewProj);
+
 	XMStoreFloat4x4(
 		&this->packagedMatrixData.worldViewProj,
-		this->rawMatrixData.worldViewProj
+		worldViewProj
 	);
 }
 
@@ -23,7 +30,9 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
 	
 	// Get world matrix
-	this->rawMatrixData.world = &graphics->getWorld();
+	//this->rawMatrixData.world = &graphics->getWorld();
+
+	XMStoreFloat4x4(&this->rawMatrixData.world, graphics->getWorld());
 	// Calculate matrices and convert to XMFLOAT4x4
 
 	this->packageMatrices();

@@ -8,6 +8,7 @@
 #include "IRandomGeneration.h"
 #include "Renderer.h"
 #include "IAudioManager.h"
+#include "IGlobalEvents.h"
 
 class State;
 
@@ -17,6 +18,7 @@ private:
 	bool isRunning;
 	IGameTime* gameTime;
 	IRandomGeneration* randomGenerator;
+	IGlobalEvents* globalEvents;
 	Renderer renderer;
 	IAudioManager* audio;
 

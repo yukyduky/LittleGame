@@ -337,7 +337,10 @@ OBJECTSTATE::TYPE LevelManager::checkTileStateFromPos(XMFLOAT3 pos, std::vector<
 {
 	return grid[pos.x / ARENASQUARESIZE][pos.z / ARENASQUARESIZE].ptr->getState();
 }
- 
+
+void LevelManager::clean() {
+
+}
 
   //////////////////////////////////////////////////////////////
  ////         OLD CODE FOR MAKING LINES ON WALLS          /////

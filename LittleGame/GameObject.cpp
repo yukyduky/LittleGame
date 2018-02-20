@@ -23,8 +23,41 @@ void GameObject::nudgePos() {
 	this->pos.y += (nudgeValue * 0.5);
 }
 
+DirectX::XMMATRIX& GameObject::getWorld() {
+	DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4(&this->world);
+	
+	return worldMatrix;
+}
+
+void GameObject::SETworldMatrix(XMMATRIX wMatrix) {
+	DirectX::XMStoreFloat4x4(&this->world, wMatrix);
+}
+
+void GameObject::SETtranslationMatrix(XMMATRIX translationM) {
+	DirectX::XMStoreFloat4x4(&this->translationMatrix, translationM);
+}
+
+void GameObject::SETscaleMatrix(XMMATRIX scaleM) {
+	DirectX::XMStoreFloat4x4(&this->scaleMatrix, scaleM);
+}
+
+void GameObject::SETrotationMatrix(XMMATRIX rotationM) {
+	DirectX::XMStoreFloat4x4(&this->rotationMatrix, rotationM);
+}
+
 void GameObject::updateWorldMatrix()
 {
-	this->translationMatrix = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
-	this->world = this->scaleMatrix * this->rotationMatrix * this->translationMatrix;
+	DirectX::XMMATRIX scaleMatrix = DirectX::XMLoadFloat4x4(&this->scaleMatrix);
+	DirectX::XMMATRIX rotationMatrix = DirectX::XMLoadFloat4x4(&this->rotationMatrix);
+	DirectX::XMMATRIX translationMatrix = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+
+	DirectX::XMMATRIX worldMatrix = scaleMatrix * rotationMatrix * translationMatrix;
+
+	DirectX::XMStoreFloat4x4(&this->world, worldMatrix);
+}
+
+XMMATRIX GameObject::getRotationMatrix() {
+	DirectX::XMMATRIX rotationMatrix = DirectX::XMLoadFloat4x4(&this->rotationMatrix);
+
+	return rotationMatrix;
 }

@@ -3,8 +3,7 @@
 #include "GamePlayState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
-#include "EndState.h"
-
+#include "RestartState.h"
 //Include spells
 //#include "Spell.h"
 #include "IncludeSpells.h"
@@ -365,8 +364,7 @@ void ActorObject::dealDmg(float dmg)
 		this->hp = 0;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
-		// Push the "EndState" which will end all!
-		StateManager::pushState(EndState::getInstance());
+		Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 	}
 }
 

@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include <iterator>
 #include "Crosshair.h"
+#include "StateManager.h"
 
 #include "IncludeSpells.h"
 
@@ -126,14 +127,14 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH * 0.5, ARENASQUARESIZE * 10, ARENAHEIGHT * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	// To be changed when Ollie has done the rework on camera
 	XMFLOAT3 tempcDir;
 	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
-	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), tempcDir);
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1();
 }
 
@@ -150,10 +151,14 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->staticObjects.clear();
+
 	for (auto &iterator : this->dynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->dynamicObjects.clear();
+
 	for (auto &iterator : this->noCollisionDynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
@@ -161,13 +166,23 @@ void GamePlayState::cleanUp()
 	for (int i = 0; i < this->playerInput.size(); i++) {
 		this->playerInput[i] = nullptr;
 	}
-	this->quadTree.cleanup();
-	this->staticObjects.clear();
-	this->dynamicObjects.clear();
 	this->noCollisionDynamicObjects.clear();
+
+	this->quadTree.cleanup();
+
+	//for (auto && iterator2 : this->pointLights) {
+	//	delete &iterator2;
+	//}
+
+	this->pointLights.clear();
+	
 	this->graphics.clear();
 
 	InputComponent::cleanup();
+
+	this->staticPhysicsCount = 0;
+	this->counter = 0;
+	this->ID = 0;
 }
 
 void GamePlayState::pause()
@@ -181,6 +196,7 @@ void GamePlayState::resume()
 
 void GamePlayState::handleEvents(GameManager * gm) {
 	MSG msg;
+	GLOBALMESSAGES globalmsg;
 
 	while (gm->pollEvent(msg)) {
 		// Exit the application when 'X' is pressed
@@ -190,6 +206,12 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+	}
+
+	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
+		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			StateManager::changeState(RestartState::getInstance());
+		}
 	}
 }
 
@@ -322,7 +344,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
-	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
+	XMFLOAT3 playerPos(static_cast<float>(ARENAWIDTH * 0.5), playerScales.y, static_cast<float>(ARENAHEIGHT * 0.5));
 	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
 	float actorSpeed = 1;
 

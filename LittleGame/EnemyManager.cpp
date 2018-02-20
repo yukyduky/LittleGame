@@ -76,6 +76,12 @@ void EnemyManager::cleanLevel()
 		// they'll be cleaned and deleted from there, so we only need to delete the 'Waves' here
 		delete currentWave;
 	}
+
+	int popWavesQueue = waves.size();
+
+	for (int i = 0; i < popWavesQueue; i++) {
+		this->waves.pop_back();
+	}
 }
 
 ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
