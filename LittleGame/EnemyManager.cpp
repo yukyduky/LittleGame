@@ -17,7 +17,7 @@
 EnemyManager::EnemyManager()
 {
 	this->pGPS = nullptr;
-
+	this->pSwarmers = new ArrayList();
 	this->activeEnemiesCount = 0;
 }
 
@@ -28,6 +28,7 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> player
 	this->players = players; 
 	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
+	this->pSwarmers = new ArrayList();
 }
 
 void EnemyManager::startLevel1()
@@ -40,9 +41,8 @@ void EnemyManager::startLevel1()
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;
-	this->swarmerCount = 0;
-	
-	//this->pAllSwarmers = new EnemyObject*[swarmerCount];
+	this->swarmerCount = 4;
+	std::vector<EnemyObject*> localSwarmers;
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -60,15 +60,20 @@ void EnemyManager::startLevel1()
 		// --------------------------- NEW --------------------------- //
 		// Per clusterer
 		for (int k = 0; k < swarmerCount; k++) {
-			// EnemyObject* clusterer = this->createClusterer();
+			// Create the actual object
+			EnemyObject* clusterer = this->createClusterer();
 			
-			//(this->pAllSwarmers[k]) = clusterer;
-			
-			// currentWave->enemies.push_back(clusterer);
+			// Attach a pointer to waves
+			currentWave->enemies.push_back(clusterer);
 
-			// this->activeEnemiesCount++;
-			
+			// Attach a pointer to swarmspecific (used by grid)
+			localSwarmers.push_back(clusterer);
+
+			this->activeEnemiesCount++;
 		}
+
+		this->pSwarmers->initialize(localSwarmers);
+
 		// --------------------------- NEW --------------------------- //
 		// --------------------------- NEW --------------------------- //
 
@@ -243,6 +248,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->players = players;
 	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
+	this->pSwarmers = new ArrayList();
 }
 
 void EnemyManager::update()
@@ -303,4 +309,6 @@ void EnemyManager::update()
 void EnemyManager::cleanUp()
 {
 	this->cleanLevel();
+	this->pSwarmers->cleanUp();
+	delete this->pSwarmers;
 }

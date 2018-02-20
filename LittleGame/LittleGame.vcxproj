@@ -213,6 +213,7 @@
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />

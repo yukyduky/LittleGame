@@ -81,6 +81,7 @@
       <Filter>Clusterer\Grid</Filter>
     </ClCompile>
     <ClCompile Include="RestartState.cpp" />
+    <ClCompile Include="GlobalEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
