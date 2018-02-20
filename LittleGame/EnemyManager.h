@@ -52,6 +52,7 @@ private:
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
 	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+	ActorObject* createClusterer();
 
 public:
 	EnemyManager();

@@ -58,7 +58,7 @@ std::vector<ActorObject*>* EnemyObject::getPlayers()
 
 void EnemyObject::update()
 {
-	// Find out where you are in relevance to the player.
+	// Find out where you are in relation to the player.
 	XMFLOAT3 playerPos = (*players)[0]->GETPosition();
 	this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
 

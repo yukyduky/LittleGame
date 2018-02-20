@@ -21,3 +21,18 @@ float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {
 
 	return randomFloat;
 }
+
+float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {
+	float randomFloat = 0.0f;
+	int integral = (rangeEnd - rangeStart) * 100;
+
+	while (randomFloat == 0.0f) {
+		randomFloat = ((rand() % integral * 0.01) + rangeStart);
+	}
+
+	return randomFloat;
+}
+
+virtual DirectX::XMFLOAT3 GenerateEnemySpawnPosition() {
+
+}

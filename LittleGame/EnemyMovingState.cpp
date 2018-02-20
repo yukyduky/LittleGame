@@ -19,10 +19,13 @@ EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain, En
 
 void EnemyMovingState::executeBehavior()
 {
+	// Update Movement
+	this->pBrain->SETsimulatedMovement(this->pHead->getVectorToPlayer());
+
 	// If we're in range, switch state to attacking!
 	if (this->pHead->getDistanceToPlayer() < this->attackRange) {
 		// Push the attacking state
-		//this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);		-- Immo shouldn't have an attackingState
+		//this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);		-- Immolation shouldn't have an attackingState, since it has no delay when attacking
 		//this->pBrain->pushState(*this->attackingStateTemplate);	-- //Shellow
 		this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 	}

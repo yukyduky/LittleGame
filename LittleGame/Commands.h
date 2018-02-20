@@ -7,6 +7,15 @@
 /* Command pattern */
 class ActorObject;
 
+/*
+mapKeyCodesToEnums();
+mapCommands();
+mapKeys();
+command
+
+
+
+*/
 
 class Command
 {
