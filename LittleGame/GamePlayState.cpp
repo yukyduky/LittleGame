@@ -131,7 +131,7 @@ void GamePlayState::init() {
 	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
-	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), this->camera.GETfacingDir());
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1();
 }
 
@@ -164,7 +164,11 @@ void GamePlayState::cleanUp()
 
 	this->quadTree.cleanup();
 
-	this->noCollisionDynamicObjects.clear();
+	//for (auto && iterator2 : this->pointLights) {
+	//	delete &iterator2;
+	//}
+
+	this->pointLights.clear();
 	
 	this->graphics.clear();
 

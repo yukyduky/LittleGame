@@ -34,12 +34,12 @@ struct LightPassData {
 };
 
 struct MatrixBufferCalc {
-	XMMATRIX* world;
-	XMMATRIX* view;
-	XMMATRIX* proj;
+	XMFLOAT4X4 world;
+	XMFLOAT4X4* view;
+	XMFLOAT4X4* proj;
 
-	XMMATRIX worldView;
-	XMMATRIX worldViewProj;
+	XMFLOAT4X4 worldView;
+	XMFLOAT4X4 worldViewProj;
 };
 
 struct MatrixBufferPack {
