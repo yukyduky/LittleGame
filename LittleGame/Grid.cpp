@@ -7,19 +7,24 @@ Grid::Grid()
 
 void Grid::wipeGrid()
 {
-
+	this->occupiedSlots.clear();
 }
 
 void Grid::updateOccupants()
 {
+	//for (each swarmer) {
+	//	
+	//	// Find out which index this swarmer occupies
 
+	//	// Add that swarmer to that GridSlot's 'occupants' list.
 
-		// Update the new
+	//	// If that index hasn't already been added, add it to the index list.
+	//}
 }
 
 Index Grid::convertPositionIntoIndex(XMFLOAT2 position)
 {
-
+	return Index();
 }
 
 void Grid::initialize()
@@ -61,7 +66,7 @@ void Grid::update()
 
 	Finishing thoughts:
 	Occupants in a gridslot could be held there in arrays, but these would all need to be the size of 
-	the maximum amount of occupants. Ultimately thinking about the problem is more worth than any one 
+	the maximum amount of occupants. Ultimately thinking about the problem is more useful than any one 
 	chosen solution since the impact is minimal anyway.
 	*/
 	this->wipeGrid();
@@ -69,7 +74,7 @@ void Grid::update()
 }
 
 
-std::list<EnemyObject*>* Grid::getOccupants(XMFLOAT3 position)
+std::list<EnemyObject*>* Grid::getOccupants(XMFLOAT2 position)
 {
 	Index index = convertPositionIntoIndex(position);
 	return &this->theGrid[index.x][index.y].occupants;

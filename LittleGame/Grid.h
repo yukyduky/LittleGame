@@ -5,15 +5,12 @@
 #include "SwarmerState.h"
 #include "ActorObject.h"
 #include "LevelManager.h"
+#include "FloorFallPatterns.h"	 // For struct 'Index'
 
 
 class EnemyObject;
 
-struct Index 
-{
-	int x = -1;
-	int y = -1;
-};
+
 struct GridSlot
 {
 	Index index;
@@ -30,7 +27,7 @@ private:
 	int widthLength = -1;
 	int heightLength = -1;
 	GridSlot** theGrid;
-	GridSlot* occupiedSlots;
+	std::list<GridSlot*> occupiedSlots;
 
 	void wipeGrid();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

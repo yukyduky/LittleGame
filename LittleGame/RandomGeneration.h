@@ -16,8 +16,6 @@ public:
 	int GenerateInt(int rangeStart, int rangeEnd);
 
 	float GenerateFloat(float rangeStart, float rangeEnd);
-
-	//virtual DirectX::XMFLOAT3 GenerateEnemySpawnPosition();// NOT NEEDED, will be given by levelManager
 };
 
 #endif

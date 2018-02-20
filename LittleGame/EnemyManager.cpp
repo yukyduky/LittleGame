@@ -163,67 +163,67 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 
 EnemyObject* EnemyManager::createClusterer()
 {
-	/// D E C L A R A T I O N
-	// GRAND OBJECT
-	EnemyObject* enemyObject;
-	// COMPONENTS
-	BlockComponent* graphicsComponent;
-	AIComponent* aiComponent;
-	InputComponent* input;
-	PhysicsComponent* physicsComponent;
-	EnemyAttackComponent* attackComponent;
-	// STATES
-	EnemyAttackingState* attackState;
-	EnemyMovingState* moveState;
+	///// D E C L A R A T I O N
+	//// GRAND OBJECT
+	//EnemyObject* enemyObject;
+	//// COMPONENTS
+	//BlockComponent* graphicsComponent;
+	//AIComponent* aiComponent;
+	//InputComponent* input;
+	//PhysicsComponent* physicsComponent;
+	//EnemyAttackComponent* attackComponent;
+	//// STATES
+	//EnemyAttackingState* attackState;
+	//EnemyMovingState* moveState;
 
-	/// D E F I N I T I O N
-	size_t ID = this->pGPS->newID();
-	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0 };
+	///// D E F I N I T I O N
+	//size_t ID = this->pGPS->newID();
+	//XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
+	//XMFLOAT3 pos = { 0, 0, 0 };
 
-	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+	//int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
+	//float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
 
-	if (spawnLocation == 1)
-		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	//if (spawnLocation == 1)
+	//	pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
 
-	else if (spawnLocation == 2)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
+	//else if (spawnLocation == 2)
+	//	pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
 
-	else if (spawnLocation == 3)
-		pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	//else if (spawnLocation == 3)
+	//	pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
 
-	else if (spawnLocation == 4)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+	//else if (spawnLocation == 4)
+	//	pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
 
 
-	float speed = 180;
-	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 color(10.0f, 0.0, 0.0f, 255.0f);
-	XMFLOAT3 rotation(0, 0, 0);
-	float projectileDamage = 1;
-	float projectileDuration = 0;
-	float projectileRange = 50;
+	//float speed = 180;
+	//XMFLOAT3 velocity(speed, speed, speed);
+	//XMFLOAT4 color(10.0f, 0.0, 0.0f, 255.0f);
+	//XMFLOAT3 rotation(0, 0, 0);
+	//float projectileDamage = 1;
+	//float projectileDuration = 0;
+	//float projectileRange = 50;
 
-	/// A T T A C H M E N T
-	// OBJECT
-	enemyObject = new EnemyObject(
-		ID, speed, pos, velocity,
-		pGPS, players, 
-		OBJECTTYPE::ENEMY
-	);
-	// COMPONENTS
-	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
-	physicsComponent = new PhysicsComponent(*enemyObject, 20);
-	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
-	attackComponent = new SwarmerEnemyAttack(*enemyObject, &this->activeEnemiesCount, projectileDamage, projectileDuration, projectileRange);
-	// STATES
-	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
-	moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
+	///// A T T A C H M E N T
+	//// OBJECT
+	//enemyObject = new EnemyObject(
+	//	ID, speed, pos, velocity,
+	//	pGPS, players, 
+	//	OBJECTTYPE::ENEMY
+	//);
+	//// COMPONENTS
+	//graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+	//physicsComponent = new PhysicsComponent(*enemyObject, 20);
+	//aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
+	//attackComponent = new SwarmerEnemyAttack(*enemyObject, &this->activeEnemiesCount, projectileDamage, projectileDuration, projectileRange);
+	//// STATES
+	//attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
+	//moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
 
-	// Make the enemy inactive
-	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
-	return enemyObject;
+	//// Make the enemy inactive
+	//enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return nullptr;
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)

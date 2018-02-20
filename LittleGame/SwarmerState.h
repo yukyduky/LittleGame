@@ -11,15 +11,14 @@ class EnemyObject;
 class SwarmerState : public EnemyState
 {
 private:
-	Grid grid;
+//	Grid grid;
 
 protected:
 	EnemyObject * neighbours;
 	void updateNeighbours() {
-		this->
+		
 	}
-	void 
-
+	
 public:
 	virtual void executeBehavior() = 0;
 };

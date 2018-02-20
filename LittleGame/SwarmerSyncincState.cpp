@@ -5,16 +5,6 @@ SwarmerSyncingState::SwarmerSyncingState()
 
 }
 
-void SwarmerSyncingState::updateNeighbours()
-{
-
-	/*
-	this->neighBours = 
-	
-	*/
-}
-
-
 void SwarmerSyncingState::executeBehavior()
 {
 	/*
