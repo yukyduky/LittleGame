@@ -20,15 +20,15 @@ public:
 
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
-	void setDirection(XMVECTOR dir) { this->direction = dir; }
-	XMVECTOR getDirection() { return this->direction; }
+	void setDirection(XMFLOAT3 dir) { this->direction = dir; }
+	XMFLOAT3 getDirection() { return this->direction; }
 	void setSpell(Spell* spell) { this->spell = spell; }
 	void setRange(int range) { this->range = range; }
 
 	Spell* getSpell() ;
 private:
 	// traveldirection of the projectile
-	XMVECTOR direction;
+	XMFLOAT3 direction;
 	// The speed of the projectile
 	float speed;
 	// If the pojectile should spinn around its X-axis
