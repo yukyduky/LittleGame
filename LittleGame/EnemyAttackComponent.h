@@ -11,6 +11,7 @@ class EnemyAttackComponent : public Component
 protected:
 	ActorObject * pHead = nullptr;
 	std::vector<ActorObject*>* players;
+	int* pActiveEnemiesCount = nullptr; // Correlates to the value 'activeEnemiesCount' inside EnemyManager.
 	float passedTime;
 	float attackDamage;
 	float attackDuration;

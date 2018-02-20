@@ -1,17 +1,18 @@
 #include "EnemyManager.h"
 #include "ActorObject.h"
+#include "EnemyObject.h"
 #include "GamePlayState.h"
 #include "Locator.h"
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
 #include "AIComponent.h"
-#include "EnemyObject.h"
 #include "EnemyAttackComponent.h"
 #include "ImmolationEnemyAttack.h"
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
 #include "EndState.h"
+#include "SwarmerEnemyAttack.h"
 
 EnemyManager::EnemyManager()
 {
@@ -20,7 +21,7 @@ EnemyManager::EnemyManager()
 	this->activeEnemiesCount = 0;
 }
 
-EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& players)
+EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
 	// Set up pointers
 	this->pGPS = &pGPS;
@@ -39,18 +40,37 @@ void EnemyManager::startLevel1()
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;
+	this->swarmerCount = 0;
+	
+	//this->pAllSwarmers = new EnemyObject*[swarmerCount];
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
 		currentWave = new Wave();
 
-		// Per enemy
+		// Per Normal Enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
+
+		// --------------------------- NEW --------------------------- //
+		// --------------------------- NEW --------------------------- //
+		// Per clusterer
+		for (int k = 0; k < swarmerCount; k++) {
+			// EnemyObject* clusterer = this->createClusterer();
+			
+			//(this->pAllSwarmers[k]) = clusterer;
+			
+			// currentWave->enemies.push_back(clusterer);
+
+			// this->activeEnemiesCount++;
+			
+		}
+		// --------------------------- NEW --------------------------- //
+		// --------------------------- NEW --------------------------- //
 
 		// Attach the currentWave to our waves
 		this->waves.push_back(currentWave);
@@ -84,7 +104,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -152,6 +172,71 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	return enemyObject;
 }
 
+EnemyObject* EnemyManager::createClusterer()
+{
+	///// D E C L A R A T I O N
+	//// GRAND OBJECT
+	//EnemyObject* enemyObject;
+	//// COMPONENTS
+	//BlockComponent* graphicsComponent;
+	//AIComponent* aiComponent;
+	//InputComponent* input;
+	//PhysicsComponent* physicsComponent;
+	//EnemyAttackComponent* attackComponent;
+	//// STATES
+	//EnemyAttackingState* attackState;
+	//EnemyMovingState* moveState;
+
+	///// D E F I N I T I O N
+	//size_t ID = this->pGPS->newID();
+	//XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
+	//XMFLOAT3 pos = { 0, 0, 0 };
+
+	//int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
+	//float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+
+	//if (spawnLocation == 1)
+	//	pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+
+	//else if (spawnLocation == 2)
+	//	pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
+
+	//else if (spawnLocation == 3)
+	//	pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+
+	//else if (spawnLocation == 4)
+	//	pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+
+
+	//float speed = 180;
+	//XMFLOAT3 velocity(speed, speed, speed);
+	//XMFLOAT4 color(10.0f, 0.0, 0.0f, 255.0f);
+	//XMFLOAT3 rotation(0, 0, 0);
+	//float projectileDamage = 1;
+	//float projectileDuration = 0;
+	//float projectileRange = 50;
+
+	///// A T T A C H M E N T
+	//// OBJECT
+	//enemyObject = new EnemyObject(
+	//	ID, speed, pos, velocity,
+	//	pGPS, players, 
+	//	OBJECTTYPE::ENEMY
+	//);
+	//// COMPONENTS
+	//graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+	//physicsComponent = new PhysicsComponent(*enemyObject, 20);
+	//aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
+	//attackComponent = new SwarmerEnemyAttack(*enemyObject, &this->activeEnemiesCount, projectileDamage, projectileDuration, projectileRange);
+	//// STATES
+	//attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
+	//moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
+
+	//// Make the enemy inactive
+	//enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return nullptr;
+}
+
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
 	this->pGPS = &pGPS;
@@ -210,6 +295,9 @@ void EnemyManager::update()
 			StateManager::pushState(this->endState);
 		}
 	}
+
+	// Clean up the Grid!
+
 }
 
 void EnemyManager::cleanUp()

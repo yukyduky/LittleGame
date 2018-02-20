@@ -42,7 +42,7 @@ private:
 	XMFLOAT2 simulatedRotation;
 
 	void bindCommands();
-
+	
 
 public:
 	AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior);
@@ -72,7 +72,7 @@ public:
 	*/
 	void execute();
 
-	void SETnormalizedVectorOfLeftStick(XMFLOAT2 simulatedMovement);
+	void SETsimulatedMovement(XMFLOAT2 simulatedMovement);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the simulated vector movement.

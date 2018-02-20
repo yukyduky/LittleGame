@@ -2,6 +2,8 @@
 #ifndef IRANDOMGENERATION_H
 #define IRANDOMGENERATION_H
 
+#include <DirectXMath.h>
+
 class IRandomGeneration {
 public:
 	virtual int GenerateInt(int rangeStart, int rangeEnd) = 0;

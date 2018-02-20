@@ -3,6 +3,7 @@
 #define RANDOMGENERATION_H
 
 #include "IRandomGeneration.h"
+#include <DirectXMath.h>
 
 class RandomGeneration : public IRandomGeneration
 {

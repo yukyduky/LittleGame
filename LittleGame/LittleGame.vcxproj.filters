@@ -65,8 +65,22 @@
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="FloorFallPatterns.cpp" />
+    <ClCompile Include="EnemyObject.cpp">
+      <Filter>Clusterer</Filter>
+    </ClCompile>
+    <ClCompile Include="SwarmerEnemyAttack.cpp">
+      <Filter>Clusterer\Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="SwarmerSyncincState.cpp">
+      <Filter>Clusterer\Specific\States</Filter>
+    </ClCompile>
+    <ClCompile Include="SwarmerState.cpp">
+      <Filter>Clusterer\Specific\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Clusterer\Grid</Filter>
+    </ClCompile>
     <ClCompile Include="RestartState.cpp" />
-    <ClCompile Include="GlobalEvents.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -91,7 +105,6 @@
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EndState.h" />
     <ClInclude Include="EnemyManager.h" />
-    <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="FloorFallPatterns.h" />
@@ -141,11 +154,46 @@
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="FloorFallPatterns.h" />
-    <ClInclude Include="RestartState.h" />
-    <ClInclude Include="IGlobalEvents.h" />
+    <ClInclude Include="EnemyObject.h">
+      <Filter>Clusterer</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerEnemyAttack.h">
+      <Filter>Clusterer\Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerSyncingState.h">
+      <Filter>Clusterer\Specific\States</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerState.h">
+      <Filter>Clusterer\Specific\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Clusterer\Grid</Filter>
+    </ClInclude>
     <ClInclude Include="GlobalEvents.h" />
+    <ClInclude Include="IGlobalEvents.h" />
+    <ClInclude Include="RestartState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="EnemyStates">
+      <UniqueIdentifier>{46f08af3-2cb4-4d05-aa85-f1c8cc631ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commands">
+      <UniqueIdentifier>{93f036e5-4317-4fa6-992f-34db81e43336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Clusterer">
+      <UniqueIdentifier>{ab4f5436-863a-433a-bc76-6b48f405ff28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Clusterer\Specific">
+      <UniqueIdentifier>{976318a9-8a70-4d62-a495-5d8e8c576690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Clusterer\Specific\States">
+      <UniqueIdentifier>{f3438d75-b948-4a15-a5f9-a7a00462c143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Clusterer\Grid">
+      <UniqueIdentifier>{917cd026-3d48-4e66-ba66-6f68d9feb979}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

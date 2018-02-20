@@ -1,20 +1,18 @@
 #pragma once
-#ifndef IMMOLATIONENEMYATTACK_H
-#define IMMOLATIONENEMYATTACK_H
+#ifndef SWARMERENEMYATTACK_H
+#define SWARMERENEMYATTACK_H
 
 #include "EnemyAttackComponent.h"
 
 class EnemyObject;
 
-class ImmolationEnemyAttack : public EnemyAttackComponent
+class SwarmerEnemyAttack : public EnemyAttackComponent
 {
 private:
-	
+
 
 public:
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	*/
-	ImmolationEnemyAttack(float damage, float attackDuration, float attackRange, int* pActiveEnemiesCount, EnemyObject& pHead);
+	SwarmerEnemyAttack(EnemyObject& pHead, int& activeEnemiesCount, float projectileDamage, float projectileDuration, float projectileRange);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the id of the actor on which this component is attached to!
@@ -26,7 +24,6 @@ public:
 
 	virtual void attack();
 
-
 };
 
-#endif 
+#endif

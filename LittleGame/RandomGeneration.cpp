@@ -21,3 +21,4 @@ float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {
 
 	return randomFloat;
 }
+

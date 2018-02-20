@@ -63,33 +63,6 @@ void AIComponent::cleanUp()
 
 void AIComponent::generateCommands()
 {
-	XMVECTOR direction;
-
-	//// O L D
-	//switch (this->behavior) {
-	//	case AIBEHAVIOR::STRAIGHTTOWARDS: {
-	//		// Update Movement
-	//		this->simulatedMovement = this->pHead->getVectorToPlayer();
-
-	//		// Update Rotation
-
-	//		// Push back the command!
-	//		this->commandQueue.push_back(this->commands[AICOMMANDS::MOVE]);
-	//		break;
-	//	}
-	//	case AIBEHAVIOR::TEMPLATE0: {
-
-	//		break;
-	//	}
-	//	case AIBEHAVIOR::TEMPLATE1: {
-
-	//		break;
-	//	}
-	//}
-
-	// Update Movement
-	this->simulatedMovement = this->pHead->getVectorToPlayer();
-
 	/// Execute behavior according to current state
 	this->states.back()->executeBehavior();
 }
@@ -108,7 +81,7 @@ void AIComponent::execute()
 	this->commandQueue.clear();
 }
 
-void AIComponent::SETnormalizedVectorOfLeftStick(XMFLOAT2 simulatedMovement)
+void AIComponent::SETsimulatedMovement(XMFLOAT2 simulatedMovement)
 {
 	this->simulatedMovement = simulatedMovement;
 }
