@@ -134,7 +134,7 @@ void GamePlayState::init() {
 	// To be changed when Ollie has done the rework on camera
 	XMFLOAT3 tempcDir;
 	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
-	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
 	this->enemyManager.startLevel1();
 }
 

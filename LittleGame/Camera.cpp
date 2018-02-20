@@ -439,6 +439,10 @@ DirectX::XMVECTOR Camera::GETfacingDir() {
 	return cameraFacingDir;
 }
 
+DirectX::XMFLOAT3 Camera::GETfacingDirFloat3() {
+	return this->cameraFacingDir;
+}
+
 DirectX::XMFLOAT4X4 &Camera::GETviewMatrix()
 {
 	return this->view;
