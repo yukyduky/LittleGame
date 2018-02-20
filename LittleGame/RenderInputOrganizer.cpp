@@ -8,10 +8,14 @@ void RenderInputOrganizer::packageMatrices() {
 	XMMATRIX viewMatrix = XMLoadFloat4x4(this->rawMatrixData.view);
 	XMMATRIX projMatrix = XMLoadFloat4x4(this->rawMatrixData.proj);
 
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+
 	XMStoreFloat4x4(
 		&this->packagedMatrixData.world,
 		worldMatrix
 	);
+
+	worldMatrix = XMLoadFloat4x4(&this->rawMatrixData.world);
 
 	XMMATRIX worldViewProj = worldMatrix * viewMatrix * projMatrix;
 	worldViewProj = XMMatrixTranspose(worldViewProj);
@@ -20,8 +24,6 @@ void RenderInputOrganizer::packageMatrices() {
 		&this->packagedMatrixData.worldViewProj,
 		worldViewProj
 	);
-
-	worldMatrix = XMMatrixTranspose(worldMatrix);
 }
 
 void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
