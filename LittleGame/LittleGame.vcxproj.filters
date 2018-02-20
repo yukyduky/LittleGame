@@ -26,7 +26,6 @@
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
-    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
@@ -56,6 +55,8 @@
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="ArenaGlobals.cpp" />
+    <ClCompile Include="ArenaPatterns.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -83,7 +84,6 @@
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
-    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
@@ -114,6 +114,7 @@
     <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="ArenaPatterns.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

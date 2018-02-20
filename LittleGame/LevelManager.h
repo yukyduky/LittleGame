@@ -9,7 +9,7 @@
 #include "GameObject.h"
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
-#include "FloorFallPatterns.h"
+#include "ArenaPatterns.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
@@ -40,7 +40,7 @@ class LevelManager
 {
 private:
 	GamePlayState * pGPS;
-	FFPattern ffp;
+	ArenaPatterns arenaPatterns;
 
 	int arenaWidth;
 	int arenaDepth;
@@ -76,6 +76,7 @@ private:
 	void setFallPattern(FloorFallData& pattern);
 
 public:
+	void selectArena();
 	/*--------<INFORMATION>--------
 	1. Creates the arena by calling the following private functions
 		createLevelWalls,
@@ -84,7 +85,7 @@ public:
 		setFallPattern.
 	2. returns the latest used ID.
 	*/
-	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics);
+	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics);
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given position.
 	*/

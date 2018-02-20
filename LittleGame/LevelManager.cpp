@@ -4,6 +4,7 @@
 #include "BlockComponent.h"
 #include "ActorObject.h"
 #include "ArenaObject.h"
+#include "ArenaGlobals.h"
 
 void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
@@ -118,8 +119,8 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
 	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
-	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, ffp.GETmaxWallNum());
-	this->ffp.createWallPattern(caseNr, wData);
+	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
+	this->arenaPatterns.createWallPattern(caseNr, wData);
 	
 	//Create pillars in the corners
 	for (int i = 0; i < 2; i++)
@@ -246,25 +247,29 @@ DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 }
 
 void LevelManager::setFallPattern(FloorFallData& pattern) {
-	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->ffp.GETmaxFloorNum());
-	this->ffp.createFloorPattern(patternNr, pattern);
+	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->arenaPatterns.GETmaxFloorNum());
+	this->arenaPatterns.createFloorPattern(patternNr, pattern);
 }
 
-int LevelManager::initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics)
+void LevelManager::selectArena() {
+	this->arenaPatterns.createArenaData();
+}
+
+int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics)
 {
 	this->pGPS = &pGPS;
-	this->squareSize = 50;
-	this->arenaWidth = width;
-	this->arenaDepth = depth;
-	this->wallHeight = 100;
+	this->squareSize = ARENADATA::GETsquareSize();
+	this->arenaWidth = ARENADATA::GETarenaWidth();
+	this->arenaDepth = ARENADATA::GETarenaHeight();
+	this->wallHeight = ARENADATA::GETheightOfWall() * ARENADATA::GETsquareSize();
 	this->nrOfWalls = 0;
 	this->tempID = ID;
 	
 	//Create the grid for the level
-	grid.resize(width / this->squareSize);
-	for (int i = 0; i < width / this->squareSize; i++)
+	grid.resize(this->arenaWidth / this->squareSize);
+	for (int i = 0; i < this->arenaWidth / this->squareSize; i++)
 	{
-		grid[i].resize(depth / this->squareSize);
+		grid[i].resize(this->arenaDepth / this->squareSize);
 		for (int k = 0; k < grid[i].size(); k++) {
 			grid[i][k].type = SQUARETYPE::EMPTY;
 		}
@@ -335,7 +340,7 @@ void LevelManager::changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE st
 
 OBJECTSTATE::TYPE LevelManager::checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
 {
-	return grid[pos.x / ARENASQUARESIZE][pos.z / ARENASQUARESIZE].ptr->getState();
+	return grid[pos.x / ARENADATA::GETsquareSize()][pos.z / ARENADATA::GETsquareSize()].ptr->getState();
 }
  
 

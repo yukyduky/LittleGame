@@ -48,19 +48,21 @@ struct WallData {
 	}
 };
 
-class FFPattern 
+class ArenaPatterns 
 {
 private:
 	int maxFloorNum;
 	int maxWallNum;
+	int maxArenaNum;
 
 public:
-	FFPattern();
-	~FFPattern();
+	ArenaPatterns();
+	~ArenaPatterns();
 	void createFloorPattern(int nr, FloorFallData& pattern);
 	int GETmaxFloorNum();
 	void createWallPattern(int nr, WallData& pattern);
 	int GETmaxWallNum();
+	void createArenaData();
 };
 
 

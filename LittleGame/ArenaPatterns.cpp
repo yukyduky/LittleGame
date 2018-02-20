@@ -1,23 +1,24 @@
-#include "FloorFallPatterns.h"
+#include "ArenaPatterns.h"
 #include <algorithm>
 #include "LevelManager.h"
 #include "Locator.h"
 
-FFPattern::FFPattern()
+ArenaPatterns::ArenaPatterns()
 {
 	this->maxFloorNum = 2;
 	this->maxWallNum = 4;
+	this->maxArenaNum = 2;
 }
 
-FFPattern::~FFPattern()
+ArenaPatterns::~ArenaPatterns()
 {
 
 }
 
-void FFPattern::createFloorPattern(int nr, FloorFallData& pattern)
+void ArenaPatterns::createFloorPattern(int nr, FloorFallData& pattern)
 {
-	int width = ARENAWIDTH / ARENASQUARESIZE;
-	int depth = ARENAHEIGHT / ARENASQUARESIZE;
+	int width = ARENADATA::GETarenaWidth() / ARENADATA::GETsquareSize();
+	int depth = ARENADATA::GETarenaHeight() / ARENADATA::GETsquareSize();
 	switch (nr)
 	{
 	//Flor falls each column from left to right.
@@ -77,12 +78,12 @@ void FFPattern::createFloorPattern(int nr, FloorFallData& pattern)
 	}
 }
 
-int FFPattern::GETmaxFloorNum()
+int ArenaPatterns::GETmaxFloorNum()
 {
 	return this->maxFloorNum;
 }
 
-void FFPattern::createWallPattern(int nr, WallData& pattern) {
+void ArenaPatterns::createWallPattern(int nr, WallData& pattern) {
 
 
 	switch (nr)
@@ -198,7 +199,38 @@ void FFPattern::createWallPattern(int nr, WallData& pattern) {
 	}
 }
 
-int FFPattern::GETmaxWallNum()
+int ArenaPatterns::GETmaxWallNum()
 {
 	return this->maxWallNum;
+}
+
+void ArenaPatterns::createArenaData() {
+	int nr = Locator::getRandomGenerator()->GenerateInt(0, this->maxArenaNum);
+
+	switch (nr)
+	{
+	case 0:
+		ARENADATA::SETarenaHeight(1600);
+		ARENADATA::SETarenaWidth(1600);
+		ARENADATA::SETheightOfWall(2);
+		ARENADATA::SETlengthOfWall(1);
+		ARENADATA::SETsquareSize(50);
+		break;
+	case 1:
+		ARENADATA::SETarenaHeight(1000);
+		ARENADATA::SETarenaWidth(1000);
+		ARENADATA::SETheightOfWall(2);
+		ARENADATA::SETlengthOfWall(1);
+		ARENADATA::SETsquareSize(50);
+		break;
+	case 2:
+		ARENADATA::SETarenaHeight(1600);
+		ARENADATA::SETarenaWidth(800);
+		ARENADATA::SETheightOfWall(2);
+		ARENADATA::SETlengthOfWall(1);
+		ARENADATA::SETsquareSize(50);
+		break;
+	default:
+		break;
+	}
 }

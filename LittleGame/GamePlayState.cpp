@@ -109,11 +109,12 @@ void GamePlayState::checkCollisions() {
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void GamePlayState::init() {
-	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
-	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
+	this->lm.selectArena();
+	this->quadTree.initializeQuadTree(0, ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight(), 0, 0);
+	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -126,8 +127,8 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH / 2.0f, ARENASQUARESIZE * 10, ARENAHEIGHT / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() / 2.0f, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	// To be changed when Ollie has done the rework on camera
@@ -322,7 +323,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
-	XMFLOAT3 playerPos((float)(ARENAWIDTH / 2), playerScales.y, (float)(ARENAHEIGHT / 2));
+	XMFLOAT3 playerPos((float)(ARENADATA::GETarenaWidth() / 2), playerScales.y, (float)(ARENADATA::GETarenaHeight() / 2));
 	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
 	float actorSpeed = 1;
 

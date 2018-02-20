@@ -160,7 +160,7 @@
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
-    <ClInclude Include="FloorFallPatterns.h" />
+    <ClInclude Include="ArenaPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
@@ -196,6 +196,7 @@
     <ClCompile Include="AbilityComponent.cpp" />
     <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -210,7 +211,7 @@
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
-    <ClCompile Include="FloorFallPatterns.cpp" />
+    <ClCompile Include="ArenaPatterns.cpp" />
     <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
