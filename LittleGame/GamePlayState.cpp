@@ -155,6 +155,9 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	for (int i = 0; i < this->playerInput.size(); i++) {
+		this->playerInput[i] = nullptr;
+	}
 	this->quadTree.cleanup();
 	this->staticObjects.clear();
 	this->dynamicObjects.clear();
@@ -229,19 +232,19 @@ void GamePlayState::update(GameManager * gm)
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
 		}
 	}
-	
 
 	int ID;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (std::list<GameObject*>::iterator it = this->noCollisionDynamicObjects.begin(); it != this->noCollisionDynamicObjects.end(); it++) {
 		(*it)->update();
 	}
-	//for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
-		//if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
+	/*
+	MIGHT WANT THIS CODE LATER! LET IT BE COMMENTED OUT FOR THE TIME BEING.
+	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
+		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
 			//noCollisionDynamicObjects[i]->update();
-		//}
-		/* THIS CODE IS HERE IF WE EVER WANT TO REMOVE DEAD OBJECTS FROM noCollisionDynamicObjects. 
-			UNTIL THAT DAY COMES LET THIS BE COMMENTED OUT!!!
+		}
+
 		else {
 			ID = this->noCollisionDynamicObjects[i]->getID();
 			for (int j = 0; j < this->graphics.size(); j++) {
@@ -254,8 +257,9 @@ void GamePlayState::update(GameManager * gm)
 			delete this->noCollisionDynamicObjects[i];
 			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
 		}
-		*/
-	//}
+	}
+	*/
+
 	this->enemyManager.update();
 
 	for (std::list<GameObject*>::iterator it = this->dynamicObjects.begin(); it != this->dynamicObjects.end(); it++) {
@@ -306,10 +310,10 @@ void GamePlayState::addGraphics(GraphicsComponent * graphicsComponent)
 
 void GamePlayState::initPlayer()
 {
-	ActorObject* actor;
-	BlockComponent* block;
-	InputComponent* input;
-	PhysicsComponent* physics;
+	ActorObject* actor = nullptr;
+	BlockComponent* block = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physics = nullptr;
 	int nextID = this->newID();
 
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
@@ -363,6 +367,11 @@ void GamePlayState::initPlayer()
 	this->player1 = actor;
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);
+
+	actor = nullptr;
+	physics = nullptr;
+	block = nullptr;
+	input = nullptr;
 }
 
 

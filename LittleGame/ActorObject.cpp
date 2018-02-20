@@ -69,11 +69,13 @@ void ActorObject::cleanUp()
 	for (int i = 0; i < this->spells.size(); i++) {
 		delete this->spells[i];
 	}
+	this->spells.clear();
 	// Cleanup all the components
 	for (auto &c : this->components) {
 		c->cleanUp();
 		delete c;
 	}
+	this->components.clear();
 }
 
 void ActorObject::update()

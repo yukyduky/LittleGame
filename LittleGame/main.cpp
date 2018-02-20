@@ -17,7 +17,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	_CrtMemState s1;
 	_CrtMemCheckpoint(&s1);
 	// 7295 addComponent (AIComponent)
-	//_CrtSetBreakAlloc(248);
+	// 258, 365, 380, 381 something in audiomanager
+	// 1936 something with the quadtree initialization
+	// 6054 something with KeyboardInput
+	// 6063, 6074 something in KeyboardInput or InputComponent
+//	_CrtSetBreakAlloc(6114);
 
 	ID3D* d3d = new D3D();
 	Locator::provide(d3d);

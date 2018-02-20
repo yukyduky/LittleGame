@@ -261,5 +261,15 @@ void InputComponent::cleanup()
 {
 	for (auto &i : commands) {
 		delete i;
+		i = nullptr;
+	}
+	while (keyboardKeyMap.size() > 0) {
+		keyboardKeyMap.erase(keyboardKeyMap.begin());
+	}
+	while (mouseKeyMap.size() > 0) {
+		mouseKeyMap.erase(mouseKeyMap.begin());
+	}
+	while (controllerKeyMap.size() > 0) {
+		controllerKeyMap.erase(controllerKeyMap.begin());
 	}
 }

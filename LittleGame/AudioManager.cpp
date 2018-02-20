@@ -1,9 +1,11 @@
+
 #include "AudioManager.h"
 
 
 AudioManager::AudioManager()
 {
-
+	this->soundVolume = 20;
+	this->musicVolume = 6;
 }
 
 int AudioManager::init()
@@ -159,4 +161,24 @@ void AudioManager::setRepeatMusic(bool repeat)
 void AudioManager::cleanUp()
 {
 	this->stopAll();
+	
+	for (int i = 0; i < this->sounds.size(); i++) {
+		this->sounds[i].~SoundBuffer();
+	}
+	
+	
+	for (int i = 0; i < this->musicFilenames.size(); i++) {
+		this->musicFilenames[i].clear();
+	}
+	
+	
+	for (int i = 0; i < this->soundQueue.size(); i++) {
+		this->soundQueue[i].~Sound();
+	}
+	
+	
+	for (int i = 0; i < this->currentMusic.size(); i++) {
+		this->currentMusic[i].~Music();
+	}
+	
 }

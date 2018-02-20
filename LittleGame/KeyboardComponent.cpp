@@ -46,9 +46,24 @@ void KeyboardComponent::receive(GameObject & obj, Message msg)
 
 void KeyboardComponent::cleanUp()
 {
+	for (int i = 0; i < this->keyboardCommandMap.size(); i++) {
+		this->keyboardCommandMap[i].command = nullptr;
+	}
 	this->keyboardCommandMap.clear();
+	for (int i = 0; i < this->mouseCommandMap.size(); i++) {
+		this->mouseCommandMap[i].command = nullptr;
+	}
 	this->mouseCommandMap.clear();
+	for (int i = 0; i < this->controllerCommandMap.size(); i++) {
+		this->controllerCommandMap[i].command = nullptr;
+	}
 	this->controllerCommandMap.clear();
+	this->pHead = nullptr;
+	
+	for (int i = 0; i < this->commandQueue.size(); i++) {
+		delete this->commandQueue[i];
+	}
+	this->commandQueue.clear();
 }
 
 void KeyboardComponent::generateCommands()

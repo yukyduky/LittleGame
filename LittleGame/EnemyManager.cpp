@@ -68,6 +68,10 @@ void EnemyManager::cleanLevel()
 	// Per wave
 	for (auto &currentWave : this->waves) {
 
+		for (int i = 0; i < currentWave->enemies.size(); i++) {
+			currentWave->enemies[i]->cleanUp();
+			delete currentWave->enemies[i];
+		}
 		// Since enemies are actors which SHOULD HAVE been added to the dynamicObjectsArray,
 		// they'll be cleaned and deleted from there, so we only need to delete the 'Waves' here
 		delete currentWave;

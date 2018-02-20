@@ -42,10 +42,20 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 void GameManager::cleanUp()
 {
 	StateManager::cleanUp();
-	delete this->gameTime;
+	if (this->gameTime != nullptr) {
+		delete this->gameTime;
+		this->gameTime = nullptr;
+	}
+	if (this->audio != nullptr) {
+		this->audio->cleanUp();
+		delete this->audio;
+		this->audio = nullptr;
+	}
+	if (this->randomGenerator != nullptr) {
+		delete this->randomGenerator;
+		this->randomGenerator = nullptr;
+	}
 	this->renderer.cleanUp();
-	this->audio->cleanUp();
-	delete this->audio;
 }
 
 void GameManager::changeState(State* state)

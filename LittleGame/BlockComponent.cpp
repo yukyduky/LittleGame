@@ -194,8 +194,14 @@ void BlockComponent::update()
 
 void BlockComponent::cleanUp()
 {
-	this->gVertexBuffer->Release();
-	this->gIndexBuffer->Release();
+	if (this->gVertexBuffer != nullptr) {
+		this->gVertexBuffer->Release();
+		this->gVertexBuffer = nullptr;
+	}
+	if (this->gIndexBuffer != nullptr) {
+		this->gIndexBuffer->Release();
+		this->gIndexBuffer = nullptr;
+	}
 }
 
 

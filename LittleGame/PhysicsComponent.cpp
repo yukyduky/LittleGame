@@ -93,7 +93,7 @@ void PhysicsComponent::update()
 
 void PhysicsComponent::cleanUp() 
 {
-
+	this->pHead = nullptr;
 }
 
 //_________________________________________//
