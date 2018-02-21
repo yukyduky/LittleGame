@@ -13,10 +13,10 @@ Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pM
 
 	D2D1_SIZE_F rtSize = this->pRT->GetSize();
 	highlight = D2D1::RectF(
-		rtSize.width / 2 - this->menuSize.x + pos.x,
-		rtSize.height / 2 - this->menuSize.y + pos.y,
-		rtSize.width / 2 - this->menuSize.x + pos.z + 5,
-		rtSize.height / 2 - this->menuSize.y + pos.w + 5
+		this->pos.x - 10.0f,
+		this->pos.y,
+		this->pos.x + this->size.x + 10.0f,
+		this->pos.y + this->size.y
 	);
 
 	this->pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->pHighlightColorBrush);

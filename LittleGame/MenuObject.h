@@ -34,7 +34,7 @@ using namespace DirectX;
 class MenuObject
 {
 public:
-	MenuObject(ID2D1HwndRenderTarget* RT);
+	MenuObject(ID2D1HwndRenderTarget* RT, size_t ID);
 	MenuObject(ID2D1HwndRenderTarget* RT ,size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
 	~MenuObject();
 
@@ -52,12 +52,14 @@ private:
 protected:
 	D2D1_RECT_F rectangle;
 	ID2D1HwndRenderTarget * pRT;
-	XMFLOAT2 menuSize = {150.0f, 350.0f};
+	// radius in -x, radius in y, offset in x
+	XMFLOAT3 menuSize;
 
 	std::list<Component*> components;
 
 	const size_t ID;
-	XMFLOAT3 pos;
+	XMFLOAT2 pos;
+	XMFLOAT2 size;
 };
 
 

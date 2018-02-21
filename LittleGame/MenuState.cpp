@@ -23,7 +23,6 @@ void MenuState::init() {
 	this->initStartMenu();
 	this->initOptionsMenu();
 
-	//this->input = new KeyboardComponent(*this->highlight);
 	
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(this->camera.GETcameraPosFloat3() , XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
@@ -118,39 +117,31 @@ MenuState* MenuState::getInstance() {
 void MenuState::initStartMenu()
 {
 	Menu* stMenu;
-	stMenu = new Menu();
-
 	MenuObject* object;
 	Button* pButton;
 	WCHAR* text;
-
 	int nextID;
+
+	stMenu = new Menu();
 
 	//Background
 	nextID = this->newID();
-	object = new MenuObject(this->objD2D.GETRenderTarget());
+	object = new MenuObject(this->objD2D.GETRenderTarget(), nextID);
 	stMenu->addQuad(object);
 
 	//Buttons
 	nextID = this->newID();
-	text = L"Options      ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{50,50, 200,100}, D2D1::ColorF::Red, 
-		text, BEHAVIOR::GOOPTIONS);
-	stMenu->addButton(pButton);
-
-	nextID = this->newID();
-	text = L"Start      ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{ 50,150, 200,200 }, D2D1::ColorF::DarkRed, 
-		text, BEHAVIOR::GOSTART);
-	stMenu->addButton(pButton);
-
-	nextID = this->newID();
 	text = L"Start Game   ";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{ 50,250, 200,300 }, D2D1::ColorF::Aqua, 
+		{ 50,50, 150,50 }, D2D1::ColorF::Aqua, 
 		text, BEHAVIOR::STARTGAME);
+	stMenu->addButton(pButton);
+
+	nextID = this->newID();
+	text = L"Options      ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
+		{ 50,150, 150,50}, D2D1::ColorF::Red, 
+		text, BEHAVIOR::GOOPTIONS);
 	stMenu->addButton(pButton);
 
 
@@ -160,34 +151,24 @@ void MenuState::initStartMenu()
 void MenuState::initOptionsMenu()
 {
 	Menu* opMenu;
-	opMenu = new Menu();
-
 	MenuObject* object;
 	Button* pButton;
 	WCHAR* text;
-	//MenuRectComponent* quad;
-
 	int nextID;
+
+	opMenu = new Menu();
 
 	//Background
 	nextID = this->newID();
-	object = new MenuObject(this->objD2D.GETRenderTarget(), nextID, { 0,0, 300,500 }, D2D1::ColorF::Blue);
+	object = new MenuObject(this->objD2D.GETRenderTarget(), nextID);
 	opMenu->addQuad(object);
 
 	//Buttons
-	text = L"Options      ";
-	nextID = this->newID();
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{ 50,50, 200,100 }, D2D1::ColorF::Red, 
-		text, BEHAVIOR::GOOPTIONS);
-	opMenu->addButton(pButton);
-
-	text = L"Start      ";
+	text = L"StartMenu  ";
 	nextID = this->newID();
 	pButton = new Button( this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,150, 200,200 }, D2D1::ColorF::DarkRed, 
-		text, BEHAVIOR::GOSTART
-	);
+		{ 50,50, 150,50 }, D2D1::ColorF::Red,
+		text, BEHAVIOR::GOSTART);
 	opMenu->addButton(pButton);
 
 
