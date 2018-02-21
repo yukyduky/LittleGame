@@ -17,7 +17,7 @@
 EnemyManager::EnemyManager()
 {
 	this->pGPS = nullptr;
-	this->pSwarmers = new ArrayList();
+//	this->pSwarmers = new ArrayList();
 	this->activeEnemiesCount = 0;
 }
 
@@ -28,7 +28,7 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> player
 	this->players = players; 
 	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
-	this->pSwarmers = new ArrayList();
+//	this->pSwarmers = new ArrayList();
 }
 
 void EnemyManager::startLevel1()
