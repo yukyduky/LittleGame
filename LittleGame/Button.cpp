@@ -41,6 +41,7 @@ void Button::onPress()
 		this->pMS->displayMenu(MENUS::OPTIONS);
 		break;
 	case BEHAVIOR::STARTGAME:
+		this->pMS->startGame();
 		break;
 	default:
 		break;

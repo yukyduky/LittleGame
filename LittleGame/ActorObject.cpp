@@ -1,6 +1,7 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
+#include "MenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
 #include "EndState.h"
@@ -293,6 +294,11 @@ void ActorObject::fireAbilityX()
 	else {
 
 	}
+}
+
+void ActorObject::pauseMenu()
+{
+	StateManager::pushState(MenuState::getInstance());
 }
 
 void ActorObject::selectAbility1()

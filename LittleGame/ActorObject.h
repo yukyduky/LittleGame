@@ -3,7 +3,6 @@
 #define ACTOROBJECT_H
 
 #include "GameObject.h"
-#include "AbilityComponent.h"
 #include "InputComponent.h"
 #include "Locator.h"
 //#include "GraphicsComponent.h"
@@ -90,6 +89,7 @@ public:
 	void selectAbility3();
 	void selectAbility4();
 	void fireAbilityX();
+	void pauseMenu();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Sets pInputComponent as both a directlink and components.push_back()

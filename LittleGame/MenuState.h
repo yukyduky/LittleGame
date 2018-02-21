@@ -95,8 +95,9 @@ public:
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }
 
-
+	//Button functions
 	void displayMenu(MENUS::TYPE menu);
+	void startGame();
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
 	void initStartMenu();

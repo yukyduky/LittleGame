@@ -6,6 +6,7 @@
 #include "BlockComponent.h"
 #include "KeyboardComponent.h"
 #include "ControllerComponent.h"
+#include "StateManager.h"
 #include <SimpleMath.h>
 #include <DirectXMath.h>
 
@@ -104,6 +105,11 @@ void MenuState::displayMenu(MENUS::TYPE menu)
 	}
 }
 
+void MenuState::startGame()
+{
+	StateManager::popState();
+}
+
 MenuState* MenuState::getInstance() {
 	return &sMenuState;
 }
@@ -128,17 +134,23 @@ void MenuState::initStartMenu()
 	//Buttons
 	nextID = this->newID();
 	text = L"Options      ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, {50,50, 200,100}, D2D1::ColorF::Red, text, BEHAVIOR::GOOPTIONS);
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
+		{50,50, 200,100}, D2D1::ColorF::Red, 
+		text, BEHAVIOR::GOOPTIONS);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Start      ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,150, 200,200 }, D2D1::ColorF::DarkRed, text, BEHAVIOR::GOSTART);
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
+		{ 50,150, 200,200 }, D2D1::ColorF::DarkRed, 
+		text, BEHAVIOR::GOSTART);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Start Game   ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,250, 200,300 }, D2D1::ColorF::Aqua, text, BEHAVIOR::STARTGAME);
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
+		{ 50,250, 200,300 }, D2D1::ColorF::Aqua, 
+		text, BEHAVIOR::STARTGAME);
 	stMenu->addButton(pButton);
 
 
@@ -163,14 +175,19 @@ void MenuState::initOptionsMenu()
 	opMenu->addQuad(object);
 
 	//Buttons
-	nextID = this->newID();
 	text = L"Options      ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,50, 200,100 }, D2D1::ColorF::Red, text, BEHAVIOR::GOOPTIONS);
+	nextID = this->newID();
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
+		{ 50,50, 200,100 }, D2D1::ColorF::Red, 
+		text, BEHAVIOR::GOOPTIONS);
 	opMenu->addButton(pButton);
 
-	nextID = this->newID();
 	text = L"Start      ";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, { 50,150, 200,200 }, D2D1::ColorF::DarkRed, text, BEHAVIOR::GOSTART);
+	nextID = this->newID();
+	pButton = new Button( this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 50,150, 200,200 }, D2D1::ColorF::DarkRed, 
+		text, BEHAVIOR::GOSTART
+	);
 	opMenu->addButton(pButton);
 
 

@@ -37,8 +37,8 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	Locator::getGameTime()->StartTimer();
 
 	// Set the first state of the game
-	StateManager::changeState(MenuState::getInstance());
-	//StateManager::changeState(GamePlayState::getInstance());
+	StateManager::pushState(GamePlayState::getInstance());
+	StateManager::pushState(MenuState::getInstance());
 }
 
 void GameManager::cleanUp()
