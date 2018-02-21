@@ -163,10 +163,11 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->noCollisionDynamicObjects.clear();
+
 	for (int i = 0; i < this->playerInput.size(); i++) {
 		this->playerInput[i] = nullptr;
 	}
-	this->noCollisionDynamicObjects.clear();
 
 	this->quadTree.cleanup();
 

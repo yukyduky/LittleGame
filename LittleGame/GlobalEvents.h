@@ -4,11 +4,11 @@
 
 #include "IGlobalEvents.h"
 #include <stdio.h>
-#include <deque>
+#include <map>
 
 class GlobalEvents : public IGlobalEvents {
 private:
-	std::deque<GLOBALMESSAGES> messageList;
+	std::map<GLOBALMESSAGES, GLOBALMESSAGES> messageMap;
 
 public:
 	GlobalEvents();
@@ -16,8 +16,8 @@ public:
 	void generateMessage(GLOBALMESSAGES message);
 	bool pollEvent(GLOBALMESSAGES &msg);
 
-	std::deque<GLOBALMESSAGES> GETmessageList();
-	void SETmessageList(std::deque<GLOBALMESSAGES> messageList);
+	std::map<GLOBALMESSAGES, GLOBALMESSAGES> GETmessageMap();
+	void SETmessageMap(std::map<GLOBALMESSAGES, GLOBALMESSAGES> messageMap);
 };
 
 #endif
