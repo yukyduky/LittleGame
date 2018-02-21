@@ -25,7 +25,6 @@ class MenuState : public State
 {
 private:
 	static MenuState sMenuState;
-	//GameManager* pGM;
 
 	D2D objD2D;
 
@@ -81,8 +80,6 @@ public:
 	virtual void render(GameManager* gm);
 
 	static MenuState* getInstance();
-
-	//void addGraphics(GraphicsComponent* graphicsComponent);
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }

@@ -75,8 +75,6 @@ HRESULT D2D::CreateDeviceIndependentResources()
 		this->m_pTextFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 
 		this->m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-
-
 	}
 
 	return hr;
@@ -108,7 +106,6 @@ HRESULT D2D::CreateDeviceResources()
 		//Create the colorBrush for the grid in the background
 		this->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Cyan), &this->pGridColor);
 	}
-
 
 	return hr;
 }
@@ -160,7 +157,6 @@ HRESULT D2D::OnRender(std::vector<MenuObject*> objects)
 				);
 			}
 
-
 		for (auto &i : objects)
 		{
 			i->render();
@@ -175,17 +171,5 @@ HRESULT D2D::OnRender(std::vector<MenuObject*> objects)
 		hr = S_OK;
 		DiscardDeviceResources();
 	}
-
 	return hr;
-}
-
-void D2D::OnResize(UINT width, UINT height)
-{
-	if (m_pRenderTarget)
-	{
-		// Note: This method can fail, but it's okay to ignore the
-		// error here, because the error will be returned again
-		// the next time EndDraw is called.
-		m_pRenderTarget->Resize(D2D1::SizeU(width, height));
-	}
 }

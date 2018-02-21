@@ -28,6 +28,7 @@ Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pM
 
 Button::~Button()
 {
+	this->cleanUp();
 }
 
 void Button::cleanUp()

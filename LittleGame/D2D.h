@@ -3,7 +3,6 @@
 #define D2D_H
 
 #include "Locator.h"
-
 #include "MenuObject.h"
 
 #ifndef Assert
@@ -14,13 +13,10 @@
 #endif //DEBUG || _DEBUG
 #endif
 
-
-
 #ifndef HINST_THISCOMPONENT
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
 #endif
-
 
 class D2D
 {
@@ -37,9 +33,13 @@ public:
 	ID2D1HwndRenderTarget* GETRenderTarget() { return this->m_pRenderTarget; }
 	IDWriteTextFormat* GETTextFormat() { return this->m_pTextFormat; }
 private:
+	// D2D device
 	ID2D1Factory* m_pDirect2dFactory = nullptr;
+	// Render target, dose all calls to render
 	ID2D1HwndRenderTarget* m_pRenderTarget = nullptr;
+	// D2D device for text
 	IDWriteFactory* m_pDirectWriteFactory = nullptr;
+	// Holds formating for text, ea Font
 	IDWriteTextFormat* m_pTextFormat = nullptr;
 
 	// Initialize device-independent resources. Like factory
@@ -50,13 +50,6 @@ private:
 
 	// Release device-dependent resource.
 	void DiscardDeviceResources();
-
-
-	// Resize the render target.
-	void OnResize(
-		UINT width,
-		UINT height
-	);
 
 	//Background
 	ID2D1SolidColorBrush * pGridColor = nullptr;
