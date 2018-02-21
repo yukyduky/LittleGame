@@ -8,8 +8,8 @@
 void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare the matrices and variables
-	GameObject* object;
-	RectangleComponent* rect;
+	GameObject* object = nullptr;
+	RectangleComponent* rect = nullptr;
 	int nextID;
 	XMFLOAT3 pos;
 	XMVECTOR vec;
@@ -87,8 +87,8 @@ void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, st
 
 void LevelManager::createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
-	GameObject* object;
-	RectangleComponent* rect;
+	GameObject* object = nullptr;
+	RectangleComponent* rect = nullptr;
 	int nextID = this->nextID();
 	// Create the ArenaObject and the RectangleComponent
 	object = new ArenaObject(nextID, pos);
@@ -112,8 +112,8 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMFLOAT4 color(155.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
-	XMFLOAT2 posIndex;
-	XMFLOAT3 temp;
+	//XMFLOAT2 posIndex;
+	//XMFLOAT3 temp;
 
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
@@ -211,9 +211,9 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 
 void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
-	GameObject* object;
-	BlockComponent* block;
-	PhysicsComponent* bSphere;
+	GameObject* object = nullptr;
+	BlockComponent* block = nullptr;
+	PhysicsComponent* bSphere = nullptr;
 	int nextID = this->nextID();	//Create the new ArenaObject and the new BlockComponent
 	object = new ArenaObject(nextID, pos);
 	object->setType(OBJECTTYPE::INDESTRUCTIBLE);

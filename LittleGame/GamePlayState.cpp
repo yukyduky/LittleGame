@@ -406,8 +406,8 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	int nextID = this->newID();
 
 	// Declare Components
-	BlockComponent* block;
-	PhysicsComponent* phyComp;
+	BlockComponent* block = nullptr;
+	PhysicsComponent* phyComp = nullptr;
 
 	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
 	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE);
