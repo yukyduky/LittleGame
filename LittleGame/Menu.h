@@ -17,11 +17,9 @@ public:
 
 	void addButton(Button* newButton);
 	void addQuad(MenuObject* quad);
-	void addGraphic(GraphicsComponent* component);
 
 	std::list<Button*> getButtons() { return this->buttons; }
 	std::vector<MenuObject*> getObjects() { return this->objects; }
-	std::vector<GraphicsComponent*> getGraphics() { return this->graphics; }
 	Button* GETCurrent() { return this->current; }
 
 	void SETCurrent(Button* current) { this->current = current; }
@@ -36,7 +34,6 @@ protected:
 	std::list<Button*> buttons;
 	std::vector<MenuObject*> objects;
 	Button* current = nullptr;
-	std::vector<GraphicsComponent*> graphics;
 };
 
 

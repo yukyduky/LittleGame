@@ -31,12 +31,8 @@ private:
 	//GameManager* pGM;
 
 	D2D objD2D;
-	
 
 	int ID = 0;
-
-	Camera camera;
-	RenderInputOrganizer rio;
 
 	// Handlers for different menus
 	std::array<Menu*, MENUS::SIZE> menus;
@@ -46,11 +42,7 @@ private:
 	// A pointer to the "highlited" area
 	MenuObject* highlight;
 
-	//All objects that wants to be renederd
-	std::vector<GraphicsComponent*> graphics;
-
-	std::vector<Light> pointLights;
-
+	bool quit;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -98,6 +90,7 @@ public:
 	//Button functions
 	void displayMenu(MENUS::TYPE menu);
 	void startGame();
+	void quitMenu() { this->quit = true; };
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
 	void initStartMenu();

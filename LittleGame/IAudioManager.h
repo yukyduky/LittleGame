@@ -49,11 +49,12 @@ public:
 	virtual void pause(MUSIC::NAME name) = 0;
 	virtual void pause(SOUND::NAME name) = 0;
 	//Changes both sound and music to parameter (0-100)
-	virtual void adjustMaster(size_t volume) = 0;
+	virtual void adjustMaster(int volume) = 0;
+	virtual void adjustMaster(bool value) = 0;
 	//Changes music to parameter (0-100)
-	virtual void adjustMusic(size_t volume) = 0;
+	virtual void adjustMusic(int volume) = 0;
 	//Changes sound to parameter (0-100)
-	virtual void adjustEffects(size_t volume) = 0;
+	virtual void adjustEffects(int volume) = 0;
 
 	virtual void setRepeatMusic(bool repeat) = 0;
 	virtual void cleanUp() = 0;

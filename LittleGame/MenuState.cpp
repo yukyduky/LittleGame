@@ -18,31 +18,19 @@ MenuState MenuState::sMenuState;
 void MenuState::init() {
 	this->objD2D.Initialize();
 
-	this->camera.init(1000, 900);
-	this->rio.initialize(this->camera, this->pointLights);
 	this->initStartMenu();
 	this->initOptionsMenu();
-
 	
-	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(this->camera.GETcameraPosFloat3() , XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-
 	this->displayMenu(MENUS::START);
 }
 
 void MenuState::cleanUp()
 {
-	// Direct internal objects
-	this->rio.cleanUp();
-	// this->camera.cleanUp();
-
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->menuObjects) {
-		//iterator->cleanUp();
 		delete iterator;
 	}
 	this->menuObjects.clear();
-	this->graphics.clear();
 }
 
 void MenuState::pause() {
@@ -57,8 +45,8 @@ void MenuState::handleEvents(GameManager * gm) {
 	MSG msg;
 
 	while (gm->pollEvent(msg)) {
-		// Exit the application when 'X' is pressed
-		if (msg.message == WM_QUIT) {
+		// Exit the application when 'X' is pressed or the quit bool is true
+		if (msg.message == WM_QUIT || this->quit) {
 			gm->quit();
 		}
 		else if (msg.message == WM_KEYUP)
@@ -66,12 +54,15 @@ void MenuState::handleEvents(GameManager * gm) {
 			switch (msg.wParam)
 			{
 			case VK_UP:
+			case 0x57:
 				this->menus[this->currMenu]->goUp();
 				break;
 			case VK_DOWN:
+			case 0x53:
 				this->menus[this->currMenu]->goDown();
 				break;
 			case VK_RETURN:
+			case VK_SPACE:
 				this->menus[this->currMenu]->pressButton();
 				break;
 			default:
@@ -140,8 +131,15 @@ void MenuState::initStartMenu()
 	nextID = this->newID();
 	text = L"Options      ";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{ 50,150, 150,50}, D2D1::ColorF::Red, 
+		{ 50,150, 150,50}, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
+	stMenu->addButton(pButton);
+
+	nextID = this->newID();
+	text = L"Quit      ";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 50,250, 150,50 }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::QUIT);
 	stMenu->addButton(pButton);
 
 
@@ -167,8 +165,36 @@ void MenuState::initOptionsMenu()
 	text = L"StartMenu  ";
 	nextID = this->newID();
 	pButton = new Button( this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,50, 150,50 }, D2D1::ColorF::Red,
+		{ 50,50, 150,50 }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOSTART);
+	opMenu->addButton(pButton);
+
+	text = L"Volume +  ";
+	nextID = this->newID();
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 50,150, 120,50 }, D2D1::ColorF::Green,
+		text, BEHAVIOR::VOLUMEUP);
+	opMenu->addButton(pButton);
+
+	text = L"Volume -  ";
+	nextID = this->newID();
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 210,150, 120,50 }, D2D1::ColorF::Blue,
+		text, BEHAVIOR::VOLUMEDOWN);
+	opMenu->addButton(pButton);
+
+	text = L"Fullscreen  ";
+	nextID = this->newID();
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 50,250, 150,50 }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::FULLSCREEN);
+	opMenu->addButton(pButton);
+
+	text = L"Windowed  ";
+	nextID = this->newID();
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 50,350, 150,50 }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::WINDOWED);
 	opMenu->addButton(pButton);
 
 

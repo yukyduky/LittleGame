@@ -89,23 +89,55 @@ void AudioManager::pause(SOUND::NAME name)
 {
 }
 
-void AudioManager::adjustMaster(size_t volume)
+void AudioManager::adjustMaster(int volume)
 {
 	this->adjustEffects(volume);
 
 	this->adjustMusic(volume);
 }
 
-void AudioManager::adjustMusic(size_t volume)
+void AudioManager::adjustMaster(bool value)
 {
-	for (size_t i = 0; i < MUSICSTATE::SIZE; i++)
+	if (value)
+	{
+		this->adjustEffects(this->musicVolume + 5);
+		this->adjustMusic(this->soundVolume + 5);
+	}
+	else
+	{
+		this->adjustEffects(this->musicVolume - 5);
+		this->adjustMusic(this->soundVolume - 5);
+	}
+}
+
+void AudioManager::adjustMusic(int volume)
+{
+	this->musicVolume = volume;
+	if (this->musicVolume < 0)
+	{
+		this->musicVolume = 0;
+	}
+	else if (this->musicVolume > 100)
+	{
+		this->musicVolume = 100;
+	}
+	for (int i = 0; i < MUSICSTATE::SIZE; i++)
 	{
 		this->currentMusic[i].setVolume(this->musicVolume);
 	}
 }
 
-void AudioManager::adjustEffects(size_t volume)
+void AudioManager::adjustEffects(int volume)
 {
+	this->soundVolume = volume;
+	if (this->soundVolume < 0)
+	{
+		this->soundVolume = 0;
+	}
+	else if (this->soundVolume > 100)
+	{
+		this->soundVolume = 100;
+	}
 	this->currentSound.setVolume(this->soundVolume);
 }
 

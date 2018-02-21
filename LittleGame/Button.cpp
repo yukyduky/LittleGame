@@ -43,6 +43,21 @@ void Button::onPress()
 	case BEHAVIOR::STARTGAME:
 		this->pMS->startGame();
 		break;
+	case BEHAVIOR::VOLUMEUP:
+		Locator::getAudioManager()->adjustMaster(true);
+		break;
+	case BEHAVIOR::VOLUMEDOWN:
+		Locator::getAudioManager()->adjustMaster(false);
+		break;
+	case BEHAVIOR::FULLSCREEN:
+		ShowWindow(Locator::getD3D()->GEThwnd(), SHOW_FULLSCREEN);
+		break;
+	case BEHAVIOR::WINDOWED:
+		ShowWindow(Locator::getD3D()->GEThwnd(), SHOW_OPENWINDOW);
+		break;
+	case BEHAVIOR::QUIT:
+		this->pMS->quitMenu();
+		break;
 	default:
 		break;
 	}
@@ -58,6 +73,7 @@ void Button::render()
 	//Renders button quad
 	MenuObject::render();
 
+	//Renders the text ontop
 	this->pRT->DrawText(
 		this->text,
 		10,

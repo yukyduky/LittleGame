@@ -30,10 +30,6 @@ void Menu::addQuad(MenuObject * quad)
 	this->objects.push_back(quad);
 }
 
-void Menu::addGraphic(GraphicsComponent * component)
-{
-	this->graphics.push_back(component);
-}
 
 void Menu::goUp()
 {

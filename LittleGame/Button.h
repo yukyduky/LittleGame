@@ -4,7 +4,7 @@
 
 #include "MenuObject.h"
 
-enum class BEHAVIOR {GOSTART, GOOPTIONS, STARTGAME};
+enum class BEHAVIOR {GOSTART, GOOPTIONS, STARTGAME, VOLUMEUP, VOLUMEDOWN, FULLSCREEN, WINDOWED, QUIT};
 
 class MenuState;
 
@@ -26,12 +26,14 @@ public:
 	void onPress();
 private:
 	BEHAVIOR behavior;
+	// Pointer to the MenuState
 	MenuState* pMS = nullptr;
 	
 	Button* nextButton;
 	Button* prevButton;
 
 	bool selected;
+	// The hidden Highlight that will be shown when the button is selected
 	D2D1_RECT_F highlight;
 	ID2D1SolidColorBrush * pHighlightColorBrush = nullptr;
 
