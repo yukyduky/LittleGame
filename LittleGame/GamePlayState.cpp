@@ -219,6 +219,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	this->checkCollisions();
 
 	this->counter += Locator::getGameTime()->getDeltaTime();
 	Index index;
@@ -308,7 +309,6 @@ void GamePlayState::update(GameManager * gm)
 			it--;
 		}
 	}
-	this->checkCollisions();
 }
 
 void GamePlayState::render(GameManager * gm) 
@@ -350,7 +350,7 @@ void GamePlayState::initPlayer()
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100000.0f);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
