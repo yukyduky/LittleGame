@@ -9,8 +9,9 @@ SpDash::SpDash(ActorObject* player) : Spell(player, NAME::DASH)
 	this->setCoolDown(2.3);
 	this->strength = this->getCoolDown();
 	// Distance to jump
-	this->range = 150;
+	this->range = 200;
 	this->nrOfFlames = 6;
+	this->damage = 2.0f;
 
 	this->flameSize = this->range / (this->nrOfFlames * 2);
 	this->burning = false;
@@ -108,11 +109,17 @@ void SpDash::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY)
 	{
-		//this->proj->setPosition(XMFLOAT3(200, 40, 200));
-		proj->setState(OBJECTSTATE::TYPE::DEAD);
-		target->setState(OBJECTSTATE::TYPE::DEAD);
+		ActorObject* actorTarget = static_cast<ActorObject*>(target);
 
+		actorTarget->dealDmg(this->damage);
+
+		vColor colorHolder = target->GETgraphicsComponent()->GETcolor();
+
+		target->GETgraphicsComponent()->updateColor(vColor(
+			actorTarget->GEThp() / actorTarget->GEThpMAX(),
+			0.0f,
+			0.0f,
+			colorHolder.a)
+		);
 	}
-
-
 }

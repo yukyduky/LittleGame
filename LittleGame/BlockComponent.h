@@ -48,6 +48,7 @@ public:
 	virtual size_t& GETnumIndices();
 	virtual XMMATRIX& getWorld();
 
+	vColor GETcolor();
 
 	/*--------<INFORMATION>--------
 	1. Something

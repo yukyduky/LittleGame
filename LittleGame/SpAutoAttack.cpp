@@ -8,7 +8,7 @@ SpAutoAttack::SpAutoAttack(ActorObject* player) : Spell(player, NAME::AUTOATTACK
 	this->setState(SPELLSTATE::READY);
 	
 	this->setCoolDown(0.3);
-	this->damage = 1;
+	this->damage = 100;
 	this->range = 50;
 }
 
@@ -50,8 +50,18 @@ void SpAutoAttack::update()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
-		target->setState(OBJECTSTATE::TYPE::DEAD);
-		Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
+		ActorObject* actorTarget = static_cast<ActorObject*>(target);
+
+		actorTarget->dealDmg(this->damage);
+
+		vColor colorHolder = target->GETgraphicsComponent()->GETcolor();
+
+		target->GETgraphicsComponent()->updateColor(vColor(
+			actorTarget->GEThp() / actorTarget->GEThpMAX(),
+			0.0f,
+			0.0f,
+			colorHolder.a)
+		);
 
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}

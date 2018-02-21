@@ -80,6 +80,19 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 {
 	if (this->damage >= this->end && target->getType() == OBJECTTYPE::ENEMY)
 	{
+		//ActorObject* actorTarget = static_cast<ActorObject*>(target);
+
+		//actorTarget->dealDmg(this->damage);
+
+		//vColor colorHolder = target->GETgraphicsComponent()->GETcolor();
+
+		//target->GETgraphicsComponent()->updateColor(vColor(
+		//	actorTarget->GEThp() / actorTarget->GEThpMAX(),
+		//	0.0f,
+		//	0.0f,
+		//	colorHolder.a)
+		//);
+
 		target->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }
