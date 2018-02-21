@@ -42,7 +42,7 @@ QuadTreeSquare::QuadTreeSquare(float widthLength_in, float heightLength_in, floa
   |           PUBLIC            |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-QuadTree::QuadTree() {
+QuadTree::QuadTree() : nodes() {
 	this->level = 0;
 	this->midpointX = 0;
 	this->midpointY = 0;
@@ -56,7 +56,7 @@ QuadTree::QuadTree() {
 QuadTree::QuadTree(
 	int level_in,
 	float widthLength_in, float heightLength_in,
-	float x_bottomLeftCorner, float y_bottomLeftCorner)
+	float x_bottomLeftCorner, float y_bottomLeftCorner) : nodes()
 {
 	this->level = level_in;
 
@@ -262,6 +262,8 @@ void QuadTree::cleanup() {
 			this->deleteToEnd(this->nodes[i]);
 		}
 	}
+
+	this->staticObjectsList.clear();
 }
 
 void QuadTree::deleteToEnd(QuadTree* currentQuad) {

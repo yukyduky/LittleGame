@@ -24,22 +24,25 @@ public:
 	XMVECTOR getDirection();
 	void setSpell(Spell* spell) { this->spell = spell; }
 	void setRange(int range) { this->range = range; }
+	void setFollowing(float rotationSpeed, XMFLOAT3* playerPos);	// Only relevant to stalking projectiles
+	Spell* getSpell();
+	
 
-	Spell* getSpell() ;
 private:
 	// traveldirection of the projectile
 	XMFLOAT3 direction;
 	// The speed of the projectile
-	float speed;
+	float speed = 0.0f;
 	// If the pojectile should spinn around its X-axis
 	bool spinn;
-	bool isFollowing = false;
-	float followingRotationSpeed = -1;
+	XMFLOAT3* pPlayerPos = nullptr;			// Only relevant to stalking projectiles
+	bool isFollowing = false;				// Only relevant to stalking projectiles
+	float followingRotationSpeed = -1;		// Only relevant to stalking projectiles
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
-	Spell* spell;
+	Spell* spell = nullptr;
 	// Range of travel
-	int range;
-	int rangeCoutner;
+	int range = 0;
+	int rangeCoutner = 0;
 };
 
 

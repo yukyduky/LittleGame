@@ -29,7 +29,7 @@ void Spell::updateCD()
 
 Projectile* Spell::spawnProj(ProjProp props)
 {
-	Projectile* proj;
+	Projectile* proj = nullptr;
 	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
 

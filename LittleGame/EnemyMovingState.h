@@ -19,10 +19,10 @@ class EnemyAttackingState;
 class EnemyMovingState : public EnemyState
 {
 private:
-	EnemyObject * pHead;
-	AIComponent * pBrain;
-	float attackRange;	// Fetched from Head's attackComponent
-	EnemyAttackingState* attackingStateTemplate;	// Used instead of 'new' each frame
+	EnemyObject * pHead = nullptr;
+	AIComponent * pBrain = nullptr;
+	float attackRange = 0.0f;	// Fetched from Head's attackComponent
+	EnemyAttackingState* attackingStateTemplate = nullptr;	// Used instead of 'new' each frame
 
 public:
 	EnemyMovingState(EnemyObject& pHead, AIComponent& pBrain, EnemyAttackingState& attackState);

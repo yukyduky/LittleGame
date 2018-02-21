@@ -10,12 +10,12 @@ class LineComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	ID3D11Buffer* gVertexBuffer;
-	ID3D11Buffer* gIndexBuffer;
-	size_t stride;
-	size_t offset;
-	size_t numIndices;
-	GameObject* head;
+	ID3D11Buffer* gVertexBuffer = nullptr;
+	ID3D11Buffer* gIndexBuffer = nullptr;
+	size_t stride = 0;
+	size_t offset = 0;
+	size_t numIndices = 0;
+	GameObject* head = nullptr;
 
 	/*--------<INFORMATION>--------
 	1. Creates a line with points ranging from 0.0 to 1.0 in x-dimension.

@@ -11,7 +11,7 @@ void AIComponent::bindCommands()
 	this->commands[AICOMMANDS::ATTACK] = new CommandEnemyAttack;
 }
 
-AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior)
+AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior) : commands()
 {
 	/// Set up head
 	this->pHead = &obj;

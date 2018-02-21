@@ -20,13 +20,13 @@ class EnemyAttackComponent;
 class EnemyAttackingState : public EnemyState
 {
 private:
-	EnemyObject * pHead;
-	AIComponent * pBrain;
-	EnemyAttackComponent* attackComponent;
+	EnemyObject * pHead = nullptr;
+	AIComponent * pBrain = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
 
-	float attackDamage;		// Not really needed, used to avoid "long" 'get->get->get' calls
-	float attackDuration;	//
-	float attackRange;		//
+	float attackDamage = 0.0f;		// Not really needed, used to avoid "long" 'get->get->get' calls
+	float attackDuration = 0.0f;	//
+	float attackRange = 0.0f;		//
 
 public:
 	EnemyAttackingState(EnemyObject& pHead, AIComponent& pBrain, EnemyAttackComponent& attackComponent);

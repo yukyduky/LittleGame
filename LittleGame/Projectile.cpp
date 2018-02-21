@@ -38,6 +38,12 @@ XMVECTOR Projectile::getDirection() {
 	return directionVector;
 }
 
+void Projectile::setFollowing(float rotationSpeed, XMFLOAT3* playerPos)
+{
+	this->isFollowing = true;
+	this->followingRotationSpeed = rotationSpeed;
+}
+
 Spell * Projectile::getSpell()
 {
 	return this->spell;
@@ -53,7 +59,45 @@ void Projectile::update()
 
 	// Alter velocity
 	if (this->isFollowing) {
-		// alter velocity depending on player, also, we need to know about player.
+		// alter velocity depending on playerPosition
+		float cos = -1.0;
+		float nominator = -1.0;
+		float denominator = -1.0;
+		XMVECTOR mathCurrent;
+		XMVECTOR mathDesired;
+		XMFLOAT3 desiredDirection;
+		XMFLOAT3 lengthCurrent;
+		XMFLOAT3 lengthDesired;
+		desiredDirection.x = (*this->pPlayerPos).x - this->pos.x;
+		desiredDirection.y = (*this->pPlayerPos).x - this->pos.x;
+		desiredDirection.z = (*this->pPlayerPos).x - this->pos.x;
+
+		mathCurrent = XMLoadFloat3(&this->direction);			// Load into vector,
+		mathCurrent = DirectX::XMVector3Length(mathCurrent);	// get dat range
+		mathDesired = XMLoadFloat3(&desiredDirection);				// Load into vector,
+		mathDesired = DirectX::XMVector3Length(mathDesired);		// get dat range
+		XMStoreFloat3(&lengthCurrent, mathCurrent);
+		XMStoreFloat3(&lengthDesired, mathDesired);
+
+		// Using dotproduct to determine cos(degree)
+		nominator = (
+			(this->direction.x * desiredDirection.x) +
+			(this->direction.y * desiredDirection.y) +
+			(this->direction.z * desiredDirection.z)
+		);
+		denominator = (lengthCurrent.x * lengthDesired.x);
+
+		// Get dat rotation
+		cos = nominator / denominator;
+
+		if (cos > 0) {
+
+		}
+		else {
+
+		}
+		this->velocity.x *= std::cos(degrees);
+		this->velocity.y *= std::sin(degrees);
 	}
 
 	float dt = Locator::getGameTime()->getDeltaTime();

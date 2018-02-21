@@ -110,16 +110,16 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
-	EnemyObject* enemyObject;
+	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent;
-	AIComponent* aiComponent;
-	InputComponent* input;
-	PhysicsComponent* physicsComponent;
-	EnemyAttackComponent* attackComponent;
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyAttackingState* attackState;
-	EnemyMovingState* moveState;
+	EnemyAttackingState* attackState = nullptr;
+	EnemyMovingState* moveState = nullptr;
 
 
 	/// D E F I N I T I O N
@@ -149,8 +149,8 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 3;
 	float attackCooldown = 0;
-	float projectileRange = 1000;
-	float aggroRange = 1000;
+	float projectileRange = 600;
+	float aggroRange = 500;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(

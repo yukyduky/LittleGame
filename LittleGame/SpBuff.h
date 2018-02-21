@@ -22,18 +22,18 @@ public:
 	void update();
 private:
 	// Template: Modifies the spell befor glyph is implemented
-	float strength;
+	float strength = 0.0f;
 	// Damge of skill to be applied on collision
-	float damage;
+	float damage = 0.0f;
 	// Travel-range of spell
-	int range;
+	int range = 0.0f;
 	// If the efect is active
 	bool active;
 	// value to increase to make the player float
-	float floatingValue;
+	float floatingValue = 0.0f;
 	// to reset the player after efect wears of
 	float oriY, oriRadius;
 	// needs to be lower than CD.
-	float duration;
+	float duration = 0.0f;
 };
 #endif // !SPBUFF_H
