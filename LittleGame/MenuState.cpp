@@ -122,23 +122,23 @@ void MenuState::initStartMenu()
 
 	//Buttons
 	nextID = this->newID();
-	text = L"Start Game   ";
+	text = L"Start Game";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{ 50,50, 150,50 }, D2D1::ColorF::Aqua, 
+		{ 100,50, 200,150 }, D2D1::ColorF::Aqua, 
 		text, BEHAVIOR::STARTGAME);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
-	text = L"Options      ";
+	text = L"Options";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
-		{ 50,150, 150,50}, D2D1::ColorF::DarkViolet,
+		{ 100,250, 200,50 }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
-	text = L"Quit      ";
+	text = L"Quit";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,250, 150,50 }, D2D1::ColorF::DarkViolet,
+		{ 100,350, 200,50 }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	stMenu->addButton(pButton);
 
@@ -162,41 +162,67 @@ void MenuState::initOptionsMenu()
 	opMenu->addQuad(object);
 
 	//Buttons
-	text = L"StartMenu  ";
+	text = L"Startmenu";
 	nextID = this->newID();
 	pButton = new Button( this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,50, 150,50 }, D2D1::ColorF::DarkViolet,
+		{ 100,50, 200,50 }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOSTART);
 	opMenu->addButton(pButton);
 
 	text = L"Volume +  ";
 	nextID = this->newID();
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,150, 120,50 }, D2D1::ColorF::Green,
+		{ 80,150, 120,50 }, D2D1::ColorF::Green,
 		text, BEHAVIOR::VOLUMEUP);
 	opMenu->addButton(pButton);
 
-	text = L"Volume -  ";
+	text = L"Volume -";
 	nextID = this->newID();
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 210,150, 120,50 }, D2D1::ColorF::Blue,
+		{ 260,150, 120,50 }, D2D1::ColorF::Blue,
 		text, BEHAVIOR::VOLUMEDOWN);
 	opMenu->addButton(pButton);
 
-	text = L"Fullscreen  ";
+	text = L"Toggle Fullscreen";
 	nextID = this->newID();
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,250, 150,50 }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::FULLSCREEN);
+		{ 100,250, 200,50 }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::WINDOWSWITCH);
 	opMenu->addButton(pButton);
-
-	text = L"Windowed  ";
-	nextID = this->newID();
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 50,350, 150,50 }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::WINDOWED);
-	opMenu->addButton(pButton);
-
 
 	this->menus[MENUS::OPTIONS] = opMenu;
+}
+
+
+void MenuState::FullScreenSwitch()
+{
+	if (this->IsWindowMode)
+	{
+		this->IsWindowMode = FALSE;
+		GetWindowPlacement(Locator::getD3D()->GEThwnd(), &wpc);
+		if (this->HWNDStyle == 0)
+			this->HWNDStyle = GetWindowLong(Locator::getD3D()->GEThwnd(), GWL_STYLE);
+		if (this->HWNDStyleEx == 0)
+			this->HWNDStyleEx = GetWindowLong(Locator::getD3D()->GEThwnd(), GWL_EXSTYLE);
+
+		LONG NewHWNDStyle = this->HWNDStyle;
+		NewHWNDStyle &= ~WS_BORDER;
+		NewHWNDStyle &= ~WS_DLGFRAME;
+		NewHWNDStyle &= ~WS_THICKFRAME;
+
+		LONG NewHWNDStyleEx = this->HWNDStyleEx;
+		NewHWNDStyleEx &= ~WS_EX_WINDOWEDGE;
+
+		SetWindowLong(Locator::getD3D()->GEThwnd(), GWL_STYLE, NewHWNDStyle | WS_POPUP);
+		SetWindowLong(Locator::getD3D()->GEThwnd(), GWL_EXSTYLE, NewHWNDStyleEx | WS_EX_TOPMOST);
+		ShowWindow(Locator::getD3D()->GEThwnd(), SW_SHOWMAXIMIZED);
+	}
+	else
+	{
+		this->IsWindowMode = TRUE;
+		SetWindowLong(Locator::getD3D()->GEThwnd(), GWL_STYLE, this->HWNDStyle);
+		SetWindowLong(Locator::getD3D()->GEThwnd(), GWL_EXSTYLE, this->HWNDStyleEx);
+		ShowWindow(Locator::getD3D()->GEThwnd(), SW_SHOWNORMAL);
+		SetWindowPlacement(Locator::getD3D()->GEThwnd(), &wpc);
+	}
 }

@@ -44,6 +44,11 @@ private:
 
 	bool quit;
 
+	BOOL IsWindowMode = TRUE;
+	WINDOWPLACEMENT wpc;
+	LONG HWNDStyle = 0;
+	LONG HWNDStyleEx = 0;
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'MenuState'.
@@ -91,6 +96,7 @@ public:
 	void displayMenu(MENUS::TYPE menu);
 	void startGame();
 	void quitMenu() { this->quit = true; };
+	void FullScreenSwitch();
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
 	void initStartMenu();

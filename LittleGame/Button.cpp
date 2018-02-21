@@ -49,11 +49,9 @@ void Button::onPress()
 	case BEHAVIOR::VOLUMEDOWN:
 		Locator::getAudioManager()->adjustMaster(false);
 		break;
-	case BEHAVIOR::FULLSCREEN:
-		ShowWindow(Locator::getD3D()->GEThwnd(), SHOW_FULLSCREEN);
+	case BEHAVIOR::WINDOWSWITCH:
+		this->pMS->FullScreenSwitch();
 		break;
-	case BEHAVIOR::WINDOWED:
-		ShowWindow(Locator::getD3D()->GEThwnd(), SHOW_OPENWINDOW);
 		break;
 	case BEHAVIOR::QUIT:
 		this->pMS->quitMenu();
@@ -76,7 +74,7 @@ void Button::render()
 	//Renders the text ontop
 	this->pRT->DrawText(
 		this->text,
-		10,
+		wcslen(this->text),
 		this->pTF,
 		this->highlight,
 		this->pTextColorBrush
