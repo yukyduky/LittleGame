@@ -38,7 +38,7 @@ void EnemyManager::startLevel1()
 	this->waveInterval = 5;
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
-	Wave* currentWave = nullptr;
+	Wave* currentWave;
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -88,16 +88,16 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
-	EnemyObject* enemyObject = nullptr;
+	EnemyObject* enemyObject;
 	// COMPONENTS
-	BlockComponent* graphicsComponent = nullptr;
-	AIComponent* aiComponent = nullptr;
-	InputComponent* input = nullptr;
-	PhysicsComponent* physicsComponent = nullptr;
-	EnemyAttackComponent* attackComponent = nullptr;
+	BlockComponent* graphicsComponent;
+	AIComponent* aiComponent;
+	InputComponent* input;
+	PhysicsComponent* physicsComponent;
+	EnemyAttackComponent* attackComponent;
 	// STATES
-	EnemyAttackingState* attackState = nullptr;
-	EnemyMovingState* moveState = nullptr;
+	EnemyAttackingState* attackState;
+	EnemyMovingState* moveState;
 
 
 	/// D E F I N I T I O N

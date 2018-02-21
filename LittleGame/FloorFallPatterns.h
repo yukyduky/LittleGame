@@ -27,10 +27,10 @@ struct FloorFallData {
 struct WallData {
 	int nrVertical;
 	int nrHorizontal;
-	int* rowL = nullptr;
-	int* rowR = nullptr;
-	int* rowT = nullptr;
-	int* rowB = nullptr;
+	int* rowL;
+	int* rowR;
+	int* rowT;
+	int* rowB;
 
 	WallData(int nrVertical, int nrHorizontal) {
 		this->nrVertical = nrVertical;

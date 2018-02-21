@@ -7,7 +7,7 @@
 std::unordered_map<KEYBOARD::KEY, size_t> InputComponent::keyboardKeyMap;
 std::unordered_map<MOUSE::KEY, size_t> InputComponent::mouseKeyMap;
 std::unordered_map<CONTROLLER::KEY, size_t> InputComponent::controllerKeyMap;
-Command* InputComponent::commands[Commands::Size] = {};
+Command* InputComponent::commands[Commands::Size];
 
 std::map<size_t, Key> InputComponent::keyboardCommandMap;
 std::map<size_t, Key> InputComponent::mouseCommandMap;

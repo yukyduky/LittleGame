@@ -46,7 +46,7 @@ namespace INPUTTYPE {
 }
 
 struct Key {
-	Command* command = nullptr;
+	Command* command;
 	COMMANDTYPE type;
 
 	Key(Command* command, COMMANDTYPE type) : command(command), type(type) {}

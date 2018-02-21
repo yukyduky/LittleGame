@@ -42,7 +42,7 @@ QuadTreeSquare::QuadTreeSquare(float widthLength_in, float heightLength_in, floa
   |           PUBLIC            |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-QuadTree::QuadTree() : nodes() {
+QuadTree::QuadTree() {
 	this->level = 0;
 	this->midpointX = 0;
 	this->midpointY = 0;
@@ -56,7 +56,7 @@ QuadTree::QuadTree() : nodes() {
 QuadTree::QuadTree(
 	int level_in,
 	float widthLength_in, float heightLength_in,
-	float x_bottomLeftCorner, float y_bottomLeftCorner) : nodes()
+	float x_bottomLeftCorner, float y_bottomLeftCorner)
 {
 	this->level = level_in;
 

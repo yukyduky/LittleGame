@@ -33,7 +33,7 @@ bool SpDash::castSpell()
 		XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range};
 		XMFLOAT3 newPos = { oldPos + distance };
 
-		//XMFLOAT3 playerNewPos;
+		XMFLOAT3 playerNewPos;
 
 		if (newPos.z > ARENAHEIGHT - ARENASQUARESIZE)
 		{
