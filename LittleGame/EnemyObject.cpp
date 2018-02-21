@@ -3,6 +3,8 @@
 #include "CollisionHandler.h"
 #include "EnemyMovingState.h"
 #include "EnemyState.h"
+#include "GameObject.h"
+#include "Spell.h"
 
 #define DISTANCE_FACTOR 1.4142135623730950488016887242097	// Fetched from CollisionHandler.h
 
@@ -34,6 +36,11 @@ EnemyObject::EnemyObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
 {
 	this->attackComponent = attackComponent;
+}
+
+EnemyAttackComponent * EnemyObject::GETattackComponent()
+{
+	return this->attackComponent;
 }
 
 XMFLOAT2 EnemyObject::getVectorToPlayer()
@@ -70,5 +77,6 @@ void EnemyObject::update()
 
 void EnemyObject::attack()
 {
-	this->attackComponent->attack();
+//	this->attackComponent->attack();
+	this->spells[0]->castSpell();
 }

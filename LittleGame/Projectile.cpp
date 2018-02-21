@@ -47,10 +47,13 @@ Spell * Projectile::getSpell()
 
 void Projectile::update()
 {
-	//GameObject::update();
-
 	for (auto &i : this->components) {
 		i->update();
+	}
+
+	// Alter velocity
+	if (this->isFollowing) {
+		// alter velocity depending on player, also, we need to know about player.
 	}
 
 	float dt = Locator::getGameTime()->getDeltaTime();

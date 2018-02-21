@@ -42,9 +42,18 @@ float ActorObject::getRotation()
 	return this->rotation;
 }
 
+void ActorObject::setDirection()
+{
+	this->direction = XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
+}
+void ActorObject::setDirection(XMFLOAT3 direction)
+{
+	this->direction = direction;
+}
+
 XMFLOAT3 ActorObject::getDirection()
 {
-	return XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
+	return this->direction;
 }
 
 XMFLOAT3 ActorObject::getDirection(float length)
@@ -239,6 +248,9 @@ void ActorObject::rotate()
 	//this->rotate();
 
 	this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+
+	// Update direction
+	this->setDirection();
 }
 
 void ActorObject::rotate(XMFLOAT3 aimVec)
@@ -267,6 +279,9 @@ void ActorObject::rotate(XMFLOAT3 aimVec)
 	//this->rotate();
 
 	this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+
+	// Update direction
+	this->setDirection();
 }
 
 void ActorObject::rotate(XMFLOAT2 aimVec)
@@ -490,4 +505,12 @@ void ActorObject::switchSpell()
 	}
 	
 	newSpells.clear();
+}
+
+Spell * ActorObject::getFirstSpell()
+{
+	if (this->spells[0] != nullptr) {
+		return this->spells[0];
+	}
+	return nullptr;
 }

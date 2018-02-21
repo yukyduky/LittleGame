@@ -11,7 +11,7 @@ EnemyAttackingState::EnemyAttackingState(EnemyObject& pHead, AIComponent& pBrain
 
 	// Misc
 	this->attackDamage		= attackComponent.GETattackDamage();
-	this->attackDuration	= attackComponent.GETattackDuration();
+	//this->attackDuration	= attackComponent.GETattackDuration();
 	this->attackRange		= attackComponent.GETattackRange();
 }
 

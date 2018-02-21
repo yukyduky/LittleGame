@@ -19,7 +19,10 @@ enum class NAME {
 	//Damage
 	AUTOATTACK, FIRE, BOMB
 	//Mobility
-	, DASH, BUFF
+	, DASH, BUFF,
+	
+	/// EnemySpells after this point
+	ENEM_SWARM
 };
 
 /* --- SPELLS
@@ -57,6 +60,7 @@ public:
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(double input) { this->coolDown = input; };
 	float getCoolDown() { return this->coolDown; };
+	int getAggroRange() { return this->aggroRange; };
 
 	// TSC = TimeSinceCast
 	size_t getTSC() { return this->timeSinceCast; };
@@ -73,6 +77,9 @@ private:
 	double timeSinceCast;
 	// EnergyCost
 	size_t cost;
+
+protected:
+	int aggroRange = -1;
 };
 
 

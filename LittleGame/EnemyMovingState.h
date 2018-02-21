@@ -7,9 +7,9 @@
 /* Example of State-Timeline
 state(n)^
 [2]	| 						    ATTACK PHASE 2
-[1]	| 			ATTACK PHASE 1		0
+[1]	| 			ATTACK PHASE 1		
 [0]	|  MOVING			     					MOVING
-|-------------------------------------------------> t
+	|-------------------------------------------------> t
 */
 
 class EnemyObject;

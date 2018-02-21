@@ -42,6 +42,7 @@ protected:
 
 	//Used to calculate angle to fire
 	float rotation = 0;
+	XMFLOAT3 direction = { 0, 0, 0 };
 
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
@@ -57,6 +58,8 @@ public:
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
+	virtual void setDirection();
+	virtual void setDirection(XMFLOAT3 direction);
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void setSpeed(float speed);
@@ -111,6 +114,9 @@ public:
 
 	//Crosshair
 	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }
+
+	// For enemies
+	Spell* getFirstSpell();
 };
 
 

@@ -6,7 +6,7 @@
 #include "EndState.h"
 
 ImmolationEnemyAttack::ImmolationEnemyAttack(
-	float damage, float attackDuration, float attackRange, int* pActiveEnemiesCount,
+	float damage, float attackCooldown, float attackRange, int* pActiveEnemiesCount,
 	EnemyObject& pHead
 )
 {
@@ -19,7 +19,7 @@ ImmolationEnemyAttack::ImmolationEnemyAttack(
 
 	// this data might be given as input parameters if we want different kinds of immolation attackers
 	this->attackDamage = damage;
-	this->attackDuration = attackDuration;
+	this->attackCooldown = attackCooldown;
 	this->attackRange = attackRange;
 }
 
@@ -28,10 +28,6 @@ const size_t ImmolationEnemyAttack::getID()
 	return this->pHead->getID();
 }
 void ImmolationEnemyAttack::receive(GameObject & obj, Message msg)
-{
-
-}
-void ImmolationEnemyAttack::update()
 {
 
 }

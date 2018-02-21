@@ -2,6 +2,7 @@
 #include "EnemyAttackingState.h"
 #include "AIComponent.h"
 #include "EnemyObject.h"
+#include "Spell.h"
 
 EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain, EnemyAttackingState& attackState)
 {
@@ -11,7 +12,7 @@ EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain, En
 	this->attackingStateTemplate = &attackState;
 
 	// Misc
-	this->attackRange = this->attackingStateTemplate->GETattackRange();
+	this->attackRange = this->pHead->getFirstSpell()->getAggroRange();
 	
 	// Activate this state
 	this->pBrain->pushState(*this);
@@ -19,14 +20,19 @@ EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain, En
 
 void EnemyMovingState::executeBehavior()
 {
-	// Update Movement
-	this->pBrain->SETsimulatedMovement(this->pHead->getVectorToPlayer());
+	// Update Direction/Movement (same thing but spells needs generic 'getDirection()')
+	XMFLOAT2 vectorToPlayer = this->pHead->getVectorToPlayer();
+	this->pBrain->SETsimulatedMovement(vectorToPlayer);
+	XMFLOAT3 temp;						// XMFLOAT2
+	temp.x = vectorToPlayer.x;			//	 to
+	temp.y = 0;							// XMFLOAT3
+	temp.z = vectorToPlayer.y;
+	this->pHead->setDirection(temp);
 
 	// If we're in range, switch state to attacking!
 	if (this->pHead->getDistanceToPlayer() < this->attackRange) {
-		// Push the attacking state
-		//this->pHead->setState(OBJECTSTATE::TYPE::ATTACKING);		-- Immolation shouldn't have an attackingState, since it has no delay when attacking
-		//this->pBrain->pushState(*this->attackingStateTemplate);	-- //Shellow
+
+		// Cooldown is checked internally
 		this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 	}
 

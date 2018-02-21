@@ -193,6 +193,7 @@
     <ClInclude Include="SpDash.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="SpFire.h" />
+    <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="SwarmerEnemyAttack.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="SpDash.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpFire.cpp" />
+    <ClCompile Include="SpSwarmProjectile.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="SwarmerEnemyAttack.cpp" />
     <ClCompile Include="SwarmerState.cpp" />

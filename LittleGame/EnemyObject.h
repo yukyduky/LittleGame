@@ -33,6 +33,7 @@ public:
 	EnemyObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
 
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
+	EnemyAttackComponent* GETattackComponent();
 
 	XMFLOAT2 getVectorToPlayer();
 	float getDistanceToPlayer();

@@ -33,6 +33,8 @@ private:
 	float speed;
 	// If the pojectile should spinn around its X-axis
 	bool spinn;
+	bool isFollowing = false;
+	float followingRotationSpeed = -1;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell;
 	// Range of travel

@@ -27,36 +27,34 @@ namespace ENEMYTYPE {
 
 
 
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ STRUCT
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ STRUCT
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
+// Necessary structs
+struct ArrayNode;	// Forward declaration since Alive/Dead/Array all reside within eachother
+struct AliveNode {
+	ArrayNode*	 index = nullptr;
+	AliveNode*	 back = nullptr;
+	AliveNode*	 forward = nullptr;
+};
+struct DeadNode {
+	ArrayNode*	 index = nullptr;
+	DeadNode*	 back = nullptr;
+	DeadNode*	 forward = nullptr;
+};
+struct ArrayNode {
+	EnemyObject* obj = nullptr;
+	AliveNode*	 alive = nullptr;
+	DeadNode*	 dead = nullptr;
+};
+
 class ArrayList
 {
 private:
-	// Necessary structs
-	struct ArrayNode;	// Forward declaration since Alive/Dead/Array all reside within eachother
-	struct AliveNode {
-		ArrayNode*	 index = nullptr;
-		AliveNode*	 back = nullptr;
-		AliveNode*	 forward = nullptr;
-	};
-	struct DeadNode {
-		ArrayNode*	 index = nullptr;
-		DeadNode*	 back = nullptr;
-		DeadNode*	 forward = nullptr;
-	};
-	struct ArrayNode {
-		EnemyObject* obj = nullptr;
-		AliveNode*	 alive = nullptr;
-		DeadNode*	 dead = nullptr;
-	};
-
 	// Variables
 	int size = -1;
 	ArrayNode* mainArray = nullptr;
 	AliveNode* firstAlive = nullptr;
 	DeadNode* firstDead = nullptr;
-
-	// Functions
 
 public:
 
@@ -65,38 +63,53 @@ public:
 		this->size = allObjectsToBeInserted.size();
 		this->mainArray = new ArrayNode[this->size];	// Allocate the entire array
 
-														// Add the first one
+		// Add the first one
 		this->mainArray[0].obj = allObjectsToBeInserted[0];
 		this->firstAlive = new AliveNode();
 		this->firstAlive->index = &this->mainArray[0];	// Connect Alive->Array
 		this->mainArray[0].alive = this->firstAlive;	// Connect Array->Alive
 
 		AliveNode* stepper = this->firstAlive;
-		// Array is done, now connect all the pieces up until the last one
-		for (int i = 1; i < (this->size - 1); i++) {
+		// Array is done, now connect all the pointers up until the last one
+		for (int i = 1; i < (this->size); i++) {
 			// Connect AliveList
 			stepper->forward = new AliveNode();		// Create forward and connect
 			stepper->forward->back = stepper;		// back-><-front
 			stepper->index = &this->mainArray[i];		// Connect List->Array
 
-														// Connect Array
+			// Step forward
+			stepper = stepper->forward;
+
+			// Connect Array
 			this->mainArray[i].obj = allObjectsToBeInserted[i];	// Array->Obj
 			this->mainArray[i].alive = stepper;					// Array->List
-
-																// Step forward
-			stepper = stepper->forward;
 		}
 
 		// Add the last one
-		stepper->index = &this->mainArray[this->size];
-		this->mainArray[this->size].obj = allObjectsToBeInserted[this->size];
-		this->mainArray[this->size].alive = stepper;
+		stepper->index = &this->mainArray[this->size-1];
 	}
 	void remove(int index) {
+		// This class is technically not done, since it can be added upon if we want to dynamically
+		// add swarmers to it, which we don't.
 
+		// To remove the AliveNode, connect it's 'back' and 'forward' pointers
+		AliveNode* back = this->mainArray[index].alive->back;
+		AliveNode* forward = this->mainArray[index].alive->forward;
+		back->forward = forward;
+		forward->back = back;
+
+		// Also clean!
+		delete this->mainArray[index].alive;
+		this->mainArray[index].alive = nullptr;
 	}
-	void find(int index) {
-
+	EnemyObject* find(int index) {
+		if (this->mainArray[index].alive != nullptr) {
+			return this->mainArray[index].obj;
+		}
+		return nullptr;
+	}
+	AliveNode* getFirst() {
+		return this->firstAlive;
 	}
 	void cleanUp() {
 
@@ -116,8 +129,8 @@ public:
 		delete this->mainArray;
 	}
 };
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ STRUCT
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ STRUCT
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
+// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
 
 
 // -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ CLASS
@@ -128,7 +141,6 @@ class EnemyManager
 private:
 	// Necessary since creation of actors is dependant on our std::vectors which rely in the GPS.
 	GamePlayState * pGPS;
-	EndState * endState;
 	std::vector<ActorObject*> players;
 	std::vector<GameObject*>* pGameObjectsArray = nullptr;
 	int activeEnemiesCount = 0;
