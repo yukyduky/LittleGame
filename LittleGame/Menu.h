@@ -14,6 +14,7 @@ class Menu
 public:
 	Menu();
 	~Menu();
+	void cleanUp();
 
 	void addButton(Button* newButton);
 	void addQuad(MenuObject* quad);

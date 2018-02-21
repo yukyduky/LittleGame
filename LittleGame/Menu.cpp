@@ -8,6 +8,12 @@ Menu::~Menu()
 {
 }
 
+void Menu::cleanUp()
+{
+	this->buttons.clear();
+	this->objects.clear();
+}
+
 void Menu::addButton(Button * newButton)
 {
 	

@@ -26,7 +26,6 @@ inline void SafeRelease(Interface **ppInterfaceToRelease)
 	}
 }
 
-class Component;
 
 using namespace DirectX;
 
@@ -38,9 +37,7 @@ public:
 	MenuObject(ID2D1HwndRenderTarget* RT ,size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
 	~MenuObject();
 
-	// Needs to be filled
 	void cleanUp();
-	void addComponent(Component* component);
 	const size_t getID() const { return this->ID; }
 
 	virtual void render();
@@ -55,7 +52,6 @@ protected:
 	// radius in -x, radius in y, offset in x
 	XMFLOAT3 menuSize;
 
-	std::list<Component*> components;
 
 	const size_t ID;
 	XMFLOAT2 pos;

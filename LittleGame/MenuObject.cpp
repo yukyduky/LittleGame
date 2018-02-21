@@ -1,5 +1,4 @@
 #include "MenuObject.h"
-#include "Component.h"
 
 MenuObject::MenuObject(ID2D1HwndRenderTarget* RT, size_t ID) : ID(ID), pRT(RT)
 {
@@ -57,11 +56,7 @@ MenuObject::~MenuObject()
 void MenuObject::cleanUp()
 {
 	SafeRelease(&this->pColorBrush);
-}
 
-void MenuObject::addComponent(Component * component)
-{
-	this->components.push_back(component);
 }
 
 void MenuObject::render()

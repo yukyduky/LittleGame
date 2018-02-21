@@ -6,8 +6,6 @@
 #include <vector>
 #include <array>
 #include "Commands.h"
-#include "RenderInputOrganizer.h"
-#include "Camera.h"
 #include <list>
 
 #include "Menu.h"
@@ -22,7 +20,6 @@ namespace MENUS {
 }
 
 class Command;
-class InputComponent;
 
 class MenuState : public State
 {
@@ -39,8 +36,6 @@ private:
 	MENUS::TYPE currMenu;
 	// All objects
 	std::vector<MenuObject*> menuObjects;
-	// A pointer to the "highlited" area
-	MenuObject* highlight;
 
 	bool quit;
 

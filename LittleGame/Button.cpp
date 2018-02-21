@@ -30,6 +30,14 @@ Button::~Button()
 {
 }
 
+void Button::cleanUp()
+{
+	SafeRelease(&this->pHighlightColorBrush);
+	SafeRelease(&this->pTextColorBrush);
+
+	MenuObject::cleanUp();
+}
+
 void Button::onPress()
 {
 	switch (this->behavior)

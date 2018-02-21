@@ -26,8 +26,8 @@ void MenuState::init() {
 
 void MenuState::cleanUp()
 {
-	// GameObjects which will on their own clean up all of their connected components
-	for (auto &iterator : this->menuObjects) {
+	for (auto &iterator : this->menus) {
+		iterator->cleanUp();
 		delete iterator;
 	}
 	this->menuObjects.clear();
@@ -46,7 +46,7 @@ void MenuState::handleEvents(GameManager * gm) {
 
 	while (gm->pollEvent(msg)) {
 		// Exit the application when 'X' is pressed or the quit bool is true
-		if (msg.message == WM_QUIT || this->quit) {
+		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
 		else if (msg.message == WM_KEYUP)
@@ -78,6 +78,10 @@ void MenuState::handleEvents(GameManager * gm) {
 
 void MenuState::update(GameManager * gm)
 {
+	if (this->quit)
+	{
+		gm->quit();
+	}
 }
 
 void MenuState::render(GameManager * gm) {
@@ -122,7 +126,7 @@ void MenuState::initStartMenu()
 
 	//Buttons
 	nextID = this->newID();
-	text = L"Start Game";
+	text = L"START GAME";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
 		{ 100,50, 200,150 }, D2D1::ColorF::Aqua, 
 		text, BEHAVIOR::STARTGAME);
@@ -169,7 +173,7 @@ void MenuState::initOptionsMenu()
 		text, BEHAVIOR::GOSTART);
 	opMenu->addButton(pButton);
 
-	text = L"Volume +  ";
+	text = L"Volume +";
 	nextID = this->newID();
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
 		{ 80,150, 120,50 }, D2D1::ColorF::Green,

@@ -4,13 +4,7 @@
 
 #include "Locator.h"
 
-
-
 #include "MenuObject.h"
-
-
-
-
 
 #ifndef Assert
 #if defined( DEBUG ) || defined( _DEBUG )
