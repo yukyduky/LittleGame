@@ -84,7 +84,7 @@ void ActorObject::update()
 
 	switch (this->state)
 	{
-	//State used to make an object fall and after a set time the object becomes "invisible"
+	//State used to make a object fall and after a set time the object becomes "invisible"
 	case OBJECTSTATE::TYPE::FALLING:
 		this->velocity.y += gravity * dt * 4;
 		this->pos.y += this->velocity.y * dt;

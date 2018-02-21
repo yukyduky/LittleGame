@@ -5,25 +5,25 @@ GlobalEvents::GlobalEvents() {
 }
 
 void GlobalEvents::generateMessage(GLOBALMESSAGES message) {
-	this->messageMap.insert(std::make_pair(message, message));
+	this->messageList.push_back(message);
 }
 
 bool GlobalEvents::pollEvent(GLOBALMESSAGES &msg) {
 	bool returnValue = false;
 
-	if (!this->messageMap.empty()) {
-		msg = (*this->messageMap.begin()).second;
-		this->messageMap.erase(this->messageMap.begin());
+	if (!this->messageList.empty()) {
+		msg = this->messageList.front();
+		this->messageList.pop_front();
 		returnValue = true;
 	}
 
 	return returnValue;
 }
 
-std::map<GLOBALMESSAGES, GLOBALMESSAGES> GlobalEvents::GETmessageMap() {
-	return this->messageMap;
+std::deque<GLOBALMESSAGES> GlobalEvents::GETmessageList() {
+	return this->messageList;
 }
 
-void GlobalEvents::SETmessageMap(std::map<GLOBALMESSAGES, GLOBALMESSAGES> messageMap) {
-	this->messageMap = messageMap;
+void GlobalEvents::SETmessageList(std::deque<GLOBALMESSAGES> messageList) {
+	this->messageList = messageList;
 }
