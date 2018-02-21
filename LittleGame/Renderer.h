@@ -44,6 +44,7 @@ private:
 	void createBackBufferRTV();
 	void createDepthStencilView(size_t width, size_t height, ID3D11DepthStencilView** gDSV, ID3D11Texture2D** gDSB);
 public:
+	Renderer() : gRTVs(), gSRVs(), gDeferredTexs() {}
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Intializes the clear color
 	2. Sets the current shadertype
