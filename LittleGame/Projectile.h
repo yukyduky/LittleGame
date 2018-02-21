@@ -30,14 +30,14 @@ private:
 	// traveldirection of the projectile
 	XMFLOAT3 direction;
 	// The speed of the projectile
-	float speed;
+	float speed = 0.0f;
 	// If the pojectile should spinn around its X-axis
 	bool spinn;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
-	Spell* spell;
+	Spell* spell = nullptr;
 	// Range of travel
-	int range;
-	int rangeCoutner;
+	int range = 0;
+	int rangeCoutner = 0;
 };
 
 

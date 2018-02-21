@@ -29,16 +29,16 @@ namespace ABILITIES {
 class ActorObject : public GameObject
 {
 protected:
-	InputComponent * pInput;
+	InputComponent * pInput = nullptr;
 	//Vector with all Spells that the player can cast
 	std::vector<Spell*> spells;
 	//Current spell that wil be cast by fireAbilityX
-	Spell* selectedSpell;
-	float hp;
-	float energy;
+	Spell* selectedSpell = nullptr;
+	float hp = 0;
+	float energy = 0;
 
 	//Varible to be changed by Spells
-	float speed;
+	float speed = 0;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -46,7 +46,7 @@ protected:
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
 
-	Crosshair* crossHair;
+	Crosshair* crossHair = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

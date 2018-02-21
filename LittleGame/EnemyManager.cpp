@@ -41,7 +41,7 @@ void EnemyManager::startLevel1()
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;
-	this->swarmerCount = 4;
+	this->swarmerCount = 0;
 	std::vector<EnemyObject*> localSwarmers;
 
 	// Per wave
@@ -72,7 +72,7 @@ void EnemyManager::startLevel1()
 			this->activeEnemiesCount++;
 		}
 
-		this->pSwarmers->initialize(localSwarmers);
+	//	this->pSwarmers->initialize(localSwarmers);
 
 		// --------------------------- NEW --------------------------- //
 		// --------------------------- NEW --------------------------- //
@@ -113,16 +113,16 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
-	EnemyObject* enemyObject;
+	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent;
-	AIComponent* aiComponent;
-	InputComponent* input;
-	PhysicsComponent* physicsComponent;
-	EnemyAttackComponent* attackComponent;
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyAttackingState* attackState;
-	EnemyMovingState* moveState;
+	EnemyAttackingState* attackState = nullptr;
+	EnemyMovingState* moveState = nullptr;
 
 
 	/// D E F I N I T I O N

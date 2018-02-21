@@ -11,7 +11,7 @@ enum class ABILITYTYPE {FIRE};
 class AbilityComponent : public Component
 {
 protected:
-	Projectile * pHead;
+	Projectile * pHead = nullptr;
 
 	//Can changes this into a struct
 	//These are all assigned in the subComponents

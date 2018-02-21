@@ -127,8 +127,8 @@ class EnemyManager
 {
 private:
 	// Necessary since creation of actors is dependant on our std::vectors which rely in the GPS.
-	GamePlayState * pGPS;
-	EndState * endState;
+	GamePlayState * pGPS = nullptr;
+	EndState * endState = nullptr;
 	std::vector<ActorObject*> players;
 	std::vector<GameObject*>* pGameObjectsArray = nullptr;
 	int activeEnemiesCount = 0;
@@ -141,12 +141,12 @@ private:
 
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
-	int currentWaveCount;
-	int currentWaveSize;
-	double spawnInterval;
-	double waveInterval;
-	double timePassed;
-	double startTime;
+	int currentWaveCount = 0;
+	int currentWaveSize = 0;
+	double spawnInterval = 0;
+	double waveInterval = 0;
+	double timePassed = 0;
+	double startTime = 0;
 
 	void cleanLevel();
 

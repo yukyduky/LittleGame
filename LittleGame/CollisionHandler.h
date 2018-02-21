@@ -49,29 +49,29 @@ using namespace SimpleMath;
 
 class CollisionHandler {
 private:
-	GameObject* collidable1;
-	GameObject* collidable2;
-	DirectX::BoundingSphere* boundingArea1;
-	DirectX::BoundingSphere* boundingArea2;
+	GameObject* collidable1 = nullptr;
+	GameObject* collidable2 = nullptr;
+	DirectX::BoundingSphere* boundingArea1 = nullptr;
+	DirectX::BoundingSphere* boundingArea2 = nullptr;
 
 	// Needed for swapping places of collidable1 with collidable2
-	GameObject* tempCollidableHolder;
+	GameObject* tempCollidableHolder = nullptr;
 
 	DirectX::XMFLOAT3 centerToCenterVector;
 	DirectX::XMFLOAT3 resultVector;
 	DirectX::XMFLOAT3 resultVector1;
-	float radiusDistanceVector;
-	float divisionFactor;
+	float radiusDistanceVector = 0.0f;
+	float divisionFactor = 0.0f;
 
 	// calculateDistance variables
-	double distance;
-	double xDiff;
-	double zDiff;
-	double minDiff;
+	double distance = 0;
+	double xDiff = 0;
+	double zDiff = 0;
+	double minDiff = 0;
 
 	float stepper = 2.0;
 
-	int collisionID;
+	int collisionID = 0;
 
 	void createCollisionID();
 	void calculateDistance(DirectX::XMFLOAT3 collidable1, DirectX::XMFLOAT3 collidable2);
