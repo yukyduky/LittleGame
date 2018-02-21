@@ -262,6 +262,8 @@ void QuadTree::cleanup() {
 			this->deleteToEnd(this->nodes[i]);
 		}
 	}
+
+	this->staticObjectsList.clear();
 }
 
 void QuadTree::deleteToEnd(QuadTree* currentQuad) {
