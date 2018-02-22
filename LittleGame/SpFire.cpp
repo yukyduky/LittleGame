@@ -56,18 +56,8 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 	if (target->getType() == OBJECTTYPE::ENEMY &&
 		!(std::find(this->previouslyHit.begin(), this->previouslyHit.end(), target) != this->previouslyHit.end())) {
 		
-		ActorObject* actorTarget = static_cast<ActorObject*>(target);
+		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
-		actorTarget->dealDmg(this->damage);
-
-		vColor colorHolder = target->GETgraphicsComponent()->GETcolor();
-
-		target->GETgraphicsComponent()->updateColor(vColor(
-			actorTarget->GEThp() / actorTarget->GEThpMAX(),
-			0.0f,
-			0.0f,
-			colorHolder.a)
-		);
 		this->previouslyHit.push_back(target);
 
 		this->hits--;

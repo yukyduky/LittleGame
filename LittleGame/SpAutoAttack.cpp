@@ -50,18 +50,7 @@ void SpAutoAttack::update()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
-		ActorObject* actorTarget = static_cast<ActorObject*>(target);
-
-		actorTarget->dealDmg(this->damage);
-
-		vColor colorHolder = target->GETgraphicsComponent()->GETcolor();
-
-		target->GETgraphicsComponent()->updateColor(vColor(
-			actorTarget->GEThp() / actorTarget->GEThpMAX(),
-			0.0f,
-			0.0f,
-			colorHolder.a)
-		);
+		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}

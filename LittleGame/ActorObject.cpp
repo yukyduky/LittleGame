@@ -361,6 +361,18 @@ void ActorObject::decCD()
 void ActorObject::dealDmg(float dmg)
 {
 	this->hp -= dmg;
+	
+	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+
+		this->GETgraphicsComponent()->updateColor(vColor(
+			this->GEThp() / this->GEThpMAX(),
+			0.0f,
+			0.0f,
+			colorHolder.a)
+		);
+	}
+
 	if (this->hp <= 0) {
 		this->hp = 0;
 		this->state = OBJECTSTATE::TYPE::DEAD;
