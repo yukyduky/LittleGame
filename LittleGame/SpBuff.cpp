@@ -7,7 +7,8 @@ SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCoolDown(5.3f);
+	this->setCost(15.0f);
+	this->setCoolDown(10.0f);
 	this->duration = 1.5f;
 
 	this->range = 20.0f;

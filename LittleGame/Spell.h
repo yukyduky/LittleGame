@@ -74,8 +74,8 @@ private:
 	NAME name;
 	ActorObject * player = nullptr;
 
-	double coolDown = 0.0f;
-	double timeSinceCast = 0.0f;
+	float coolDown = 0.0f;
+	float timeSinceCast = 0.0f;
 	// EnergyCost
 	float cost = 0;
 };

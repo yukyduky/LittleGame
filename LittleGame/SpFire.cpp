@@ -7,9 +7,9 @@ SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCost(20);
-	this->setCoolDown(1.3);
-	this->damage = 100;
+	this->setCost(10);
+	this->setCoolDown(0.2);
+	this->damage = 50;
 	this->range = 100;
 }
 
@@ -35,7 +35,7 @@ bool SpFire::castSpell()
 
 			this->setState(SPELLSTATE::COOLDOWN);
 
-			this->hits = 6;
+			this->hits = 8;
 		}
 	}
 
@@ -57,22 +57,24 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
 	if (target->getType() == OBJECTTYPE::ENEMY &&
-		!(std::find(this->previouslyHit.begin(), this->previouslyHit.end(), target) != this->previouslyHit.end())) {
+		!(std::find(proj->getPreviouslyHitList()->begin(), proj->getPreviouslyHitList()->end(), target)
+			!=
+			proj->getPreviouslyHitList()->end())) {
 		
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
-		this->previouslyHit.push_back(target);
+		proj->getPreviouslyHitList()->push_back(target);
 
 		this->hits--;
 		if (this->hits == 0)
 		{
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
-			this->previouslyHit.clear();
+			proj->getPreviouslyHitList()->clear();
 		}
 	}
 
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
-		this->previouslyHit.clear();
+		proj->getPreviouslyHitList()->clear();
 	}
 }

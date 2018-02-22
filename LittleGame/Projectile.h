@@ -26,6 +26,9 @@ public:
 	void setRange(int range) { this->range = range; }
 
 	Spell* getSpell() ;
+
+	// Mainly for FIRE SPELL, but can be used by all projectiles
+	std::list<GameObject*>* getPreviouslyHitList() { return &this->previouslyHit; }
 private:
 	// traveldirection of the projectile
 	XMFLOAT3 direction;
@@ -38,6 +41,8 @@ private:
 	// Range of travel
 	int range = 0;
 	int rangeCoutner = 0;
+	
+	std::list<GameObject*> previouslyHit;
 };
 
 
