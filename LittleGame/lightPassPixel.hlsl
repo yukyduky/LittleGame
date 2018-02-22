@@ -2,7 +2,7 @@ Texture2D texPosition	: register(t0);
 Texture2D texNormal		: register(t1);
 Texture2D texDiffuse	: register(t2);
 
-struct PointLight 
+struct PointLight
 {
 	float3 pos;
 	float pad0;
@@ -14,7 +14,7 @@ struct PointLight
 	float specPower;
 };
 
-struct FloorGrid 
+struct FloorGrid
 {
 	float height;
 	float3 color;
@@ -27,14 +27,15 @@ static const int MAX_NUM_FLOORGRIDS_Y = 20;
 cbuffer GeneralData : register (b0) {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
 	float3 camPos;
-	float camDir;
-	int2 arenaDims;
-	int2 gridDims;
-	float2 wDims;
-	float scaleHeight;
-	float scaleDepth;
-	float3 gridStartPos;
 	float nrOfLights;
+	float3 camDir;
+	float pad0;
+	float2 arenaDims;
+	float2 gridDims;
+	float2 wDims;
+	float2 pad1;
+	float2 gridStartPos;
+	float2 pad2;
 }
 
 cbuffer Light : register (b1) {
@@ -44,6 +45,7 @@ cbuffer Light : register (b1) {
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission, out float objectType);
 void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
+float dot(float3 vec1, float3 vec2);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 {
@@ -73,11 +75,32 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 
 void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType)
 {
-	int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
-	int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
-
 	if (objectType == 0.5f) {
+		float lDotN = dot(camDir, normal);
+		if (lDotN != 0.0f) {
+			int i = 0;
+			bool intersected = false;
+			float3 p = float3(0.0f, 0.0f, 0.0f);
+			do {
+				float pOnQuadX = pos_W.x + camDir.x * (gridDims.x / 2.0f) * i; // gridDims.x / 2.0f stepsize
+				float pOnQuadZ = pos_W.z + camDir.z * (gridDims.y / 2.0f) * i;
 
+				int xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x < MAX_NUM_FLOORGRIDS_X ? (pOnQuadX - gridStartPos.x) / gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
+				int yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y < MAX_NUM_FLOORGRIDS_Y ? (pOnQuadZ - gridStartPos.y) / gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+
+				float d = dot(float3(pOnQuadX, grid[xGrid][yGrid].height, pOnQuadZ) - camPos, normal) / dot(camDir, normal);
+				p = d * camDir + camPos;
+
+				if (p.x >= pOnQuadX && p.x < pOnQuadX + gridDims.x &&
+					p.z >= pOnQuadZ && p.z < pOnQuadZ + gridDims.y)
+				{
+					intersected = true;
+					diffuse = grid[xGrid][yGrid].color;
+				}
+
+				i++;
+			} while (!intersected && p.x - gridStartPos.x < arenaDims.x && p.x >= gridStartPos.x && p.y - gridStartPos.y < arenaDims.y && p.y >= gridStartPos.y);
+		}
 	}
 
 
@@ -144,4 +167,9 @@ float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float em
 	}
 
 	return float4(saturate(pointLighting), 1.0f);
+}
+
+float dot(float3 vec1, float3 vec2)
+{
+	return float(vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
 }
