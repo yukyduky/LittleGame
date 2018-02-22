@@ -68,12 +68,30 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
 	emission = texDiffuse.Load(texCoords).w;
-	objectType = texNormal.Load(texCoords).xyz;
+	objectType = texNormal.Load(texCoords).w;
 }
 
 void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType)
 {
 	int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
+	int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+
+	if (objectType == 0.5f) {
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	/*int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
 	int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
 
 
@@ -93,9 +111,9 @@ void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3
 		int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
 
 		while (xGrid != MAX_NUM_FLOORGRIDS_X - 1 && yGrid != MAX_NUM_FLOORGRIDS_Y) {
-
+			
 		}
-	}
+	}*/
 }
 
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission)
