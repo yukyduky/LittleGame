@@ -233,9 +233,11 @@ void Camera::rotateCameraHorizontally(POINT mouseMovement) {
 
 void Camera::init(float arenaWidth, float arenaDepth)
 {
-	this->cameraStartPos = DirectX::XMVECTOR{ (float)(arenaWidth / 2.0f), (float)(arenaDepth * 0.7f), (float)((arenaDepth / 2) * 0.30f) };
+//	this->cameraStartPos = DirectX::XMVECTOR{ (float)(arenaWidth / 2.0f), (float)(arenaDepth * 0.7f), (float)((arenaDepth / 2) * 0.30f) };
 	
-	this->cameraStartFacingDir = DirectX::XMVECTOR{ arenaWidth / 2, 0, arenaDepth / 2 * 0.8f };
+	this->cameraStartPos = DirectX::XMVECTOR{ (float)(arenaWidth / 2.0f), (float)(sqrt((arenaWidth * arenaWidth + arenaDepth * arenaDepth) / 4)), (float)((arenaDepth / 2) * 0.30f) };
+
+	this->cameraStartFacingDir = DirectX::XMVECTOR{ arenaWidth / 2, 0, arenaDepth / 2 * 0.75f };
 
 	this->updateRequired = false;
 

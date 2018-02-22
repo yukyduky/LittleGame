@@ -19,7 +19,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, 0, this->squareSize * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
-	vColor color(0.0f / 255.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
+	vColor color(0.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
 	//Create all the squares representing the floor
 	for (int i = 0; i < grid.size(); i++)
 	{
@@ -42,6 +42,9 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 			object->SETrotationMatrix(rotationM);
 			object->SETscaleMatrix(scaleM);
 			//Push the new ArenaObject and GraphicsComponent into the vector arrays
+			grid[i][j].baseColor = XMFLOAT4(color.r, color.g, color.b, color.a);
+			grid[i][j].color = XMFLOAT4(color.r, color.g, color.b, color.a);
+			grid[i][j].posY = pos.y;
 			grid[i][j].ptr = object;
 			staticObjects.push_back(object);
 			graphics.push_back(rect);
@@ -119,7 +122,8 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
 	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
-	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
+	//int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
+	int caseNr = 3;
 	this->arenaPatterns.createWallPattern(caseNr, wData);
 	
 	//Create pillars in the corners
@@ -248,14 +252,25 @@ DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 
 void LevelManager::setFallPattern(FloorFallData& pattern) {
 	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->arenaPatterns.GETmaxFloorNum());
-	this->arenaPatterns.createFloorPattern(patternNr, pattern);
+	this->arenaPatterns.createFloorPattern(3, pattern);
+}
+
+void LevelManager::createFallPatterns(std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard) {
+	this->arenaPatterns.createEasyFloorPatterns(easy);
+	this->arenaPatterns.createMediumFloorPatterns(medium);
+	this->arenaPatterns.createHardFloorPatterns(hard);
 }
 
 void LevelManager::selectArena() {
 	this->arenaPatterns.createArenaData();
 }
 
-int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics)
+int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, 
+			FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, 
+			std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects,
+			std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, 
+			std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, 
+			std::vector<FloorFallData>& hard)
 {
 	this->pGPS = &pGPS;
 	this->squareSize = ARENADATA::GETsquareSize();
@@ -277,9 +292,10 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	
 	// createLevelWalls needs to come first
 	this->createLevelWalls(staticPhysicsCount, grid, staticObjects, graphics);
-	this->createFloor(grid, staticObjects, graphics);
+	this->createFloor(grid, dynamicNoCollisionObjects, graphics);
 	this->createNeonFloorGrid(staticObjects, graphics);
 	this->setFallPattern(pattern);
+	this->createFallPatterns(easy, medium, hard);
 
 	return this->tempID;
 }

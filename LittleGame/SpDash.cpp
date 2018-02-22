@@ -35,22 +35,22 @@ bool SpDash::castSpell()
 
 		XMFLOAT3 playerNewPos;
 
-		if (newPos.z > ARENAHEIGHT - ARENASQUARESIZE)
+		if (newPos.z > ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize())
 		{
-			newPos.z = ARENAHEIGHT - ARENASQUARESIZE;
+			newPos.z = ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize();
 		}
-		else if (newPos.z < ARENASQUARESIZE)
+		else if (newPos.z < ARENADATA::GETsquareSize())
 		{
-			newPos.z = ARENASQUARESIZE;
+			newPos.z = ARENADATA::GETsquareSize();
 		}
 
-		if (newPos.x > ARENAWIDTH - ARENASQUARESIZE)
+		if (newPos.x > ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize())
 		{
-			newPos.x = ARENAWIDTH - ARENASQUARESIZE;
+			newPos.x = ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize();
 		}
-		else if (newPos.x < ARENASQUARESIZE)
+		else if (newPos.x < ARENADATA::GETsquareSize())
 		{
-			newPos.x = ARENASQUARESIZE;
+			newPos.x = ARENADATA::GETsquareSize();
 		}
 
 		for (int i = 0; i < this->nrOfFlames; i++)

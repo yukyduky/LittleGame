@@ -45,6 +45,12 @@ struct ProjProp {
 	ProjProp() {}
 };
 
+namespace FLOORSTATE {
+	enum STATE {
+		ACTIVE, TFALLING, FALLING, RECOVERING, DEACTIVATED,
+		SIZE
+	};
+}
 
 class GamePlayState : public State
 {
@@ -70,8 +76,24 @@ private:
 	int staticPhysicsCount = 0;
 	
 	//Variables for falling floor
-	FloorFallData fallData;
-	double counter = 0;
+	FloorFallData fallData; //OLD
+	FloorFallData currData;
+	FLOORSTATE::STATE floorState;
+	std::vector<FloorFallData> easyPatterns;
+	std::vector<FloorFallData> mediumPatterns;
+	std::vector<FloorFallData> hardPatterns;
+	double mediumTime;
+	double hardTime;
+	double totalLevelTime;
+	double gTimeLastFrame;
+	double stateTime;
+	double timeBetweenPatterns;
+	double tFallingTime;
+	double fallAndRecoveryTime;
+	double counter;
+	bool recoveryMode;
+	int currentPatternNr;
+
 
 	//All objects that wants to be renederd
 	std::list<GraphicsComponent*> graphics;
@@ -89,6 +111,7 @@ private:
 	//void updatePhysicsComponents();
 	
 	void checkCollisions();
+	void updateFloorPattern();
 
 
 	MouseInput* mousePicker;

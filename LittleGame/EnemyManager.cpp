@@ -59,8 +59,6 @@ void EnemyManager::startLevel1()
 		this->currentWaveSize += 1;
 	}
 
-	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
-	this->activeEnemiesCount--;
 }
 
 void EnemyManager::cleanLevel()

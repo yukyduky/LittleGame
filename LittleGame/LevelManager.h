@@ -28,8 +28,12 @@ struct tileData {
 	SQUARETYPE::TYPE type;
 	GameObject* ptr;
 
-	tileData() {};
+	//Nya som Dew ska använda
+	XMFLOAT4 baseColor;
+	XMFLOAT4 color;
+	float posY;
 
+	tileData() {};
 	tileData(SQUARETYPE::TYPE type) {
 		this->type = type;
 	}
@@ -75,6 +79,8 @@ private:
 	*/
 	void setFallPattern(FloorFallData& pattern);
 
+	void LevelManager::createFallPatterns(std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard);
+
 public:
 	void selectArena();
 	/*--------<INFORMATION>--------
@@ -85,7 +91,7 @@ public:
 		setFallPattern.
 	2. returns the latest used ID.
 	*/
-	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics);
+	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard);
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given position.
 	*/

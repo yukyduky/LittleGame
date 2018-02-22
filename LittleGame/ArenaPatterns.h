@@ -59,6 +59,9 @@ public:
 	ArenaPatterns();
 	~ArenaPatterns();
 	void createFloorPattern(int nr, FloorFallData& pattern);
+	void createEasyFloorPatterns(std::vector<FloorFallData>& easy);
+	void createMediumFloorPatterns(std::vector<FloorFallData>& medium);
+	void createHardFloorPatterns(std::vector<FloorFallData>& hard);
 	int GETmaxFloorNum();
 	void createWallPattern(int nr, WallData& pattern);
 	int GETmaxWallNum();

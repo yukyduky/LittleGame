@@ -122,6 +122,7 @@ void RectangleComponent::update()
 			}
 			else {
 				this->head->setState(OBJECTSTATE::TYPE::FALLING);
+				this->counter = 0.0;
 			}
 		}
 		break;

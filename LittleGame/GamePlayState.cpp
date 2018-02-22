@@ -93,111 +93,126 @@ void GamePlayState::checkCollisions() {
 	}
 }
 
-//_________________________________________//
-//                                         //
-//             END OF PRIVATE              //
-//_________________________________________//
-/////////////////////////////////////////////
+void GamePlayState::updateFloorPattern() {
+	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->totalLevelTime += dt;
+	this->counter += dt;
+	Index index(0, 0);
+	XMFLOAT3 currVel(0, 0, 0);
+	XMFLOAT4 fallColor(1.0f, 0.0f, 0.0f, 1.0f);
+	XMFLOAT4 baseColor(0.0f, 0.0f, 0.0f, 0.0f);
+	XMFLOAT4 finalColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+	switch (this->floorState)	
+	{
+	case FLOORSTATE::STATE::ACTIVE:
+		if (this->counter > this->stateTime) {
+			if (totalLevelTime < this->mediumTime) {
+				this->currData = easyPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->easyPatterns.size() - 1)];
+			}
+			else if (totalLevelTime < this->hardTime) {
+				this->currData = mediumPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->mediumPatterns.size() - 1)];
+			}
+			else {
+				this->currData = hardPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->hardPatterns.size() - 1)];
+			}
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
+				this->grid[index.x][index.y].ptr->setState(OBJECTSTATE::TYPE::TFALLING);
+				//this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+			}
+			this->floorState = FLOORSTATE::STATE::TFALLING;
+			this->counter = 0.0f;
+		}
+		break;
+		
+	case FLOORSTATE::STATE::TFALLING:
+		if (this->counter < this->stateTime) {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = currData.pattern[i].x;
+				index.y = currData.pattern[i].y;
+				baseColor = this->grid[index.x][index.y].baseColor;
 
+				baseColor.x = baseColor.x - (baseColor.x / (this->stateTime - 0.5f)) * counter;
+				baseColor.y = baseColor.y - (baseColor.y / (this->stateTime - 0.5f)) * counter;
+				baseColor.z = baseColor.z - (baseColor.z / (this->stateTime - 0.5f)) * counter;
+				fallColor.x = (fallColor.x / (this->stateTime - 0.5f)) * counter;
+				fallColor.y = (fallColor.y / (this->stateTime - 0.5f)) * counter;
+				fallColor.z = (fallColor.z / (this->stateTime - 0.5f)) * counter;
+				
+				finalColor.x = baseColor.x + fallColor.x;
+				finalColor.y = baseColor.y + fallColor.y;
+				finalColor.z = baseColor.z + fallColor.z;
+				finalColor.w = baseColor.w;
 
+				this->grid[index.x][index.y].color = finalColor;
+			}
+		}
+		else {
+			this->floorState = FLOORSTATE::STATE::FALLING;
+			this->counter = 0.0f;
+		}
+		break;
 
+	case FLOORSTATE::STATE::FALLING:
+		if (this->counter < stateTime) {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
+				this->grid[index.x][index.y].posY += GRAVITY * this->counter * 4.0f;
+			}
+		}
+		else {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
+				this->grid[index.x][index.y].posY = 10000.0f;
+			}
+			this->floorState = FLOORSTATE::STATE::DEACTIVATED;
+			this->counter = 0.0f;
+		}
+		break;
 
-/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
-  |                             |
-  |           PUBLIC            |
-   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+	case FLOORSTATE::STATE::DEACTIVATED:
+		if (this->counter > this->stateTime) {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
+				this->grid[index.x][index.y].posY = -50.0f;
+			}
+			this->floorState = FLOORSTATE::STATE::RECOVERING;
+			this->counter = 0.0f;
+		}
+		break;
 
-void GamePlayState::init() {
-	this->lm.selectArena();
-	this->quadTree.initializeQuadTree(0, ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight(), 0, 0);
-	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
-	this->rio.initialize(this->camera, this->pointLights);
-	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
-	int i = 0;
-	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
-		this->quadTree.insertStaticObject(*it);
-		i++;
+	case FLOORSTATE::STATE::RECOVERING:
+		if (this->counter < this->stateTime) {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
+				this->grid[index.x][index.y].posY -= GRAVITY * this->counter * 4.0f;
+			}
+		}
+		else {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
+				this->grid[index.x][index.y].posY = -0.5f;
+			}
+			this->floorState = FLOORSTATE::STATE::ACTIVE;
+			this->counter = 0.0f;
+		}
+		break;
+
+	default:
+		break;
 	}
 	
+	
 
-	std::vector<ActorObject*> allPlayers;
-	allPlayers.push_back(player1);
-	this->enemyManager.initialize(sGamePlayState, allPlayers);
-
-	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() / 2.0f, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-
-	// To be changed when Ollie has done the rework on camera
-	XMFLOAT3 tempcDir;
-	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
-	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), tempcDir);
-	this->enemyManager.startLevel1();
-}
-
-void GamePlayState::cleanUp()
-{
-	Locator::getAudioManager()->stopSound();
-	// Direct internal objects
-	this->rio.cleanUp();
-	// this->camera.cleanUp();
-	this->enemyManager.cleanUp();
-
-	// GameObjects which will on their own clean up all of their connected components
-	for (auto &iterator : this->staticObjects) {
-		iterator->cleanUp();
-		delete iterator;
-	}
-	for (auto &iterator : this->dynamicObjects) {
-		iterator->cleanUp();
-		delete iterator;
-	}
-	for (auto &iterator : this->noCollisionDynamicObjects) {
-		iterator->cleanUp();
-		delete iterator;
-	}
-	for (int i = 0; i < this->playerInput.size(); i++) {
-		this->playerInput[i] = nullptr;
-	}
-	this->quadTree.cleanup();
-	this->staticObjects.clear();
-	this->dynamicObjects.clear();
-	this->noCollisionDynamicObjects.clear();
-	this->graphics.clear();
-
-	InputComponent::cleanup();
-}
-
-void GamePlayState::pause()
-{
-
-}
-
-void GamePlayState::resume()
-{
-}
-
-void GamePlayState::handleEvents(GameManager * gm) {
-	MSG msg;
-
-	while (gm->pollEvent(msg)) {
-		// Exit the application when 'X' is pressed
-		if (msg.message == WM_QUIT) {
-			gm->quit();
-		}
-
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-}
-
-
-void GamePlayState::update(GameManager * gm)
-{	
-
+	/*
 	this->counter += Locator::getGameTime()->getDeltaTime();
 	Index index;
 	//Make the next floor tile fall if the time is right.	
@@ -230,41 +245,134 @@ void GamePlayState::update(GameManager * gm)
 			this->counter = 0;
 		}
 	}
-	//Check if the player is on a active floor tile or if he fell of the map.
-	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
-		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
-			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
-		}
+	*/
+
+}
+
+//_________________________________________//
+//                                         //
+//             END OF PRIVATE              //
+//_________________________________________//
+/////////////////////////////////////////////
+
+
+
+
+
+/* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_
+  |                             |
+  |           PUBLIC            |
+   -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
+
+void GamePlayState::init() {
+	this->lm.selectArena();
+	this->quadTree.initializeQuadTree(0, ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight(), 0, 0);
+	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
+	this->rio.initialize(this->camera, this->pointLights);
+	this->initPlayer();
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns);
+	int i = 0;
+	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
+		this->quadTree.insertStaticObject(*it);
+		i++;
 	}
+
+	std::vector<ActorObject*> allPlayers;
+	allPlayers.push_back(player1);
+	this->enemyManager.initialize(sGamePlayState, allPlayers);
+
+	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
+	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() / 2.0f, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+
+	// To be changed when Ollie has done the rework on camera
+	XMFLOAT3 tempcDir;
+	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
+	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), tempcDir);
+	this->enemyManager.startLevel1();
+
+	this->mediumTime = 120.0;
+	this->hardTime = 240.0;
+	this->totalLevelTime = 0.0;
+	this->timeBetweenPatterns = 20.0;
+	this->stateTime = 5.0;
+	this->recoveryMode = false;
+	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	
+}
+
+void GamePlayState::cleanUp()
+{
+	Locator::getAudioManager()->stopSound();
+	// Direct internal objects
+	this->rio.cleanUp();
+	// this->camera.cleanUp();
+	this->enemyManager.cleanUp();
+
+	// GameObjects which will on their own clean up all of their connected components
+	for (auto &iterator : this->staticObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	for (auto &iterator : this->dynamicObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	for (auto &iterator : this->noCollisionDynamicObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	for (int i = 0; i < this->playerInput.size(); i++) {
+		this->playerInput[i] = nullptr;
+	}
+	this->quadTree.cleanup();
+	this->staticObjects.clear();
+	this->dynamicObjects.clear();
+	this->noCollisionDynamicObjects.clear();
+	this->graphics.clear();
+
+	//Clear FloorFallPattern arrays.
+	this->easyPatterns.clear();
+	this->mediumPatterns.clear();
+	this->hardPatterns.clear();
+
+	InputComponent::cleanup();
+}
+
+void GamePlayState::pause()
+{
+
+}
+
+void GamePlayState::resume()
+{
+}
+
+void GamePlayState::handleEvents(GameManager * gm) {
+	MSG msg;
+
+	while (gm->pollEvent(msg)) {
+		// Exit the application when 'X' is pressed
+		if (msg.message == WM_QUIT) {
+			gm->quit();
+		}
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+}
+
+
+void GamePlayState::update(GameManager * gm)
+{	
+	this->updateFloorPattern();
 
 	int ID;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (std::list<GameObject*>::iterator it = this->noCollisionDynamicObjects.begin(); it != this->noCollisionDynamicObjects.end(); it++) {
 		(*it)->update();
 	}
-	/*
-	MIGHT WANT THIS CODE LATER! LET IT BE COMMENTED OUT FOR THE TIME BEING.
-	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
-		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
-			//noCollisionDynamicObjects[i]->update();
-		}
-
-		else {
-			ID = this->noCollisionDynamicObjects[i]->getID();
-			for (int j = 0; j < this->graphics.size(); j++) {
-				if (this->graphics[j]->getID() == ID) {
-					this->graphics.erase(this->graphics.begin() + j);
-					break;
-				}
-			}
-			this->noCollisionDynamicObjects[i]->cleanUp();
-			delete this->noCollisionDynamicObjects[i];
-			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
-		}
-	}
-	*/
-
-	this->enemyManager.update();
 
 	for (std::list<GameObject*>::iterator it = this->dynamicObjects.begin(); it != this->dynamicObjects.end(); it++) {
 		if ((*it)->getState() != OBJECTSTATE::TYPE::DEAD) {
@@ -286,6 +394,15 @@ void GamePlayState::update(GameManager * gm)
 			it--;
 		}
 	}
+
+	//Check if the player is on a active floor tile or if he fell of the map.
+	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
+		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
+			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
+		}
+	}
+
+//	this->enemyManager.update();
 	this->checkCollisions();
 }
 

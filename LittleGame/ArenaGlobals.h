@@ -2,6 +2,9 @@
 #ifndef ARENAGLOBALS_H_
 #define ARENAGLOBALS_H_
 
+#define TIMEBETWEENPATTERNS 20
+#define GRAVITY -9.82
+
 namespace ARENADATA {
 		static int arenaWidth;
 		static int arenaHeight;
@@ -9,17 +12,17 @@ namespace ARENADATA {
 		static int lengthOfWall;
 		static int heightOfWall;
 
-		void SETarenaWidth(int width); //{ arenaWidth = width; }
-		void SETarenaHeight(int height); // { arenaHeight = height; }
-		void SETsquareSize(int size); // { squareSize = size; }
-		void SETlengthOfWall(int length); // { lengthOfWall = length; }
-		void SETheightOfWall(int height); // { heightOfWall = height; }
+		void SETarenaWidth(int width);
+		void SETarenaHeight(int height);
+		void SETsquareSize(int size);
+		void SETlengthOfWall(int length);
+		void SETheightOfWall(int height);
 
-		int GETarenaWidth(); // { return arenaWidth; }
-		int GETarenaHeight(); // { return arenaHeight; }
-		int GETsquareSize(); // { return squareSize; }
-		int GETlengthOfWall(); // { return lengthOfWall; }
-		int GETheightOfWall(); // { return heightOfWall; }
+		int GETarenaWidth();
+		int GETarenaHeight();
+		int GETsquareSize();
+		int GETlengthOfWall();
+		int GETheightOfWall();
 }
 
 
