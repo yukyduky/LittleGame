@@ -123,7 +123,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 
 	float speed = 180;
 	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
+	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 0.3f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 3;
 	float immolationDuration = 0.3;

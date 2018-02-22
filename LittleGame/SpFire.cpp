@@ -8,7 +8,7 @@ SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 	this->setState(SPELLSTATE::READY);
 
 	this->setCoolDown(1.3);
-	this->damage = 10;
+	this->damage = 100;
 	this->range = 100;
 }
 
@@ -52,18 +52,24 @@ void SpFire::update()
 
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY) {
-		target->setState(OBJECTSTATE::TYPE::DEAD);
-		Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
+	if (target->getType() == OBJECTTYPE::ENEMY &&
+		!(std::find(this->previouslyHit.begin(), this->previouslyHit.end(), target) != this->previouslyHit.end())) {
+		
+		static_cast<ActorObject*>(target)->dealDmg(this->damage);
+
+		this->previouslyHit.push_back(target);
 
 		this->hits--;
 		if (this->hits == 0)
 		{
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
+			this->previouslyHit.clear();
 		}
 	}
 
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
+		this->previouslyHit.clear();
 	}
 }

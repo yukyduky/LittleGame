@@ -10,7 +10,7 @@
 #include <DirectXMath.h>
 
 
-ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
+ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
@@ -24,7 +24,8 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->transitionTime = 5.0f;
 	
 	// Balance
-	this->hp = 100;
+	this->hp = hp_in;
+	this->hpMAX = hp_in;
 }
 
 const size_t ActorObject::getID()
@@ -360,11 +361,30 @@ void ActorObject::decCD()
 void ActorObject::dealDmg(float dmg)
 {
 	this->hp -= dmg;
+	
+	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+
+		this->GETgraphicsComponent()->updateColor(vColor(
+			this->GEThp() / this->GEThpMAX(),
+			0.0f,
+			0.0f,
+			colorHolder.a)
+		);
+	}
+
 	if (this->hp <= 0) {
 		this->hp = 0;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
-		Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
+		if (this->getType() == OBJECTTYPE::TYPE::ENEMY) {
+			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
+		}
+
+		// If the player much did dieded, create globalMessage 'PLAYERDIED'
+		else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 	}
 }
 

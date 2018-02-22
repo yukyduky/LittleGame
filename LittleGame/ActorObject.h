@@ -35,6 +35,7 @@ protected:
 	//Current spell that wil be cast by fireAbilityX
 	Spell* selectedSpell = nullptr;
 	float hp = 0;
+	float hpMAX = 0;
 	float energy = 0;
 
 	//Varible to be changed by Spells
@@ -52,7 +53,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType);
+	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
 	virtual ~ActorObject() {}
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
@@ -61,6 +62,7 @@ public:
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void setSpeed(float speed);
 	virtual float GEThp() { return this->hp; }
+	virtual float GEThpMAX() { return this->hpMAX; }
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();

@@ -5,6 +5,9 @@
 #include "Locator.h"
 #include "ActorObject.h"
 #include "GamePlayState.h"
+#include "BlockComponent.h"
+#include "GraphicsComponent.h"
+#include <algorithm>
 
 
 //Template for when glyphs become relevant

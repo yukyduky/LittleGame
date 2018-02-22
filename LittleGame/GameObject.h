@@ -20,6 +20,7 @@ namespace OBJECTTYPE {
 
 class Component;
 class PhysicsComponent;
+class BlockComponent;
 
 using namespace DirectX;
 
@@ -46,6 +47,7 @@ private:
 protected:
 	std::list<Component*> components;
 	PhysicsComponent* physicsComponent = nullptr;
+	BlockComponent* graphicsComponent = nullptr;
 
 	const size_t ID;
 	XMFLOAT3 pos;
@@ -97,6 +99,9 @@ public:
 
 	void SETphysicsComponent(PhysicsComponent* physicsComponent_in) { this->physicsComponent = physicsComponent_in; }
 	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }
+
+	void SETgraphicsComponent(BlockComponent* graphicsComponent_in) { this->graphicsComponent = graphicsComponent_in; }
+	BlockComponent* GETgraphicsComponent() { return this->graphicsComponent; }
 };
 
 #endif // !GAMEOBJECT_H
