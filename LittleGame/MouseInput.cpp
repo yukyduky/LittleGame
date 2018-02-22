@@ -42,8 +42,8 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 	//(0,wY)-----(wX,wY)
 
 
-	this->mousePoint.x = this->mPoint.x;
-	this->mousePoint.y = this->mPoint.y;
+	this->mousePoint.x = static_cast<float>(this->mPoint.x);
+	this->mousePoint.y = static_cast<float>(this->mPoint.y);
 	
 	size_t wWid = Locator::getD3D()->GETwWidth();
 	size_t wHei = Locator::getD3D()->GETwHeight();

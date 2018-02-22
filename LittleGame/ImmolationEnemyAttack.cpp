@@ -43,8 +43,6 @@ void ImmolationEnemyAttack::cleanUp()
 }
 void ImmolationEnemyAttack::attack()
 {
-	char msgbuf[20];
-
 	// Only coded to work against 1 player atm!
 	(*this->players)[0]->dealDmg(this->attackDamage);
 

@@ -31,8 +31,8 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 	
 	// Get world matrix
 	//this->rawMatrixData.world = &graphics->getWorld();
+	this->rawMatrixData.world = graphics->getWorld();
 
-	XMStoreFloat4x4(&this->rawMatrixData.world, graphics->getWorld());
 	// Calculate matrices and convert to XMFLOAT4x4
 
 	this->packageMatrices();
@@ -78,7 +78,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 {
 	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
 
-	this->lightPassData.nrOfLights = size;
+	this->lightPassData.nrOfLights = static_cast<float>(size);
 
 	Locator::getD3D()->mapConstantBuffer(&this->cLightPassDataBuffer, &this->lightPassData, sizeof(LightPassData));
 	Locator::getD3D()->setConstantBuffer(this->cLightPassDataBuffer, SHADER::PIXEL, 0, 1);

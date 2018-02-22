@@ -24,8 +24,8 @@ private:
 	//Sound object that will play the sound
 	sf::Sound currentSound;
 
-	size_t soundVolume = 0;
-	size_t musicVolume = 0;
+	float soundVolume = 0.0f;
+	float musicVolume = 0.0f;
 
 	// What MUSICSTATE the game is in, declared as LEVEL1 in current version
 	size_t currState = 0;
@@ -49,9 +49,9 @@ public:
 	void stopSound();
 	void pause(MUSIC::NAME name);
 	void pause(SOUND::NAME name);
-	void adjustMaster(size_t volume);
-	void adjustMusic(size_t volume);
-	void adjustEffects(size_t volume);
+	void adjustMaster(float volume);
+	void adjustMusic(float volume);
+	void adjustEffects(float volume);
 
 	void setRepeatMusic(bool repeat);
 

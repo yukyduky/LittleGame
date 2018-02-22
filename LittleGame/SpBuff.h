@@ -26,7 +26,7 @@ private:
 	// Damge of skill to be applied on collision
 	float damage = 0.0f;
 	// Travel-range of spell
-	int range = 0.0f;
+	float range = 0.0f;
 	// If the efect is active
 	bool active;
 	// value to increase to make the player float

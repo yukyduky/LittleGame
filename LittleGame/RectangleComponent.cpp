@@ -97,7 +97,7 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 void RectangleComponent::update()
 {
 	OBJECTSTATE::TYPE state = this->head->getState();
-	double dt = Locator::getGameTime()->getDeltaTime();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 	switch (state)	
 	{
@@ -166,7 +166,7 @@ size_t& RectangleComponent::GETnumIndices()
 	return this->numIndices;
 }
 
-XMMATRIX& RectangleComponent::getWorld()
+DirectX::XMFLOAT4X4& RectangleComponent::getWorld()
 {
 	return this->head->getWorld();
 }

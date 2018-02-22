@@ -103,7 +103,7 @@ size_t& LineComponent::GETnumIndices()
 	return this->numIndices;
 }
 
-XMMATRIX& LineComponent::getWorld()
+DirectX::XMFLOAT4X4& LineComponent::getWorld()
 {
 	return this->head->getWorld();
 }

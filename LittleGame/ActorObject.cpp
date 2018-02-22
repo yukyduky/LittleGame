@@ -65,8 +65,8 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-	for (int i = 0; i < this->spells.size(); i++) {
-		delete this->spells[i];
+	for (auto &i : this->spells) {
+		delete i;
 	}
 	this->spells.clear();
 	// Cleanup all the components
@@ -79,8 +79,8 @@ void ActorObject::cleanUp()
 
 void ActorObject::update()
 {
-	float gravity = -9.82 * 4;
-	double dt = Locator::getGameTime()->getDeltaTime();
+	float gravity = -9.82f * 4.0f;
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 	switch (this->state)
 	{
@@ -112,7 +112,7 @@ void ActorObject::move()
 	//Create the new objects we will need for the calculations.
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
-	float deltaTime = Locator::getGameTime()->getDeltaTime();
+	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	XMFLOAT3 actorPos = this->GETPosition();
 	XMFLOAT3 actorVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = actorPos;
@@ -151,7 +151,7 @@ void ActorObject::move()
 void ActorObject::moveUp()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z += actorVelocity.z * dt;
@@ -168,7 +168,7 @@ void ActorObject::moveUp()
 void ActorObject::moveLeft()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x -= actorVelocity.x * dt;
@@ -184,7 +184,7 @@ void ActorObject::moveLeft()
 void ActorObject::moveDown()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z -= actorVelocity.z * dt;
@@ -200,7 +200,7 @@ void ActorObject::moveDown()
 void ActorObject::moveRight()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x += actorVelocity.x * dt;

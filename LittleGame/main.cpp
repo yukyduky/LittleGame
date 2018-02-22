@@ -1,3 +1,5 @@
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 #include <Windows.h>
 #include "GameManager.h"
 #include "Locator.h"
@@ -14,8 +16,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
+#ifdef _DEBUG
 	_CrtMemState s1;
 	_CrtMemCheckpoint(&s1);
+#endif
 	// 7295 addComponent (AIComponent)
 	// 258, 365, 380, 381 something in audiomanager
 	// 1936 something with the quadtree initialization
@@ -65,7 +69,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//_CrtDumpMemoryLeaks();
 	//_CrtMemState s2, s3;
 	//_CrtMemCheckpoint(&s2);
+#ifdef _DEBUG
 	_CrtMemDumpAllObjectsSince(&s1);
+#endif
 	/*if (_CrtMemDifference(&s3, &s1, &s2)) {
 		_CrtMemDumpStatistics(&s3);
 	}*/

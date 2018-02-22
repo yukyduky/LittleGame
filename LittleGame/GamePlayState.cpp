@@ -111,10 +111,10 @@ void GamePlayState::checkCollisions() {
 
 void GamePlayState::init() {
 	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
 	this->rio.initialize(this->camera, this->pointLights);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -165,8 +165,8 @@ void GamePlayState::cleanUp()
 	}
 	this->noCollisionDynamicObjects.clear();
 
-	for (int i = 0; i < this->playerInput.size(); i++) {
-		this->playerInput[i] = nullptr;
+	for (auto &i : this->playerInput) {
+		i = nullptr;
 	}
 
 	this->quadTree.cleanup();
@@ -220,7 +220,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 void GamePlayState::update(GameManager * gm)
 {	
 
-	this->counter += Locator::getGameTime()->getDeltaTime();
+	this->counter += static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	Index index;
 	//Make the next floor tile fall if the time is right.	
 	if (this->counter > this->fallData.time) {
@@ -234,10 +234,11 @@ void GamePlayState::update(GameManager * gm)
 					index.y = this->fallData.pattern[0].y;
 					this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
 					this->fallData.pattern.erase(this->fallData.pattern.begin());
-					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+					OBJECTSTATE::TYPE state = OBJECTSTATE::TYPE::TFALLING;
+					this->lm.changeTileStateFromIndex(index.x, index.y, state, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
 				}
 			}
-			this->counter = 0;
+			this->counter = 0.0f;
 		}
 		else {
 			//Recover a floor tile if the time is right
@@ -246,10 +247,11 @@ void GamePlayState::update(GameManager * gm)
 					index.x = this->fallData.recoverPattern[0].x;
 					index.y = this->fallData.recoverPattern[0].y;
 					this->fallData.recoverPattern.erase(this->fallData.recoverPattern.begin());
-					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::RECOVER, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
+					OBJECTSTATE::TYPE state = OBJECTSTATE::TYPE::RECOVER;
+					this->lm.changeTileStateFromIndex(index.x, index.y, state, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
 				}
 			}
-			this->counter = 0;
+			this->counter = 0.0f;
 		}
 	}
 	//Check if the player is on a active floor tile or if he fell of the map.

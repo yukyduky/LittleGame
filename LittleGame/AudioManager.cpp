@@ -133,24 +133,24 @@ void AudioManager::pause(SOUND::NAME name)
 {
 }
 
-void AudioManager::adjustMaster(size_t volume)
+void AudioManager::adjustMaster(float volume)
 {
 	this->adjustEffects(volume);
 
 	this->adjustMusic(volume);
 }
 
-void AudioManager::adjustMusic(size_t volume)
+void AudioManager::adjustMusic(float volume)
 {
 	for (size_t i = 0; i < MUSICSTATE::SIZE; i++)
 	{
-		this->currentMusic[i].setVolume(this->musicVolume);
+		this->currentMusic[i].setVolume(volume);
 	}
 }
 
-void AudioManager::adjustEffects(size_t volume)
+void AudioManager::adjustEffects(float volume)
 {
-	this->currentSound.setVolume(this->soundVolume);
+	this->currentSound.setVolume(volume);
 }
 
 void AudioManager::setRepeatMusic(bool repeat)
@@ -160,25 +160,5 @@ void AudioManager::setRepeatMusic(bool repeat)
 
 void AudioManager::cleanUp()
 {
-	this->stopAll();
-	
-	for (int i = 0; i < this->sounds.size(); i++) {
-		this->sounds[i].~SoundBuffer();
-	}
-	
-	
-	for (int i = 0; i < this->musicFilenames.size(); i++) {
-		this->musicFilenames[i].clear();
-	}
-	
-	
-	for (int i = 0; i < this->soundQueue.size(); i++) {
-		this->soundQueue[i].~Sound();
-	}
-	
-	
-	for (int i = 0; i < this->currentMusic.size(); i++) {
-		this->currentMusic[i].~Music();
-	}
-	
+	this->stopAll();	
 }

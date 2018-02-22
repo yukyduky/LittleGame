@@ -26,7 +26,7 @@ private:
 	// Damge of skill to be applied on collision
 	float damage = 0.0f;
 	// Travel-range of spell
-	int range = 0;
+	float range = 0.0f;
 
 	int hits = 0;
 };

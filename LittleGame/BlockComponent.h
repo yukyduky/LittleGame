@@ -1,6 +1,8 @@
 #pragma once
 #ifndef BLOCKCOMPONENT_H_
 #define BLOCKCOMPONENT_H_
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 
 #include "GraphicsComponent.h"
 #include <vector>
@@ -46,7 +48,7 @@ public:
 	virtual size_t& GETstride();
 	virtual size_t& GEToffset();
 	virtual size_t& GETnumIndices();
-	virtual XMMATRIX& getWorld();
+	virtual XMFLOAT4X4& getWorld();
 
 
 	/*--------<INFORMATION>--------

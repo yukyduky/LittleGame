@@ -27,7 +27,7 @@
 class Command;
 class InputComponent;
 
-//(Size of cube, color in XMFLOAT4, travelSpeed, range(tiem alive), if it sould spinn)
+//(Size of cube, color in XMFLOAT4, travelSpeed, range(time alive), if it should spin)
 struct ProjProp {
 	float size;
 	XMFLOAT4 color;
@@ -71,7 +71,7 @@ private:
 	
 	//Variables for falling floor
 	FloorFallData fallData;
-	double counter = 0;
+	float counter = 0.0f;
 
 	//All objects that wants to be renederd
 	std::list<GraphicsComponent*> graphics;

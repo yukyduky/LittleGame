@@ -13,7 +13,7 @@ Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, X
 	this->speed = speed;
 	this->spinn = spinn;
 	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
-	this->rangeCoutner = 0;
+	this->rangeCounter = 0;
 }
 
 Projectile::~Projectile()
@@ -53,18 +53,18 @@ void Projectile::update()
 		i->update();
 	}
 
-	float dt = Locator::getGameTime()->getDeltaTime();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	this->pos.x += this->velocity.x * dt;
 	// Projectiles dosnt move in Y
 	this->pos.z += this->velocity.z * dt;
 	this->setPosition(pos);
 	if (this->spinn)
 	{
-		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->getDirection(), this->rangeCoutner));
+		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->getDirection(), static_cast<float>(this->rangeCounter)));
 	}
 
-	this->rangeCoutner++;
-	if (this->rangeCoutner >= this->range && this->range != -1)
+	this->rangeCounter++;
+	if (this->rangeCounter >= this->range && this->range != -1.0f)
 	{
 		this->setState(OBJECTSTATE::TYPE::DEAD);
 	}
