@@ -21,8 +21,6 @@ public:
 	void collision(GameObject* target, Projectile* proj);
 	void update();
 private:
-	std::list<GameObject*> previouslyHit;
-
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
 	// Damge of skill to be applied on collision

@@ -388,6 +388,24 @@ void ActorObject::dealDmg(float dmg)
 	}
 }
 
+bool ActorObject::useEnergy(float energyUse) {
+	bool returnValue = false;
+
+	if (energyUse <= this->energy) {
+		this->energy -= energyUse;
+		returnValue = true;
+	}
+
+	return returnValue;
+}
+
+void ActorObject::addEnergy(float energyGain) {
+	this->energy += energyGain;
+
+	if (this->energy > this->energyMAX)
+		this->energy = this->energyMAX;
+}
+
 void ActorObject::addSpell(Spell * spell)
 {
 	this->spells.push_back(spell);

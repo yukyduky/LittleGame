@@ -50,6 +50,8 @@ void SpAutoAttack::update()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
+		this->getPlayer()->addEnergy(5);
+
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
 		proj->setState(OBJECTSTATE::TYPE::DEAD);

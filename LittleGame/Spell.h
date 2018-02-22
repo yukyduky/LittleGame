@@ -60,6 +60,8 @@ public:
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(float input) { this->coolDown = input; };
 	float getCoolDown() { return this->coolDown; };
+	void setCost(float input) { this->cost = input; }
+	float getCost() { return this->cost; }
 
 	// TSC = TimeSinceCast
 	float getTSC() { return this->timeSinceCast; };
@@ -75,7 +77,7 @@ private:
 	float coolDown = 0.0f;
 	float timeSinceCast = 0.0f;
 	// EnergyCost
-	size_t cost = 0;
+	float cost = 0;
 };
 
 

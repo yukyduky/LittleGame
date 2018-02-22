@@ -26,6 +26,9 @@ public:
 	void setRange(float range) { this->range = range; }
 
 	Spell* getSpell() ;
+
+	// Mainly for FIRE SPELL, but can be used by all projectiles
+	std::list<GameObject*>* getPreviouslyHitList() { return &this->previouslyHit; }
 private:
 	// traveldirection of the projectile
 	XMFLOAT3 direction;
@@ -36,8 +39,10 @@ private:
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel
-	float range = 0.0f;
+	int range = 0;
 	int rangeCounter = 0;
+	
+	std::list<GameObject*> previouslyHit;
 };
 
 

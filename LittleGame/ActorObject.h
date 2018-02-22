@@ -36,7 +36,9 @@ protected:
 	Spell* selectedSpell = nullptr;
 	float hp = 0;
 	float hpMAX = 0;
-	float energy = 0;
+
+	float energy = 100;
+	float energyMAX = 100;
 
 	//Varible to be changed by Spells
 	float speed = 0;
@@ -105,6 +107,13 @@ public:
 	void decCD();	//To be implemented into actors update from another branch
 	// Deals dmg to the Actors Hp
 	void dealDmg(float dmg);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Depletes the players energy by a certain amount.
+	2. NOTE: Should the function return true, then the energy HAS BEEN DEPLETED.
+	*/
+	bool useEnergy(float energyUse);
+
+	void addEnergy(float energyGain);
 	
 	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);
