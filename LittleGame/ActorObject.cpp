@@ -373,8 +373,8 @@ void ActorObject::dealDmg(float dmg)
 		);
 	}
 
-	if (this->hp <= 0) {
-		this->hp = 0;
+	if (this->hp <= 0.0f) {
+		this->hp = 0.0f;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
 		if (this->getType() == OBJECTTYPE::TYPE::ENEMY) {
