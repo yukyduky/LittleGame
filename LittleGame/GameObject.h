@@ -86,11 +86,11 @@ public:
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
-	XMMATRIX& getWorld();
-	void SETworldMatrix(XMMATRIX wMatrix);
-	void SETtranslationMatrix(XMMATRIX translationM);
-	void SETscaleMatrix(XMMATRIX scaleM);
-	void SETrotationMatrix(XMMATRIX rotationM);
+	XMFLOAT4X4& getWorld();
+	void SETworldMatrix(XMMATRIX& wMatrix);
+	void SETtranslationMatrix(XMMATRIX& translationM);
+	void SETscaleMatrix(XMMATRIX& scaleM);
+	void SETrotationMatrix(XMMATRIX& rotationM);
 	void updateWorldMatrix();
 	XMMATRIX getRotationMatrix();
 

@@ -58,11 +58,11 @@ public:
 	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
-	void setCoolDown(double input) { this->coolDown = input; };
+	void setCoolDown(float input) { this->coolDown = input; };
 	float getCoolDown() { return this->coolDown; };
 
 	// TSC = TimeSinceCast
-	size_t getTSC() { return this->timeSinceCast; };
+	float getTSC() { return this->timeSinceCast; };
 
 private:
 	//Array of glyphs
@@ -72,8 +72,8 @@ private:
 	NAME name;
 	ActorObject * player = nullptr;
 
-	double coolDown = 0.0f;
-	double timeSinceCast = 0.0f;
+	float coolDown = 0.0f;
+	float timeSinceCast = 0.0f;
 	// EnergyCost
 	size_t cost = 0;
 };

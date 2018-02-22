@@ -308,7 +308,7 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	this->cameraUpDir = { 0, 1, 0 };
 	DirectX::XMVECTOR cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
 
-	this->angle = 0.45 * DirectX::XM_PI;
+	this->angle = 0.45f * DirectX::XM_PI;
 	this->nearPlane = 0.5;
 	this->farPlane = 2000.0; //200
 
@@ -323,7 +323,7 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	// Initiate the projection matrix
 	DirectX::XMMATRIX proj = DirectX::XMMatrixPerspectiveFovLH(
 		(this->angle),
-		(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
+		static_cast<float>(Locator::getD3D()->GETwWidth() / Locator::getD3D()->GETwHeight()),
 		this->nearPlane,
 		this->farPlane
 	);

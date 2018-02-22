@@ -68,7 +68,7 @@ void EnemyManager::cleanLevel()
 	// Per wave
 	for (auto &currentWave : this->waves) {
 
-		for (int i = 0; i < currentWave->enemies.size(); i++) {
+		for (size_t i = 0; i < currentWave->enemies.size(); i++) {
 			currentWave->enemies[i]->cleanUp();
 			delete currentWave->enemies[i];
 		}
@@ -126,7 +126,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 0.3f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 3;
-	float immolationDuration = 0.3;
+	float immolationDuration = 0.3f;
 	float immolationRange = 80;
 	
 	// OBJECT

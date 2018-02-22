@@ -23,7 +23,7 @@ public:
 	void setDirection(XMVECTOR dir);
 	XMVECTOR getDirection();
 	void setSpell(Spell* spell) { this->spell = spell; }
-	void setRange(int range) { this->range = range; }
+	void setRange(float range) { this->range = range; }
 
 	Spell* getSpell() ;
 private:
@@ -36,8 +36,8 @@ private:
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel
-	int range = 0;
-	int rangeCoutner = 0;
+	float range = 0.0f;
+	int rangeCounter = 0;
 };
 
 

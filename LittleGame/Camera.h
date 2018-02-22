@@ -14,11 +14,11 @@
 
 class Camera {
 private:
-	float			cameraMoveSpeed = 2.0;
-	float			cameraRotateSpeed = 0.02;
-	float			angle = 0;
-	float			nearPlane = 0;
-	float			farPlane = 0;
+	float			cameraMoveSpeed = 2.0f;
+	float			cameraRotateSpeed = 0.02f;
+	float			angle = 0.0f;
+	float			nearPlane = 0.0f;
+	float			farPlane = 0.0f;
 
 	DirectX::XMFLOAT3 cameraStartPos;
 	DirectX::XMFLOAT3 cameraStartFacingDir;

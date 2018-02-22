@@ -64,8 +64,9 @@ void StateManager::render(GameManager* gm)
 
 void StateManager::cleanUp()
 {	
-	for (int i = 0; i < sStates.size(); i++) {
-		sStates[i]->cleanUp();
+	for (auto &i : sStates) {
+		i->cleanUp();
 	}
+
 	sStates.clear();
 }

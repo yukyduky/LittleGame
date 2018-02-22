@@ -71,22 +71,23 @@ void ControllerComponent::receive(GameObject & obj, Message msg)
 
 void ControllerComponent::cleanUp()
 {
-	for (int i = 0; i < this->keyboardCommandMap.size(); i++) {
+	for (size_t i = 0; i < this->keyboardCommandMap.size(); i++) {
 		this->keyboardCommandMap[i].command = nullptr;
 	}
 	this->keyboardCommandMap.clear();
-	for (int i = 0; i < this->mouseCommandMap.size(); i++) {
+	for (size_t i = 0; i < this->mouseCommandMap.size(); i++) {
 		this->mouseCommandMap[i].command = nullptr;
 	}
 	this->mouseCommandMap.clear();
-	for (int i = 0; i < this->controllerCommandMap.size(); i++) {
+	for (size_t i = 0; i < this->controllerCommandMap.size(); i++) {
 		this->controllerCommandMap[i].command = nullptr;
 	}
+
 	this->controllerCommandMap.clear();
 	this->pHead = nullptr;
 
-	for (int i = 0; i < this->commandQueue.size(); i++) {
-		delete this->commandQueue[i];
+	for (auto &i : this->commandQueue) {
+		delete i;
 	}
 	this->commandQueue.clear();
 
@@ -138,14 +139,14 @@ void ControllerComponent::generateCommands()
 		// Check if either LSHOULDER or RSHOULDER was triggered
 		if (nextState.Gamepad.bLeftTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
 			commandQueue.push_back(this->controllerCommandMap[CONTROLLER::LSHOULDER].command);
-			this->trigLValue = nextState.Gamepad.bLeftTrigger / 255;
+			this->trigLValue = nextState.Gamepad.bLeftTrigger / 255.0f;
 		}
 		else {
 			this->trigLValue = 0.0f;
 		}
 		if (nextState.Gamepad.bRightTrigger > XINPUT_GAMEPAD_TRIGGER_THRESHOLD) {
 			commandQueue.push_back(this->controllerCommandMap[CONTROLLER::RSHOULDER].command);
-			this->trigRValue = nextState.Gamepad.bRightTrigger / 255;
+			this->trigRValue = nextState.Gamepad.bRightTrigger / 255.0f;
 		}
 		else {
 			this->trigRValue = 0.0f;
@@ -155,7 +156,7 @@ void ControllerComponent::generateCommands()
 	}
 }
 
-void ControllerComponent::vibrate(size_t left, size_t right)
+void ControllerComponent::vibrate(unsigned short left, unsigned short right)
 {
 	// Create a Vibraton State
 	XINPUT_VIBRATION vib;

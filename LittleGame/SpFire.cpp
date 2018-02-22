@@ -7,7 +7,7 @@ SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCoolDown(1.3);
+	this->setCoolDown(1.3f);
 	this->damage = 100;
 	this->range = 100;
 }
@@ -25,7 +25,7 @@ bool SpFire::castSpell()
 	}
 	else
 	{
-		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, true);
+		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500.0f, this->range, true);
 		this->spawnProj(props);
 
 		Locator::getAudioManager()->play(SOUND::NAME::BEEP4);

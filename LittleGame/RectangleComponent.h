@@ -2,6 +2,9 @@
 #ifndef RECTANGLECOMPONENT_H_
 #define RECTANGLECOMPONENT_H_
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include "GraphicsComponent.h"
 #include <Windows.h>
 #include <array>
@@ -19,8 +22,8 @@ private:
 	GameObject* head = nullptr;
 	XMFLOAT3 points[4];
 	XMFLOAT3 normal;
-	double counter = 0;
-	double transitionTime = 0;
+	float counter = 0;
+	float transitionTime = 0;
 	/*--------<INFORMATION>--------
 	1. Creates a rectangle with points ranging from -1.0 to 1.0 in x and z dimensions.
 	2. All vertices is in modelspace with origin in the center of the rectangle.
@@ -58,7 +61,7 @@ public:
 
 	virtual size_t& GETnumIndices();
 
-	virtual XMMATRIX& getWorld();
+	virtual XMFLOAT4X4& getWorld();
 
 	/*--------<INFORMATION>--------
 	1. Returns the color of the rectangle.

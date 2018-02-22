@@ -151,7 +151,7 @@ void InputComponent::init()
 	mapKeys();
 }
 
-void InputComponent::vibrate(size_t left, size_t right)
+void InputComponent::vibrate(unsigned short left, unsigned short right)
 {
 }
 

@@ -52,6 +52,8 @@ void SpBuff::update()
 {
 	if (this->active)
 	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
 		if (this->getTSC() > this->duration)
 		{
 			this->getPlayer()->setSpeed(1.0f);
@@ -63,7 +65,7 @@ void SpBuff::update()
 		}
 		else
 		{
-			this->floatingValue += 5.0f * Locator::getGameTime()->getDeltaTime();
+			this->floatingValue += 5.0f * dt;
 			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
 
 			this->getPlayer()->setPositionY(parameter);

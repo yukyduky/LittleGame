@@ -18,7 +18,8 @@ void Spell::updateCD()
 {
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
-		this->timeSinceCast += Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+		this->timeSinceCast += dt;
 		if (this->timeSinceCast >= this->coolDown)
 		{
 			this->state = SPELLSTATE::READY;

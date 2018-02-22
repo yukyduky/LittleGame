@@ -18,9 +18,9 @@ void AbilityComponent::receive(GameObject & obj, Message msg)
 
 void AbilityComponent::update()
 {
-	this->range -= Locator::getGameTime()->getDeltaTime();
+	this->range -= static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
-	if (this->range < 0)
+	if (this->range < 0.0f)
 	{
 		this->pHead->setState(OBJECTSTATE::TYPE::DEAD);
 	}

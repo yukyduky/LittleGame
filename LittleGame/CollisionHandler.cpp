@@ -203,7 +203,7 @@ void CollisionHandler::collisionPlayerPlayer() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		this->centerToCenterVector.y * this->divisionFactor,
@@ -232,7 +232,7 @@ void CollisionHandler::collisionPlayerEnemy() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
@@ -272,7 +272,7 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
@@ -309,7 +309,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector1 = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
@@ -350,7 +350,7 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
