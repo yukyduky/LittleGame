@@ -32,7 +32,7 @@ bool SpFire::castSpell()
 
 		this->setState(SPELLSTATE::COOLDOWN);
 
-		this->hits = 3;
+		this->hits = 6;
 
 	}
 
