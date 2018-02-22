@@ -80,7 +80,7 @@ void D3D::createSwapChain()
 }
 
 void D3D::createVertexBuffer(ID3D11Buffer ** gVertexBuffer, void* v, size_t& stride, size_t& offset, size_t numVertices)
-{
+{	
 	// Describe the vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	memset(&vertexBufferDesc, 0, sizeof(D3D11_BUFFER_DESC));
@@ -221,6 +221,121 @@ ID3D11DeviceContext *& D3D::GETgDevCon()
 IDXGISwapChain *& D3D::GETswapChain()
 {
 	return this->gSwapChain;
+}
+
+void D3D::GetFrame()
+{
+	HDC hdcScreen;
+	HDC hdcWindow;
+	HDC hdcMemDC = NULL;
+	HBITMAP hbmScreen = NULL;
+	BITMAP bmpScreen;
+
+	// Retrieve the handle to a display device context for the client 
+	// area of the window. 
+	hdcScreen = GetDC(NULL);
+	hdcWindow = GetDC(this->hwnd);
+
+	// Create a compatible DC which is used in a BitBlt from the window DC
+	hdcMemDC = CreateCompatibleDC(hdcWindow);
+
+	
+
+	// Get the client area for size calculation
+	RECT rcClient;
+	GetClientRect(this->hwnd, &rcClient);
+
+	//This is the best stretch mode
+	SetStretchBltMode(hdcWindow, HALFTONE);
+
+	//The source DC is the entire screen and the destination DC is the current window (HWND)
+	StretchBlt(hdcWindow,
+		0, 0,
+		rcClient.right, rcClient.bottom,
+		hdcScreen,
+		0, 0,
+		GetSystemMetrics(SM_CXSCREEN),
+		GetSystemMetrics(SM_CYSCREEN),
+		SRCCOPY);
+
+	// Create a compatible bitmap from the Window DC
+	hbmScreen = CreateCompatibleBitmap(hdcWindow, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top);
+
+	
+
+	// Select the compatible bitmap into the compatible memory DC.
+	SelectObject(hdcMemDC, hbmScreen);
+
+	// Bit block transfer into our compatible memory DC.
+	BitBlt(hdcMemDC,
+		0, 0,
+		rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
+		hdcWindow,
+		0, 0,
+		SRCCOPY);
+
+	// Get the BITMAP from the HBITMAP
+	GetObject(hbmScreen, sizeof(BITMAP), &bmpScreen);
+
+	BITMAPFILEHEADER   bmfHeader;
+	BITMAPINFOHEADER   bi;
+
+	bi.biSize = sizeof(BITMAPINFOHEADER);
+	bi.biWidth = bmpScreen.bmWidth;
+	bi.biHeight = bmpScreen.bmHeight;
+	bi.biPlanes = 1;
+	bi.biBitCount = 32;
+	bi.biCompression = BI_RGB;
+	bi.biSizeImage = 0;
+	bi.biXPelsPerMeter = 0;
+	bi.biYPelsPerMeter = 0;
+	bi.biClrUsed = 0;
+	bi.biClrImportant = 0;
+
+	DWORD dwBmpSize = ((bmpScreen.bmWidth * bi.biBitCount + 31) / 32) * 4 * bmpScreen.bmHeight; 
+
+	HANDLE hDIB = GlobalAlloc(GHND, dwBmpSize);
+	char *lpbitmap = (char *)GlobalLock(hDIB);
+
+	// Gets the "bits" from the bitmap and copies them into a buffer 
+	// which is pointed to by lpbitmap.
+	GetDIBits(hdcWindow, hbmScreen, 0,
+		(UINT)bmpScreen.bmHeight,
+		lpbitmap,
+		(BITMAPINFO *)&bi, DIB_RGB_COLORS);
+
+	// A file is created, this is where we will save the screen capture.
+	HANDLE hFile = CreateFile("include/screenSaved.bmp",
+		GENERIC_WRITE,
+		0,
+		NULL,
+		CREATE_ALWAYS,
+		FILE_ATTRIBUTE_NORMAL, NULL);
+
+	// Add the size of the headers to the size of the bitmap to get the total file size
+	DWORD dwSizeofDIB = dwBmpSize + sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+	//Offset to where the actual bitmap bits start.
+	bmfHeader.bfOffBits = (DWORD)sizeof(BITMAPFILEHEADER) + (DWORD)sizeof(BITMAPINFOHEADER);
+
+	//Size of the file
+	bmfHeader.bfSize = dwSizeofDIB;
+
+	//bfType must always be BM for Bitmaps
+	bmfHeader.bfType = 0x4D42; //BM   
+
+	DWORD dwBytesWritten = 0;
+	WriteFile(hFile, (LPSTR)&bmfHeader, sizeof(BITMAPFILEHEADER), &dwBytesWritten, NULL);
+	WriteFile(hFile, (LPSTR)&bi, sizeof(BITMAPINFOHEADER), &dwBytesWritten, NULL);
+	WriteFile(hFile, (LPSTR)lpbitmap, dwBmpSize, &dwBytesWritten, NULL);
+
+	//Unlock and Free the DIB from the heap
+	GlobalUnlock(hDIB);
+	GlobalFree(hDIB);
+
+	//Close the handle for the file that was created
+	CloseHandle(hFile);
+
 }
 
 LRESULT CALLBACK wndProc(HWND hwnd, size_t msg, WPARAM wParam, LPARAM lParam)

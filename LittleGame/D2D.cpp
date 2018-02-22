@@ -76,6 +76,17 @@ HRESULT D2D::CreateDeviceIndependentResources()
 
 		this->m_pTextFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	}
+	if (SUCCEEDED(hr))
+	{
+		// Create a DirectWrite text format object.
+		hr = CoCreateInstance(
+			CLSID_WICImagingFactory,
+			NULL,
+			CLSCTX_INPROC_SERVER,
+			IID_IWICImagingFactory,
+			(LPVOID*)&this->pIWICFactory
+		);
+	}
 
 	return hr;
 }
@@ -104,7 +115,73 @@ HRESULT D2D::CreateDeviceResources()
 		);
 
 		//Create the colorBrush for the grid in the background
-		this->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Cyan), &this->pGridColor);
+		this->m_pRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &this->pGridColor);
+
+
+		//Create a texture
+		IWICBitmapDecoder *pDecoder = nullptr;
+		IWICBitmapFrameDecode *pSource = nullptr;
+		IWICStream *pStream = nullptr;
+		IWICFormatConverter *pConverter = nullptr;
+		IWICBitmapScaler *pScaler = nullptr;
+
+		this->m_pRenderTarget->CreateBitmap(
+			size,
+			D2D1::BitmapProperties(
+				D2D1::PixelFormat(DXGI_FORMAT_UNKNOWN, D2D1_ALPHA_MODE_IGNORE),
+				size.width,
+				size.height),
+			&this->pBitmap
+			);
+
+		this->uri = L"include/screenSaved.bmp";
+		this->pIWICFactory->CreateDecoderFromFilename(
+			uri,
+			NULL,
+			GENERIC_READ,
+			WICDecodeMetadataCacheOnLoad,
+			&pDecoder
+		);
+		if (SUCCEEDED(hr))
+		{
+			// Create the initial frame.
+			hr = pDecoder->GetFrame(0, &pSource);
+		}
+		if (SUCCEEDED(hr))
+		{
+
+			// Convert the image format to 32bppPBGRA
+			// (DXGI_FORMAT_B8G8R8A8_UNORM + D2D1_ALPHA_MODE_PREMULTIPLIED).
+			hr = pIWICFactory->CreateFormatConverter(&pConverter);
+
+		}
+		if (SUCCEEDED(hr))
+		{
+			hr = pConverter->Initialize(
+				pSource,
+				GUID_WICPixelFormat32bppPBGRA,
+				WICBitmapDitherTypeNone,
+				NULL,
+				0.f,
+				WICBitmapPaletteTypeMedianCut
+			);
+		}
+		if (SUCCEEDED(hr))
+		{
+
+			// Create a Direct2D bitmap from the WIC bitmap.
+			hr = this->m_pRenderTarget->CreateBitmapFromWicBitmap(
+				pConverter,
+				NULL,
+				&this->pBitmap
+			);
+		}
+
+		SafeRelease(&pDecoder);
+		SafeRelease(&pSource);
+		SafeRelease(&pStream);
+		SafeRelease(&pConverter);
+		SafeRelease(&pScaler);
 	}
 
 	return hr;
@@ -130,30 +207,41 @@ HRESULT D2D::OnRender(std::vector<MenuObject*> objects)
 		this->m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
 		this->m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+		
+		D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
+
+		int width = static_cast<int>(rtSize.width);
+		int height = static_cast<int>(rtSize.height);
+
+		//Background picture
+		this->m_pRenderTarget->DrawBitmap(this->pBitmap,
+			D2D1::RectF(
+				0,
+				0,
+				width,
+				height
+			)
+		);
 
 		// Draw a grid background.
-			D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
 
-			int width = static_cast<int>(rtSize.width);
-			int height = static_cast<int>(rtSize.height);
-
-			for (int x = 0; x < width; x += 10)
+			for (int x = 0; x < width; x += 5)
 			{
 				m_pRenderTarget->DrawLine(
 					D2D1::Point2F(static_cast<FLOAT>(x), 0.0f),
 					D2D1::Point2F(static_cast<FLOAT>(x), rtSize.height),
 					this->pGridColor,
-					1.5f
+					2.5f
 				);
 			}
 
-			for (int y = 0; y < height; y += 10)
+			for (int y = 0; y < height; y += 5)
 			{
 				m_pRenderTarget->DrawLine(
 					D2D1::Point2F(0.0f, static_cast<FLOAT>(y)),
 					D2D1::Point2F(rtSize.width, static_cast<FLOAT>(y)),
 					this->pGridColor,
-					1.5f
+					2.5f
 				);
 			}
 
@@ -161,6 +249,8 @@ HRESULT D2D::OnRender(std::vector<MenuObject*> objects)
 		{
 			i->render();
 		}
+
+		
 
 		hr = m_pRenderTarget->EndDraw();
 	}

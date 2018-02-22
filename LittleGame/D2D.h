@@ -53,6 +53,12 @@ private:
 
 	//Background
 	ID2D1SolidColorBrush * pGridColor = nullptr;
+
+	IWICImagingFactory *pIWICFactory = nullptr;
+	PCWSTR uri = nullptr;
+	UINT destinationWidth;
+	UINT destinationHeight;
+	ID2D1Bitmap* pBitmap = nullptr;
 };
 
 

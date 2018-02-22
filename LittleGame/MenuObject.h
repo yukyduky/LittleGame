@@ -13,6 +13,7 @@
 #include <wincodec.h>
 #pragma comment(lib, "d2d1")
 #pragma comment(lib, "Dwrite")
+#pragma comment(lib, "Windowscodecs")
 
 //SafeRealse function from the D2D tutorial that might be usefull in other parts of the program
 template<class Interface>

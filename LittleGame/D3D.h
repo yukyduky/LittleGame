@@ -5,6 +5,8 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "ID3D.h"
+#include <dxgi1_2.h>
+#pragma comment(lib, "Dxgi")
 
 class D3D : public ID3D
 {
@@ -15,6 +17,8 @@ private:
 	HWND hwnd;
 	size_t wWidth;
 	size_t wHeight;
+
+	IDXGIOutputDuplication* pDeskDup;
 public:
 	virtual void initializeWindow(HINSTANCE hInstance, int ShowWnd, int width, int height, bool windowed);
 	virtual void createSwapChain();
@@ -33,6 +37,8 @@ public:
 	virtual ID3D11Device*& GETgDevice();
 	virtual ID3D11DeviceContext*& GETgDevCon();
 	virtual IDXGISwapChain*& GETswapChain();
+
+	virtual void GetFrame();
 };
 
 

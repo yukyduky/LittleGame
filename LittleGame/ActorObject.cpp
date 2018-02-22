@@ -298,6 +298,7 @@ void ActorObject::fireAbilityX()
 
 void ActorObject::pauseMenu()
 {
+	Locator::getD3D()->GetFrame();
 	StateManager::pushState(MenuState::getInstance());
 }
 
