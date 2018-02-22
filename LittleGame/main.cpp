@@ -6,26 +6,27 @@
 #include "ID3D.h"
 #include "D3D.h"
 
+#ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
+#endif
 
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+#ifdef _DEBUG
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
-#ifdef _DEBUG
 	_CrtMemState s1;
 	_CrtMemCheckpoint(&s1);
-#endif
 	// 7295 addComponent (AIComponent)
 	// 258, 365, 380, 381 something in audiomanager
 	// 1936 something with the quadtree initialization
 	// 6054 something with KeyboardInput
 	// 6063, 6074 something in KeyboardInput or InputComponent
-//	_CrtSetBreakAlloc(6114);
+	//	_CrtSetBreakAlloc(6114);
+#endif
 
 	ID3D* d3d = new D3D();
 	Locator::provide(d3d);
@@ -36,8 +37,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	GameManager gm;
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);
-	double deltaTime;
-	double timeLastFrame = 0;
+	double deltaTime = 0.0;
+	double timeLastFrame = 0.0;
 	int frames = 0;
 	char msgbuf[20];
 
@@ -57,7 +58,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		if (timeLastFrame > 1000.0) {
 			sprintf_s(msgbuf, "FPS: %d\n", frames);
 			frames = 0;
-			timeLastFrame = 0;
+			timeLastFrame = 0.0;
 			OutputDebugStringA(msgbuf);
 		}
 	}
@@ -66,14 +67,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	d3d->cleanup();
 	delete d3d;
 
-	//_CrtDumpMemoryLeaks();
-	//_CrtMemState s2, s3;
-	//_CrtMemCheckpoint(&s2);
 #ifdef _DEBUG
+	//_CrtDumpMemoryLeaks();
 	_CrtMemDumpAllObjectsSince(&s1);
 #endif
-	/*if (_CrtMemDifference(&s3, &s1, &s2)) {
-		_CrtMemDumpStatistics(&s3);
-	}*/
 	return 0;
 }

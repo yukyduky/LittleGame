@@ -28,12 +28,8 @@ void RenderInputOrganizer::packageMatrices() {
 
 void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
-	
 	// Get world matrix
-	//this->rawMatrixData.world = &graphics->getWorld();
 	this->rawMatrixData.world = graphics->getWorld();
-
-	// Calculate matrices and convert to XMFLOAT4x4
 
 	this->packageMatrices();
 
