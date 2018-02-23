@@ -454,6 +454,7 @@ CollisionHandler::CollisionHandler() {
 	this->collidable2 = nullptr;
 	this->boundingArea1 = nullptr;
 	this->boundingArea2 = nullptr;
+
 }
 
 CollisionHandler::~CollisionHandler() {

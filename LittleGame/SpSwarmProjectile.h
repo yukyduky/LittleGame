@@ -9,6 +9,7 @@ class SpSwarmProjectile : public Spell
 private:
 	float damage = -1;
 	int range = -1;
+	float seekSpeed = -1;
 
 public:
 	SpSwarmProjectile(EnemyObject* player, int range, int dmg, int aggroRange, double cooldown);
@@ -21,6 +22,10 @@ public:
 	// Function called by the projectile, spells collision should be handeld here
 	virtual void collision(GameObject* target, Projectile* proj);
 	virtual void update();
+
+	float getDamage();
+	float getRange();
+
 
 	
 };

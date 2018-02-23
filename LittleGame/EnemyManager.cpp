@@ -143,8 +143,7 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
 
 
-	float speed = 180;
-	XMFLOAT3 velocity(speed, speed, speed);
+	float velocity = 180;
 	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 3;
@@ -154,15 +153,16 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, speed, pos, velocity, 
+		ID, velocity, pos, velocity,
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
 
 	// SPELL (Needs to be before States)
-	Spell* attack = new SpSwarmProjectile(
+	Spell* spell = new SpSwarmProjectile(
 		enemyObject, projectileRange, immolationDamage, aggroRange, attackCooldown
 	);
+	enemyObject->addSpell(spell);	// NECESSARY
 	
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
@@ -216,8 +216,7 @@ EnemyObject* EnemyManager::createClusterer()
 		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
 
 
-	float speed = 180;
-	XMFLOAT3 velocity(speed, speed, speed);
+	float velocity = 180;
 	XMFLOAT4 color(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float projectileDamage = 1;
@@ -227,7 +226,7 @@ EnemyObject* EnemyManager::createClusterer()
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, speed, pos, velocity,
+		ID, velocity, pos, velocity,
 		pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);

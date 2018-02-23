@@ -4,7 +4,7 @@
 
 #include "EnemyState.h"
 #include "State.h"
-#include "Grid.h"
+//#include "Grid.h"
 
 class EnemyObject;
 

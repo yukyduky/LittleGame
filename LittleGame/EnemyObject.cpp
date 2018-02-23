@@ -27,7 +27,7 @@ void EnemyObject::updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos)
 
 
 
-EnemyObject::EnemyObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType)
+EnemyObject::EnemyObject(const size_t ID, float speed, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType)
 	: ActorObject(ID, speed, pos, velocity, pGPS, objectType)
 {
 	this->players = players;

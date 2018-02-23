@@ -42,34 +42,43 @@ void ArenaObject::update()
 		i->update();
 	}	
 
-	float gravity = -9.82;
-	double dt = Locator::getGameTime()->getDeltaTime();
-	
-	switch (this->state)
-	{
-	//State used to make a object fall and after the object reaches a set distance it turns "INVISIBLE"
-	case OBJECTSTATE::TYPE::FALLING:
-		this->velocity.y += gravity * dt * 4;
-		this->pos.y += this->velocity.y * dt;
-		if (this->pos.y < this->maxFallDepth) {
-			this->pos.y = this->maxFallDepth;
-			this->velocity.y = 0.0f;
-			this->state = OBJECTSTATE::TYPE::INVISIBLE;
-		}
-		this->updateWorldMatrix();
-		break;
-	//State used to restore the arena floor at the end of the stage.
-	case OBJECTSTATE::TYPE::RECOVER:
-		this->velocity.y += gravity * dt * 4;
-		this->pos.y -= this->velocity.y * dt;
-		if (this->pos.y > this->startPos.y) {
-			this->pos.y = this->startPos.y;
-			this->state = OBJECTSTATE::TYPE::RESETCOLOR;
-		}
-		this->updateWorldMatrix();
-		break;
-	default:
-		break;
-	}
+	//float gravity = -9.82;
+	//double dt = Locator::getGameTime()->getDeltaTime();
+	//
+	//switch (this->state)
+	//{
+	////State used to make a object fall and after the object reaches a set distance it turns "INVISIBLE"
+	//case OBJECTSTATE::TYPE::FALLING:
+
+	//	this->direction.x = 0;
+	//	this->direction.z = 0;
+	//	this->direction.y = -1;
+
+	//	this->velocity += gravity * dt * 4;
+
+
+	//	this->pos.y += this->velocity.y * dt;
+
+
+	//	if (this->pos.y < this->maxFallDepth) {
+	//		this->pos.y = this->maxFallDepth;
+	//		this->velocity.y = 0.0f;
+	//		this->state = OBJECTSTATE::TYPE::INVISIBLE;
+	//	}
+	//	this->updateWorldMatrix();
+	//	break;
+	////State used to restore the arena floor at the end of the stage.
+	//case OBJECTSTATE::TYPE::RECOVER:
+	//	this->velocity.y += gravity * dt * 4;
+	//	this->pos.y -= this->velocity.y * dt;
+	//	if (this->pos.y > this->startPos.y) {
+	//		this->pos.y = this->startPos.y;
+	//		this->state = OBJECTSTATE::TYPE::RESETCOLOR;
+	//	}
+	//	this->updateWorldMatrix();
+	//	break;
+	//default:
+	//	break;
+	//}
 
 }

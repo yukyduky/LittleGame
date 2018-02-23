@@ -1,4 +1,5 @@
 #include "EnemyAttackingState.h"
+#include "EnemyAttackComponent.h"
 #include "EnemyObject.h"
 
 

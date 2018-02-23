@@ -9,7 +9,6 @@ SpSwarmProjectile::SpSwarmProjectile(
 	this->damage = dmg;
 	this->aggroRange = aggroRange;
 	this->setCoolDown(1.0f);
-	player->addSpell(this);
 }
 SpSwarmProjectile::~SpSwarmProjectile()
 {
@@ -26,7 +25,8 @@ bool SpSwarmProjectile::castSpell()
 	else
 	{
 		ProjProp props(5, XMFLOAT4(1.0f, 1.0f, 0.5f, 0.1f), 150, this->range, false);
-		this->spawnProj(props);
+		Projectile* pProj = this->spawnProj(props);
+		pProj->setSeeking(this->seekSpeed, this->getPlayer());
 
 		Locator::getAudioManager()->play(SOUND::NAME::AHEM);
 
@@ -56,4 +56,14 @@ void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 void SpSwarmProjectile::update()
 {
 
+}
+
+float SpSwarmProjectile::getDamage()
+{
+	return this->damage;
+}
+
+float SpSwarmProjectile::getRange()
+{
+	return this->range;
 }

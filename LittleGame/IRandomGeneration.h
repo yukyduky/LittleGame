@@ -10,4 +10,4 @@ public:
 	virtual float GenerateFloat(float rangeStart, float rangeEnd) = 0;
 };
 
-#endif
+#endif 

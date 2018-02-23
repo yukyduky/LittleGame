@@ -49,7 +49,8 @@ protected:
 
 	const size_t ID;
 	XMFLOAT3 pos;
-	XMFLOAT3 velocity;
+	XMFLOAT3 direction;
+	float velocity;
 	OBJECTTYPE::TYPE type;
 	OBJECTSTATE::TYPE state;
 	double counter = 0;
@@ -80,8 +81,8 @@ public:
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
 	void setPositionY(float value) { this->pos.y = value; }
 	XMFLOAT3 GETPosition() const { return this->pos; }
-	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
-	XMFLOAT3 getVelocity() const { return this->velocity; }
+	void setVelocity(float velocity) { this->velocity = velocity; }
+	float getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
 	XMMATRIX& getWorld();

@@ -37,9 +37,6 @@ protected:
 	float hp = 0;
 	float energy = 0;
 
-	//Varible to be changed by Spells
-	float speed = 0;
-
 	//Used to calculate angle to fire
 	float rotation = 0;
 	XMFLOAT3 direction = { 0, 0, 0 };
@@ -53,7 +50,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType);
+	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType);
 	virtual ~ActorObject() {}
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();

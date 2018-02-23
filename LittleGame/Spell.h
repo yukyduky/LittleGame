@@ -5,7 +5,16 @@
 #include "Locator.h"
 #include "ActorObject.h"
 #include "GamePlayState.h"
+#include "BlockComponent.h"
+#include "GraphicsComponent.h"
+#include <algorithm>
 
+/* --- SPELLS
+1. All spells inherits from Spell
+2. The player will call for castSpell when using a spell
+3. Has the collision for all projectiels
+4. Inserting a glyph into a spell will switch spell when actor calls "switchSpell()"
+*/
 
 //Template for when glyphs become relevant
 enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
@@ -21,16 +30,10 @@ enum class NAME {
 	//Mobility
 	, DASH, BUFF,
 	
-	/// EnemySpells after this point
+	// EnemySpells after this point
 	ENEM_SWARM
 };
 
-/* --- SPELLS
-1. All spells inherits from Spell
-2. The player will call for castSpell when using a spell
-3. Has the collision for all projectiels
-4. Inserting a glyph into a spell will switch spell when actor calls "switchSpell()"
-*/
 class Spell
 {
 public:
