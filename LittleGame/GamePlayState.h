@@ -94,6 +94,9 @@ private:
 	bool recoveryMode;
 	int currentPatternNr;
 
+	//All spawnPositions that will be used in the EnemyHandler
+	enemySpawnPositions enemySpawnPos;
+
 
 	//All objects that wants to be renederd
 	std::list<GraphicsComponent*> graphics;

@@ -92,7 +92,7 @@ void ActorObject::update()
 		if (this->pos.y < -500.0f) {
 			this->pos.y = -500.0f;
 			this->velocity.y = 0.0f;
-			this->state = OBJECTSTATE::TYPE::INVISIBLE;
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 		}
 		this->updateWorldMatrix();
 		break;

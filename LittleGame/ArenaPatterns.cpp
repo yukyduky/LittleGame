@@ -392,17 +392,17 @@ void ArenaPatterns::createWallPattern(int nr, WallData& pattern) {
 
 	case 3: // 1/4 of each side is open.
 		for (int i = 0; i < 4; i++) {
-			randomT[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrVertical - 3);
-			randomB[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrVertical - 3);
-			randomL[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrHorizontal - 3);
-			randomR[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrHorizontal - 3);
+			randomT[i] = Locator::getRandomGenerator()->GenerateInt(3, pattern.nrHorizontal - 4);
+			randomB[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrHorizontal - 4);
+			randomL[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrVertical - 4);
+			randomR[i] = Locator::getRandomGenerator()->GenerateInt(2, pattern.nrVertical - 4);
 		}
 		for (int i = 0; i < pattern.nrVertical; i++) {
 			pattern.rowL[i] = SQUARETYPE::TYPE::WALL;
 			pattern.rowR[i] = SQUARETYPE::TYPE::WALL;
 		}
 		for (int i = 0; i < pattern.nrVertical; i++) {
-			for (int j = 0; j < 1; j++) {
+			for (int j = 0; j < 2; j++) {
 				if (randomL[j] == i || randomL[j] - 1 == i || randomL[j] + 1 == i) {
 					pattern.rowL[i] = SQUARETYPE::TYPE::SPAWN;
 				}
@@ -417,7 +417,7 @@ void ArenaPatterns::createWallPattern(int nr, WallData& pattern) {
 			pattern.rowB[i] = SQUARETYPE::TYPE::WALL;
 		}
 		for (int i = 0; i < pattern.nrHorizontal; i++) {
-			for (int j = 0; j < 1; j++) {
+			for (int j = 0; j < 2; j++) {
 				if (randomT[j] == i || randomT[j] - 1 == i || randomT[j] + 1 == i) {
 					pattern.rowT[i] = SQUARETYPE::TYPE::SPAWN;
 				}

@@ -108,7 +108,7 @@ void LevelManager::createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& co
 	graphics.push_back(rect);
 }
 
-void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
+void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, enemySpawnPositions& enemySpawnPos, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
 //	int nextID = this->nextID();
@@ -120,14 +120,15 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMFLOAT4 color(155.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
+	XMFLOAT2 spawnPos;
 	//XMFLOAT2 posIndex;
 	//XMFLOAT3 temp;
 
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
 	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
-	//int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
-	int caseNr = 3;
+	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
+	//int caseNr = 5;
 	this->arenaPatterns.createWallPattern(caseNr, wData);
 	
 	//Create pillars in the corners
@@ -147,9 +148,9 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	//Create left row of walls
 	for (int i = 1; i < wData.nrVertical - 1; i++)
 	{
+		currPos = XMFLOAT3(this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 		if (wData.rowL[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -159,15 +160,18 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 		else 
 		{
+			spawnPos.x = currPos.x;
+			spawnPos.y = currPos.z;
+			enemySpawnPos.west.push_back(spawnPos);
 			grid[0][i].type = SQUARETYPE::SPAWN;
 		}
 	}
 	//Create right row of walls
 	for (int i = 1; i < wData.nrVertical - 1; i++)
 	{
+		currPos = XMFLOAT3(this->arenaWidth - this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 		if (wData.rowR[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->arenaWidth - this->squareSize * 0.5f, this->wallHeight * 0.5f, this->squareSize * 0.5f + i * this->squareSize);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -177,15 +181,18 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 		else
 		{
+			spawnPos.x = currPos.x;
+			spawnPos.y = currPos.z;
+			enemySpawnPos.east.push_back(spawnPos);
 			grid[nrOfHorizontalSquares - 1][i].type = SQUARETYPE::SPAWN;
 		}
 	}
 	//Create top row of walls
 	for (int i = 1; i < wData.nrHorizontal - 1; i++)
 	{
+		currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->arenaDepth - this->squareSize * 0.5f);
 		if (wData.rowT[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->arenaDepth - this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -195,15 +202,18 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 		else
 		{
+			spawnPos.x = currPos.x;
+			spawnPos.y = currPos.z;
+			enemySpawnPos.north.push_back(spawnPos);
 			grid[i][nrOfVerticalSquares - 1].type = SQUARETYPE::SPAWN;
 		}
 	}
 	//Create bottom row of walls
 	for (int i = 1; i < wData.nrHorizontal - 1; i++)
 	{
+		currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->squareSize * 0.5f);
 		if (wData.rowB[i] == SQUARETYPE::WALL)
 		{
-			currPos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, this->wallHeight * 0.5f, this->squareSize * 0.5f);
 			vec = XMLoadFloat3(&currPos);
 			translationM = XMMatrixTranslationFromVector(vec);
 			worldM = scaleM * rotTB * translationM;
@@ -213,6 +223,9 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 		}
 		else
 		{
+			spawnPos.x = currPos.x;
+			spawnPos.y = currPos.z;
+			enemySpawnPos.south.push_back(spawnPos);
 			grid[i][0].type = SQUARETYPE::SPAWN;
 		}
 	}
@@ -275,7 +288,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 			std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects,
 			std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, 
 			std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, 
-			std::vector<FloorFallData>& hard)
+			std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos)
 {
 	this->pGPS = &pGPS;
 	this->squareSize = ARENADATA::GETsquareSize();
@@ -286,9 +299,9 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	this->tempID = ID;
 
 	//Create the grid for the level
-	grid.resize(width / this->squareSize);
+	grid.resize(this->arenaWidth / this->squareSize);
 	for (auto &i : grid) {
-		i.resize(depth / this->squareSize);
+		i.resize(this->arenaDepth / this->squareSize);
 		for (auto &k : i) {
 			k.type = SQUARETYPE::EMPTY;
 		}
@@ -303,7 +316,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	}*/
 	
 	// createLevelWalls needs to come first
-	this->createLevelWalls(staticPhysicsCount, grid, staticObjects, graphics);
+	this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
 	this->createFloor(grid, dynamicNoCollisionObjects, graphics);
 	this->createNeonFloorGrid(staticObjects, graphics);
 	this->setFallPattern(pattern);
@@ -374,7 +387,7 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 
 OBJECTSTATE::TYPE LevelManager::checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
 {
-	return grid[static_cast<size_t>(pos.x / ARENASQUARESIZE)][static_cast<size_t>(pos.z / ARENASQUARESIZE)].ptr->getState();
+	return grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].ptr->getState();
 }
 
 void LevelManager::clean() {

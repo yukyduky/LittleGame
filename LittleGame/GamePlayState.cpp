@@ -271,7 +271,7 @@ void GamePlayState::init() {
 	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -283,8 +283,8 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH * 0.5, ARENASQUARESIZE * 10, ARENAHEIGHT * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() * 0.5, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	// To be changed when Ollie has done the rework on camera
@@ -299,6 +299,7 @@ void GamePlayState::init() {
 	this->timeBetweenPatterns = 20.0;
 	this->stateTime = 5.0;
 	this->recoveryMode = false;
+	this->counter = 0.0;
 	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
 	
 }
@@ -344,16 +345,23 @@ void GamePlayState::cleanUp()
 	
 	this->graphics.clear();
 
+	//Clear the grid
+	this->grid.clear();
+	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	//Clear FloorFallPattern arrays.
 	this->easyPatterns.clear();
 	this->mediumPatterns.clear();
 	this->hardPatterns.clear();
+	this->currData.pattern.clear();
+	//Clear enemySpawnPos
+	this->enemySpawnPos.cleanUp();
 
 	InputComponent::cleanup();
 
 	this->staticPhysicsCount = 0;
 	this->counter = 0;
 	this->ID = 0;
+	this->counter = 0;
 }
 
 void GamePlayState::pause()
@@ -420,7 +428,7 @@ void GamePlayState::update(GameManager * gm)
 
 	//Check if the player is on a active floor tile or if he fell of the map.
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
-		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
+		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::RECOVER) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
 		}
 	}
@@ -463,8 +471,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
-	//XMFLOAT3 playerPos(static_cast<float>(ARENAWIDTH * 0.5), playerScales.y, static_cast<float>(ARENAHEIGHT * 0.5));
-	XMFLOAT3 playerPos((float)(ARENADATA::GETarenaWidth() / 2), playerScales.y, (float)(ARENADATA::GETarenaHeight() / 2));
+	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
 	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
 	float actorSpeed = 1;
 
