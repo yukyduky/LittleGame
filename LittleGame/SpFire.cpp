@@ -7,8 +7,9 @@ SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCoolDown(1.3);
-	this->damage = 10;
+	this->setCost(10);
+	this->setCoolDown(0.2);
+	this->damage = 50;
 	this->range = 100;
 }
 
@@ -18,22 +19,24 @@ SpFire::~SpFire()
 
 bool SpFire::castSpell()
 {
-	bool returnValue = true;
-	if (this->getState() == SPELLSTATE::COOLDOWN)
+	bool returnValue = false;
+
+	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
-		returnValue = false;
-	}
-	else
-	{
-		ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, true);
-		this->spawnProj(props);
+		// For further info, if needed, see 'useEnergy()' description
+		if (this->getPlayer()->useEnergy(this->getCost()))
+		{
+			returnValue = true;
 
-		Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
+			ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, true);
+			this->spawnProj(props);
 
-		this->setState(SPELLSTATE::COOLDOWN);
+			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
 
-		this->hits = 3;
+			this->setState(SPELLSTATE::COOLDOWN);
 
+			this->hits = 8;
+		}
 	}
 
 	return returnValue;
@@ -52,18 +55,26 @@ void SpFire::update()
 
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY) {
-		target->setState(OBJECTSTATE::TYPE::DEAD);
-		Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
+	if (target->getType() == OBJECTTYPE::ENEMY &&
+		!(std::find(proj->getPreviouslyHitList()->begin(), proj->getPreviouslyHitList()->end(), target)
+			!=
+			proj->getPreviouslyHitList()->end())) {
+		
+		static_cast<ActorObject*>(target)->dealDmg(this->damage);
+
+		proj->getPreviouslyHitList()->push_back(target);
 
 		this->hits--;
 		if (this->hits == 0)
 		{
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
+			proj->getPreviouslyHitList()->clear();
 		}
 	}
 
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
+		proj->getPreviouslyHitList()->clear();
 	}
 }

@@ -97,7 +97,7 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 void RectangleComponent::update()
 {
 	OBJECTSTATE::TYPE state = this->head->getState();
-	double dt = Locator::getGameTime()->getDeltaTime();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 	switch (state)	
 	{
@@ -108,7 +108,7 @@ void RectangleComponent::update()
 			if (this->counter < this->transitionTime) {
 				vColor finalColor(0.0f, 0.0f, 0.0f, 1.0f);
 				vColor aCol = this->color;
-				vColor bCol(1.0f, 0.0f, 0.0f, 1.0f);
+				vColor bCol(0.1f, 0.1f, 0.1f, 1.0f);
 
 				aCol.r = aCol.r - (aCol.r / this->transitionTime) * counter;
 				aCol.g = aCol.g - (aCol.g / this->transitionTime) * counter;
@@ -167,7 +167,7 @@ size_t& RectangleComponent::GETnumIndices()
 	return this->numIndices;
 }
 
-XMMATRIX& RectangleComponent::getWorld()
+DirectX::XMFLOAT4X4& RectangleComponent::getWorld()
 {
 	return this->head->getWorld();
 }

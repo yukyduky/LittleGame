@@ -2,6 +2,9 @@
 #ifndef CONTROLLERCOMPONENT_H
 #define CONTROLLERCOMPONENT_H
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include "InputComponent.h"
 #include <Windows.h>
 #include <Xinput.h>
@@ -20,8 +23,8 @@ private:
 	XINPUT_STATE currentState;
 	XMFLOAT2 thumbLDir;
 	XMFLOAT2 thumbRDir;
-	float trigLValue;
-	float trigRValue;
+	float trigLValue = 0.0f;
+	float trigRValue = 0.0f;
 
 	float checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE state);
 public:
@@ -33,7 +36,7 @@ public:
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
 	virtual void generateCommands();
-	virtual void vibrate(size_t left, size_t right);
+	virtual void vibrate(unsigned short left, unsigned short right);
 	virtual XMFLOAT2 GETnormalizedVectorOfLeftStick();
 	virtual XMFLOAT2 GETnormalizedVectorOfRightStick();
 	virtual float GETnormalizedValueOfLeftTrigger();

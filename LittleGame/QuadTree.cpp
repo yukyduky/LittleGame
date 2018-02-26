@@ -42,7 +42,7 @@ QuadTreeSquare::QuadTreeSquare(float widthLength_in, float heightLength_in, floa
   |           PUBLIC            |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-QuadTree::QuadTree() {
+QuadTree::QuadTree() : nodes() {
 	this->level = 0;
 	this->midpointX = 0;
 	this->midpointY = 0;
@@ -56,7 +56,7 @@ QuadTree::QuadTree() {
 QuadTree::QuadTree(
 	int level_in,
 	float widthLength_in, float heightLength_in,
-	float x_bottomLeftCorner, float y_bottomLeftCorner)
+	float x_bottomLeftCorner, float y_bottomLeftCorner) : nodes()
 {
 	this->level = level_in;
 
@@ -65,8 +65,8 @@ QuadTree::QuadTree(
 	this->nodeBounds.x = x_bottomLeftCorner;
 	this->nodeBounds.y = y_bottomLeftCorner;
 
-	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5));
-	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5));
+	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5f));
+	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5f));
 
 	this->nodes[BOTTOM_LEFT] = nullptr;
 	this->nodes[BOTTOM_RIGHT] = nullptr;
@@ -82,8 +82,8 @@ QuadTree::~QuadTree() {
 //  HELP-FUNCTIONS FOR THE 'initializeQuadTree' FUNCTION //
 //------------------------------------------------------//
 void QuadTree::split(QuadTree* currentQuad) {
-	float width = (currentQuad->nodeBounds.widthLength * 0.5);
-	float height = (currentQuad->nodeBounds.heightLength * 0.5);
+	float width = (currentQuad->nodeBounds.widthLength * 0.5f);
+	float height = (currentQuad->nodeBounds.heightLength * 0.5f);
 
 	// Storing these so we don't have to 'get' them over and over
 	float storedX = currentQuad->nodeBounds.x;
@@ -127,8 +127,8 @@ void QuadTree::initializeQuadTree(
 	this->nodeBounds.x = x_bottomLeftCorner;
 	this->nodeBounds.y = y_bottomLeftCorner;
 
-	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5));
-	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5));
+	this->midpointX = (x_bottomLeftCorner + (widthLength_in * 0.5f));
+	this->midpointY = (y_bottomLeftCorner + (heightLength_in * 0.5f));
 
 	if (LAYERS_MAX > 0) {
 		this->splitRecursively(this);
@@ -262,6 +262,8 @@ void QuadTree::cleanup() {
 			this->deleteToEnd(this->nodes[i]);
 		}
 	}
+
+	this->staticObjectsList.clear();
 }
 
 void QuadTree::deleteToEnd(QuadTree* currentQuad) {

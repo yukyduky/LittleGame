@@ -6,6 +6,7 @@
 #include "ID3D.h"
 #include "IAudioManager.h"
 #include "IRandomGeneration.h"
+#include "IGlobalEvents.h"
 
 /* Service Locator pattern */
 
@@ -15,6 +16,7 @@ private:
 	static IGameTime* sGT;
 	static ID3D* sID3D;
 	static IRandomGeneration* sRandomGeneration;
+	static IGlobalEvents* sGlobalEvents;
 	static IAudioManager* sAM;
 
 public:
@@ -25,6 +27,7 @@ public:
 	static void provide(IGameTime* gameTime) { sGT = gameTime; }
 	static void provide(ID3D* d3d) { sID3D = d3d; }
 	static void provide(IRandomGeneration* randomGeneration) { sRandomGeneration = randomGeneration; }
+	static void provide(IGlobalEvents* globalEvents) { sGlobalEvents = globalEvents; }
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Provides the address of 'audioManager'(obj) to the 'sAM'(ptr) Locator object.
 	2. Passes the pointer to 'gameTime'(obj) as a parameter.
@@ -39,6 +42,7 @@ public:
 	static IGameTime* getGameTime() { return sGT; }
 	static ID3D* getD3D() { return sID3D; }
 	static IRandomGeneration* getRandomGenerator() { return sRandomGeneration; }
+	static IGlobalEvents* getGlobalEvents() { return sGlobalEvents; }
 	static IAudioManager* getAudioManager() { return sAM; }
 };
 

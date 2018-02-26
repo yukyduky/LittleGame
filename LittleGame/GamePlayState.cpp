@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include <iterator>
 #include "Crosshair.h"
+#include "StateManager.h"
 
 #include "IncludeSpells.h"
 
@@ -282,14 +283,14 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() / 2.0f, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() / 2.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH * 0.5, ARENASQUARESIZE * 10, ARENAHEIGHT * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	// To be changed when Ollie has done the rework on camera
 	XMFLOAT3 tempcDir;
 	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
-	this->mousePicker = new MouseInput(this->camera.GETcameraPosFloat3(), tempcDir);
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
 	this->enemyManager.startLevel1();
 
 	this->mediumTime = 120.0;
@@ -315,21 +316,32 @@ void GamePlayState::cleanUp()
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->staticObjects.clear();
+
 	for (auto &iterator : this->dynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
 	}
+	this->dynamicObjects.clear();
+
 	for (auto &iterator : this->noCollisionDynamicObjects) {
 		iterator->cleanUp();
 		delete iterator;
 	}
-	for (int i = 0; i < this->playerInput.size(); i++) {
-		this->playerInput[i] = nullptr;
-	}
-	this->quadTree.cleanup();
-	this->staticObjects.clear();
-	this->dynamicObjects.clear();
 	this->noCollisionDynamicObjects.clear();
+
+	for (auto &i : this->playerInput) {
+		i = nullptr;
+	}
+
+	this->quadTree.cleanup();
+
+	//for (auto && iterator2 : this->pointLights) {
+	//	delete &iterator2;
+	//}
+
+	this->pointLights.clear();
+	
 	this->graphics.clear();
 
 	//Clear FloorFallPattern arrays.
@@ -338,6 +350,10 @@ void GamePlayState::cleanUp()
 	this->hardPatterns.clear();
 
 	InputComponent::cleanup();
+
+	this->staticPhysicsCount = 0;
+	this->counter = 0;
+	this->ID = 0;
 }
 
 void GamePlayState::pause()
@@ -351,6 +367,7 @@ void GamePlayState::resume()
 
 void GamePlayState::handleEvents(GameManager * gm) {
 	MSG msg;
+	GLOBALMESSAGES globalmsg;
 
 	while (gm->pollEvent(msg)) {
 		// Exit the application when 'X' is pressed
@@ -360,6 +377,12 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+	}
+
+	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
+		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			StateManager::changeState(RestartState::getInstance());
+		}
 	}
 }
 
@@ -440,12 +463,13 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
+	//XMFLOAT3 playerPos(static_cast<float>(ARENAWIDTH * 0.5), playerScales.y, static_cast<float>(ARENAHEIGHT * 0.5));
 	XMFLOAT3 playerPos((float)(ARENADATA::GETarenaWidth() / 2), playerScales.y, (float)(ARENADATA::GETarenaHeight() / 2));
 	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
@@ -475,14 +499,14 @@ void GamePlayState::initPlayer()
 	this->playerInput[0] = input;
 
 	/// CROSSHAIR	
-		Crosshair* crossHair;
-		BlockComponent* cross;
+	Crosshair* crossHair = nullptr;
+	BlockComponent* cross = nullptr;
 
-		crossHair = new Crosshair(actor, this->newID());
+	crossHair = new Crosshair(actor, this->newID());
 
-		cross = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
+	cross = new BlockComponent(*this, *crossHair, XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f), XMFLOAT3(10.0f, 5.0f, 5.0f), playerRotation);
 
-		this->noCollisionDynamicObjects.push_back(crossHair);
+	this->noCollisionDynamicObjects.push_back(crossHair);
 	/// END OF CROSSHAIR
 
 	this->player1 = actor;
@@ -498,12 +522,12 @@ void GamePlayState::initPlayer()
 
 Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
 {
-	Projectile* proj;
+	Projectile* proj = nullptr;
 	int nextID = this->newID();
 
 	// Declare Components
-	BlockComponent* block;
-	PhysicsComponent* phyComp;
+	BlockComponent* block = nullptr;
+	PhysicsComponent* phyComp = nullptr;
 
 	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
 	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE);

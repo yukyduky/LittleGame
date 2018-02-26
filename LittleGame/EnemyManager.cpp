@@ -38,7 +38,7 @@ void EnemyManager::startLevel1()
 	this->waveInterval = 5;
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
-	Wave* currentWave;
+	Wave* currentWave = nullptr;
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -66,7 +66,7 @@ void EnemyManager::cleanLevel()
 	// Per wave
 	for (auto &currentWave : this->waves) {
 
-		for (int i = 0; i < currentWave->enemies.size(); i++) {
+		for (size_t i = 0; i < currentWave->enemies.size(); i++) {
 			currentWave->enemies[i]->cleanUp();
 			delete currentWave->enemies[i];
 		}
@@ -74,22 +74,28 @@ void EnemyManager::cleanLevel()
 		// they'll be cleaned and deleted from there, so we only need to delete the 'Waves' here
 		delete currentWave;
 	}
+
+	int popWavesQueue = waves.size();
+
+	for (int i = 0; i < popWavesQueue; i++) {
+		this->waves.pop_back();
+	}
 }
 
 ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
-	EnemyObject* enemyObject;
+	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent;
-	AIComponent* aiComponent;
-	InputComponent* input;
-	PhysicsComponent* physicsComponent;
-	EnemyAttackComponent* attackComponent;
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyAttackingState* attackState;
-	EnemyMovingState* moveState;
+	EnemyAttackingState* attackState = nullptr;
+	EnemyMovingState* moveState = nullptr;
 
 
 	/// D E F I N I T I O N
@@ -115,11 +121,11 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 
 	float speed = 180;
 	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
+	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 0.3f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 3;
 	float immolationDuration = 0.3;
-	float immolationRange = 80;
+	float immolationRange = 50;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(

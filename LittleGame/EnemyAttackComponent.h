@@ -10,11 +10,11 @@ class EnemyAttackComponent : public Component
 {
 protected:
 	ActorObject * pHead = nullptr;
-	std::vector<ActorObject*>* players;
-	float passedTime;
-	float attackDamage;
-	float attackDuration;
-	float attackRange;
+	std::vector<ActorObject*>* players = nullptr;
+	float passedTime = 0.0f;
+	float attackDamage = 0.0f;
+	float attackDuration = 0.0f;
+	float attackRange = 0.0f;
 
 public:
 	virtual const size_t getID() = 0;
@@ -29,9 +29,9 @@ public:
 	2. Determines this with an internal timer which compares with attackDuration
 	*/
 	virtual bool timeToAttack() {
-		this->passedTime += Locator::getGameTime()->getDeltaTime();
+		this->passedTime += static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		if (this->passedTime > attackDuration) {
-			this->passedTime = 0;
+			this->passedTime = 0.0f;
 			return true;
 		}
 		return false;

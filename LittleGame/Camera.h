@@ -14,44 +14,44 @@
 
 class Camera {
 private:
-	float			cameraMoveSpeed = 2.0;
-	float			cameraRotateSpeed = 0.02;
-	float			angle;
-	float			nearPlane;
-	float			farPlane;
+	float			cameraMoveSpeed = 2.0f;
+	float			cameraRotateSpeed = 0.02f;
+	float			angle = 0.0f;
+	float			nearPlane = 0.0f;
+	float			farPlane = 0.0f;
 
-	DirectX::XMFLOAT3 cameraPos_Float3;
+	DirectX::XMFLOAT3 cameraStartPos;
+	DirectX::XMFLOAT3 cameraStartFacingDir;
+	DirectX::XMFLOAT3 cameraPos;
+	DirectX::XMFLOAT3 cameraFacingDir;
+	DirectX::XMFLOAT3 cameraUpDir;
+	DirectX::XMFLOAT3 cameraRightDir;
 
-	DirectX::XMVECTOR cameraStartPos;
-	DirectX::XMVECTOR cameraStartFacingDir;
-	DirectX::XMVECTOR cameraPos;
-	DirectX::XMVECTOR cameraFacingDir;
-	DirectX::XMVECTOR cameraUpDir;
-	DirectX::XMVECTOR cameraRightDir;
-
-	DirectX::XMMATRIX view;
-	DirectX::XMMATRIX projection;
+	DirectX::XMFLOAT4X4 view;
+	DirectX::XMFLOAT4X4 projection;
+	//DirectX::XMMATRIX view;
+	//DirectX::XMMATRIX projection;
 
 	/// ---------- UPDATE-FUNCTION VARIABLES ---------
 	// ------------- POSITION MOVEMENT ---------------
-	DirectX::XMVECTOR	upVecNormalized;
-	DirectX::XMVECTOR	moveVecNormalized;
-	DirectX::XMVECTOR	rightAxis;
+	DirectX::XMFLOAT3	upVecNormalized;
+	DirectX::XMFLOAT3	moveVecNormalized;
+	DirectX::XMFLOAT3	rightAxis;
 	// _______________________________________________
 	// --------------- LOOK-AT MOVEMENT --------------
-	float				rotationAngle;
-	DirectX::XMVECTOR	rotationQuaternion;
-	bool				isMouseMovingUp;
-	DirectX::XMFLOAT3	newRotation_Float3;
-	DirectX::XMVECTOR	newRotation_Vector;
-	DirectX::XMFLOAT3	oldRotation_Float3;
-	DirectX::XMVECTOR	oldRotation_Vector;
-	DirectX::XMFLOAT3	tempRotationDifference_Float3;
-	DirectX::XMVECTOR	tempRotationDifference_Vector;
+	//float				rotationAngle;
+	//DirectX::XMFLOAT3	rotationQuaternion;
+	//bool				isMouseMovingUp;
+	//DirectX::XMFLOAT3	newRotation_Float3;
+	//DirectX::XMVECTOR	newRotation_Vector;
+	//DirectX::XMFLOAT3	oldRotation_Float3;
+	//DirectX::XMVECTOR	oldRotation_Vector;
+	//DirectX::XMFLOAT3	tempRotationDifference_Float3;
+	//DirectX::XMVECTOR	tempRotationDifference_Vector;
 	// _______________________________________________
 	///_______________________________________________
 
-	bool updateRequired;
+	bool updateRequired = false;
 
 	void moveCameraUp();
 	void moveCameraLeft();
@@ -60,8 +60,8 @@ private:
 	void moveCameraBackward();
 	void updateRightDir();
 
-	void rotateCameraVertically(POINT mouseMovement);
-	void rotateCameraHorizontally(POINT mouseMovement);
+	//void rotateCameraVertically(POINT mouseMovement);
+	//void rotateCameraHorizontally(POINT mouseMovement);
 
 public:
 	void init(float arenaWidth, float arenaDepth);
@@ -85,12 +85,13 @@ public:
 	2. Stores the converted 'cameraPos' in 'cameraPos_Float3'.
 	3. Returns 'cameraPos_Float3'.
 	*/
-	DirectX::XMFLOAT3	GETcameraPosFloat3();
-	DirectX::XMVECTOR	GETcameraStartPos();
-	DirectX::XMVECTOR	GETcameraPos();
-	DirectX::XMVECTOR	GETfacingDir();
-	DirectX::XMMATRIX&	GETviewMatrix();
-	DirectX::XMMATRIX&	GETprojMatrix();
+	//DirectX::XMFLOAT3	GETcameraPosFloat3();
+	//DirectX::XMVECTOR	GETcameraStartPos();
+	DirectX::XMFLOAT3		GETcameraPos();
+	DirectX::XMVECTOR		GETfacingDir();
+	DirectX::XMFLOAT3		GETfacingDirFloat3();
+	DirectX::XMFLOAT4X4&	GETviewMatrix();
+	DirectX::XMFLOAT4X4&	GETprojMatrix();
 };
 
 //______________________________________________//

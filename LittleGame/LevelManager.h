@@ -26,7 +26,7 @@ namespace WALLTYPE {
 
 struct tileData {
 	SQUARETYPE::TYPE type;
-	GameObject* ptr;
+	GameObject* ptr = nullptr;
 
 	//Nya som Dew ska använda
 	XMFLOAT4 baseColor;
@@ -43,15 +43,15 @@ struct tileData {
 class LevelManager
 {
 private:
-	GamePlayState * pGPS;
+	GamePlayState * pGPS = nullptr;
 	ArenaPatterns arenaPatterns;
 
-	int arenaWidth;
-	int arenaDepth;
-	int squareSize;
-	int wallHeight;
-	int tempID;
-	int nrOfWalls;
+	int arenaWidth = 0;
+	int arenaDepth = 0;
+	int squareSize = 0;
+	int wallHeight = 0;
+	int tempID = 0;
+	int nrOfWalls = 0;
 	
 	/*--------<INFORMATION>--------
 	1. Creates all the RectangleComponents representing the arena floor.
@@ -62,12 +62,12 @@ private:
 		by calling createARectLine function for each line.
 	*/
 	void createNeonFloorGrid(std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
-	void createARectLine(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
+	void createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	/*
 	1. Creates all the outer walls of the level by calling createAWall function for each wall.
 	*/
 	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
-	void createAWall(XMFLOAT3 pos, XMMATRIX worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
+	void createAWall(XMFLOAT3 pos, XMMATRIX& worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	int nextID();
 
 	/*--------<INFORMATION>--------
@@ -99,11 +99,13 @@ public:
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given grid index.
 	*/
-	void changeTileStateFromIndex(XMFLOAT2 index, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects);
+	void changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects);
 	/*--------<INFORMATION>--------
 	1. Returns the state of a floor tile from a given position.
 	*/
 	OBJECTSTATE::TYPE checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+
+	void clean();
 };
 
 

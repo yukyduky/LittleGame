@@ -2,6 +2,9 @@
 #ifndef LINECOMPONENT_H_
 #define LINECOMPONENT_H_
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include "GraphicsComponent.h"
 #include <Windows.h>
 #include <array>
@@ -10,12 +13,12 @@ class LineComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	ID3D11Buffer* gVertexBuffer;
-	ID3D11Buffer* gIndexBuffer;
-	size_t stride;
-	size_t offset;
-	size_t numIndices;
-	GameObject* head;
+	ID3D11Buffer* gVertexBuffer = nullptr;
+	ID3D11Buffer* gIndexBuffer = nullptr;
+	size_t stride = 0;
+	size_t offset = 0;
+	size_t numIndices = 0;
+	GameObject* head = nullptr;
 
 	/*--------<INFORMATION>--------
 	1. Creates a line with points ranging from 0.0 to 1.0 in x-dimension.
@@ -47,7 +50,7 @@ public:
 	virtual size_t& GETstride();
 	virtual size_t& GEToffset();
 	virtual size_t& GETnumIndices();
-	virtual XMMATRIX& getWorld();
+	virtual XMFLOAT4X4& getWorld();
 	virtual bool checkIfDead();
 	
 };

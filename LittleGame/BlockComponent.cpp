@@ -149,6 +149,7 @@ BlockComponent::BlockComponent(
 {
 	// Connections
 	this->head = &obj;
+	obj.SETgraphicsComponent(this);
 	obj.addComponent(this);
 	pGPS.addGraphics(this);
 	
@@ -230,9 +231,13 @@ size_t & BlockComponent::GETnumIndices()
 	return this->numIndices;
 }
 
-XMMATRIX& BlockComponent::getWorld()
+DirectX::XMFLOAT4X4& BlockComponent::getWorld()
 {
 	return this->head->getWorld();
+}
+
+vColor BlockComponent::GETcolor() {
+	return this->color;
 }
 
 const size_t BlockComponent::getID()

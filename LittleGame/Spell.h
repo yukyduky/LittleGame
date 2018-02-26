@@ -5,6 +5,9 @@
 #include "Locator.h"
 #include "ActorObject.h"
 #include "GamePlayState.h"
+#include "BlockComponent.h"
+#include "GraphicsComponent.h"
+#include <algorithm>
 
 
 //Template for when glyphs become relevant
@@ -55,11 +58,13 @@ public:
 	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
-	void setCoolDown(double input) { this->coolDown = input; };
+	void setCoolDown(float input) { this->coolDown = input; };
 	float getCoolDown() { return this->coolDown; };
+	void setCost(float input) { this->cost = input; }
+	float getCost() { return this->cost; }
 
 	// TSC = TimeSinceCast
-	size_t getTSC() { return this->timeSinceCast; };
+	float getTSC() { return this->timeSinceCast; };
 
 private:
 	//Array of glyphs
@@ -67,12 +72,12 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	NAME name;
-	ActorObject * player;
+	ActorObject * player = nullptr;
 
-	double coolDown;
-	double timeSinceCast;
+	float coolDown = 0.0f;
+	float timeSinceCast = 0.0f;
 	// EnergyCost
-	size_t cost;
+	float cost = 0;
 };
 
 

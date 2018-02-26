@@ -3,6 +3,7 @@
 #define STATEMANAGER_H
 
 #include <vector>
+#include "RestartState.h"
 
 class State;
 class GameManager;
@@ -51,6 +52,8 @@ public:
 	1. Call the 'render()' function found in the State at the back of the stack.
 	*/
 	static void render(GameManager* gm);
+
+	static std::vector<State*> GETallStates() { return sStates; }
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Call the 'cleanup()' function in all states currently in the stack.

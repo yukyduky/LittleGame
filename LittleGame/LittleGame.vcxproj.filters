@@ -55,6 +55,17 @@
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="EnemyAttackingState.cpp">
+      <Filter>EnemyStates</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyMovingState.cpp">
+      <Filter>EnemyStates</Filter>
+    </ClCompile>
+    <ClCompile Include="RandomGeneration.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
+    <ClCompile Include="FloorFallPatterns.cpp" />
+    <ClCompile Include="RestartState.cpp" />
+    <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaPatterns.cpp" />
   </ItemGroup>
@@ -114,6 +125,25 @@
     <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="EnemyMovingState.h">
+      <Filter>EnemyStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyAttackingState.h">
+      <Filter>EnemyStates</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyState.h">
+      <Filter>EnemyStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>commands</Filter>
+    </ClInclude>
+    <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="RandomGeneration.h" />
+    <ClInclude Include="Crosshair.h" />
+    <ClInclude Include="FloorFallPatterns.h" />
+    <ClInclude Include="RestartState.h" />
+    <ClInclude Include="IGlobalEvents.h" />
+    <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="ArenaPatterns.h" />
   </ItemGroup>
   <ItemGroup>

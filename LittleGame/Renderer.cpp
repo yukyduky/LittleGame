@@ -1,3 +1,6 @@
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include "Renderer.h"
 #include <Windows.h>
 #include "Locator.h"
@@ -118,8 +121,8 @@ void Renderer::createViewport()
 
 	this->viewport.TopLeftX = 0;
 	this->viewport.TopLeftY = 0;
-	this->viewport.Width = Locator::getD3D()->GETwWidth();
-	this->viewport.Height = Locator::getD3D()->GETwHeight();
+	this->viewport.Width = static_cast<FLOAT>(Locator::getD3D()->GETwWidth());
+	this->viewport.Height = static_cast<FLOAT>(Locator::getD3D()->GETwHeight());
 	this->viewport.MinDepth = 0.0f;
 	this->viewport.MaxDepth = 1.0f;
 }

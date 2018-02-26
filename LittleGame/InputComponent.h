@@ -46,7 +46,7 @@ namespace INPUTTYPE {
 }
 
 struct Key {
-	Command* command;
+	Command* command = nullptr;
 	COMMANDTYPE type;
 
 	Key(Command* command, COMMANDTYPE type) : command(command), type(type) {}
@@ -119,7 +119,7 @@ public:
 	1. Makes the controller vibrate a variable amount in either left or right or both sides
 		If the InputComponent is a keyboard then nothing happens
 	*/
-	virtual void vibrate(size_t left, size_t right);
+	virtual void vibrate(unsigned short left, unsigned short right);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Maps the given virtual key code to the given Key struct
 	*/

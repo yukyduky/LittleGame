@@ -14,7 +14,7 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	// only 1 bomb out
 	this->active = false;
 
-	this->setCoolDown(5.3);
+	this->setCoolDown(2.3f);
 	this->damage = this->start;
 	this->range = -1;
 
@@ -36,7 +36,7 @@ bool SpBomb::castSpell()
 		if (!this->active)
 		{
 			this->active = true;
-			ProjProp props(30, XMFLOAT4(0.9f, 0.4f, 0.0f, 0.2f), 0, this->range, false);
+			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, this->range, false);
 			this->theProj = this->spawnProj(props);
 		}
 
@@ -56,16 +56,18 @@ void SpBomb::update()
 {
 	if (this->active)
 	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
 		if (this->damage < this->end)
 		{
-			this->damage += 40 * Locator::getGameTime()->getDeltaTime();
+			this->damage += 300 * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage);
+			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 2);
 			this->theProj->SETscaleMatrix(scaleM);
 		}
 		else if (this->damage < this->end + 0.2) // delay so that the explosion can kill targets
 		{
-			this->damage += 20 * Locator::getGameTime()->getDeltaTime();
+			this->damage += 20 * dt;
 		}
 		else
 		{
@@ -78,8 +80,20 @@ void SpBomb::update()
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-	if (this->damage >= this->end && target->getType() == OBJECTTYPE::ENEMY)
+	if (target->getType() == OBJECTTYPE::ENEMY)
 	{
+		//ActorObject* actorTarget = static_cast<ActorObject*>(target);
+
+		//actorTarget->dealDmg(this->damage);
+
+		//vColor colorHolder = target->GETgraphicsComponent()->GETcolor();
+
+		//target->GETgraphicsComponent()->updateColor(vColor(
+		//	actorTarget->GEThp() / actorTarget->GEThpMAX(),
+		//	0.0f,
+		//	0.0f,
+		//	colorHolder.a)
+		//);
 		target->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }

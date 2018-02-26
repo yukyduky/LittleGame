@@ -3,7 +3,7 @@
 #define SPFIRE_H
 
 #include "Spell.h"
-
+#include "GameObject.h"
 
 class GamePlayState;
 
@@ -22,12 +22,12 @@ public:
 	void update();
 private:
 	// Template: Modifies the spell befor glyph is implemented
-	float strength;
+	float strength = 0.0f;
 	// Damge of skill to be applied on collision
-	float damage;
+	float damage = 0.0f;
 	// Travel-range of spell
-	int range;
+	float range = 0.0f;
 
-	int hits;
+	int hits = 0;
 };
 #endif // !SPFIRE_H
