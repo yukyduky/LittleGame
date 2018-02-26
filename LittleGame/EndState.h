@@ -2,9 +2,9 @@
 #ifndef ENDSTATE_H
 #define ENDSTATE_H
 
-#include "State.h"
+#include "MenuState.h"
 
-class EndState : public State
+class EndState : public MenuState
 {
 private:
 	static EndState sEndState;
@@ -22,13 +22,6 @@ public:
 	1. Virtual Function.
 	2. Cleanup this state; freeing memory and setting settings for it back to default.
 	*/
-	virtual void cleanUp();
-
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Virtual Function.
-	2. Pause this state.
-	*/
-	virtual void pause();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Virtual Function.
@@ -36,23 +29,8 @@ public:
 	*/
 	virtual void resume();
 
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Virtual Function.
-	2. Handle the events generated in this state.
-	*/
-	virtual void handleEvents(GameManager* gm);
 
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Virtual Function.
-	2. Update this state.
-	*/
-	virtual void update(GameManager* gm);
-
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Virtual Function.
-	2. Render this state.
-	*/
-	virtual void render(GameManager* gm);
+	Menu* initRewardMenu();
 };
 
 #endif

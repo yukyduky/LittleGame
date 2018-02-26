@@ -1,4 +1,5 @@
 #include "MenuState.h"
+#include "GamePlayState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "StateManager.h"
@@ -28,6 +29,7 @@ void MenuState::pause() {
 
 void MenuState::resume()
 {
+	StateManager::popState();
 }
 
 void MenuState::handleEvents(GameManager * gm) {
@@ -94,5 +96,5 @@ void MenuState::displayMenu(Menu* menu)
 
 void MenuState::startGame()
 {
-	StateManager::popState();
+	StateManager::changeState(GamePlayState::getInstance());
 }

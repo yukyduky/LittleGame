@@ -23,7 +23,6 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleanup the 'MainMenuState'; freeing memory, default settings, etc.
 	*/
-	virtual void cleanUp();
 
 	static MainMenuState* getInstance();
 

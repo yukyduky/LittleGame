@@ -1,27 +1,18 @@
 #include "MainMenuState.h"
 #include "GameManager.h"
 #include "Button.h"
-#include "Locator.h"
 #include "StateManager.h"
-#include <SimpleMath.h>
-#include <DirectXMath.h>
-
-
-using namespace DirectX::SimpleMath;
 
 MainMenuState MainMenuState::sMainMenuState;
 
-void MainMenuState::init() {
+void MainMenuState::init() 
+{
 	MenuState::init();
 	
-	//this->displayMenu(MENUS::START);
 	this->displayMenu(this->initStartMenu());
 }
 
-void MainMenuState::cleanUp()
-{
-	MenuState::cleanUp();
-}
+
 
 MainMenuState* MainMenuState::getInstance() {
 	return &sMainMenuState;
@@ -45,10 +36,10 @@ Menu* MainMenuState::initStartMenu()
 
 	//Buttons
 	nextID = this->newID();
-	text = L"START GAME";
+	text = L"Start/Resume game";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
 		{ 100,50, 200,150 }, D2D1::ColorF::Aqua, 
-		text, BEHAVIOR::STARTGAME);
+		text, BEHAVIOR::RESUMEGAME);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();

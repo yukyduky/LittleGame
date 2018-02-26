@@ -49,8 +49,8 @@ void Button::onPress()
 	case BEHAVIOR::GOOPTIONS:
 		this->pMS->displayMenu(static_cast<MainMenuState*>(this->pMS)->initOptionsMenu());
 		break;
-	case BEHAVIOR::STARTGAME:
-		this->pMS->startGame();
+	case BEHAVIOR::RESUMEGAME:
+		this->pMS->resume();
 		break;
 	case BEHAVIOR::VOLUMEUP:
 		Locator::getAudioManager()->adjustMaster(true);
