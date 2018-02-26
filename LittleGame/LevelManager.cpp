@@ -21,7 +21,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, 0, this->squareSize * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
-	vColor color(0.0f, 200.0f / 255.0f, 255.0f / 255.0f, 50.0f / 255.0f);
+	vColor color(1.0f, 1.0f, 1.0f, 0.0f);
 	//Create all the squares representing the floor
 	for (size_t i = 0; i < grid.size(); i++)
 	{
