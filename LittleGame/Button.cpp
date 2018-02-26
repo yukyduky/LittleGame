@@ -44,10 +44,10 @@ void Button::onPress()
 	switch (this->behavior)
 	{
 	case BEHAVIOR::GOSTART:
-		this->pMS->displayMenu(MENUS::START);
+		this->pMS->displayMenu(this->pMS->initStartMenu());
 		break;
 	case BEHAVIOR::GOOPTIONS:
-		this->pMS->displayMenu(MENUS::OPTIONS);
+		this->pMS->displayMenu(this->pMS->initOptionsMenu());
 		break;
 	case BEHAVIOR::STARTGAME:
 		this->pMS->startGame();

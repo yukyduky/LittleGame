@@ -1,11 +1,6 @@
 #include "MenuState.h"
-#include "GamePlayState.h"
 #include "GameManager.h"
 #include "Locator.h"
-#include "LineComponent.h"
-#include "BlockComponent.h"
-#include "KeyboardComponent.h"
-#include "ControllerComponent.h"
 #include "StateManager.h"
 #include <SimpleMath.h>
 #include <DirectXMath.h>
@@ -21,16 +16,16 @@ void MenuState::init() {
 	this->initStartMenu();
 	this->initOptionsMenu();
 	
-	this->displayMenu(MENUS::START);
+	//this->displayMenu(MENUS::START);
+	this->displayMenu(this->initStartMenu());
 }
 
 void MenuState::cleanUp()
 {
-	for (auto &iterator : this->menus) {
-		iterator->cleanUp();
-		delete iterator;
-	}
+	this->currMenu->cleanUp();
+
 	this->menuObjects.clear();
+	this->objD2D.~D2D();
 }
 
 void MenuState::pause() {
@@ -55,15 +50,15 @@ void MenuState::handleEvents(GameManager * gm) {
 			{
 			case VK_UP:
 			case 0x57:
-				this->menus[this->currMenu]->goUp();
+				this->currMenu->goUp();
 				break;
 			case VK_DOWN:
 			case 0x53:
-				this->menus[this->currMenu]->goDown();
+				this->currMenu->goDown();
 				break;
 			case VK_RETURN:
 			case VK_SPACE:
-				this->menus[this->currMenu]->pressButton();
+				this->currMenu->pressButton();
 				break;
 			default:
 				break;
@@ -88,12 +83,12 @@ void MenuState::render(GameManager * gm) {
 	this->objD2D.OnRender(this->menuObjects);
 }
 
-void MenuState::displayMenu(MENUS::TYPE menu)
+void MenuState::displayMenu(Menu* menu)
 {
 	this->menuObjects.clear();
 
 	this->currMenu = menu;
-	for ( auto &i : this->menus[menu]->getObjects())
+	for ( auto &i : this->currMenu->getObjects())
 	{
 		this->menuObjects.push_back(i);
 	}
@@ -109,7 +104,7 @@ MenuState* MenuState::getInstance() {
 }
 
 
-void MenuState::initStartMenu()
+Menu* MenuState::initStartMenu()
 {
 	Menu* stMenu;
 	MenuObject* object;
@@ -147,10 +142,11 @@ void MenuState::initStartMenu()
 	stMenu->addButton(pButton);
 
 
-	this->menus[MENUS::START] = stMenu;
+	//this->menus[MENUS::START] = stMenu;
+	return stMenu;
 }
 
-void MenuState::initOptionsMenu()
+Menu* MenuState::initOptionsMenu()
 {
 	Menu* opMenu;
 	MenuObject* object;
@@ -194,7 +190,8 @@ void MenuState::initOptionsMenu()
 		text, BEHAVIOR::WINDOWSWITCH);
 	opMenu->addButton(pButton);
 
-	this->menus[MENUS::OPTIONS] = opMenu;
+	//this->menus[MENUS::OPTIONS] = opMenu;
+	return opMenu;
 }
 
 

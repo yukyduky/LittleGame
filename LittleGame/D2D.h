@@ -48,6 +48,12 @@ private:
 	// Initialize device-dependent resources.
 	HRESULT CreateDeviceResources();
 
+	//Take a screenshot of the window and saves it to a .bmp
+	void saveScreenshot();
+
+	//Loads the pBitmap with the screenshot
+	void loadBitmap();
+
 	// Release device-dependent resource.
 	void DiscardDeviceResources();
 

@@ -23,6 +23,11 @@ class Command;
 
 class MenuState : public State
 {
+protected:
+	// All objects
+	std::vector<MenuObject*> menuObjects;
+	std::vector<Menu*> menus;
+
 private:
 	static MenuState sMenuState;
 
@@ -31,10 +36,9 @@ private:
 	int ID = 0;
 
 	// Handlers for different menus
-	std::array<Menu*, MENUS::SIZE> menus;
-	MENUS::TYPE currMenu;
-	// All objects
-	std::vector<MenuObject*> menuObjects;
+	//std::array<Menu*, MENUS::SIZE> menus;
+	//MENUS::TYPE currMenu;
+	Menu* currMenu;
 
 	bool quit;
 
@@ -85,14 +89,14 @@ public:
 	int newID() { return this->ID++; }
 
 	//Button functions
-	void displayMenu(MENUS::TYPE menu);
+	void displayMenu(Menu* menu);
 	void startGame();
 	void quitMenu() { this->quit = true; };
 	void FullScreenSwitch();
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
-	void initStartMenu();
-	void initOptionsMenu();
+	Menu* initStartMenu();
+	Menu* initOptionsMenu();
 
 
 };

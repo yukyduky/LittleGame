@@ -6,6 +6,7 @@ Menu::Menu()
 
 Menu::~Menu()
 {
+	this->cleanUp();
 }
 
 void Menu::cleanUp()
