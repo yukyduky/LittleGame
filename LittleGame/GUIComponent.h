@@ -1,10 +1,16 @@
 #pragma once
-#ifndef GUIOBJECT_H
-#define GUIOBJECT_H
+#ifndef GUICOMPONENT_H
+#define GUICOMPONENT_H
 
 #include "GraphicsComponent.h"
+#include <vector>
+#include <array>
+#include <Windows.h>
 
-class GUIObject : public GraphicsComponent
+struct PrimitiveVertexData;
+class GamePlayState;
+
+class GUIComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
@@ -16,15 +22,15 @@ private:
 	vColor color;
 	GameObject* head = nullptr;
 	XMFLOAT3 points[4];
-	//XMFLOAT3 normals[6];
+	XMFLOAT3 normals[1];
 	double counter = 0;
 	double transitionTime = 0;
 
 	void createVertices(XMFLOAT4 color);
 
 public:
-	GUIObject();
-	~GUIObject();
+	GUIComponent(GamePlayState& pGPS, GameObject& obj, XMFLOAT4 color, XMFLOAT3 scale, XMFLOAT3 rotation);
+	~GUIComponent();
 
 	virtual const size_t getID() { return this->ID; }
 	virtual void receive(GameObject & obj, Message msg);
@@ -36,6 +42,11 @@ public:
 	virtual size_t& GETnumIndices();
 	virtual XMFLOAT4X4& getWorld();
 	virtual OBJECTSTATE::TYPE GETstate();
+
+	vColor GETcolor();
+
+	virtual void cleanUp();
+	void updateColor(vColor newColor);
 };
 
 #endif

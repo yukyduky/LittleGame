@@ -21,6 +21,7 @@ namespace OBJECTTYPE {
 class Component;
 class PhysicsComponent;
 class BlockComponent;
+class GUIComponent;
 
 using namespace DirectX;
 
@@ -35,10 +36,6 @@ struct Message
 class GameObject
 {
 private:
-	//XMMATRIX world;
-	//XMMATRIX translationMatrix;
-	//XMMATRIX scaleMatrix;
-	//XMMATRIX rotationMatrix;
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 translationMatrix;
 	XMFLOAT4X4 scaleMatrix;
@@ -48,6 +45,7 @@ protected:
 	std::list<Component*> components;
 	PhysicsComponent* physicsComponent = nullptr;
 	BlockComponent* graphicsComponent = nullptr;
+	GUIComponent* graphicsComponentUI = nullptr;
 
 	const size_t ID;
 	XMFLOAT3 pos;
@@ -100,8 +98,12 @@ public:
 	void SETphysicsComponent(PhysicsComponent* physicsComponent_in) { this->physicsComponent = physicsComponent_in; }
 	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }
 
+	// Graphics: BLOCK_COMPONENT
 	void SETgraphicsComponent(BlockComponent* graphicsComponent_in) { this->graphicsComponent = graphicsComponent_in; }
 	BlockComponent* GETgraphicsComponent() { return this->graphicsComponent; }
+	// Graphics: GUI_COMPONENT
+	void SETgraphicsComponent(GUIComponent* graphicsComponent_in) { this->graphicsComponentUI = graphicsComponent_in; }
+	GUIComponent* GETgraphicsComponentUI() { return this->graphicsComponentUI; }
 };
 
 #endif // !GAMEOBJECT_H

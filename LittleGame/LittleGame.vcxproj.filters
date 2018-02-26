@@ -67,7 +67,7 @@
     <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="RestartState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
-    <ClCompile Include="GUIObject.cpp" />
+    <ClCompile Include="GUIComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -145,7 +145,7 @@
     <ClInclude Include="RestartState.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="GlobalEvents.h" />
-    <ClInclude Include="GUIObject.h" />
+    <ClInclude Include="GUIComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
