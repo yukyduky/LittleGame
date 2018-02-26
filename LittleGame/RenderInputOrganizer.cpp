@@ -1,6 +1,7 @@
 #include "RenderInputOrganizer.h"
 #include "GraphicsComponent.h"
 #include "Locator.h"
+#include "ArenaGlobals.h"
 
 
 void RenderInputOrganizer::packageMatrices() {
@@ -52,6 +53,21 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 	this->rawMatrixData.view = &camera.GETviewMatrix();
 	this->rawMatrixData.proj = &camera.GETprojMatrix();
 
+	this->lightPassData.camDir = camera.GETfacingDirFloat3();
+	this->lightPassData.camPos = camera.GETcameraPos();
+	this->lightPassData.arenaDims = XMFLOAT2(ARENAWIDTH, ARENAHEIGHT);
+	this->lightPassData.gridDims = XMFLOAT2(ARENASQUARESIZE, ARENASQUARESIZE);
+	this->lightPassData.gridStartPos = XMFLOAT2(0.0f, 0.0f);
+
+	for (int i = 0; i < MAX_NUM_FLOORGRIDS_X; i++)
+	{
+		for (int k = 0; k < MAX_NUM_FLOORGRIDS_Y; k++)
+		{
+			this->lightPassData.grid[i][k].color = XMFLOAT3(100.0f / 255.0f, 150.0f / 255.0f, 200.0f / 255.0f);
+			this->lightPassData.grid[i][k].height = 0.0f;
+		}
+	}
+
 	Locator::getD3D()->createConstantBuffer(
 		&this->cMatrixBuffer,
 		sizeof(MatrixBufferPack)
@@ -73,6 +89,7 @@ void RenderInputOrganizer::render(std::list<GraphicsComponent*>& graphics)
 void RenderInputOrganizer::injectResourcesIntoSecondPass()
 {
 	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
+
 
 	this->lightPassData.nrOfLights = static_cast<float>(size);
 

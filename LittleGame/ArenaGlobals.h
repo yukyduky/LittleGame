@@ -9,6 +9,4 @@
 #define HEIGHTOFWALLS 3		//Will be multiplied with ARENASQUARESIZE for total height of a wall.
 #define PI 3.14159265358979323846
 
-
-
 #endif

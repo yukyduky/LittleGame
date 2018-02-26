@@ -16,11 +16,11 @@ struct PointLight
 
 struct FloorGrid
 {
-	float height;
 	float3 color;
+	float height;
 };
 
-static const int MAX_NUM_LIGHTS = 3;
+static const int MAX_NUM_LIGHTS = 50;
 static const int MAX_NUM_FLOORGRIDS_X = 20;
 static const int MAX_NUM_FLOORGRIDS_Y = 20;
 
@@ -32,37 +32,37 @@ cbuffer GeneralData : register (b0) {
 	float pad0;
 	float2 arenaDims;
 	float2 gridDims;
-	float2 wDims;
-	float2 pad1;
 	float2 gridStartPos;
-	float2 pad2;
+	float2 pad1;
 }
 
 cbuffer Light : register (b1) {
 	PointLight Lights[MAX_NUM_LIGHTS];
 }
 
-void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission, out float objectType);
-void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType);
+void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
+void renderFallingFloor(inout float3 pos_W, in float3 normal, inout float3 diffuse);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 float dot(float3 vec1, float3 vec2);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 {
 	float3 pos_W, normal, diffuse;
-	float emission, objectType;
+    float emission;
 	// position_S.xy is literally screen coords
 	float2 screenCoords = position_S.xy;
 
 	// Load all the data from the geo pass
-	loadGeoPassData(screenCoords, pos_W, normal, diffuse, emission, objectType);
+	loadGeoPassData(screenCoords, pos_W, normal, diffuse, emission);
+
+	renderFallingFloor(pos_W, normal, diffuse);
 
 	float4 finalColor = calcLight(pos_W, normal, diffuse, emission);
 
 	return finalColor;
 }
 
-void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission, out float objectType)
+void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission)
 {
 	int3 texCoords = int3(screenCoords, 0.0f);
 
@@ -70,12 +70,11 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
 	emission = texDiffuse.Load(texCoords).w;
-	objectType = texNormal.Load(texCoords).w;
 }
 
-void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3 normal, inout float3 diffuse, inout float emission, in float objectType)
+void renderFallingFloor(inout float3 pos_W, in float3 normal, inout float3 diffuse)
 {
-	if (objectType == 0.5f) {
+	if (diffuse.x + diffuse.y + diffuse.z == 3.0f) {
 		float lDotN = dot(camDir, normal);
 		if (lDotN != 0.0f) {
 			int i = 0;
@@ -96,6 +95,7 @@ void renderFallingFloor(in float2 screenCoords, inout float3 pos_W, inout float3
 				{
 					intersected = true;
 					diffuse = grid[xGrid][yGrid].color;
+					pos_W.y = p.y;
 				}
 
 				i++;

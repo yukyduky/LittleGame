@@ -8,6 +8,8 @@
 #include "Camera.h"
 
 constexpr int MAX_NUM_POINTLIGHTS = 50;
+constexpr int MAX_NUM_FLOORGRIDS_X = 20;
+constexpr int MAX_NUM_FLOORGRIDS_Y = 20;
 
 using namespace DirectX;
 
@@ -26,9 +28,22 @@ struct Light {
 		pos(pos), diffuse(diffuse), ambient(ambient), attenuation(attenuation), specPower(specPower) {}
 };
 
+struct FloorGrid
+{
+	XMFLOAT3 color;
+	float height;
+};
+
 struct LightPassData {
+	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
+	XMFLOAT3 camPos;
 	float nrOfLights;
-	XMFLOAT3 pad0;
+	XMFLOAT3 camDir;
+	float pad0;
+	XMFLOAT2 arenaDims;
+	XMFLOAT2 gridDims;
+	XMFLOAT2 gridStartPos;
+	XMFLOAT2 pad1;
 
 	LightPassData() {}
 };
