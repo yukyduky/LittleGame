@@ -4,9 +4,9 @@
 
 #include "MenuObject.h"
 
-enum class BEHAVIOR {GOSTART, GOOPTIONS, STARTGAME, VOLUMEUP, VOLUMEDOWN, WINDOWSWITCH, QUIT};
-
 class MenuState;
+
+enum class BEHAVIOR {GOSTART, GOOPTIONS, STARTGAME, VOLUMEUP, VOLUMEDOWN, WINDOWSWITCH, QUIT};
 
 class Button : public MenuObject
 {

@@ -1,7 +1,7 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
-#include "MenuState.h"
+#include "MainMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
 #include "EndState.h"
@@ -299,7 +299,7 @@ void ActorObject::fireAbilityX()
 void ActorObject::pauseMenu()
 {
 	//Locator::getD3D()->GetFrame();
-	StateManager::pushState(MenuState::getInstance());
+	StateManager::pushState(MainMenuState::getInstance());
 }
 
 void ActorObject::selectAbility1()

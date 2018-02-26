@@ -58,11 +58,12 @@
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="FloorFallPatterns.cpp" />
-    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="D2D.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="MenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -127,11 +128,12 @@
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="FloorFallPatterns.h" />
-    <ClInclude Include="MenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="D2D.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="MenuState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

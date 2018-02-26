@@ -7,8 +7,6 @@
 #include <vector>
 #include <list>
 
-class GraphicsComponent;
-
 class Menu
 {
 public:

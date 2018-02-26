@@ -1,7 +1,7 @@
 #include "Button.h"
-#include "MenuState.h"
+#include "MainMenuState.h"
 
-Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID, 
+Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID,
 	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior) : MenuObject(pRT, ID, pos, color)
 {
 	this->behavior = behavior;
@@ -44,10 +44,10 @@ void Button::onPress()
 	switch (this->behavior)
 	{
 	case BEHAVIOR::GOSTART:
-		this->pMS->displayMenu(this->pMS->initStartMenu());
+		this->pMS->displayMenu(static_cast<MainMenuState*>(this->pMS)->initStartMenu());
 		break;
 	case BEHAVIOR::GOOPTIONS:
-		this->pMS->displayMenu(this->pMS->initOptionsMenu());
+		this->pMS->displayMenu(static_cast<MainMenuState*>(this->pMS)->initOptionsMenu());
 		break;
 	case BEHAVIOR::STARTGAME:
 		this->pMS->startGame();
@@ -59,7 +59,7 @@ void Button::onPress()
 		Locator::getAudioManager()->adjustMaster(false);
 		break;
 	case BEHAVIOR::WINDOWSWITCH:
-		this->pMS->FullScreenSwitch();
+		static_cast<MainMenuState*>(this->pMS)->FullScreenSwitch();
 		break;
 		break;
 	case BEHAVIOR::QUIT:

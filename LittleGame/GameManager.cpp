@@ -6,7 +6,7 @@
 #include "GameTime.h"
 #include "RandomGeneration.h"
 #include "GamePlayState.h"
-#include "MenuState.h"
+#include "MainMenuState.h"
 #include "Renderer.h"
 #include "AudioManager.h"
 
@@ -38,7 +38,7 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 
 	// Set the first state of the game
 	StateManager::pushState(GamePlayState::getInstance());
-	StateManager::pushState(MenuState::getInstance());
+	StateManager::pushState(MainMenuState::getInstance());
 }
 
 void GameManager::cleanUp()

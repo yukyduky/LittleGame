@@ -5,21 +5,18 @@
 #include "State.h"
 #include <vector>
 #include <array>
-#include "Commands.h"
 #include <list>
 
 #include "Menu.h"
 
 #include "D2D.h"
 
-namespace MENUS {
-	enum TYPE {
-		START, OPTIONS,
-		SIZE
-	};
-}
-
-class Command;
+//namespace MENUS {
+//	enum TYPE {
+//		START, OPTIONS,
+//		SIZE
+//	};
+//}
 
 class MenuState : public State
 {
@@ -28,10 +25,8 @@ protected:
 	std::vector<MenuObject*> menuObjects;
 	std::vector<Menu*> menus;
 
-private:
-	static MenuState sMenuState;
-
 	D2D objD2D;
+private:
 
 	int ID = 0;
 
@@ -42,10 +37,6 @@ private:
 
 	bool quit;
 
-	BOOL IsWindowMode = TRUE;
-	WINDOWPLACEMENT wpc;
-	LONG HWNDStyle = 0;
-	LONG HWNDStyleEx = 0;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -83,8 +74,6 @@ public:
 	*/
 	virtual void render(GameManager* gm);
 
-	static MenuState* getInstance();
-
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }
 
@@ -92,13 +81,8 @@ public:
 	void displayMenu(Menu* menu);
 	void startGame();
 	void quitMenu() { this->quit = true; };
-	void FullScreenSwitch();
-
-	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
-	Menu* initStartMenu();
-	Menu* initOptionsMenu();
-
 
 };
 
 #endif // !MENUSTATE_H
+#pragma once
