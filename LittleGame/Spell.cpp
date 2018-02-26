@@ -7,10 +7,10 @@
 #include "SpSwarmProjectile.h"
 
 
-Spell::Spell(ActorObject* player, NAME name)
+Spell::Spell(ActorObject* actor, NAME name)
 {
 	this->glyph = GLYPHTYPE::NONE;
-	this->player = player;
+	this->actor = actor;
 	this->name = name;
 	this->timeSinceCast = 0.0;
 	this->cost = 0;
@@ -36,12 +36,12 @@ void Spell::updateCD()
 Projectile* Spell::spawnProj(ProjProp props)
 {
 	Projectile* proj = nullptr;
-	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
-	XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
+	XMFLOAT3 distance = { this->getActor()->getDirection() * 40 };
+	XMFLOAT3 newPos = { this->getActor()->GETPosition() + distance };
 
-	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
-	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
-	proj->setRange(props.range);
+	proj = this->getActor()->getPGPS()->initProjectile(newPos, this->getActor(), props);
+//	proj->SETrotationMatrix(this->getActor()->getRotationMatrix());
+//	proj->setRange(props.range); 
 
 	// Attach the relevant spell to the projectile
 	// (This could be optimized by adding copy constructors and using those instead of what's done below)
@@ -51,34 +51,34 @@ Projectile* Spell::spawnProj(ProjProp props)
 	case NAME::AUTOATTACK: {
 		SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
 
-		projectilesSpell = new SpAutoAttack(this->getPlayer());
+		projectilesSpell = new SpAutoAttack(this->getActor());
 		proj->setSpell(projectilesSpell);
 		break;
 	}
 	case NAME::BOMB: {
 		SpBomb* trueThis = static_cast<SpBomb*>(this);
 
-		projectilesSpell = new SpBomb(this->getPlayer());
+		projectilesSpell = new SpBomb(this->getActor());
 		proj->setSpell(projectilesSpell);
 		break;
 	}
 	case NAME::DASH: {
 		SpDash* trueThis = static_cast<SpDash*>(this);
 
-		projectilesSpell = new SpDash(this->getPlayer());
+		projectilesSpell = new SpDash(this->getActor());
 		proj->setSpell(projectilesSpell);
 		break;
 	}
 	case NAME::FIRE: {
 		SpFire* trueThis = static_cast<SpFire*>(this);
 
-		projectilesSpell = new SpFire(this->getPlayer());
+		projectilesSpell = new SpFire(this->getActor());
 		proj->setSpell(projectilesSpell);
 		break;
 	}
 	case NAME::ENEM_SWARM: {
 		SpSwarmProjectile* trueThis = static_cast<SpSwarmProjectile*>(this);
-		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getPlayer());
+		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getActor());
 
 		projectilesSpell = new SpSwarmProjectile(
 			nullptr, trueThis->getRange(), trueThis->getDamage(),

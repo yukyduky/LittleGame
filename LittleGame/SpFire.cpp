@@ -47,7 +47,7 @@ void SpFire::upgrade(float modif)
 
 void SpFire::update()
 {
-
+	this->updateCD();
 }
 
 void SpFire::collision(GameObject * target, Projectile* proj)

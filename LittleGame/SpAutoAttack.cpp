@@ -44,7 +44,7 @@ void SpAutoAttack::upgrade(float modif)
 
 void SpAutoAttack::update()
 {
-	
+	this->updateCD();
 }
 
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)

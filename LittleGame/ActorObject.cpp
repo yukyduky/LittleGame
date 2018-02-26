@@ -120,7 +120,6 @@ void ActorObject::update()
 	}
 	for (auto &i : this->spells) {
 		i->update();
-		i->updateCD();
 	}
 }
 

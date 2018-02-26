@@ -29,8 +29,8 @@ bool SpDash::castSpell()
 	}
 	else if (!this->burning)
 	{
-		XMFLOAT3 oldPos = this->getPlayer()->GETPosition();
-		XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range};
+		XMFLOAT3 oldPos = this->getActor()->GETPosition();
+		XMFLOAT3 distance = { this->getActor()->getDirection() * this->range};
 		XMFLOAT3 newPos = { oldPos + distance };
 
 		//XMFLOAT3 playerNewPos;
@@ -57,12 +57,12 @@ bool SpDash::castSpell()
 		{
 			ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
 			flames.push_back(this->spawnProj(props));
-			flames[i]->setPosition(oldPos + (this->getPlayer()->getDirection(i * flameSize * 2)));
+			flames[i]->setPosition(oldPos + (this->getActor()->getDirection(i * flameSize * 2)));
 		}
 		//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
 		//this->spawnProj(props)->SETscaleMatrix(XMMatrixScaling(this->range - 40.0f, props.size, props.size));
 
-		this->getPlayer()->setPosition(newPos);
+		this->getActor()->setPosition(newPos);
 
 		Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
@@ -82,6 +82,8 @@ void SpDash::upgrade(float modif)
 
 void SpDash::update()
 {
+	this->updateCD();
+
 	if (this->getState() == SPELLSTATE::READY)
 	{
 		this->burning = false;

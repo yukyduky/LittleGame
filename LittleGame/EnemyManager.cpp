@@ -42,6 +42,11 @@ void EnemyManager::startLevel1()
 	this->swarmerCount = 0;
 	std::vector<EnemyObject*> localSwarmers;
 
+	// TESTING -----------
+	this->currentWaveCount = 1;
+	this->currentWaveSize = 2;
+	// TESTING -----------
+
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
 		currentWave = new Wave();
@@ -129,6 +134,8 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 
 	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+
+	spawnLocation = 2;	// fixed for testing purposes
 
 	if (spawnLocation == 1)
 		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };

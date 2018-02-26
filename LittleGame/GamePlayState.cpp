@@ -401,17 +401,19 @@ void GamePlayState::initPlayer()
 }
 
 
-Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props)
 {
 	Projectile* proj = nullptr;
 	int nextID = this->newID();
+
+	XMFLOAT3 dir = shooter->getDirection();
 
 	// Declare Components
 	BlockComponent* block = nullptr;
 	PhysicsComponent* phyComp = nullptr;
 
 	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
-	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE);
+	proj = new Projectile(nextID, props.speed, props.range, props.spinn, shooter, position, dir, OBJECTTYPE::PROJECTILE);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);

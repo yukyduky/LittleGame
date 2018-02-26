@@ -37,7 +37,7 @@ enum class NAME {
 class Spell
 {
 public:
-	Spell(ActorObject* player, NAME name);
+	Spell(ActorObject* actor, NAME name);
 	virtual ~Spell();
 
 	// Returns false if spell in unavalible to cast
@@ -53,7 +53,7 @@ public:
 	// Spawns a projectile infront of the player
 	Projectile* spawnProj(ProjProp props);
 
-	ActorObject* getPlayer() { return this->player; };
+	ActorObject* getActor() { return this->actor; };
 	void setType(SPELLTYPE input) { this->type = input; };
 	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
@@ -74,7 +74,7 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	NAME name;
-	ActorObject * player = nullptr;
+	ActorObject * actor = nullptr;
 
 	double coolDown = 0.0f;
 	double timeSinceCast = 0.0f;

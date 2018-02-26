@@ -12,7 +12,7 @@ class ActorObject;
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
+	Projectile(const size_t ID, float speed, float range, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
 	~Projectile();
 
 	/*Moves the projectile in this->direction with this->velocity * this->dt
@@ -22,15 +22,15 @@ public:
 
 
 	float getAngleTowardsPlayer();
-	void turnLeft(float speed);
-	void turnRight(float speed);
+	void turnLeft();
+	void turnRight();
 
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
 	void setDirection(XMVECTOR dir);
 	XMVECTOR getDirection();
 	void setRange(int range) { this->range = range; }
-	void setSeeking(float seekSpeed, ActorObject* playerPos);	// Only relevant to stalking projectiles
+	void setSeeking(float rotationSpeed, ActorObject* playerPos);	// Only relevant to stalking projectiles
 	void setSpell(Spell* spell);
 	Spell* getSpell();	// Gets allocated by player.spell->castSpell()
 
@@ -45,9 +45,10 @@ private:
 	float speed = 0.0f;
 	// If the pojectile should spinn around its X-axis
 	bool spinn;
+	bool seekingLeft = false;			// Only relevant to seek projectiles
 	ActorObject* pPlayer = nullptr;		// Only relevant to seek projectiles
 	bool isFollowing = false;			// Only relevant to seek projectiles
-	float seekSpeed = -1;				// Only relevant to seek projectiles
+	float rotationSpeed = -1;			// Only relevant to seek projectiles
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel

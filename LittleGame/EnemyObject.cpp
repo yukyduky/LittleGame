@@ -73,6 +73,9 @@ void EnemyObject::update()
 	for (auto &component : this->components) {
 		component->update();
 	}
+
+	// Also update the cooldown on spells
+	this->spells[0]->update();
 }
 
 void EnemyObject::attack()

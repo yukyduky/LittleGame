@@ -54,6 +54,8 @@ void SpBomb::upgrade(float modif)
 
 void SpBomb::update()
 {
+	this->updateCD();
+
 	if (this->active)
 	{
 		if (this->damage < this->end)

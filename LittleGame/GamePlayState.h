@@ -148,7 +148,7 @@ public:
 	int newID() { return this->ID++; }
 
 	/*call to shoot projectile*/
-	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props);
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
 
