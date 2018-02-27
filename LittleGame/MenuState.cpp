@@ -11,8 +11,6 @@ using namespace DirectX::SimpleMath;
 
 void MenuState::init() {
 	this->objD2D.Initialize();
-
-	//this->displayMenu(MENUS::START);
 }
 
 void MenuState::cleanUp()
@@ -29,11 +27,11 @@ void MenuState::pause() {
 
 void MenuState::resume()
 {
-	StateManager::popState();
 }
 
 void MenuState::handleEvents(GameManager * gm) {
 	MSG msg;
+	GLOBALMESSAGES globalmsg;
 
 	while (gm->pollEvent(msg)) {
 		// Exit the application when 'X' is pressed or the quit bool is true
@@ -63,6 +61,15 @@ void MenuState::handleEvents(GameManager * gm) {
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+	}
+
+	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
+		if (globalmsg == GLOBALMESSAGES::STARTGAME) {
+			StateManager::changeState(GamePlayState::getInstance());
+		}
+		else if (globalmsg == GLOBALMESSAGES::RESUMEGAME) {
+			StateManager::popState();
+		}
 	}
 }
 
@@ -96,5 +103,5 @@ void MenuState::displayMenu(Menu* menu)
 
 void MenuState::startGame()
 {
-	StateManager::popState();
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESUMEGAME);
 }

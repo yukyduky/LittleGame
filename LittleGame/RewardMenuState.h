@@ -20,17 +20,6 @@ public:
 	*/
 	virtual void init();
 
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Virtual Function.
-	2. Cleanup this state; freeing memory and setting settings for it back to default.
-	*/
-
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Virtual Function.
-	2. Resume this state.
-	*/
-	virtual void resume();
-
 
 	Menu* initRewardMenu();
 

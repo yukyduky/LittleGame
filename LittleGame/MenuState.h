@@ -8,15 +8,7 @@
 #include <list>
 
 #include "Menu.h"
-
 #include "D2D.h"
-
-//namespace MENUS {
-//	enum TYPE {
-//		START, OPTIONS,
-//		SIZE
-//	};
-//}
 
 class MenuState : public State
 {

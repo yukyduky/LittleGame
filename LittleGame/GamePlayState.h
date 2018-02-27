@@ -44,6 +44,12 @@ struct ProjProp {
 	ProjProp() {}
 };
 
+struct StateMsg {
+	ActorObject player;
+	StateMsg(ActorObject ply)
+		: player(ply)
+	{}
+};
 
 class GamePlayState : public State
 {

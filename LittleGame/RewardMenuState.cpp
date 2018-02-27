@@ -17,10 +17,6 @@ void RewardMenuState::init()
 	this->displayMenu(this->initRewardMenu());
 }
 
-void RewardMenuState::resume()
-{
-
-}
 
 Menu * RewardMenuState::initRewardMenu()
 {
@@ -39,10 +35,10 @@ Menu * RewardMenuState::initRewardMenu()
 
 	//Buttons
 	nextID = this->newID();
-	text = L"New game";
+	text = L"Next level";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
 		{ 100,50, 200,150 }, D2D1::ColorF::GreenYellow,
-		text, BEHAVIOR::NEWGAME);
+		text, BEHAVIOR::REWSTARTGAME);
 	menu->addButton(pButton);
 
 	nextID = this->newID();
@@ -50,7 +46,7 @@ Menu * RewardMenuState::initRewardMenu()
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
 		{ 100,250, 200,50 }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::ADDGLYPH,
-		NAME::AUTOATTACK, GLYPHTYPE::GLYPH1);
+		NAME::FIRE, GLYPHTYPE::GLYPH1);
 	menu->addButton(pButton);
 
 	nextID = this->newID();
@@ -73,5 +69,5 @@ void RewardMenuState::provide(ActorObject* player)
 void RewardMenuState::startGame()
 {
 	this->player->switchSpell();
-	StateManager::popState();
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESUMEGAME);
 }

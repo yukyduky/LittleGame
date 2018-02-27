@@ -338,6 +338,8 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
 	}
@@ -458,7 +460,7 @@ void ActorObject::switchSpell()
 				i = new SpFire(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpFire(this);
+				i = new SpAutoAttack(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
 				i = new SpFire(this);
@@ -536,6 +538,8 @@ void ActorObject::switchSpell()
 	}
 	
 	newSpells.clear();
+
+	this->selectAbility1();
 }
 
 void ActorObject::changeSpell(int spell, int glyph)

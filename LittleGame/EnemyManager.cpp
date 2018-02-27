@@ -11,7 +11,8 @@
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
-#include "EndState.h"
+//#include "EndState.h"
+#include "RewardMenuState.h"
 
 EnemyManager::EnemyManager()
 {
@@ -25,7 +26,6 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& playe
 	// Set up pointers
 	this->pGPS = &pGPS;
 	this->players = players; 
-	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
 }
 
@@ -156,7 +156,6 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 {
 	this->pGPS = &pGPS;
 	this->players = players;
-	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
 }
 
@@ -207,7 +206,7 @@ void EnemyManager::update()
 	else {
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
-			StateManager::pushState(this->endState);
+			//StateManager::pushState(RewardMenuState::getInstance());
 		}
 	}
 }

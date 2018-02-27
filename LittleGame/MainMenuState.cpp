@@ -12,12 +12,9 @@ void MainMenuState::init()
 	this->displayMenu(this->initStartMenu());
 }
 
-
-
 MainMenuState* MainMenuState::getInstance() {
 	return &sMainMenuState;
 }
-
 
 Menu* MainMenuState::initStartMenu()
 {
@@ -39,7 +36,7 @@ Menu* MainMenuState::initStartMenu()
 	text = L"Start/Resume game";
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID, 
 		{ 100,50, 200,150 }, D2D1::ColorF::Aqua, 
-		text, BEHAVIOR::RESUMEGAME);
+		text, BEHAVIOR::STARTGAME);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
@@ -54,14 +51,6 @@ Menu* MainMenuState::initStartMenu()
 	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
 		{ 100,350, 200,50 }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
-	stMenu->addButton(pButton);
-
-	nextID = this->newID();
-	text = L"Auto Glyph1";
-	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
-		{ 100,450, 200,50 }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::ADDGLYPH,
-		NAME::AUTOATTACK, GLYPHTYPE::GLYPH1);
 	stMenu->addButton(pButton);
 
 

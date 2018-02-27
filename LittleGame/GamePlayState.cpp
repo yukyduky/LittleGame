@@ -137,6 +137,8 @@ void GamePlayState::init() {
 	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
 	this->enemyManager.startLevel1();
+
+	RewardMenuState::getInstance()->provide(this->player1);
 }
 
 void GamePlayState::cleanUp()
@@ -212,6 +214,9 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			StateManager::changeState(RestartState::getInstance());
+		}
+		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			StateManager::changeState(RestartState::getInstance());
 		}
 	}

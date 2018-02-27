@@ -140,17 +140,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AbilityComponent.h" />
     <ClInclude Include="ActorObject.h" />
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ControllerComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Crosshair.h" />
+    <ClInclude Include="D2D.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="EnemyAttackingState.h" />
     <ClInclude Include="EnemyMovingState.h" />
@@ -159,18 +160,20 @@
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuObject.h" />
+    <ClInclude Include="MenuState.h" />
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="RestartState.h" />
+    <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
-    <ClInclude Include="EndState.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
-    <ClInclude Include="FireballComponent.h" />
     <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="ID3D.h" />
-    <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MouseInput.h" />
     <ClInclude Include="Projectile.h" />
@@ -201,30 +204,33 @@
     <ClInclude Include="StateManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AbilityComponent.cpp" />
     <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CollisionHandler.cpp" />
     <ClCompile Include="Crosshair.cpp" />
+    <ClCompile Include="D2D.cpp" />
     <ClCompile Include="D3D.cpp" />
-    <ClCompile Include="EndState.cpp" />
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuObject.cpp" />
+    <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="RestartState.cpp" />
+    <ClCompile Include="RewardMenuState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
-    <ClCompile Include="FireballComponent.cpp" />
-    <ClCompile Include="MobilitySpell.cpp" />
     <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="QuadTree.cpp" />

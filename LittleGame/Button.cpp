@@ -71,7 +71,7 @@ void Button::onPress()
 	case BEHAVIOR::STARTGAME:
 		this->pMS->startGame();
 		break;
-	case BEHAVIOR::NEWGAME:
+	case BEHAVIOR::REWSTARTGAME:
 		static_cast<RewardMenuState*>(this->pMS)->startGame();
 		break;
 	case BEHAVIOR::VOLUMEUP:
