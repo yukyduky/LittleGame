@@ -96,5 +96,5 @@ void MenuState::displayMenu(Menu* menu)
 
 void MenuState::startGame()
 {
-	StateManager::changeState(GamePlayState::getInstance());
+	StateManager::popState();
 }

@@ -145,6 +145,8 @@ public:
 	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
+
+	void provide(ActorObject* player);
 };
 
 #endif // !GAMEPLAYSTATE_H

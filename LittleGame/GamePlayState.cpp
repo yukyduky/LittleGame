@@ -14,6 +14,7 @@
 #include "Crosshair.h"
 
 #include "IncludeSpells.h"
+#include "RewardMenuState.h"
 
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -351,6 +352,8 @@ void GamePlayState::initPlayer()
 	this->player1 = actor;
 	// We add this component to the Dynamic list because this actor = dynamic.
 	this->dynamicObjects.push_back(actor);
+
+	RewardMenuState::getInstance()->provide(this->player1);
 }
 
 
@@ -381,6 +384,11 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	this->dynamicObjects.push_back(proj);
 
 	return proj;
+}
+
+void GamePlayState::provide(ActorObject* player)
+{
+	this->player1 = player;
 }
 //_________________________________________//
 //                                         //

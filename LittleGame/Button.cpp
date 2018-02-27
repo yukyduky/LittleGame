@@ -1,8 +1,30 @@
 #include "Button.h"
 #include "MainMenuState.h"
+#include "RewardMenuState.h"
 
 Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID,
 	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior) : MenuObject(pRT, ID, pos, color)
+{
+	init(pTF, pMS, text, behavior);
+	
+}
+
+Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID,
+	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior,
+	NAME spellname, GLYPHTYPE glyph) : MenuObject(pRT, ID, pos, color)
+{
+	init(pTF, pMS, text, behavior);
+
+	this->spellname = spellname;
+	this->glyph = glyph;
+}
+
+Button::~Button()
+{
+	this->cleanUp();
+}
+
+void Button::init(IDWriteTextFormat * pTF, MenuState * pMS, const WCHAR * text, BEHAVIOR behavior)
 {
 	this->behavior = behavior;
 	this->pMS = pMS;
@@ -23,12 +45,6 @@ Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pM
 	this->pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->pTextColorBrush);
 
 	this->text = text;
-	
-}
-
-Button::~Button()
-{
-	this->cleanUp();
 }
 
 void Button::cleanUp()
@@ -52,6 +68,12 @@ void Button::onPress()
 	case BEHAVIOR::RESUMEGAME:
 		this->pMS->resume();
 		break;
+	case BEHAVIOR::STARTGAME:
+		this->pMS->startGame();
+		break;
+	case BEHAVIOR::NEWGAME:
+		static_cast<RewardMenuState*>(this->pMS)->startGame();
+		break;
 	case BEHAVIOR::VOLUMEUP:
 		Locator::getAudioManager()->adjustMaster(true);
 		break;
@@ -61,7 +83,13 @@ void Button::onPress()
 	case BEHAVIOR::WINDOWSWITCH:
 		static_cast<MainMenuState*>(this->pMS)->FullScreenSwitch();
 		break;
+
+	case BEHAVIOR::ADDGLYPH:
+		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
 		break;
+
+
+
 	case BEHAVIOR::QUIT:
 		this->pMS->quitMenu();
 		break;

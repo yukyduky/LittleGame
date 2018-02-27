@@ -5,11 +5,6 @@
 #include "GameObject.h"
 #include "InputComponent.h"
 #include "Locator.h"
-//#include "GraphicsComponent.h"
-//#include "KeyboardComponent.h"
-//*#include "ControllerComponent.h"
-//#include "GamePlayState.h"
-//#include "Crosshair.h"
 
 #include "D3D.h"
 #include "list"
@@ -106,6 +101,7 @@ public:
 	void addSpell(Spell* spell);
 	// Goes over each spell and switches to new spells, depending on what glyph is on it
 	void switchSpell();
+	void changeSpell(int spell, int glyph);
 
 	//Crosshair
 	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }

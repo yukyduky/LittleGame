@@ -56,6 +56,14 @@ Menu* MainMenuState::initStartMenu()
 		text, BEHAVIOR::QUIT);
 	stMenu->addButton(pButton);
 
+	nextID = this->newID();
+	text = L"Auto Glyph1";
+	pButton = new Button(this->objD2D.GETRenderTarget(), this->objD2D.GETTextFormat(), this, nextID,
+		{ 100,450, 200,50 }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::ADDGLYPH,
+		NAME::AUTOATTACK, GLYPHTYPE::GLYPH1);
+	stMenu->addButton(pButton);
+
 
 	//this->menus[MENUS::START] = stMenu;
 	return stMenu;

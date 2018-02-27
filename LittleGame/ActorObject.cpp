@@ -4,7 +4,7 @@
 #include "MainMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
-#include "EndState.h"
+#include "RewardMenuState.h"
 
 //Include spells
 //#include "Spell.h"
@@ -298,7 +298,6 @@ void ActorObject::fireAbilityX()
 
 void ActorObject::pauseMenu()
 {
-	//Locator::getD3D()->GetFrame();
 	StateManager::pushState(MainMenuState::getInstance());
 }
 
@@ -372,8 +371,8 @@ void ActorObject::dealDmg(float dmg)
 		this->hp = 0;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
-		// Push the "EndState" which will end all!
-		StateManager::pushState(EndState::getInstance());
+		// Push the "RewardMenuState" which will end all!
+		StateManager::pushState(RewardMenuState::getInstance());
 	}
 }
 
@@ -499,4 +498,9 @@ void ActorObject::switchSpell()
 	}
 	
 	newSpells.clear();
+}
+
+void ActorObject::changeSpell(int spell, int glyph)
+{
+	this->spells[spell]->insertGlyph((GLYPHTYPE)glyph);
 }

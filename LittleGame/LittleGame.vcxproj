@@ -160,7 +160,7 @@
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
-    <ClInclude Include="EndState.h" />
+    <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
@@ -207,7 +207,7 @@
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="D2D.cpp" />
     <ClCompile Include="D3D.cpp" />
-    <ClCompile Include="EndState.cpp" />
+    <ClCompile Include="RewardMenuState.cpp" />
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
