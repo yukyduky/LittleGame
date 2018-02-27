@@ -2,15 +2,15 @@
 #include "Spell.h"
 
 SpSwarmProjectile::SpSwarmProjectile(
-	EnemyObject* pShooter, ActorObject* pPlayer,
-	int range, int dmg, int aggroRange, double cooldown) : EnemySpell(pShooter, NAME::ENEM_SWARM)
+	EnemyObject* pShooter, ActorObject* pPlayer, int* pActiveEnemiesCount,
+	int projectilesMaxFlyingRange, int dmg, int attackRange, double cooldown) : EnemySpell(pShooter, pActiveEnemiesCount, NAME::ENEM_SWARM)
 {
 	this->pPlayer = pPlayer;
-	this->range = range;
+	this->projectilesMaxFlyingRange = projectilesMaxFlyingRange;
 	this->damage = dmg;
-	this->aggroRange = aggroRange;
+	this->attackRange = attackRange;
 	this->setCoolDown(1.0f);
-	this->seekSpeed = 1;
+	this->seekSpeed = 0.9;
 }
 SpSwarmProjectile::~SpSwarmProjectile()
 {
@@ -26,7 +26,7 @@ bool SpSwarmProjectile::castSpell()
 	}
 	else
 	{
-		ProjProp props(5, XMFLOAT4(1.0f, 1.0f, 0.5f, 0.1f), 150, this->range, false);
+		ProjProp props(5, XMFLOAT4(1.0f, 1.0f, 0.5f, 0.1f), 150, this->projectilesMaxFlyingRange, false);
 		Projectile* pProj = this->spawnProj(props);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 
@@ -58,4 +58,12 @@ void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 void SpSwarmProjectile::update()
 {
 	this->updateCD();
+}
+
+void SpSwarmProjectile::cleanUp()
+{
+	// The owner of me is dying, so reduce the activeEnemies!
+	if (this->getOwner()->getType() == OBJECTTYPE::ENEMY) {
+		(*this->pActiveEnemiesCount)--;
+	}
 }

@@ -26,12 +26,15 @@ enum class SPELLSTATE {READY, COOLDOWN, ACTIVE, LOCKED};
 // Names of spells, usd in switchcase
 enum class NAME {
 	//Damage
-	AUTOATTACK, FIRE, BOMB
+	AUTOATTACK, FIRE, BOMB,
 	//Mobility
-	, DASH, BUFF,
+	DASH, BUFF,
 	
 	// EnemySpells after this point
-	ENEM_SWARM
+	ENEM_SWARM, ENEM_IMMO,
+	
+	//
+	SIZE
 };
 
 class Spell
@@ -47,13 +50,14 @@ public:
 	// Function called by the projectile, spells collision should be handled here
 	virtual void collision(GameObject* target, Projectile* proj) = 0;
 	virtual void update() = 0;
+	virtual void cleanUp() = 0;
 
 	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
 	// Spawns a projectile infront of the player
 	Projectile* spawnProj(ProjProp props);
 
-	ActorObject* getActor() { return this->actor; };
+	ActorObject* getOwner() { return this->owner; };
 	void setType(SPELLTYPE input) { this->type = input; };
 	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
@@ -63,7 +67,8 @@ public:
 	SPELLSTATE getState() { return this->state; };
 	void setCoolDown(double input) { this->coolDown = input; };
 	float getCoolDown() { return this->coolDown; };
-	int getAggroRange() { return this->aggroRange; };
+	void setAttackRange(int attackRange) { this->attackRange = attackRange; }
+	int getAttackRange() { return this->attackRange; };
 
 	// TSC = TimeSinceCast
 	size_t getTSC() { return this->timeSinceCast; };
@@ -74,7 +79,7 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	NAME name;
-	ActorObject * actor = nullptr;
+	ActorObject * owner = nullptr;
 
 	double coolDown = 0.0f;
 	double timeSinceCast = 0.0f;
@@ -82,7 +87,7 @@ private:
 	size_t cost;
 
 protected:
-	int aggroRange = -1;
+	int attackRange = -1;
 };
 
 

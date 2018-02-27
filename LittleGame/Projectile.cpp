@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "IncludeSpells.h"
 
-Projectile::Projectile(const size_t ID, float velocity, float range, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -14,8 +14,8 @@ Projectile::Projectile(const size_t ID, float velocity, float range, bool spinn,
 	this->direction = dir;
 	this->velocity = velocity;
 	this->spinn = spinn;
-	this->rangeCoutner = 0;
-	this->range = range;
+	this->rangeCounter = 0;
+	this->maxFlyingRange = maxFlyingRange;
 	this->SETrotationMatrix(shooter->getRotationMatrix());
 
 	// IGNORE THIS ATM, IT IS AN OPTIMIZATION WHICH COULD BE IMPLEMENTED (setSpell should be done inside the constructor)
@@ -218,11 +218,11 @@ void Projectile::update()
 
 	if (this->spinn)
 	{
-		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->getDirection(), this->rangeCoutner));
+		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->getDirection(), this->rangeCounter));
 	}
 
-	this->rangeCoutner++;
-	if (this->rangeCoutner >= this->range && this->range != -1)
+	this->rangeCounter++;
+	if (this->rangeCounter >= this->maxFlyingRange && this->maxFlyingRange != -1)
 	{
 		this->setState(OBJECTSTATE::TYPE::DEAD);
 	}

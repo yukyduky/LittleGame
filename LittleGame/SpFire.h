@@ -20,6 +20,7 @@ public:
 	//What the spell will do with the target
 	void collision(GameObject* target, Projectile* proj);
 	void update();
+	void cleanUp();
 private:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;

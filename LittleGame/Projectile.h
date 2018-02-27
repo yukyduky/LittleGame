@@ -12,7 +12,7 @@ class ActorObject;
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, float speed, float range, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
+	Projectile(const size_t ID, float speed, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
 	~Projectile();
 
 	/*Moves the projectile in this->direction with this->velocity * this->dt
@@ -29,8 +29,8 @@ public:
 	float getSpeed() { return this->speed; }
 	void setDirection(XMVECTOR dir);
 	XMVECTOR getDirection();
-	void setRange(int range) { this->range = range; }
-	void setSeeking(float rotationSpeed, ActorObject* pPlayer);	// Only relevant to stalking projectiles
+	void setRange(int maxFlyingRange) { this->maxFlyingRange = maxFlyingRange; }
+	void setSeeking(float rotationSpeed, ActorObject* pPlayer);	// Only relevant to seekling projectiles
 	void setSpell(Spell* spell);
 	Spell* getSpell();	// Gets allocated by player.spell->castSpell()
 
@@ -53,8 +53,8 @@ private:
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel
-	int range = 0;
-	int rangeCoutner = 0;
+	int maxFlyingRange = 0;
+	int rangeCounter = 0;
 };
 
 

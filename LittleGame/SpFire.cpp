@@ -50,6 +50,10 @@ void SpFire::update()
 	this->updateCD();
 }
 
+void SpFire::cleanUp()
+{
+}
+
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {

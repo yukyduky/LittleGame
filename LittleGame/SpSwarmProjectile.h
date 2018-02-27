@@ -11,18 +11,19 @@ private:
 
 public:
 	SpSwarmProjectile(
-		EnemyObject* pShooter, ActorObject* pPlayer,
-		int range, int dmg, int aggroRange, double cooldown
+		EnemyObject* pShooter, ActorObject* pPlayer, int* pActiveEnemiesCount,
+		int range, int dmg, int attackRange, double cooldown
 	);
 	~SpSwarmProjectile();
 
 	// Returns false if spell in unavalible to cast
-	virtual bool castSpell();
+	bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
-	virtual void upgrade(float modif);
+	void upgrade(float modif);
 	// Function called by the projectile, spells collision should be handeld here
-	virtual void collision(GameObject* target, Projectile* proj);
-	virtual void update();
+	void collision(GameObject* target, Projectile* proj);
+	void update();
+	void cleanUp();
 
 
 

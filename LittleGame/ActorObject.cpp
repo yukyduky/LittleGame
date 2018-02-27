@@ -75,6 +75,7 @@ void ActorObject::cleanUp()
 {
 	// Clean up all internal data
 	for (int i = 0; i < this->spells.size(); i++) {
+		this->spells[i]->cleanUp();
 		delete this->spells[i];
 	}
 	this->spells.clear();

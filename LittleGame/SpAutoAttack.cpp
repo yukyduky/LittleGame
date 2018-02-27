@@ -47,6 +47,10 @@ void SpAutoAttack::update()
 	this->updateCD();
 }
 
+void SpAutoAttack::cleanUp()
+{
+}
+
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {

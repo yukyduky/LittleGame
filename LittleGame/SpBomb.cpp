@@ -78,6 +78,10 @@ void SpBomb::update()
 	}
 }
 
+void SpBomb::cleanUp()
+{
+}
+
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
 	if (this->damage >= this->end && target->getType() == OBJECTTYPE::ENEMY)

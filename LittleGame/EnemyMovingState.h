@@ -22,10 +22,9 @@ private:
 	EnemyObject * pHead = nullptr;
 	AIComponent * pBrain = nullptr;
 	float attackRange = 0.0f;	// Fetched from Head's attackComponent
-	EnemyAttackingState* attackingStateTemplate = nullptr;	// Used instead of 'new' each frame
 
 public:
-	EnemyMovingState(EnemyObject& pHead, AIComponent& pBrain, EnemyAttackingState& attackState);
+	EnemyMovingState(EnemyObject& pHead, AIComponent& pBrain);
 	virtual void executeBehavior();
 
 };

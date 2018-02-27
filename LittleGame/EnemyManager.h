@@ -7,11 +7,14 @@
 #include "ActorObject.h"
 #include "AIComponent.h"
 
+/* ---------------------------------------------------------------------------
+	If you're here to look at anything that is NOT the swarmers, i highly recommend 
+	minimizing EVERYTHING that is not the EnemyManager class
+---------------------------------------------------------------------------- */
+
 
 // Forward declaration to prevent double includes
-class EndState;
 class GamePlayState;
-
 
 struct Wave {
 	// Push to the back, pop from the front, [0] is the first enemy and [n] is the last enemy.
@@ -25,11 +28,6 @@ namespace ENEMYTYPE {
 	};
 }
 
-
-
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
-// Necessary structs
 struct ArrayNode;	// Forward declaration since Alive/Dead/Array all reside within eachother
 struct AliveNode {
 	ArrayNode*	 index = nullptr;
@@ -46,12 +44,15 @@ struct ArrayNode {
 	AliveNode*	 alive = nullptr;
 	DeadNode*	 dead = nullptr;
 };
-
-class ArrayList
+class ArrayList 
 {
 private:
+	// This class is technically not done, since it can be added upon if we want to dynamically
+	// add swarmers to it, which we don't need or want to do atm.
+
 	// Variables
 	int size = -1;
+	XMFLOAT3 averagePosition = { -1, -1, -1 };
 	ArrayNode* mainArray = nullptr;
 	AliveNode* firstAlive = nullptr;
 	DeadNode* firstDead = nullptr;
@@ -88,19 +89,35 @@ public:
 		// Add the last one
 		stepper->index = &this->mainArray[this->size-1];
 	}
-	void remove(int index) {
-		// This class is technically not done, since it can be added upon if we want to dynamically
-		// add swarmers to it, which we don't.
+	void update() {
+		// Update the averagePosition
+		XMFLOAT3 averagePosition = { 0, 0, 0 };
+		XMFLOAT3 currentPosition = { 0, 0, 0 };
+		AliveNode* stepper = this->firstAlive;
 
-		// To remove the AliveNode, connect it's 'back' and 'forward' pointers
-		AliveNode* back = this->mainArray[index].alive->back;
-		AliveNode* forward = this->mainArray[index].alive->forward;
-		back->forward = forward;
-		forward->back = back;
+		while (stepper->forward != nullptr) {
+			// Add up all of them! (except the last one)
+			currentPosition = stepper->index->obj->GETPosition();
+			averagePosition.x += currentPosition.x;
+			averagePosition.y += currentPosition.y;
+			averagePosition.z += currentPosition.z;
 
-		// Also clean!
-		delete this->mainArray[index].alive;
-		this->mainArray[index].alive = nullptr;
+			stepper = stepper->forward;
+		}
+
+		// Add up the last one
+		currentPosition = this->mainArray[0].obj->GETPosition();
+		averagePosition.x += currentPosition.x;
+		averagePosition.y += currentPosition.y;
+		averagePosition.z += currentPosition.z;
+
+		// Divide down
+		averagePosition.x /= this->size;
+		averagePosition.y /= this->size;
+		averagePosition.z /= this->size;
+	}
+	XMFLOAT3* getAveragePosition() {
+		return &this->averagePosition;
 	}
 	EnemyObject* find(int index) {
 		if (this->mainArray[index].alive != nullptr) {
@@ -110,6 +127,23 @@ public:
 	}
 	AliveNode* getFirst() {
 		return this->firstAlive;
+	}
+	void insert() {
+		// NOT IMPLEMENTED AS IT IS NOT NEEDED OR WANTED ATM.
+	}
+	void remove(int index) {
+		if (this->firstAlive != nullptr) {
+			// To remove the AliveNode, connect it's 'back' and 'forward' pointers
+			AliveNode* back = this->mainArray[index].alive->back;
+			AliveNode* forward = this->mainArray[index].alive->forward;
+			back->forward = forward;
+			forward->back = back;
+
+			// Also clean!
+			delete this->mainArray[index].alive;
+			this->mainArray[index].alive = nullptr;
+			this->size--;
+		}
 	}
 	void cleanUp() {
 
@@ -125,16 +159,9 @@ public:
 			}
 			// All objects clean themselves, we're only using pointers here.
 		}
-
 		delete this->mainArray;
 	}
 };
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ ArrayList
-
-
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ CLASS
-// -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+ CLASS
 
 class EnemyManager
 {
@@ -148,7 +175,6 @@ private:
 	// Relevant to grid
 	int swarmerCount = -1;
 	ArrayList* pSwarmers = nullptr;
-
 
 
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
@@ -165,8 +191,8 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
-	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
-	EnemyObject* createClusterer();
+	EnemyObject* createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+	EnemyObject* createSwarmer();
 
 public:
 	EnemyManager();

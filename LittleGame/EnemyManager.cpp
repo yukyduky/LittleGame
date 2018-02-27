@@ -14,6 +14,7 @@
 #include "EndState.h"
 #include "SwarmerEnemyAttack.h"
 #include "SpSwarmProjectile.h"
+#include "SpEnemyImmolation.h"
 
 EnemyManager::EnemyManager()
 {
@@ -39,33 +40,31 @@ void EnemyManager::startLevel1()
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;
-	this->swarmerCount = 0;
+	this->swarmerCount = 5;
 	std::vector<EnemyObject*> localSwarmers;
 
 	// TESTING -----------
 	this->currentWaveCount = 1;
 	this->currentWaveSize = 0;
-	this->swarmerCount = 3;
+	this->swarmerCount = 5;
 	// TESTING -----------
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
 		currentWave = new Wave();
 
-		// Per Normal Enemy
+		// Per minion
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			EnemyObject* enemy = this->createMinion(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
 
-		// --------------------------- NEW --------------------------- //
-		// --------------------------- NEW --------------------------- //
-		// Per clusterer
+		// Per Swarmer
 		for (int k = 0; k < swarmerCount; k++) {
 			// Create the actual object
-			EnemyObject* swarmer = this->createClusterer();
+			EnemyObject* swarmer = this->createSwarmer();
 
 			// Attach a pointer to waves
 			currentWave->enemies.push_back(swarmer);
@@ -75,16 +74,17 @@ void EnemyManager::startLevel1()
 
 			this->activeEnemiesCount++;
 		}
-		this->pSwarmers->initialize(localSwarmers);
-
-		// --------------------------- NEW --------------------------- //
-		// --------------------------- NEW --------------------------- //
 
 		// Attach the currentWave to our waves
 		this->waves.push_back(currentWave);
 
 		// Up the difficulty a bit maybe?
 	//	this->currentWaveSize += 1;				REMOVED WHILE IMMOLATION IS NOT DONE
+	}
+
+	// Initialize the swarmers! (if there are any)
+	if (this->swarmerCount > 0) {
+		this->pSwarmers->initialize(localSwarmers);
 	}
 
 	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
@@ -112,7 +112,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -150,31 +150,31 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 
 
 	float velocity = 180;
-	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
+	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 	float immolationDamage = 3;
-	float attackCooldown = 0;
-	float projectileRange = 600;
-	float aggroRange = 500;
-	
+	float attackCooldown = 0.5;
+	float attackRange = 70;
+
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ID, velocity, pos, velocity,
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
-//	Spell* spell = new SpImmolation();			// TO BE ADDED
-//	enemyObject->addSpell(spell);				//
+	Spell* spell = new SpEnemyImmolation(
+		enemyObject, this->players[0], &this->activeEnemiesCount,
+		immolationDamage, attackCooldown, attackRange
+	);
+	enemyObject->addSpell(spell);
 	
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject, aiBehavior);
-	attackComponent = new ImmolationEnemyAttack(immolationDamage, attackCooldown, aggroRange, &this->activeEnemiesCount, *enemyObject);
 	
 	// STATES
-	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
-	moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
+	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
 
 	
 	// Make the enemy inactive
@@ -182,7 +182,7 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	return enemyObject;
 }
 
-EnemyObject* EnemyManager::createClusterer()
+EnemyObject* EnemyManager::createSwarmer()
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -219,13 +219,13 @@ EnemyObject* EnemyManager::createClusterer()
 
 
 	float velocity = 180;
-	XMFLOAT4 color(10.0f, 0.0, 0.0f, 255.0f);
+	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float projectileDamage = 3;
 	float attackCooldown = 0.5;
 	float projectileRange = 600;
-	float aggroRange = 500;
+	float attackRange = 500;
 
 	/// A T T A C H M E N T
 	// OBJECT
@@ -236,7 +236,7 @@ EnemyObject* EnemyManager::createClusterer()
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpSwarmProjectile(
-		enemyObject, this->players[0], projectileRange, projectileDamage, aggroRange, attackCooldown
+		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
 	);
 	enemyObject->addSpell(spell);	// NECESSARY
 
@@ -245,10 +245,10 @@ EnemyObject* EnemyManager::createClusterer()
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
-	attackComponent = new SwarmerEnemyAttack(*enemyObject, this->activeEnemiesCount, projectileDamage, attackCooldown, projectileRange);
+//	attackComponent = new SwarmerEnemyAttack(*enemyObject, this->activeEnemiesCount, projectileDamage, attackCooldown, projectileRange);
 	// STATES
-	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
-	moveState = new EnemyMovingState(*enemyObject, *aiComponent, *attackState);
+//	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
+	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
@@ -319,16 +319,17 @@ void EnemyManager::update()
 			this->timePassed += Locator::getGameTime()->getDeltaTime();
 		}
 	}
-	// All waves have been spawned!
-	else {
+	else { // All waves have been spawned!
+		
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
 			//StateManager::pushState(this->endState);
+			int asdf1 = 3;
 		}
 	}
 
-	// Clean up the Grid!
-
+	// Update the swarmer collective!
+	this->pSwarmers->update();
 }
 
 void EnemyManager::cleanUp()

@@ -11,10 +11,10 @@ SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
 	this->duration = 1.5f;
 
 	this->range = 20.0f;
-	this->oriRadius = this->getActor()->GETphysicsComponent()->GETBoundingSphere().Radius;
+	this->oriRadius = this->getOwner()->GETphysicsComponent()->GETBoundingSphere().Radius;
 	this->active = false;
 	this->floatingValue = 0.0f;
-	this->oriY = this->getActor()->GETPosition().y + this->range;
+	this->oriY = this->getOwner()->GETPosition().y + this->range;
 }
 
 SpBuff::~SpBuff()
@@ -33,8 +33,8 @@ bool SpBuff::castSpell()
 		this->active = true;
 		this->setState(SPELLSTATE::ACTIVE);
 
-		this->getActor()->setSpeed(this->strength);
-		this->getActor()->GETphysicsComponent()->updateBoundingArea(0.0f);
+		this->getOwner()->setSpeed(this->strength);
+		this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
 		Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 	}
@@ -56,21 +56,25 @@ void SpBuff::update()
 	{
 		if (this->getTSC() > this->duration)
 		{
-			this->getActor()->setSpeed(1.0f);
+			this->getOwner()->setSpeed(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 
-			this->getActor()->setPositionY(this->oriY - this->range);
-			this->getActor()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
+			this->getOwner()->setPositionY(this->oriY - this->range);
+			this->getOwner()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
 		}
 		else
 		{
 			this->floatingValue += 5.0f * Locator::getGameTime()->getDeltaTime();
 			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
 
-			this->getActor()->setPositionY(parameter);
+			this->getOwner()->setPositionY(parameter);
 		}
 	}
+}
+
+void SpBuff::cleanUp()
+{
 }
 
 void SpBuff::collision(GameObject * target, Projectile* proj)
