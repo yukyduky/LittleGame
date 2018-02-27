@@ -10,28 +10,35 @@
 #include "ImmolationEnemyAttack.h"
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
+#include "StateManager.h"
+#include "EndState.h"
 
 EnemyManager::EnemyManager()
 {
 	this->pGPS = nullptr;
+
+	this->activeEnemiesCount = 0;
 }
 
-EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players)
+EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& players)
 {
+	// Set up pointers
 	this->pGPS = &pGPS;
 	this->players = players; 
+	this->endState = new EndState();
+	this->activeEnemiesCount = 0;
 }
 
 void EnemyManager::startLevel1()
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
+	this->activeEnemiesCount = 0;
 	this->spawnInterval = 0.2;
 	this->waveInterval = 5;
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
-	int testScale = 1;
-	Wave* currentWave;
+	Wave* currentWave = nullptr;
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -42,7 +49,7 @@ void EnemyManager::startLevel1()
 			// Create an enemy and attatch it to the wave.
 			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
 			currentWave->enemies.push_back(enemy);
-			testScale++;
+			this->activeEnemiesCount++;
 		}
 
 		// Attach the currentWave to our waves
@@ -51,6 +58,9 @@ void EnemyManager::startLevel1()
 		// Up the difficulty a bit maybe?
 		this->currentWaveSize += 1;
 	}
+
+	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
+	this->activeEnemiesCount--;
 }
 
 void EnemyManager::cleanLevel()
@@ -58,9 +68,19 @@ void EnemyManager::cleanLevel()
 	// Per wave
 	for (auto &currentWave : this->waves) {
 
+		for (size_t i = 0; i < currentWave->enemies.size(); i++) {
+			currentWave->enemies[i]->cleanUp();
+			delete currentWave->enemies[i];
+		}
 		// Since enemies are actors which SHOULD HAVE been added to the dynamicObjectsArray,
 		// they'll be cleaned and deleted from there, so we only need to delete the 'Waves' here
 		delete currentWave;
+	}
+
+	int popWavesQueue = waves.size();
+
+	for (int i = 0; i < popWavesQueue; i++) {
+		this->waves.pop_back();
 	}
 }
 
@@ -68,16 +88,16 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
-	EnemyObject* enemyObject;
+	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent;
-	AIComponent* aiComponent;
-	InputComponent* input;
-	PhysicsComponent* physicsComponent;
-	EnemyAttackComponent* attackComponent;
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyAttackingState* attackState;
-	EnemyMovingState* moveState;
+	EnemyAttackingState* attackState = nullptr;
+	EnemyMovingState* moveState = nullptr;
 
 
 	/// D E F I N I T I O N
@@ -103,11 +123,11 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 
 	float speed = 180;
 	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
+	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 0.3f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float immolationDamage = 30;
-	float immolationDuration = 3;
-	float immolationRange = 40;
+	float immolationDamage = 3;
+	float immolationDuration = 0.3;
+	float immolationRange = 50;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -120,7 +140,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject, aiBehavior);
-	attackComponent = new ImmolationEnemyAttack(immolationDamage, immolationDuration, immolationRange, *enemyObject);
+	attackComponent = new ImmolationEnemyAttack(immolationDamage, immolationDuration, immolationRange, &this->activeEnemiesCount, *enemyObject);
 	
 	// STATES
 	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
@@ -136,6 +156,8 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 {
 	this->pGPS = &pGPS;
 	this->players = players;
+	this->endState = new EndState();
+	this->activeEnemiesCount = 0;
 }
 
 void EnemyManager::update()
@@ -179,6 +201,13 @@ void EnemyManager::update()
 
 		else {
 			this->timePassed += Locator::getGameTime()->getDeltaTime();
+		}
+	}
+	// All waves have been spawned!
+	else {
+		// Has the player won? :O
+		if (this->activeEnemiesCount < 1) {
+			StateManager::pushState(this->endState);
 		}
 	}
 }

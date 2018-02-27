@@ -26,7 +26,7 @@
 class Command;
 class InputComponent;
 
-//(Size of cube, color in XMFLOAT4, travelSpeed, range(tiem alive), if it sould spinn)
+//(Size of cube, color in XMFLOAT4, travelSpeed, range(time alive), if it should spin)
 struct ProjProp {
 	float size;
 	XMFLOAT4 color;
@@ -49,12 +49,12 @@ class GamePlayState : public State
 {
 private:
 	static GamePlayState sGamePlayState;
-	GameManager* pGM;
+	GameManager* pGM = nullptr;
 	
 	EnemyManager enemyManager;
 	int ID = 0;
-	int arenaWidth;
-	int arenaDepth;
+	int arenaWidth = 0;
+	int arenaDepth = 0;
 	QuadTree quadTree;
 	CollisionHandler collisionHandler;
 	LevelManager lm;
@@ -62,30 +62,35 @@ private:
 	RenderInputOrganizer rio;
 	std::vector<std::vector<tileData>> grid;
 	//everything that will exist in this level
-	std::vector<GameObject*> staticObjects;
-	std::vector<GameObject*> dynamicObjects;
+	std::list<GameObject*> staticObjects;
+	std::list<GameObject*> dynamicObjects;
 	// Count below represents static objects that have collision (see 'checkCollisions()' function)
-	std::vector<GameObject*> noCollisionDynamicObjects;
+	std::list<GameObject*> noCollisionDynamicObjects;
 	int staticPhysicsCount = 0;
 	
 	//Variables for falling floor
 	FloorFallData fallData;
-	double counter = 0;
+	float counter = 0.0f;
 
 	//All objects that wants to be renederd
-	std::vector<GraphicsComponent*> graphics;
+	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
 	std::vector<Light> pointLights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
-	ActorObject* player1;
-	Command* selectCommand;
+	ActorObject* player1 = nullptr;
+	Command* selectCommand = nullptr;
+
+	///std::list<PhysicsComponent*> physicsListStatic;
+	///std::list<PhysicsComponent*> physicsListDynamic;
+
+	//void updatePhysicsComponents();
 	
 	void checkCollisions();
 
-	MouseInput* mousePicker;
 
+	MouseInput* mousePicker = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -132,7 +137,7 @@ public:
 	1. Returns a reference to the internal dynamicObjects vector.
 	- Currently only used by EnemyHandler for creation of enemies.
 	*/
-	std::vector<GameObject*>* getDynamicObjects();
+	std::list<GameObject*>* getDynamicObjects();
 
 	void addGraphics(GraphicsComponent* graphicsComponent);
 

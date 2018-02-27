@@ -15,7 +15,18 @@
 
 
 namespace SOUND {
-	enum NAME { AHEM, GULP, BEEP0, BEEP1, BEEP2, BEEP3, BEEP4, SIZE };
+	enum NAME {
+		AHEM, GULP,
+		BEEP0, BEEP1, BEEP2, BEEP3, BEEP4,
+		ENEMYATTACK_1, ENEMYATTACK_2, ENEMYATTACK_3, ENEMYATTACK_4,
+		ENEMYATTACK_5, ENEMYATTACK_6, ENEMYATTACK_7, ENEMYATTACK_8,
+		ENEMYATTACK_9, ENEMYATTACK_10, ENEMYATTACK_11,
+		ATTACKGRUNT_1, ATTACKGRUNT_2, ATTACKGRUNT_3, ATTACKGRUNT_4,
+		ATTACKGRUNT_5, ATTACKGRUNT_6, ATTACKGRUNT_7, ATTACKGRUNT_8,
+		ATTACKGRUNT_9,
+		ENEMYDEATH_1, ENEMYDEATH_2, ENEMYDEATH_3, ENEMYDEATH_4, ENEMYDEATH_5,
+		ABILITYSOUND_SPEEDBOOST, ABILITYSOUND_TELEPORT,
+		SIZE };
 }
 namespace MUSIC {
 	enum NAME { ONEPUNCH, SIZE };
@@ -44,17 +55,18 @@ public:
 	virtual void play(MUSIC::NAME name) = 0;
 	//Puts a sound into soundQueue
 	virtual void play(SOUND::NAME name) = 0;
-	virtual void stop(MUSIC::NAME name) = 0;
-	virtual void stop(SOUND::NAME name) = 0;
+	virtual void stopAll() = 0;
+	virtual void stopMusic() = 0;
+	virtual void stopSound() = 0;
 	virtual void pause(MUSIC::NAME name) = 0;
 	virtual void pause(SOUND::NAME name) = 0;
-	//Changes both sound and music to parameter (0-100)
-	virtual void adjustMaster(int volume) = 0;
 	virtual void adjustMaster(bool value) = 0;
+	//Changes both sound and music to parameter (0-100)
+	virtual void adjustMaster(float volume) = 0;
 	//Changes music to parameter (0-100)
-	virtual void adjustMusic(int volume) = 0;
+	virtual void adjustMusic(float volume) = 0;
 	//Changes sound to parameter (0-100)
-	virtual void adjustEffects(int volume) = 0;
+	virtual void adjustEffects(float volume) = 0;
 
 	virtual void setRepeatMusic(bool repeat) = 0;
 	virtual void cleanUp() = 0;

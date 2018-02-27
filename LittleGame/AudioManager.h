@@ -2,13 +2,10 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 
-#include <string>
 #include <SFML\Audio.hpp>
 #include <array>
 #include <deque>
 #include "IAudioManager.h"
-
-
 
 /*	---:INFO:---
 Sound: Plays sound from the buffer, more lightweght
@@ -18,7 +15,7 @@ Music: Streams from a file, saves memory
 class AudioManager : public IAudioManager
 {
 private:
-	bool repeatMusic;
+	bool repeatMusic = true;
 	std::array<sf::SoundBuffer, SOUND::SIZE> sounds;
 	std::array<std::string, MUSIC::SIZE> musicFilenames;
 	//Queue isnt neccesary and the game will play the sound instantly
@@ -27,12 +24,14 @@ private:
 	//Sound object that will play the sound
 	sf::Sound currentSound;
 
-	int soundVolume = 20;
-	int musicVolume = 6;
+	float soundVolume = 0.0f;
+	float musicVolume = 0.0f;
 
 	// What MUSICSTATE the game is in, declared as LEVEL1 in current version
-	int currState;
+	size_t currState = 0;
 public:
+	AudioManager();
+	~AudioManager() {}
 	//Loads in all music and sound
 	int init();
 	//Adds a posible sound
@@ -45,15 +44,16 @@ public:
 	void play(MUSIC::NAME name);
 	//Plays the sound once per call
 	void play(SOUND::NAME name);
-	void stop(MUSIC::NAME name);
-	void stop(SOUND::NAME name);
+	void stopAll();
+	void stopMusic();
+	void stopSound();
 	void pause(MUSIC::NAME name);
 	void pause(SOUND::NAME name);
-	void adjustMaster(int volume);
 	// true = audio up
 	void adjustMaster(bool value);
-	void adjustMusic(int volume);
-	void adjustEffects(int volume);
+	void adjustMaster(float volume);
+	void adjustMusic(float volume);
+	void adjustEffects(float volume);
 
 	void setRepeatMusic(bool repeat);
 

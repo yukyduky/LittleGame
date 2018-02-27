@@ -2,6 +2,9 @@
 #ifndef RECTANGLECOMPONENT_H_
 #define RECTANGLECOMPONENT_H_
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include "GraphicsComponent.h"
 #include <Windows.h>
 #include <array>
@@ -10,17 +13,17 @@ class RectangleComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	ID3D11Buffer* gVertexBuffer;
-	ID3D11Buffer* gIndexBuffer;
-	size_t stride;
-	size_t offset;
-	size_t numIndices;
+	ID3D11Buffer* gVertexBuffer = nullptr;
+	ID3D11Buffer* gIndexBuffer = nullptr;
+	size_t stride = 0;
+	size_t offset = 0;
+	size_t numIndices = 0;
 	vColor color;
-	GameObject* head;
+	GameObject* head = nullptr;
 	XMFLOAT3 points[4];
 	XMFLOAT3 normal;
-	double counter;
-	double transitionTime;
+	float counter = 0;
+	float transitionTime = 0;
 	/*--------<INFORMATION>--------
 	1. Creates a rectangle with points ranging from -1.0 to 1.0 in x and z dimensions.
 	2. All vertices is in modelspace with origin in the center of the rectangle.
@@ -34,7 +37,7 @@ public:
 	1. Calls the private function createVertices() if it's the first time a RectangleComponent is being created.
 	*/
 	RectangleComponent(GameObject& obj, const float r, const float g, const float b, const float a);
-	~RectangleComponent();
+	virtual ~RectangleComponent();
 
 	/*--------<INFORMATION>--------
 	1. Returns the ID of the component.
@@ -58,7 +61,7 @@ public:
 
 	virtual size_t& GETnumIndices();
 
-	virtual XMMATRIX& getWorld();
+	virtual XMFLOAT4X4& getWorld();
 
 	/*--------<INFORMATION>--------
 	1. Returns the color of the rectangle.

@@ -7,7 +7,7 @@
 std::unordered_map<KEYBOARD::KEY, size_t> InputComponent::keyboardKeyMap;
 std::unordered_map<MOUSE::KEY, size_t> InputComponent::mouseKeyMap;
 std::unordered_map<CONTROLLER::KEY, size_t> InputComponent::controllerKeyMap;
-Command* InputComponent::commands[Commands::Size];
+Command* InputComponent::commands[Commands::Size] = {};
 
 std::map<size_t, Key> InputComponent::keyboardCommandMap;
 std::map<size_t, Key> InputComponent::mouseCommandMap;
@@ -151,7 +151,7 @@ void InputComponent::init()
 	mapKeys();
 }
 
-void InputComponent::vibrate(size_t left, size_t right)
+void InputComponent::vibrate(unsigned short left, unsigned short right)
 {
 }
 
@@ -255,4 +255,21 @@ float InputComponent::GETnormalizedValueOfRightTrigger()
 XMFLOAT2 InputComponent::GETcursorPos()
 {
 	return XMFLOAT2(0.0f, 0.0f);
+}
+
+void InputComponent::cleanup()
+{
+	for (auto &i : commands) {
+		delete i;
+		i = nullptr;
+	}
+	while (keyboardKeyMap.size() > 0) {
+		keyboardKeyMap.erase(keyboardKeyMap.begin());
+	}
+	while (mouseKeyMap.size() > 0) {
+		mouseKeyMap.erase(mouseKeyMap.begin());
+	}
+	while (controllerKeyMap.size() > 0) {
+		controllerKeyMap.erase(controllerKeyMap.begin());
+	}
 }

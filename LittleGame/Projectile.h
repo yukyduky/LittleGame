@@ -20,24 +20,29 @@ public:
 
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
-	void setDirection(XMVECTOR dir) { this->direction = dir; }
-	XMVECTOR getDirection() { return this->direction; }
+	void setDirection(XMVECTOR dir);
+	XMVECTOR getDirection();
 	void setSpell(Spell* spell) { this->spell = spell; }
-	void setRange(int range) { this->range = range; }
+	void setRange(float range) { this->range = range; }
 
 	Spell* getSpell() ;
+
+	// Mainly for FIRE SPELL, but can be used by all projectiles
+	std::list<GameObject*>* getPreviouslyHitList() { return &this->previouslyHit; }
 private:
 	// traveldirection of the projectile
-	XMVECTOR direction;
+	XMFLOAT3 direction;
 	// The speed of the projectile
-	float speed;
+	float speed = 0.0f;
 	// If the pojectile should spinn around its X-axis
 	bool spinn;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
-	Spell* spell;
+	Spell* spell = nullptr;
 	// Range of travel
-	int range;
-	int rangeCoutner;
+	int range = 0;
+	int rangeCounter = 0;
+	
+	std::list<GameObject*> previouslyHit;
 };
 
 

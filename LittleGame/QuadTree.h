@@ -11,10 +11,10 @@
 #define LAYERS_MAX 5
 
 struct QuadTreeSquare {
-	float widthLength;
-	float heightLength;
-	float x;
-	float y;
+	float widthLength = 0.0f;
+	float heightLength = 0.0f;
+	float x = 0.0f;
+	float y = 0.0f;
 
 	QuadTreeSquare();
 	QuadTreeSquare(float widthLength_in, float heightLength_in, float x_in, float y_in);
@@ -24,10 +24,10 @@ class QuadTree {
 private:
 	enum QUADTREEINDEX { BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, SIZE };
 
-	float midpointX;
-	float midpointY;
+	float midpointX = 0.0f;
+	float midpointY = 0.0f;
 
-	int level;
+	int level = 0;
 	std::list<GameObject*> staticObjectsList;
 	QuadTreeSquare nodeBounds;
 	QuadTree* nodes[4];

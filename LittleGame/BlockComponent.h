@@ -1,6 +1,8 @@
 #pragma once
 #ifndef BLOCKCOMPONENT_H_
 #define BLOCKCOMPONENT_H_
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 
 #include "GraphicsComponent.h"
 #include <vector>
@@ -14,17 +16,17 @@ class BlockComponent : public GraphicsComponent
 {
 private:
 	const size_t ID;
-	ID3D11Buffer* gVertexBuffer;
-	ID3D11Buffer* gIndexBuffer;
-	size_t stride;
-	size_t offset;
-	size_t numIndices;
+	ID3D11Buffer* gVertexBuffer = nullptr;
+	ID3D11Buffer* gIndexBuffer = nullptr;
+	size_t stride = 0;
+	size_t offset = 0;
+	size_t numIndices = 0;
 	vColor color;
-	GameObject* head;
+	GameObject* head = nullptr;
 	XMFLOAT3 points[8];
 	XMFLOAT3 normals[6];
-	double counter;
-	double transitionTime;
+	double counter = 0;
+	double transitionTime = 0;
 
 	
 
@@ -38,7 +40,7 @@ private:
 	
 public:
 	BlockComponent(GamePlayState& pGPS, GameObject& obj, XMFLOAT4 color, XMFLOAT3 scale, XMFLOAT3 rotation);
-	~BlockComponent();
+	virtual ~BlockComponent();
 
 
 	virtual ID3D11Buffer*& GETvertexBuffer();
@@ -46,8 +48,9 @@ public:
 	virtual size_t& GETstride();
 	virtual size_t& GEToffset();
 	virtual size_t& GETnumIndices();
-	virtual XMMATRIX& getWorld();
+	virtual XMFLOAT4X4& getWorld();
 
+	vColor GETcolor();
 
 	/*--------<INFORMATION>--------
 	1. Something

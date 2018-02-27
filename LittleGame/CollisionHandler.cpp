@@ -203,7 +203,7 @@ void CollisionHandler::collisionPlayerPlayer() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		this->centerToCenterVector.y * this->divisionFactor,
@@ -232,7 +232,7 @@ void CollisionHandler::collisionPlayerEnemy() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
@@ -241,7 +241,6 @@ void CollisionHandler::collisionPlayerEnemy() {
 
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
-	//this->collidable1->setState(OBJECTSTATE::TYPE::DEAD);
 	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 
@@ -273,7 +272,7 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
@@ -310,7 +309,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector1 = {
 		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
@@ -351,15 +350,15 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0 / this->distance);
+	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
 		this->centerToCenterVector.x * this->divisionFactor,
-		this->centerToCenterVector.y * this->divisionFactor,
+		0.0,
 		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	// Moving the enemy only, since the indestructibles cannot move.
-	//collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+	// Moving the player only, since the indestructibles cannot move.
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyProjectile() {

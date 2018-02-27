@@ -2,12 +2,16 @@
 #ifndef RANDOMZENGINE_H
 #define RANDOMZENGINE_H
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include <Windows.h>
 #include <d3d11.h>
 #include "IGameTime.h"
 #include "IRandomGeneration.h"
 #include "Renderer.h"
 #include "IAudioManager.h"
+#include "IGlobalEvents.h"
 
 class State;
 
@@ -15,11 +19,11 @@ class GameManager
 {
 private:
 	bool isRunning;
-	IGameTime* gameTime;
-	IRandomGeneration* randomGenerator;
+	IGameTime* gameTime = nullptr;
+	IRandomGeneration* randomGenerator = nullptr;
+	IGlobalEvents* globalEvents = nullptr;
 	Renderer renderer;
-
-	IAudioManager* audio;
+	IAudioManager* audio = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

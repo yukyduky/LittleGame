@@ -7,7 +7,9 @@
 #include "ActorObject.h"
 #include "AIComponent.h"
 
+
 // Forward declaration to prevent double includes
+class EndState;
 class GamePlayState;
 
 struct Wave {
@@ -26,8 +28,10 @@ class EnemyManager
 {
 private:
 	// Necessary since creation of actors is dependant on our std::vectors which rely in the GPS.
-	GamePlayState * pGPS;
+	GamePlayState * pGPS = nullptr;
+	EndState * endState = nullptr;
 	std::vector<ActorObject*> players;
+	int activeEnemiesCount = 0;
 
 	// Assumes that all the gameObjects are updated through this pointer, if 
 	// it has since then been divided into several arrays, the pointer here should be to the Actors
@@ -35,12 +39,12 @@ private:
 
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
-	int currentWaveCount;
-	int currentWaveSize;
-	double spawnInterval;
-	double waveInterval;
-	double timePassed;
-	double startTime;
+	int currentWaveCount = 0;
+	int currentWaveSize = 0;
+	double spawnInterval = 0;
+	double waveInterval = 0;
+	double timePassed = 0;
+	double startTime = 0;
 
 	void cleanLevel();
 
@@ -51,7 +55,7 @@ private:
 
 public:
 	EnemyManager();
-	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> players);
+	EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& players);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

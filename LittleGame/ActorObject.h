@@ -23,16 +23,19 @@ namespace ABILITIES {
 class ActorObject : public GameObject
 {
 protected:
-	InputComponent * pInput;
+	InputComponent * pInput = nullptr;
 	//Vector with all Spells that the player can cast
 	std::vector<Spell*> spells;
 	//Current spell that wil be cast by fireAbilityX
-	Spell* selectedSpell;
-	float hp;
-	float energy;
+	Spell* selectedSpell = nullptr;
+	float hp = 0;
+	float hpMAX = 0;
+
+	float energy = 100;
+	float energyMAX = 100;
 
 	//Varible to be changed by Spells
-	float speed;
+	float speed = 0;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -40,19 +43,22 @@ protected:
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
 
-	Crosshair* crossHair;
+	Crosshair* crossHair = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType);
+	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
+	virtual ~ActorObject() {}
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void setSpeed(float speed);
+	virtual float GEThp() { return this->hp; }
+	virtual float GEThpMAX() { return this->hpMAX; }
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
@@ -96,6 +102,13 @@ public:
 	void decCD();	//To be implemented into actors update from another branch
 	// Deals dmg to the Actors Hp
 	void dealDmg(float dmg);
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Depletes the players energy by a certain amount.
+	2. NOTE: Should the function return true, then the energy HAS BEEN DEPLETED.
+	*/
+	bool useEnergy(float energyUse);
+
+	void addEnergy(float energyGain);
 	
 	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);

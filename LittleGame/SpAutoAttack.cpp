@@ -7,9 +7,9 @@ SpAutoAttack::SpAutoAttack(ActorObject* player) : Spell(player, NAME::AUTOATTACK
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 	
-	this->setCoolDown(0.3);
-	this->damage = 1;
-	this->range = 50;
+	this->setCoolDown(0.3f);
+	this->damage = 100.0f;
+	this->range = 50.0f;
 }
 
 SpAutoAttack::~SpAutoAttack()
@@ -25,7 +25,7 @@ bool SpAutoAttack::castSpell()
 	}
 	else
 	{
-		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000, this->range, true);
+		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000.0f, this->range, true);
 		this->spawnProj(props);
 
 		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
@@ -50,7 +50,10 @@ void SpAutoAttack::update()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY) {
-		target->setState(OBJECTSTATE::TYPE::DEAD);
+		this->getPlayer()->addEnergy(5);
+
+		static_cast<ActorObject*>(target)->dealDmg(this->damage);
+
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 

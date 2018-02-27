@@ -34,12 +34,12 @@ struct LightPassData {
 };
 
 struct MatrixBufferCalc {
-	XMMATRIX* world;
-	XMMATRIX* view;
-	XMMATRIX* proj;
+	XMFLOAT4X4 world;
+	XMFLOAT4X4* view = nullptr;
+	XMFLOAT4X4* proj = nullptr;
 
-	XMMATRIX worldView;
-	XMMATRIX worldViewProj;
+	XMFLOAT4X4 worldView;
+	XMFLOAT4X4 worldViewProj;
 };
 
 struct MatrixBufferPack {
@@ -55,14 +55,14 @@ class GraphicsComponent;
 class RenderInputOrganizer
 {
 private:
-	std::vector<Light>* lights;
+	std::vector<Light>* lights = nullptr;
 
 	MatrixBufferCalc rawMatrixData;
 	MatrixBufferPack packagedMatrixData;
 	LightPassData lightPassData;
-	ID3D11Buffer* cMatrixBuffer;
-	ID3D11Buffer* cLightBuffer;
-	ID3D11Buffer* cLightPassDataBuffer;
+	ID3D11Buffer* cMatrixBuffer = nullptr;
+	ID3D11Buffer* cLightBuffer = nullptr;
+	ID3D11Buffer* cLightPassDataBuffer = nullptr;
 
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -75,7 +75,7 @@ private:
 
 public:
 	void initialize(Camera& camera, std::vector<Light>& lights);
-	void render(std::vector<GraphicsComponent*>& graphics);
+	void render(std::list<GraphicsComponent*>& graphics);
 	void injectResourcesIntoSecondPass();
 	void cleanUp();
 };

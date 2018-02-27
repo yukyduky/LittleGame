@@ -4,27 +4,32 @@
 
 
 void RenderInputOrganizer::packageMatrices() {
-	XMMATRIX world = *this->rawMatrixData.world;
-	world = XMMatrixTranspose(world);
+	XMMATRIX worldMatrix = XMLoadFloat4x4(&this->rawMatrixData.world);
+	XMMATRIX viewMatrix = XMLoadFloat4x4(this->rawMatrixData.view);
+	XMMATRIX projMatrix = XMLoadFloat4x4(this->rawMatrixData.proj);
+
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+
 	XMStoreFloat4x4(
 		&this->packagedMatrixData.world,
-		world
+		worldMatrix
 	);
 
-	this->rawMatrixData.worldViewProj = (*this->rawMatrixData.world) * (*this->rawMatrixData.view) * (*this->rawMatrixData.proj);
-	this->rawMatrixData.worldViewProj = XMMatrixTranspose(this->rawMatrixData.worldViewProj);
+	worldMatrix = XMLoadFloat4x4(&this->rawMatrixData.world);
+
+	XMMATRIX worldViewProj = worldMatrix * viewMatrix * projMatrix;
+	worldViewProj = XMMatrixTranspose(worldViewProj);
+
 	XMStoreFloat4x4(
 		&this->packagedMatrixData.worldViewProj,
-		this->rawMatrixData.worldViewProj
+		worldViewProj
 	);
 }
 
 void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 {
-	
 	// Get world matrix
-	this->rawMatrixData.world = &graphics->getWorld();
-	// Calculate matrices and convert to XMFLOAT4x4
+	this->rawMatrixData.world = graphics->getWorld();
 
 	this->packageMatrices();
 
@@ -56,7 +61,7 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 	Locator::getD3D()->createConstantBuffer(&this->cLightBuffer, sizeof(Light) * MAX_NUM_POINTLIGHTS);
 }
 
-void RenderInputOrganizer::render(std::vector<GraphicsComponent*>& graphics)
+void RenderInputOrganizer::render(std::list<GraphicsComponent*>& graphics)
 {
 	for (auto &i : graphics) {
 		if (i->GETstate() != OBJECTSTATE::TYPE::INVISIBLE) {
@@ -69,7 +74,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 {
 	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
 
-	this->lightPassData.nrOfLights = size;
+	this->lightPassData.nrOfLights = static_cast<float>(size);
 
 	Locator::getD3D()->mapConstantBuffer(&this->cLightPassDataBuffer, &this->lightPassData, sizeof(LightPassData));
 	Locator::getD3D()->setConstantBuffer(this->cLightPassDataBuffer, SHADER::PIXEL, 0, 1);
@@ -80,4 +85,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass()
 
 void RenderInputOrganizer::cleanUp()
 {
+	this->cLightBuffer->Release();
+	this->cLightPassDataBuffer->Release();
+	this->cMatrixBuffer->Release();
 }

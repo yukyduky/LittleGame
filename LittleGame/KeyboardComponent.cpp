@@ -3,6 +3,7 @@
 #include "GamePlayState.h"
 #include "Locator.h"
 #include "Commands.h"
+#include "ActorObject.h"
 
 
 KeyboardComponent::KeyboardComponent(GameObject& obj) : ID(obj.getID())
@@ -13,8 +14,8 @@ KeyboardComponent::KeyboardComponent(GameObject& obj) : ID(obj.getID())
 
 	POINT p;
 	GetCursorPos(&p);
-	this->cursorPos.x = p.x;
-	this->cursorPos.y = p.y;
+	this->cursorPos.x = static_cast<float>(p.x);
+	this->cursorPos.y = static_cast<float>(p.y);
 
 	this->init();
 }
@@ -59,9 +60,24 @@ void KeyboardComponent::receive(GameObject & obj, Message msg)
 
 void KeyboardComponent::cleanUp()
 {
+	for (size_t i = 0; i < this->keyboardCommandMap.size(); i++) {
+		this->keyboardCommandMap[i].command = nullptr;
+	}
 	this->keyboardCommandMap.clear();
+	for (size_t i = 0; i < this->mouseCommandMap.size(); i++) {
+		this->mouseCommandMap[i].command = nullptr;
+	}
 	this->mouseCommandMap.clear();
+	for (size_t i = 0; i < this->controllerCommandMap.size(); i++) {
+		this->controllerCommandMap[i].command = nullptr;
+	}
 	this->controllerCommandMap.clear();
+	this->pHead = nullptr;
+	
+	for (auto &i : this->commandQueue) {
+		delete i;
+	}
+	this->commandQueue.clear();
 }
 
 void KeyboardComponent::generateCommands()
@@ -96,8 +112,8 @@ void KeyboardComponent::generateCommands()
 	// Converts the cursor pos to relative to the window
 	ScreenToClient(Locator::getD3D()->GEThwnd(), &p);
 
-	this->cursorPos.x = p.x;
-	this->cursorPos.y = p.y;
+	this->cursorPos.x = static_cast<float>(p.x);
+	this->cursorPos.y = static_cast<float>(p.y);
 }
 
 XMFLOAT2 KeyboardComponent::GETcursorPos()

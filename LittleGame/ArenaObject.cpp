@@ -31,7 +31,6 @@ const size_t ArenaObject::getID()
 void ArenaObject::cleanUp()
 {
 	for (auto &c : this->components) {
-		c->getID();
 		c->cleanUp();
 		delete c;
 	}
@@ -43,14 +42,14 @@ void ArenaObject::update()
 		i->update();
 	}	
 
-	float gravity = -9.82;
-	double dt = Locator::getGameTime()->getDeltaTime();
+	float gravity = -9.82f;
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	
 	switch (this->state)
 	{
 	//State used to make a object fall and after the object reaches a set distance it turns "INVISIBLE"
 	case OBJECTSTATE::TYPE::FALLING:
-		this->velocity.y += gravity * dt * 4;
+		this->velocity.y += gravity * dt * 4.0f;
 		this->pos.y += this->velocity.y * dt;
 		if (this->pos.y < this->maxFallDepth) {
 			this->pos.y = this->maxFallDepth;
@@ -61,7 +60,7 @@ void ArenaObject::update()
 		break;
 	//State used to restore the arena floor at the end of the stage.
 	case OBJECTSTATE::TYPE::RECOVER:
-		this->velocity.y += gravity * dt * 4;
+		this->velocity.y += gravity * dt * 4.0f;
 		this->pos.y -= this->velocity.y * dt;
 		if (this->pos.y > this->startPos.y) {
 			this->pos.y = this->startPos.y;

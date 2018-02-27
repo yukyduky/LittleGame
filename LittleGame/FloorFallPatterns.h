@@ -24,13 +24,43 @@ struct FloorFallData {
 	std::vector<Index> recoverPattern; //Recovery order.
 };
 
+struct WallData {
+	int nrVertical;
+	int nrHorizontal;
+	int* rowL = nullptr;
+	int* rowR = nullptr;
+	int* rowT = nullptr;
+	int* rowB = nullptr;
+
+	WallData(int nrVertical, int nrHorizontal) {
+		this->nrVertical = nrVertical;
+		this->nrHorizontal = nrHorizontal;
+		this->rowL = new int[nrVertical];
+		this->rowR = new int[nrVertical];
+		this->rowT = new int[nrHorizontal];
+		this->rowB = new int[nrHorizontal];
+	}
+	~WallData() {
+		delete this->rowL;
+		delete this->rowR;
+		delete this->rowT;
+		delete this->rowB;
+	}
+};
+
 class FFPattern 
 {
 private:
-	int maxNum = 2;
+	int maxFloorNum;
+	int maxWallNum;
+
 public:
-	 void createPattern(int nr, FloorFallData& pattern);
-	 int GETmaxNum();
+	FFPattern();
+	~FFPattern();
+	void createFloorPattern(int nr, FloorFallData& pattern);
+	int GETmaxFloorNum();
+	void createWallPattern(int nr, WallData& pattern);
+	int GETmaxWallNum();
 };
 
 

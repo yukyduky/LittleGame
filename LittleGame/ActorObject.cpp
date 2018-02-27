@@ -6,13 +6,14 @@
 #include "StateManager.h"
 #include "RewardMenuState.h"
 
+#include "RestartState.h"
 //Include spells
 //#include "Spell.h"
 #include "IncludeSpells.h"
 #include <DirectXMath.h>
 
 
-ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
+ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
@@ -26,7 +27,8 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->transitionTime = 5.0f;
 	
 	// Balance
-	this->hp = 100;
+	this->hp = hp_in;
+	this->hpMAX = hp_in;
 }
 
 const size_t ActorObject::getID()
@@ -59,7 +61,6 @@ void ActorObject::setSpeed(float speed)
 	this->speed = speed;
 }
 
-
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
@@ -68,25 +69,26 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-	for (int i = 0; i < this->spells.size(); i++) {
-		delete this->spells[i];
+	for (auto &i : this->spells) {
+		delete i;
 	}
+	this->spells.clear();
 	// Cleanup all the components
 	for (auto &c : this->components) {
-		c->getID();
 		c->cleanUp();
 		delete c;
 	}
+	this->components.clear();
 }
 
 void ActorObject::update()
 {
-	float gravity = -9.82 * 4;
-	double dt = Locator::getGameTime()->getDeltaTime();
+	float gravity = -9.82f * 4.0f;
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 	switch (this->state)
 	{
-	//State used to make a object fall and after a set time the object becomes "invisible"
+	//State used to make an object fall and after a set time the object becomes "invisible"
 	case OBJECTSTATE::TYPE::FALLING:
 		this->velocity.y += gravity * dt * 4;
 		this->pos.y += this->velocity.y * dt;
@@ -114,7 +116,7 @@ void ActorObject::move()
 	//Create the new objects we will need for the calculations.
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
-	float deltaTime = Locator::getGameTime()->getDeltaTime();
+	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	XMFLOAT3 actorPos = this->GETPosition();
 	XMFLOAT3 actorVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = actorPos;
@@ -153,7 +155,7 @@ void ActorObject::move()
 void ActorObject::moveUp()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z += actorVelocity.z * dt;
@@ -170,7 +172,7 @@ void ActorObject::moveUp()
 void ActorObject::moveLeft()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x -= actorVelocity.x * dt;
@@ -186,7 +188,7 @@ void ActorObject::moveLeft()
 void ActorObject::moveDown()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z -= actorVelocity.z * dt;
@@ -202,7 +204,7 @@ void ActorObject::moveDown()
 void ActorObject::moveRight()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x += actorVelocity.x * dt;
@@ -367,13 +369,49 @@ void ActorObject::decCD()
 void ActorObject::dealDmg(float dmg)
 {
 	this->hp -= dmg;
-	if (this->hp <= 0) {
-		this->hp = 0;
+	
+	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+
+		this->GETgraphicsComponent()->updateColor(vColor(
+			this->GEThp() / this->GEThpMAX(),
+			0.0f,
+			0.0f,
+			colorHolder.a)
+		);
+	}
+
+	if (this->hp <= 0.0f) {
+		this->hp = 0.0f;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
-		// Push the "RewardMenuState" which will end all!
-		StateManager::pushState(RewardMenuState::getInstance());
+		if (this->getType() == OBJECTTYPE::TYPE::ENEMY) {
+			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
+		}
+
+		// If the player much did dieded, create globalMessage 'PLAYERDIED'
+		else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 	}
+}
+
+bool ActorObject::useEnergy(float energyUse) {
+	bool returnValue = false;
+
+	if (energyUse <= this->energy) {
+		this->energy -= energyUse;
+		returnValue = true;
+	}
+
+	return returnValue;
+}
+
+void ActorObject::addEnergy(float energyGain) {
+	this->energy += energyGain;
+
+	if (this->energy > this->energyMAX)
+		this->energy = this->energyMAX;
 }
 
 void ActorObject::addSpell(Spell * spell)

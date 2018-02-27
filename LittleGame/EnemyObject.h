@@ -13,14 +13,14 @@ class EnemyMovingState;
 class EnemyObject : public ActorObject
 {
 private:
-	EnemyAttackComponent * attackComponent;
-	std::vector<ActorObject*>* players;
+	EnemyAttackComponent * attackComponent = nullptr;
+	std::vector<ActorObject*>* players = nullptr;
 	// Same vector as the one which relies in this, soon-to-be, AI-component
 	std::vector<EnemyState*> states;
 
 	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
-	float distanceToPlayer;
+	float distanceToPlayer = 0.0f;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Updates internal 'normalizedVectorToPlayer' and 'distanceToPlayer'
@@ -38,6 +38,7 @@ public:
 	float getDistanceToPlayer();
 	void dealDmgToPlayer(size_t playerID, float damage);
 	std::vector<ActorObject*>* getPlayers();
+
 
 	virtual void update();
 	virtual void attack();

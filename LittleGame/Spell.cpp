@@ -18,7 +18,8 @@ void Spell::updateCD()
 {
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
-		this->timeSinceCast += Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+		this->timeSinceCast += dt;
 		if (this->timeSinceCast >= this->coolDown)
 		{
 			this->state = SPELLSTATE::READY;
@@ -29,7 +30,7 @@ void Spell::updateCD()
 
 Projectile* Spell::spawnProj(ProjProp props)
 {
-	Projectile* proj;
+	Projectile* proj = nullptr;
 	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
 

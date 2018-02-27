@@ -2,7 +2,7 @@
 #ifndef COLLISIONHANDLER_H
 #define COLLISIONHANDLER_H
 
-#define DISTANCE_FACTOR 1.4142135623730950488016887242097
+#define DISTANCE_FACTOR 1.414213f
 
 #include <d3d11.h>
 #include "D3D.h"
@@ -49,29 +49,29 @@ using namespace SimpleMath;
 
 class CollisionHandler {
 private:
-	GameObject* collidable1;
-	GameObject* collidable2;
-	DirectX::BoundingSphere* boundingArea1;
-	DirectX::BoundingSphere* boundingArea2;
+	GameObject* collidable1 = nullptr;
+	GameObject* collidable2 = nullptr;
+	DirectX::BoundingSphere* boundingArea1 = nullptr;
+	DirectX::BoundingSphere* boundingArea2 = nullptr;
 
 	// Needed for swapping places of collidable1 with collidable2
-	GameObject* tempCollidableHolder;
+	GameObject* tempCollidableHolder = nullptr;
 
 	DirectX::XMFLOAT3 centerToCenterVector;
 	DirectX::XMFLOAT3 resultVector;
 	DirectX::XMFLOAT3 resultVector1;
-	float radiusDistanceVector;
-	float divisionFactor;
+	float radiusDistanceVector = 0.0f;
+	float divisionFactor = 0.0f;
 
 	// calculateDistance variables
-	double distance;
-	double xDiff;
-	double zDiff;
-	double minDiff;
+	float distance = 0.0f;
+	float xDiff = 0.0f;
+	float zDiff = 0.0f;
+	float minDiff = 0.0f;
 
-	float stepper = 2.0;
+	float stepper = 2.0f;
 
-	int collisionID;
+	int collisionID = 0;
 
 	void createCollisionID();
 	void calculateDistance(DirectX::XMFLOAT3 collidable1, DirectX::XMFLOAT3 collidable2);

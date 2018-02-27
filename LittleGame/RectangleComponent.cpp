@@ -96,45 +96,42 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 
 void RectangleComponent::update()
 {
-	if (this->head != nullptr)
+	OBJECTSTATE::TYPE state = this->head->getState();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	switch (state)	
 	{
-		OBJECTSTATE::TYPE state = this->head->getState();
-		double dt = Locator::getGameTime()->getDeltaTime();
+	//This case changes the color of the object from it's start color to red over a set time
+	case OBJECTSTATE::TYPE::TFALLING:
+		if (dt < 1.0) {
+			this->counter += dt;
+			if (this->counter < this->transitionTime) {
+				vColor finalColor(0.0f, 0.0f, 0.0f, 1.0f);
+				vColor aCol = this->color;
+				vColor bCol(0.1f, 0.1f, 0.1f, 1.0f);
 
-		switch (state)	
-		{
-		//This case changes the color of the object from it's start color to red over a set time
-		case OBJECTSTATE::TYPE::TFALLING:
-			if (dt < 1.0) {
-				this->counter += dt;
-				if (this->counter < this->transitionTime) {
-					vColor finalColor(0.0f, 0.0f, 0.0f, 1.0f);
-					vColor aCol = this->color;
-					vColor bCol(1.0f, 0.0f, 0.0f, 1.0f);
+				aCol.r = aCol.r - (aCol.r / this->transitionTime) * counter;
+				aCol.g = aCol.g - (aCol.g / this->transitionTime) * counter;
+				aCol.b = aCol.b - (aCol.b / this->transitionTime) * counter;
+				bCol.r = (bCol.r / this->transitionTime) * counter;
+				finalColor.r = aCol.r + bCol.r;
+				finalColor.g = aCol.g + bCol.g;
+				finalColor.b = aCol.b + bCol.b;
 
-					aCol.r = aCol.r - (aCol.r / this->transitionTime) * counter;
-					aCol.g = aCol.g - (aCol.g / this->transitionTime) * counter;
-					aCol.b = aCol.b - (aCol.b / this->transitionTime) * counter;
-					bCol.r = (bCol.r / this->transitionTime) * counter;
-					finalColor.r = aCol.r + bCol.r;
-					finalColor.g = aCol.g + bCol.g;
-					finalColor.b = aCol.b + bCol.b;
-
-					this->updateColor(finalColor);
-				}
-				else {
-					this->head->setState(OBJECTSTATE::TYPE::FALLING);
-				}
+				this->updateColor(finalColor);
 			}
-			break;
-		//This case sets the objects color to it's original color
-		case OBJECTSTATE::TYPE::RESETCOLOR:
-			this->updateColor(this->color);
-			this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
-			break;
-		default:
-			break;
+			else {
+				this->head->setState(OBJECTSTATE::TYPE::FALLING);
+			}
 		}
+		break;
+	//This case sets the objects color to it's original color
+	case OBJECTSTATE::TYPE::RESETCOLOR:
+		this->updateColor(this->color);
+		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -169,7 +166,7 @@ size_t& RectangleComponent::GETnumIndices()
 	return this->numIndices;
 }
 
-XMMATRIX& RectangleComponent::getWorld()
+DirectX::XMFLOAT4X4& RectangleComponent::getWorld()
 {
 	return this->head->getWorld();
 }
