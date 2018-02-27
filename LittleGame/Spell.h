@@ -65,6 +65,8 @@ public:
 
 	// TSC = TimeSinceCast
 	float getTSC() { return this->timeSinceCast; };
+	// GUI Visual Cooldown float
+	float GETremainingCoolDownFloat();
 
 private:
 	//Array of glyphs

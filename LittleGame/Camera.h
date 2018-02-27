@@ -21,9 +21,9 @@ private:
 	float			farPlane = 0.0f;
 
 	DirectX::XMFLOAT3 cameraStartPos;
-	DirectX::XMFLOAT3 cameraStartFacingDir;
+	DirectX::XMFLOAT3 cameraStartFacingPos;
 	DirectX::XMFLOAT3 cameraPos;
-	DirectX::XMFLOAT3 cameraFacingDir;
+	DirectX::XMFLOAT3 cameraFacingPos;
 	DirectX::XMFLOAT3 cameraUpDir;
 	DirectX::XMFLOAT3 cameraRightDir;
 
@@ -88,8 +88,9 @@ public:
 	//DirectX::XMFLOAT3	GETcameraPosFloat3();
 	//DirectX::XMVECTOR	GETcameraStartPos();
 	DirectX::XMFLOAT3		GETcameraPos();
-	DirectX::XMVECTOR		GETfacingDir();
-	DirectX::XMFLOAT3		GETfacingDirFloat3();
+	DirectX::XMVECTOR		GETfacingPos();
+	DirectX::XMFLOAT3		GETfacingPosFloat3();
+	DirectX::XMFLOAT3		GETfacingDir();
 	DirectX::XMFLOAT4X4&	GETviewMatrix();
 	DirectX::XMFLOAT4X4&	GETprojMatrix();
 };

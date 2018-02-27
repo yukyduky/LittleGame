@@ -101,9 +101,6 @@ public:
 	// Graphics: BLOCK_COMPONENT
 	void SETgraphicsComponent(BlockComponent* graphicsComponent_in) { this->graphicsComponent = graphicsComponent_in; }
 	BlockComponent* GETgraphicsComponent() { return this->graphicsComponent; }
-	// Graphics: GUI_COMPONENT
-	void SETgraphicsComponent(GUIComponent* graphicsComponent_in) { this->graphicsComponentUI = graphicsComponent_in; }
-	GUIComponent* GETgraphicsComponentUI() { return this->graphicsComponentUI; }
 };
 
 #endif // !GAMEOBJECT_H

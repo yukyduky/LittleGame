@@ -18,6 +18,7 @@
 #include "IncludeSpells.h"
 
 
+
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                                 GAMEPLAY STATE          /
 ///////////////////////////////////////////////////////////
@@ -113,6 +114,13 @@ void GamePlayState::init() {
 	this->initPlayer();
 	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
 	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
+	this->ID = this->GUI.initGUI(
+		this->newID(),
+		this->camera.GETcameraPos(),
+		this->camera.GETfacingDir(),
+		this->GUIObjects,
+		this->graphics
+	);
 	this->rio.initialize(this->camera, this->pointLights);
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
 	int i = 0;
@@ -120,7 +128,6 @@ void GamePlayState::init() {
 		this->quadTree.insertStaticObject(*it);
 		i++;
 	}
-	
 
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
@@ -133,8 +140,8 @@ void GamePlayState::init() {
 
 	// To be changed when Ollie has done the rework on camera
 	XMFLOAT3 tempcDir;
-	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
-	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
+	XMStoreFloat3(&tempcDir, this->camera.GETfacingPos());
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingPosFloat3());
 	this->enemyManager.startLevel1();
 }
 
@@ -164,6 +171,12 @@ void GamePlayState::cleanUp()
 		delete iterator;
 	}
 	this->noCollisionDynamicObjects.clear();
+
+	for (auto &iterator : this->GUIObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	this->GUIObjects.clear();
 
 	for (auto &i : this->playerInput) {
 		i = nullptr;
@@ -219,6 +232,29 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	this->GUI.GEThpRect()->updateVertexZ(0, this->player1->GEThpRemainingFloat());
+	this->GUI.GEThpRect()->updateVertexZ(1, this->player1->GEThpRemainingFloat());
+
+	this->GUI.GETenergyRect()->updateVertexZ(0, this->player1->GETenergyRemainingFloat());
+	this->GUI.GETenergyRect()->updateVertexZ(1, this->player1->GETenergyRemainingFloat());
+
+	this->GUI.GETability1Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(1)->GETremainingCoolDownFloat());
+	this->GUI.GETability1Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(1)->GETremainingCoolDownFloat());
+
+	this->GUI.GETability2Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(2)->GETremainingCoolDownFloat());
+	this->GUI.GETability2Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(2)->GETremainingCoolDownFloat());
+
+	this->GUI.GETability3Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(3)->GETremainingCoolDownFloat());
+	this->GUI.GETability3Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(3)->GETremainingCoolDownFloat());
+
+	this->GUI.GETability4Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(4)->GETremainingCoolDownFloat());
+	this->GUI.GETability4Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(4)->GETremainingCoolDownFloat());
+
+	if (this->player1->GETspellsVector().at(4)->getTSC() == 0)
+		this->GUI.GETability4Rect()->updateColor(vColor(0.0f, 0.0f, 0.0f, 255.0f));
+	else
+		this->GUI.GETability4Rect()->updateColor(vColor(255.0f, 255.0f, 255.0f, 255.0f));
+
 	this->checkCollisions();
 
 	this->counter += static_cast<float>(Locator::getGameTime()->getDeltaTime());

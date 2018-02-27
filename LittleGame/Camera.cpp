@@ -45,7 +45,7 @@ void Camera::moveCameraLeft() {
 	DirectX::XMVECTOR cameraUpDir;
 	DirectX::XMVECTOR cameraPos;
 
-	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 	cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
 	cameraPos = DirectX::XMLoadFloat3(&this->cameraPos);
 
@@ -78,7 +78,7 @@ void Camera::moveCameraRight() {
 	DirectX::XMVECTOR cameraPos;
 
 	cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
-	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 	cameraPos = DirectX::XMLoadFloat3(&this->cameraPos);
 	
 	// Creates the 'RIGHT-movement' vector
@@ -110,7 +110,7 @@ void Camera::moveCameraForward() {
 	DirectX::XMVECTOR cameraPos;
 
 	cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
-	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 	cameraPos = DirectX::XMLoadFloat3(&this->cameraPos);
 
 	// 'FORWARD-movement' vector already exists, so we just copy + normalize it
@@ -137,7 +137,7 @@ void Camera::moveCameraBackward() {
 	DirectX::XMVECTOR cameraPos;
 
 	cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
-	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 	cameraPos = DirectX::XMLoadFloat3(&this->cameraPos);
 
 	// 'FORWARD-movement' vector already exists, so we just copy + normalize it
@@ -164,7 +164,7 @@ void Camera::updateRightDir() {
 	DirectX::XMVECTOR cameraFacingDir;
 
 	cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
-	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 
 	// Create & set the new 'Right' vector
 	cameraRightDir = DirectX::XMVector3Cross(
@@ -304,7 +304,7 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	DirectX::XMStoreFloat3(&this->cameraPos, cameraStartPos);
 
 	// Storing cameraFacingDir
-	DirectX::XMStoreFloat3(&this->cameraFacingDir, cameraStartFacingDir);
+	DirectX::XMStoreFloat3(&this->cameraFacingPos, cameraStartFacingDir);
 	this->cameraUpDir = { 0, 1, 0 };
 	DirectX::XMVECTOR cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
 
@@ -385,7 +385,7 @@ void Camera::updateCamera() {
 	DirectX::XMVECTOR cameraUpDir;
 
 	cameraPos = DirectX::XMLoadFloat3(&this->cameraPos);
-	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+	cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 	cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
 
 	if (updateRequired) {
@@ -410,7 +410,7 @@ void Camera::updateCamera() {
 
 void Camera::resetCamera() {
 	this->cameraPos = this->cameraStartPos;
-	this->cameraFacingDir = { 0, 0, 1 };
+	this->cameraFacingPos = { 0, 0, 1 };
 	this->cameraUpDir = { 0, 1, 0 };
 }
 
@@ -433,14 +433,28 @@ DirectX::XMFLOAT3 Camera::GETcameraPos() {
 	return this->cameraPos;
 }
 
-DirectX::XMVECTOR Camera::GETfacingDir() {
-	DirectX::XMVECTOR cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingDir);
+DirectX::XMVECTOR Camera::GETfacingPos() {
+	DirectX::XMVECTOR cameraFacingDir = DirectX::XMLoadFloat3(&this->cameraFacingPos);
 	
 	return cameraFacingDir;
 }
 
-DirectX::XMFLOAT3 Camera::GETfacingDirFloat3() {
-	return this->cameraFacingDir;
+DirectX::XMFLOAT3 Camera::GETfacingPosFloat3() {
+	return this->cameraFacingPos;
+}
+
+DirectX::XMFLOAT3 Camera::GETfacingDir() {
+	DirectX::XMFLOAT3 returnFloat3;
+
+	DirectX::XMVECTOR cameraPos = DirectX::XMLoadFloat3(&this->cameraPos);
+	DirectX::XMVECTOR cameraLookAtPos = DirectX::XMLoadFloat3(&this->cameraFacingPos);
+
+	DirectX::XMVECTOR CameraFacingDir = DirectX::XMVectorSubtract(cameraLookAtPos, cameraPos);
+	CameraFacingDir = DirectX::XMVector3Normalize(CameraFacingDir);
+
+	DirectX::XMStoreFloat3(&returnFloat3, CameraFacingDir);
+
+	return returnFloat3;
 }
 
 DirectX::XMFLOAT4X4 &Camera::GETviewMatrix()
