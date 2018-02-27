@@ -2,17 +2,18 @@
 #ifndef SPSWARMPROJECTILE_H
 #define SPSWARMPROJECTILE_H
 
-#include "Spell.h"
+#include "EnemySpell.h"
 
-class SpSwarmProjectile : public Spell
+class SpSwarmProjectile : public EnemySpell
 {
 private:
-	float damage = -1;
-	int range = -1;
 	float seekSpeed = -1;
 
 public:
-	SpSwarmProjectile(EnemyObject* player, int range, int dmg, int aggroRange, double cooldown);
+	SpSwarmProjectile(
+		EnemyObject* pShooter, ActorObject* pPlayer,
+		int range, int dmg, int aggroRange, double cooldown
+	);
 	~SpSwarmProjectile();
 
 	// Returns false if spell in unavalible to cast
@@ -23,8 +24,7 @@ public:
 	virtual void collision(GameObject* target, Projectile* proj);
 	virtual void update();
 
-	float getDamage();
-	float getRange();
+
 
 
 	

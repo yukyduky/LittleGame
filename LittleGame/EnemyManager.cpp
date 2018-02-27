@@ -44,7 +44,8 @@ void EnemyManager::startLevel1()
 
 	// TESTING -----------
 	this->currentWaveCount = 1;
-	this->currentWaveSize = 2;
+	this->currentWaveSize = 0;
+	this->swarmerCount = 3;
 	// TESTING -----------
 
 	// Per wave
@@ -64,17 +65,17 @@ void EnemyManager::startLevel1()
 		// Per clusterer
 		for (int k = 0; k < swarmerCount; k++) {
 			// Create the actual object
-			EnemyObject* clusterer = this->createClusterer();
+			EnemyObject* swarmer = this->createClusterer();
 
 			// Attach a pointer to waves
-			currentWave->enemies.push_back(clusterer);
+			currentWave->enemies.push_back(swarmer);
 
 			// Attach a pointer to swarmspecific (used by grid)
-			localSwarmers.push_back(clusterer);
+			localSwarmers.push_back(swarmer);
 
 			this->activeEnemiesCount++;
 		}
-//		this->pSwarmers->initialize(localSwarmers);
+		this->pSwarmers->initialize(localSwarmers);
 
 		// --------------------------- NEW --------------------------- //
 		// --------------------------- NEW --------------------------- //
@@ -83,7 +84,7 @@ void EnemyManager::startLevel1()
 		this->waves.push_back(currentWave);
 
 		// Up the difficulty a bit maybe?
-		this->currentWaveSize += 1;
+	//	this->currentWaveSize += 1;				REMOVED WHILE IMMOLATION IS NOT DONE
 	}
 
 	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
@@ -135,8 +136,6 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
 
-	spawnLocation = 2;	// fixed for testing purposes
-
 	if (spawnLocation == 1)
 		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
 
@@ -164,12 +163,8 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
-
-	// SPELL (Needs to be before States)
-	Spell* spell = new SpSwarmProjectile(
-		enemyObject, projectileRange, immolationDamage, aggroRange, attackCooldown
-	);
-	enemyObject->addSpell(spell);	// NECESSARY
+//	Spell* spell = new SpImmolation();			// TO BE ADDED
+//	enemyObject->addSpell(spell);				//
 	
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
@@ -226,9 +221,11 @@ EnemyObject* EnemyManager::createClusterer()
 	float velocity = 180;
 	XMFLOAT4 color(10.0f, 0.0, 0.0f, 255.0f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float projectileDamage = 1;
-	float attackCooldown = 0;
-	float projectileRange = 50;
+
+	float projectileDamage = 3;
+	float attackCooldown = 0.5;
+	float projectileRange = 600;
+	float aggroRange = 500;
 
 	/// A T T A C H M E N T
 	// OBJECT
@@ -237,6 +234,13 @@ EnemyObject* EnemyManager::createClusterer()
 		pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
+	// SPELL (Needs to be before States)
+	Spell* spell = new SpSwarmProjectile(
+		enemyObject, this->players[0], projectileRange, projectileDamage, aggroRange, attackCooldown
+	);
+	enemyObject->addSpell(spell);	// NECESSARY
+
+
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
@@ -248,7 +252,7 @@ EnemyObject* EnemyManager::createClusterer()
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
-	return nullptr;
+	return enemyObject;
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
@@ -258,7 +262,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->activeEnemiesCount = 0;
 	this->pSwarmers = new ArrayList();
 	
-	// --------- NEW ---------
+	// --------- NEW TEST ---------
 	//std::vector<EnemyObject*> tempVec;
 	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));
 	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));

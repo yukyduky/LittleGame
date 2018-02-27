@@ -40,8 +40,6 @@ Projectile* Spell::spawnProj(ProjProp props)
 	XMFLOAT3 newPos = { this->getActor()->GETPosition() + distance };
 
 	proj = this->getActor()->getPGPS()->initProjectile(newPos, this->getActor(), props);
-//	proj->SETrotationMatrix(this->getActor()->getRotationMatrix());
-//	proj->setRange(props.range); 
 
 	// Attach the relevant spell to the projectile
 	// (This could be optimized by adding copy constructors and using those instead of what's done below)
@@ -81,7 +79,7 @@ Projectile* Spell::spawnProj(ProjProp props)
 		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getActor());
 
 		projectilesSpell = new SpSwarmProjectile(
-			nullptr, trueThis->getRange(), trueThis->getDamage(),
+			trueCaster, trueThis->GETpPlayer(), trueThis->getRange(), trueThis->getDamage(),
 			trueThis->getAggroRange(), trueThis->getCoolDown()
 		);
 		proj->setSpell(projectilesSpell);

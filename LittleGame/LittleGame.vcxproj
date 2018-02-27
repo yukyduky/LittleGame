@@ -152,6 +152,7 @@
     <ClInclude Include="D3D.h" />
     <ClInclude Include="EnemyAttackingState.h" />
     <ClInclude Include="EnemyMovingState.h" />
+    <ClInclude Include="EnemySpell.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GlobalEvents.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="SpBuff.h" />
     <ClInclude Include="SpDash.h" />
     <ClInclude Include="Spell.h" />
+    <ClInclude Include="spEnemyImmolation.h" />
     <ClInclude Include="SpFire.h" />
     <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
@@ -252,6 +254,7 @@
     <ClCompile Include="SpBuff.cpp" />
     <ClCompile Include="SpDash.cpp" />
     <ClCompile Include="Spell.cpp" />
+    <ClCompile Include="spEnemyImmolation.cpp" />
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="SpSwarmProjectile.cpp" />
     <ClCompile Include="StateManager.cpp" />

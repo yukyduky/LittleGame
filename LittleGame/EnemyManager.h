@@ -141,7 +141,7 @@ class EnemyManager
 private:
 	// Necessary since creation of actors is dependant on our std::vectors which rely in the GPS.
 	GamePlayState * pGPS = nullptr;
-	std::vector<ActorObject*> players;
+	std::vector<ActorObject*> players;	// Only players[0] here.
 	std::vector<GameObject*>* pGameObjectsArray = nullptr;
 	int activeEnemiesCount = 0;
 

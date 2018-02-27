@@ -37,14 +37,14 @@ enum class NAME {
 class Spell
 {
 public:
-	Spell(ActorObject* actor, NAME name);
+	Spell(ActorObject* shooter, NAME name);
 	virtual ~Spell();
 
 	// Returns false if spell in unavalible to cast
 	virtual bool castSpell() = 0;
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	virtual void upgrade(float modif) = 0;
-	// Function called by the projectile, spells collision should be handeld here
+	// Function called by the projectile, spells collision should be handled here
 	virtual void collision(GameObject* target, Projectile* proj) = 0;
 	virtual void update() = 0;
 

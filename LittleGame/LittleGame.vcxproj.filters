@@ -85,6 +85,7 @@
     <ClCompile Include="SpSwarmProjectile.cpp">
       <Filter>Swarmer</Filter>
     </ClCompile>
+    <ClCompile Include="spEnemyImmolation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -179,6 +180,8 @@
     <ClInclude Include="SpSwarmProjectile.h">
       <Filter>Swarmer</Filter>
     </ClInclude>
+    <ClInclude Include="spEnemyImmolation.h" />
+    <ClInclude Include="EnemySpell.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

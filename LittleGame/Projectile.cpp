@@ -163,40 +163,56 @@ void Projectile::move()
 	this->setPosition(pos);
 }
 
+void Projectile::steerTowardsPlayer()
+{
+	float dt = Locator::getGameTime()->getDeltaTime();
+	XMFLOAT3 playerPos = this->pPlayer->GETPosition();
+	XMFLOAT3 desiredDirection;
+	XMFLOAT3 steeringDirection;
+
+	// Calculate desired direction
+	desiredDirection.x = playerPos.x - this->pos.x;
+	desiredDirection.y = playerPos.y - this->pos.y;
+	desiredDirection.z = playerPos.z - this->pos.z;
+
+	// Normalize it
+	XMVECTOR vecDesired = DirectX::XMLoadFloat3(&desiredDirection);
+	vecDesired = XMVector3Normalize(vecDesired);
+	DirectX::XMStoreFloat3(&desiredDirection, vecDesired);
+
+	// Calculate the steering direction
+	steeringDirection.x = desiredDirection.x - this->direction.x;
+	steeringDirection.y = desiredDirection.y - this->direction.y;
+	steeringDirection.z = desiredDirection.z - this->direction.z;
+
+	// Normalize it
+	XMVECTOR vecSteering = DirectX::XMLoadFloat3(&steeringDirection);
+	vecDesired = XMVector3Normalize(vecSteering);
+	DirectX::XMStoreFloat3(&steeringDirection, vecSteering);
+
+	// Affect the current direction
+	this->direction.x += steeringDirection.x * this->rotationSpeed * dt;
+	this->direction.y += steeringDirection.y * this->rotationSpeed * dt;
+	this->direction.z += steeringDirection.z * this->rotationSpeed * dt;
+
+	// Then normalize the current direction
+	XMVECTOR vecDirection = DirectX::XMLoadFloat3(&this->direction);
+	vecDirection = XMVector3Normalize(vecDirection);
+	DirectX::XMStoreFloat3(&this->direction, vecDirection);
+}
+
 
 
 void Projectile::update()
 {
 	// Alter velocity if we're gonna seek towards the player
 	if (this->isFollowing) {
-		// Find out 
-		float radAngle = getAngleTowardsPlayer();
-		float sinus = std::sin(radAngle);
-		float cosinus = std::cos(radAngle);
-
-		if (cosinus > 0) {
-			if (sinus > 0.9) {
-				this->turnRight();
-			}
-			else {
-				this->turnLeft();
-			}
-		}
-		else {
-			if (sinus > 0.1) {
-				this->turnRight();
-			}
-			else {
-				this->turnLeft();
-			}
-		}
+		steerTowardsPlayer();
 	}
-
 
 	for (auto &i : this->components) {
 		i->update();
 	}
-
 
 	this->move();
 

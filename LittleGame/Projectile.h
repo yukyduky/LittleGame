@@ -30,7 +30,7 @@ public:
 	void setDirection(XMVECTOR dir);
 	XMVECTOR getDirection();
 	void setRange(int range) { this->range = range; }
-	void setSeeking(float rotationSpeed, ActorObject* playerPos);	// Only relevant to stalking projectiles
+	void setSeeking(float rotationSpeed, ActorObject* pPlayer);	// Only relevant to stalking projectiles
 	void setSpell(Spell* spell);
 	Spell* getSpell();	// Gets allocated by player.spell->castSpell()
 
@@ -40,6 +40,7 @@ private:
 	1. Affects position based on current direction and velocity.
 	*/
 	void move();
+	void steerTowardsPlayer();
 
 	// The speed of the projectile
 	float speed = 0.0f;
