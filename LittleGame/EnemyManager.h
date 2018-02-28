@@ -2,10 +2,11 @@
 #ifndef ENEMYMANAGER_H
 #define ENEMYMANAGER_H
 
-#include <deque>
 #include "GameObject.h"
 #include "ActorObject.h"
 #include "AIComponent.h"
+#include "EnemyObject.h"
+#include "EnemyIncludes.h"
 
 /* ---------------------------------------------------------------------------
 	If you're here to look at anything that is NOT the swarmers, i highly recommend 
@@ -13,20 +14,14 @@
 ---------------------------------------------------------------------------- */
 
 
+
 // Forward declaration to prevent double includes
 class GamePlayState;
 
 struct Wave {
 	// Push to the back, pop from the front, [0] is the first enemy and [n] is the last enemy.
-	std::deque<ActorObject*> enemies;
+	std::deque<EnemyObject*> enemies;
 };
-
-namespace ENEMYTYPE {
-	enum TYPE {
-		IMMOLATION,
-		SIZE
-	};
-}
 
 struct ArrayNode;	// Forward declaration since Alive/Dead/Array all reside within eachother
 struct AliveNode {
@@ -44,14 +39,21 @@ struct ArrayNode {
 	AliveNode*	 alive = nullptr;
 	DeadNode*	 dead = nullptr;
 };
-class ArrayList 
+class ArrayList
 {
 private:
-	// This class is technically not done, since it can be added upon if we want to dynamically
+	/*
+	The ArrayList uses a combination of two triple linked lists and an array to
+	achieve O(1)-time in Remove & Find.
+
+	*/
+	// This class can be added upon if we want to dynamically
 	// add swarmers to it, which we don't need or want to do atm.
 
 	// Variables
-	int size = -1;
+	int capacity = -1;
+	int count = 0;
+	int toBeActivated = 0;
 	XMFLOAT3 averagePosition = { -1, -1, -1 };
 	ArrayNode* mainArray = nullptr;
 	AliveNode* firstAlive = nullptr;
@@ -61,33 +63,37 @@ public:
 
 	void initialize(std::vector<EnemyObject*> allObjectsToBeInserted) {
 		// Prep some values
-		this->size = allObjectsToBeInserted.size();
-		this->mainArray = new ArrayNode[this->size];	// Allocate the entire array
+		this->capacity = allObjectsToBeInserted.size();
+		this->mainArray = new ArrayNode[this->capacity];	// Allocate the entire array
 
-		// Add the first one
-		this->mainArray[0].obj = allObjectsToBeInserted[0];
-		this->firstAlive = new AliveNode();
-		this->firstAlive->index = &this->mainArray[0];	// Connect Alive->Array
-		this->mainArray[0].alive = this->firstAlive;	// Connect Array->Alive
-
-		AliveNode* stepper = this->firstAlive;
-		// Array is done, now connect all the pointers up until the last one
-		for (int i = 1; i < (this->size); i++) {
-			// Connect AliveList
-			stepper->forward = new AliveNode();		// Create forward and connect
-			stepper->forward->back = stepper;		// back-><-front
-			stepper->index = &this->mainArray[i];		// Connect List->Array
-
-			// Step forward
-			stepper = stepper->forward;
-
-			// Connect Array
-			this->mainArray[i].obj = allObjectsToBeInserted[i];	// Array->Obj
-			this->mainArray[i].alive = stepper;					// Array->List
+		for (int i = 0; i < this->capacity; i++) {
+			this->mainArray[i].obj = allObjectsToBeInserted[i];
 		}
 
-		// Add the last one
-		stepper->index = &this->mainArray[this->size-1];
+		//// Add the first one
+		//this->mainArray[0].obj = allObjectsToBeInserted[0];0
+		//this->firstAlive = new AliveNode();
+		//this->firstAlive->index = &this->mainArray[0];	// Connect Alive->Array
+		//this->mainArray[0].alive = this->firstAlive;	// Connect Array->Alive
+
+		//AliveNode* stepper = this->firstAlive;
+		//// Array is done, now connect all the pointers up until the last one
+		//for (int i = 1; i < (this->capacity); i++) {
+		//	// Connect AliveList
+		//	stepper->forward = new AliveNode();		// Create forward and connect
+		//	stepper->forward->back = stepper;		// back-><-front
+		//	stepper->index = &this->mainArray[i];		// Connect List->Array
+
+		//	// Step forward
+		//	stepper = stepper->forward;
+
+		//	// Connect Array
+		//	this->mainArray[i].obj = allObjectsToBeInserted[i];	// Array->Obj
+		//	this->mainArray[i].alive = stepper;					// Array->List
+		//}
+
+		//// Add the last one
+		//stepper->index = &this->mainArray[this->capacity - 1];
 	}
 	void update() {
 		// Update the averagePosition
@@ -112,9 +118,9 @@ public:
 		averagePosition.z += currentPosition.z;
 
 		// Divide down
-		averagePosition.x /= this->size;
-		averagePosition.y /= this->size;
-		averagePosition.z /= this->size;
+		averagePosition.x /= this->count;
+		averagePosition.y /= this->count;
+		averagePosition.z /= this->count;
 	}
 	XMFLOAT3* getAveragePosition() {
 		return &this->averagePosition;
@@ -128,8 +134,47 @@ public:
 	AliveNode* getFirst() {
 		return this->firstAlive;
 	}
-	void insert() {
-		// NOT IMPLEMENTED AS IT IS NOT NEEDED OR WANTED ATM.
+	void activateNext() {
+		int index = this->toBeActivated++;
+
+		// Check if it has already been activated
+		if (this->mainArray[index].alive == nullptr) {
+			// Activate it
+			bool found = false;
+			AliveNode* freshNode = new AliveNode();
+
+			// Connect behind
+			int stepper = index;
+			while (stepper > -1 && !found) {
+				AliveNode* toBeBack = this->mainArray[stepper].alive;
+
+				if (toBeBack != nullptr) {
+					found = true;
+					// Connect the freshNode to it's proper back and front
+					freshNode->back = toBeBack;
+					freshNode->forward = toBeBack->forward;
+
+					// Replace the old links
+					freshNode->back->forward = freshNode;
+
+					if (freshNode->forward != nullptr) {
+						freshNode->forward->back = freshNode;
+					}
+				}
+
+				stepper--;
+			}
+
+			// Connect to the array
+			freshNode->index = &this->mainArray[index];
+			this->mainArray[index].alive = freshNode;
+
+			if (this->firstAlive == nullptr) {
+				this->firstAlive = freshNode;
+			}
+
+			/// Connect front will never occur if we always activate through toBeActivated
+		}
 	}
 	void remove(int index) {
 		if (this->firstAlive != nullptr) {
@@ -139,15 +184,19 @@ public:
 			back->forward = forward;
 			forward->back = back;
 
+			if (this->mainArray[index].alive == this->firstAlive) {
+				this->firstAlive = this->mainArray[index].alive->forward;
+			}
+
 			// Also clean!
 			delete this->mainArray[index].alive;
 			this->mainArray[index].alive = nullptr;
-			this->size--;
+			this->count--;
 		}
 	}
 	void cleanUp() {
 
-		for (int i = 0; i < this->size; i++) {
+		for (int i = 0; i < this->capacity; i++) {
 			// We only need to delete the 'newed' data, so we don't really care about the links between the data.
 			if (this->mainArray[i].dead != nullptr) {
 				delete this->mainArray[i].dead;
@@ -162,6 +211,8 @@ public:
 		delete this->mainArray;
 	}
 };
+
+
 
 class EnemyManager
 {

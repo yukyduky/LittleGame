@@ -3,15 +3,20 @@
 #define ENEMYOBJECT_H
 
 #include "ActorObject.h"
+#include "EnemyIncludes.h"
 
 class ActorObject;
 class EnemyState;
 class EnemyMovingState;
 class EnemyAttackComponent;
 
+
+
+
 class EnemyObject : public ActorObject
 {
 private:
+	ENEMYTYPE::TYPE enemyType = ENEMYTYPE::SIZE;
 	EnemyAttackComponent * attackComponent = nullptr;
 	std::vector<ActorObject*>* players = nullptr;
 	// Same vector as the one which relies in this, soon-to-be, AI-component
@@ -26,10 +31,8 @@ private:
 	*/
 	void updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos);
 
-	
-
 public:
-	EnemyObject(const size_t ID, float speed, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
+	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, float speed, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
 
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
 	EnemyAttackComponent* GETattackComponent();
@@ -38,6 +41,7 @@ public:
 	float getDistanceToPlayer();
 	void dealDmgToPlayer(size_t playerID, float damage);
 	std::vector<ActorObject*>* getPlayers();
+	ENEMYTYPE::TYPE getEnemyType();
 
 
 	virtual void update();

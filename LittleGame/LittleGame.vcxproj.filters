@@ -182,6 +182,7 @@
     </ClInclude>
     <ClInclude Include="EnemySpell.h" />
     <ClInclude Include="SpEnemyImmolation.h" />
+    <ClInclude Include="EnemyIncludes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

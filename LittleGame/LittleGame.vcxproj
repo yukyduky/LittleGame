@@ -151,6 +151,7 @@
     <ClInclude Include="Crosshair.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="EnemyAttackingState.h" />
+    <ClInclude Include="EnemyIncludes.h" />
     <ClInclude Include="EnemyMovingState.h" />
     <ClInclude Include="EnemySpell.h" />
     <ClInclude Include="EnemyState.h" />

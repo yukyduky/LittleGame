@@ -158,7 +158,7 @@ EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::K
 
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, velocity, pos, velocity,
+		ENEMYTYPE::IMMOLATION, ID, velocity, pos, velocity,
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
@@ -230,7 +230,7 @@ EnemyObject* EnemyManager::createSwarmer()
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, velocity, pos, velocity,
+		ENEMYTYPE::SWARMER, ID, velocity, pos, velocity,
 		pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
@@ -294,7 +294,13 @@ void EnemyManager::update()
 				this->timePassed = 0;
 
 				// Grab the next enemy in line
-				ActorObject* freshEnemy = this->waves.front()->enemies.front();
+				EnemyObject* freshEnemy = this->waves.front()->enemies.front();
+
+				// Was bobby a swarmer?
+				if (freshEnemy->getEnemyType() == ENEMYTYPE::SWARMER) {
+					this->pSwarmers->activateNext(); // If so then activate him!
+				}
+
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
 				// Send him out into the real world and let him handle himself (gl hf bobby!)
