@@ -24,6 +24,8 @@ void MenuState::cleanUp()
 	this->menuObjects.clear();
 
 	this->ID = 0;
+
+	DeleteFile("include/screenSaved.bmp");
 }
 
 void MenuState::pause() {
