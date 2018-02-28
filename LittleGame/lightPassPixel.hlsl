@@ -91,29 +91,33 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 				float pOnQuadX = pos_W.x + pToC.x * (gridDims.x / 10.0f) * i; // gridDims.x / 2.0f stepsize
 				float pOnQuadZ = pos_W.z + pToC.z * (gridDims.y / 10.0f) * i;
 
-				xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x; // < MAX_NUM_FLOORGRIDS_X ? (pOnQuadX - gridStartPos.x) / gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
-				yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y; // < MAX_NUM_FLOORGRIDS_Y ? (pOnQuadZ - gridStartPos.y) / gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
-				
+				xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x;
+				yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y;
 
 				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X && 
 					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y) {
 					float d = dot(float3(pOnQuadX, grid[xGrid][yGrid].height, pOnQuadZ) - camPos, normal) / lDotN;
 					p = d * pToC + camPos;
 
-					if (p.x >= pOnQuadX - 5.0f && p.x <= pOnQuadX + gridDims.x + 5.0f &&
-						p.z >= pOnQuadZ - 5.0f && p.z <= pOnQuadZ + gridDims.y + 5.0f)
+					if (p.x >= pOnQuadX - 1.0f && p.x < pOnQuadX + gridDims.x + 0.0f &&
+						p.z >= pOnQuadZ - 1.0f && p.z < pOnQuadZ + gridDims.y + 0.0f)
 					{
 						intersected = true;
-						diffuse = grid[xGrid][yGrid].color;
 						pos_W.y = p.y;
+						diffuse = grid[xGrid][yGrid].color;
 					}
 				}
 				else {
-					intersected = true;
+					break;
 				}
 
 				i += 1.0f;
 			} while (!intersected);
+
+			if (!intersected)
+			{
+				diffuse = float3(0.0f, 0.0f, 0.0f);
+			}
 		}
 	}
 

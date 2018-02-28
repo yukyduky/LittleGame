@@ -95,12 +95,12 @@ void GamePlayState::checkCollisions() {
 }
 
 void GamePlayState::updateFloorPattern() {
-	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	float dt = static_cast<float>(Locator::getGameTime()->GetTime()) - this->gTimeLastFrame;
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->totalLevelTime += dt;
 	this->counter += dt;
 	Index index(0, 0);
-	XMFLOAT3 currVel(0, 0, 0);
+	XMFLOAT3 currVel(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 fallColor(1.0f, 0.0f, 0.0f);
 	XMFLOAT3 baseColor(0.0f, 1.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);

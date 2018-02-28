@@ -318,7 +318,7 @@ void Camera::init(float arenaWidth, float arenaDepth)
 
 	this->angle = 0.45f * DirectX::XM_PI;
 	this->nearPlane = 0.5;
-	this->farPlane = 100000.0; //200
+	this->farPlane = 10000.0; //200
 
 	DirectX::XMMATRIX view = DirectX::XMMatrixLookToLH(
 		cameraStartPos,
