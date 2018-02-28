@@ -21,8 +21,8 @@ struct FloorGrid
 };
 
 static const int MAX_NUM_LIGHTS = 50;
-static const int MAX_NUM_FLOORGRIDS_X = 20;
-static const int MAX_NUM_FLOORGRIDS_Y = 20;
+static const int MAX_NUM_FLOORGRIDS_X = 35;
+static const int MAX_NUM_FLOORGRIDS_Y = 35;
 
 cbuffer GeneralData : register (b0) {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
@@ -41,9 +41,10 @@ cbuffer Light : register (b1) {
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
-void renderFallingFloor(inout float3 pos_W, in float3 normal, inout float3 diffuse);
+void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 float dot(float3 vec1, float3 vec2);
+void normalize(inout float3 vec);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 {
@@ -70,36 +71,49 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
 	emission = texDiffuse.Load(texCoords).w;
+	normal = float3(0.0f, 1.0f, 0.0f);
 }
 
-void renderFallingFloor(inout float3 pos_W, in float3 normal, inout float3 diffuse)
+void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 {
-	if (diffuse.x + diffuse.y + diffuse.z == 3.0f) {
-		float lDotN = dot(camDir, normal);
+	if (pos_W.y == -0.5f) {
+		float3 pToC = pos_W - camPos;
+		normalize(pToC);
+		float lDotN = dot(pToC, normal);
 		if (lDotN != 0.0f) {
-			int i = 0;
+			float i = 0.0f;
 			bool intersected = false;
 			float3 p = float3(0.0f, 0.0f, 0.0f);
+			int xGrid = 0;
+			int yGrid = 0;
+
 			do {
-				float pOnQuadX = pos_W.x + camDir.x * (gridDims.x / 2.0f) * i; // gridDims.x / 2.0f stepsize
-				float pOnQuadZ = pos_W.z + camDir.z * (gridDims.y / 2.0f) * i;
+				float pOnQuadX = pos_W.x + pToC.x * (gridDims.x / 10.0f) * i; // gridDims.x / 2.0f stepsize
+				float pOnQuadZ = pos_W.z + pToC.z * (gridDims.y / 10.0f) * i;
 
-				int xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x < MAX_NUM_FLOORGRIDS_X ? (pOnQuadX - gridStartPos.x) / gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
-				int yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y < MAX_NUM_FLOORGRIDS_Y ? (pOnQuadZ - gridStartPos.y) / gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+				xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x; // < MAX_NUM_FLOORGRIDS_X ? (pOnQuadX - gridStartPos.x) / gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
+				yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y; // < MAX_NUM_FLOORGRIDS_Y ? (pOnQuadZ - gridStartPos.y) / gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+				
 
-				float d = dot(float3(pOnQuadX, grid[xGrid][yGrid].height, pOnQuadZ) - camPos, normal) / dot(camDir, normal);
-				p = d * camDir + camPos;
+				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X && 
+					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y) {
+					float d = dot(float3(pOnQuadX, grid[xGrid][yGrid].height, pOnQuadZ) - camPos, normal) / lDotN;
+					p = d * pToC + camPos;
 
-				if (p.x >= pOnQuadX && p.x < pOnQuadX + gridDims.x &&
-					p.z >= pOnQuadZ && p.z < pOnQuadZ + gridDims.y)
-				{
+					if (p.x >= pOnQuadX - 5.0f && p.x <= pOnQuadX + gridDims.x + 5.0f &&
+						p.z >= pOnQuadZ - 5.0f && p.z <= pOnQuadZ + gridDims.y + 5.0f)
+					{
+						intersected = true;
+						diffuse = grid[xGrid][yGrid].color;
+						pos_W.y = p.y;
+					}
+				}
+				else {
 					intersected = true;
-					diffuse = grid[xGrid][yGrid].color;
-					pos_W.y = p.y;
 				}
 
-				i++;
-			} while (!intersected && p.x - gridStartPos.x < arenaDims.x && p.x >= gridStartPos.x && p.y - gridStartPos.y < arenaDims.y && p.y >= gridStartPos.y);
+				i += 1.0f;
+			} while (!intersected);
 		}
 	}
 
@@ -172,4 +186,10 @@ float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float em
 float dot(float3 vec1, float3 vec2)
 {
 	return float(vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
+}
+
+void normalize(inout float3 vec)
+{
+	float mag = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	vec = float3(vec.x / mag, vec.y / mag, vec.z / mag);
 }

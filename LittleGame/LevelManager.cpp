@@ -18,11 +18,46 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMVECTOR vec;
 	XMMATRIX worldM;
 	XMMATRIX rotationM = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(this->squareSize * 0.5f, 0, this->squareSize * 0.5f);
+	XMMATRIX scaleM = XMMatrixScaling(this->arenaWidth * 0.5f, 0, this->arenaDepth * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(1.0f, 1.0f, 1.0f, 0.0f);
+	vColor actualColor(0.0f, 1.0f, 0.0f, 1.0f);
 	//Create all the squares representing the floor
+	
+	//Calculate center position of the next grid space
+	pos = XMFLOAT3(this->arenaWidth * 0.5f, -0.5f, this->arenaDepth * 0.5f);
+	nextID = this->nextID();
+	//Create the GameObject and calculate the world matrix
+	object = new ArenaObject(nextID, pos);
+	int test = sizeof(ArenaObject);
+	vec = XMLoadFloat3(&pos);
+	translationM = XMMatrixTranslationFromVector(vec);
+	worldM = scaleM * rotationM * translationM;
+	//Create the RectangleComponent
+	rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
+	//Give the RectangleComponent to the ArenaObject and set it's world matrix
+	object->addComponent(rect);
+	object->SETworldMatrix(worldM);
+	object->SETrotationMatrix(rotationM);
+	object->SETscaleMatrix(scaleM);
+	//Push the new ArenaObject and GraphicsComponent into the vector arrays
+	
+	for (size_t i = 0; i < grid.size(); i++)
+	{
+		for (size_t j = 0; j < grid[i].size(); j++)
+		{
+			grid[i][j].baseColor = XMFLOAT3(color.r, color.g, color.b);
+			grid[i][j].color = XMFLOAT3(actualColor.r, actualColor.g, actualColor.b);
+			grid[i][j].posY = pos.y - 0.01f;
+			grid[i][j].ptr = object;
+		}
+	}
+	staticObjects.push_back(object);
+	graphics.push_back(rect);
+
+
+	/*
 	for (size_t i = 0; i < grid.size(); i++)
 	{
 		for (size_t j = 0; j < grid[i].size(); j++)
@@ -52,6 +87,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 			graphics.push_back(rect);
 		}
 	}
+	*/
 }
 
 void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
@@ -316,7 +352,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	}*/
 	
 	// createLevelWalls needs to come first
-	this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
+	//this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
 	this->createFloor(grid, dynamicNoCollisionObjects, graphics);
 	this->createNeonFloorGrid(staticObjects, graphics);
 	this->setFallPattern(pattern);

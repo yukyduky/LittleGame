@@ -101,9 +101,9 @@ void GamePlayState::updateFloorPattern() {
 	this->counter += dt;
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
-	XMFLOAT4 fallColor(1.0f, 0.0f, 0.0f, 1.0f);
-	XMFLOAT4 baseColor(0.0f, 0.0f, 0.0f, 0.0f);
-	XMFLOAT4 finalColor(0.0f, 0.0f, 0.0f, 1.0f);
+	XMFLOAT3 fallColor(1.0f, 0.0f, 0.0f);
+	XMFLOAT3 baseColor(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 
 	switch (this->floorState)	
 	{
@@ -121,7 +121,7 @@ void GamePlayState::updateFloorPattern() {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].ptr->setState(OBJECTSTATE::TYPE::TFALLING);
+//				this->grid[index.x][index.y].ptr->setState(OBJECTSTATE::TYPE::TFALLING);
 				//this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
 			}
 			this->floorState = FLOORSTATE::STATE::TFALLING;
@@ -131,27 +131,29 @@ void GamePlayState::updateFloorPattern() {
 		
 	case FLOORSTATE::STATE::TFALLING:
 		if (this->counter < this->stateTime) {
+			baseColor.x = baseColor.x - (baseColor.x / (this->stateTime)) * counter;
+			baseColor.y = baseColor.y - (baseColor.y / (this->stateTime)) * counter;
+			baseColor.z = baseColor.z - (baseColor.z / (this->stateTime)) * counter;
+			fallColor.x = (fallColor.x / (this->stateTime)) * counter;
+			fallColor.y = (fallColor.y / (this->stateTime)) * counter;
+			fallColor.z = (fallColor.z / (this->stateTime)) * counter;
+
+			finalColor.x = baseColor.x + fallColor.x;
+			finalColor.y = baseColor.y + fallColor.y;
+			finalColor.z = baseColor.z + fallColor.z;
+
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
-				baseColor = this->grid[index.x][index.y].baseColor;
-
-				baseColor.x = baseColor.x - (baseColor.x / (this->stateTime - 0.5f)) * counter;
-				baseColor.y = baseColor.y - (baseColor.y / (this->stateTime - 0.5f)) * counter;
-				baseColor.z = baseColor.z - (baseColor.z / (this->stateTime - 0.5f)) * counter;
-				fallColor.x = (fallColor.x / (this->stateTime - 0.5f)) * counter;
-				fallColor.y = (fallColor.y / (this->stateTime - 0.5f)) * counter;
-				fallColor.z = (fallColor.z / (this->stateTime - 0.5f)) * counter;
-				
-				finalColor.x = baseColor.x + fallColor.x;
-				finalColor.y = baseColor.y + fallColor.y;
-				finalColor.z = baseColor.z + fallColor.z;
-				finalColor.w = baseColor.w;
-
 				this->grid[index.x][index.y].color = finalColor;
 			}
 		}
 		else {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = currData.pattern[i].x;
+				index.y = currData.pattern[i].y;
+				this->grid[index.x][index.y].color = fallColor;
+			}
 			this->floorState = FLOORSTATE::STATE::FALLING;
 			this->counter = 0.0f;
 		}
@@ -162,14 +164,15 @@ void GamePlayState::updateFloorPattern() {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY += GRAVITY * this->counter * 4.0f;
+				this->grid[index.x][index.y].posY += GRAVITY * this->counter;
 			}
 		}
 		else {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY = 10000.0f;
+				this->grid[index.x][index.y].posY = -1000.0f;
+				this->grid[index.x][index.y].color = XMFLOAT3(0.0f, 0.0f, 0.0f);
 			}
 			this->floorState = FLOORSTATE::STATE::DEACTIVATED;
 			this->counter = 0.0f;
@@ -181,7 +184,7 @@ void GamePlayState::updateFloorPattern() {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY = -50.0f;
+				this->grid[index.x][index.y].color = baseColor;
 			}
 			this->floorState = FLOORSTATE::STATE::RECOVERING;
 			this->counter = 0.0f;
@@ -193,7 +196,7 @@ void GamePlayState::updateFloorPattern() {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY -= GRAVITY * this->counter * 4.0f;
+				this->grid[index.x][index.y].posY -= GRAVITY * this->counter;
 			}
 		}
 		else {
@@ -201,6 +204,7 @@ void GamePlayState::updateFloorPattern() {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY = -0.5f;
+				this->grid[index.x][index.y].color = baseColor;
 			}
 			this->floorState = FLOORSTATE::STATE::ACTIVE;
 			this->counter = 0.0f;
@@ -298,6 +302,7 @@ void GamePlayState::init() {
 	this->recoveryMode = false;
 	this->counter = 0.0;
 	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	
 }
 
@@ -438,7 +443,7 @@ void GamePlayState::render(GameManager * gm)
 {
 	rio.render(this->graphics);
 	gm->setupSecondRenderPass();
-	rio.injectResourcesIntoSecondPass();
+	rio.injectResourcesIntoSecondPass(this->grid);
 	gm->display(this);
 }
 

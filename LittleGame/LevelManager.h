@@ -29,8 +29,8 @@ struct tileData {
 	GameObject* ptr = nullptr;
 
 	//Nya som Dew ska använda
-	XMFLOAT4 baseColor;
-	XMFLOAT4 color;
+	XMFLOAT3 baseColor;
+	XMFLOAT3 color;
 	float posY;
 
 	tileData() {};

@@ -5,6 +5,9 @@
 #include "Locator.h"
 #include "ID3D.h"
 #include "D3D.h"
+#include <DirectXMath.h>
+
+using namespace DirectX;
 
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
@@ -12,6 +15,7 @@
 #include <crtdbg.h>
 #endif
 
+void test();
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
@@ -27,6 +31,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// 6063, 6074 something in KeyboardInput or InputComponent
 	//	_CrtSetBreakAlloc(6114);
 #endif
+
+	test();
 
 	ID3D* d3d = new D3D();
 	Locator::provide(d3d);
@@ -72,4 +78,65 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	_CrtMemDumpAllObjectsSince(&s1);
 #endif
 	return 0;
+}
+
+void test()
+{
+	XMVECTOR pos_W = XMVECTOR{ 100.0f, -0.5f, 800.0f };
+	XMVECTOR camPos = XMVECTOR{ 800.0f, 1131.0f, 240.0f };
+	XMVECTOR normal = XMVECTOR{ 0.0f, 1.0f, 0.0f };
+
+
+	//if (pos_W.y == -0.5f) {
+	XMVECTOR pToC = XMVectorSubtract(pos_W, camPos);
+	pToC = XMVector3Normalize(pToC);
+
+	XMVECTOR lDotN = XMVector3Dot(pToC, normal);
+	//if (lDotN != 0.0f) {
+		float i = 1.0f;
+		bool intersected = false;
+		XMVECTOR p = XMVECTOR{ 0.0f, 0.0f, 0.0f };
+		int xGrid = 0;
+		int yGrid = 0;
+
+		do {
+			XMFLOAT3 pos_Wfloat3;
+			XMFLOAT3 pToCfloat3;
+			XMStoreFloat3(&pos_Wfloat3, pos_W);
+			XMStoreFloat3(&pToCfloat3, pToC);
+
+			float pOnQuadX = pos_Wfloat3.x + pToCfloat3.x * (50 / 1.0f) * i; // gridDims.x / 2.0f stepsize
+			float pOnQuadZ = pos_Wfloat3.z + pToCfloat3.z * (50 / 1.0f) * i;
+
+			xGrid = (pOnQuadX - 0) / 50; // < MAX_NUM_FLOORGRIDS_X ? (pOnQuadX - gridStartPos.x) / gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
+			yGrid = (pOnQuadZ - 0) / 50; // < MAX_NUM_FLOORGRIDS_Y ? (pOnQuadZ - gridStartPos.y) / gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
+
+
+			if (xGrid >= 0 && xGrid < 35 &&
+				yGrid >= 0 && yGrid < 35) {
+				XMVECTOR d = XMVectorDivide(XMVector3Dot(XMVectorSubtract(XMVECTOR{ pOnQuadX, -0.601f, pOnQuadZ }, camPos), normal), lDotN);
+
+				p = XMVectorAdd((XMVectorMultiply(d, pToC)), camPos);
+
+				XMFLOAT3 pfloat3;
+				XMStoreFloat3(&pfloat3, p);
+
+
+				if (pfloat3.x >= pOnQuadX && pfloat3.x <= pOnQuadX + 50 &&
+					pfloat3.z >= pOnQuadZ && pfloat3.z <= pOnQuadZ + 50)
+				{
+
+					intersected = true;
+					//diffuse = grid[xGrid][yGrid].color;
+					//pos_W.y = p.y;
+				}
+			}
+			else {
+				intersected = true;
+			}
+
+			i += 1.0f;
+		} while (!intersected);
+		//	}
+	//}
 }

@@ -55,18 +55,9 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 
 	this->lightPassData.camDir = camera.GETfacingDirFloat3();
 	this->lightPassData.camPos = camera.GETcameraPos();
-	this->lightPassData.arenaDims = XMFLOAT2(ARENAWIDTH, ARENAHEIGHT);
-	this->lightPassData.gridDims = XMFLOAT2(ARENASQUARESIZE, ARENASQUARESIZE);
+	this->lightPassData.arenaDims = XMFLOAT2(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
+	this->lightPassData.gridDims = XMFLOAT2(ARENADATA::GETsquareSize(), ARENADATA::GETsquareSize());
 	this->lightPassData.gridStartPos = XMFLOAT2(0.0f, 0.0f);
-
-	for (int i = 0; i < MAX_NUM_FLOORGRIDS_X; i++)
-	{
-		for (int k = 0; k < MAX_NUM_FLOORGRIDS_Y; k++)
-		{
-			this->lightPassData.grid[i][k].color = XMFLOAT3(100.0f / 255.0f, 150.0f / 255.0f, 200.0f / 255.0f);
-			this->lightPassData.grid[i][k].height = 0.0f;
-		}
-	}
 
 	Locator::getD3D()->createConstantBuffer(
 		&this->cMatrixBuffer,
@@ -86,10 +77,16 @@ void RenderInputOrganizer::render(std::list<GraphicsComponent*>& graphics)
 	}
 }
 
-void RenderInputOrganizer::injectResourcesIntoSecondPass()
+void RenderInputOrganizer::injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid)
 {
-	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
+	for (int i = 0; i < grid.size(); i++) {
+		for (int j = 0; j < grid[i].size(); j++) {
+			this->lightPassData.grid[i][j].color = grid[i][j].color;
+			this->lightPassData.grid[i][j].height = grid[i][j].posY;
+		}
+	}
 
+	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
 
 	this->lightPassData.nrOfLights = static_cast<float>(size);
 
