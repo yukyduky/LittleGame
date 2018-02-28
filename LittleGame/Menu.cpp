@@ -12,12 +12,19 @@ Menu::~Menu()
 void Menu::cleanUp()
 {
 	this->buttons.clear();
+	for (auto &i : this->objects)
+	{
+		if (!i)
+		{
+			i->~MenuObject();
+			delete i;
+		}
+	}
 	this->objects.clear();
 }
 
 void Menu::addButton(Button * newButton)
 {
-	
 	if (this->buttons.size() > 0)
 	{
 		newButton->SETNext(this->buttons.front());
@@ -36,7 +43,6 @@ void Menu::addQuad(MenuObject * quad)
 {
 	this->objects.push_back(quad);
 }
-
 
 void Menu::goUp(int nrOfChoosen)
 {

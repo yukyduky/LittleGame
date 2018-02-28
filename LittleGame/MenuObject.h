@@ -49,7 +49,7 @@ private:
 
 protected:
 	D2D1_RECT_F rectangle;
-	ID2D1HwndRenderTarget * pRT;
+	ID2D1HwndRenderTarget * pRT = nullptr;
 	// radius in -x, radius in y, offset in x
 	XMFLOAT3 menuSize;
 

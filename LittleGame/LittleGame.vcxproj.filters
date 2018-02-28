@@ -150,6 +150,7 @@
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
+    <ClInclude Include="ID2D.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

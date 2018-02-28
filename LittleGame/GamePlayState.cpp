@@ -177,10 +177,6 @@ void GamePlayState::cleanUp()
 
 	this->quadTree.cleanup();
 
-	//for (auto && iterator2 : this->pointLights) {
-	//	delete &iterator2;
-	//}
-
 	this->pointLights.clear();
 	
 	this->graphics.clear();

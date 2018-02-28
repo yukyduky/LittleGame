@@ -2,36 +2,21 @@
 #ifndef D2D_H
 #define D2D_H
 
+#include "ID2D.h"
+
 #include "Locator.h"
-#include "MenuObject.h"
 
-#ifndef Assert
-#if defined( DEBUG ) || defined( _DEBUG )
-#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
-#else
-#define Assert(b)
-#endif //DEBUG || _DEBUG
-#endif
-
-#ifndef HINST_THISCOMPONENT
-EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-#define HINST_THISCOMPONENT ((HINSTANCE)&__ImageBase)
-#endif
-
-class D2D
+class D2D : public ID2D
 {
 public:
-	D2D();
-	~D2D();
-
 	// Register the window class and call methods for instantiating drawing resources
-	HRESULT Initialize();
+	virtual HRESULT Initialize();
 
 	// Draw content.
-	HRESULT OnRender(std::vector<MenuObject*> objects);
+	virtual HRESULT OnRender(std::vector<MenuObject*> objects);
 
-	ID2D1HwndRenderTarget* GETRenderTarget() { return this->m_pRenderTarget; }
-	IDWriteTextFormat* GETTextFormat() { return this->m_pTextFormat; }
+	virtual ID2D1HwndRenderTarget* GETRenderTarget() { return this->m_pRenderTarget; }
+	virtual IDWriteTextFormat* GETTextFormat() { return this->m_pTextFormat; }
 private:
 	// D2D device
 	ID2D1Factory* m_pDirect2dFactory = nullptr;
@@ -61,7 +46,7 @@ private:
 	ID2D1SolidColorBrush * pGridColor = nullptr;
 
 	IWICImagingFactory *pIWICFactory = nullptr;
-	PCWSTR uri = nullptr;
+	//PCWSTR uri = nullptr;
 	UINT destinationWidth;
 	UINT destinationHeight;
 	ID2D1Bitmap* pBitmap = nullptr;

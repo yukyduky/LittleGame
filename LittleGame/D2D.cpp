@@ -259,9 +259,9 @@ void D2D::loadBitmap()
 		&this->pBitmap
 	);
 
-	this->uri = L"include/screenSaved.bmp";
+	//this->uri = L"include/screenSaved.bmp";
 	hr = this->pIWICFactory->CreateDecoderFromFilename(
-		uri,
+		L"include/screenSaved.bmp",
 		NULL,
 		GENERIC_READ,
 		WICDecodeMetadataCacheOnLoad,
