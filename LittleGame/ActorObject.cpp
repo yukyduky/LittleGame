@@ -95,7 +95,7 @@ void ActorObject::update()
 		if (this->pos.y < -500.0f) {
 			this->pos.y = -500.0f;
 			this->velocity.y = 0.0f;
-			this->state = OBJECTSTATE::TYPE::INVISIBLE;
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 		}
 		this->updateWorldMatrix();
 		break;
@@ -137,12 +137,12 @@ void ActorObject::move()
 	}
 
 	else {
-		if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+		if (tempPos.z > ARENADATA::GETsquareSize() && tempPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
 			actorNewPos.z = tempPos.z;
 			this->physicsComponent->updateBoundingArea(actorPos);
 		}
 		else { actorNewPos.z = actorPos.z; }
-		if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+		if (tempPos.x > ARENADATA::GETsquareSize() && tempPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
 			actorNewPos.x = tempPos.x;
 			this->physicsComponent->updateBoundingArea(actorPos);
 		}
@@ -159,7 +159,7 @@ void ActorObject::moveUp()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z += actorVelocity.z * dt;
-		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+		if (playerPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
 			this->physicsComponent->updateBoundingArea(playerPos);
 			this->setPosition(playerPos);
 		}
@@ -176,7 +176,7 @@ void ActorObject::moveLeft()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x -= actorVelocity.x * dt;
-		if (playerPos.x > ARENASQUARESIZE) {
+		if (playerPos.x > ARENADATA::GETsquareSize()) {
 			this->physicsComponent->updateBoundingArea(playerPos);
 			this->setPosition(playerPos);
 		}
@@ -192,7 +192,7 @@ void ActorObject::moveDown()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z -= actorVelocity.z * dt;
-		if (playerPos.z > ARENASQUARESIZE) {
+		if (playerPos.z > ARENADATA::GETsquareSize()) {
 			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
@@ -208,7 +208,7 @@ void ActorObject::moveRight()
 		XMFLOAT3 playerPos = this->GETPosition();
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x += actorVelocity.x * dt;
-		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+		if (playerPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
 			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}

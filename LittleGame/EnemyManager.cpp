@@ -59,8 +59,6 @@ void EnemyManager::startLevel1()
 		this->currentWaveSize += 1;
 	}
 
-	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
-	this->activeEnemiesCount--;
 }
 
 void EnemyManager::cleanLevel()
@@ -109,16 +107,16 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
 
 	if (spawnLocation == 1)
-		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+		pos = { -spawnOffset, scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
 
 	else if (spawnLocation == 2)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
+		pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, -spawnOffset };
 
 	else if (spawnLocation == 3)
-		pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+		pos = { (static_cast<float>(ARENADATA::GETarenaWidth()) + spawnOffset), scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
 
 	else if (spawnLocation == 4)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+		pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
 	float speed = 180;

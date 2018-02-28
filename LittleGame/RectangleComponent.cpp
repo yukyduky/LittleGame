@@ -35,10 +35,10 @@ void RectangleComponent::createVertices(const float r, const float g, const floa
 
 	std::array<PrimitiveVertexData, 4> vertexData;
 
-	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
-	vertexData[1] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
-	vertexData[2] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, r, g, b, a);
-	vertexData[3] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, r, g, b, a);
+	vertexData[0] = PrimitiveVertexData(-1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, r, g, b, a);
+	vertexData[1] = PrimitiveVertexData(1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, r, g, b, a);
+	vertexData[2] = PrimitiveVertexData(-1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, r, g, b, a);
+	vertexData[3] = PrimitiveVertexData(1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f, r, g, b, a);
 
 	DWORD index[] = 
 	{
@@ -122,6 +122,7 @@ void RectangleComponent::update()
 			}
 			else {
 				this->head->setState(OBJECTSTATE::TYPE::FALLING);
+				this->counter = 0.0;
 			}
 		}
 		break;
