@@ -2,18 +2,17 @@
 #include "MainMenuState.h"
 #include "RewardMenuState.h"
 
-Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID,
-	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior) : MenuObject(pRT, ID, pos, color)
+Button::Button(MenuState* pMS, size_t ID,
+	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior) : MenuObject(ID, pos, color)
 {
-	init(pTF, pMS, text, behavior);
-	
+	init(pMS, text, behavior);
 }
 
-Button::Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID,
+Button::Button(MenuState* pMS, size_t ID,
 	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior,
-	NAME spellname, GLYPHTYPE glyph) : MenuObject(pRT, ID, pos, color)
+	NAME spellname, GLYPHTYPE glyph) : MenuObject(ID, pos, color)
 {
-	init(pTF, pMS, text, behavior);
+	init(pMS, text, behavior);
 
 	this->spellname = spellname;
 	this->glyph = glyph;
@@ -24,11 +23,11 @@ Button::~Button()
 	this->cleanUp();
 }
 
-void Button::init(IDWriteTextFormat * pTF, MenuState * pMS, const WCHAR * text, BEHAVIOR behavior)
+void Button::init(MenuState * pMS, const WCHAR * text, BEHAVIOR behavior)
 {
 	this->behavior = behavior;
 	this->pMS = pMS;
-	this->pTF = pTF;
+	this->pTF = Locator::getD2D()->GETTextFormat();
 	this->selected = false;
 	this->nextButton = this;
 	this->prevButton = this;

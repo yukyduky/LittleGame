@@ -18,14 +18,10 @@ protected:
 
 	Menu* currMenu;
 
-	D2D objD2D;
+	D2D* objD2D;
 private:
 
 	int ID = 0;
-
-	// Handlers for different menus
-	//std::array<Menu*, MENUS::SIZE> menus;
-	//MENUS::TYPE currMenu;
 
 	bool quit;
 

@@ -158,6 +158,7 @@
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="ID2D.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />

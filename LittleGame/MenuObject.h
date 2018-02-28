@@ -7,6 +7,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+
 #include <d2d1.h>
 #include <d2d1helper.h>
 #include <Dwrite.h>
@@ -34,8 +35,8 @@ using namespace DirectX;
 class MenuObject
 {
 public:
-	MenuObject(ID2D1HwndRenderTarget* RT, size_t ID);
-	MenuObject(ID2D1HwndRenderTarget* RT ,size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
+	MenuObject(size_t ID);
+	MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
 	~MenuObject();
 
 	void cleanUp();
@@ -49,7 +50,7 @@ private:
 
 protected:
 	D2D1_RECT_F rectangle;
-	ID2D1HwndRenderTarget * pRT;
+	ID2D1HwndRenderTarget * pRT = nullptr;
 	// radius in -x, radius in y, offset in x
 	XMFLOAT3 menuSize;
 
