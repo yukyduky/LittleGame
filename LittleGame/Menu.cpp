@@ -57,3 +57,18 @@ void Menu::goDown(int nrOfChoosen)
 	this->current = this->current->GETNext(nrOfChoosen);
 	this->current->selectButton();
 }
+
+void Menu::goUp()
+{
+	this->current->deSelectButton();
+	this->current = this->current->GETPrev(1);
+	this->current->selectButton();
+}
+
+void Menu::goDown()
+{
+	this->current->deSelectButton();
+	this->current = this->current->GETNext(1);
+	this->current->selectButton();
+}
+

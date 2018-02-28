@@ -1,7 +1,9 @@
 #include "MenuObject.h"
+#include "Locator.h"
 
-MenuObject::MenuObject(ID2D1HwndRenderTarget* RT, size_t ID) : ID(ID), pRT(RT)
+MenuObject::MenuObject(size_t ID) : ID(ID)
 {
+	this->pRT = Locator::getD2D()->GETRenderTarget();
 	this->menuSize = { 200.0f, 400.0f, 300.0f };
 	//Default background
 	D2D1_SIZE_F rtSize = pRT->GetSize();
@@ -24,8 +26,9 @@ MenuObject::MenuObject(ID2D1HwndRenderTarget* RT, size_t ID) : ID(ID), pRT(RT)
 	pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkMagenta), &this->pColorBrush);
 }
 
-MenuObject::MenuObject(ID2D1HwndRenderTarget* RT ,size_t ID, XMFLOAT4 pos, D2D1::ColorF color) : ID(ID), pRT(RT)
+MenuObject::MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color) : ID(ID)
 {
+	this->pRT = Locator::getD2D()->GETRenderTarget();
 	this->menuSize = { 200.0f, 400.0f, 300.0f };
 	D2D1_SIZE_F rtSize = pRT->GetSize();
 	this->pos = {

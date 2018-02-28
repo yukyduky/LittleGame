@@ -1,29 +1,28 @@
 #include "D2D.h"
 
 
-D2D::D2D() :
-	m_pDirect2dFactory(nullptr),
-	m_pRenderTarget(nullptr),
-	m_pDirectWriteFactory(nullptr),
-	m_pTextFormat(nullptr),
-	pGridColor(nullptr)
-{
-}
+//D2D::D2D() :
+//	m_pDirect2dFactory(nullptr),
+//	m_pRenderTarget(nullptr),
+//	m_pDirectWriteFactory(nullptr),
+//	m_pTextFormat(nullptr),
+//	pGridColor(nullptr)
+//{
+//}
 
-D2D::~D2D()
-{
-
-	SafeRelease(&this->m_pDirect2dFactory);
-	SafeRelease(&this->m_pDirectWriteFactory);
-	SafeRelease(&this->m_pRenderTarget);
-	SafeRelease(&this->m_pTextFormat);
-	SafeRelease(&this->pGridColor);
-	SafeRelease(&this->pIWICFactory);
-	SafeRelease(&this->pBitmap);
-
-	//Removes the screenshot from the directory
-	DeleteFile("include/screenSaved.bmp");
-}
+//D2D::~D2D()
+//{
+//	SafeRelease(&this->m_pDirect2dFactory);
+//	SafeRelease(&this->m_pDirectWriteFactory);
+//	SafeRelease(&this->m_pRenderTarget);
+//	SafeRelease(&this->m_pTextFormat);
+//	SafeRelease(&this->pGridColor);
+//	SafeRelease(&this->pIWICFactory);
+//	SafeRelease(&this->pBitmap);
+//
+//	//Removes the screenshot from the directory
+//	DeleteFile("include/screenSaved.bmp");
+//}
 
 HRESULT D2D::Initialize()
 {

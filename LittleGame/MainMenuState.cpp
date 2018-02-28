@@ -7,8 +7,6 @@ MainMenuState MainMenuState::sMainMenuState;
 
 void MainMenuState::init() 
 {
-	MenuState::init();
-	
 	this->displayMenu(this->initStartMenu());
 }
 
@@ -28,27 +26,27 @@ Menu* MainMenuState::initStartMenu()
 
 	//Background
 	nextID = this->newID();
-	object = new MenuObject(this->objD2D->GETRenderTarget(), nextID);
+	object = new MenuObject(nextID);
 	stMenu->addQuad(object);
 
 	//Buttons
 	nextID = this->newID();
 	text = L"Start/Resume game";
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 100.0f,50.0f, 200.0f,150.0f }, D2D1::ColorF::Aqua,
 		text, BEHAVIOR::STARTGAME);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Options";
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
 	stMenu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Quit";
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	stMenu->addButton(pButton);
@@ -70,34 +68,34 @@ Menu* MainMenuState::initOptionsMenu()
 
 	//Background
 	nextID = this->newID();
-	object = new MenuObject(this->objD2D->GETRenderTarget(), nextID);
+	object = new MenuObject(nextID);
 	opMenu->addQuad(object);
 
 	//Buttons
 	text = L"Startmenu";
 	nextID = this->newID();
-	pButton = new Button( this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 100.0f,50.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOSTART);
 	opMenu->addButton(pButton);
 
 	text = L"Volume +";
 	nextID = this->newID();
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 80.0f,150.0f, 120.0f,50.0f }, D2D1::ColorF::Green,
 		text, BEHAVIOR::VOLUMEUP);
 	opMenu->addButton(pButton);
 
 	text = L"Volume -";
 	nextID = this->newID();
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 260.0f,150.0f, 120.0f,50.0f }, D2D1::ColorF::Blue,
 		text, BEHAVIOR::VOLUMEDOWN);
 	opMenu->addButton(pButton);
 
 	text = L"Toggle Fullscreen";
 	nextID = this->newID();
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::WINDOWSWITCH);
 	opMenu->addButton(pButton);

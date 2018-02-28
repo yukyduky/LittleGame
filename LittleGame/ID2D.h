@@ -2,7 +2,6 @@
 #ifndef ID2D_H
 #define ID2D_H
 
-#include "Locator.h"
 #include "MenuObject.h"
 
 #ifndef Assert

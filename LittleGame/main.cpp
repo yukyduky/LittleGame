@@ -4,6 +4,7 @@
 #include "GameManager.h"
 #include "Locator.h"
 #include "ID3D.h"
+#include "ID2D.h"
 #include "D3D.h"
 #include "D2D.h"
 
@@ -30,12 +31,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 #endif
 
 	ID3D* d3d = new D3D();
+	ID2D* d2d = new D2D();
 
 	Locator::provide(d3d);
+	Locator::provide(d2d);
 
 	Locator::getD3D()->initializeWindow(hInstance, true, 1920, 1080, true);
 	Locator::getD3D()->createSwapChain();
 
+	Locator::getD2D()->Initialize();
+	
 	GameManager gm;
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);

@@ -10,7 +10,6 @@
 using namespace DirectX::SimpleMath;
 
 void MenuState::init() {
-	this->objD2D->Initialize();
 }
 
 void MenuState::cleanUp()
@@ -24,7 +23,6 @@ void MenuState::cleanUp()
 	}
 	this->menuObjects.clear();
 
-	this->objD2D->~D2D();
 	this->ID = 0;
 }
 
@@ -51,11 +49,11 @@ void MenuState::handleEvents(GameManager * gm) {
 			{
 			case VK_UP:
 			case 0x57:
-				this->currMenu->goUp(1);
+				this->currMenu->goUp();
 				break;
 			case VK_DOWN:
 			case 0x53:
-				this->currMenu->goDown(1);
+				this->currMenu->goDown();
 				break;
 			case VK_RETURN:
 			case VK_SPACE:
@@ -90,7 +88,7 @@ void MenuState::update(GameManager * gm)
 }
 
 void MenuState::render(GameManager * gm) {
-	this->objD2D->OnRender(this->menuObjects);
+	Locator::getD2D()->OnRender(this->menuObjects);
 }
 
 void MenuState::displayMenu(Menu* menu)

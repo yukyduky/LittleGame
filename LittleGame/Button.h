@@ -15,13 +15,13 @@ enum class BEHAVIOR {
 class Button : public MenuObject
 {
 public:
-	Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID, 
+	Button(MenuState* pMS, size_t ID, 
 		XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior);
-	Button(ID2D1HwndRenderTarget* pRT, IDWriteTextFormat* pTF, MenuState* pMS, size_t ID,
+	Button(MenuState* pMS, size_t ID,
 		XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior,
 		NAME spellname, GLYPHTYPE glyph);
 	~Button();
-	void init(IDWriteTextFormat* pTF, MenuState* pMS,
+	void init(MenuState* pMS,
 		const WCHAR* text, BEHAVIOR behavior);
 	void cleanUp();
 

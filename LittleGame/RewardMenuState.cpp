@@ -12,8 +12,6 @@ RewardMenuState * RewardMenuState::getInstance()
 
 void RewardMenuState::init()
 {
-	MenuState::init();
-
 	this->displayMenu(this->initRewardMenu());
 }
 
@@ -79,7 +77,7 @@ Menu * RewardMenuState::initRewardMenu()
 
 	//Background
 	nextID = this->newID();
-	object = new MenuObject(this->objD2D->GETRenderTarget(), nextID);
+	object = new MenuObject(nextID);
 	menu->addQuad(object);
 
 	
@@ -226,7 +224,7 @@ Menu * RewardMenuState::initRewardMenu()
 				break;
 			}
 
-			pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, this->newID(),
+			pButton = new Button(this, this->newID(),
 				{ start.x,start.y, 100.0f,100.0f }, color,
 				text, BEHAVIOR::ADDGLYPH,
 				name, glyph);
@@ -240,7 +238,7 @@ Menu * RewardMenuState::initRewardMenu()
 	}
 	else {
 		text = L"Next level";
-		pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, this->newID(),
+		pButton = new Button(this, this->newID(),
 			{ 100.0f,50.0f, 200.0f,150.0f }, D2D1::ColorF::GreenYellow,
 			text, BEHAVIOR::REWSTARTGAME);
 		menu->addButton(pButton);
@@ -250,7 +248,7 @@ Menu * RewardMenuState::initRewardMenu()
 
 	nextID = this->newID();
 	text = L"Quit";
-	pButton = new Button(this->objD2D->GETRenderTarget(), this->objD2D->GETTextFormat(), this, nextID,
+	pButton = new Button(this, nextID,
 		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);

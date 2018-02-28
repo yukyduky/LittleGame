@@ -26,6 +26,8 @@ public:
 	//Commands
 	void goUp(int nrOfChoosen);
 	void goDown(int nrOfChoosen);
+	void goUp();
+	void goDown();
 	void pressButton() { this->current->onPress(); };
 
 
