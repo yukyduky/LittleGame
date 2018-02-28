@@ -19,6 +19,10 @@ namespace SQUARETYPE {
 	enum TYPE { EMPTY, WALL, SPAWN, SIZE };
 }
 
+namespace TILESTATUS {
+	enum STATUS {IDLE, HOLE, SIZE};
+}
+
 //Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
 namespace WALLTYPE {
 	enum TYPE { VERTICAL, HORIZONTAL, SIZE };
@@ -32,10 +36,14 @@ struct tileData {
 	XMFLOAT3 baseColor;
 	XMFLOAT3 color;
 	float posY;
+	TILESTATUS::STATUS status;
 
-	tileData() {};
+
+
+	tileData() { this->status = TILESTATUS::STATUS::IDLE; };
 	tileData(SQUARETYPE::TYPE type) {
 		this->type = type;
+		this->status = TILESTATUS::STATUS::IDLE;
 	}
 };
 
@@ -83,10 +91,7 @@ private:
 	void createAWall(XMFLOAT3 pos, XMMATRIX& worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	int nextID();
 
-	/*--------<INFORMATION>--------
-	1. Returns the grid index pos for a given position.
-	*/
-	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+	
 	/*--------<INFORMATION>--------
 	1. Creates the fall pattern for the floor by calling the createPattern function in FloorFallPattern
 	*/
@@ -116,7 +121,12 @@ public:
 	/*--------<INFORMATION>--------
 	1. Returns the state of a floor tile from a given position.
 	*/
-	OBJECTSTATE::TYPE checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+	TILESTATUS::STATUS checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+
+	/*--------<INFORMATION>--------
+	1. Returns the grid index pos for a given position.
+	*/
+	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
 
 	void clean();
 };

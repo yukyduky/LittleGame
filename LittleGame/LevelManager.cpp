@@ -18,11 +18,11 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMVECTOR vec;
 	XMMATRIX worldM;
 	XMMATRIX rotationM = XMMatrixIdentity();
-	XMMATRIX scaleM = XMMatrixScaling(this->arenaWidth * 0.5f, 0, this->arenaDepth * 0.5f);
+	XMMATRIX scaleM = XMMatrixScaling(this->arenaWidth * 0.5f, 1.0f, this->arenaDepth * 0.5f);
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(1.0f, 1.0f, 1.0f, 0.0f);
-	vColor actualColor(0.0f, 1.0f, 0.0f, 1.0f);
+	vColor actualColor(0.0f, 0.784f, 1.0f, 1.0f);
 	//Create all the squares representing the floor
 	
 	//Calculate center position of the next grid space
@@ -295,15 +295,6 @@ int LevelManager::nextID()
 	return this->tempID++;
 }
 
-DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
-{
-	XMFLOAT2 index = XMFLOAT2(0.0f, 0.0f);
-	index.x = pos.x / this->squareSize;
-	index.y = pos.y / this->squareSize;
-
-	return index;
-}
-
 void LevelManager::setFallPattern(FloorFallData& pattern) {
 	int patternNr = Locator::getRandomGenerator()->GenerateInt(0, this->arenaPatterns.GETmaxFloorNum());
 	this->arenaPatterns.createFloorPattern(3, pattern);
@@ -352,7 +343,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	}*/
 	
 	// createLevelWalls needs to come first
-	//this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
+	this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
 	this->createFloor(grid, dynamicNoCollisionObjects, graphics);
 	this->createNeonFloorGrid(staticObjects, graphics);
 	this->setFallPattern(pattern);
@@ -421,9 +412,18 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 	}
 }
 
-OBJECTSTATE::TYPE LevelManager::checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
+TILESTATUS::STATUS LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
 {
-	return grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].ptr->getState();
+	return grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].status;
+}
+
+DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
+{
+	XMFLOAT2 index = XMFLOAT2(0.0f, 0.0f);
+	index.x = pos.x / this->squareSize;
+	index.y = pos.y / this->squareSize;
+
+	return index;
 }
 
 void LevelManager::clean() {

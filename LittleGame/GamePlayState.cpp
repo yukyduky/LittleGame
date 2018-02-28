@@ -101,10 +101,13 @@ void GamePlayState::updateFloorPattern() {
 	this->counter += dt;
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
-	XMFLOAT3 fallColor(1.0f, 0.0f, 0.0f);
-	XMFLOAT3 baseColor(0.0f, 1.0f, 0.0f);
+	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
+	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
+	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
-
+	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
+	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
+	int test;
 	switch (this->floorState)	
 	{
 	case FLOORSTATE::STATE::ACTIVE:
@@ -121,8 +124,6 @@ void GamePlayState::updateFloorPattern() {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-//				this->grid[index.x][index.y].ptr->setState(OBJECTSTATE::TYPE::TFALLING);
-				//this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
 			}
 			this->floorState = FLOORSTATE::STATE::TFALLING;
 			this->counter = 0.0f;
@@ -153,6 +154,7 @@ void GamePlayState::updateFloorPattern() {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
 				this->grid[index.x][index.y].color = fallColor;
+				this->grid[index.x][index.y].status = TILESTATUS::STATUS::HOLE;
 			}
 			this->floorState = FLOORSTATE::STATE::FALLING;
 			this->counter = 0.0f;
@@ -164,14 +166,14 @@ void GamePlayState::updateFloorPattern() {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY += GRAVITY * this->counter;
+				this->grid[index.x][index.y].posY += GRAVITY / 4.0f * this->counter;
 			}
 		}
 		else {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY = -1000.0f;
+				this->grid[index.x][index.y].posY = -0.5f;
 				this->grid[index.x][index.y].color = XMFLOAT3(0.0f, 0.0f, 0.0f);
 			}
 			this->floorState = FLOORSTATE::STATE::DEACTIVATED;
@@ -181,11 +183,6 @@ void GamePlayState::updateFloorPattern() {
 
 	case FLOORSTATE::STATE::DEACTIVATED:
 		if (this->counter > this->stateTime) {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].color = baseColor;
-			}
 			this->floorState = FLOORSTATE::STATE::RECOVERING;
 			this->counter = 0.0f;
 		}
@@ -193,17 +190,36 @@ void GamePlayState::updateFloorPattern() {
 
 	case FLOORSTATE::STATE::RECOVERING:
 		if (this->counter < this->stateTime) {
+			recoverColor.x = (recoverColor.x / (this->stateTime)) * counter;
+			recoverColor.y = (recoverColor.y / (this->stateTime)) * counter;
+			recoverColor.z = (recoverColor.z / (this->stateTime)) * counter;
+
+			finalColor.x = recoverColor.x + holeColor.x;
+			finalColor.y = recoverColor.y + holeColor.y;
+			finalColor.z = recoverColor.z + holeColor.z;
+
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY -= GRAVITY * this->counter;
+				index.x = currData.pattern[i].x;
+				index.y = currData.pattern[i].y;
+				this->grid[index.x][index.y].color = finalColor;
 			}
 		}
 		else {
 			for (int i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY = -0.5f;
+				this->grid[index.x][index.y].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
+				this->grid[index.x][index.y].status = TILESTATUS::STATUS::IDLE;
+			}
+			this->floorState = FLOORSTATE::STATE::FLASH;
+			this->counter = 0.0f;
+		}
+		break;
+	case FLOORSTATE::STATE::FLASH:
+		if (counter > 0.2f) {
+			for (int i = 0; i < this->currData.pattern.size(); i++) {
+				index.x = this->currData.pattern[i].x;
+				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].color = baseColor;
 			}
 			this->floorState = FLOORSTATE::STATE::ACTIVE;
@@ -214,43 +230,17 @@ void GamePlayState::updateFloorPattern() {
 	default:
 		break;
 	}
-	
-	
+}
 
-	/*
-	this->counter += Locator::getGameTime()->getDeltaTime();
-	Index index;
-	//Make the next floor tile fall if the time is right.	
-	if (this->counter > this->fallData.time) {
-		if (!this->fallData.recoverMode) {
-			for (int i = 0; i < this->fallData.popsPerIteration; i++) {
-				if (this->fallData.pattern.size() == 0) { //Will be replaced by a check if all enemies are dead.
-					this->fallData.recoverMode = true;
-				}
-				else {
-					index.x = this->fallData.pattern[0].x;
-					index.y = this->fallData.pattern[0].y;
-					this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
-					this->fallData.pattern.erase(this->fallData.pattern.begin());
-					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-				}
-			}
-			this->counter = 0;
-		}
-		else {
-			//Recover a floor tile if the time is right
-			for (int i = 0; i < this->fallData.popsPerIteration; i++) {
-				if (this->fallData.recoverPattern.size() != 0) {
-					index.x = this->fallData.recoverPattern[0].x;
-					index.y = this->fallData.recoverPattern[0].y;
-					this->fallData.recoverPattern.erase(this->fallData.recoverPattern.begin());
-					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::RECOVER, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-				}
-			}
-			this->counter = 0;
+void GamePlayState::checkPlayerTileStatus() 
+{
+	TILESTATUS::STATUS status = this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid);
+	//Check if the player is on a active floor tile or if he fell of the map.
+	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
+		if (status == TILESTATUS::STATUS::HOLE) {
+			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
 		}
 	}
-	*/
 
 }
 
@@ -428,13 +418,7 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 
-	//Check if the player is on a active floor tile or if he fell of the map.
-	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
-		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::RECOVER) {
-			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
-		}
-	}
-
+	this->checkPlayerTileStatus();
 //	this->enemyManager.update();
 	this->checkCollisions();
 }
@@ -487,8 +471,8 @@ void GamePlayState::initPlayer()
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
 	/// INPUT COMPONENT:
-	//input = new ControllerComponent(*actor, 0);
-	input = new KeyboardComponent(*actor);
+	input = new ControllerComponent(*actor, 0);
+	//input = new KeyboardComponent(*actor);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
