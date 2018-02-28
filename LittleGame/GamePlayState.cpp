@@ -234,8 +234,6 @@ void GamePlayState::update(GameManager * gm)
 {	
 	this->GUI.updateGUI(this->player1);
 
-	this->checkCollisions();
-
 	this->counter += static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	Index index;
 	//Make the next floor tile fall if the time is right.	
@@ -326,6 +324,8 @@ void GamePlayState::update(GameManager * gm)
 			it--;
 		}
 	}
+
+	this->checkCollisions();
 }
 
 void GamePlayState::render(GameManager * gm) 
