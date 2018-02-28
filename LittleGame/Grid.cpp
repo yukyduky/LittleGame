@@ -1,74 +1,88 @@
 #include "Grid.h"
+#include "EnemyManager.h"
+#include "ActorObject.h"
+#include "EnemyObject.h"
+#include "GameObject.h"
 
-Grid::Grid()
+Grid::Grid(ArrayList* arrayList_)
 {
-
+	this->initialize(arrayList_);
 }
 
-void Grid::wipeGrid()
+void Grid::initialize(ArrayList* arrayList_)
 {
-	this->occupiedSlots.clear();
-}
-
-void Grid::updateOccupants()
-{
-	//for (each swarmer) {
-	//	
-	//	// Find out which index this swarmer occupies
-
-	//	// Add that swarmer to that GridSlot's 'occupants' list.
-
-	//	// If that index hasn't already been added, add it to the index list.
-	//}
-}
-
-Index Grid::convertPositionIntoIndex(XMFLOAT2 position)
-{
-	return Index();
-}
-
-void Grid::initialize()
-{
-	int levelOfDetail = 10;
-	int widthLength = ARENAWIDTH / levelOfDetail;
-	int heightLength = ARENAHEIGHT / levelOfDetail;
+	this->arrayList = arrayList_;
+	this->levelOfDetail = 10;
+	this->width = ARENAWIDTH;
+	this->height = ARENAHEIGHT;
+	this->widthDivider = this->width / levelOfDetail;
+	this->heightDivider = this->height / levelOfDetail;
 
 	// Allocation of the grid
-	this->theGrid = new GridSlot*[widthLength];
-	for (int i = 0; i < heightLength; i++) {
-		this->theGrid[i] = new GridSlot[heightLength];
+	this->theGrid = new GridSlot*[levelOfDetail];
+	for (int i = 0; i < levelOfDetail; i++) {
+		this->theGrid[i] = new GridSlot[levelOfDetail];
 	}
 
 	// Initialization of every GridSlot
-	for (int x = 0; x < widthLength; x++) {
-		for (int y = 0; y < heightLength; y++) {
+	for (int x = 0; x < levelOfDetail; x++) {
+		for (int y = 0; y < levelOfDetail; y++) {
 
 			this->theGrid[x][y].index = Index{ x, y };
 		}
 	}
 }
 
+
+void Grid::wipeGrid()
+{
+	this->occupiedSlots.clear();
+}
+
+void Grid::updateFromOccupant(AliveNode* aliveNode)
+{
+	// Find out which index this swarmer occupies
+	EnemyObject* swarmer = aliveNode->index->obj;
+	XMFLOAT3 position = swarmer->GETPosition();
+
+	if (this->inOrOut(XMFLOAT2(position.x, position.z))) {
+		// Add that swarmer to that GridSlot's 'occupants' list.
+		Index occupiedIndex = this->getIndex(XMFLOAT2(position.x, position.z));
+		GridSlot* occupiedGridSlot = &this->theGrid[occupiedIndex.x][occupiedIndex.y];
+		occupiedGridSlot->occupants.push_back(swarmer);
+
+		// Add that gridslot to the 'occupiedSlots' so that it's faster to clear them
+		this->occupiedSlots.push_back(occupiedGridSlot);
+	}
+}
+
+void Grid::updateOccupants()
+{
+	AliveNode* stepper = this->arrayList->getFirst();
+
+	if (stepper != nullptr) {
+		while (stepper->forward != nullptr) {
+			this->updateFromOccupant(stepper);
+
+			/// Step forward
+			stepper = stepper->forward;
+		}
+		/// Do the last
+		this->updateFromOccupant(stepper);
+	}
+
+}
+
+Index Grid::getIndex(XMFLOAT2 position)
+{
+	Index index;
+	index.x = (int)(position.x / this->widthDivider);
+	index.y = (int)(position.y / this->heightDivider);
+	return index;
+}
+
 void Grid::update()
 {
-	/*
-	Each frame:
-	- All data from the previous frame is wiped 
-	- Each occupant is added to the grid again.
-
-	Why not update their position? rather than wiping all and then adding again?
-	- Each Gridslot has multiple occupants.
-	- When updating, an occupant needs to both be able to find themselves(pro array) and the occupantArray itself
-	needs to be able to expand flexibly(pro list), so whichever we choose it's bad.
-
-	How is wiping better?
-	- It is better, with the assumption that going through a list of all the occupants once per frame,
-	is better than each occupant needing to find themselves each frame.
-
-	Finishing thoughts:
-	Occupants in a gridslot could be held there in arrays, but these would all need to be the size of 
-	the maximum amount of occupants. Ultimately thinking about the problem is more useful than any one 
-	chosen solution since the impact is minimal anyway.
-	*/
 	this->wipeGrid();
 	this->updateOccupants();
 }
@@ -76,7 +90,7 @@ void Grid::update()
 
 std::list<EnemyObject*>* Grid::getOccupants(XMFLOAT2 position)
 {
-	Index index = convertPositionIntoIndex(position);
+	Index index = getIndex(position);
 	return &this->theGrid[index.x][index.y].occupants;
 }
 
@@ -85,11 +99,58 @@ std::list<EnemyObject*>* Grid::getOccupants(Index index)
 	return &this->theGrid[index.x][index.y].occupants;
 }
 
+std::vector<EnemyObject*> Grid::getNeighbours(XMFLOAT2 position)
+{
+	Index center = this->getIndex(position);
+	std::vector<EnemyObject*> neighbours;
+	std::vector<GridSlot*> potentialNeighbours;
+
+
+
+	
+
+	// Gather all the gridslots that can house potential neighbours
+	potentialNeighbours.push_back(&this->theGrid[center.x][center.y]);	// Center
+	potentialNeighbours.push_back(&this->theGrid[center.x - 1][center.y]);	// West
+	potentialNeighbours.push_back(&this->theGrid[center.x + 1][center.y]);	// East
+	potentialNeighbours.push_back(&this->theGrid[center.x][center.y + 1]);	// North
+	potentialNeighbours.push_back(&this->theGrid[center.x][center.y - 1]);	// South
+	potentialNeighbours.push_back(&this->theGrid[center.x - 1][center.y - 1]);	// Southwest
+	potentialNeighbours.push_back(&this->theGrid[center.x + 1][center.y - 1]);	// SouthEast
+	potentialNeighbours.push_back(&this->theGrid[center.x - 1][center.y + 1]);	// NorthWest
+	potentialNeighbours.push_back(&this->theGrid[center.x + 1][center.y + 1]);	// NorthEast
+	
+	// Get all found occupants
+	for (auto &currentGridSlot : potentialNeighbours) {
+		if (currentGridSlot->occupants.size > 0) {
+			for (auto &currentOccupant : currentGridSlot->occupants) {
+				neighbours.push_back(currentOccupant);
+			}
+		}
+	}
+
+	/// A problem here is that an occupant asking for neighbours will recieve a vector where itself is included.
+	return neighbours;
+}
+
+bool Grid::inOrOut(XMFLOAT2 position)
+{
+	bool result = false;
+	
+	if (position.x > 0 && position.x < ARENAWIDTH) {
+		if (position.y > 0 && position.y < ARENAHEIGHT) {
+			result = true;
+		}
+	}
+
+	return result;
+}
+
 void Grid::cleanUp()
 {
-	for (int x = 0; x < widthLength; x++) {
+	for (int x = 0; x < levelOfDetail; x++) {
 		
-		for (int y = 0; y < heightLength;) {
+		for (int y = 0; y < levelOfDetail;) {
 			// Cleans up the internal data inside the GridSlot
 			this->theGrid[x][y].cleanUp();
 		}

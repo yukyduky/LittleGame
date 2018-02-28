@@ -26,7 +26,7 @@ bool SpSwarmProjectile::castSpell()
 	}
 	else
 	{
-		ProjProp props(5, XMFLOAT4(1.0f, 1.0f, 0.5f, 0.1f), 150, this->projectilesMaxFlyingRange, false);
+		ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.1f), 100, this->projectilesMaxFlyingRange, false);
 		Projectile* pProj = this->spawnProj(props);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 

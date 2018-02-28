@@ -15,6 +15,7 @@
 #include "SwarmerEnemyAttack.h"
 #include "SpSwarmProjectile.h"
 #include "SpEnemyImmolation.h"
+#include "Grid.h"
 
 EnemyManager::EnemyManager()
 {
@@ -35,8 +36,8 @@ void EnemyManager::startLevel1()
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
-	this->spawnInterval = 0.2;
-	this->waveInterval = 5;
+	this->spawnInterval = 1;
+	this->waveInterval = 0.2;
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;
@@ -46,7 +47,7 @@ void EnemyManager::startLevel1()
 	// TESTING -----------
 	this->currentWaveCount = 1;
 	this->currentWaveSize = 0;
-	this->swarmerCount = 5;
+	this->swarmerCount = 10;
 	// TESTING -----------
 
 	// Per wave
@@ -261,6 +262,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->players = players;
 	this->activeEnemiesCount = 0;
 	this->pSwarmers = new ArrayList();
+	this->pGrid = new Grid(this->pSwarmers);
 	
 	// --------- NEW TEST ---------
 	//std::vector<EnemyObject*> tempVec;
@@ -336,6 +338,7 @@ void EnemyManager::update()
 
 	// Update the swarmer collective!
 	this->pSwarmers->update();
+	this->pGrid->update();
 }
 
 void EnemyManager::cleanUp()

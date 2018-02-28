@@ -17,13 +17,14 @@
 
 // Forward declaration to prevent double includes
 class GamePlayState;
+class Grid;
 
 struct Wave {
 	// Push to the back, pop from the front, [0] is the first enemy and [n] is the last enemy.
 	std::deque<EnemyObject*> enemies;
 };
 
-struct ArrayNode;	// Forward declaration since Alive/Dead/Array all reside within eachother
+struct ArrayNode;
 struct AliveNode {
 	ArrayNode*	 index = nullptr;
 	AliveNode*	 back = nullptr;
@@ -101,26 +102,28 @@ public:
 		XMFLOAT3 currentPosition = { 0, 0, 0 };
 		AliveNode* stepper = this->firstAlive;
 
-		while (stepper->forward != nullptr) {
-			// Add up all of them! (except the last one)
-			currentPosition = stepper->index->obj->GETPosition();
+		if (stepper != nullptr) {
+			while (stepper->forward != nullptr) {
+				// Add up all of them! (except the last one)
+				currentPosition = stepper->index->obj->GETPosition();
+				averagePosition.x += currentPosition.x;
+				averagePosition.y += currentPosition.y;
+				averagePosition.z += currentPosition.z;
+
+				stepper = stepper->forward;
+			}
+
+			// Add up the last one
+			currentPosition = this->mainArray[0].obj->GETPosition();
 			averagePosition.x += currentPosition.x;
 			averagePosition.y += currentPosition.y;
 			averagePosition.z += currentPosition.z;
 
-			stepper = stepper->forward;
+			// Divide down
+			averagePosition.x /= this->count;
+			averagePosition.y /= this->count;
+			averagePosition.z /= this->count;
 		}
-
-		// Add up the last one
-		currentPosition = this->mainArray[0].obj->GETPosition();
-		averagePosition.x += currentPosition.x;
-		averagePosition.y += currentPosition.y;
-		averagePosition.z += currentPosition.z;
-
-		// Divide down
-		averagePosition.x /= this->count;
-		averagePosition.y /= this->count;
-		averagePosition.z /= this->count;
 	}
 	XMFLOAT3* getAveragePosition() {
 		return &this->averagePosition;
@@ -132,6 +135,8 @@ public:
 		return nullptr;
 	}
 	AliveNode* getFirst() {
+		if (this->firstAlive == nullptr)
+			return nullptr;
 		return this->firstAlive;
 	}
 	void activateNext() {
@@ -226,7 +231,7 @@ private:
 	// Relevant to grid
 	int swarmerCount = -1;
 	ArrayList* pSwarmers = nullptr;
-
+	Grid* pGrid = nullptr;
 
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
@@ -262,7 +267,8 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Spawns enemies to dynamicObjects according to the spawnInterval and waves
 	(If there are waves/enemies left).
-	- Doesn't currently have any time in between waves.
+	2. Checks if all of the enemies has died.
+	3. Updates internal arrayList & grid.
 	*/
 	void update();
 

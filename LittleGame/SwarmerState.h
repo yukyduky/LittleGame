@@ -3,20 +3,21 @@
 #define SWARMERSTATE_H
 
 #include "EnemyState.h"
-#include "State.h"
-//#include "Grid.h"
+#include "Grid.h"
+#include "DirectXMath.h"
 
 class EnemyObject;
 
 class SwarmerState : public EnemyState
 {
 private:
-//	Grid grid;
+	int what;
+	Grid *grid = nullptr;
 
 protected:
 	EnemyObject * neighbours;
-	void updateNeighbours() {
-		
+	void updateNeighbours(DirectX::XMFLOAT2 position) {
+		//this->neighbours = this->grid.getNeighbours(position);
 	}
 	
 public:

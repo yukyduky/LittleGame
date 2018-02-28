@@ -203,6 +203,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="SwarmerEnemyAttack.h" />
+    <ClInclude Include="SwarmerSeekingState.h" />
     <ClInclude Include="SwarmerState.h" />
     <ClInclude Include="SwarmerSyncingState.h" />
   </ItemGroup>
@@ -260,6 +261,7 @@
     <ClCompile Include="SpSwarmProjectile.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="SwarmerEnemyAttack.cpp" />
+    <ClCompile Include="SwarmerSeekingState.cpp" />
     <ClCompile Include="SwarmerState.cpp" />
     <ClCompile Include="SwarmerSyncincState.cpp" />
   </ItemGroup>
