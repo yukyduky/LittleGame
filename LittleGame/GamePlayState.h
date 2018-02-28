@@ -19,6 +19,7 @@
 #include "EnemyManager.h"
 #include "LevelManager.h"
 #include "QuadTree.h"
+#include "GUIManager.h"
 
 #include "MouseInput.h"
 
@@ -65,9 +66,11 @@ private:
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
+	GUIManager GUI;
 	RenderInputOrganizer rio;
 	std::vector<std::vector<tileData>> grid;
 	//everything that will exist in this level
+	std::list<GameObject*> GUIObjects;
 	std::list<GameObject*> staticObjects;
 	std::list<GameObject*> dynamicObjects;
 	// Count below represents static objects that have collision (see 'checkCollisions()' function)
@@ -115,7 +118,7 @@ private:
 	int nrOfPickedUpLoot = 0;
 
 	MouseInput* mousePicker = nullptr;
-
+	float tempFloater = 1.0f;
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'GamePlayState'.

@@ -6,13 +6,13 @@ SpDash::SpDash(ActorObject* player) : Spell(player, NAME::DASH)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCost(15.0f);
-	this->setCoolDown(1.0f);
+	this->setCost(0.0f);
+	this->setCoolDown(0.1f);
 	this->strength = this->getCoolDown();
 	// Distance to jump
 	this->range = 200;
 	this->nrOfFlames = 6;
-	this->damage = 4.0f;
+	this->damage = 40.0f;
 
 	this->flameSize = this->range / static_cast<float>((this->nrOfFlames * 2));
 	this->burning = false;

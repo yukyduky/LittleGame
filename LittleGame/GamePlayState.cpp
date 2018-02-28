@@ -19,6 +19,7 @@
 #include "RewardMenuState.h"
 
 
+
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                                 GAMEPLAY STATE          /
 ///////////////////////////////////////////////////////////
@@ -266,6 +267,13 @@ void GamePlayState::init() {
 	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
+	this->ID = this->GUI.initGUI(
+		this->newID(),
+		this->camera.GETcameraPos(),
+		this->camera.GETfacingDirFloat3(),
+		this->GUIObjects,
+		this->graphics
+	);
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
@@ -328,6 +336,12 @@ void GamePlayState::cleanUp()
 		delete iterator;
 	}
 	this->noCollisionDynamicObjects.clear();
+
+	for (auto &iterator : this->GUIObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	this->GUIObjects.clear();
 
 	for (auto &i : this->playerInput) {
 		i = nullptr;
@@ -400,6 +414,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	this->GUI.updateGUI(this->player1);
 	this->updateFloorPattern();
 
 	int ID;
@@ -430,7 +445,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 
 	this->checkPlayerTileStatus();
-//	this->enemyManager.update();
+	this->enemyManager.update();
 	this->checkCollisions();
 }
 

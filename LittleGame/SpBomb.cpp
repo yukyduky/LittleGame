@@ -14,7 +14,7 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	// only 1 bomb out
 	this->active = false;
 
-	this->setCoolDown(2.3f);
+	this->setCoolDown(0.5f);
 	this->damage = this->start;
 	this->range = -1;
 
@@ -65,7 +65,7 @@ void SpBomb::update()
 			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 2);
 			this->theProj->SETscaleMatrix(scaleM);
 		}
-		else if (this->damage < this->end + 0.2) // delay so that the explosion can kill targets
+		else if (this->damage < (this->end + 0.2f)) // delay so that the explosion can kill targets
 		{
 			this->damage += 20 * dt;
 		}
@@ -94,6 +94,6 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 		//	0.0f,
 		//	colorHolder.a)
 		//);
-		target->setState(OBJECTSTATE::TYPE::DEAD);
+		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
 	}
 }
