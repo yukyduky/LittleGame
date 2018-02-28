@@ -263,19 +263,6 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->activeEnemiesCount = 0;
 	this->pSwarmers = new ArrayList();
 	this->pGrid = new Grid(this->pSwarmers);
-	
-	// --------- NEW TEST ---------
-	//std::vector<EnemyObject*> tempVec;
-	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));
-	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));
-	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));
-	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));
-	//tempVec.push_back(this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS));
-	//this->pSwarmers->initialize(tempVec);
-
-	//this->pSwarmers->find(3);
-	//this->pSwarmers->remove(3);
-	//this->pSwarmers->find(3);
 }
 
 void EnemyManager::update()

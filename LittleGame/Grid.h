@@ -16,19 +16,64 @@ The grid updates by clearing all previously occupied slots and afterwards goes t
 checking their positions and alerting different gridslots that they are being occupied and by whom.
 */
 
+/* GRIDSLOTS & EDGEGRIDSLOTS
+Gridslots can be asked if there are any neighbours around, and they check the surrounding GridSlots.
+EdgeGridSlots, however, delegate the responsibility of that action to a nearby gridslot who won't try to
+access indices out of bounds.
+
+*/
 class EnemyObject;
 class ArrayList;
 class AliveNode;
 
-struct GridSlot
-{
+class GridSlot {
+public:
 	Index index;
 	std::list<EnemyObject*> occupants;
-	
-	void cleanUp() {
+
+	virtual std::vector<EnemyObject*> getNeighbours(GridSlot** *pTheGrid) {
+		Index center = this->index;
+		std::vector<EnemyObject*> neighbours;
+		std::vector<GridSlot*> potentialNeighbours;
+
+		// Gather all the gridslots that can house potential neighbours
+		potentialNeighbours.push_back(pTheGrid[center.x][center.y]);	// Center
+		potentialNeighbours.push_back(pTheGrid[center.x - 1][center.y]);	// West
+		potentialNeighbours.push_back(pTheGrid[center.x + 1][center.y]);	// East
+		potentialNeighbours.push_back(pTheGrid[center.x][center.y + 1]);	// North
+		potentialNeighbours.push_back(pTheGrid[center.x][center.y - 1]);	// South
+		potentialNeighbours.push_back(pTheGrid[center.x - 1][center.y - 1]);	// Southwest
+		potentialNeighbours.push_back(pTheGrid[center.x + 1][center.y - 1]);	// SouthEast
+		potentialNeighbours.push_back(pTheGrid[center.x - 1][center.y + 1]);	// NorthWest
+		potentialNeighbours.push_back(pTheGrid[center.x + 1][center.y + 1]);	// NorthEast
+
+		// Get all found occupants
+		for (auto &currentGridSlot : potentialNeighbours) {
+			if (currentGridSlot->occupants.size() > 0) {
+				for (auto &currentOccupant : currentGridSlot->occupants) {
+					neighbours.push_back(currentOccupant);
+				}
+			}
+		}
+
+		return neighbours;
+	}
+	virtual void cleanUp() {
 		this->occupants.clear();
 	};
 };
+class EdgeGridSlot : public GridSlot {
+private:
+	GridSlot* substitute = nullptr;
+public:
+	void assignSubstitute(GridSlot* substitute) {
+		this->substitute = substitute;
+	}
+	std::vector<EnemyObject*> getNeighbours(GridSlot** *pTheGrid) {
+		return this->substitute->getNeighbours(pTheGrid);
+	}
+};
+
 
 class Grid
 {
@@ -40,7 +85,7 @@ private:
 	float heightDivider = -1;
 	
 	ArrayList* arrayList = nullptr;
-	GridSlot** theGrid = nullptr;
+	GridSlot** *theGrid = nullptr;
 	std::list<GridSlot*> occupiedSlots;
 
 	void initialize(ArrayList* arraylist);
@@ -52,18 +97,17 @@ private:
 
 public:
 	Grid(ArrayList* arraylist);
-	
 
 	void update();
 
-
+	// Not used, but might come in handy for something else later
 	std::list<EnemyObject*>* getOccupants(XMFLOAT2 position);	// Slower than the index version.
 	std::list<EnemyObject*>* getOccupants(Index index);	// Faster than the position version.
+
 	std::vector<EnemyObject*> getNeighbours(XMFLOAT2 position);
 	bool inOrOut(XMFLOAT2 position);
 
 	void cleanUp();
-
 };
 
 #endif

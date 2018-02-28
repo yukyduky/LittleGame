@@ -12,23 +12,73 @@ Grid::Grid(ArrayList* arrayList_)
 void Grid::initialize(ArrayList* arrayList_)
 {
 	this->arrayList = arrayList_;
-	this->levelOfDetail = 10;
+	this->levelOfDetail = 10;		// Also decides how easily swarmers group up
 	this->width = ARENAWIDTH;
 	this->height = ARENAHEIGHT;
 	this->widthDivider = this->width / levelOfDetail;
 	this->heightDivider = this->height / levelOfDetail;
 
 	// Allocation of the grid
-	this->theGrid = new GridSlot*[levelOfDetail];
+	this->theGrid = new GridSlot**[levelOfDetail];
 	for (int i = 0; i < levelOfDetail; i++) {
-		this->theGrid[i] = new GridSlot[levelOfDetail];
+		this->theGrid[i] = new GridSlot*[levelOfDetail];
 	}
 
 	// Initialization of every GridSlot
 	for (int x = 0; x < levelOfDetail; x++) {
 		for (int y = 0; y < levelOfDetail; y++) {
+			/// Is it on the edge?
+			// West edge
+			if (x == 0) {
+				this->theGrid[x][y] = new EdgeGridSlot();
+			}
+			// North edge
+			else if (y == levelOfDetail-1) {
+				this->theGrid[x][y] = new EdgeGridSlot();
+			}
+			// East edge
+			else if (x == levelOfDetail-1) {
+				this->theGrid[x][y] = new EdgeGridSlot();
+			}
+			// South edge
+			else if (y == 0) {
+				this->theGrid[x][y] = new EdgeGridSlot();
+			}
+			// If it's not on the edge, allocate a normal GridSlot
+			else {
+				this->theGrid[x][y] = new GridSlot();
+			}
+			
+			this->theGrid[x][y]->index = Index{ x, y };
+		}
+	}
 
-			this->theGrid[x][y].index = Index{ x, y };
+	/// Handle EdgeGridSlots specifically
+	// West
+	for (int y = 0; y < levelOfDetail; y++) {
+		EdgeGridSlot* trueForm = static_cast<EdgeGridSlot*>(this->theGrid[0][y]);
+		trueForm->assignSubstitute(this->theGrid[1][y]);
+	}
+	// East
+	for (int y = 0; y < levelOfDetail; y++) {
+		EdgeGridSlot* trueForm = static_cast<EdgeGridSlot*>(this->theGrid[levelOfDetail - 1][y]);
+		trueForm->assignSubstitute(this->theGrid[levelOfDetail - 2][y]);
+	}
+	// North
+	for (int x = 0; x < levelOfDetail; x++) {
+		EdgeGridSlot* trueForm = static_cast<EdgeGridSlot*>(this->theGrid[x][levelOfDetail - 1]);
+		trueForm->assignSubstitute(this->theGrid[x][levelOfDetail - 2]);
+	}
+	// South
+	for (int x = 0; x < levelOfDetail; x++) {
+		EdgeGridSlot* trueForm = static_cast<EdgeGridSlot*>(this->theGrid[x][0]);
+		trueForm->assignSubstitute(this->theGrid[x][1]);
+	}
+
+	// PURELY FOR TESTING, REMOVE IF YOU WISH
+	for (int x = 0; x < levelOfDetail; x++) {
+		for (int y = 0; y < levelOfDetail; y++) {
+			this->theGrid[x][y]->getNeighbours(this->theGrid);
 		}
 	}
 }
@@ -48,7 +98,7 @@ void Grid::updateFromOccupant(AliveNode* aliveNode)
 	if (this->inOrOut(XMFLOAT2(position.x, position.z))) {
 		// Add that swarmer to that GridSlot's 'occupants' list.
 		Index occupiedIndex = this->getIndex(XMFLOAT2(position.x, position.z));
-		GridSlot* occupiedGridSlot = &this->theGrid[occupiedIndex.x][occupiedIndex.y];
+		GridSlot* occupiedGridSlot = this->theGrid[occupiedIndex.x][occupiedIndex.y];
 		occupiedGridSlot->occupants.push_back(swarmer);
 
 		// Add that gridslot to the 'occupiedSlots' so that it's faster to clear them
@@ -91,45 +141,24 @@ void Grid::update()
 std::list<EnemyObject*>* Grid::getOccupants(XMFLOAT2 position)
 {
 	Index index = getIndex(position);
-	return &this->theGrid[index.x][index.y].occupants;
+	return &this->theGrid[index.x][index.y]->occupants;
 }
 
 std::list<EnemyObject*>* Grid::getOccupants(Index index)
 {
-	return &this->theGrid[index.x][index.y].occupants;
+	return &this->theGrid[index.x][index.y]->occupants;
 }
 
 std::vector<EnemyObject*> Grid::getNeighbours(XMFLOAT2 position)
 {
-	Index center = this->getIndex(position);
 	std::vector<EnemyObject*> neighbours;
-	std::vector<GridSlot*> potentialNeighbours;
+	Index index = this->getIndex(position);
 
-
-
-	
-
-	// Gather all the gridslots that can house potential neighbours
-	potentialNeighbours.push_back(&this->theGrid[center.x][center.y]);	// Center
-	potentialNeighbours.push_back(&this->theGrid[center.x - 1][center.y]);	// West
-	potentialNeighbours.push_back(&this->theGrid[center.x + 1][center.y]);	// East
-	potentialNeighbours.push_back(&this->theGrid[center.x][center.y + 1]);	// North
-	potentialNeighbours.push_back(&this->theGrid[center.x][center.y - 1]);	// South
-	potentialNeighbours.push_back(&this->theGrid[center.x - 1][center.y - 1]);	// Southwest
-	potentialNeighbours.push_back(&this->theGrid[center.x + 1][center.y - 1]);	// SouthEast
-	potentialNeighbours.push_back(&this->theGrid[center.x - 1][center.y + 1]);	// NorthWest
-	potentialNeighbours.push_back(&this->theGrid[center.x + 1][center.y + 1]);	// NorthEast
-	
-	// Get all found occupants
-	for (auto &currentGridSlot : potentialNeighbours) {
-		if (currentGridSlot->occupants.size > 0) {
-			for (auto &currentOccupant : currentGridSlot->occupants) {
-				neighbours.push_back(currentOccupant);
-			}
-		}
+	// Only try to return neighbours if the position is inside the grid.
+	if (this->inOrOut(position)) {
+		neighbours = this->theGrid[index.x][index.y]->getNeighbours(this->theGrid);
 	}
 
-	/// A problem here is that an occupant asking for neighbours will recieve a vector where itself is included.
 	return neighbours;
 }
 
@@ -148,13 +177,14 @@ bool Grid::inOrOut(XMFLOAT2 position)
 
 void Grid::cleanUp()
 {
+	/// NOT UPDATED
 	for (int x = 0; x < levelOfDetail; x++) {
-		
 		for (int y = 0; y < levelOfDetail;) {
 			// Cleans up the internal data inside the GridSlot
-			this->theGrid[x][y].cleanUp();
+			this->theGrid[x][y]->cleanUp();
+			// Deletes the allocated GridSlot
+			delete this->theGrid[x][y];
 		}
-
 		// Deletes the Y-array
 		delete this->theGrid[x];
 	}
