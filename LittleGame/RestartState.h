@@ -11,7 +11,6 @@ private:
 	static RestartState sRestartState;
 	static bool flag;
 
-	StateMsg* msg;
 
 public:
 	static RestartState* getInstance();
@@ -58,7 +57,6 @@ public:
 	*/
 	virtual void render(GameManager* gm);
 
-	void provide(StateMsg msg);
 
 	static bool GETflag() { return flag; }
 	static void SETflag(bool inputValue) { flag = inputValue; }

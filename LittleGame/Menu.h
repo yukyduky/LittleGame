@@ -24,8 +24,8 @@ public:
 	void SETCurrent(Button* current) { this->current = current; }
 
 	//Commands
-	void goUp();
-	void goDown();
+	void goUp(int nrOfChoosen);
+	void goDown(int nrOfChoosen);
 	void pressButton() { this->current->onPress(); };
 
 
@@ -33,6 +33,8 @@ protected:
 	std::list<Button*> buttons;
 	std::vector<MenuObject*> objects;
 	Button* current = nullptr;
+
+	int nrOfChoosen;
 };
 
 

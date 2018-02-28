@@ -15,7 +15,8 @@ class MenuState : public State
 protected:
 	// All objects
 	std::vector<MenuObject*> menuObjects;
-	std::vector<Menu*> menus;
+
+	Menu* currMenu;
 
 	D2D objD2D;
 private:
@@ -25,7 +26,6 @@ private:
 	// Handlers for different menus
 	//std::array<Menu*, MENUS::SIZE> menus;
 	//MENUS::TYPE currMenu;
-	Menu* currMenu;
 
 	bool quit;
 

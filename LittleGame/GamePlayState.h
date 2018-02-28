@@ -44,12 +44,6 @@ struct ProjProp {
 	ProjProp() {}
 };
 
-struct StateMsg {
-	ActorObject player;
-	StateMsg(ActorObject ply)
-		: player(ply)
-	{}
-};
 
 class GamePlayState : public State
 {
@@ -87,14 +81,11 @@ private:
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
 	Command* selectCommand = nullptr;
-
-	///std::list<PhysicsComponent*> physicsListStatic;
-	///std::list<PhysicsComponent*> physicsListDynamic;
-
-	//void updatePhysicsComponents();
 	
 	void checkCollisions();
 
+	// Template version of picked up loot, is provided to RMS
+	int nrOfPickedUpLoot = 0;
 
 	MouseInput* mousePicker = nullptr;
 
@@ -157,7 +148,6 @@ public:
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
 
-	void provide(ActorObject* player);
 };
 
 #endif // !GAMEPLAYSTATE_H

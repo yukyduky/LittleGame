@@ -38,16 +38,16 @@ void Menu::addQuad(MenuObject * quad)
 }
 
 
-void Menu::goUp()
+void Menu::goUp(int nrOfChoosen)
 {
 	this->current->deSelectButton();
-	this->current = this->current->GETPrev();
+	this->current = this->current->GETPrev(nrOfChoosen);
 	this->current->selectButton();
 }
 
-void Menu::goDown()
+void Menu::goDown(int nrOfChoosen)
 {
 	this->current->deSelectButton();
-	this->current = this->current->GETNext();
+	this->current = this->current->GETNext(nrOfChoosen);
 	this->current->selectButton();
 }

@@ -457,16 +457,16 @@ void ActorObject::switchSpell()
 			switch (j->getGlyph())
 			{
 			case GLYPHTYPE::NONE:
-				i = new SpFire(this);
-				break;
-			case GLYPHTYPE::GLYPH1:
 				i = new SpAutoAttack(this);
 				break;
+			case GLYPHTYPE::GLYPH1:
+				i = new SpBomb(this);
+				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpFire(this);
+				i = new SpDash(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpFire(this);
+				i = new SpBuff(this);
 				break;
 			}
 			break;

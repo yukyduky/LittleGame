@@ -55,6 +55,32 @@ void Button::cleanUp()
 	MenuObject::cleanUp();
 }
 
+Button * Button::GETNext(int nrOfChoosen)
+{
+	if (nrOfChoosen <= 0 && this->nextButton->behavior == BEHAVIOR::ADDGLYPH)
+	{
+		return this->nextButton->GETNext(nrOfChoosen);
+	}
+	return this->nextButton;
+}
+
+Button * Button::GETPrev(int nrOfChoosen)
+{
+	if (nrOfChoosen <= 0 && this->prevButton->behavior == BEHAVIOR::ADDGLYPH)
+	{
+		return this->prevButton->GETPrev(nrOfChoosen);
+	}
+	return this->prevButton;
+}
+
+void Button::deSelectButton()
+{
+	if (!this->choosen)
+	{
+		this->selected = false;
+	}
+}
+
 void Button::onPress()
 {
 	switch (this->behavior)
@@ -85,7 +111,10 @@ void Button::onPress()
 		break;
 
 	case BEHAVIOR::ADDGLYPH:
+		this->choosen = true;
 		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
+		this->nextButton->SETPrev(this->prevButton);
+		this->prevButton->SETNext(this->nextButton);
 		break;
 
 

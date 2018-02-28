@@ -44,11 +44,11 @@ void MenuState::handleEvents(GameManager * gm) {
 			{
 			case VK_UP:
 			case 0x57:
-				this->currMenu->goUp();
+				this->currMenu->goUp(1);
 				break;
 			case VK_DOWN:
 			case 0x53:
-				this->currMenu->goDown();
+				this->currMenu->goDown(1);
 				break;
 			case VK_RETURN:
 			case VK_SPACE:

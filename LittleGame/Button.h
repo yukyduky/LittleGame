@@ -28,11 +28,12 @@ public:
 	void SETNext(Button* nextB) { this->nextButton = nextB; };
 	void SETPrev(Button* prevB) { this->prevButton = prevB; };
 
-	Button* GETNext() { return this->nextButton; };
-	Button* GETPrev() { return this->prevButton; };
+	Button* GETNext(int nrOfChoosen);
+	Button* GETPrev(int nrOfChoosen);
+	BEHAVIOR GETBehavior() { return this->behavior; };
 
 	void selectButton() { this->selected = true; };
-	void deSelectButton() { this->selected = false; };
+	void deSelectButton();
 	void onPress();
 private:
 	BEHAVIOR behavior;
@@ -47,6 +48,7 @@ private:
 	Button* prevButton = nullptr;
 
 	bool selected;
+	bool choosen = false;
 	// The hidden Highlight that will be shown when the button is selected
 	D2D1_RECT_F highlight;
 	ID2D1SolidColorBrush * pHighlightColorBrush = nullptr;

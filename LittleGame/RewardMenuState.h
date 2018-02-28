@@ -9,7 +9,8 @@ class RewardMenuState : public MenuState
 private:
 	static RewardMenuState sRewardMenuState;
 
-	ActorObject* player;
+	ActorObject* player = nullptr;
+	int nrOfLoot;
 
 public:
 	static RewardMenuState* getInstance();
@@ -20,10 +21,12 @@ public:
 	*/
 	virtual void init();
 
+	virtual void handleEvents(GameManager* gm);
 
 	Menu* initRewardMenu();
 
 	void provide(ActorObject* player);
+	void provide(int nrOfLoot) { this->nrOfLoot = nrOfLoot; };
 	ActorObject* GETPlayer() { return this->player; };
 
 	void startGame();

@@ -59,6 +59,7 @@ public:
 	virtual void setSpeed(float speed);
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
+	std::vector<Spell*> GETSpells() { return this->spells; };
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();

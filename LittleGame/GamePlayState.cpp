@@ -139,6 +139,9 @@ void GamePlayState::init() {
 	this->enemyManager.startLevel1();
 
 	RewardMenuState::getInstance()->provide(this->player1);
+
+	// Player will always get 2 rewards as a base
+	this->nrOfPickedUpLoot = 2;
 }
 
 void GamePlayState::cleanUp()
@@ -218,6 +221,8 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			StateManager::changeState(RestartState::getInstance());
+			//Sends the number of Lootboxes picked up druring the game
+			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
 		}
 	}
 }
@@ -438,10 +443,6 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	return proj;
 }
 
-void GamePlayState::provide(ActorObject* player)
-{
-	this->player1 = player;
-}
 //_________________________________________//
 //                                         //
 //              END OF PUBLIC              //
