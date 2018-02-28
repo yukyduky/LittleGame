@@ -54,7 +54,8 @@ void ArenaObject::update()
 		if (this->pos.y < this->maxFallDepth) {
 			this->pos.y = this->maxFallDepth;
 			this->velocity.y = 0.0f;
-			this->state = OBJECTSTATE::TYPE::INVISIBLE;
+//			this->state = OBJECTSTATE::TYPE::INVISIBLE;
+			this->state = OBJECTSTATE::TYPE::RECOVER;
 		}
 		this->updateWorldMatrix();
 		break;
@@ -64,6 +65,7 @@ void ArenaObject::update()
 		this->pos.y -= this->velocity.y * dt;
 		if (this->pos.y > this->startPos.y) {
 			this->pos.y = this->startPos.y;
+			this->velocity.y = 0.0f;
 			this->state = OBJECTSTATE::TYPE::RESETCOLOR;
 		}
 		this->updateWorldMatrix();

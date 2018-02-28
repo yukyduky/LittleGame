@@ -113,7 +113,7 @@ int GUIManager::initGUI(
 //  ----------------
 	this->createGUIElement(
 		this->colorHP.r, this->colorHP.g, this->colorHP.b, this->colorHP.a,
-		-0.6f, 0.0f, -0.55f,
+		-0.58f, 0.0f, -0.55f,
 		0.06, 0.0f, 0.06f
 	);
 
@@ -125,8 +125,8 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 0.0f, 0.0f, 0.0f,
-		-0.6f, -0.001f, -0.55f,
+		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
+		-0.58f, -0.001f, -0.55f,
 		0.075, 0.0f, 0.075f
 	);
 
@@ -147,7 +147,7 @@ int GUIManager::initGUI(
 //  ----------------
 	this->createGUIElement(
 		this->colorEnergy.r, this->colorEnergy.g, this->colorEnergy.b, this->colorEnergy.a,
-		0.6f, 0.0f, -0.55f,
+		0.58f, 0.0f, -0.55f,
 		0.06, 0.0f, 0.06f
 	);
 
@@ -159,8 +159,8 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.6f, -0.001f, -0.55f,
+		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
+		0.58f, -0.001f, -0.55f,
 		0.075, 0.0f, 0.075f
 	);
 
@@ -193,7 +193,7 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 0.0f, 0.0f, 0.0f,
+		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		-0.3f, -0.001f, -0.55f,
 		0.04, 0.0f, 0.04f
 	);
@@ -227,7 +227,7 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 0.0f, 0.0f, 0.0f,
+		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		-0.1f, -0.001f, -0.55f,
 		0.04, 0.0f, 0.04f
 	);
@@ -261,7 +261,7 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 0.0f, 0.0f, 0.0f,
+		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		0.1f, -0.001f, -0.55f,
 		0.04, 0.0f, 0.04f
 	);
@@ -295,7 +295,7 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 0.0f, 0.0f, 0.0f,
+		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		0.3f, -0.001f, -0.55f,
 		0.04, 0.0f, 0.04f
 	);

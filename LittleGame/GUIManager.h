@@ -46,6 +46,8 @@ private:
 	// vColor colorAbility4 = { 0.0f, 102.0f, 255.0f, 255.0f };
 	vColor colorAbility4 = { 0.0f, 0.4f, 1.0f, 1.0f };
 
+	vColor colorBack = { 0.25f, 0.25f, 0.25f, 0.0f };
+
 	void createGUIElement(
 		float r, float g, float b, float a,
 		float xAdjust, float yAdjust, float zAdjust,

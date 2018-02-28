@@ -9,7 +9,7 @@
 #include "GameObject.h"
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
-#include "FloorFallPatterns.h"
+#include "ArenaPatterns.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
@@ -17,6 +17,10 @@ class GamePlayState;
 //Defines what a specific space contains
 namespace SQUARETYPE {
 	enum TYPE { EMPTY, WALL, SPAWN, SIZE };
+}
+
+namespace TILESTATUS {
+	enum STATUS {IDLE, HOLE, SIZE};
 }
 
 //Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
@@ -28,19 +32,40 @@ struct tileData {
 	SQUARETYPE::TYPE type;
 	GameObject* ptr = nullptr;
 
-	tileData() {};
+	//Nya som Dew ska använda
+	XMFLOAT3 baseColor;
+	XMFLOAT3 color;
+	float posY;
+	TILESTATUS::STATUS status;
 
+
+
+	tileData() { this->status = TILESTATUS::STATUS::IDLE; };
 	tileData(SQUARETYPE::TYPE type) {
 		this->type = type;
+		this->status = TILESTATUS::STATUS::IDLE;
 	}
 };
 
+struct enemySpawnPositions {
+	std::vector<XMFLOAT2> north;
+	std::vector<XMFLOAT2> west;
+	std::vector<XMFLOAT2> south;
+	std::vector<XMFLOAT2> east;
+
+	void cleanUp() {
+		this->north.clear();
+		this->west.clear();
+		this->south.clear();
+		this->east.clear();
+	}
+};
 
 class LevelManager
 {
 private:
 	GamePlayState * pGPS = nullptr;
-	FFPattern ffp;
+	ArenaPatterns arenaPatterns;
 
 	int arenaWidth = 0;
 	int arenaDepth = 0;
@@ -62,20 +87,20 @@ private:
 	/*
 	1. Creates all the outer walls of the level by calling createAWall function for each wall.
 	*/
-	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
+	void createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, enemySpawnPositions& enemySpawnPos, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	void createAWall(XMFLOAT3 pos, XMMATRIX& worldM, XMFLOAT4 color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	int nextID();
 
-	/*--------<INFORMATION>--------
-	1. Returns the grid index pos for a given position.
-	*/
-	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+	
 	/*--------<INFORMATION>--------
 	1. Creates the fall pattern for the floor by calling the createPattern function in FloorFallPattern
 	*/
 	void setFallPattern(FloorFallData& pattern);
 
+	void LevelManager::createFallPatterns(std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard);
+
 public:
+	void selectArena();
 	/*--------<INFORMATION>--------
 	1. Creates the arena by calling the following private functions
 		createLevelWalls,
@@ -84,7 +109,7 @@ public:
 		setFallPattern.
 	2. returns the latest used ID.
 	*/
-	int initArena(int ID, int &staticPhysicsCount, int width, int depth, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics);
+	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos);
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given position.
 	*/
@@ -96,7 +121,12 @@ public:
 	/*--------<INFORMATION>--------
 	1. Returns the state of a floor tile from a given position.
 	*/
-	OBJECTSTATE::TYPE checkTileStateFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+	TILESTATUS::STATUS checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+
+	/*--------<INFORMATION>--------
+	1. Returns the grid index pos for a given position.
+	*/
+	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
 
 	void clean();
 };

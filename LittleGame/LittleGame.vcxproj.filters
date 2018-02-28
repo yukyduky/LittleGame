@@ -26,7 +26,6 @@
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
-    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="FireballComponent.cpp" />
@@ -67,6 +66,8 @@
     <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="RestartState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
+    <ClCompile Include="ArenaGlobals.cpp" />
+    <ClCompile Include="ArenaPatterns.cpp" />
     <ClCompile Include="GUIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -95,7 +96,6 @@
     <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="FireballComponent.h" />
-    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="MobilitySpell.h" />
     <ClInclude Include="LevelManager.h" />
@@ -145,6 +145,7 @@
     <ClInclude Include="RestartState.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="GlobalEvents.h" />
+    <ClInclude Include="ArenaPatterns.h" />
     <ClInclude Include="GUIManager.h" />
   </ItemGroup>
   <ItemGroup>
