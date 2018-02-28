@@ -232,28 +232,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
-	this->GUI.GEThpRect()->updateVertexZ(0, this->player1->GEThpRemainingFloat());
-	this->GUI.GEThpRect()->updateVertexZ(1, this->player1->GEThpRemainingFloat());
-
-	this->GUI.GETenergyRect()->updateVertexZ(0, this->player1->GETenergyRemainingFloat());
-	this->GUI.GETenergyRect()->updateVertexZ(1, this->player1->GETenergyRemainingFloat());
-
-	this->GUI.GETability1Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(1)->GETremainingCoolDownFloat());
-	this->GUI.GETability1Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(1)->GETremainingCoolDownFloat());
-
-	this->GUI.GETability2Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(2)->GETremainingCoolDownFloat());
-	this->GUI.GETability2Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(2)->GETremainingCoolDownFloat());
-
-	this->GUI.GETability3Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(3)->GETremainingCoolDownFloat());
-	this->GUI.GETability3Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(3)->GETremainingCoolDownFloat());
-
-	this->GUI.GETability4Rect()->updateVertexZ(0, this->player1->GETspellsVector().at(4)->GETremainingCoolDownFloat());
-	this->GUI.GETability4Rect()->updateVertexZ(1, this->player1->GETspellsVector().at(4)->GETremainingCoolDownFloat());
-
-	if (this->player1->GETspellsVector().at(4)->getTSC() == 0)
-		this->GUI.GETability4Rect()->updateColor(vColor(0.0f, 0.0f, 0.0f, 255.0f));
-	else
-		this->GUI.GETability4Rect()->updateColor(vColor(255.0f, 255.0f, 255.0f, 255.0f));
+	this->GUI.updateGUI(this->player1);
 
 	this->checkCollisions();
 

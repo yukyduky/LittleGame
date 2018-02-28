@@ -1,6 +1,7 @@
 #include "GUIManager.h"
 #include "RectangleComponent.h"
 #include "ArenaObject.h"
+#include "Spell.h"
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                                   GUI MANAGER           /
@@ -29,8 +30,8 @@ void GUIManager::createGUIElement(
 	XMMATRIX scaleM;
 	XMMATRIX translationM;
 
-	//Prepare the color
-	color = { r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f };
+	// NOTE: NO preparation needed; numbers already divided by '255.0f'
+	color = { r, g, b, a };
 
 	// Place the object in front of the camera
 	pos = (this->cameraPos + this->cameraFacingDir);
@@ -56,6 +57,12 @@ void GUIManager::createGUIElement(
 
 	// Incrementing the ID number for next object
 	this->tempID++;
+}
+
+void GUIManager::updateGUIElement(RectangleComponent* element, float remainingCooldownFloat)
+{
+	element->updateVertexZ(0, remainingCooldownFloat);
+	element->updateVertexZ(1, remainingCooldownFloat);
 }
 
 int GUIManager::getID() {
@@ -96,6 +103,8 @@ int GUIManager::initGUI(
 	this->cameraPos = cameraPos;
 	this->cameraFacingDir = cameraFacingDir;
 
+	float temptester123 = (1 - this->cameraPos.y / 630.0f);
+
 //----------------------------\
 //     HEALTH GUI ELEMENT     /
 //___________________________/
@@ -103,7 +112,7 @@ int GUIManager::initGUI(
 	// FOREGROUND \\
 //  ----------------
 	this->createGUIElement(
-		255.0f, 0.0f, 0.0f, 255.0f,
+		this->colorHP.r, this->colorHP.g, this->colorHP.b, this->colorHP.a,
 		-0.6f, 0.0f, -0.55f,
 		0.06, 0.0f, 0.06f
 	);
@@ -111,7 +120,7 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
-	this->hpRect = this->rect;
+	this->rectHP = this->rect;
 
 	// BACKGROUND \\
 //  ----------------
@@ -137,7 +146,7 @@ int GUIManager::initGUI(
 	// FOREGROUND \\
 //  ----------------
 	this->createGUIElement(
-		244.0f, 226.0f, 67.0f, 255.0f,
+		this->colorEnergy.r, this->colorEnergy.g, this->colorEnergy.b, this->colorEnergy.a,
 		0.6f, 0.0f, -0.55f,
 		0.06, 0.0f, 0.06f
 	);
@@ -145,7 +154,7 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
-	this->energyRect = this->rect;
+	this->rectEnergy = this->rect;
 
 	// BACKGROUND \\
 //  ----------------
@@ -171,7 +180,7 @@ int GUIManager::initGUI(
 	// FOREGROUND \\
 //  ----------------
 	this->createGUIElement(
-		255.0f, 25.5f, 127.5f, 255.0f,
+		this->colorAbility1.r, this->colorAbility1.g, this->colorAbility1.b, this->colorAbility1.a,
 		-0.3f, 0.0f, -0.55f,
 		0.03f, 0.0f, 0.03f
 	);
@@ -179,7 +188,7 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
-	this->ability1Rect = this->rect;
+	this->rectAbility1 = this->rect;
 
 	// BACKGROUND \\
 //  ----------------
@@ -205,7 +214,7 @@ int GUIManager::initGUI(
 	// FOREGROUND \\
 //  ----------------
 	this->createGUIElement(
-		80.0f, 80.0f, 80.0f, 255.0f,
+		this->colorAbility2.r, this->colorAbility2.g, this->colorAbility2.b, this->colorAbility2.a,
 		-0.1f, 0.0f, -0.55f,
 		0.03f, 0.0f, 0.03f
 	);
@@ -213,7 +222,7 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
-	this->ability2Rect = this->rect;
+	this->rectAbility2 = this->rect;
 
 	// BACKGROUND \\
 //  ----------------
@@ -239,7 +248,7 @@ int GUIManager::initGUI(
 	// FOREGROUND \\
 //  ----------------
 	this->createGUIElement(
-		255.0f, 255.0f, 0.0f, 51.0f,
+		this->colorAbility3.r, this->colorAbility3.g, this->colorAbility3.b, this->colorAbility3.a,
 		0.1f, 0.0f, -0.55f,
 		0.03f, 0.0f, 0.03f
 	);
@@ -247,7 +256,7 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
-	this->ability3Rect = this->rect;
+	this->rectAbility3 = this->rect;
 
 	// BACKGROUND \\
 //  ----------------
@@ -273,13 +282,15 @@ int GUIManager::initGUI(
 	// FOREGROUND \\
 //  ----------------
 	this->createGUIElement(
-		0.0f, 102.0f, 255.0f, 255.0f,
+		this->colorAbility4.r, this->colorAbility4.g, this->colorAbility4.b, this->colorAbility4.a,
 		0.3f, 0.0f, -0.55f,
 		0.03f, 0.0f, 0.03f
 	);
 
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
+
+	this->rectAbility4 = this->rect;
 
 	// BACKGROUND \\
 //  ----------------
@@ -288,8 +299,6 @@ int GUIManager::initGUI(
 		0.3f, -0.001f, -0.55f,
 		0.04, 0.0f, 0.04f
 	);
-
-	this->ability4Rect = this->rect;
 
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
@@ -301,6 +310,48 @@ int GUIManager::initGUI(
 
 
 	return this->tempID;
+}
+
+void GUIManager::updateGUI(ActorObject* player)
+{
+	vColor colorHolder;
+
+	// Update size of UI elements to represent remaining 'HP', 'ENERGY', or 'COOLDOWN'
+	this->updateGUIElement(this->rectHP, player->GEThpRemainingFloat());
+	this->updateGUIElement(this->rectEnergy, player->GETenergyRemainingFloat());
+	this->updateGUIElement(this->rectAbility1, player->GETspellsVector().at(1)->GETremainingCoolDownFloat());
+	this->updateGUIElement(this->rectAbility2, player->GETspellsVector().at(2)->GETremainingCoolDownFloat());
+	this->updateGUIElement(this->rectAbility3, player->GETspellsVector().at(3)->GETremainingCoolDownFloat());
+	this->updateGUIElement(this->rectAbility4, player->GETspellsVector().at(4)->GETremainingCoolDownFloat());
+
+	// Update the color of ability cooldown based on whether they are ON or OFF cooldown
+	if (player->GETspellsVector().at(1)->getTSC() == 0)
+		this->rectAbility1->updateColor(this->colorAbility1);
+	else {
+		colorHolder = this->colorAbility1;
+		this->rectAbility1->updateColor(vColor(colorHolder.r, colorHolder.g, colorHolder.b, 0.0f));
+	}
+
+	if (player->GETspellsVector().at(2)->getTSC() == 0)
+		this->rectAbility2->updateColor(this->colorAbility2);
+	else {
+		colorHolder = this->colorAbility2;
+		this->rectAbility2->updateColor(vColor(colorHolder.r, colorHolder.g, colorHolder.b, 0.0f));
+	}
+
+	if (player->GETspellsVector().at(3)->getTSC() == 0)
+		this->rectAbility3->updateColor(this->colorAbility3);
+	else {
+		colorHolder = this->colorAbility3;
+		this->rectAbility3->updateColor(vColor(colorHolder.r, colorHolder.g, colorHolder.b, 0.0f));
+	}
+
+	if (player->GETspellsVector().at(4)->getTSC() == 0)
+		this->rectAbility4->updateColor(this->colorAbility4);
+	else {
+		colorHolder = this->colorAbility4;
+		this->rectAbility4->updateColor(vColor(colorHolder.r, colorHolder.g, colorHolder.b, 0.0f));
+	}
 }
 
 //_________________________________________//
