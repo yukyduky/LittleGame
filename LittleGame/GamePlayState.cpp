@@ -96,7 +96,7 @@ void GamePlayState::checkCollisions() {
 
 void GamePlayState::updateFloorPattern() {
 	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
-	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->totalLevelTime += dt;
 	this->counter += dt;
 	Index index(0, 0);
@@ -118,7 +118,7 @@ void GamePlayState::updateFloorPattern() {
 			else {
 				this->currData = hardPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->hardPatterns.size() - 1)];
 			}
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 //				this->grid[index.x][index.y].ptr->setState(OBJECTSTATE::TYPE::TFALLING);
@@ -142,14 +142,14 @@ void GamePlayState::updateFloorPattern() {
 			finalColor.y = baseColor.y + fallColor.y;
 			finalColor.z = baseColor.z + fallColor.z;
 
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
 				this->grid[index.x][index.y].color = finalColor;
 			}
 		}
 		else {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
 				this->grid[index.x][index.y].color = fallColor;
@@ -161,14 +161,14 @@ void GamePlayState::updateFloorPattern() {
 
 	case FLOORSTATE::STATE::FALLING:
 		if (this->counter < stateTime) {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY += GRAVITY * this->counter;
 			}
 		}
 		else {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY = -1000.0f;
@@ -181,7 +181,7 @@ void GamePlayState::updateFloorPattern() {
 
 	case FLOORSTATE::STATE::DEACTIVATED:
 		if (this->counter > this->stateTime) {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].color = baseColor;
@@ -193,14 +193,14 @@ void GamePlayState::updateFloorPattern() {
 
 	case FLOORSTATE::STATE::RECOVERING:
 		if (this->counter < this->stateTime) {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY -= GRAVITY * this->counter;
 			}
 		}
 		else {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY = -0.5f;
@@ -271,8 +271,8 @@ void GamePlayState::updateFloorPattern() {
 
 void GamePlayState::init() {
 	this->lm.selectArena();
-	this->quadTree.initializeQuadTree(0, ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight(), 0, 0);
-	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
+	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
+	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
@@ -287,8 +287,8 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() * 0.5, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
@@ -301,7 +301,7 @@ void GamePlayState::init() {
 	this->stateTime = 5.0;
 	this->recoveryMode = false;
 	this->counter = 0.0;
-	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	
 }

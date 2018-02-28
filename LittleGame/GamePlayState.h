@@ -83,15 +83,15 @@ private:
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
-	double mediumTime;
-	double hardTime;
-	double totalLevelTime;
-	double gTimeLastFrame;
-	double stateTime;
-	double timeBetweenPatterns;
-	double tFallingTime;
-	double fallAndRecoveryTime;
-	double counter;
+	float mediumTime;
+	float hardTime;
+	float totalLevelTime;
+	float gTimeLastFrame;
+	float stateTime;
+	float timeBetweenPatterns;
+	float tFallingTime;
+	float fallAndRecoveryTime;
+	float counter;
 	bool recoveryMode;
 	int currentPatternNr;
 

@@ -39,23 +39,23 @@ bool SpDash::castSpell()
 
 			//XMFLOAT3 playerNewPos;
 
-		if (newPos.z > ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize())
-		{
-			newPos.z = ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize();
-		}
-		else if (newPos.z < ARENADATA::GETsquareSize())
-		{
-			newPos.z = ARENADATA::GETsquareSize();
-		}
+			if (newPos.z > static_cast<float>(ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()))
+			{
+				newPos.z = static_cast<float>(ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize());
+			}
+			else if (newPos.z < ARENADATA::GETsquareSize())
+			{
+				newPos.z = static_cast<float>(ARENADATA::GETsquareSize());
+			}
 
-		if (newPos.x > ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize())
-		{
-			newPos.x = ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize();
-		}
-		else if (newPos.x < ARENADATA::GETsquareSize())
-		{
-			newPos.x = ARENADATA::GETsquareSize();
-		}
+			if (newPos.x > static_cast<float>(ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()))
+			{
+				newPos.x = static_cast<float>(ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize());
+			}
+			else if (newPos.x < static_cast<float>(ARENADATA::GETsquareSize()))
+			{
+				newPos.x = static_cast<float>(ARENADATA::GETsquareSize());
+			}
 
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
@@ -74,8 +74,8 @@ bool SpDash::castSpell()
 			this->burning = true;
 		}
 
-		return returnValue;
 	}
+	return returnValue;
 }
 
 void SpDash::upgrade(float modif)

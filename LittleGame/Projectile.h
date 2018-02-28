@@ -39,7 +39,7 @@ private:
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel
-	int range = 0;
+	float range = 0.0f;
 	int rangeCounter = 0;
 	
 	std::list<GameObject*> previouslyHit;
