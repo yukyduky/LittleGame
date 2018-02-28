@@ -103,7 +103,7 @@ int GUIManager::initGUI(
 	this->cameraPos = cameraPos;
 	this->cameraFacingDir = cameraFacingDir;
 
-	float temptester123 = (1 - this->cameraPos.y / 630.0f);
+	float temptester123 = this->cameraPos.y / 630.0f;
 
 //----------------------------\
 //     HEALTH GUI ELEMENT     /

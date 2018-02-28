@@ -295,7 +295,7 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	DirectX::XMVECTOR cameraStartPos;
 	DirectX::XMVECTOR cameraStartFacingDir;
 
-	cameraStartPos = DirectX::XMVECTOR{ static_cast<float>(arenaWidth * 0.5f), static_cast<float>(arenaDepth * 0.6f), static_cast<float>((arenaDepth * 0.5f) * 0.30f) };
+	cameraStartPos = DirectX::XMVECTOR{ static_cast<float>(arenaWidth * 0.5f), static_cast<float>(arenaDepth * 0.7f), static_cast<float>((arenaDepth * 0.5f) * 0.30f) };
 	cameraStartFacingDir = DirectX::XMVECTOR{ arenaWidth * 0.5f, 0, (arenaDepth * 0.5f) * 0.8f };
 
 	this->updateRequired = false;
@@ -309,8 +309,8 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	DirectX::XMVECTOR cameraUpDir = DirectX::XMLoadFloat3(&this->cameraUpDir);
 
 	this->angle = 0.45f * DirectX::XM_PI;
-	this->nearPlane = 0.5;
-	this->farPlane = 2000.0; //200
+	this->nearPlane = 0.5f;
+	this->farPlane = 2000.0f; //200
 
 	DirectX::XMMATRIX view = DirectX::XMMatrixLookAtLH(
 		cameraStartPos,
