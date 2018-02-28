@@ -48,8 +48,7 @@ struct ProjProp {
 namespace FLOORSTATE {
 	enum STATE {
 		ACTIVE, TFALLING, FALLING, RECOVERING, DEACTIVATED,
-		TESTACTIVE, TESTTFALLING, TESTFALLING, TESTRECOVERING, TESTDEACTIVATED,
-		SIZE
+		FLASH, SIZE
 	};
 }
 
@@ -116,6 +115,7 @@ private:
 	
 	void checkCollisions();
 	void updateFloorPattern();
+	void checkPlayerTileStatus();
 
 
 	MouseInput* mousePicker = nullptr;

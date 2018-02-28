@@ -121,8 +121,8 @@ void ArenaPatterns::createEasyFloorPatterns(std::vector<FloorFallData>& easy)
 {
 	int width = ARENADATA::GETarenaWidth() / ARENADATA::GETsquareSize();
 	int depth = ARENADATA::GETarenaHeight() / ARENADATA::GETsquareSize();
-	int randomX1 = Locator::getRandomGenerator()->GenerateInt(1, width - 1);
-	int randomY1 = Locator::getRandomGenerator()->GenerateInt(1, depth - 1);
+	int randomX1 = Locator::getRandomGenerator()->GenerateInt(1, width - 3);
+	int randomY1 = Locator::getRandomGenerator()->GenerateInt(1, depth - 3);
 	int randomX2 = randomX1 + 1;
 	int randomY2 = randomY1 + 1;
 
@@ -130,7 +130,7 @@ void ArenaPatterns::createEasyFloorPatterns(std::vector<FloorFallData>& easy)
 	FloorFallData easy1;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < depth; j++) {
-			if (i != randomX1 && i != randomX2 && j != randomY1 && j != randomY2) {
+			if (i == randomX1 || i == randomX2 || j == randomY1 || j == randomY2) {
 				easy1.pattern.push_back(Index(i, j));
 			}
 		}

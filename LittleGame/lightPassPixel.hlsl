@@ -71,7 +71,7 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
 	emission = texDiffuse.Load(texCoords).w;
-	normal = float3(0.0f, 1.0f, 0.0f);
+//	normal = float3(0.0f, 1.0f, 0.0f);
 }
 
 void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
