@@ -95,10 +95,6 @@ void GamePlayState::checkCollisions() {
 }
 
 void GamePlayState::updateFloorPattern() {
-	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
-	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
-	this->totalLevelTime += dt;
-	this->counter += dt;
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
@@ -291,6 +287,7 @@ void GamePlayState::init() {
 	this->stateTime = 5.0;
 	this->recoveryMode = false;
 	this->counter = 0.0;
+	this->genTimer = 10.0;
 	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	
@@ -389,7 +386,17 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->totalLevelTime += dt;
+	this->counter += dt;
+	this->genCounter += dt;
 	this->updateFloorPattern();
+	
+	if (this->genCounter > this->genTimer) {
+		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics);
+		this->genCounter = 0.0;
+	}
 
 	int ID;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.

@@ -20,12 +20,16 @@ namespace SQUARETYPE {
 }
 
 namespace TILESTATUS {
-	enum STATUS {IDLE, HOLE, SIZE};
+	enum STATUS {IDLE, HOLE, ELECTRIFIED, HEATED, COOLED, SIZE};
 }
 
 //Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
 namespace WALLTYPE {
 	enum TYPE { VERTICAL, HORIZONTAL, SIZE };
+}
+
+namespace GENERATOR {
+	enum TYPE { OVERHEATED, COOLED, OVERCHARGED, SIZE};
 }
 
 struct tileData {
@@ -37,13 +41,17 @@ struct tileData {
 	XMFLOAT3 color;
 	float posY;
 	TILESTATUS::STATUS status;
+	bool occupiedByGenerator;
 
-
-
-	tileData() { this->status = TILESTATUS::STATUS::IDLE; };
+	tileData() 
+	{ 
+		this->status = TILESTATUS::STATUS::IDLE; 
+		this->occupiedByGenerator = false;
+	};
 	tileData(SQUARETYPE::TYPE type) {
 		this->type = type;
 		this->status = TILESTATUS::STATUS::IDLE;
+		this->occupiedByGenerator = false;
 	}
 };
 
@@ -127,6 +135,9 @@ public:
 	1. Returns the grid index pos for a given position.
 	*/
 	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+
+
+	void createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics);
 
 	void clean();
 };

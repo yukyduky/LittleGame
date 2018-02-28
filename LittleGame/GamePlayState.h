@@ -91,6 +91,8 @@ private:
 	double tFallingTime;
 	double fallAndRecoveryTime;
 	double counter;
+	double genTimer;
+	double genCounter;
 	bool recoveryMode;
 	int currentPatternNr;
 

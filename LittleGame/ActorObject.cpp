@@ -96,6 +96,16 @@ void ActorObject::update()
 		}
 		this->updateWorldMatrix();
 		break;
+	case OBJECTSTATE::TYPE::GENERATORRISING:
+		if (this->pos.y < 25.0f) {
+			this->pos.y += 0.5;
+		}
+		else {
+			this->pos.y = 25.0f;
+			this->state = OBJECTSTATE::TYPE::GENERATORACTIVE;
+		}
+		this->updateWorldMatrix();
+		break;
 	default:
 		for (auto &i : this->components) {
 			i->update();
