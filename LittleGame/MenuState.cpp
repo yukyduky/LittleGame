@@ -9,7 +9,9 @@
 
 using namespace DirectX::SimpleMath;
 
-void MenuState::init() {
+void MenuState::init() 
+{
+	Locator::getD2D()->saveScreen();
 }
 
 void MenuState::cleanUp()
@@ -25,7 +27,7 @@ void MenuState::cleanUp()
 
 	this->ID = 0;
 
-	DeleteFile("include/screenSaved.bmp");
+	Locator::getD2D()->closeMenu();
 }
 
 void MenuState::pause() {

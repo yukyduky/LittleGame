@@ -7,6 +7,8 @@ MainMenuState MainMenuState::sMainMenuState;
 
 void MainMenuState::init() 
 {
+	MenuState::init();
+
 	this->displayMenu(this->initStartMenu());
 }
 

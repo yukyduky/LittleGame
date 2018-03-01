@@ -25,8 +25,14 @@ public:
 
 	// Draw content.
 	virtual HRESULT OnRender(std::vector<MenuObject*> objects) = 0;
+
 	virtual ID2D1HwndRenderTarget* GETRenderTarget() = 0;
 	virtual IDWriteTextFormat* GETTextFormat() = 0;
+	
+	// Takes a screenshot of the screen to be used as background
+	virtual void saveScreen() = 0;
+	// Clears the screenshot
+	virtual void closeMenu() = 0;
 };
 
 

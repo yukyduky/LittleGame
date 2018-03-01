@@ -12,6 +12,7 @@ RewardMenuState * RewardMenuState::getInstance()
 
 void RewardMenuState::init()
 {
+	MenuState::init();
 	this->displayMenu(this->initRewardMenu());
 }
 
