@@ -156,6 +156,7 @@
     <ClInclude Include="EnemyMovingState.h" />
     <ClInclude Include="EnemyState.h" />
     <ClInclude Include="GlobalEvents.h" />
+    <ClInclude Include="GUIManager.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="RestartState.cpp" />

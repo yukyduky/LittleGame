@@ -69,7 +69,7 @@ public:
 	vColor& GETcolor();
 	virtual OBJECTSTATE::TYPE GETstate();
 	void updateColor(vColor newColor);
-	
+	void updateVertexZ(int verticeNumber, float zInput);	
 };
 
 

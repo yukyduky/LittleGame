@@ -65,6 +65,7 @@ public:
 	virtual void setSpeed(float speed);
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
+	virtual float GEThpRemainingFloat() { return (this->hp / this->hpMAX); }
 
 	virtual void receive(GameObject & obj, Message msg);
 	virtual void cleanUp();
@@ -112,13 +113,15 @@ public:
 	2. NOTE: Should the function return true, then the energy HAS BEEN DEPLETED.
 	*/
 	bool useEnergy(float energyUse);
-
 	void addEnergy(float energyGain);
+	float GETenergyRemainingFloat() { return (this->energy / this->energyMAX); }
 	
 	// Adds a spell to the vector with avalible spells
 	void addSpell(Spell* spell);
 	// Goes over each spell and switches to new spells, depending on what glyph is on it
 	void switchSpell();
+	// Return vector of spells
+	std::vector<Spell*> GETspellsVector() { return this->spells; }
 
 	//Crosshair
 	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }

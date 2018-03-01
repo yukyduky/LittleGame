@@ -68,6 +68,7 @@
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaPatterns.cpp" />
+    <ClCompile Include="GUIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="ArenaPatterns.h" />
+    <ClInclude Include="GUIManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
