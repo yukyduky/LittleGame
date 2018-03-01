@@ -90,7 +90,7 @@ public:
 	void SETscaleMatrix(XMMATRIX& scaleM);
 	void SETrotationMatrix(XMMATRIX& rotationM);
 	void updateWorldMatrix();
-	XMMATRIX getRotationMatrix();
+	XMFLOAT4X4& getRotationMatrix();
 
 	OBJECTTYPE::TYPE getType() const { return this->type; }
 	void setType(OBJECTTYPE::TYPE type) { this->type = type; }

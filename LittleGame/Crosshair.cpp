@@ -32,7 +32,7 @@ void Crosshair::update()
 	XMFLOAT3 newPos{ this->player->GETPosition() };
 	XMFLOAT3 dir(this->player->getDirection(this->radius));
 	this->setPosition(XMFLOAT3 (newPos.x + dir.x, newPos.y, newPos.z + dir.z));
-	this->SETrotationMatrix(this->player->getRotationMatrix());
+	this->SETrotationMatrix(XMLoadFloat4x4(&this->player->getRotationMatrix()));
 	for (auto &i : this->components) {
 		i->update();
 	}

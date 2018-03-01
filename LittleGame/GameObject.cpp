@@ -60,8 +60,7 @@ void GameObject::updateWorldMatrix()
 	DirectX::XMStoreFloat4x4(&this->world, worldMatrix);
 }
 
-XMMATRIX GameObject::getRotationMatrix() {
-	DirectX::XMMATRIX rotationMatrix = DirectX::XMLoadFloat4x4(&this->rotationMatrix);
-
-	return rotationMatrix;
+DirectX::XMFLOAT4X4& GameObject::getRotationMatrix()
+{
+	return this->rotationMatrix;
 }

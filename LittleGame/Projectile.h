@@ -21,7 +21,7 @@ public:
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
 	void setDirection(XMVECTOR dir);
-	XMVECTOR getDirection();
+	XMFLOAT3 getDirection();
 	void setSpell(Spell* spell) { this->spell = spell; }
 	void setRange(float range) { this->range = range; }
 

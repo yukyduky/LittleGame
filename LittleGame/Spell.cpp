@@ -36,7 +36,8 @@ Projectile* Spell::spawnProj(ProjProp props)
 
 	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
 	proj->setSpell(this);
-	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
+
+	proj->SETrotationMatrix(XMLoadFloat4x4(&this->getPlayer()->getRotationMatrix()));
 	proj->setRange(props.range);
 
 	return proj;

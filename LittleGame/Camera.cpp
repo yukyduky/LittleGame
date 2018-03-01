@@ -56,7 +56,7 @@ void Camera::moveCameraLeft() {
 	);
 
 	// Normalize the vector
-	DirectX::XMVector3Normalize(moveVecNormalized);
+	moveVecNormalized = DirectX::XMVector3Normalize(moveVecNormalized);
 
 	// Scale the vector based on the 'cameraMoveSpeed' variable
 	moveVecNormalized = DirectX::XMVectorScale(
@@ -88,7 +88,7 @@ void Camera::moveCameraRight() {
 	);
 
 	// Normalize the vector
-	DirectX::XMVector3Normalize(moveVecNormalized);
+	moveVecNormalized = DirectX::XMVector3Normalize(moveVecNormalized);
 
 	// Scale the vector based on the 'cameraMoveSpeed' variable
 	moveVecNormalized = DirectX::XMVectorScale(
@@ -115,7 +115,7 @@ void Camera::moveCameraForward() {
 
 	// 'FORWARD-movement' vector already exists, so we just copy + normalize it
 	moveVecNormalized = cameraFacingDir;
-	DirectX::XMVector3Normalize(moveVecNormalized);
+	moveVecNormalized = DirectX::XMVector3Normalize(moveVecNormalized);
 
 	// Scale the vector based on the 'cameraMoveSpeed' variable
 	moveVecNormalized = DirectX::XMVectorScale(
@@ -142,7 +142,7 @@ void Camera::moveCameraBackward() {
 
 	// 'FORWARD-movement' vector already exists, so we just copy + normalize it
 	moveVecNormalized = cameraFacingDir;
-	DirectX::XMVector3Normalize(moveVecNormalized);
+	moveVecNormalized = DirectX::XMVector3Normalize(moveVecNormalized);
 
 	// Scale the vector based on the 'cameraMoveSpeed' variable
 	// NOTE: We're scaling with NEGATIVE 'cameraMoveSpeed' to go backwards!!
@@ -313,7 +313,7 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	DirectX::XMStoreFloat3(&this->cameraFacingDir, cameraStartFacingDir);
 	//this->cameraUpDir = DirectX::XMVector3Cross(DirectX::XMVECTOR{ 1.0f, 0.0f, 0.0f }, cameraStartFacingDir);
 	DirectX::XMVECTOR cameraUpDir = DirectX::XMVector3Cross(cameraStartFacingDir, DirectX::XMVECTOR{ 1.0f, 0.0f, 0.0f });
-	DirectX::XMVector3Normalize(cameraUpDir);
+	cameraUpDir = DirectX::XMVector3Normalize(cameraUpDir);
 	DirectX::XMStoreFloat3(&this->cameraUpDir, cameraUpDir);
 
 	this->angle = 0.45f * DirectX::XM_PI;
