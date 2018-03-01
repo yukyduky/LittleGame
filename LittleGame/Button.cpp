@@ -3,16 +3,16 @@
 #include "RewardMenuState.h"
 
 Button::Button(MenuState* pMS, size_t ID,
-	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior) : MenuObject(ID, pos, color)
+	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior) : MenuObject(ID, pos, color, text)
 {
-	init(pMS, text, behavior);
+	init(pMS, behavior);
 }
 
 Button::Button(MenuState* pMS, size_t ID,
 	XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior,
-	NAME spellname, GLYPHTYPE glyph) : MenuObject(ID, pos, color)
+	NAME spellname, GLYPHTYPE glyph) : MenuObject(ID, pos, color, text)
 {
-	init(pMS, text, behavior);
+	init(pMS, behavior);
 
 	this->spellname = spellname;
 	this->glyph = glyph;
@@ -23,7 +23,7 @@ Button::~Button()
 	this->cleanUp();
 }
 
-void Button::init(MenuState * pMS, const WCHAR * text, BEHAVIOR behavior)
+void Button::init(MenuState * pMS, BEHAVIOR behavior)
 {
 	this->behavior = behavior;
 	this->pMS = pMS;
@@ -41,15 +41,15 @@ void Button::init(MenuState * pMS, const WCHAR * text, BEHAVIOR behavior)
 	);
 
 	this->pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->pHighlightColorBrush);
-	this->pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->pTextColorBrush);
+	//this->pRT->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &this->pTextColorBrush);
 
-	this->text = text;
+	//this->text = text;
 }
 
 void Button::cleanUp()
 {
 	SafeRelease(&this->pHighlightColorBrush);
-	SafeRelease(&this->pTextColorBrush);
+	//SafeRelease(&this->pTextColorBrush);
 
 	MenuObject::cleanUp();
 }
@@ -136,12 +136,5 @@ void Button::render()
 	//Renders button quad
 	MenuObject::render();
 
-	//Renders the text ontop
-	this->pRT->DrawText(
-		this->text,
-		wcslen(this->text),
-		this->pTF,
-		this->highlight,
-		this->pTextColorBrush
-	);
+
 }

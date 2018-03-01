@@ -113,3 +113,46 @@ void SpDash::collision(GameObject * target, Projectile* proj)
 	if (target->getType() == OBJECTTYPE::ENEMY)
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 }
+
+
+////////////////////////////////////////////
+//// GLYPH 1 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpDashG1::SpDashG1(ActorObject * player) : SpDash(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
+	this->setCoolDown(0.1f);
+}
+
+SpDashG1::~SpDashG1()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 2 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpDashG2::SpDashG2(ActorObject * player) : SpDash(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
+	this->setCost(this->getCost() * 0.6f);
+}
+
+SpDashG2::~SpDashG2()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 3 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpDashG3::SpDashG3(ActorObject * player) : SpDash(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
+	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->setCost(this->getCost() * 0.2f);
+}
+
+SpDashG3::~SpDashG3()
+{
+}

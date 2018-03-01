@@ -303,8 +303,8 @@ HRESULT D2D::OnRender(std::vector<MenuObject*> objects)
 		
 		D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
 
-		int width = static_cast<int>(rtSize.width);
-		int height = static_cast<int>(rtSize.height);
+		FLOAT width = static_cast<FLOAT>(rtSize.width);
+		FLOAT height = static_cast<FLOAT>(rtSize.height);
 
 		//Background picture
 		if (this->pBitmap)

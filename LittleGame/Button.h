@@ -21,8 +21,7 @@ public:
 		XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text, BEHAVIOR behavior,
 		NAME spellname, GLYPHTYPE glyph);
 	~Button();
-	void init(MenuState* pMS,
-		const WCHAR* text, BEHAVIOR behavior);
+	void init(MenuState* pMS, BEHAVIOR behavior);
 	void cleanUp();
 
 	void SETNext(Button* nextB) { this->nextButton = nextB; };
@@ -52,11 +51,10 @@ private:
 	// The hidden Highlight that will be shown when the button is selected
 	D2D1_RECT_F highlight;
 	ID2D1SolidColorBrush * pHighlightColorBrush = nullptr;
+	//ID2D1SolidColorBrush * pTextColorBrush = nullptr;
 
 	// Holds the text settings from D2D
 	IDWriteTextFormat* pTF = nullptr;
-	ID2D1SolidColorBrush * pTextColorBrush = nullptr;
-	const WCHAR* text = nullptr;
 
 	void render();
 };

@@ -403,6 +403,8 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(RestartState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
+			//this->player1->GETSpells();
+			RestartState::getInstance()->provide(this->player1->GETSpells());
 			StateManager::changeState(RestartState::getInstance());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);

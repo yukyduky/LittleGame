@@ -37,6 +37,17 @@ void RestartState::update(GameManager* gm)
 }
 void RestartState::render(GameManager* gm)
 {
+	RewardMenuState::getInstance()->provide(this->spellPackage);
 	StateManager::changeState(GamePlayState::getInstance());
 	StateManager::pushState(RewardMenuState::getInstance());
+}
+
+void RestartState::provide(std::vector<Spell*> spellPackage)
+{
+	this->spellPackage.clear();
+
+	for (auto &i : spellPackage)
+	{
+		this->spellPackage.push_back(i);
+	}
 }
