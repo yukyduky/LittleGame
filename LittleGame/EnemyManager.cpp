@@ -11,7 +11,8 @@
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
-#include "EndState.h"
+//#include "EndState.h"
+#include "RewardMenuState.h"
 
 EnemyManager::EnemyManager()
 {
@@ -25,7 +26,6 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& playe
 	// Set up pointers
 	this->pGPS = &pGPS;
 	this->players = players; 
-	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
 }
 
@@ -119,13 +119,13 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 		pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
-	float speed = 180;
+	float speed = 180.0f;
 	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 0.3f);
-	XMFLOAT3 rotation(0, 0, 0);
-	float immolationDamage = 3;
-	float immolationDuration = 0.3;
-	float immolationRange = 50;
+	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 0.3f);
+	XMFLOAT3 rotation(0.0f, 0.0f, 0.0f);
+	float immolationDamage = 3.0f;
+	float immolationDuration = 0.3f;
+	float immolationRange = 50.0f;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -154,7 +154,6 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 {
 	this->pGPS = &pGPS;
 	this->players = players;
-	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
 }
 
@@ -205,7 +204,7 @@ void EnemyManager::update()
 	else {
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
-			StateManager::pushState(this->endState);
+			//StateManager::pushState(RewardMenuState::getInstance());
 		}
 	}
 }

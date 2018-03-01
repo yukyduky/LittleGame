@@ -14,7 +14,6 @@
 #include "Camera.h"
 //#include "PhysicsComponent.h"
 #include "CollisionHandler.h"
-#include "FireballComponent.h"
 #include <list>
 #include "ArenaGlobals.h"
 #include "EnemyManager.h"
@@ -85,15 +84,15 @@ private:
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
-	double mediumTime;
-	double hardTime;
-	double totalLevelTime;
-	double gTimeLastFrame;
-	double stateTime;
-	double timeBetweenPatterns;
-	double tFallingTime;
-	double fallAndRecoveryTime;
-	double counter;
+	float mediumTime;
+	float hardTime;
+	float totalLevelTime;
+	float gTimeLastFrame;
+	float stateTime;
+	float timeBetweenPatterns;
+	float tFallingTime;
+	float fallAndRecoveryTime;
+	float counter;
 	bool recoveryMode;
 	int currentPatternNr;
 
@@ -110,16 +109,13 @@ private:
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
 	Command* selectCommand = nullptr;
-
-	///std::list<PhysicsComponent*> physicsListStatic;
-	///std::list<PhysicsComponent*> physicsListDynamic;
-
-	//void updatePhysicsComponents();
 	
 	void checkCollisions();
 	void updateFloorPattern();
 	void checkPlayerTileStatus();
 
+	// Template version of picked up loot, is provided to RMS
+	int nrOfPickedUpLoot = 0;
 
 	MouseInput* mousePicker = nullptr;
 	float tempFloater = 1.0f;
@@ -174,11 +170,11 @@ public:
 
 	void initPlayer();
 
-	/*RETURNS THE NEW ID*/
-	int newID() { return this->ID++; }
-
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+
+	/*RETURNS THE NEW ID*/
+	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
 

@@ -1,7 +1,7 @@
 #include "RestartState.h"
 #include "GameManager.h"
 #include "StateManager.h"
-#include "GamePlayState.h"
+#include "RewardMenuState.h"
 
 RestartState RestartState::sRestartState;
 bool RestartState::flag = true;
@@ -38,4 +38,5 @@ void RestartState::update(GameManager* gm)
 void RestartState::render(GameManager* gm)
 {
 	StateManager::changeState(GamePlayState::getInstance());
+	StateManager::pushState(RewardMenuState::getInstance());
 }

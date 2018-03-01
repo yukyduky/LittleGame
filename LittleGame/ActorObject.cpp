@@ -1,8 +1,11 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
+#include "MainMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
+#include "RewardMenuState.h"
+
 #include "RestartState.h"
 //Include spells
 //#include "Spell.h"
@@ -295,6 +298,11 @@ void ActorObject::fireAbilityX()
 	}
 }
 
+void ActorObject::pauseMenu()
+{
+	StateManager::pushState(MainMenuState::getInstance());
+}
+
 void ActorObject::selectAbility1()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
@@ -330,6 +338,8 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
 	}
@@ -450,13 +460,13 @@ void ActorObject::switchSpell()
 				i = new SpFire(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpFire(this);
+				i = new SpAutoAttack(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpFire(this);
+				i = new SpDash(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpFire(this);
+				i = new SpBuff(this);
 				break;
 			}
 			break;
@@ -528,4 +538,11 @@ void ActorObject::switchSpell()
 	}
 	
 	newSpells.clear();
+
+	this->selectAbility1();
+}
+
+void ActorObject::changeSpell(int spell, int glyph)
+{
+	this->spells[spell]->insertGlyph((GLYPHTYPE)glyph);
 }

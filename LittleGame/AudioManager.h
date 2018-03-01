@@ -49,6 +49,8 @@ public:
 	void stopSound();
 	void pause(MUSIC::NAME name);
 	void pause(SOUND::NAME name);
+	// true = audio up
+	void adjustMaster(bool value);
 	void adjustMaster(float volume);
 	void adjustMusic(float volume);
 	void adjustEffects(float volume);

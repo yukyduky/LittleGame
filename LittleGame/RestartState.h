@@ -3,12 +3,14 @@
 #define RESTARTSTATE_H
 
 #include "State.h"
+#include "GamePlayState.h"
 
 class RestartState : public State
 {
 private:
 	static RestartState sRestartState;
 	static bool flag;
+
 
 public:
 	static RestartState* getInstance();
@@ -54,6 +56,7 @@ public:
 	2. Render this state.
 	*/
 	virtual void render(GameManager* gm);
+
 
 	static bool GETflag() { return flag; }
 	static void SETflag(bool inputValue) { flag = inputValue; }

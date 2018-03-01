@@ -13,7 +13,7 @@ struct Index
 	int y;
 
 	Index() {};
-	Index(int x, int y) { this->x = x; this->y = y; }
+	Index(int x, int y) : x(x), y(y) {}
 };
 
 struct FloorFallData {
