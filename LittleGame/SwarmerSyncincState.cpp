@@ -4,7 +4,7 @@ SwarmerSyncingState::SwarmerSyncingState(
 	EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID
 ) : SwarmerState(pHead, pBrain, pGrid_, swarmerID)
 {
-	
+	int asdf = 3;
 }
 
 void SwarmerSyncingState::executeBehavior()

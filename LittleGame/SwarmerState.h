@@ -14,9 +14,38 @@ class SwarmerState : public EnemyState
 private:
 	size_t swarmerID = 0;
 	Grid *pGrid = nullptr;
+	float passedTime = 0;
+	float pulseInterval = 4.50;
+	float maxVelocity = this->pHead->getVelocity();
+	float timeFactor = maxVelocity / pulseInterval;
+
+	float pulseFormula(float dt) {
+		return (maxVelocity - timeFactor * dt);
+	}
 
 protected:
 	std::vector<EnemyObject*> neighbours;
+	void adjustAim() {
+
+		Locator::getRandomGenerator()->GenerateInt(0, 90);
+		XMFLOAT3 currentDirection = this->pHead->getDirection();
+
+		currentDirection.x += std
+		this->pHead->setDirection();
+	}
+	void pulse() {
+		// Get time
+		float dt = Locator::getGameTime()->getDeltaTime();
+		this->passedTime += dt;
+
+		// Adjust velocity based on time
+		this->pHead->setVelocity(pulseFormula(this->passedTime));
+
+		// Reset if necessary
+		if (this->passedTime > pulseInterval) {
+			this->passedTime = 0;
+		}
+	}
 	void updateNeighbours(DirectX::XMFLOAT2 position) {
 		this->neighbours = this->pGrid->getNeighbours(position);
 	}

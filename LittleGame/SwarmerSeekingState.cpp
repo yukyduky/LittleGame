@@ -26,15 +26,22 @@ void SwarmerSeekingState::executeBehavior()
 	vecDirection = DirectX::XMVector3Normalize(vecDirection);
 	DirectX::XMStoreFloat3(&newDirection, vecDirection);
 
-	// Set SimulatedMovement & Direction
-	this->pBrain->SETsimulatedMovement(XMFLOAT2(newDirection.x, newDirection.z));
-	this->pHead->setDirection(newDirection);
 
 	/// Shoot a spell (spells handle their own cooldown)
 	if (this->pHead->getDistanceToPlayer() < this->attackRange) {
 		// Cooldown is checked internally
 		this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 	}
+
+	// Set SimulatedMovement & Direction
+	this->pBrain->SETsimulatedMovement(XMFLOAT2(newDirection.x, newDirection.z));
+	this->pHead->setDirection(newDirection);
+
+	// Do the 'manet-shooting'
+	this->adjustAim();
+
+	// Adjust velocity based on pulsing
+	this->pulse();
 
 	// Move!
 	this->pBrain->pushCommand(AICOMMANDS::MOVE);

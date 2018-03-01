@@ -167,6 +167,8 @@ public:
 			averagePosition.x /= this->count;
 			averagePosition.y /= this->count;
 			averagePosition.z /= this->count;
+
+			this->averagePosition = averagePosition;
 		}
 	}
 	XMFLOAT3 getAveragePosition() {
