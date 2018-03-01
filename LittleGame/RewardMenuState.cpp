@@ -78,9 +78,16 @@ Menu * RewardMenuState::initRewardMenu()
 
 	//Background
 	nextID = this->newID();
-	object = new MenuObject(nextID);
+	object = new MenuObject(this->newID(),
+		{ 0.0f,0.0f, 400.0f,400.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
 
+	//Glyph desc
+	text = L" Glyph 1 (G1) lowers cooldown. \n\n Glyph 2 (G2) incresees power. \n\n Glyph 3 (G3) greatly incresees power but incresees cooldown.";
+	object = new MenuObject(this->newID(),
+		{ -300.0f,0.0f, 200.0f,400.0f }, D2D1::ColorF::DarkKhaki,
+		text);
+	menu->addQuad(object);
 	
 	//Buttons
 	XMFLOAT2 start{ 30.0f, 50.0f};
@@ -119,16 +126,16 @@ Menu * RewardMenuState::initRewardMenu()
 				switch (glyph)
 				{
 				case GLYPHTYPE::NONE:
-					text = L"AA NO";
+					text = L"AutoA NO";
 					break;
 				case GLYPHTYPE::GLYPH1:
-					text = L"AA G1";
+					text = L"AutoA G1";
 					break;
 				case GLYPHTYPE::GLYPH2:
-					text = L"AA G2";
+					text = L"AutoA G2";
 					break;
 				case GLYPHTYPE::GLYPH3:
-					text = L"AA G3";
+					text = L"AutoA G3";
 					break;
 				default:
 					text = L"ERROR";
@@ -140,16 +147,16 @@ Menu * RewardMenuState::initRewardMenu()
 				switch (glyph)
 				{
 				case GLYPHTYPE::NONE:
-					text = L"Fr NO";
+					text = L"Fire NO";
 					break;
 				case GLYPHTYPE::GLYPH1:
-					text = L"Fr G1";
+					text = L"Fire G1";
 					break;
 				case GLYPHTYPE::GLYPH2:
-					text = L"Fr G2";
+					text = L"Fire G2";
 					break;
 				case GLYPHTYPE::GLYPH3:
-					text = L"Fr G3";
+					text = L"Fire G3";
 					break;
 				default:
 					text = L"ERROR";
@@ -161,16 +168,16 @@ Menu * RewardMenuState::initRewardMenu()
 				switch (glyph)
 				{
 				case GLYPHTYPE::NONE:
-					text = L"Bom NO";
+					text = L"Bomb NO";
 					break;
 				case GLYPHTYPE::GLYPH1:
-					text = L"Bom G1";
+					text = L"Bomb G1";
 					break;
 				case GLYPHTYPE::GLYPH2:
-					text = L"Bom G2";
+					text = L"Bomb G2";
 					break;
 				case GLYPHTYPE::GLYPH3:
-					text = L"Bom G3";
+					text = L"Bomb G3";
 					break;
 				default:
 					text = L"ERROR";
@@ -182,16 +189,16 @@ Menu * RewardMenuState::initRewardMenu()
 				switch (glyph)
 				{
 				case GLYPHTYPE::NONE:
-					text = L"Dsh NO";
+					text = L"Dash NO";
 					break;
 				case GLYPHTYPE::GLYPH1:
-					text = L"Dsh G1";
+					text = L"Dash G1";
 					break;
 				case GLYPHTYPE::GLYPH2:
-					text = L"Dsh G2";
+					text = L"Dash G2";
 					break;
 				case GLYPHTYPE::GLYPH3:
-					text = L"Dsh G3";
+					text = L"Dash G3";
 					break;
 				default:
 					text = L"ERROR";
@@ -203,16 +210,16 @@ Menu * RewardMenuState::initRewardMenu()
 				switch (glyph)
 				{
 				case GLYPHTYPE::NONE:
-					text = L"Buf NO";
+					text = L"Buff NO";
 					break;
 				case GLYPHTYPE::GLYPH1:
-					text = L"Buf G1";
+					text = L"Buff G1";
 					break;
 				case GLYPHTYPE::GLYPH2:
-					text = L"Buf G2";
+					text = L"Buff G2";
 					break;
 				case GLYPHTYPE::GLYPH3:
-					text = L"Buf G3";
+					text = L"Buff G3";
 					break;
 				default:
 					text = L"ERROR";
@@ -254,14 +261,28 @@ Menu * RewardMenuState::initRewardMenu()
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 
-
-	//this->menus[MENUS::START] = menu;
 	return menu;
 }
 
-void RewardMenuState::provide(ActorObject* player)
+void RewardMenuState::provide(std::vector<Spell*> spellPackage)
+{
+	this->spellPackage.clear();
+
+	for (auto i : spellPackage)
+	{
+		this->spellPackage.push_back(i);
+	}
+
+}
+
+void RewardMenuState::provide(ActorObject * player)
 {
 	this->player = player;
+
+	for (auto i : this->spellPackage)
+	{
+		this->player->changeSpell((int)i->getName(), (int)i->getGlyph());
+	}
 }
 
 void RewardMenuState::startGame()

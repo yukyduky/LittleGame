@@ -20,7 +20,7 @@ public:
 	//What the spell will do with the target
 	void collision(GameObject* target, Projectile* proj);
 	void update();
-private:
+protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
 	// Damge of skill to be applied on collision
@@ -34,4 +34,36 @@ private:
 	// needs to be lower than CD.
 	float duration = 0.0f;
 };
+
+
+
+////////////////////////////////////////////
+//// GLYPHS ////////////////////////////////////////////
+////////////////////////////////////////////
+class SpBuffG1 : public SpBuff
+{
+public:
+	SpBuffG1(ActorObject* player);
+	virtual ~SpBuffG1();
+private:
+};
+
+
+class SpBuffG2 : public SpBuff
+{
+public:
+	SpBuffG2(ActorObject* player);
+	virtual ~SpBuffG2();
+private:
+};
+
+
+class SpBuffG3 : public SpBuff
+{
+public:
+	SpBuffG3(ActorObject* player);
+	virtual ~SpBuffG3();
+private:
+};
+
 #endif // !SPBUFF_H

@@ -89,3 +89,47 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
 	}
 }
+
+
+////////////////////////////////////////////
+//// GLYPH 1 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpBombG1::SpBombG1(ActorObject * player) : SpBomb(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
+	this->setCoolDown(0.1f);
+}
+
+SpBombG1::~SpBombG1()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 2 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpBombG2::SpBombG2(ActorObject * player) : SpBomb(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
+	this->damage *= 1.2f;
+}
+
+SpBombG2::~SpBombG2()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 3 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpBombG3::SpBombG3(ActorObject * player) : SpBomb(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
+	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->damage *= 2.0f;
+}
+
+SpBombG3::~SpBombG3()
+{
+}
+
