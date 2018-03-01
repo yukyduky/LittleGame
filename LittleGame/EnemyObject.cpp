@@ -44,8 +44,6 @@ EnemyAttackComponent * EnemyObject::GETattackComponent()
 	return this->attackComponent;
 }
 
-
-
 XMFLOAT2 EnemyObject::getVectorToPlayer()
 {
 	return this->normalizedVectorToPlayer;

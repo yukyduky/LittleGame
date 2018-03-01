@@ -99,6 +99,7 @@ public:
 
 	void update();
 
+	void removeSwarmer(int index);
 	void activateNext();
 	void activateMe(size_t swarmerID);
 
@@ -110,6 +111,8 @@ public:
 	XMFLOAT3 getPositionToSeek();
 
 	bool inOrOut(XMFLOAT2 position);
+	// Like inOrOut but with a bit of marginal, so you're definitely inside.
+	bool Grid::inOrOutPLUS(XMFLOAT2 position);
 
 	void cleanUp();
 };

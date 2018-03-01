@@ -58,6 +58,8 @@ public:
 
 	void cleanUp();
 
+	EnemyState* getCurrentState();
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1.  Adds commands to the command queue depending on where the player is and the AIBEHAVIOR
 	*/

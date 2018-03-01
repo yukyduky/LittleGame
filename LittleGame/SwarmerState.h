@@ -27,11 +27,14 @@ protected:
 	std::vector<EnemyObject*> neighbours;
 	void adjustAim() {
 
-		Locator::getRandomGenerator()->GenerateInt(0, 90);
-		XMFLOAT3 currentDirection = this->pHead->getDirection();
+		int degree = Locator::getRandomGenerator()->GenerateInt(-45, 45);
+		XMFLOAT3 newDirection = this->pHead->getDirection();
 
-		currentDirection.x += std
-		this->pHead->setDirection();
+		int radDegree = degree * PI / 180;
+
+		newDirection.x += std::cos(radDegree);
+		newDirection.z += std::sin(radDegree);
+		this->pHead->setDirection(newDirection);
 	}
 	void pulse() {
 		// Get time
@@ -66,11 +69,18 @@ protected:
 		XMFLOAT3 position = this->pHead->GETPosition();
 		return this->pGrid->inOrOut(XMFLOAT2(position.x, position.z));
 	}
+	bool inOrOutPlus() {
+		XMFLOAT3 position = this->pHead->GETPosition();
+		return this->pGrid->inOrOutPLUS(XMFLOAT2(position.x, position.z));
+	}
 	
 public:
 	SwarmerState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID) : EnemyState(pHead, pBrain) {
 		this->pGrid = pGrid_;
 		this->swarmerID = swarmerID;
+	}
+	virtual void removeFromGrid() {
+		this->pGrid->removeSwarmer(this->swarmerID);
 	}
 	virtual void executeBehavior() = 0;
 };

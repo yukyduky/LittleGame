@@ -163,10 +163,13 @@ public:
 			averagePosition.y += currentPosition.y;
 			averagePosition.z += currentPosition.z;
 
+			// We'd rather multiply than divide
+			float optimizer = 1.0 / this->count;
+
 			// Divide down
-			averagePosition.x /= this->count;
-			averagePosition.y /= this->count;
-			averagePosition.z /= this->count;
+			averagePosition.x *= optimizer;
+			averagePosition.y *= optimizer;
+			averagePosition.z *= optimizer;
 
 			this->averagePosition = averagePosition;
 		}
@@ -198,11 +201,24 @@ public:
 			// To remove the AliveNode, connect it's 'back' and 'forward' pointers
 			AliveNode* back = this->mainArray[index].alive->back;
 			AliveNode* forward = this->mainArray[index].alive->forward;
-			back->forward = forward;
-			forward->back = back;
 
+			
+			if (back != nullptr) {
+				back->forward = forward;
+			}
+			if (forward != nullptr) {
+				forward->back = back;
+			}
+				
+			// If we're deleting the first one
 			if (this->mainArray[index].alive == this->firstAlive) {
-				this->firstAlive = this->mainArray[index].alive->forward;
+				if (this->mainArray[index].alive->forward != nullptr) {
+					this->firstAlive = this->mainArray[index].alive->forward;
+				}
+				else {
+					this->firstAlive = nullptr;
+				}
+				
 			}
 
 			// Also clean!

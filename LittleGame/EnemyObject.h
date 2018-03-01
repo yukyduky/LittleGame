@@ -9,7 +9,7 @@ class ActorObject;
 class EnemyState;
 class EnemyMovingState;
 class EnemyAttackComponent;
-
+class AIComponent;
 
 
 
@@ -18,9 +18,8 @@ class EnemyObject : public ActorObject
 private:
 	ENEMYTYPE::TYPE enemyType = ENEMYTYPE::SIZE;
 	EnemyAttackComponent * attackComponent = nullptr;
+	AIComponent* pBrain = nullptr;
 	std::vector<ActorObject*>* players = nullptr;
-	// Same vector as the one which relies in this, soon-to-be, AI-component
-	std::vector<EnemyState*> states;
 
 	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
@@ -42,7 +41,6 @@ public:
 	void dealDmgToPlayer(size_t playerID, float damage);
 	std::vector<ActorObject*>* getPlayers();
 	ENEMYTYPE::TYPE getEnemyType();
-
 
 	virtual void update();
 	virtual void attack();

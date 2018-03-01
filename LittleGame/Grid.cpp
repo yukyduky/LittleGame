@@ -86,6 +86,9 @@ void Grid::initialize(ArrayList* arrayList_)
 
 void Grid::wipeGrid()
 {
+	for (auto gridSlotWithOccupants : this->occupiedSlots) {
+		gridSlotWithOccupants->occupants.clear();
+	}
 	this->occupiedSlots.clear();
 }
 
@@ -135,6 +138,11 @@ void Grid::update()
 {
 	this->wipeGrid();
 	this->updateOccupants();
+}
+
+void Grid::removeSwarmer(int index)
+{
+	this->arrayList->remove(index);
 }
 
 void Grid::activateNext()
@@ -189,12 +197,25 @@ bool Grid::inOrOut(XMFLOAT2 position)
 
 	return result;
 }
+bool Grid::inOrOutPLUS(XMFLOAT2 position) 
+{
+	bool result = false;
+	int margin = LENGTHOFWALLS * ARENASQUARESIZE + 1;
+
+	if ((position.x > margin) && (position.x < ARENAWIDTH - margin)) {
+		if ((position.y > margin) && (position.y < ARENAHEIGHT - margin)) {
+			result = true;
+		}
+	}
+
+	return result;
+}
 
 void Grid::cleanUp()
 {
 	/// NOT UPDATED
 	for (int x = 0; x < levelOfDetail; x++) {
-		for (int y = 0; y < levelOfDetail;) {
+		for (int y = 0; y < levelOfDetail; y++) {
 			// Cleans up the internal data inside the GridSlot
 			this->theGrid[x][y]->cleanUp();
 			// Deletes the allocated GridSlot

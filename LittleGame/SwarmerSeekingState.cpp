@@ -38,7 +38,7 @@ void SwarmerSeekingState::executeBehavior()
 	this->pHead->setDirection(newDirection);
 
 	// Do the 'manet-shooting'
-	this->adjustAim();
+//	this->adjustAim();
 
 	// Adjust velocity based on pulsing
 	this->pulse();

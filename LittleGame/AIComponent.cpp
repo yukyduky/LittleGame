@@ -17,6 +17,7 @@ AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior) : command
 	this->pHead = &obj;
 	this->pHead->SETinputComponent(this);
 	this->ID = obj.getID();
+	
 
 	/// Set internal data
 	this->behavior = aiBehavior;
@@ -59,6 +60,11 @@ void AIComponent::cleanUp()
 //	this->keyboardCommandMap.clear();
 //	this->mouseCommandMap.clear();
 	// Might be missing things in accordance with vector!
+}
+
+EnemyState * AIComponent::getCurrentState()
+{
+	return this->states.back();
 }
 
 void AIComponent::generateCommands()

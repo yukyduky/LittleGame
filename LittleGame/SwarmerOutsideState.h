@@ -28,12 +28,12 @@ public:
 		this->pBrain->pushCommand(AICOMMANDS::MOVE);
 
 		// If we've come inside the grid, ACT LIKE IT.
-		if (this->inOrOut()) {
+
+		if (this->inOrOutPlus()) {
 			EnemyState* seekingState = new SwarmerSeekingState(
 				*this->pHead, *this->pBrain, this->getGrid(), this->getSwarmerID()
 			);
-			this->pBrain->pushState(*seekingState);
-			this->getGrid()->activateMe(this->getSwarmerID());
+			this->getGrid()->activateMe(this->getSwarmerID()); // can this be moved inside the constructor?
 		}
 	}
 };

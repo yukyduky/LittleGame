@@ -1,4 +1,5 @@
 #include "SpSwarmProjectile.h"
+#include "SwarmerState.h"
 #include "Spell.h"
 
 SpSwarmProjectile::SpSwarmProjectile(
@@ -64,6 +65,10 @@ void SpSwarmProjectile::cleanUp()
 {
 	// The owner of me is dying, so reduce the activeEnemies!
 	if (this->getOwner()->getType() == OBJECTTYPE::ENEMY) {
+		AIComponent* trueInput = static_cast<AIComponent*>(this->getOwner()->GETinputComponent());
+		SwarmerState* trueState = static_cast<SwarmerState*>(trueInput->getCurrentState());
+		trueState->removeFromGrid();
+
 		(*this->pActiveEnemiesCount)--;
 	}
 }
