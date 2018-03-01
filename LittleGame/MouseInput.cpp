@@ -18,8 +18,7 @@ MouseInput::MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMFLOAT3 cDir)
 	this->surface = { 0.0f, 1.0f, 0.0f, -40.f };
 
 	DirectX::XMStoreFloat3(&direction, dir);
-	this->cameraDirNor = direction;
-
+	this->cameraDirNor = cDir;
 }
 
 MouseInput::~MouseInput()

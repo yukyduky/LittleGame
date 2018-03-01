@@ -53,7 +53,7 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 	this->rawMatrixData.view = &camera.GETviewMatrix();
 	this->rawMatrixData.proj = &camera.GETprojMatrix();
 
-	this->lightPassData.camDir = camera.GETfacingDirFloat3();
+	this->lightPassData.camDir = camera.GETfacingDir();
 	this->lightPassData.camPos = camera.GETcameraPos();
 	this->lightPassData.arenaDims = XMFLOAT2(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->lightPassData.gridDims = XMFLOAT2(static_cast<float>(ARENADATA::GETsquareSize()), static_cast<float>(ARENADATA::GETsquareSize()));

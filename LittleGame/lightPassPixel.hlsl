@@ -76,42 +76,54 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 
 void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 {
-	if (pos_W.y == -0.5f) {
+	if (pos_W.y == -0.5f)
+	{
 		float3 pToC = pos_W - camPos;
 		normalize(pToC);
+
 		float lDotN = dot(pToC, normal);
-		if (lDotN != 0.0f) {
+		if (lDotN != 0.0f)
+		{
 			float i = 0.0f;
 			bool intersected = false;
-			float3 p = float3(0.0f, 0.0f, 0.0f);
-			int xGrid = 0;
-			int yGrid = 0;
 
-			do {
-				float pOnQuadX = pos_W.x + pToC.x * (gridDims.x / 10.0f) * i; // gridDims.x / 2.0f stepsize
-				float pOnQuadZ = pos_W.z + pToC.z * (gridDims.y / 10.0f) * i;
+			do
+			{
+				float pOnQuadX = pos_W.x + pToC.x * (gridDims.x / 4.0f) * i; // gridDims.x / 2.0f stepsize
+				float pOnQuadY = pos_W.y + pToC.y * (gridDims.x / 4.0f) * i;
+				float pOnQuadZ = pos_W.z + pToC.z * (gridDims.y / 4.0f) * i;
 
-				xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x;
-				yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y;
+				int xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x;
+				int yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y;
 
-				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X && 
-					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y) {
-					float d = dot(float3(pOnQuadX, grid[xGrid][yGrid].height, pOnQuadZ) - camPos, normal) / lDotN;
-					p = d * pToC + camPos;
+				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X &&
+					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y)
+				{
+					float height = grid[xGrid][yGrid].height;
+					float d = dot(float3(pOnQuadX, pOnQuadY, pOnQuadZ) - camPos, normal) / lDotN;
+					float3 p = d * pToC + camPos;
 
-					if (p.x >= pOnQuadX - 1.0f && p.x < pOnQuadX + gridDims.x + 0.0f &&
-						p.z >= pOnQuadZ - 1.0f && p.z < pOnQuadZ + gridDims.y + 0.0f)
+					float offsetX = 7.0f;
+					float offsetY = 7.0f;
+					float offsetZ = 7.0f;
+
+					if (p.x >= pOnQuadX - offsetX && p.x < pOnQuadX + gridDims.x + offsetX &&
+						p.z >= pOnQuadZ - offsetZ && p.z < pOnQuadZ + gridDims.y + offsetZ &&
+						p.y >= height - offsetY && p.y < height + offsetY)
 					{
 						intersected = true;
 						pos_W.y = p.y;
 						diffuse = grid[xGrid][yGrid].color;
+						//diffuse *= abs(p.y) / 0.001f;
 					}
 				}
-				else {
+				else
+				{
 					break;
 				}
 
 				i += 1.0f;
+
 			} while (!intersected);
 
 			if (!intersected)
@@ -120,41 +132,6 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 			}
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-	/*int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
-	int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
-
-
-
-	if (pos_W.y < (grid[xGrid][yGrid].height * scaleHeight) + gridStartPos.y) {
-		diffuse = grid[xGrid][yGrid].color;
-	}
-	else if (pos_W.y < (grid[xGrid][yGrid].height * scaleDepth) + gridStartPos.y)
-
-	if (objectType == 0.5f) {
-		
-	}
-	else {
-		float3 pToC = camPos - pos_W;
-
-		int xGrid = pos_W.x % gridDims.x < MAX_NUM_FLOORGRIDS_X ? pos_W.x % gridDims.x : MAX_NUM_FLOORGRIDS_X - 1;
-		int yGrid = pos_W.z % gridDims.y < MAX_NUM_FLOORGRIDS_Y ? pos_W.z % gridDims.y : MAX_NUM_FLOORGRIDS_Y - 1;
-
-		while (xGrid != MAX_NUM_FLOORGRIDS_X - 1 && yGrid != MAX_NUM_FLOORGRIDS_Y) {
-			
-		}
-	}*/
 }
 
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission)

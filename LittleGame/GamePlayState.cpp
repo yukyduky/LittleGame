@@ -112,7 +112,8 @@ void GamePlayState::updateFloorPattern() {
 	case FLOORSTATE::STATE::ACTIVE:
 		if (this->counter > this->stateTime) {
 			if (totalLevelTime < this->mediumTime) {
-				this->currData = easyPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->easyPatterns.size() - 1)];
+				//this->currData = easyPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->easyPatterns.size() - 1)];
+				this->currData = easyPatterns[0];
 			}
 			else if (totalLevelTime < this->hardTime) {
 				this->currData = mediumPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->mediumPatterns.size() - 1)];
@@ -277,10 +278,10 @@ void GamePlayState::init() {
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
-	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1();
 
 	this->mediumTime = 120.0;
@@ -470,8 +471,8 @@ void GamePlayState::initPlayer()
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
 	/// INPUT COMPONENT:
-	input = new ControllerComponent(*actor, 0);
-	//input = new KeyboardComponent(*actor);
+	//input = new ControllerComponent(*actor, 0);
+	input = new KeyboardComponent(*actor);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
