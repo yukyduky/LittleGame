@@ -422,11 +422,12 @@ void CollisionHandler::collisionIndestrucProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	/*Projectile* proj = static_cast<Projectile*>(this->collidable2);
-	Spell* spell = proj->getSpell();
-	spell->collision(this->collidable1, proj);*/
-
 	this->collidable2->setState(OBJECTSTATE::TYPE::DEAD);
+
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+
+	spell->setActive(false);
 }
 
 void CollisionHandler::collisionProjectileProjectile() {

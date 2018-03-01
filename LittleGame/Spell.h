@@ -62,6 +62,8 @@ public:
 	float getCoolDown() { return this->coolDown; };
 	void setCost(float input) { this->cost = input; }
 	float getCost() { return this->cost; }
+	void setActive(bool input) { this->active = input; }
+	bool getActive() { return this->active; }
 
 	// TSC = TimeSinceCast
 	float getTSC() { return this->timeSinceCast; };
@@ -80,6 +82,9 @@ private:
 	float timeSinceCast = 0.0f;
 	// EnergyCost
 	float cost = 0;
+
+protected:
+	bool active = false;
 };
 
 

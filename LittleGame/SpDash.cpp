@@ -73,9 +73,9 @@ bool SpDash::castSpell()
 			this->setState(SPELLSTATE::COOLDOWN);
 			this->burning = true;
 		}
-
-		return returnValue;
 	}
+
+	return returnValue;
 }
 
 void SpDash::upgrade(float modif)

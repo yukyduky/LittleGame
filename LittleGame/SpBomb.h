@@ -29,7 +29,6 @@ private:
 	float range = 0.0f;
 
 	Projectile* theProj = nullptr;
-	float start, end;
-	bool active;
+	float start, end, collisionDuration;
 };
 #endif // !SPBOMB_H

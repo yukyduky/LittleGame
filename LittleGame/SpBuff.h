@@ -27,8 +27,6 @@ private:
 	float damage = 0.0f;
 	// Travel-range of spell
 	float range = 0.0f;
-	// If the efect is active
-	bool active;
 	// value to increase to make the player float
 	float floatingValue = 0.0f;
 	// to reset the player after efect wears of
