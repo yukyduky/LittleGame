@@ -85,6 +85,7 @@ private:
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
+	std::vector<Index> genIndex;
 	double mediumTime;
 	double hardTime;
 	double totalLevelTime;
@@ -96,6 +97,7 @@ private:
 	double counter;
 	double genTimer;
 	double genCounter;
+	double genEffectTime;
 	bool recoveryMode;
 	int currentPatternNr;
 
@@ -121,7 +123,7 @@ private:
 	void checkCollisions();
 	void updateFloorPattern();
 	void checkPlayerTileStatus();
-
+	void updateGenerators();
 
 	MouseInput* mousePicker = nullptr;
 	float tempFloater = 1.0f;

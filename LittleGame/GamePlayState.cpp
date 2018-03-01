@@ -231,13 +231,82 @@ void GamePlayState::updateFloorPattern() {
 
 void GamePlayState::checkPlayerTileStatus() 
 {
-	TILESTATUS::STATUS status = this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid);
+	TILESTATUS::STATUS status;
+	EFFECTSTATUS::EFFECT effect;
+	this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid, status, effect);
+
 	//Check if the player is on a active floor tile or if he fell of the map.
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
 		if (status == TILESTATUS::STATUS::HOLE) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
+		} 
+		else {
+			switch (effect) 
+			{
+			case EFFECTSTATUS::EFFECT::IDLE:
+				break;
+			case EFFECTSTATUS::EFFECT::HEATED:
+				//To be filled out
+				break;
+			case EFFECTSTATUS::EFFECT::COOLED:
+				//To be filled out
+				break;
+			case EFFECTSTATUS::EFFECT::ELECTRIFIED:
+				//To be filled out
+				break;
+			default:
+				break;
+			}
 		}
 	}
+
+}
+
+void GamePlayState::updateGenerators() 
+{
+	Index tempIndex;
+	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	for (int i = 0; i < this->genIndex.size(); i++) {
+		this->grid[genIndex[i].x][genIndex[i].y].genTimer += dt;
+		if (this->grid[genIndex[i].x][genIndex[i].y].genTimer > this->genEffectTime) {
+			for (int j = 0; j < this->grid[genIndex[i].x][genIndex[i].y].genPattern.size(); j++) {
+				tempIndex.x = this->grid[genIndex[i].x][genIndex[i].y].genPattern[j].x;
+				tempIndex.y = this->grid[genIndex[i].x][genIndex[i].y].genPattern[j].y;
+				this->grid[tempIndex.x][tempIndex.y].currentEffect = this->grid[genIndex[i].x][genIndex[i].y].genEffect;
+			}
+			this->grid[genIndex[i].x][genIndex[i].y].genTimer = 0.0;
+		}
+	}
+
+	XMFLOAT3 electrified = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	XMFLOAT3 heated = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	XMFLOAT3 cooled = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	EFFECTSTATUS::EFFECT effect;
+	for (int i = 0; i < this->grid.size(); i++) {
+		for (int j = 0; j < this->grid[i].size(); j++) {
+			effect = this->grid[i][j].currentEffect;
+			switch (effect)
+			{
+			case EFFECTSTATUS::IDLE:
+				break;
+			case EFFECTSTATUS::ELECTRIFIED:
+				this->grid[i][j].color = electrified;
+				this->grid[i][j].currentEffect = EFFECTSTATUS::EFFECT::IDLE;
+				break;
+			case EFFECTSTATUS::HEATED:
+				this->grid[i][j].color = heated;
+				this->grid[i][j].currentEffect = EFFECTSTATUS::EFFECT::IDLE;
+				break;
+			case EFFECTSTATUS::COOLED:
+				this->grid[i][j].color = cooled;
+				this->grid[i][j].currentEffect = EFFECTSTATUS::EFFECT::IDLE;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
 
 }
 
@@ -409,7 +478,7 @@ void GamePlayState::update(GameManager * gm)
 	this->updateFloorPattern();
 	
 	if (this->genCounter > this->genTimer) {
-		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics);
+		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
 		this->genCounter = 0.0;
 	}
 
@@ -440,6 +509,7 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 
+	this->updateGenerators();
 	this->checkPlayerTileStatus();
 	this->enemyManager.update();
 	this->checkCollisions();

@@ -50,7 +50,6 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 			grid[i][j].baseColor = XMFLOAT3(color.r, color.g, color.b);
 			grid[i][j].color = XMFLOAT3(actualColor.r, actualColor.g, actualColor.b);
 			grid[i][j].posY = pos.y - 0.01f;
-			grid[i][j].ptr = object;
 		}
 	}
 	staticObjects.push_back(object);
@@ -310,19 +309,19 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
 	XMFLOAT2 index = this->findTileIndexFromPos(pos);
-	grid[(int)index.x][(int)index.y].ptr->setState(state);
+//	grid[(int)index.x][(int)index.y].ptr->setState(state);
 
 
-	int ID = grid[(int)index.x][(int)index.y].ptr->getID();
+//	int ID = grid[(int)index.x][(int)index.y].ptr->getID();
 	switch (state)
 	{
 	case OBJECTSTATE::TYPE::TFALLING : 
 		for (std::list<GameObject*>::iterator it = staticObjects.begin(); it != staticObjects.end(); it++) {
-			if ((*it)->getID() == ID) {
-				dynamicObjects.push_back((*it));
-				staticObjects.erase(it);
+//			if ((*it)->getID() == ID) {
+//				dynamicObjects.push_back((*it));
+//				staticObjects.erase(it);
 				it--;
-			}
+//			}
 		}
 		break;
 	default:
@@ -332,7 +331,8 @@ void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state,
 
 void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
-	int ID = grid[x][y].ptr->getID();
+//	int ID = grid[x][y].ptr->getID();
+	int ID = -1;
 	std::list<GameObject*>::iterator it = staticObjects.begin();
 	int test = 0;
 
@@ -367,9 +367,10 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 	}
 }
 
-TILESTATUS::STATUS LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
+void LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATUS::STATUS& status, EFFECTSTATUS::EFFECT& effect)
 {
-	return grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].status;
+	status = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].status;
+	effect = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].currentEffect;
 }
 
 DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
@@ -381,7 +382,7 @@ DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 	return index;
 }
 
-void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics)
+void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex)
 {
 	Index index;
 	do {
@@ -399,15 +400,31 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	{
 	case GENERATOR::TYPE::OVERHEATED:
 		genColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+		grid[index.x][index.y].genEffect = EFFECTSTATUS::EFFECT::HEATED;
 		break;
 	case GENERATOR::TYPE::COOLED:
 		genColor = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+		grid[index.x][index.y].genEffect = EFFECTSTATUS::EFFECT::COOLED;
 		break;
 	case GENERATOR::TYPE::OVERCHARGED:
 		genColor = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		grid[index.x][index.y].genEffect = EFFECTSTATUS::EFFECT::ELECTRIFIED;
 		break;
 	default:
 		break;
+	}
+	genIndex.push_back(index);
+	
+
+	Index effectIndex;
+	for (int i = 0; i < grid.size(); i++) {
+		for (int j = 0; j < grid[i].size(); j++) {
+			if (i == index.x || j == index.y) {
+				effectIndex.x = i;
+				effectIndex.y = j;
+				grid[index.x][index.y].genPattern.push_back(effectIndex);
+			}
+		}
 	}
 
 	GameObject* object = nullptr;

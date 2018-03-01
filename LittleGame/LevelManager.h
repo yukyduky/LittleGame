@@ -20,12 +20,16 @@ namespace SQUARETYPE {
 }
 
 namespace TILESTATUS {
-	enum STATUS {IDLE, HOLE, ELECTRIFIED, HEATED, COOLED, SIZE};
+	enum STATUS {IDLE, HOLE, SIZE};
 }
 
 //Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
 namespace WALLTYPE {
 	enum TYPE { VERTICAL, HORIZONTAL, SIZE };
+}
+
+namespace EFFECTSTATUS {
+	enum EFFECT{ IDLE, ELECTRIFIED, HEATED, COOLED, SIZE };
 }
 
 namespace GENERATOR {
@@ -34,24 +38,34 @@ namespace GENERATOR {
 
 struct tileData {
 	SQUARETYPE::TYPE type;
-	GameObject* ptr = nullptr;
 
 	//Nya som Dew ska använda
 	XMFLOAT3 baseColor;
 	XMFLOAT3 color;
 	float posY;
 	TILESTATUS::STATUS status;
+	double genTimer;
+	
+
 	bool occupiedByGenerator;
+	EFFECTSTATUS::EFFECT genEffect;
+	EFFECTSTATUS::EFFECT currentEffect;
+	std::vector<Index> genPattern;
 
 	tileData() 
 	{ 
-		this->status = TILESTATUS::STATUS::IDLE; 
+		this->type = SQUARETYPE::TYPE::EMPTY;
+		this->status = TILESTATUS::STATUS::IDLE;
+		this->currentEffect = EFFECTSTATUS::EFFECT::IDLE;
 		this->occupiedByGenerator = false;
+		this->genTimer = 0.0;
 	};
 	tileData(SQUARETYPE::TYPE type) {
 		this->type = type;
 		this->status = TILESTATUS::STATUS::IDLE;
+		this->currentEffect = EFFECTSTATUS::EFFECT::IDLE;
 		this->occupiedByGenerator = false;
+		this->genTimer = 0.0;
 	}
 };
 
@@ -129,7 +143,7 @@ public:
 	/*--------<INFORMATION>--------
 	1. Returns the state of a floor tile from a given position.
 	*/
-	TILESTATUS::STATUS checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid);
+	void checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATUS::STATUS& status, EFFECTSTATUS::EFFECT& effect);
 
 	/*--------<INFORMATION>--------
 	1. Returns the grid index pos for a given position.
@@ -137,7 +151,7 @@ public:
 	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
 
 
-	void createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics);
+	void createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex);
 
 	void clean();
 };
