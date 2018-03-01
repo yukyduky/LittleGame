@@ -5,13 +5,15 @@
 #include "State.h"
 #include "GamePlayState.h"
 
+class ActorObject;
+
 class RestartState : public State
 {
 private:
 	static RestartState sRestartState;
 	static bool flag;
 
-
+	std::vector<Spell*> spellPackage;
 public:
 	static RestartState* getInstance();
 
@@ -60,6 +62,8 @@ public:
 
 	static bool GETflag() { return flag; }
 	static void SETflag(bool inputValue) { flag = inputValue; }
+
+	virtual void provide(std::vector<Spell*> spellPackage);
 };
 
 #endif

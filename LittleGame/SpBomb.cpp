@@ -104,6 +104,7 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 SpBombG1::SpBombG1(ActorObject * player) : SpBomb(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
 }
 
@@ -117,6 +118,7 @@ SpBombG1::~SpBombG1()
 ////////////////////////////////////////////
 SpBombG2::SpBombG2(ActorObject * player) : SpBomb(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 1.2f;
 }
 
@@ -130,6 +132,7 @@ SpBombG2::~SpBombG2()
 ////////////////////////////////////////////
 SpBombG3::SpBombG3(ActorObject * player) : SpBomb(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 1.5f);
 	this->damage *= 2.0f;
 }

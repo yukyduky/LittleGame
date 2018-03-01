@@ -67,6 +67,7 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 SpAutoAttackG1::SpAutoAttackG1(ActorObject * player) : SpAutoAttack(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
 }
 
@@ -80,6 +81,7 @@ SpAutoAttackG1::~SpAutoAttackG1()
 ////////////////////////////////////////////
 SpAutoAttackG2::SpAutoAttackG2(ActorObject * player) : SpAutoAttack(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 1.2f;
 }
 
@@ -93,6 +95,7 @@ SpAutoAttackG2::~SpAutoAttackG2()
 ////////////////////////////////////////////
 SpAutoAttackG3::SpAutoAttackG3(ActorObject * player) : SpAutoAttack(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(0.5f);
 	this->damage *= 2.0f;
 }

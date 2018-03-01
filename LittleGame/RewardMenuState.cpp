@@ -266,9 +266,27 @@ Menu * RewardMenuState::initRewardMenu()
 	return menu;
 }
 
-void RewardMenuState::provide(ActorObject* player)
+void RewardMenuState::provide(std::vector<Spell*> spellPackage)
+{
+	//this->spellsPackage = spellsPackage;
+
+	this->spellPackage.clear();
+
+	for (auto i : spellPackage)
+	{
+		this->spellPackage.push_back(i);
+	}
+
+}
+
+void RewardMenuState::provide(ActorObject * player)
 {
 	this->player = player;
+
+	for (auto i : this->spellPackage)
+	{
+		this->player->changeSpell((int)i->getName(), (int)i->getGlyph());
+	}
 }
 
 void RewardMenuState::startGame()

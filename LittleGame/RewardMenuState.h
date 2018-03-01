@@ -12,6 +12,7 @@ private:
 	ActorObject* player = nullptr;
 	int nrOfLoot;
 
+	std::vector<Spell*> spellPackage;
 public:
 	static RewardMenuState* getInstance();
 		
@@ -24,7 +25,8 @@ public:
 	virtual void handleEvents(GameManager* gm);
 
 	Menu* initRewardMenu();
-
+	
+	void provide(std::vector<Spell*> spellPackage);
 	void provide(ActorObject* player);
 	void provide(int nrOfLoot) { this->nrOfLoot = nrOfLoot; };
 	ActorObject* GETPlayer() { return this->player; };

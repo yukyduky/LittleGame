@@ -69,9 +69,9 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-	for (auto &i : this->spells) {
-		delete i;
-	}
+	//for (auto &i : this->spells) {
+	//	delete i;
+	//}
 	this->spells.clear();
 	// Cleanup all the components
 	for (auto &c : this->components) {

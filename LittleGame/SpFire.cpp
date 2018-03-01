@@ -85,6 +85,7 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 SpFireG1::SpFireG1(ActorObject * player) : SpFire(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
 }
 
@@ -98,6 +99,7 @@ SpFireG1::~SpFireG1()
 ////////////////////////////////////////////
 SpFireG2::SpFireG2(ActorObject * player) : SpFire(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 1.2f;
 }
 
@@ -111,6 +113,7 @@ SpFireG2::~SpFireG2()
 ////////////////////////////////////////////
 SpFireG3::SpFireG3(ActorObject * player) : SpFire(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 1.5f);
 	this->damage *= 2.0f;
 }

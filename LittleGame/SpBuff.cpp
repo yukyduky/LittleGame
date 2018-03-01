@@ -88,6 +88,7 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 SpBuffG1::SpBuffG1(ActorObject * player) : SpBuff(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
 }
 
@@ -101,6 +102,7 @@ SpBuffG1::~SpBuffG1()
 ////////////////////////////////////////////
 SpBuffG2::SpBuffG2(ActorObject * player) : SpBuff(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCost(this->getCost() * 0.6f);
 }
 
@@ -114,6 +116,7 @@ SpBuffG2::~SpBuffG2()
 ////////////////////////////////////////////
 SpBuffG3::SpBuffG3(ActorObject * player) : SpBuff(player)
 {
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 1.5f);
 	this->setCost(this->getCost() * 0.2f);
 }
