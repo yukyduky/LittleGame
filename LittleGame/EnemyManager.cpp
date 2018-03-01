@@ -29,7 +29,7 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& playe
 	this->activeEnemiesCount = 0;
 }
 
-void EnemyManager::startLevel1()
+void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
@@ -47,7 +47,7 @@ void EnemyManager::startLevel1()
 		// Per enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
@@ -82,7 +82,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -97,26 +97,89 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	EnemyAttackingState* attackState = nullptr;
 	EnemyMovingState* moveState = nullptr;
 
+	bool reGenerateRandom = true;
+	int spawnLocation = 0;
+
 
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
-	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
 
-	if (spawnLocation == 1)
-		pos = { -spawnOffset, scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
+	while (reGenerateRandom)
+	{
+		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 
-	else if (spawnLocation == 2)
-		pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, -spawnOffset };
+		switch (spawnLocation) {
+		case 1:
+		{
+			if (spawnPosVectors.west.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
+				pos = {
+					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
+					scale.y,
+					spawnPosVectors.west.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 2:
+		{
+			if (spawnPosVectors.south.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
+				pos = {
+					spawnPosVectors.south.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 3:
+		{
+			if (spawnPosVectors.east.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
+				pos = {
+					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
+					scale.y,
+					spawnPosVectors.east.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 4:
+		{
+			if (spawnPosVectors.north.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
+				pos = {
+					spawnPosVectors.north.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		break;
+		}
+	}
 
-	else if (spawnLocation == 3)
-		pos = { (static_cast<float>(ARENADATA::GETarenaWidth()) + spawnOffset), scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
+	//if (spawnLocation == 1)
+	//	pos = { -spawnOffset, scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
 
-	else if (spawnLocation == 4)
-		pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
+	//else if (spawnLocation == 2)
+	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, -spawnOffset };
+
+	//else if (spawnLocation == 3)
+	//	pos = { (static_cast<float>(ARENADATA::GETarenaWidth()) + spawnOffset), scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
+
+	//else if (spawnLocation == 4)
+	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
 	float speed = 180.0f;

@@ -28,6 +28,7 @@ protected:
 	std::vector<Spell*> spells;
 	//Current spell that wil be cast by fireAbilityX
 	Spell* selectedSpell = nullptr;
+	int selectedSpellIntValue = 0;
 	float hp = 0;
 	float hpMAX = 0;
 
@@ -118,6 +119,7 @@ public:
 	void switchSpell();
 	// Return vector of spells
 	std::vector<Spell*> GETspellsVector() { return this->spells; }
+	int GETcurrentSpellInt() { return this->selectedSpellIntValue; }
 	void changeSpell(int spell, int glyph);
 
 	//Crosshair

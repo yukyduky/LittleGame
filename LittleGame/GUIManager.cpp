@@ -103,6 +103,10 @@ int GUIManager::initGUI(
 	this->cameraPos = cameraPos;
 	this->cameraFacingDir = cameraFacingDir;
 
+	for (int i = 0; i < 4; i++) {
+		this->rectBack[i] = nullptr;
+	}
+
 	float temptester123 = this->cameraPos.y / 630.0f;
 
 //----------------------------\
@@ -193,13 +197,15 @@ int GUIManager::initGUI(
 	// BACKGROUND \\
 //  ----------------
 	this->createGUIElement(
-		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
+		this->colorBackSelected.r, this->colorBackSelected.g, this->colorBackSelected.b, this->colorBackSelected.a,
 		-0.3f, -0.001f, -0.55f,
 		0.04, 0.0f, 0.04f
 	);
 
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
+
+	this->rectBack[0] = this->rect;
 
 ///-------------------------------------------
 
@@ -235,6 +241,8 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
+	this->rectBack[1] = this->rect;
+
 ///-------------------------------------------
 
 
@@ -268,6 +276,8 @@ int GUIManager::initGUI(
 
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
+
+	this->rectBack[2] = this->rect;
 
 ///-------------------------------------------
 
@@ -303,6 +313,8 @@ int GUIManager::initGUI(
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
 
+	this->rectBack[3] = this->rect;
+
 ///-------------------------------------------
 
 
@@ -327,6 +339,7 @@ void GUIManager::updateGUI(ActorObject* player)
 	// Update the color of ability cooldown based on whether they are ON or OFF cooldown
 	if (player->GETspellsVector().at(1)->getTSC() == 0)
 		this->rectAbility1->updateColor(this->colorAbility1);
+		
 	else {
 		colorHolder = this->colorAbility1;
 		this->rectAbility1->updateColor(vColor(colorHolder.r, colorHolder.g, colorHolder.b, 0.0f));
@@ -351,6 +364,14 @@ void GUIManager::updateGUI(ActorObject* player)
 	else {
 		colorHolder = this->colorAbility4;
 		this->rectAbility4->updateColor(vColor(colorHolder.r, colorHolder.g, colorHolder.b, 0.0f));
+	}
+
+	if (player->GETcurrentSpellInt() != this->lastSpell)
+	{
+		this->rectBack[(lastSpell - 1)]->updateColor(this->colorBack);
+		this->rectBack[(player->GETcurrentSpellInt() - 1)]->updateColor(this->colorBackSelected);
+
+		this->lastSpell = player->GETcurrentSpellInt();
 	}
 }
 

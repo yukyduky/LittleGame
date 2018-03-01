@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "ActorObject.h"
 #include "AIComponent.h"
+#include "LevelManager.h"
 
 
 // Forward declaration to prevent double includes
@@ -51,7 +52,7 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
-	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+	ActorObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
 
 public:
 	EnemyManager();
@@ -60,7 +61,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
 	*/
-	void startLevel1();
+	void startLevel1(enemySpawnPositions spawnPosVectors);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
