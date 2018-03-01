@@ -88,7 +88,7 @@ public:
 	//DirectX::XMFLOAT3	GETcameraPosFloat3();
 	//DirectX::XMVECTOR	GETcameraStartPos();
 	DirectX::XMFLOAT3		GETcameraPos();
-	DirectX::XMFLOAT3 GETfacingDirFloat3();
+	DirectX::XMFLOAT3       GETfacingDir();
 	DirectX::XMFLOAT4X4&	GETviewMatrix();
 	DirectX::XMFLOAT4X4&	GETprojMatrix();
 };

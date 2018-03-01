@@ -53,10 +53,10 @@ void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights
 	this->rawMatrixData.view = &camera.GETviewMatrix();
 	this->rawMatrixData.proj = &camera.GETprojMatrix();
 
-	this->lightPassData.camDir = camera.GETfacingDirFloat3();
+	this->lightPassData.camDir = camera.GETfacingDir();
 	this->lightPassData.camPos = camera.GETcameraPos();
-	this->lightPassData.arenaDims = XMFLOAT2(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
-	this->lightPassData.gridDims = XMFLOAT2(ARENADATA::GETsquareSize(), ARENADATA::GETsquareSize());
+	this->lightPassData.arenaDims = XMFLOAT2(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
+	this->lightPassData.gridDims = XMFLOAT2(static_cast<float>(ARENADATA::GETsquareSize()), static_cast<float>(ARENADATA::GETsquareSize()));
 	this->lightPassData.gridStartPos = XMFLOAT2(0.0f, 0.0f);
 
 	Locator::getD3D()->createConstantBuffer(
@@ -79,8 +79,8 @@ void RenderInputOrganizer::render(std::list<GraphicsComponent*>& graphics)
 
 void RenderInputOrganizer::injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid)
 {
-	for (int i = 0; i < grid.size(); i++) {
-		for (int j = 0; j < grid[i].size(); j++) {
+	for (size_t i = 0; i < grid.size(); i++) {
+		for (size_t j = 0; j < grid[i].size(); j++) {
 			this->lightPassData.grid[i][j].color = grid[i][j].color;
 			this->lightPassData.grid[i][j].height = grid[i][j].posY;
 		}

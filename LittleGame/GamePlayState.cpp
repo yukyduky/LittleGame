@@ -97,19 +97,18 @@ void GamePlayState::checkCollisions() {
 }
 
 void GamePlayState::updateFloorPattern() {
-	double dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
-	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	float dt = static_cast<float>(Locator::getGameTime()->GetTime()) - this->gTimeLastFrame;
+	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->totalLevelTime += dt;
 	this->counter += dt;
 	Index index(0, 0);
-	XMFLOAT3 currVel(0, 0, 0);
+	XMFLOAT3 currVel(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
 	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
 	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
-	int test;
 	switch (this->floorState)	
 	{
 	case FLOORSTATE::STATE::ACTIVE:
@@ -123,7 +122,7 @@ void GamePlayState::updateFloorPattern() {
 			else {
 				this->currData = hardPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->hardPatterns.size() - 1)];
 			}
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 			}
@@ -145,14 +144,14 @@ void GamePlayState::updateFloorPattern() {
 			finalColor.y = baseColor.y + fallColor.y;
 			finalColor.z = baseColor.z + fallColor.z;
 
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
 				this->grid[index.x][index.y].color = finalColor;
 			}
 		}
 		else {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
 				this->grid[index.x][index.y].color = fallColor;
@@ -165,14 +164,14 @@ void GamePlayState::updateFloorPattern() {
 
 	case FLOORSTATE::STATE::FALLING:
 		if (this->counter < stateTime) {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY += GRAVITY / 4.0f * this->counter;
 			}
 		}
 		else {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].posY = -0.5f;
@@ -200,14 +199,14 @@ void GamePlayState::updateFloorPattern() {
 			finalColor.y = recoverColor.y + holeColor.y;
 			finalColor.z = recoverColor.z + holeColor.z;
 
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = currData.pattern[i].x;
 				index.y = currData.pattern[i].y;
 				this->grid[index.x][index.y].color = finalColor;
 			}
 		}
 		else {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -219,7 +218,7 @@ void GamePlayState::updateFloorPattern() {
 		break;
 	case FLOORSTATE::STATE::FLASH:
 		if (counter > 0.2f) {
-			for (int i = 0; i < this->currData.pattern.size(); i++) {
+			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
 				index.x = this->currData.pattern[i].x;
 				index.y = this->currData.pattern[i].y;
 				this->grid[index.x][index.y].color = baseColor;
@@ -263,14 +262,14 @@ void GamePlayState::checkPlayerTileStatus()
 
 void GamePlayState::init() {
 	this->lm.selectArena();
-	this->quadTree.initializeQuadTree(0, ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight(), 0, 0);
-	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
+	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
+	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->ID = this->GUI.initGUI(
 		this->newID(),
 		this->camera.GETcameraPos(),
-		this->camera.GETfacingDirFloat3(),
+		this->camera.GETfacingDir(),
 		this->GUIObjects,
 		this->graphics
 	);
@@ -286,11 +285,11 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() * 0.5, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
-	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1();
 
 	this->mediumTime = 120.0;
@@ -300,7 +299,7 @@ void GamePlayState::init() {
 	this->stateTime = 5.0;
 	this->recoveryMode = false;
 	this->counter = 0.0;
-	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	
 
