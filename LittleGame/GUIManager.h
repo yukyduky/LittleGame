@@ -33,6 +33,10 @@ private:
 	RectangleComponent* rectAbility3 = nullptr;
 	RectangleComponent* rectAbility4 = nullptr;
 
+	RectangleComponent* rectBack[4];
+
+	int lastSpell = 0;
+
 	// vColor colorHP = { 255.0f, 0.0f, 0.0f, 255.0f };
 	vColor colorHP = { 1.0f, 0.0f, 0.0f, 1.0f };
 	// vColor colorEnergy = { 0.95687f, 226.0f, 67.0f, 255.0f };
@@ -47,6 +51,7 @@ private:
 	vColor colorAbility4 = { 0.0f, 0.4f, 1.0f, 1.0f };
 
 	vColor colorBack = { 0.25f, 0.25f, 0.25f, 0.0f };
+	vColor colorBackSelected = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	void createGUIElement(
 		float r, float g, float b, float a,
@@ -78,6 +83,11 @@ public:
 	RectangleComponent* GETrectAbility2() { return this->rectAbility2; }
 	RectangleComponent* GETrectAbility3() { return this->rectAbility3; }
 	RectangleComponent* GETrectAbility4() { return this->rectAbility4; }
+
+	RectangleComponent* GETrectBack1() { return this->rectBack[0]; }
+	RectangleComponent* GETrectBack2() { return this->rectBack[1]; }
+	RectangleComponent* GETrectBack3() { return this->rectBack[2]; }
+	RectangleComponent* GETrectBack4() { return this->rectBack[3]; }
 
 	vColor GETcolorHP() { return this->colorHP; };
 	vColor GETcolorEnergy() { return this->colorEnergy; }

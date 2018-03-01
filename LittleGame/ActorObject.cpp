@@ -307,6 +307,7 @@ void ActorObject::selectAbility1()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[1];
+		this->selectedSpellIntValue = 1;
 	}
 	else {
 
@@ -319,6 +320,7 @@ void ActorObject::selectAbility2()
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
+		this->selectedSpellIntValue = 2;
 	}
 	else {
 
@@ -329,7 +331,7 @@ void ActorObject::selectAbility3()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[3];
-		
+		this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -342,6 +344,7 @@ void ActorObject::selectAbility4()
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
+		this->selectedSpellIntValue = 4;
 	}
 	else {
 
