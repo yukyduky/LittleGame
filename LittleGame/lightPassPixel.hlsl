@@ -115,7 +115,8 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 						intersected = true;
 						pos_W.y = p.y;
 						diffuse = grid[xGrid][yGrid].color;
-						//diffuse *= abs(p.y) / 0.001f;
+						diffuse -= 0.001f * abs(p.y);
+						saturate(diffuse);
 					}
 				}
 				else
