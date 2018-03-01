@@ -442,13 +442,13 @@ void ActorObject::switchSpell()
 				i = new SpAutoAttack(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG3(this);
 				break;
 			}
 			break;
@@ -460,13 +460,13 @@ void ActorObject::switchSpell()
 				i = new SpFire(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpAutoAttack(this);
+				i = new SpFireG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpDash(this);
+				i = new SpFireG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBuff(this);
+				i = new SpFireG3(this);
 				break;
 			}
 			break;
@@ -478,13 +478,13 @@ void ActorObject::switchSpell()
 				i = new SpBomb(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpBomb(this);
+				i = new SpBombG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpBomb(this);
+				i = new SpBombG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBomb(this);
+				i = new SpBombG3(this);
 				break;
 			}
 			break;
@@ -496,13 +496,13 @@ void ActorObject::switchSpell()
 				i = new SpDash(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpDash(this);
+				i = new SpDashG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpDash(this);
+				i = new SpDashG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpDash(this);
+				i = new SpDashG3(this);
 				break;
 			}
 			break;
@@ -514,13 +514,13 @@ void ActorObject::switchSpell()
 				i = new SpBuff(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpBuff(this);
+				i = new SpBuffG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpBuff(this);
+				i = new SpBuffG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBuff(this);
+				i = new SpBuffG3(this);
 				break;
 			}
 			break;
@@ -529,7 +529,11 @@ void ActorObject::switchSpell()
 		newSpells.push_back(i);
 
 	}
-	
+
+	//// Clean up old spells
+	//for (auto &i : this->spells) {
+	//	delete i;
+	//}
 	this->spells.clear();
 	
 	for (auto i : newSpells)

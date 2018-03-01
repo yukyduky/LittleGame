@@ -61,3 +61,42 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }
+
+////////////////////////////////////////////
+//// GLYPH 1 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpAutoAttackG1::SpAutoAttackG1(ActorObject * player) : SpAutoAttack(player)
+{
+	this->setCoolDown(0.1f);
+}
+
+SpAutoAttackG1::~SpAutoAttackG1()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 2 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpAutoAttackG2::SpAutoAttackG2(ActorObject * player) : SpAutoAttack(player)
+{
+	this->damage *= 1.2f;
+}
+
+SpAutoAttackG2::~SpAutoAttackG2()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 3 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpAutoAttackG3::SpAutoAttackG3(ActorObject * player) : SpAutoAttack(player)
+{
+	this->setCoolDown(0.5f);
+	this->damage *= 2.0f;
+}
+
+SpAutoAttackG3::~SpAutoAttackG3()
+{
+}
