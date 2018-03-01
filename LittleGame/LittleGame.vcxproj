@@ -203,6 +203,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="SwarmerEnemyAttack.h" />
+    <ClInclude Include="SwarmerOutsideState.h" />
     <ClInclude Include="SwarmerSeekingState.h" />
     <ClInclude Include="SwarmerState.h" />
     <ClInclude Include="SwarmerSyncingState.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />

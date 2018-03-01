@@ -89,6 +89,7 @@
     <ClCompile Include="SwarmerSeekingState.cpp">
       <Filter>Swarmer\Specific\States</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbilityComponent.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="SwarmerSeekingState.h">
       <Filter>Swarmer\Specific\States</Filter>
     </ClInclude>
+    <ClInclude Include="SwarmerOutsideState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,7 +9,8 @@ class SwarmerSeekingState : public SwarmerState
 private:
 
 public:
-
+	SwarmerSeekingState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID);
+	void executeBehavior();
 
 };
 

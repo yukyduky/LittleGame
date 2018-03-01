@@ -14,14 +14,10 @@ state(n)^
 
 class EnemyObject;
 class AIComponent;
-class EnemyAttackingState;
 
 class EnemyMovingState : public EnemyState
 {
 private:
-	EnemyObject * pHead = nullptr;
-	AIComponent * pBrain = nullptr;
-	float attackRange = 0.0f;	// Fetched from Head's attackComponent
 
 public:
 	EnemyMovingState(EnemyObject& pHead, AIComponent& pBrain);

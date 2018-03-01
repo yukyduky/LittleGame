@@ -4,28 +4,20 @@
 #include "EnemyObject.h"
 #include "Spell.h"
 
-EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain)
+EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain) : EnemyState(pHead, pBrain)
 {
-	// Set up pointers
-	this->pHead = &pHead;
-	this->pBrain = &pBrain;
-	// Misc
-	this->attackRange = this->pHead->getFirstSpell()->getAttackRange();
-	
 	// Activate this state
 	this->pBrain->pushState(*this);
 }
 
 void EnemyMovingState::executeBehavior()
 {
-	// Update Direction/Movement (same thing but spells needs generic 'getDirection()')
+	/// Move towards the player
 	XMFLOAT2 vectorToPlayer = this->pHead->getVectorToPlayer();
-	XMFLOAT3 temp;						// XMFLOAT2
-	temp.x = vectorToPlayer.x;			//	 to
-	temp.y = 0;							// XMFLOAT3
-	temp.z = vectorToPlayer.y;
+
+	// Set SimulatedMovement & Direction
 	this->pBrain->SETsimulatedMovement(vectorToPlayer);
-	this->pHead->setDirection(temp);
+	this->pHead->setDirection(XMFLOAT3(vectorToPlayer.x, 0, vectorToPlayer.y));
 
 	// If we're in range, switch state to attacking!
 	if (this->pHead->getDistanceToPlayer() < this->attackRange) {

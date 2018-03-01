@@ -53,7 +53,7 @@ void Grid::initialize(ArrayList* arrayList_)
 		}
 	}
 
-	/// Handle EdgeGridSlots specifically
+	/// Assign substitutes to all of the EdgeGridSlots
 	// West
 	for (int y = 0; y < levelOfDetail; y++) {
 		EdgeGridSlot* trueForm = static_cast<EdgeGridSlot*>(this->theGrid[0][y]);
@@ -137,6 +137,16 @@ void Grid::update()
 	this->updateOccupants();
 }
 
+void Grid::activateNext()
+{
+	this->arrayList->activateNext();
+}
+
+void Grid::activateMe(size_t swarmerID)
+{
+	this->arrayList->activateMe(swarmerID);
+}
+
 
 std::list<EnemyObject*>* Grid::getOccupants(XMFLOAT2 position)
 {
@@ -160,6 +170,11 @@ std::vector<EnemyObject*> Grid::getNeighbours(XMFLOAT2 position)
 	}
 
 	return neighbours;
+}
+
+XMFLOAT3 Grid::getPositionToSeek()
+{
+	return this->arrayList->getAveragePosition();
 }
 
 bool Grid::inOrOut(XMFLOAT2 position)

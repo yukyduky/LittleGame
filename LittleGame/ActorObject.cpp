@@ -10,7 +10,7 @@
 #include <DirectXMath.h>
 
 
-ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
+ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
@@ -19,7 +19,6 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, float veloc
 	this->type = objectType;
 	this->velocity = velocity;	
 	this->state = OBJECTSTATE::TYPE::ACTIVATED;
-//	this->speed = speed;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
 	

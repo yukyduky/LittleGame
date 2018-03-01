@@ -36,7 +36,7 @@ public:
 		std::vector<EnemyObject*> neighbours;
 		std::vector<GridSlot*> potentialNeighbours;
 
-		// Gather all the gridslots that can house potential neighbours
+		// Gather all the surrounding gridslots that can house potential neighbours
 		potentialNeighbours.push_back(pTheGrid[center.x][center.y]);	// Center
 		potentialNeighbours.push_back(pTheGrid[center.x - 1][center.y]);	// West
 		potentialNeighbours.push_back(pTheGrid[center.x + 1][center.y]);	// East
@@ -74,7 +74,6 @@ public:
 	}
 };
 
-
 class Grid
 {
 private:
@@ -100,11 +99,16 @@ public:
 
 	void update();
 
+	void activateNext();
+	void activateMe(size_t swarmerID);
+
 	// Not used, but might come in handy for something else later
 	std::list<EnemyObject*>* getOccupants(XMFLOAT2 position);	// Slower than the index version.
 	std::list<EnemyObject*>* getOccupants(Index index);	// Faster than the position version.
 
 	std::vector<EnemyObject*> getNeighbours(XMFLOAT2 position);
+	XMFLOAT3 getPositionToSeek();
+
 	bool inOrOut(XMFLOAT2 position);
 
 	void cleanUp();

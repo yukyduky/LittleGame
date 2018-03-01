@@ -60,6 +60,49 @@ private:
 	AliveNode* firstAlive = nullptr;
 	DeadNode* firstDead = nullptr;
 
+	void activateIndex(size_t index) {
+		// Check if it has already been activated
+		if (this->mainArray[index].alive == nullptr) {
+			// Activate it
+			bool found = false;
+			AliveNode* freshNode = new AliveNode();
+
+			// Connect behind
+			int stepper = index;
+			while (stepper > -1 && !found) {
+				AliveNode* toBeBack = this->mainArray[stepper].alive;
+
+				if (toBeBack != nullptr) {
+					found = true;
+					// Connect the freshNode to it's proper back and front
+					freshNode->back = toBeBack;
+					freshNode->forward = toBeBack->forward;
+
+					// Replace the old links
+					freshNode->back->forward = freshNode;
+
+					// Connect to it's forward if it exists
+					if (freshNode->forward != nullptr) {
+						freshNode->forward->back = freshNode;
+					}
+				}
+
+				stepper--;
+			}
+
+			// Connect to the array
+			freshNode->index = &this->mainArray[index];
+			this->mainArray[index].alive = freshNode;
+
+			if (this->firstAlive == nullptr) {
+				this->firstAlive = freshNode;
+			}
+
+			this->count++;
+			/// Connect front will never occur if we always activate through toBeActivated
+		}
+	}
+
 public:
 
 	void initialize(std::vector<EnemyObject*> allObjectsToBeInserted) {
@@ -71,6 +114,7 @@ public:
 			this->mainArray[i].obj = allObjectsToBeInserted[i];
 		}
 
+		/// LEAVING THIS HERE INCASE I HAVE FORGOTTEN SOMETHING WITH THE SOLUTION ABOVE
 		//// Add the first one
 		//this->mainArray[0].obj = allObjectsToBeInserted[0];0
 		//this->firstAlive = new AliveNode();
@@ -125,8 +169,8 @@ public:
 			averagePosition.z /= this->count;
 		}
 	}
-	XMFLOAT3* getAveragePosition() {
-		return &this->averagePosition;
+	XMFLOAT3 getAveragePosition() {
+		return this->averagePosition;
 	}
 	EnemyObject* find(int index) {
 		if (this->mainArray[index].alive != nullptr) {
@@ -142,44 +186,10 @@ public:
 	void activateNext() {
 		int index = this->toBeActivated++;
 
-		// Check if it has already been activated
-		if (this->mainArray[index].alive == nullptr) {
-			// Activate it
-			bool found = false;
-			AliveNode* freshNode = new AliveNode();
-
-			// Connect behind
-			int stepper = index;
-			while (stepper > -1 && !found) {
-				AliveNode* toBeBack = this->mainArray[stepper].alive;
-
-				if (toBeBack != nullptr) {
-					found = true;
-					// Connect the freshNode to it's proper back and front
-					freshNode->back = toBeBack;
-					freshNode->forward = toBeBack->forward;
-
-					// Replace the old links
-					freshNode->back->forward = freshNode;
-
-					if (freshNode->forward != nullptr) {
-						freshNode->forward->back = freshNode;
-					}
-				}
-
-				stepper--;
-			}
-
-			// Connect to the array
-			freshNode->index = &this->mainArray[index];
-			this->mainArray[index].alive = freshNode;
-
-			if (this->firstAlive == nullptr) {
-				this->firstAlive = freshNode;
-			}
-
-			/// Connect front will never occur if we always activate through toBeActivated
-		}
+		this->activateIndex(index);
+	}
+	void activateMe(size_t swarmerID) {
+		this->activateIndex(swarmerID);
 	}
 	void remove(int index) {
 		if (this->firstAlive != nullptr) {
@@ -232,6 +242,7 @@ private:
 	int swarmerCount = -1;
 	ArrayList* pSwarmers = nullptr;
 	Grid* pGrid = nullptr;
+	size_t swarmerIDs = 0;
 
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;

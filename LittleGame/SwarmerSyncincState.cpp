@@ -1,8 +1,10 @@
 #include "SwarmerSyncingState.h"
 
-SwarmerSyncingState::SwarmerSyncingState()
+SwarmerSyncingState::SwarmerSyncingState(
+	EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID
+) : SwarmerState(pHead, pBrain, pGrid_, swarmerID)
 {
-
+	
 }
 
 void SwarmerSyncingState::executeBehavior()

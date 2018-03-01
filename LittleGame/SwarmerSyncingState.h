@@ -10,7 +10,7 @@ class SwarmerSyncingState : public SwarmerState
 private:
 
 public:
-	SwarmerSyncingState();
+	SwarmerSyncingState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID);
 
 	virtual void executeBehavior();
 };

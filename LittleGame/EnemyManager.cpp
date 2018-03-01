@@ -13,6 +13,8 @@
 #include "StateManager.h"
 #include "EndState.h"
 #include "SwarmerEnemyAttack.h"
+#include "SwarmerSeekingState.h"
+#include "SwarmerOutsideState.h"
 #include "SpSwarmProjectile.h"
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
@@ -46,8 +48,8 @@ void EnemyManager::startLevel1()
 
 	// TESTING -----------
 	this->currentWaveCount = 1;
-	this->currentWaveSize = 0;
-	this->swarmerCount = 10;
+	this->currentWaveSize = 3;
+	this->swarmerCount = 5;
 	// TESTING -----------
 
 	// Per wave
@@ -125,7 +127,6 @@ EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::K
 	PhysicsComponent* physicsComponent = nullptr;
 	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyAttackingState* attackState = nullptr;
 	EnemyMovingState* moveState = nullptr;
 
 
@@ -159,7 +160,7 @@ EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::K
 
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ENEMYTYPE::IMMOLATION, ID, velocity, pos, velocity,
+		ENEMYTYPE::IMMOLATION, ID, pos, velocity,
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
@@ -187,16 +188,15 @@ EnemyObject* EnemyManager::createSwarmer()
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
-	EnemyObject* enemyObject;
+	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent;
-	AIComponent* aiComponent;
-	InputComponent* input;
-	PhysicsComponent* physicsComponent;
-	EnemyAttackComponent* attackComponent;
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyAttackingState* attackState;
-	EnemyMovingState* moveState;
+	EnemyState* moveState = nullptr;
 
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
@@ -231,7 +231,7 @@ EnemyObject* EnemyManager::createSwarmer()
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ENEMYTYPE::SWARMER, ID, velocity, pos, velocity,
+		ENEMYTYPE::SWARMER, ID, pos, velocity,
 		pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);
@@ -239,17 +239,17 @@ EnemyObject* EnemyManager::createSwarmer()
 	Spell* spell = new SpSwarmProjectile(
 		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
 	);
-	enemyObject->addSpell(spell);	// NECESSARY
+	enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
 
 
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
-//	attackComponent = new SwarmerEnemyAttack(*enemyObject, this->activeEnemiesCount, projectileDamage, attackCooldown, projectileRange);
 	// STATES
-//	attackState = new EnemyAttackingState(*enemyObject, *aiComponent, *attackComponent);
-	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
+//	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
+//	moveState = new SwarmerSeekingState(*enemyObject, *aiComponent, this->pGrid);
+	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++);
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
@@ -284,11 +284,6 @@ void EnemyManager::update()
 
 				// Grab the next enemy in line
 				EnemyObject* freshEnemy = this->waves.front()->enemies.front();
-
-				// Was bobby a swarmer?
-				if (freshEnemy->getEnemyType() == ENEMYTYPE::SWARMER) {
-					this->pSwarmers->activateNext(); // If so then activate him!
-				}
 
 				// Remove his homelink
 				this->waves.front()->enemies.pop_front();
@@ -331,6 +326,7 @@ void EnemyManager::update()
 void EnemyManager::cleanUp()
 {
 	this->cleanLevel();
+	this->pGrid->cleanUp();
 	this->pSwarmers->cleanUp();
 	delete this->pSwarmers;
 }

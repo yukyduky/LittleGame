@@ -32,7 +32,7 @@ private:
 	void updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos);
 
 public:
-	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, float speed, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
+	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
 
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
 	EnemyAttackComponent* GETattackComponent();
