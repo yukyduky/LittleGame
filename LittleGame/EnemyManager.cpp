@@ -204,7 +204,7 @@ void EnemyManager::update()
 	else {
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
-			//StateManager::pushState(RewardMenuState::getInstance());
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 		}
 	}
 }

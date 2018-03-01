@@ -261,15 +261,11 @@ Menu * RewardMenuState::initRewardMenu()
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 
-
-	//this->menus[MENUS::START] = menu;
 	return menu;
 }
 
 void RewardMenuState::provide(std::vector<Spell*> spellPackage)
 {
-	//this->spellsPackage = spellsPackage;
-
 	this->spellPackage.clear();
 
 	for (auto i : spellPackage)
