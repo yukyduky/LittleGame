@@ -3,7 +3,7 @@
 #include "EnemyObject.h"
 #include "GamePlayState.h"
 #include "StateManager.h"
-#include "EndState.h"
+//#include "EndState.h"
 
 ImmolationEnemyAttack::ImmolationEnemyAttack(
 	float damage, float attackDuration, float attackRange, int* pActiveEnemiesCount,

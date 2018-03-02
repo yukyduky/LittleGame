@@ -84,7 +84,7 @@ void D3D::createSwapChain()
 }
 
 void D3D::createVertexBuffer(ID3D11Buffer ** gVertexBuffer, void* v, size_t& stride, size_t& offset, size_t numVertices)
-{
+{	
 	// Describe the vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	memset(&vertexBufferDesc, 0, sizeof(D3D11_BUFFER_DESC));

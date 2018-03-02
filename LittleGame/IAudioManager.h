@@ -60,6 +60,7 @@ public:
 	virtual void stopSound() = 0;
 	virtual void pause(MUSIC::NAME name) = 0;
 	virtual void pause(SOUND::NAME name) = 0;
+	virtual void adjustMaster(bool value) = 0;
 	//Changes both sound and music to parameter (0-100)
 	virtual void adjustMaster(float volume) = 0;
 	//Changes music to parameter (0-100)

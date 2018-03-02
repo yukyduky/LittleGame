@@ -4,8 +4,8 @@
 
 AudioManager::AudioManager()
 {
-	this->soundVolume = 20;
-	this->musicVolume = 6;
+	this->soundVolume = 10.0f;
+	this->musicVolume = 3.0f;
 }
 
 int AudioManager::init()
@@ -140,9 +140,32 @@ void AudioManager::adjustMaster(float volume)
 	this->adjustMusic(volume);
 }
 
+void AudioManager::adjustMaster(bool value)
+{
+	if (value)
+	{
+		this->adjustEffects(this->musicVolume + 5.0f);
+		this->adjustMusic(this->soundVolume + 5.0f);
+	}
+	else
+	{
+		this->adjustEffects(this->musicVolume - 5.0f);
+		this->adjustMusic(this->soundVolume - 5.0f);
+	}
+}
+
 void AudioManager::adjustMusic(float volume)
 {
-	for (size_t i = 0; i < MUSICSTATE::SIZE; i++)
+	this->musicVolume = volume;
+	if (this->musicVolume < 0.0f)
+	{
+		this->musicVolume = 0.0f;
+	}
+	else if (this->musicVolume > 100.0f)
+	{
+		this->musicVolume = 100.0f;
+	}
+	for (int i = 0; i < MUSICSTATE::SIZE; i++)
 	{
 		this->currentMusic[i].setVolume(volume);
 	}
@@ -150,7 +173,16 @@ void AudioManager::adjustMusic(float volume)
 
 void AudioManager::adjustEffects(float volume)
 {
-	this->currentSound.setVolume(volume);
+	this->soundVolume = volume;
+	if (this->soundVolume < 0.0f)
+	{
+		this->soundVolume = 0.0f;
+	}
+	else if (this->soundVolume > 100.0f)
+	{
+		this->soundVolume = 100.0f;
+	}
+	this->currentSound.setVolume(this->soundVolume);
 }
 
 void AudioManager::setRepeatMusic(bool repeat)

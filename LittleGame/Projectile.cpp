@@ -32,10 +32,9 @@ void Projectile::setDirection(XMVECTOR dir) {
 	DirectX::XMStoreFloat3(&this->direction, dir);
 }
 
-XMVECTOR Projectile::getDirection() {
-	DirectX::XMVECTOR directionVector = DirectX::XMLoadFloat3(&this->direction);
-	
-	return directionVector;
+DirectX::XMFLOAT3 Projectile::getDirection()
+{	
+	return this->direction;
 }
 
 Spell * Projectile::getSpell()
@@ -60,7 +59,9 @@ void Projectile::update()
 	this->setPosition(pos);
 	if (this->spinn)
 	{
-		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->getDirection(), static_cast<float>(this->rangeCounter)));
+		XMVECTOR dir = XMLoadFloat3(&this->direction);
+		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
+		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
 	}
 
 	this->rangeCounter++;

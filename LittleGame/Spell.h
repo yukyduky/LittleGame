@@ -11,7 +11,7 @@
 
 
 //Template for when glyphs become relevant
-enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
+enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3, SIZE};
 // Type to not need to check dynamic_cast NOT USED YET
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
@@ -22,7 +22,8 @@ enum class NAME {
 	//Damage
 	AUTOATTACK, FIRE, BOMB
 	//Mobility
-	, DASH, BUFF
+	, DASH, BUFF,
+	SIZE
 };
 
 /* --- SPELLS
@@ -62,6 +63,8 @@ public:
 	float getCoolDown() { return this->coolDown; };
 	void setCost(float input) { this->cost = input; }
 	float getCost() { return this->cost; }
+	void setActive(bool input) { this->active = input; }
+	bool getActive() { return this->active; }
 
 	// TSC = TimeSinceCast
 	float getTSC() { return this->timeSinceCast; };
@@ -80,6 +83,9 @@ private:
 	float timeSinceCast = 0.0f;
 	// EnergyCost
 	float cost = 0;
+
+protected:
+	bool active = false;
 };
 
 

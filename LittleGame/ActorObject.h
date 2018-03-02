@@ -3,14 +3,8 @@
 #define ACTOROBJECT_H
 
 #include "GameObject.h"
-#include "AbilityComponent.h"
 #include "InputComponent.h"
 #include "Locator.h"
-//#include "GraphicsComponent.h"
-//#include "KeyboardComponent.h"
-//*#include "ControllerComponent.h"
-//#include "GamePlayState.h"
-//#include "Crosshair.h"
 
 #include "D3D.h"
 #include "list"
@@ -34,6 +28,7 @@ protected:
 	std::vector<Spell*> spells;
 	//Current spell that wil be cast by fireAbilityX
 	Spell* selectedSpell = nullptr;
+	int selectedSpellIntValue = 0;
 	float hp = 0;
 	float hpMAX = 0;
 
@@ -65,6 +60,7 @@ public:
 	virtual void setSpeed(float speed);
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
+	std::vector<Spell*> GETSpells() { return this->spells; };
 	virtual float GEThpRemainingFloat() { return (this->hp / this->hpMAX); }
 
 	virtual void receive(GameObject & obj, Message msg);
@@ -97,6 +93,7 @@ public:
 	void selectAbility3();
 	void selectAbility4();
 	void fireAbilityX();
+	void pauseMenu();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Sets pInputComponent as both a directlink and components.push_back()
@@ -122,6 +119,8 @@ public:
 	void switchSpell();
 	// Return vector of spells
 	std::vector<Spell*> GETspellsVector() { return this->spells; }
+	int GETcurrentSpellInt() { return this->selectedSpellIntValue; }
+	void changeSpell(int spell, int glyph);
 
 	//Crosshair
 	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }

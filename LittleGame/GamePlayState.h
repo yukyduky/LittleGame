@@ -14,7 +14,6 @@
 #include "Camera.h"
 //#include "PhysicsComponent.h"
 #include "CollisionHandler.h"
-#include "FireballComponent.h"
 #include <list>
 #include "ArenaGlobals.h"
 #include "EnemyManager.h"
@@ -116,16 +115,14 @@ private:
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
 	Command* selectCommand = nullptr;
-
-	///std::list<PhysicsComponent*> physicsListStatic;
-	///std::list<PhysicsComponent*> physicsListDynamic;
-
-	//void updatePhysicsComponents();
 	
 	void checkCollisions();
 	void updateFloorPattern();
 	void updateFloor();
 	void checkPlayerTileStatus();
+
+	// Template version of picked up loot, is provided to RMS
+	int nrOfPickedUpLoot = 0;
 	void generatorDischarge(Index index);
 
 	MouseInput* mousePicker = nullptr;
@@ -181,11 +178,11 @@ public:
 
 	void initPlayer();
 
-	/*RETURNS THE NEW ID*/
-	int newID() { return this->ID++; }
-
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+
+	/*RETURNS THE NEW ID*/
+	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
 

@@ -3,7 +3,7 @@
 #define ARENAGLOBALS_H_
 
 #define TIMEBETWEENPATTERNS 20
-#define GRAVITY -9.82
+#define GRAVITY -9.82f
 
 namespace ARENADATA {
 		static int arenaWidth;

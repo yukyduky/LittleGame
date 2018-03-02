@@ -1,8 +1,11 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
+#include "MainMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
+#include "RewardMenuState.h"
+
 #include "RestartState.h"
 //Include spells
 //#include "Spell.h"
@@ -66,9 +69,9 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-	for (auto &i : this->spells) {
-		delete i;
-	}
+	//for (auto &i : this->spells) {
+	//	delete i;
+	//}
 	this->spells.clear();
 	// Cleanup all the components
 	for (auto &c : this->components) {
@@ -305,10 +308,16 @@ void ActorObject::fireAbilityX()
 	}
 }
 
+void ActorObject::pauseMenu()
+{
+	StateManager::pushState(MainMenuState::getInstance());
+}
+
 void ActorObject::selectAbility1()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[1];
+		this->selectedSpellIntValue = 1;
 	}
 	else {
 
@@ -321,6 +330,7 @@ void ActorObject::selectAbility2()
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
+		this->selectedSpellIntValue = 2;
 	}
 	else {
 
@@ -331,7 +341,7 @@ void ActorObject::selectAbility3()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[3];
-		
+		this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -340,8 +350,11 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
+		this->selectedSpellIntValue = 4;
 	}
 	else {
 
@@ -442,13 +455,13 @@ void ActorObject::switchSpell()
 				i = new SpAutoAttack(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG3(this);
 				break;
 			}
 			break;
@@ -460,13 +473,13 @@ void ActorObject::switchSpell()
 				i = new SpFire(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpFire(this);
+				i = new SpFireG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpFire(this);
+				i = new SpFireG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpFire(this);
+				i = new SpFireG3(this);
 				break;
 			}
 			break;
@@ -478,13 +491,13 @@ void ActorObject::switchSpell()
 				i = new SpBomb(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpBomb(this);
+				i = new SpBombG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpBomb(this);
+				i = new SpBombG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBomb(this);
+				i = new SpBombG3(this);
 				break;
 			}
 			break;
@@ -496,13 +509,13 @@ void ActorObject::switchSpell()
 				i = new SpDash(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpDash(this);
+				i = new SpDashG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpDash(this);
+				i = new SpDashG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpDash(this);
+				i = new SpDashG3(this);
 				break;
 			}
 			break;
@@ -514,13 +527,13 @@ void ActorObject::switchSpell()
 				i = new SpBuff(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpBuff(this);
+				i = new SpBuffG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpBuff(this);
+				i = new SpBuffG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBuff(this);
+				i = new SpBuffG3(this);
 				break;
 			}
 			break;
@@ -529,7 +542,11 @@ void ActorObject::switchSpell()
 		newSpells.push_back(i);
 
 	}
-	
+
+	//// Clean up old spells
+	//for (auto &i : this->spells) {
+	//	delete i;
+	//}
 	this->spells.clear();
 	
 	for (auto i : newSpells)
@@ -538,4 +555,11 @@ void ActorObject::switchSpell()
 	}
 	
 	newSpells.clear();
+
+	this->selectAbility1();
+}
+
+void ActorObject::changeSpell(int spell, int glyph)
+{
+	this->spells[spell]->insertGlyph((GLYPHTYPE)glyph);
 }

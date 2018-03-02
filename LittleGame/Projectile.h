@@ -21,7 +21,7 @@ public:
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
 	void setDirection(XMVECTOR dir);
-	XMVECTOR getDirection();
+	XMFLOAT3 getDirection();
 	void setSpell(Spell* spell) { this->spell = spell; }
 	void setRange(float range) { this->range = range; }
 
@@ -39,7 +39,7 @@ private:
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel
-	int range = 0;
+	float range = 0.0f;
 	int rangeCounter = 0;
 	
 	std::list<GameObject*> previouslyHit;

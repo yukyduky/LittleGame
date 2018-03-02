@@ -16,6 +16,7 @@
 #include "StateManager.h"
 
 #include "IncludeSpells.h"
+#include "RewardMenuState.h"
 
 
 
@@ -53,6 +54,10 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
+					if (k->getType() == OBJECTTYPE::TYPE::PROJECTILE &&
+						k->getState() == OBJECTSTATE::TYPE::DEAD)
+						int tester007 = 700;
+
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						// Dynamic Object must be within the same part of the quad tree
@@ -386,14 +391,14 @@ void GamePlayState::generatorDischarge(Index index)
 
 void GamePlayState::init() {
 	this->lm.selectArena();
-	this->quadTree.initializeQuadTree(0, ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight(), 0, 0);
-	this->camera.init(ARENADATA::GETarenaWidth(), ARENADATA::GETarenaHeight());
+	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
+	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
 	this->ID = this->GUI.initGUI(
 		this->newID(),
 		this->camera.GETcameraPos(),
-		this->camera.GETfacingDirFloat3(),
+		this->camera.GETfacingDir(),
 		this->GUIObjects,
 		this->graphics
 	);
@@ -409,12 +414,12 @@ void GamePlayState::init() {
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() * 0.5, ARENADATA::GETsquareSize() * 10, ARENADATA::GETarenaHeight() * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENADATA::GETarenaWidth() - 200.0f, ARENADATA::GETsquareSize() * 3, ARENADATA::GETarenaHeight() - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	//this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
-	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
-	this->enemyManager.startLevel1();
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
+	this->enemyManager.startLevel1(this->enemySpawnPos);
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -424,10 +429,15 @@ void GamePlayState::init() {
 	this->recoveryMode = false;
 	this->counter = 0.0;
 	this->genTimer = 10.0;
-	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	this->fallPatternCoolDown = 25.0;
 	
+
+	RewardMenuState::getInstance()->provide(this->player1);
+
+	// Player will always get 2 rewards as a base
+	this->nrOfPickedUpLoot = 2;
 }
 
 void GamePlayState::cleanUp()
@@ -468,10 +478,6 @@ void GamePlayState::cleanUp()
 	}
 
 	this->quadTree.cleanup();
-
-	//for (auto && iterator2 : this->pointLights) {
-	//	delete &iterator2;
-	//}
 
 	this->pointLights.clear();
 	
@@ -522,6 +528,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
 			StateManager::changeState(RestartState::getInstance());
+		}
+		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
+			//this->player1->GETSpells();
+			RestartState::getInstance()->provide(this->player1->GETSpells());
+			StateManager::changeState(RestartState::getInstance());
+			//Sends the number of Lootboxes picked up druring the game
+			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
 		}
 	}
 }
@@ -687,15 +700,15 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, (props.size + 5));
+	phyComp = new PhysicsComponent(*proj, (props.size + 5));
 
 	
 	//Add proj to objectArrays
 	this->dynamicObjects.push_back(proj);
-//	this->projectiles.push_back(proj);
 
 	return proj;
 }
+
 //_________________________________________//
 //                                         //
 //              END OF PUBLIC              //
