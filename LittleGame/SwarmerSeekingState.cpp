@@ -26,16 +26,15 @@ void SwarmerSeekingState::executeBehavior()
 	vecDirection = DirectX::XMVector3Normalize(vecDirection);
 	DirectX::XMStoreFloat3(&newDirection, vecDirection);
 
-
-	/// Shoot a spell (spells handle their own cooldown)
-	if (this->pHead->getDistanceToPlayer() < this->attackRange) {
-		// Cooldown is checked internally
-		this->pBrain->pushCommand(AICOMMANDS::ATTACK);
-	}
-
 	// Set SimulatedMovement & Direction
 	this->pBrain->SETsimulatedMovement(XMFLOAT2(newDirection.x, newDirection.z));
 	this->pHead->setDirection(newDirection);
+
+	/// Shoot a spell (spells handle their own cooldown)
+	// Cooldown is checked internally | This unit has unlimited attackrange! so why bother checking
+	this->pBrain->pushCommand(AICOMMANDS::ATTACK);
+
+
 
 	// Do the 'manet-shooting'
 //	this->adjustAim();

@@ -8,7 +8,7 @@ SpSwarmProjectile::SpSwarmProjectile(
 {
 	this->pPlayer = pPlayer;
 	this->projectilesMaxFlyingRange = projectilesMaxFlyingRange;
-	this->damage = dmg;
+	this->damage = 0;//dmg;
 	this->attackRange = attackRange;
 	this->setCoolDown(1.0f);
 	this->seekSpeed = 0.9;
@@ -27,7 +27,7 @@ bool SpSwarmProjectile::castSpell()
 	}
 	else
 	{
-		ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.1f), 100, this->projectilesMaxFlyingRange, false);
+		ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.1f), 200, this->projectilesMaxFlyingRange, false);
 		Projectile* pProj = this->spawnProj(props);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 
@@ -53,7 +53,7 @@ void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 		case OBJECTTYPE::INDESTRUCTIBLE: {
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
 			break;
-		}								
+		}
 	}
 }
 void SpSwarmProjectile::update()

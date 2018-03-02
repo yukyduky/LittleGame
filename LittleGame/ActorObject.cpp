@@ -162,6 +162,8 @@ void ActorObject::move()
 		actorNewPos.y = actorPos.y;
 		this->setPosition(actorNewPos);
 	}
+
+	int asdf = 3;
 }
 
 void ActorObject::moveUp()

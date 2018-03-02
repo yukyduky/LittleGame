@@ -36,7 +36,7 @@ int RandomGeneration::GenerateInt(int rangeStart, int rangeEnd) {
 		returnValue = rand() % ((rangeEnd + 1) - rangeStart) + rangeStart;
 	}
 
-	return returnValue;
+	return rand() % ((rangeEnd + 1) - rangeStart) + rangeStart;
 }
 
 float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {

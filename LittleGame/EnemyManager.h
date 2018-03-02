@@ -55,7 +55,7 @@ private:
 	int capacity = -1;
 	int count = 0;
 	int toBeActivated = 0;
-	XMFLOAT3 averagePosition = { -1, -1, -1 };
+	XMFLOAT3 averagePosition = { 0, 0, 0 };
 	ArrayNode* mainArray = nullptr;
 	AliveNode* firstAlive = nullptr;
 	DeadNode* firstDead = nullptr;
@@ -63,41 +63,48 @@ private:
 	void activateIndex(size_t index) {
 		// Check if it has already been activated
 		if (this->mainArray[index].alive == nullptr) {
-			// Activate it
-			bool found = false;
+
 			AliveNode* freshNode = new AliveNode();
+			this->mainArray[index].alive = freshNode;
 
-			// Connect behind
-			int stepper = index;
-			while (stepper > -1 && !found) {
-				AliveNode* toBeBack = this->mainArray[stepper].alive;
-
-				if (toBeBack != nullptr) {
-					found = true;
-					// Connect the freshNode to it's proper back and front
-					freshNode->back = toBeBack;
-					freshNode->forward = toBeBack->forward;
-
-					// Replace the old links
-					freshNode->back->forward = freshNode;
-
-					// Connect to it's forward if it exists
-					if (freshNode->forward != nullptr) {
-						freshNode->forward->back = freshNode;
-					}
-				}
-
-				stepper--;
+			// If this is going to be the only one alive
+			if (this->firstAlive == nullptr) {
+				this->firstAlive = this->mainArray[index].alive;
 			}
+			else {
+				// Activate it
+				bool found = false;
+				
+				// Connect behind
+				int stepper = index - 1;
+				while (stepper > -1 && !found) {
+					AliveNode* toBeBack = this->mainArray[stepper].alive;
+
+					if (toBeBack != nullptr) {
+						found = true;
+						// Connect the freshNode to it's proper back and front
+						freshNode->back = toBeBack;
+
+						// Connect to front if it exists
+						if (toBeBack->forward != nullptr) {
+							freshNode->forward = toBeBack->forward;
+						}
+
+						// Replace the old links
+						freshNode->back->forward = freshNode;
+
+						// Connect to it's forward if it exists
+						if (freshNode->forward != nullptr) {
+							freshNode->forward->back = freshNode;
+						}
+					}
+					stepper--;
+				}
+			}
+			
 
 			// Connect to the array
 			freshNode->index = &this->mainArray[index];
-			this->mainArray[index].alive = freshNode;
-
-			if (this->firstAlive == nullptr) {
-				this->firstAlive = freshNode;
-			}
-
 			this->count++;
 			/// Connect front will never occur if we always activate through toBeActivated
 		}
@@ -142,7 +149,7 @@ public:
 	}
 	void update() {
 		// Update the averagePosition
-		XMFLOAT3 averagePosition = { 0, 0, 0 };
+		XMFLOAT3 averagePosition_ = { 0, 0, 0 };
 		XMFLOAT3 currentPosition = { 0, 0, 0 };
 		AliveNode* stepper = this->firstAlive;
 
@@ -150,28 +157,28 @@ public:
 			while (stepper->forward != nullptr) {
 				// Add up all of them! (except the last one)
 				currentPosition = stepper->index->obj->GETPosition();
-				averagePosition.x += currentPosition.x;
-				averagePosition.y += currentPosition.y;
-				averagePosition.z += currentPosition.z;
+				averagePosition_.x += currentPosition.x;
+				averagePosition_.y += currentPosition.y;
+				averagePosition_.z += currentPosition.z;
 
 				stepper = stepper->forward;
 			}
 
 			// Add up the last one
 			currentPosition = this->mainArray[0].obj->GETPosition();
-			averagePosition.x += currentPosition.x;
-			averagePosition.y += currentPosition.y;
-			averagePosition.z += currentPosition.z;
+			averagePosition_.x += currentPosition.x;
+			averagePosition_.y += currentPosition.y;
+			averagePosition_.z += currentPosition.z;
 
 			// We'd rather multiply than divide
 			float optimizer = 1.0 / this->count;
 
 			// Divide down
-			averagePosition.x *= optimizer;
-			averagePosition.y *= optimizer;
-			averagePosition.z *= optimizer;
+			averagePosition_.x *= optimizer;
+			averagePosition_.y *= optimizer;
+			averagePosition_.z *= optimizer;
 
-			this->averagePosition = averagePosition;
+			this->averagePosition = averagePosition_;
 		}
 	}
 	XMFLOAT3 getAveragePosition() {
@@ -197,34 +204,44 @@ public:
 		this->activateIndex(swarmerID);
 	}
 	void remove(int index) {
+		AliveNode* nodeToBeRemoved = this->mainArray[index].alive;
 		if (this->firstAlive != nullptr) {
 			// To remove the AliveNode, connect it's 'back' and 'forward' pointers
-			AliveNode* back = this->mainArray[index].alive->back;
-			AliveNode* forward = this->mainArray[index].alive->forward;
+			AliveNode* back = nodeToBeRemoved->back;
+			AliveNode* forward = nodeToBeRemoved->forward;
 
-			
-			if (back != nullptr) {
-				back->forward = forward;
-			}
-			if (forward != nullptr) {
-				forward->back = back;
-			}
-				
 			// If we're deleting the first one
-			if (this->mainArray[index].alive == this->firstAlive) {
-				if (this->mainArray[index].alive->forward != nullptr) {
-					this->firstAlive = this->mainArray[index].alive->forward;
+			if (nodeToBeRemoved == this->firstAlive) {
+				// And we have something in front of us
+				if (nodeToBeRemoved->forward != nullptr) {
+					// Make what's in front of us the firstAlive node
+					this->firstAlive = nodeToBeRemoved->forward;
 				}
+				// And nothing ahead, we were the only node left
 				else {
 					this->firstAlive = nullptr;
 				}
-				
 			}
-
+			// nodeToBeRemoved definitely has a node behind itself, but not necessarily one ahead.
+			else {
+				// It does have one ahead
+				if (forward != nullptr) {
+					// So it has one ahead and back
+					forward->back = back;
+					back->forward = forward;
+				}
+				// It only has one behind
+				else {
+					// Remove link so that 'back' has nothing in front of itself
+					back->forward = nullptr;
+				}
+			}
+			
 			// Also clean!
 			delete this->mainArray[index].alive;
 			this->mainArray[index].alive = nullptr;
 			this->count--;
+			Locator::getGameTime()->UpdateFrameTime();
 		}
 	}
 	void cleanUp() {

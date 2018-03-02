@@ -28,7 +28,6 @@ public:
 		this->pBrain->pushCommand(AICOMMANDS::MOVE);
 
 		// If we've come inside the grid, ACT LIKE IT.
-
 		if (this->inOrOutPlus()) {
 			EnemyState* seekingState = new SwarmerSeekingState(
 				*this->pHead, *this->pBrain, this->getGrid(), this->getSwarmerID()

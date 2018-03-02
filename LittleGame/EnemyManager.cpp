@@ -48,8 +48,8 @@ void EnemyManager::startLevel1()
 
 	// TESTING -----------
 	this->currentWaveCount = 1;
-	this->currentWaveSize = 3;
-	this->swarmerCount = 5;
+	this->currentWaveSize = 0;
+	this->swarmerCount = 7;
 	// TESTING -----------
 
 	// Per wave
@@ -91,7 +91,7 @@ void EnemyManager::startLevel1()
 	}
 
 	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
-	this->activeEnemiesCount--;
+//	this->activeEnemiesCount--;
 }
 
 void EnemyManager::cleanLevel()
@@ -225,7 +225,7 @@ EnemyObject* EnemyManager::createSwarmer()
 
 	float projectileDamage = 3;
 	float attackCooldown = 0.5;
-	float projectileRange = 600;
+	float projectileRange = 450;
 	float attackRange = 500;
 
 	/// A T T A C H M E N T
@@ -315,6 +315,8 @@ void EnemyManager::update()
 		if (this->activeEnemiesCount < 1) {
 			//StateManager::pushState(this->endState);
 			int asdf1 = 3;
+			/// only for testing
+			this->cleanUp();
 		}
 	}
 
@@ -326,7 +328,7 @@ void EnemyManager::update()
 void EnemyManager::cleanUp()
 {
 	this->cleanLevel();
-	this->pGrid->cleanUp();
 	this->pSwarmers->cleanUp();
+	this->pGrid->cleanUp();
 	delete this->pSwarmers;
 }

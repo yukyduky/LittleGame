@@ -37,6 +37,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	int frames = 0;
 	char msgbuf[20];
 
+	Locator::getGameTime()->StartTimer();
+	Locator::getGameTime()->UpdateFrameTime();
+
 	// Game loop
 	while (gm.getIsRunning()) {
 		// Update delta time
@@ -56,6 +59,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			timeLastFrame = 0;
 			OutputDebugStringA(msgbuf);
 		}
+
 	}
 
 	gm.cleanUp();
