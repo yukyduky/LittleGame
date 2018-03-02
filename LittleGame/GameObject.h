@@ -48,6 +48,7 @@ protected:
 	GUIComponent* graphicsComponentUI = nullptr;
 
 	const size_t ID;
+	XMFLOAT3 previousPos;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTTYPE::TYPE type;
@@ -79,7 +80,9 @@ public:
 
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
 	void setPositionY(float value) { this->pos.y = value; }
+	void SETpreviousPos(XMFLOAT3 pos) { this->previousPos = pos; }
 	XMFLOAT3 GETPosition() const { return this->pos; }
+	XMFLOAT3 GETpreviousPos() const { return this->previousPos; }
 	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }

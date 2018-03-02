@@ -205,13 +205,10 @@ void CollisionHandler::collisionPlayerPlayer() {
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
-		this->centerToCenterVector.x * this->divisionFactor,
-		this->centerToCenterVector.y * this->divisionFactor,
-		this->centerToCenterVector.z * this->divisionFactor
+		this->stepper * (this->centerToCenterVector.x * this->divisionFactor),
+		this->stepper * (this->centerToCenterVector.y * this->divisionFactor),
+		this->stepper * (this->centerToCenterVector.z * this->divisionFactor)
 	};
-
-	/// Might be needed if we upgrade this code
-	//this->radiusDistanceVector = (this->boundingArea1->Radius + this->boundingArea2->Radius);
 
 	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
 	this->collidable2->setPosition(this->collidable2->GETPosition() + (this->resultVector * this->stepper));
@@ -219,7 +216,7 @@ void CollisionHandler::collisionPlayerPlayer() {
 
 void CollisionHandler::collisionPlayerEnemy() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = PLAYER
+	// COLLIDABLE1 = PLAYER
 	if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
@@ -234,58 +231,45 @@ void CollisionHandler::collisionPlayerEnemy() {
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
-		this->centerToCenterVector.x * this->divisionFactor,
+		(this->stepper * 3) * (this->centerToCenterVector.x * this->divisionFactor),
 		0.0,
-		this->centerToCenterVector.z * this->divisionFactor
+		(this->stepper * 3) * (this->centerToCenterVector.z * this->divisionFactor)
 	};
 
 	// Enemies are moved out of the way of players
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
-	//this->collidable2->setVelocity(this->resultVector * 10);
 }
 
 void CollisionHandler::collisionPlayerDoodad() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = PLAYER
+	// COLLIDABLE1 = PLAYER
 	if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// Currently interacting with a doodad does nothing,
-	// since 99% of the time they are invisible, invincible, etc. etc.
+	// Moving the player only, since the doodads cannot move.
+	this->collidable1->setPosition(this->collidable1->GETpreviousPos());
 }
 
 void CollisionHandler::collisionPlayerIndestruct() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = PLAYER
-	if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
-		this->tempCollidableHolder = this->collidable1;
-		this->collidable1 = this->collidable2;
-		this->collidable2 = this->tempCollidableHolder;
-	}
+	// COLLIDABLE1 = PLAYER
+	//if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
+	//	this->tempCollidableHolder = this->collidable1;
+	//	this->collidable1 = this->collidable2;
+	//	this->collidable2 = this->tempCollidableHolder;
+	//}
 
-	this->calculateDistance(
-		this->collidable1->GETPosition(),
-		this->collidable2->GETPosition()
-	);
-
-	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0f / this->distance);
-	this->resultVector = {
-		this->centerToCenterVector.x * this->divisionFactor,
-		0.0,
-		this->centerToCenterVector.z * this->divisionFactor
-	};
-
-	// Moving the player only, since the indestructibles cannot move.
-	//collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
+	// NOTE:
+	// Only walls are indesctructibles, and they interact with the player
+	// in a different way (see 'ActorObject', 'move' functions).
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = PLAYER
+	// COLLIDABLE1 = PLAYER
 	if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
@@ -298,46 +282,26 @@ void CollisionHandler::collisionPlayerProjectile() {
 }
 
 void CollisionHandler::collisionEnemyEnemy() {
-	/// LEFT OUT FOR NOW; PROBABLY ENOUGH WITH THE IF-STATEMENT ABOVE
-	//if (this->collidable1->GETPosition().y == this->collidable2->GETPosition().y)
-	//	this->collidable2->nudgePos();
-
 	this->calculateDistance(
 		this->collidable1->GETPosition(),
 		this->collidable2->GETPosition()
 	);
 
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-
 	this->divisionFactor = (1.0f / this->distance);
-	this->resultVector1 = {
-		this->centerToCenterVector.x * this->divisionFactor,
+	this->resultVector = {
+		this->stepper * (this->centerToCenterVector.x * this->divisionFactor),
 		0.0,
-		this->centerToCenterVector.z * this->divisionFactor
+		this->stepper * this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	//this->collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector1 /** this->stepper*/));
-	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector1 * this->stepper));
+	// Enemies are moved, and not doodads
+	this->collidable2->setPosition(this->collidable2->GETPosition() - this->resultVector);
 }
 
 void CollisionHandler::collisionEnemyDoodad() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = ENEMY
-	if (this->collidable1->getType() != OBJECTTYPE::ENEMY) {
-		this->tempCollidableHolder = this->collidable1;
-		this->collidable1 = this->collidable2;
-		this->collidable2 = this->tempCollidableHolder;
-	}
-
-	// Currently interacting with a doodad does nothing,
-	// since 99% of the time they are invisible, invincible, etc. etc.
-
-	return;
-}
-
-void CollisionHandler::collisionEnemyIndestruct() {
-	// Swapping places of collidables with eachother if necessary
-	// collidable1 = ENEMY
+	// COLLIDABLE1 = ENEMY
 	if (this->collidable1->getType() != OBJECTTYPE::ENEMY) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
@@ -352,9 +316,35 @@ void CollisionHandler::collisionEnemyIndestruct() {
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
-		this->centerToCenterVector.x * this->divisionFactor,
+		this->stepper * (this->centerToCenterVector.x * this->divisionFactor),
 		0.0,
-		this->centerToCenterVector.z * this->divisionFactor
+		this->stepper * (this->centerToCenterVector.z * this->divisionFactor)
+	};
+
+	// Enemies are moved, and not doodads
+	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+}
+
+void CollisionHandler::collisionEnemyIndestruct() {
+	// Swapping places of collidables with eachother if necessary
+	// COLLIDABLE1 = ENEMY
+	if (this->collidable1->getType() != OBJECTTYPE::ENEMY) {
+		this->tempCollidableHolder = this->collidable1;
+		this->collidable1 = this->collidable2;
+		this->collidable2 = this->tempCollidableHolder;
+	}
+
+	this->calculateDistance(
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
+	);
+
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+	this->divisionFactor = (1.0f / this->distance);
+	this->resultVector = {
+		(this->stepper * 3) * (this->centerToCenterVector.x * this->divisionFactor),
+		0.0,
+		(this->stepper * 3) * (this->centerToCenterVector.z * this->divisionFactor)
 	};
 
 	// Moving the player only, since the indestructibles cannot move.
@@ -363,7 +353,7 @@ void CollisionHandler::collisionEnemyIndestruct() {
 
 void CollisionHandler::collisionEnemyProjectile() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = ENEMY
+	// COLLIDABLE1 = ENEMY
 	if (this->collidable1->getType() != OBJECTTYPE::ENEMY) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
@@ -383,12 +373,12 @@ void CollisionHandler::collisionDoodadDoodad() {
 
 void CollisionHandler::collisionDoodadIndestruct() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = DOODAD
-	if (this->collidable1->getType() != OBJECTTYPE::DOODAD) {
-		this->tempCollidableHolder = this->collidable1;
-		this->collidable1 = this->collidable2;
-		this->collidable2 = this->tempCollidableHolder;
-	}
+	// COLLIDABLE1 = DOODAD
+	//if (this->collidable1->getType() != OBJECTTYPE::DOODAD) {
+	//	this->tempCollidableHolder = this->collidable1;
+	//	this->collidable1 = this->collidable2;
+	//	this->collidable2 = this->tempCollidableHolder;
+	//}
 
 	// A doodad colliding with an indestructible?
 	// Also seems kinda silly.
@@ -397,7 +387,7 @@ void CollisionHandler::collisionDoodadIndestruct() {
 
 void CollisionHandler::collisionDoodadProjectile() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = DOODAD
+	// COLLIDABLE1 = DOODAD
 	if (this->collidable1->getType() != OBJECTTYPE::DOODAD) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
@@ -415,7 +405,7 @@ void CollisionHandler::collisionIndestructIndestruct() {
 
 void CollisionHandler::collisionIndestrucProjectile() {
 	// Swapping places of collidables with eachother if necessary
-	// collidable1 = INDESTRUCTIBLE
+	// COLLIDABLE1 = INDESTRUCTIBLE
 	if (this->collidable1->getType() != OBJECTTYPE::INDESTRUCTIBLE) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
