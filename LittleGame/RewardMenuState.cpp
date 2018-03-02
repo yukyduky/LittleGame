@@ -83,7 +83,7 @@ Menu * RewardMenuState::initRewardMenu()
 	menu->addQuad(object);
 
 	//Glyph desc
-	text = L" Glyph 1 (G1) lowers cooldown. \n\n Glyph 2 (G2) incresees power. \n\n Glyph 3 (G3) greatly incresees power but incresees cooldown.";
+	text = L" Glyph 1 (G1) lowers cooldown. \n\n Glyph 2 (G2) h'o'jer power. \n\n Glyph 3 (G3) greatly h'o'jer power but h'o'jer cooldown.";
 	object = new MenuObject(this->newID(),
 		{ -300.0f,0.0f, 200.0f,400.0f }, D2D1::ColorF::DarkKhaki,
 		text);

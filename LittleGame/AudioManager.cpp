@@ -4,8 +4,8 @@
 
 AudioManager::AudioManager()
 {
-	this->soundVolume = 10.0f;
-	this->musicVolume = 3.0f;
+	this->soundVolume = 0.0f;
+	this->musicVolume = 0.0f;
 }
 
 int AudioManager::init()
@@ -144,12 +144,12 @@ void AudioManager::adjustMaster(bool value)
 {
 	if (value)
 	{
-		this->adjustEffects(this->musicVolume + 5.0f);
+		this->adjustEffects(this->musicVolume + 1.0f);
 		this->adjustMusic(this->soundVolume + 5.0f);
 	}
 	else
 	{
-		this->adjustEffects(this->musicVolume - 5.0f);
+		this->adjustEffects(this->musicVolume - 1.0f);
 		this->adjustMusic(this->soundVolume - 5.0f);
 	}
 }
