@@ -417,13 +417,13 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	GameObject* object = nullptr;
 	BlockComponent* block = nullptr;
 	PhysicsComponent* bSphere = nullptr;
-	object = new ActorObject(ID, 0.0f, genPos, XMFLOAT3(0.0f, 0.0f, 0.0f), this->pGPS, OBJECTTYPE::ENEMY, 100.0f);
+	object = new ActorObject(ID, 0.0f, genPos, XMFLOAT3(0.0f, 0.0f, 0.0f), this->pGPS, OBJECTTYPE::ENEMY, 500.0f);
 	object->setType(OBJECTTYPE::GENERATOR);
 	object->setState(OBJECTSTATE::TYPE::GENERATORRISING);
 	XMFLOAT3 scale(this->squareSize * 0.5f, this->squareSize * 0.5f, this->squareSize * 0.5f);						// TOBE DELETED
 	XMFLOAT3 rotation(0, 0, 0);
 	block = new BlockComponent(*this->pGPS, *object, genColor, scale, rotation);
-	bSphere = new PhysicsComponent(*object, static_cast<float>(this->squareSize) * 0.5f);
+	bSphere = new PhysicsComponent(*object, static_cast<float>(this->squareSize) * 0.75f);
 	XMFLOAT3 bSpherePos = genPos;
 	bSpherePos.y = this->squareSize * 0.5f;
 	bSphere->updateBoundingArea(bSpherePos);

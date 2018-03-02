@@ -415,8 +415,8 @@ void GamePlayState::init() {
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
 	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	//this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	//this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1(this->enemySpawnPos);
