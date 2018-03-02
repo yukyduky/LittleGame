@@ -100,6 +100,8 @@ private:
 	double genEffectTime;
 	bool recoveryMode;
 	int currentPatternNr;
+	double fallPatternCoolDown;
+	double dt;
 
 	//All spawnPositions that will be used in the EnemyHandler
 	enemySpawnPositions enemySpawnPos;
@@ -122,8 +124,9 @@ private:
 	
 	void checkCollisions();
 	void updateFloorPattern();
+	void updateFloor();
 	void checkPlayerTileStatus();
-	void updateGenerators();
+	void generatorDischarge(Index index);
 
 	MouseInput* mousePicker = nullptr;
 	float tempFloater = 1.0f;

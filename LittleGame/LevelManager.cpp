@@ -367,10 +367,9 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 	}
 }
 
-void LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATUS::STATUS& status, EFFECTSTATUS::EFFECT& effect)
+void LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATE::STATE& state)
 {
-	status = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].status;
-	effect = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].currentEffect;
+	state = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].state;
 }
 
 DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
@@ -388,50 +387,38 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	do {
 		index.x = Locator::getRandomGenerator()->GenerateInt(1, grid.size() - 2);
 		index.y = Locator::getRandomGenerator()->GenerateInt(1, grid[0].size() - 2);
-	} while (grid[index.x][index.y].occupiedByGenerator);
+	} while (grid[index.x][index.y].state == TILESTATE::GENERATOR);
 	
 	float squareSize = ARENADATA::GETsquareSize();
 	XMFLOAT3 genPos = XMFLOAT3(squareSize * 0.5f + index.x * squareSize, -squareSize * 0.5f, squareSize * 0.5f + index.y * squareSize);
-	int genType = Locator::getRandomGenerator()->GenerateInt(0, GENERATOR::TYPE::SIZE - 1);
-	grid[index.x][index.y].occupiedByGenerator = true;
+	int genType = Locator::getRandomGenerator()->GenerateInt(0, GENERATOR::TYPE::COOLED);
+	grid[index.x][index.y].state = TILESTATE::GENERATOR;
 	XMFLOAT4 genColor;
 
 	switch (genType)
 	{
 	case GENERATOR::TYPE::OVERHEATED:
 		genColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-		grid[index.x][index.y].genEffect = EFFECTSTATUS::EFFECT::HEATED;
+		grid[index.x][index.y].genEffect = TILESTATE::THEATED;
 		break;
 	case GENERATOR::TYPE::COOLED:
 		genColor = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
-		grid[index.x][index.y].genEffect = EFFECTSTATUS::EFFECT::COOLED;
+		grid[index.x][index.y].genEffect = TILESTATE::TCOOLED;
 		break;
 	case GENERATOR::TYPE::OVERCHARGED:
 		genColor = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
-		grid[index.x][index.y].genEffect = EFFECTSTATUS::EFFECT::ELECTRIFIED;
+		grid[index.x][index.y].genEffect = TILESTATE::TELECTRIFIED;
 		break;
 	default:
 		break;
 	}
 	genIndex.push_back(index);
 	
-
-	Index effectIndex;
-	for (int i = 0; i < grid.size(); i++) {
-		for (int j = 0; j < grid[i].size(); j++) {
-			if (i == index.x || j == index.y) {
-				effectIndex.x = i;
-				effectIndex.y = j;
-				grid[index.x][index.y].genPattern.push_back(effectIndex);
-			}
-		}
-	}
-
 	GameObject* object = nullptr;
 	BlockComponent* block = nullptr;
 	PhysicsComponent* bSphere = nullptr;
 	object = new ActorObject(ID, 0.0f, genPos, XMFLOAT3(0.0f, 0.0f, 0.0f), this->pGPS, OBJECTTYPE::ENEMY, 100.0f);
-	object->setType(OBJECTTYPE::ENEMY);
+	object->setType(OBJECTTYPE::GENERATOR);
 	object->setState(OBJECTSTATE::TYPE::GENERATORRISING);
 	XMFLOAT3 scale(this->squareSize * 0.5f, this->squareSize * 0.5f, this->squareSize * 0.5f);						// TOBE DELETED
 	XMFLOAT3 rotation(0, 0, 0);

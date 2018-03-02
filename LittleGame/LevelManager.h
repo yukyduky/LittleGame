@@ -23,13 +23,21 @@ namespace TILESTATUS {
 	enum STATUS {IDLE, HOLE, SIZE};
 }
 
+namespace TILESTATE {
+	enum STATE {
+		ACTIVE, TFALLING, FALLING, HOLE, RECOVERING, FLASH,
+		GENERATOR, ELECTRIFIED, HEATED, COOLED, TELECTRIFIED,
+		THEATED, TCOOLED, SIZE
+	};
+}
+
 //Defines if a wall runs along the z-axis(VERTICAL) or along the x-axis(HORIZONTAL)
 namespace WALLTYPE {
 	enum TYPE { VERTICAL, HORIZONTAL, SIZE };
 }
 
 namespace EFFECTSTATUS {
-	enum EFFECT{ IDLE, ELECTRIFIED, HEATED, COOLED, SIZE };
+	enum EFFECT{ IDLE, ELECTRIFIED, HEATED, COOLED, TELECTRIFIED, THEATED, TCOOLED, SIZE };
 }
 
 namespace GENERATOR {
@@ -42,30 +50,50 @@ struct tileData {
 	//Nya som Dew ska använda
 	XMFLOAT3 baseColor;
 	XMFLOAT3 color;
+//	float basePosY;
+//	float realPosY;
 	float posY;
 	TILESTATUS::STATUS status;
-	double genTimer;
+	double counter;
+	double stateTime;
+	double coolDownTime;
+	double chargeTime;
+//	double coolDownCounter;
+//	double chargeCounter;
+	TILESTATE::STATE state;
 	
 
-	bool occupiedByGenerator;
-	EFFECTSTATUS::EFFECT genEffect;
+//	bool occupiedByGenerator;
+	TILESTATE::STATE genEffect;
 	EFFECTSTATUS::EFFECT currentEffect;
 	std::vector<Index> genPattern;
 
 	tileData() 
 	{ 
+		this->state = TILESTATE::STATE::ACTIVE;
 		this->type = SQUARETYPE::TYPE::EMPTY;
 		this->status = TILESTATUS::STATUS::IDLE;
 		this->currentEffect = EFFECTSTATUS::EFFECT::IDLE;
-		this->occupiedByGenerator = false;
-		this->genTimer = 0.0;
+//		this->occupiedByGenerator = false;
+		this->coolDownTime = 6.0;
+		this->chargeTime = 1.5;
+		this->stateTime = 5.0;
+		this->counter = 0.0;
+//		this->coolDownCounter = 0.0;
+//		this->chargeCounter = 0.0;
 	};
 	tileData(SQUARETYPE::TYPE type) {
+		this->state = TILESTATE::STATE::ACTIVE;
 		this->type = type;
 		this->status = TILESTATUS::STATUS::IDLE;
 		this->currentEffect = EFFECTSTATUS::EFFECT::IDLE;
-		this->occupiedByGenerator = false;
-		this->genTimer = 0.0;
+//		this->occupiedByGenerator = false;
+		this->coolDownTime = 6.0;
+		this->chargeTime = 1.5;
+		this->stateTime = 5.0;
+		this->counter = 0.0;
+//		this->coolDownCounter = 0.0;
+//		this->chargeCounter = 0.0;
 	}
 };
 
@@ -143,7 +171,7 @@ public:
 	/*--------<INFORMATION>--------
 	1. Returns the state of a floor tile from a given position.
 	*/
-	void checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATUS::STATUS& status, EFFECTSTATUS::EFFECT& effect);
+	void checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATE::STATE& state);
 
 	/*--------<INFORMATION>--------
 	1. Returns the grid index pos for a given position.
