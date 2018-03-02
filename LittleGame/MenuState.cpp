@@ -1,5 +1,6 @@
 #include "MenuState.h"
 #include "GamePlayState.h"
+#include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "StateManager.h"
@@ -119,4 +120,9 @@ void MenuState::displayMenu(Menu* menu)
 void MenuState::startGame()
 {
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESUMEGAME);
+}
+
+void MenuState::statsWindow()
+{
+	StateManager::changeState(StatisticsMenuState::getInstance());
 }

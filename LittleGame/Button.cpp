@@ -96,9 +96,6 @@ void Button::onPress()
 	case BEHAVIOR::STARTGAME:
 		this->pMS->startGame();
 		break;
-	case BEHAVIOR::REWSTARTGAME:
-		static_cast<RewardMenuState*>(this->pMS)->startGame();
-		break;
 	case BEHAVIOR::VOLUMEUP:
 		Locator::getAudioManager()->adjustMaster(true);
 		break;
@@ -114,6 +111,12 @@ void Button::onPress()
 		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
 		this->nextButton->SETPrev(this->prevButton);
 		this->prevButton->SETNext(this->nextButton);
+		break;
+	case BEHAVIOR::REWSTARTGAME:
+		static_cast<RewardMenuState*>(this->pMS)->startGame();
+		break;
+	case BEHAVIOR::GOSTATS:
+		this->pMS->statsWindow();
 		break;
 
 

@@ -71,6 +71,8 @@
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="RewardMenuState.cpp" />
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -153,6 +155,9 @@
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
+    <ClInclude Include="IStatsHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

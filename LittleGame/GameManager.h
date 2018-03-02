@@ -12,6 +12,7 @@
 #include "Renderer.h"
 #include "IAudioManager.h"
 #include "IGlobalEvents.h"
+#include "IStatsHeader.h"
 
 class State;
 
@@ -24,6 +25,7 @@ private:
 	IGlobalEvents* globalEvents = nullptr;
 	Renderer renderer;
 	IAudioManager* audio = nullptr;
+	IStatsHeader* stats = nullptr;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -

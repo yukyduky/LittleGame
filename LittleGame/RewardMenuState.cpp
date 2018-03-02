@@ -255,6 +255,14 @@ Menu * RewardMenuState::initRewardMenu()
 	}
 
 	nextID = this->newID();
+	text = L"End to stats";
+	pButton = new Button(this, nextID,
+		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOSTATS);
+	menu->addButton(pButton);
+
+	start.y += 170.0f;
+	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
 		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,

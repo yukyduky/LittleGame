@@ -69,7 +69,7 @@ public:
 	void displayMenu(Menu* menu);
 	void startGame();
 	void quitMenu() { this->quit = true; };
-
+	void statsWindow();
 };
 
 #endif // !MENUSTATE_H

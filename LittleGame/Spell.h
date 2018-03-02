@@ -23,6 +23,7 @@ enum class NAME {
 	AUTOATTACK, FIRE, BOMB
 	//Mobility
 	, DASH, BUFF,
+	//Other
 	SIZE
 };
 
