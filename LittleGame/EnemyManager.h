@@ -165,7 +165,7 @@ public:
 			}
 
 			// Add up the last one
-			currentPosition = this->mainArray[0].obj->GETPosition();
+			currentPosition = stepper->index->obj->GETPosition();
 			averagePosition_.x += currentPosition.x;
 			averagePosition_.y += currentPosition.y;
 			averagePosition_.z += currentPosition.z;
@@ -204,45 +204,51 @@ public:
 		this->activateIndex(swarmerID);
 	}
 	void remove(int index) {
-		AliveNode* nodeToBeRemoved = this->mainArray[index].alive;
-		if (this->firstAlive != nullptr) {
-			// To remove the AliveNode, connect it's 'back' and 'forward' pointers
-			AliveNode* back = nodeToBeRemoved->back;
-			AliveNode* forward = nodeToBeRemoved->forward;
+		if (this->mainArray != nullptr) {
+			AliveNode* nodeToBeRemoved = this->mainArray[index].alive;
+			if (nodeToBeRemoved != nullptr) {
+				if (this->firstAlive != nullptr) {
+					// To remove the AliveNode, connect it's 'back' and 'forward' pointers
+					AliveNode* back = nodeToBeRemoved->back;
+					AliveNode* forward = nodeToBeRemoved->forward;
 
-			// If we're deleting the first one
-			if (nodeToBeRemoved == this->firstAlive) {
-				// And we have something in front of us
-				if (nodeToBeRemoved->forward != nullptr) {
-					// Make what's in front of us the firstAlive node
-					this->firstAlive = nodeToBeRemoved->forward;
-				}
-				// And nothing ahead, we were the only node left
-				else {
-					this->firstAlive = nullptr;
+					// If we're deleting the first one
+					if (nodeToBeRemoved == this->firstAlive) {
+						// And we have something in front of us
+						if (nodeToBeRemoved->forward != nullptr) {
+							// Make what's in front of us the firstAlive node
+							this->firstAlive = nodeToBeRemoved->forward;
+							// It 
+							this->firstAlive->back = nullptr;
+						}
+						// And nothing ahead, we were the only node left
+						else {
+							this->firstAlive = nullptr;
+						}
+					}
+					// nodeToBeRemoved definitely has a node behind itself, but not necessarily one ahead.
+					else {
+						// It does have one ahead
+						if (forward != nullptr) {
+							// So it has one ahead and back
+							forward->back = back;
+							back->forward = forward;
+						}
+						// It only has one behind
+						else {
+							// Remove link so that 'back' has nothing in front of itself
+							back->forward = nullptr;
+						}
+					}
+
+					// Also clean!
+					delete this->mainArray[index].alive;
+					this->mainArray[index].alive = nullptr;
+					this->count--;
+					Locator::getGameTime()->UpdateFrameTime();
 				}
 			}
-			// nodeToBeRemoved definitely has a node behind itself, but not necessarily one ahead.
-			else {
-				// It does have one ahead
-				if (forward != nullptr) {
-					// So it has one ahead and back
-					forward->back = back;
-					back->forward = forward;
-				}
-				// It only has one behind
-				else {
-					// Remove link so that 'back' has nothing in front of itself
-					back->forward = nullptr;
-				}
-			}
-			
-			// Also clean!
-			delete this->mainArray[index].alive;
-			this->mainArray[index].alive = nullptr;
-			this->count--;
-			Locator::getGameTime()->UpdateFrameTime();
-		}
+		}	
 	}
 	void cleanUp() {
 
@@ -259,6 +265,7 @@ public:
 			// All objects clean themselves, we're only using pointers here.
 		}
 		delete this->mainArray;
+		this->mainArray = nullptr;
 	}
 };
 

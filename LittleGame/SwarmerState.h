@@ -20,7 +20,12 @@ private:
 	float timeFactor = maxVelocity / pulseInterval;
 
 	float pulseFormula(float dt) {
-		return (maxVelocity - timeFactor * dt);
+		float returnValue = (maxVelocity - timeFactor * dt);
+		// Let's not even have the possibility of negative velocity
+		if (returnValue > 0)
+			return returnValue;
+		else
+			return 0;
 	}
 
 protected:

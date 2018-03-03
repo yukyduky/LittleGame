@@ -40,7 +40,7 @@ void SwarmerSeekingState::executeBehavior()
 //	this->adjustAim();
 
 	// Adjust velocity based on pulsing
-	this->pulse();
+//	this->pulse();
 
 	// Move!
 	this->pBrain->pushCommand(AICOMMANDS::MOVE);

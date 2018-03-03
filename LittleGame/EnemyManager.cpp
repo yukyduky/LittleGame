@@ -47,8 +47,8 @@ void EnemyManager::startLevel1()
 	std::vector<EnemyObject*> localSwarmers;
 
 	// TESTING -----------
-	this->currentWaveCount = 1;
-	this->currentWaveSize = 0;
+	this->currentWaveCount = 2;
+	this->currentWaveSize = 5;
 	this->swarmerCount = 7;
 	// TESTING -----------
 

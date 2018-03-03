@@ -136,6 +136,14 @@ void ActorObject::move()
 	tempPos.z += MovementVector.y * actorVelocity * deltaTime;
 	XMFLOAT3 actorNewPos;
 
+	XMVECTOR debug = XMLoadFloat3(&tempPos);
+	debug = XMVector3Length(debug);
+	XMFLOAT3 debug1;
+	XMStoreFloat3(&debug1, debug);
+	if (debug1.x > 2000) {
+		int WARNING = 0;
+	}
+
 	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (this->getType() == OBJECTTYPE::ENEMY) {
 		actorNewPos.z = tempPos.z;
