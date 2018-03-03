@@ -223,7 +223,7 @@ EnemyObject* EnemyManager::createSwarmer()
 	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float projectileDamage = 3;
+	float projectileDamage = 8;
 	float attackCooldown = 0.5;
 	float projectileRange = 450;
 	float attackRange = 500;
@@ -247,8 +247,6 @@ EnemyObject* EnemyManager::createSwarmer()
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
 	// STATES
-//	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
-//	moveState = new SwarmerSeekingState(*enemyObject, *aiComponent, this->pGrid);
 	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++);
 
 	// Make the enemy inactive
@@ -258,6 +256,9 @@ EnemyObject* EnemyManager::createSwarmer()
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
 {
+	// Reinstansiate values incase we've restarted once
+	this->swarmerIDs = 0;
+
 	this->pGPS = &pGPS;
 	this->players = players;
 	this->activeEnemiesCount = 0;
@@ -315,8 +316,6 @@ void EnemyManager::update()
 		if (this->activeEnemiesCount < 1) {
 			//StateManager::pushState(this->endState);
 			int asdf1 = 3;
-			/// only for testing
-			this->cleanUp();
 		}
 	}
 
@@ -328,7 +327,17 @@ void EnemyManager::update()
 void EnemyManager::cleanUp()
 {
 	this->cleanLevel();
-	this->pSwarmers->cleanUp();
+
+	// Grid
 	this->pGrid->cleanUp();
+	delete this->pGrid;
+	this->pGrid = nullptr;
+	
+	// ArrayList
+	this->pSwarmers->cleanUp();
 	delete this->pSwarmers;
+	this->pSwarmers = nullptr;
+	
+
+	
 }

@@ -39,6 +39,7 @@ struct ArrayNode {
 	EnemyObject* obj = nullptr;
 	AliveNode*	 alive = nullptr;
 	DeadNode*	 dead = nullptr;
+	size_t		 arrayIndex = 0;
 };
 class ArrayList
 {
@@ -69,6 +70,10 @@ private:
 
 			// If this is going to be the only one alive
 			if (this->firstAlive == nullptr) {
+				this->firstAlive = this->mainArray[index].alive;
+			}
+			// If we're activating one earlier than the current firstAlive
+			else if (index < this->firstAlive->index->arrayIndex) {
 				this->firstAlive = this->mainArray[index].alive;
 			}
 			else {
@@ -204,7 +209,7 @@ public:
 		this->activateIndex(swarmerID);
 	}
 	void remove(int index) {
-		if (this->mainArray != nullptr) {
+		if (this->count > 0) {
 			AliveNode* nodeToBeRemoved = this->mainArray[index].alive;
 			if (nodeToBeRemoved != nullptr) {
 				if (this->firstAlive != nullptr) {
@@ -212,7 +217,7 @@ public:
 					AliveNode* back = nodeToBeRemoved->back;
 					AliveNode* forward = nodeToBeRemoved->forward;
 
-					// If we're deleting the first one
+					// If we're delesawdsawdting the first one
 					if (nodeToBeRemoved == this->firstAlive) {
 						// And we have something in front of us
 						if (nodeToBeRemoved->forward != nullptr) {
@@ -265,7 +270,7 @@ public:
 			// All objects clean themselves, we're only using pointers here.
 		}
 		delete this->mainArray;
-		this->mainArray = nullptr;
+		*&this->mainArray = nullptr;
 	}
 };
 

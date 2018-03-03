@@ -87,7 +87,7 @@ private:
 	GridSlot** *theGrid = nullptr;
 	std::list<GridSlot*> occupiedSlots;
 
-	void initialize(ArrayList* arraylist);
+	void initialize(ArrayList*& arraylist);
 	void wipeGrid();
 
 	void updateFromOccupant(AliveNode* aliveNode);
@@ -95,7 +95,7 @@ private:
 	Index getIndex(XMFLOAT2 position);
 
 public:
-	Grid(ArrayList* arraylist);
+	Grid(ArrayList*& arraylist);
 
 	void update();
 
@@ -113,6 +113,7 @@ public:
 	bool inOrOut(XMFLOAT2 position);
 	// Like inOrOut but with a bit of marginal, so you're definitely inside.
 	bool Grid::inOrOutPLUS(XMFLOAT2 position);
+	bool gridAlive();
 
 	void cleanUp();
 };

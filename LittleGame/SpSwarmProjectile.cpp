@@ -8,7 +8,7 @@ SpSwarmProjectile::SpSwarmProjectile(
 {
 	this->pPlayer = pPlayer;
 	this->projectilesMaxFlyingRange = projectilesMaxFlyingRange;
-	this->damage = 0;//dmg;
+	this->damage = dmg;
 	this->attackRange = attackRange;
 	this->setCoolDown(1.0f);
 	this->seekSpeed = 0.9;
@@ -48,6 +48,7 @@ void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 	switch (type) {
 		case OBJECTTYPE::PLAYER: {
 			static_cast<ActorObject*>(target)->dealDmg(this->damage);
+			proj->setState(OBJECTSTATE::TYPE::DEAD);
 			break;
 		};
 		case OBJECTTYPE::INDESTRUCTIBLE: {

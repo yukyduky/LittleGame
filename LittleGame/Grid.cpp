@@ -4,12 +4,12 @@
 #include "EnemyObject.h"
 #include "GameObject.h"
 
-Grid::Grid(ArrayList* arrayList_)
+Grid::Grid(ArrayList *& arrayList_)
 {
 	this->initialize(arrayList_);
 }
 
-void Grid::initialize(ArrayList* arrayList_)
+void Grid::initialize(ArrayList *& arrayList_)
 {
 	this->arrayList = arrayList_;
 	this->levelOfDetail = 10;		// Also decides how easily swarmers group up
@@ -211,6 +211,14 @@ bool Grid::inOrOutPLUS(XMFLOAT2 position)
 	return result;
 }
 
+bool Grid::gridAlive()
+{
+	if (this->theGrid == nullptr) {
+		return false;
+	}
+	return true;
+}
+
 void Grid::cleanUp()
 {
 	/// NOT UPDATED
@@ -226,4 +234,5 @@ void Grid::cleanUp()
 	}
 	// Deletes the X-array
 	delete this->theGrid;
+	this->theGrid = nullptr;
 }

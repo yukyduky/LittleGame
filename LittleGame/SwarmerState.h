@@ -85,7 +85,9 @@ public:
 		this->swarmerID = swarmerID;
 	}
 	virtual void removeFromGrid() {
-		this->pGrid->removeSwarmer(this->swarmerID);
+		if (this->pGrid->gridAlive()) {
+			this->pGrid->removeSwarmer(this->swarmerID);
+		}
 	}
 	virtual void executeBehavior() = 0;
 };

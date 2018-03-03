@@ -144,7 +144,6 @@ void GamePlayState::cleanUp()
 	// Direct internal objects
 	this->rio.cleanUp();
 	// this->camera.cleanUp();
-	this->enemyManager.cleanUp();
 
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->staticObjects) {
@@ -158,6 +157,10 @@ void GamePlayState::cleanUp()
 		delete iterator;
 	}
 	this->dynamicObjects.clear();
+
+	// Needs to be after dynamic objects:
+	// No Playerobject-->no unique clean for enemy-->spells clean up swarmers from grid-->swarmers try using grid after it's deleted
+	this->enemyManager.cleanUp();
 
 	for (auto &iterator : this->noCollisionDynamicObjects) {
 		iterator->cleanUp();
