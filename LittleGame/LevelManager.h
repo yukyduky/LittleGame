@@ -176,7 +176,7 @@ public:
 	/*--------<INFORMATION>--------
 	1. Returns the grid index pos for a given position.
 	*/
-	XMFLOAT2 findTileIndexFromPos(XMFLOAT2 pos);
+	Index findTileIndexFromPos(XMFLOAT2 pos);
 
 
 	void createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex);

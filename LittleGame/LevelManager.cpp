@@ -308,7 +308,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 
 void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
-	XMFLOAT2 index = this->findTileIndexFromPos(pos);
+	Index index = this->findTileIndexFromPos(pos);
 //	grid[(int)index.x][(int)index.y].ptr->setState(state);
 
 
@@ -372,9 +372,9 @@ void LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<
 	state = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].state;
 }
 
-DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
+Index LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 {
-	XMFLOAT2 index = XMFLOAT2(0.0f, 0.0f);
+	Index index;
 	index.x = pos.x / this->squareSize;
 	index.y = pos.y / this->squareSize;
 
@@ -391,7 +391,7 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	
 	float squareSize = ARENADATA::GETsquareSize();
 	XMFLOAT3 genPos = XMFLOAT3(squareSize * 0.5f + index.x * squareSize, -squareSize * 0.5f, squareSize * 0.5f + index.y * squareSize);
-	int genType = Locator::getRandomGenerator()->GenerateInt(0, GENERATOR::TYPE::COOLED);
+	int genType = Locator::getRandomGenerator()->GenerateInt(0, GENERATOR::TYPE::OVERCHARGED);
 	grid[index.x][index.y].state = TILESTATE::GENERATOR;
 	XMFLOAT4 genColor;
 

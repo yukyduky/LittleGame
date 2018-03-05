@@ -272,12 +272,9 @@ void GamePlayState::updateFloor()
 				}
 				break;
 			case TILESTATE::HEATED:
-				this->grid[i][j].counter += this->dt;
-				if (this->grid[i][j].counter > 0.2) {
-					this->grid[i][j].state = TILESTATE::ACTIVE;
-					this->grid[i][j].color = baseColor;
-					this->grid[i][j].counter = 0.0;
-				}
+				this->grid[i][j].state = TILESTATE::ACTIVE;
+				this->grid[i][j].color = baseColor;
+				this->grid[i][j].counter = 0.0;
 				break;
 			case TILESTATE::TCOOLED:
 				this->grid[i][j].counter += this->dt;
@@ -328,16 +325,16 @@ void GamePlayState::checkPlayerTileStatus()
 		else {
 			switch (state) 
 			{
-			case EFFECTSTATUS::EFFECT::IDLE:
+			case TILESTATE::STATE::ACTIVE:
 				break;
-			case EFFECTSTATUS::EFFECT::HEATED:
-				//To be filled out
+			case TILESTATE::STATE::HEATED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::HEATED);
 				break;
-			case EFFECTSTATUS::EFFECT::COOLED:
-				//To be filled out
+			case TILESTATE::STATE::COOLED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::COOLED);
 				break;
-			case EFFECTSTATUS::EFFECT::ELECTRIFIED:
-				//To be filled out
+			case TILESTATE::STATE::ELECTRIFIED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
 				break;
 			default:
 				break;
@@ -559,6 +556,8 @@ void GamePlayState::update(GameManager * gm)
 	this->updateFloor();
 
 	int ID;
+	Index genIndex;
+	XMFLOAT3 genPos;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (std::list<GameObject*>::iterator it = this->noCollisionDynamicObjects.begin(); it != this->noCollisionDynamicObjects.end(); it++) {
 		(*it)->update();
@@ -578,6 +577,17 @@ void GamePlayState::update(GameManager * gm)
 				}
 				j--;
 			}
+			if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
+				genPos = (*it)->GETPosition();
+				genIndex = this->lm.findTileIndexFromPos(XMFLOAT2(genPos.x, genPos.z));
+				for (int i = 0; i < this->genIndex.size(); i++) {
+					if (genIndex.x == this->genIndex[i].x && genIndex.y == this->genIndex[i].y) {
+						this->grid[this->genIndex[i].x][this->genIndex[i].y].state = TILESTATE::ACTIVE;
+						this->genIndex.erase(this->genIndex.begin() + i);
+						break;
+					}
+				}
+			}
 			(*it)->cleanUp();
 			delete (*it);
 			it = this->dynamicObjects.erase(it);
@@ -586,7 +596,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 
 	this->checkPlayerTileStatus();
-//	this->enemyManager.update();
+	this->enemyManager.update();
 	this->checkCollisions();
 }
 
