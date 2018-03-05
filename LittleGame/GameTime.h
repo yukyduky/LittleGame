@@ -8,10 +8,11 @@ class GameTime : public IGameTime
 {
 private:
 	// Variables
-	double frequency = 0;
+	double frequency = 0.0;
 	__int64 CounterStart;
 	__int64 prevCurrentCount;
-	double deltaTime = 0;
+	double deltaTime = 0.0;
+	double multiplier = 1.0;
 
 public:
 	GameTime();
@@ -35,6 +36,10 @@ public:
 	1. Returns the 'deltaTime'(obj).
 	*/
 	const double getDeltaTime();
+
+	void setMultiplier(double val) {
+		multiplier = val;
+	}
 };
 
 #endif
