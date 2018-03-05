@@ -1,7 +1,5 @@
 #include "StatsHeader.h"
 
-#include "Spell.h"
-
 StatsHeader::StatsHeader()
 {
 	//Sets every glyph to 0 aka NONE
@@ -45,4 +43,18 @@ void StatsHeader::addGlyph(int spellName, int glyph)
 Statistics StatsHeader::getStats()
 {
 	return stats;
+}
+
+void StatsHeader::resetStats()
+{
+	this->stats.damageTaken = 0.0f;
+	this->stats.kills = 0;
+	this->stats.level = 0;
+
+	//Sets every glyph to 0 aka NONE
+	this->stats.glyphs[0] = 0.0f;
+	this->stats.glyphs[1] = 0.0f;
+	this->stats.glyphs[2] = 0.0f;
+	this->stats.glyphs[3] = 0.0f;
+	this->stats.glyphs[4] = 0.0f;
 }

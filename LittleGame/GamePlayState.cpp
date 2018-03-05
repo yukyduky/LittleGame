@@ -311,6 +311,9 @@ void GamePlayState::init() {
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
+
+	// Adds to the level each time it starts a level
+	Locator::getStatsHeader()->addLevel();
 }
 
 void GamePlayState::cleanUp()
@@ -403,11 +406,12 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(RestartState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			//this->player1->GETSpells();
+			// Give the RestartState the current spells so it can be saved for thet next level
 			RestartState::getInstance()->provide(this->player1->GETSpells());
-			StateManager::changeState(RestartState::getInstance());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+
+			StateManager::changeState(RestartState::getInstance());
 		}
 	}
 }

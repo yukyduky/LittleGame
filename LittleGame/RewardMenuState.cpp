@@ -72,6 +72,7 @@ Menu * RewardMenuState::initRewardMenu()
 	MenuObject* object = nullptr;
 	Button* pButton = nullptr;
 	WCHAR* text = nullptr;
+	std::wstring textStr;
 	int nextID;
 
 	menu = new Menu();
@@ -80,6 +81,12 @@ Menu * RewardMenuState::initRewardMenu()
 	nextID = this->newID();
 	object = new MenuObject(this->newID(),
 		{ 0.0f,0.0f, 400.0f,400.0f }, D2D1::ColorF::DarkMagenta);
+	menu->addQuad(object);
+	textStr = L"Current level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
+		textStr);
 	menu->addQuad(object);
 
 	//Glyph desc

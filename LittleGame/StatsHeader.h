@@ -16,6 +16,7 @@ public:
 	virtual void addGlyph(int spellName, int glyph);
 
 	virtual Statistics getStats();
+	virtual void resetStats();
 private:
 	Statistics stats;
 

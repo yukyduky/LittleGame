@@ -13,7 +13,7 @@ struct Statistics
 	std::array<int /*GLYPHTYPE*/, 5 /*NAME*/> glyphs;
 
 	Statistics() :
-		level(0),
+		level(-1),
 		kills(0),
 		damageTaken(0.0f)
 	{};
@@ -29,6 +29,7 @@ public:
 	virtual void addGlyph(int spellName, int glyph) = 0;
 
 	virtual Statistics getStats() = 0;
+	virtual void resetStats() = 0;
 private:
 
 };
