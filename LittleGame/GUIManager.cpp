@@ -118,7 +118,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorHP.r, this->colorHP.g, this->colorHP.b, this->colorHP.a,
 		-0.58f, 0.0f, -0.55f,
-		0.06, 0.0f, 0.06f
+		0.06f, 0.0f, 0.06f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -131,7 +131,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		-0.58f, -0.001f, -0.55f,
-		0.075, 0.0f, 0.075f
+		0.075f, 0.0f, 0.075f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -152,7 +152,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorEnergy.r, this->colorEnergy.g, this->colorEnergy.b, this->colorEnergy.a,
 		0.58f, 0.0f, -0.55f,
-		0.06, 0.0f, 0.06f
+		0.06f, 0.0f, 0.06f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -165,7 +165,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		0.58f, -0.001f, -0.55f,
-		0.075, 0.0f, 0.075f
+		0.075f, 0.0f, 0.075f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -199,7 +199,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBackSelected.r, this->colorBackSelected.g, this->colorBackSelected.b, this->colorBackSelected.a,
 		-0.3f, -0.001f, -0.55f,
-		0.04, 0.0f, 0.04f
+		0.04f, 0.0f, 0.04f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -235,7 +235,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		-0.1f, -0.001f, -0.55f,
-		0.04, 0.0f, 0.04f
+		0.04f, 0.0f, 0.04f
 	);
 
 	GUIObjects.push_back(this->object);

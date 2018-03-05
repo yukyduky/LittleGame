@@ -130,7 +130,7 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 
 			if (!intersected)
 			{
-				diffuse = float3(0.0f, 0.0f, 0.0f);
+				//diffuse = float3(0.0f, 0.0f, 0.0f);
 			}
 		}
 	}

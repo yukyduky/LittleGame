@@ -30,7 +30,6 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	nextID = this->nextID();
 	//Create the GameObject and calculate the world matrix
 	object = new ArenaObject(nextID, pos);
-	int test = sizeof(ArenaObject);
 	vec = XMLoadFloat3(&pos);
 	translationM = XMMatrixTranslationFromVector(vec);
 	worldM = scaleM * rotationM * translationM;
@@ -49,7 +48,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 		{
 			grid[i][j].baseColor = XMFLOAT3(color.r, color.g, color.b);
 			grid[i][j].color = XMFLOAT3(actualColor.r, actualColor.g, actualColor.b);
-			grid[i][j].posY = pos.y - 0.01f;
+			grid[i][j].posY = pos.y;
 		}
 	}
 	staticObjects.push_back(object);
