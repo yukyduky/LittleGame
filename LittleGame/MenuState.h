@@ -70,6 +70,8 @@ public:
 	//Button functions
 	void displayMenu(Menu* menu);
 	void startGame();
+	void resumeGame();
+	void restartGame();
 	void quitMenu() { this->quit = true; };
 	void statsWindow();
 };

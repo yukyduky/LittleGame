@@ -43,7 +43,7 @@ Menu* MainMenuState::initStartMenu()
 	text = L"Start/Resume game";
 	pButton = new Button(this, nextID,
 		{ 100.0f,50.0f, 200.0f,150.0f }, D2D1::ColorF::Aqua,
-		text, BEHAVIOR::STARTGAME);
+		text, BEHAVIOR::RESUMEGAME);
 	menu->addButton(pButton);
 
 	nextID = this->newID();

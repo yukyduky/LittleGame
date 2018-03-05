@@ -91,10 +91,13 @@ void Button::onPress()
 		this->pMS->displayMenu(static_cast<MainMenuState*>(this->pMS)->initOptionsMenu());
 		break;
 	case BEHAVIOR::RESUMEGAME:
-		this->pMS->resume();
+		this->pMS->resumeGame();
 		break;
 	case BEHAVIOR::STARTGAME:
 		this->pMS->startGame();
+		break;
+	case BEHAVIOR::RESTARTGAME:
+		this->pMS->restartGame();
 		break;
 	case BEHAVIOR::VOLUMEUP:
 		Locator::getAudioManager()->adjustMaster(true);
@@ -106,6 +109,7 @@ void Button::onPress()
 		static_cast<MainMenuState*>(this->pMS)->FullScreenSwitch();
 		break;
 
+	// Rewardmenu
 	case BEHAVIOR::ADDGLYPH:
 		this->choosen = true;
 		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
@@ -116,6 +120,8 @@ void Button::onPress()
 	case BEHAVIOR::REWSTARTGAME:
 		static_cast<RewardMenuState*>(this->pMS)->startGame();
 		break;
+
+	// Stats window
 	case BEHAVIOR::GOSTATS:
 		this->pMS->statsWindow();
 		break;

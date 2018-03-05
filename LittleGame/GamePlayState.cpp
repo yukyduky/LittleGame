@@ -1,4 +1,5 @@
 #include "GamePlayState.h"
+#include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "RectangleComponent.h"
@@ -403,7 +404,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
-			StateManager::changeState(RestartState::getInstance());
+			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			// Give the RestartState the current spells so it can be saved for thet next level
