@@ -597,7 +597,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 
 	this->checkPlayerTileStatus();
-//	this->enemyManager.update();
+	this->enemyManager.update();
 	this->checkCollisions();
 }
 
