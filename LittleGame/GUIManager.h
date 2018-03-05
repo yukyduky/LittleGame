@@ -10,6 +10,7 @@
 #include "GameObject.h"
 #include "GraphicsComponent.h"
 #include "ActorObject.h"
+#include "IDHandler.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
