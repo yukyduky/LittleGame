@@ -39,7 +39,7 @@ void EnemyManager::startLevel1()
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
 	this->spawnInterval = 1;
-	this->waveInterval = 0.2;
+	this->waveInterval = 0.1;
 	this->currentWaveCount = 4;
 	this->currentWaveSize = 20;
 	Wave* currentWave;

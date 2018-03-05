@@ -2,6 +2,7 @@
 #include "AIComponent.h"
 #include "EnemyObject.h"
 #include "SwarmerState.h"
+#include "IncludeSpells.h"
 
 SwarmerSeekingState::SwarmerSeekingState(
 	EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID
@@ -30,8 +31,12 @@ void SwarmerSeekingState::executeBehavior()
 	this->pBrain->SETsimulatedMovement(XMFLOAT2(newDirection.x, newDirection.z));
 	this->pHead->setDirection(newDirection);
 
+	std::vector<EnemyObject*> neighbours = this->getNeighbours();
+	int size = neighbours.size();
+
+
 	/// Shoot a spell (spells handle their own cooldown)
-	// Cooldown is checked internally | This unit has unlimited attackrange! so why bother checking
+	// Cooldown is checked internally | This unit has unlimited attackrange
 	this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 
 
@@ -40,7 +45,7 @@ void SwarmerSeekingState::executeBehavior()
 //	this->adjustAim();
 
 	// Adjust velocity based on pulsing
-//	this->pulse();
+	this->pulse();
 
 	// Move!
 	this->pBrain->pushCommand(AICOMMANDS::MOVE);
