@@ -1,5 +1,7 @@
 #include "MenuState.h"
 #include "GamePlayState.h"
+#include "MainMenuState.h"
+#include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "StateManager.h"
@@ -79,6 +81,12 @@ void MenuState::handleEvents(GameManager * gm) {
 		else if (globalmsg == GLOBALMESSAGES::RESUMEGAME) {
 			StateManager::popState();
 		}
+		else if (globalmsg == GLOBALMESSAGES::RESTARTGAME) {
+			Locator::getStatsHeader()->resetStats();
+
+			StateManager::changeState(GamePlayState::getInstance());
+			StateManager::pushState(MainMenuState::getInstance());
+		}
 	}
 }
 
@@ -93,6 +101,12 @@ void MenuState::update(GameManager * gm)
 
 void MenuState::render(GameManager * gm) {
 	Locator::getD2D()->OnRender(this->menuObjects);
+}
+
+std::wstring MenuState::intToWchar(int input)
+{
+	std::wstring texten = std::to_wstring(input);
+	return texten;
 }
 
 void MenuState::displayMenu(Menu* menu)
@@ -118,5 +132,22 @@ void MenuState::displayMenu(Menu* menu)
 
 void MenuState::startGame()
 {
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::STARTGAME);
+}
+
+void MenuState::resumeGame()
+{
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESUMEGAME);
 }
+
+void MenuState::restartGame()
+{
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESTARTGAME);
+}
+
+void MenuState::statsWindow()
+{
+	StateManager::popState();
+	StateManager::changeState(StatisticsMenuState::getInstance());
+}
+

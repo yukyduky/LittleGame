@@ -71,6 +71,8 @@
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="RewardMenuState.cpp" />
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="IDHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +156,9 @@
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
+    <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="IDHandler.h" />
   </ItemGroup>
   <ItemGroup>

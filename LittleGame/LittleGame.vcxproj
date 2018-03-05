@@ -163,6 +163,7 @@
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
@@ -205,6 +206,8 @@
     <ClInclude Include="SpFire.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActorObject.cpp" />
@@ -262,6 +265,8 @@
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

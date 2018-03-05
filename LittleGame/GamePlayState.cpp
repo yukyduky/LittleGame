@@ -1,4 +1,5 @@
 #include "GamePlayState.h"
+#include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "RectangleComponent.h"
@@ -436,6 +437,9 @@ void GamePlayState::init() {
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
+
+	// Adds to the level each time it starts a level
+	Locator::getStatsHeader()->addLevel();
 }
 
 void GamePlayState::cleanUp()
@@ -525,14 +529,15 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
-			StateManager::changeState(RestartState::getInstance());
+			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			//this->player1->GETSpells();
+			// Give the RestartState the current spells so it can be saved for thet next level
 			RestartState::getInstance()->provide(this->player1->GETSpells());
-			StateManager::changeState(RestartState::getInstance());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+
+			StateManager::changeState(RestartState::getInstance());
 		}
 	}
 }
