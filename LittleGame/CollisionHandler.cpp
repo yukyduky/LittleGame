@@ -17,20 +17,20 @@ void CollisionHandler::createCollisionID() {
 		// P   L   A   Y   E   R
 		// 1	=	PLAYER				+			PLAYER
 		// 2	=	PLAYER				+			ENEMY
-		// 3	=	PLAYER				+			DOODAD
+		// 3	=	PLAYER				+			GENERATOR
 		// 4	=	PLAYER				+			INDESTRUCTIBLE
 		// 5	=	PLAYER				+			PROJECTILE
 
 		// E   N   E   M   Y
 		// 6	=	ENEMY				+			ENEMY
-		// 7	=	ENEMY				+			DOODAD
+		// 7	=	ENEMY				+			GENERATOR
 		// 8	=	ENEMY				+			INDESCTRUCTIBLE
 		// 9	=	ENEMY				+			PROJECTILE
 
-		// D   O   O   D   A   D
-		// 10	=	DOODAD				+			DOODAD
-		// 11	=	DOODAD				+			INDESTRUCTIBLE
-		// 12	=	DOODAD				+			PROJECTILE
+		// G  E  N  E  R  A  T  O  R
+		// 10	=	GENERATOR			+			GENERATOR
+		// 11	=	GENERATOR			+			INDESTRUCTIBLE
+		// 12	=	GENERATOR			+			PROJECTILE
 
 		// I  N  D  E  S  T  R  U  C  T  I  B  L  E
 		// 13	=	INDESTRUCTIBLE		+			INDESTRUCTIBLE
@@ -51,7 +51,7 @@ void CollisionHandler::createCollisionID() {
 			this->collisionID = 2;
 			break;
 		}
-		case OBJECTTYPE::DOODAD: { // PLAYER <--> DOODAD
+		case OBJECTTYPE::GENERATOR: { // PLAYER <--> GENERATOR
 			this->collisionID = 3;
 			break;
 		}
@@ -77,7 +77,7 @@ void CollisionHandler::createCollisionID() {
 			this->collisionID = 6;
 			break;
 		}
-		case OBJECTTYPE::DOODAD: { // ENEMY <--> DOODAD
+		case OBJECTTYPE::GENERATOR: { // ENEMY <--> GENERATOR
 			this->collisionID = 7;
 			break;
 		}
@@ -92,26 +92,26 @@ void CollisionHandler::createCollisionID() {
 		}
 		break;
 	}
-		// Collidable #1 = DOODAD
-	case OBJECTTYPE::DOODAD: {
+		// Collidable #1 = GENERATOR
+	case OBJECTTYPE::GENERATOR: {
 		switch (this->collidable2->getType()) {
-		case OBJECTTYPE::PLAYER: { // DOODAD <--> PLAYER
+		case OBJECTTYPE::PLAYER: { // GENERATOR <--> PLAYER
 			this->collisionID = 3;
 			break;
 		}
-		case OBJECTTYPE::ENEMY: { // DOODAD <--> ENEMY
+		case OBJECTTYPE::ENEMY: { // GENERATOR <--> ENEMY
 			this->collisionID = 7;
 			break;
 		}
-		case OBJECTTYPE::DOODAD: { // DOODAD <--> DOODAD
+		case OBJECTTYPE::GENERATOR: { // GENERATOR <--> GENERATOR
 			this->collisionID = 10;
 			break;
 		}
-		case OBJECTTYPE::INDESTRUCTIBLE: { // DOODAD <--> INDESTRUCTIBLE
+		case OBJECTTYPE::INDESTRUCTIBLE: { // GENERATOR <--> INDESTRUCTIBLE
 			this->collisionID = 11;
 			break;
 		}
-		case OBJECTTYPE::PROJECTILE: { // DOODAD <--> PROJECTILE
+		case OBJECTTYPE::PROJECTILE: { // GENERATOR <--> PROJECTILE
 			this->collisionID = 12;
 			break;
 		}
@@ -129,7 +129,7 @@ void CollisionHandler::createCollisionID() {
 			this->collisionID = 8;
 			break;
 		}
-		case OBJECTTYPE::DOODAD: { // INDESTRUCTIBLE <--> DOODAD
+		case OBJECTTYPE::GENERATOR: { // INDESTRUCTIBLE <--> GENERATOR
 			this->collisionID = 11;
 			break;
 		}
@@ -155,7 +155,7 @@ void CollisionHandler::createCollisionID() {
 			this->collisionID = 9;
 			break;
 		}
-		case OBJECTTYPE::DOODAD: { // PROJECTILE <--> DOODAD
+		case OBJECTTYPE::GENERATOR: { // PROJECTILE <--> DOODAD
 			this->collisionID = 12;
 			break;
 		}
@@ -240,7 +240,7 @@ void CollisionHandler::collisionPlayerEnemy() {
 	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
 }
 
-void CollisionHandler::collisionPlayerDoodad() {
+void CollisionHandler::collisionPlayerGenerator() {
 	// Swapping places of collidables with eachother if necessary
 	// COLLIDABLE1 = PLAYER
 	if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
@@ -249,8 +249,21 @@ void CollisionHandler::collisionPlayerDoodad() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	// Moving the player only, since the doodads cannot move.
-	this->collidable1->setPosition(this->collidable1->GETpreviousPos());
+	this->calculateDistance(
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
+	);
+
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+	this->divisionFactor = (1.0f / this->distance);
+	this->resultVector = {
+		this->centerToCenterVector.x * this->divisionFactor,
+		0.0,
+		this->centerToCenterVector.z * this->divisionFactor
+	};
+
+	// Moving the player only, since the indestructibles cannot move.
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerIndestruct() {
@@ -262,9 +275,21 @@ void CollisionHandler::collisionPlayerIndestruct() {
 	//	this->collidable2 = this->tempCollidableHolder;
 	//}
 
-	// NOTE:
-	// Only walls are indesctructibles, and they interact with the player
-	// in a different way (see 'ActorObject', 'move' functions).
+	this->calculateDistance(
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
+	);
+
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+	this->divisionFactor = (1.0f / this->distance);
+	this->resultVector = {
+		this->centerToCenterVector.x * this->divisionFactor,
+		0.0,
+		this->centerToCenterVector.z * this->divisionFactor
+	};
+
+	// Moving the player only, since the indestructibles cannot move.
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
@@ -299,7 +324,7 @@ void CollisionHandler::collisionEnemyEnemy() {
 	this->collidable2->setPosition(this->collidable2->GETPosition() - this->resultVector);
 }
 
-void CollisionHandler::collisionEnemyDoodad() {
+void CollisionHandler::collisionEnemyGenerator() {
 	// Swapping places of collidables with eachother if necessary
 	// COLLIDABLE1 = ENEMY
 	if (this->collidable1->getType() != OBJECTTYPE::ENEMY) {
@@ -316,13 +341,13 @@ void CollisionHandler::collisionEnemyDoodad() {
 	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
 	this->divisionFactor = (1.0f / this->distance);
 	this->resultVector = {
-		this->stepper * (this->centerToCenterVector.x * this->divisionFactor),
+		this->centerToCenterVector.x * this->divisionFactor,
 		0.0,
-		this->stepper * (this->centerToCenterVector.z * this->divisionFactor)
+		this->centerToCenterVector.z * this->divisionFactor
 	};
 
-	// Enemies are moved, and not doodads
-	this->collidable1->setPosition(this->collidable1->GETPosition() - (this->resultVector * this->stepper));
+	// Moving the player only, since the indestructibles cannot move.
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyIndestruct() {
@@ -365,13 +390,13 @@ void CollisionHandler::collisionEnemyProjectile() {
 	spell->collision(this->collidable1, proj);
 }
 
-void CollisionHandler::collisionDoodadDoodad() {
-	// A doodad colliding with another doodad?
+void CollisionHandler::collisionGeneratorGenerator() {
+	// A GENERATOR colliding with another GENERATOR?
 	// Now that just sounds silly.
 	/// Does nothing for the time being.
 }
 
-void CollisionHandler::collisionDoodadIndestruct() {
+void CollisionHandler::collisionGeneratorIndestruct() {
 	// Swapping places of collidables with eachother if necessary
 	// COLLIDABLE1 = DOODAD
 	//if (this->collidable1->getType() != OBJECTTYPE::DOODAD) {
@@ -380,19 +405,23 @@ void CollisionHandler::collisionDoodadIndestruct() {
 	//	this->collidable2 = this->tempCollidableHolder;
 	//}
 
-	// A doodad colliding with an indestructible?
+	// A GENERATOR colliding with an indestructible?
 	// Also seems kinda silly.
 	/// Does nothing for the time being.
 }
 
-void CollisionHandler::collisionDoodadProjectile() {
+void CollisionHandler::collisionGeneratorProjectile() {
 	// Swapping places of collidables with eachother if necessary
-	// COLLIDABLE1 = DOODAD
-	if (this->collidable1->getType() != OBJECTTYPE::DOODAD) {
+	// collidable1 = DOODAD
+	if (this->collidable1->getType() != OBJECTTYPE::GENERATOR) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
 		this->collidable2 = this->tempCollidableHolder;
 	}
+
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 
 	// There's potential here I suppose, mostly in terms of graphical effects, perhaps.
 	/// Regardless, this too does nothing for now.
@@ -474,7 +503,7 @@ void CollisionHandler::executeCollision(
 		break;
 	case 2: this->collisionPlayerEnemy();
 		break;
-	case 3: this->collisionPlayerDoodad();
+	case 3: this->collisionPlayerGenerator();
 		break;
 	case 4: this->collisionPlayerIndestruct();
 		break;
@@ -483,18 +512,18 @@ void CollisionHandler::executeCollision(
 		// ENEMY
 	case 6: this->collisionEnemyEnemy();
 		break;
-	case 7: this->collisionEnemyDoodad();
+	case 7: this->collisionEnemyGenerator();
 		break;
 	case 8: this->collisionEnemyIndestruct();
 		break;
 	case 9: this->collisionEnemyProjectile();
 		break;
 		// DOODAD
-	case 10: this->collisionDoodadDoodad();
+	case 10: this->collisionGeneratorGenerator();
 		break;
-	case 11: this->collisionDoodadIndestruct();
+	case 11: this->collisionGeneratorIndestruct();
 		break;
-	case 12: this->collisionDoodadProjectile();
+	case 12: this->collisionGeneratorProjectile();
 		break;
 		// INDESTRUCTIBLE
 	case 13: this->collisionIndestructIndestruct();

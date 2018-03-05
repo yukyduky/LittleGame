@@ -84,7 +84,7 @@ void SpBomb::update()
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::TYPE::ENEMY)
+	if (target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
 	{
 		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
 	}
