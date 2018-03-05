@@ -29,7 +29,8 @@ bool SpFire::castSpell()
 			returnValue = true;
 
 			ProjProp props(15, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, true);
-			this->spawnProj(props);
+
+			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
 			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
 

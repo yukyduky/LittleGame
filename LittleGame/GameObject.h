@@ -48,6 +48,7 @@ protected:
 	GUIComponent* graphicsComponentUI = nullptr;
 
 	const size_t ID;
+	XMFLOAT3 previousPos;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTTYPE::TYPE type;

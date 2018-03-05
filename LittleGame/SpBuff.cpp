@@ -60,6 +60,7 @@ void SpBuff::update()
 
 		if (this->getTSC() > this->duration)
 		{
+			Locator::getGameTime()->setMultiplier(1.0);
 			this->getPlayer()->setSpeed(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
@@ -69,6 +70,7 @@ void SpBuff::update()
 		}
 		else
 		{
+			Locator::getGameTime()->setMultiplier(0.3);
 			this->floatingValue += 5.0f * dt;
 			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
 

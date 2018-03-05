@@ -1,7 +1,8 @@
 #include "Projectile.h"
 #include "Component.h"
+#include "RenderInputOrganizer.h"
 
-Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	//this->speed = spd;
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
@@ -14,6 +15,9 @@ Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, X
 	this->spinn = spinn;
 	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
 	this->rangeCounter = 0;
+
+	this->light = light;
+	this->lightIDs = lightIDs;
 }
 
 Projectile::~Projectile()
@@ -22,6 +26,10 @@ Projectile::~Projectile()
 
 void Projectile::cleanUp()
 {
+	this->lightIDs->remove(this->light.first);
+	this->light.second->diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->light.second->ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
 	for (auto &c : this->components) {
 		c->cleanUp();
 		delete c;
@@ -57,6 +65,7 @@ void Projectile::update()
 	// Projectiles dosnt move in Y
 	this->pos.z += this->velocity.z * dt;
 	this->setPosition(pos);
+	this->light.second->pos = pos;
 	if (this->spinn)
 	{
 		XMVECTOR dir = XMLoadFloat3(&this->direction);

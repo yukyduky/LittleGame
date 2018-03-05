@@ -162,6 +162,7 @@ void ActorObject::move()
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	XMFLOAT3 actorPos = this->GETPosition();
+	this->previousPos = this->pos;
 	XMFLOAT3 actorVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = actorPos;
 	tempPos.x += MovementVector.x * actorVelocity.x * deltaTime;
@@ -201,6 +202,7 @@ void ActorObject::moveUp()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z += actorVelocity.z * dt;
 		if (playerPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
@@ -218,6 +220,7 @@ void ActorObject::moveLeft()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x -= actorVelocity.x * dt;
 		if (playerPos.x > ARENADATA::GETsquareSize()) {
@@ -234,6 +237,7 @@ void ActorObject::moveDown()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z -= actorVelocity.z * dt;
 		if (playerPos.z > ARENADATA::GETsquareSize()) {
@@ -250,6 +254,7 @@ void ActorObject::moveRight()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x += actorVelocity.x * dt;
 		if (playerPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
@@ -384,7 +389,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+	//Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
