@@ -129,14 +129,14 @@ void GamePlayState::updateFloor()
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
+	XMFLOAT3 baseColor(0.2f, 0.2f, 0.45f);
 	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.0f);
-	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.0f);
-	XMFLOAT3 cooledColor = XMFLOAT3(0.0f, 0.75f, 1.0f);
+	XMFLOAT3 electrifiedColor = XMFLOAT3(0.5f, 0.5f, 0.05f);
+	XMFLOAT3 heatedColor = XMFLOAT3(0.5f, 0.245f, 0.05f);
+	XMFLOAT3 cooledColor = XMFLOAT3(0.05f, 0.4f, 0.5f);
 	XMFLOAT3 tempColor1;
 	XMFLOAT3 tempColor2;
 	float baseHeight = 0.5f - 0.01f;
