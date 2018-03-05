@@ -14,14 +14,14 @@
 
 class Camera {
 private:
-	float			cameraMoveSpeed = 2.0;
-	float			cameraRotateSpeed = 0.02;
-	float			angle = 0;
-	float			nearPlane = 0;
-	float			farPlane = 0;
+	float			cameraMoveSpeed = 2.0f;
+	float			cameraRotateSpeed = 0.02f;
+	float			angle = 0.0f;
+	float			nearPlane = 0.0f;
+	float			farPlane = 0.0f;
 
 	DirectX::XMFLOAT3 cameraStartPos;
-	DirectX::XMFLOAT3 cameraStartFacingDir;
+	DirectX::XMFLOAT3 cameraStartFacingPos;
 	DirectX::XMFLOAT3 cameraPos;
 	DirectX::XMFLOAT3 cameraFacingDir;
 	DirectX::XMFLOAT3 cameraUpDir;
@@ -88,8 +88,7 @@ public:
 	//DirectX::XMFLOAT3	GETcameraPosFloat3();
 	//DirectX::XMVECTOR	GETcameraStartPos();
 	DirectX::XMFLOAT3		GETcameraPos();
-	DirectX::XMVECTOR		GETfacingDir();
-	DirectX::XMFLOAT3		GETfacingDirFloat3();
+	DirectX::XMFLOAT3       GETfacingDir();
 	DirectX::XMFLOAT4X4&	GETviewMatrix();
 	DirectX::XMFLOAT4X4&	GETprojMatrix();
 };

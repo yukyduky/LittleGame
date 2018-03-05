@@ -7,6 +7,7 @@
 #include "AIComponent.h"
 #include "EnemyObject.h"
 #include "EnemyIncludes.h"
+#include "LevelManager.h"
 
 /* ---------------------------------------------------------------------------
 	If you're here to look at anything that is NOT the swarmers, i highly recommend 
@@ -305,8 +306,8 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
-	EnemyObject* createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
-	EnemyObject* createSwarmer();
+	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
+	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
 
 public:
 	EnemyManager();
@@ -315,7 +316,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
 	*/
-	void startLevel1();
+	void startLevel1(enemySpawnPositions spawnPosVectors);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

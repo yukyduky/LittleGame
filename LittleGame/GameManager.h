@@ -2,6 +2,9 @@
 #ifndef RANDOMZENGINE_H
 #define RANDOMZENGINE_H
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include <Windows.h>
 #include <d3d11.h>
 #include "IGameTime.h"

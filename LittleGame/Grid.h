@@ -5,7 +5,6 @@
 
 #include "ActorObject.h"
 #include "LevelManager.h"
-#include "FloorFallPatterns.h"	 // For struct 'Index'
 
 /* GRID
 This class is used by swarmers when they want to see if there are any nearby swarmers(neighbours).

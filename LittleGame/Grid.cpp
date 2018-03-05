@@ -12,9 +12,9 @@ Grid::Grid(ArrayList *& arrayList_)
 void Grid::initialize(ArrayList *& arrayList_)
 {
 	this->arrayList = arrayList_;
-	this->levelOfDetail = 10;		// Also decides how easily swarmers group up
-	this->width = ARENAWIDTH;
-	this->height = ARENAHEIGHT;
+	int levelOfDetail = 10;
+	int widthLength = ARENADATA::GETarenaWidth() / levelOfDetail;
+	int heightLength = ARENADATA::GETarenaHeight() / levelOfDetail;
 	this->widthDivider = this->width / levelOfDetail;
 	this->heightDivider = this->height / levelOfDetail;
 
@@ -189,8 +189,8 @@ bool Grid::inOrOut(XMFLOAT2 position)
 {
 	bool result = false;
 	
-	if (position.x > 0 && position.x < ARENAWIDTH) {
-		if (position.y > 0 && position.y < ARENAHEIGHT) {
+	if (position.x > 0 && position.x < ARENADATA::GETarenaWidth()) {
+		if (position.y > 0 && position.y < ARENADATA::GETarenaHeight()) {
 			result = true;
 		}
 	}
@@ -200,10 +200,10 @@ bool Grid::inOrOut(XMFLOAT2 position)
 bool Grid::inOrOutPLUS(XMFLOAT2 position) 
 {
 	bool result = false;
-	int margin = LENGTHOFWALLS * ARENASQUARESIZE + 1;
+	int margin = ARENADATA::GETlengthOfWall() * ARENADATA::GETsquareSize() + 1;
 
-	if ((position.x > margin) && (position.x < ARENAWIDTH - margin)) {
-		if ((position.y > margin) && (position.y < ARENAHEIGHT - margin)) {
+	if ((position.x > margin) && (position.x < ARENADATA::GETarenaWidth() - margin)) {
+		if ((position.y > margin) && (position.y < ARENADATA::GETarenaHeight() - margin)) {
 			result = true;
 		}
 	}

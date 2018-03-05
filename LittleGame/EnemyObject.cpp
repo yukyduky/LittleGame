@@ -6,7 +6,7 @@
 #include "GameObject.h"
 #include "Spell.h"
 
-#define DISTANCE_FACTOR 1.4142135623730950488016887242097	// Fetched from CollisionHandler.h
+//#define DISTANCE_FACTOR 1.4142135623730950488016887242097	// Fetched from CollisionHandler.h
 
 void EnemyObject::updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos)
 {
@@ -28,7 +28,7 @@ void EnemyObject::updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos)
 
 
 EnemyObject::EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType)
-	: ActorObject(ID, pos, velocity, pGPS, objectType)
+	: ActorObject(ID, pos, velocity, pGPS, objectType, 200.0f)
 {
 	this->enemyType = enemyType;
 	this->players = players;

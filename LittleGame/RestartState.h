@@ -3,13 +3,18 @@
 #define RESTARTSTATE_H
 
 #include "State.h"
+#include "GamePlayState.h"
+
+class ActorObject;
 
 class RestartState : public State
 {
 private:
 	static RestartState sRestartState;
 	static bool flag;
+	std::vector<int> vecGlyph; // typecasted GLYPHTYPE->int
 
+	std::vector<Spell*> spellPackage;
 public:
 	static RestartState* getInstance();
 
@@ -55,8 +60,11 @@ public:
 	*/
 	virtual void render(GameManager* gm);
 
+
 	static bool GETflag() { return flag; }
 	static void SETflag(bool inputValue) { flag = inputValue; }
+
+	virtual void provide(std::vector<Spell*> spellPackage);
 };
 
 #endif

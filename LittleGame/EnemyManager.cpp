@@ -11,13 +11,13 @@
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
-#include "EndState.h"
 #include "SwarmerEnemyAttack.h"
 #include "SwarmerSeekingState.h"
 #include "SwarmerOutsideState.h"
 #include "SpSwarmProjectile.h"
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
+#include "RewardMenuState.h"
 
 EnemyManager::EnemyManager()
 {
@@ -33,7 +33,7 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> player
 	this->activeEnemiesCount = 0;
 }
 
-void EnemyManager::startLevel1()
+void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
@@ -59,7 +59,7 @@ void EnemyManager::startLevel1()
 		// Per minion
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			EnemyObject* enemy = this->createMinion(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
@@ -67,7 +67,7 @@ void EnemyManager::startLevel1()
 		// Per Swarmer
 		for (int k = 0; k < swarmerCount; k++) {
 			// Create the actual object
-			EnemyObject* swarmer = this->createSwarmer();
+			EnemyObject* swarmer = this->createSwarmer(spawnPosVectors);
 
 			// Attach a pointer to waves
 			currentWave->enemies.push_back(swarmer);
@@ -99,7 +99,7 @@ void EnemyManager::cleanLevel()
 	// Per wave
 	for (auto &currentWave : this->waves) {
 
-		for (int i = 0; i < currentWave->enemies.size(); i++) {
+		for (size_t i = 0; i < currentWave->enemies.size(); i++) {
 			currentWave->enemies[i]->cleanUp();
 			delete currentWave->enemies[i];
 		}
@@ -115,7 +115,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -129,26 +129,89 @@ EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::K
 	// STATES
 	EnemyMovingState* moveState = nullptr;
 
+	bool reGenerateRandom = true;
+	int spawnLocation = 0;
+
 
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
-	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
 
-	if (spawnLocation == 1)
-		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	while (reGenerateRandom)
+	{
+		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 
-	else if (spawnLocation == 2)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
+		switch (spawnLocation) {
+		case 1:
+		{
+			if (spawnPosVectors.west.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
+				pos = {
+					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
+					scale.y,
+					spawnPosVectors.west.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 2:
+		{
+			if (spawnPosVectors.south.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
+				pos = {
+					spawnPosVectors.south.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 3:
+		{
+			if (spawnPosVectors.east.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
+				pos = {
+					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
+					scale.y,
+					spawnPosVectors.east.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 4:
+		{
+			if (spawnPosVectors.north.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
+				pos = {
+					spawnPosVectors.north.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		break;
+		}
+	}
 
-	else if (spawnLocation == 3)
-		pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	//if (spawnLocation == 1)
+	//	pos = { -spawnOffset, scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
 
-	else if (spawnLocation == 4)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+	//else if (spawnLocation == 2)
+	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, -spawnOffset };
+
+	//else if (spawnLocation == 3)
+	//	pos = { (static_cast<float>(ARENADATA::GETarenaWidth()) + spawnOffset), scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
+
+	//else if (spawnLocation == 4)
+	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
 	float velocity = 180;
@@ -184,7 +247,7 @@ EnemyObject* EnemyManager::createMinion(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::K
 	return enemyObject;
 }
 
-EnemyObject* EnemyManager::createSwarmer()
+EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -203,20 +266,70 @@ EnemyObject* EnemyManager::createSwarmer()
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
-	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+	bool reGenerateRandom = true;
+	int spawnLocation = 0;
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
 
-	if (spawnLocation == 1)
-		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	while (reGenerateRandom)
+	{
+		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 
-	else if (spawnLocation == 2)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
-
-	else if (spawnLocation == 3)
-		pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
-
-	else if (spawnLocation == 4)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+		switch (spawnLocation) {
+		case 1:
+		{
+			if (spawnPosVectors.west.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
+				pos = {
+					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
+					scale.y,
+					spawnPosVectors.west.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 2:
+		{
+			if (spawnPosVectors.south.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
+				pos = {
+					spawnPosVectors.south.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 3:
+		{
+			if (spawnPosVectors.east.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
+				pos = {
+					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
+					scale.y,
+					spawnPosVectors.east.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 4:
+		{
+			if (spawnPosVectors.north.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
+				pos = {
+					spawnPosVectors.north.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		break;
+		}
+	}
 
 
 	float velocity = 180;
@@ -314,8 +427,7 @@ void EnemyManager::update()
 		
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
-			//StateManager::pushState(this->endState);
-			int asdf1 = 3;
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 		}
 	}
 

@@ -18,7 +18,7 @@ MouseInput::MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMFLOAT3 cDir)
 	this->surface = { 0.0f, 1.0f, 0.0f, -40.f };
 
 	DirectX::XMStoreFloat3(&direction, dir);
-	this->cameraDirNor = direction;
+	this->cameraDirNor = cDir;
 
 }
 
@@ -42,8 +42,8 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 	//(0,wY)-----(wX,wY)
 
 
-	this->mousePoint.x = this->mPoint.x;
-	this->mousePoint.y = this->mPoint.y;
+	this->mousePoint.x = static_cast<float>(this->mPoint.x);
+	this->mousePoint.y = static_cast<float>(this->mPoint.y);
 	
 	size_t wWid = Locator::getD3D()->GETwWidth();
 	size_t wHei = Locator::getD3D()->GETwHeight();

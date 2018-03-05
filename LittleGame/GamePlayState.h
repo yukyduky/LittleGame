@@ -14,12 +14,12 @@
 #include "Camera.h"
 //#include "PhysicsComponent.h"
 #include "CollisionHandler.h"
-#include "FireballComponent.h"
 #include <list>
 #include "ArenaGlobals.h"
 #include "EnemyManager.h"
 #include "LevelManager.h"
 #include "QuadTree.h"
+#include "GUIManager.h"
 
 #include "MouseInput.h"
 
@@ -27,7 +27,7 @@
 class Command;
 class InputComponent;
 
-//(Size of cube, color in XMFLOAT4, travelSpeed, range(tiem alive), if it sould spinn)
+//(Size of cube, color in XMFLOAT4, travelSpeed, range(time alive), if it should spin)
 struct ProjProp {
 	float size;
 	XMFLOAT4 color;
@@ -45,6 +45,12 @@ struct ProjProp {
 	ProjProp() {}
 };
 
+namespace FLOORSTATE {
+	enum STATE {
+		ACTIVE, TFALLING, FALLING, RECOVERING, DEACTIVATED,
+		FLASH, SIZE
+	};
+}
 
 class GamePlayState : public State
 {
@@ -60,9 +66,11 @@ private:
 	CollisionHandler collisionHandler;
 	LevelManager lm;
 	Camera camera;
+	GUIManager GUI;
 	RenderInputOrganizer rio;
 	std::vector<std::vector<tileData>> grid;
 	//everything that will exist in this level
+	std::list<GameObject*> GUIObjects;
 	std::list<GameObject*> staticObjects;
 	std::list<GameObject*> dynamicObjects;
 	// Count below represents static objects that have collision (see 'checkCollisions()' function)
@@ -70,8 +78,33 @@ private:
 	int staticPhysicsCount = 0;
 	
 	//Variables for falling floor
-	FloorFallData fallData;
-	double counter = 0;
+	FloorFallData fallData; //OLD
+	FloorFallData currData;
+	FLOORSTATE::STATE floorState;
+	std::vector<FloorFallData> easyPatterns;
+	std::vector<FloorFallData> mediumPatterns;
+	std::vector<FloorFallData> hardPatterns;
+	std::vector<Index> genIndex;
+	double mediumTime;
+	double hardTime;
+	double totalLevelTime;
+	double gTimeLastFrame;
+	double stateTime;
+	double timeBetweenPatterns;
+	double tFallingTime;
+	double fallAndRecoveryTime;
+	double counter;
+	double genTimer;
+	double genCounter;
+	double genEffectTime;
+	bool recoveryMode;
+	int currentPatternNr;
+	double fallPatternCoolDown;
+	double dt;
+
+	//All spawnPositions that will be used in the EnemyHandler
+	enemySpawnPositions enemySpawnPos;
+
 
 	//All objects that wants to be renederd
 	std::list<GraphicsComponent*> graphics;
@@ -82,17 +115,18 @@ private:
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
 	Command* selectCommand = nullptr;
-
-	///std::list<PhysicsComponent*> physicsListStatic;
-	///std::list<PhysicsComponent*> physicsListDynamic;
-
-	//void updatePhysicsComponents();
 	
 	void checkCollisions();
+	void updateFloorPattern();
+	void updateFloor();
+	void checkPlayerTileStatus();
 
+	// Template version of picked up loot, is provided to RMS
+	int nrOfPickedUpLoot = 0;
+	void generatorDischarge(Index index);
 
 	MouseInput* mousePicker = nullptr;
-
+	float tempFloater = 1.0f;
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'GamePlayState'.
@@ -144,11 +178,11 @@ public:
 
 	void initPlayer();
 
-	/*RETURNS THE NEW ID*/
-	int newID() { return this->ID++; }
-
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props);
+
+	/*RETURNS THE NEW ID*/
+	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
 

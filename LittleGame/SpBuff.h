@@ -21,15 +21,13 @@ public:
 	void collision(GameObject* target, Projectile* proj);
 	void update();
 	void cleanUp();
-private:
+protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
 	// Damge of skill to be applied on collision
 	float damage = 0.0f;
 	// Travel-range of spell
-	int range = 0.0f;
-	// If the efect is active
-	bool active;
+	float range = 0.0f;
 	// value to increase to make the player float
 	float floatingValue = 0.0f;
 	// to reset the player after efect wears of
@@ -37,4 +35,36 @@ private:
 	// needs to be lower than CD.
 	float duration = 0.0f;
 };
+
+
+
+////////////////////////////////////////////
+//// GLYPHS ////////////////////////////////////////////
+////////////////////////////////////////////
+class SpBuffG1 : public SpBuff
+{
+public:
+	SpBuffG1(ActorObject* player);
+	virtual ~SpBuffG1();
+private:
+};
+
+
+class SpBuffG2 : public SpBuff
+{
+public:
+	SpBuffG2(ActorObject* player);
+	virtual ~SpBuffG2();
+private:
+};
+
+
+class SpBuffG3 : public SpBuff
+{
+public:
+	SpBuffG3(ActorObject* player);
+	virtual ~SpBuffG3();
+private:
+};
+
 #endif // !SPBUFF_H

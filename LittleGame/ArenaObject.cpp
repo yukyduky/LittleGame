@@ -41,7 +41,4 @@ void ArenaObject::update()
 	for (auto &i : this->components) {
 		i->update();
 	}	
-
-	float gravity = -9.82;
-	double dt = Locator::getGameTime()->getDeltaTime();
 }

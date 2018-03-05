@@ -4,7 +4,8 @@
 #include <cassert>
 
 RandomGeneration::RandomGeneration() {
-	srand(time(NULL));
+	time_t t;
+	srand(static_cast<unsigned int>(time(&t)));
 }
 
 int RandomGeneration::GenerateInt(int rangeStart, int rangeEnd) {
@@ -41,10 +42,10 @@ int RandomGeneration::GenerateInt(int rangeStart, int rangeEnd) {
 
 float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {
 	float randomFloat = 0.0f;
-	int integral = (rangeEnd - rangeStart) * 100;
+	int integral = static_cast<int>((rangeEnd - rangeStart) * 100.0f);
 
 	while (randomFloat == 0.0f) {
-		randomFloat = ((rand() % integral * 0.01) + rangeStart);
+		randomFloat = (static_cast<float>((rand() % integral) * 0.01f) + rangeStart);
 	}
 
 	return randomFloat;

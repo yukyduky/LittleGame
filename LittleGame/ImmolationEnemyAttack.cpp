@@ -3,7 +3,7 @@
 #include "EnemyObject.h"
 #include "GamePlayState.h"
 #include "StateManager.h"
-#include "EndState.h"
+//#include "EndState.h"
 
 ImmolationEnemyAttack::ImmolationEnemyAttack(
 	float damage, float attackCooldown, float attackRange, int* pActiveEnemiesCount,
@@ -39,8 +39,6 @@ void ImmolationEnemyAttack::cleanUp()
 }
 void ImmolationEnemyAttack::attack()
 {
-	char msgbuf[20];
-
 	// Only coded to work against 1 player atm!
 	(*this->players)[0]->dealDmg(this->attackDamage);
 

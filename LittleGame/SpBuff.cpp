@@ -7,7 +7,8 @@ SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCoolDown(5.3f);
+	this->setCost(15.0f);
+	this->setCoolDown(10.0f);
 	this->duration = 1.5f;
 
 	this->range = 20.0f;
@@ -30,13 +31,16 @@ bool SpBuff::castSpell()
 	}
 	else
 	{
-		this->active = true;
-		this->setState(SPELLSTATE::ACTIVE);
+		if (this->getOwner()->useEnergy(this->getCost()))
+		{
+			this->active = true;
+			this->setState(SPELLSTATE::ACTIVE);
 
 		this->getOwner()->setSpeed(this->strength);
 		this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
-		Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+		}
 	}
 
 	return returnValue;
@@ -54,6 +58,8 @@ void SpBuff::update()
 
 	if (this->active)
 	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
 		if (this->getTSC() > this->duration)
 		{
 			this->getOwner()->setSpeed(1.0f);
@@ -65,7 +71,7 @@ void SpBuff::update()
 		}
 		else
 		{
-			this->floatingValue += 5.0f * Locator::getGameTime()->getDeltaTime();
+			this->floatingValue += 5.0f * dt;
 			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
 
 			this->getOwner()->setPositionY(parameter);
@@ -80,4 +86,47 @@ void SpBuff::cleanUp()
 void SpBuff::collision(GameObject * target, Projectile* proj)
 {
 	
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 1 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpBuffG1::SpBuffG1(ActorObject * player) : SpBuff(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH1);
+	this->setCoolDown(0.1f);
+}
+
+SpBuffG1::~SpBuffG1()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 2 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpBuffG2::SpBuffG2(ActorObject * player) : SpBuff(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH2);
+	this->setCost(this->getCost() * 0.6f);
+}
+
+SpBuffG2::~SpBuffG2()
+{
+}
+
+
+////////////////////////////////////////////
+//// GLYPH 3 ////////////////////////////////////////////
+////////////////////////////////////////////
+SpBuffG3::SpBuffG3(ActorObject * player) : SpBuff(player)
+{
+	this->insertGlyph(GLYPHTYPE::GLYPH3);
+	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->setCost(this->getCost() * 0.2f);
+}
+
+SpBuffG3::~SpBuffG3()
+{
 }

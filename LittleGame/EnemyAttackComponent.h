@@ -33,8 +33,9 @@ public:
 	2. Determines this with an internal timer which compares with attackDuration
 	*/
 	virtual bool timeToAttack() {
+		this->passedTime += static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		if (this->passedTime > attackCooldown) {
-			this->passedTime = 0;
+			this->passedTime = 0.0f;
 			return true;
 		}
 		return false;

@@ -1,8 +1,11 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
+#include "MainMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
+#include "RewardMenuState.h"
+
 #include "RestartState.h"
 //Include spells
 //#include "Spell.h"
@@ -10,7 +13,7 @@
 #include <DirectXMath.h>
 
 
-ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType)
+ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
@@ -21,9 +24,12 @@ ActorObject::ActorObject(const size_t ID, XMFLOAT3 pos, float velocity, GamePlay
 	this->state = OBJECTSTATE::TYPE::ACTIVATED;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
+	this->realVelocity = velocity;
+	this->slowedVelocity = velocity * 0.5;
 	
 	// Balance
-	this->hp = 100;
+	this->hp = hp_in;
+	this->hpMAX = hp_in;
 }
 
 const size_t ActorObject::getID()
@@ -88,38 +94,75 @@ void ActorObject::cleanUp()
 
 void ActorObject::update()
 {
-	// HAS NOT BEEN ADAPTED TO THE NEW DIRECTION:VELOCITY
-//	float gravity = -9.82 * 4;
-//	double dt = Locator::getGameTime()->getDeltaTime();
-//
-//	switch (this->state)
-//	{
-//	//State used to make an object fall and after a set time the object becomes "invisible"
-//	case OBJECTSTATE::TYPE::FALLING:
-//		this->velocity.y += gravity * dt * 4;
-//		this->pos.y += this->velocity.y * dt;
-//		if (this->pos.y < -500.0f) {
-//			this->pos.y = -500.0f;
-//			this->velocity.y = 0.0f;
-//			this->state = OBJECTSTATE::TYPE::INVISIBLE;
-//		}
-//		this->updateWorldMatrix();
-//		break;
-//	default:
-//		for (auto &i : this->components) {
-//			i->update();
-//		}
-//		for (auto &i : this->spells) {
-//			i->update();
-//			i->updateCD();
-//		}
-//		break;
-//	}
-	for (auto &i : this->components) {
-		i->update();
+	float gravity = -9.82f * 4.0f;
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	switch (this->statusEffect)
+	{
+	case TILESTATE::COOLED:
+		this->counter += dt;
+		if (this->counter > 3.0f) {
+			this->statusEffect = TILESTATE::ACTIVE;
+			this->velocity = this->realVelocity;
+		}
+		else {
+			this->velocity = this->slowedVelocity;
+		}
+		break;
+	case TILESTATE::HEATED:
+		this->dealDmg(15.0f);
+		this->statusEffect = TILESTATE::ACTIVE;
+		break;
+	case TILESTATE::ELECTRIFIED:
+		this->counter += dt;
+		if (this->counter > 1.5f) {
+			this->statusEffect = TILESTATE::ACTIVE;
+			this->state = OBJECTSTATE::TYPE::ACTIVATED;
+		}
+		else {
+			this->state = OBJECTSTATE::TYPE::STUNNED;
+		}
+		break;
+	default:
+		break;
 	}
-	for (auto &i : this->spells) {
-		i->update();
+
+
+	switch (this->state)
+	{
+	//State used to make an object fall and after a set time the object becomes "invisible"
+	case OBJECTSTATE::TYPE::FALLING:
+		this->velocity += gravity * dt * 4;
+		this->pos.y += this->velocity * dt;
+
+		if (this->pos.y < -500.0f) {
+			this->pos.y = -500.0f;
+			this->velocity = 0.0f;
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
+		}
+		this->updateWorldMatrix();
+		break;
+	case OBJECTSTATE::TYPE::GENERATORRISING:
+		if (this->pos.y < 25.0f) {
+			this->pos.y += 0.5;
+		}
+		else {
+			this->pos.y = 25.0f;
+			this->state = OBJECTSTATE::TYPE::GENERATORACTIVE;
+		}
+		this->updateWorldMatrix();
+		break;
+	case OBJECTSTATE::TYPE::STUNNED:
+		break;
+	default:
+		for (auto &i : this->components) {
+			i->update();
+		}
+		for (auto &i : this->spells) {
+			i->update();
+			i->updateCD();
+		}
+		break;
 	}
 }
 
@@ -128,8 +171,9 @@ void ActorObject::move()
 	//Create the new objects we will need for the calculations.
 	DirectX::XMFLOAT2 MovementVector;
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
-	float deltaTime = Locator::getGameTime()->getDeltaTime();
+	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	XMFLOAT3 actorPos = this->GETPosition();
+	this->previousPos = this->pos;
 	float actorVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = actorPos;
 	tempPos.x += MovementVector.x * actorVelocity * deltaTime;
@@ -157,12 +201,12 @@ void ActorObject::move()
 	}
 
 	else {
-		if (tempPos.z > ARENASQUARESIZE && tempPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+		if (tempPos.z > ARENADATA::GETsquareSize() && tempPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
 			actorNewPos.z = tempPos.z;
 			this->physicsComponent->updateBoundingArea(actorPos);
 		}
 		else { actorNewPos.z = actorPos.z; }
-		if (tempPos.x > ARENASQUARESIZE && tempPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+		if (tempPos.x > ARENADATA::GETsquareSize() && tempPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
 			actorNewPos.x = tempPos.x;
 			this->physicsComponent->updateBoundingArea(actorPos);
 		}
@@ -177,11 +221,12 @@ void ActorObject::move()
 void ActorObject::moveUp()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		float actorVelocity = this->getVelocity();
 		playerPos.z += actorVelocity * dt;
-		if (playerPos.z < ARENAHEIGHT - ARENASQUARESIZE) {
+		if (playerPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
 			this->physicsComponent->updateBoundingArea(playerPos);
 			this->setPosition(playerPos);
 		}
@@ -192,11 +237,12 @@ void ActorObject::moveUp()
 void ActorObject::moveLeft()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		float actorVelocity = this->getVelocity();
 		playerPos.x -= actorVelocity * dt;
-		if (playerPos.x > ARENASQUARESIZE) {
+		if (playerPos.x > ARENADATA::GETsquareSize()) {
 			this->physicsComponent->updateBoundingArea(playerPos);
 			this->setPosition(playerPos);
 		}
@@ -206,11 +252,12 @@ void ActorObject::moveLeft()
 void ActorObject::moveDown()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		float actorVelocity = this->getVelocity();
 		playerPos.z -= actorVelocity * dt;
-		if (playerPos.z > ARENASQUARESIZE) {
+		if (playerPos.z > ARENADATA::GETsquareSize()) {
 			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
@@ -220,11 +267,12 @@ void ActorObject::moveDown()
 void ActorObject::moveRight()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		double dt = Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		float actorVelocity = this->getVelocity();
 		playerPos.x += actorVelocity * dt;
-		if (playerPos.x < ARENAWIDTH - ARENASQUARESIZE) {
+		if (playerPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
 			this->setPosition(playerPos);
 			this->physicsComponent->updateBoundingArea(playerPos);
 		}
@@ -318,10 +366,16 @@ void ActorObject::fireAbilityX()
 	}
 }
 
+void ActorObject::pauseMenu()
+{
+	StateManager::pushState(MainMenuState::getInstance());
+}
+
 void ActorObject::selectAbility1()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[1];
+		this->selectedSpellIntValue = 1;
 	}
 	else {
 
@@ -334,6 +388,7 @@ void ActorObject::selectAbility2()
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
+		this->selectedSpellIntValue = 2;
 	}
 	else {
 
@@ -344,7 +399,7 @@ void ActorObject::selectAbility3()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[3];
-		
+		this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -353,8 +408,11 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];
+		this->selectedSpellIntValue = 4;
 	}
 	else {
 
@@ -384,12 +442,49 @@ void ActorObject::decCD()
 void ActorObject::dealDmg(float dmg)
 {
 	this->hp -= dmg;
-	if (this->hp <= 0) {
-		this->hp = 0;
+	
+	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+
+		this->GETgraphicsComponent()->updateColor(vColor(
+			this->GEThp() / this->GEThpMAX(),
+			0.0f,
+			0.0f,
+			colorHolder.a)
+		);
+	}
+
+	if (this->hp <= 0.0f) {
+		this->hp = 0.0f;
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
-		Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
+		if (this->getType() == OBJECTTYPE::TYPE::ENEMY) {
+			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
+		}
+
+		// If the player much did dieded, create globalMessage 'PLAYERDIED'
+		else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 	}
+}
+
+bool ActorObject::useEnergy(float energyUse) {
+	bool returnValue = false;
+
+	if (energyUse <= this->energy) {
+		this->energy -= energyUse;
+		returnValue = true;
+	}
+
+	return returnValue;
+}
+
+void ActorObject::addEnergy(float energyGain) {
+	this->energy += energyGain;
+
+	if (this->energy > this->energyMAX)
+		this->energy = this->energyMAX;
 }
 
 void ActorObject::addSpell(Spell * spell)
@@ -418,13 +513,13 @@ void ActorObject::switchSpell()
 				i = new SpAutoAttack(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpAutoAttack(this);
+				i = new SpAutoAttackG3(this);
 				break;
 			}
 			break;
@@ -436,13 +531,13 @@ void ActorObject::switchSpell()
 				i = new SpFire(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpFire(this);
+				i = new SpFireG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpFire(this);
+				i = new SpFireG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpFire(this);
+				i = new SpFireG3(this);
 				break;
 			}
 			break;
@@ -454,13 +549,13 @@ void ActorObject::switchSpell()
 				i = new SpBomb(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpBomb(this);
+				i = new SpBombG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpBomb(this);
+				i = new SpBombG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBomb(this);
+				i = new SpBombG3(this);
 				break;
 			}
 			break;
@@ -472,13 +567,13 @@ void ActorObject::switchSpell()
 				i = new SpDash(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpDash(this);
+				i = new SpDashG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpDash(this);
+				i = new SpDashG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpDash(this);
+				i = new SpDashG3(this);
 				break;
 			}
 			break;
@@ -490,13 +585,13 @@ void ActorObject::switchSpell()
 				i = new SpBuff(this);
 				break;
 			case GLYPHTYPE::GLYPH1:
-				i = new SpBuff(this);
+				i = new SpBuffG1(this);
 				break;
 			case GLYPHTYPE::GLYPH2:
-				i = new SpBuff(this);
+				i = new SpBuffG2(this);
 				break;
 			case GLYPHTYPE::GLYPH3:
-				i = new SpBuff(this);
+				i = new SpBuffG3(this);
 				break;
 			}
 			break;
@@ -505,7 +600,11 @@ void ActorObject::switchSpell()
 		newSpells.push_back(i);
 
 	}
-	
+
+	//// Clean up old spells
+	//for (auto &i : this->spells) {
+	//	delete i;
+	//}
 	this->spells.clear();
 	
 	for (auto i : newSpells)
@@ -514,6 +613,19 @@ void ActorObject::switchSpell()
 	}
 	
 	newSpells.clear();
+
+	this->selectAbility1();
+}
+
+void ActorObject::changeSpell(int spell, int glyph)
+{
+	this->spells[spell]->insertGlyph((GLYPHTYPE)glyph);
+}
+
+void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
+{
+	this->statusEffect = effect;
+	this->counter = 0.0f;
 }
 
 Spell * ActorObject::getFirstSpell()

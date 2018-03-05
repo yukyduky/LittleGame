@@ -16,7 +16,7 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bo
 	this->spinn = spinn;
 	this->rangeCounter = 0;
 	this->maxFlyingRange = maxFlyingRange;
-	this->SETrotationMatrix(shooter->getRotationMatrix());
+	this->SETrotationMatrix(DirectX::XMLoadFloat4x4(&shooter->getRotationMatrix()));
 
 	// IGNORE THIS ATM, IT IS AN OPTIMIZATION WHICH COULD BE IMPLEMENTED (setSpell should be done inside the constructor)
 	//Spell* projectilesSpell = nullptr;
@@ -131,10 +131,9 @@ void Projectile::setDirection(XMVECTOR dir) {
 	DirectX::XMStoreFloat3(&this->direction, dir);
 }
 
-XMVECTOR Projectile::getDirection() {
-	DirectX::XMVECTOR directionVector = DirectX::XMLoadFloat3(&this->direction);
-	
-	return directionVector;
+DirectX::XMFLOAT3 Projectile::getDirection()
+{	
+	return this->direction;
 }
 
 void Projectile::setSeeking(float rotationSpeed, ActorObject* pPlayer)
@@ -218,7 +217,9 @@ void Projectile::update()
 
 	if (this->spinn)
 	{
-		this->SETrotationMatrix(this->getRotationMatrix() * XMMatrixRotationAxis(this->getDirection(), this->rangeCounter));
+		XMVECTOR dir = XMLoadFloat3(&this->direction);
+		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
+		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
 	}
 
 	this->rangeCounter++;

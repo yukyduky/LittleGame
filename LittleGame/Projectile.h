@@ -28,12 +28,15 @@ public:
 	void setSpeed(float spd) { this->speed = spd; }
 	float getSpeed() { return this->speed; }
 	void setDirection(XMVECTOR dir);
-	XMVECTOR getDirection();
+	XMFLOAT3 getDirection();
 	void setRange(int maxFlyingRange) { this->maxFlyingRange = maxFlyingRange; }
 	void setSeeking(float rotationSpeed, ActorObject* pPlayer);	// Only relevant to seekling projectiles
 	void setSpell(Spell* spell);
 	Spell* getSpell();	// Gets allocated by player.spell->castSpell()
 
+
+	// Mainly for FIRE SPELL, but can be used by all projectiles
+	std::list<GameObject*>* getPreviouslyHitList() { return &this->previouslyHit; }
 private:
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -55,6 +58,8 @@ private:
 	// Range of travel
 	int maxFlyingRange = 0;
 	int rangeCounter = 0;
+	
+	std::list<GameObject*> previouslyHit;
 };
 
 

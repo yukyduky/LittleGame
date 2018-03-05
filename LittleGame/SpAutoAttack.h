@@ -22,12 +22,42 @@ public:
 	void update();
 	void cleanUp();
 
-private:
+protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
 	// Damge of skill to be applied on collision
 	float damage = 0.0f;
 	// Travel-range of spell
-	int range = 0;
+	float range = 0.0f;
 };
+
+////////////////////////////////////////////
+//// GLYPHS ////////////////////////////////////////////
+////////////////////////////////////////////
+class SpAutoAttackG1 : public SpAutoAttack
+{
+public:
+	SpAutoAttackG1(ActorObject* player);
+	virtual ~SpAutoAttackG1();
+private:
+};
+
+
+class SpAutoAttackG2 : public SpAutoAttack
+{
+public:
+	SpAutoAttackG2(ActorObject* player);
+	virtual ~SpAutoAttackG2();
+private:
+};
+
+
+class SpAutoAttackG3 : public SpAutoAttack
+{
+public:
+	SpAutoAttackG3(ActorObject* player);
+	virtual ~SpAutoAttackG3();
+private:
+};
+
 #endif // !SPAUTOATTACK_H

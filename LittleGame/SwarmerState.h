@@ -35,7 +35,7 @@ protected:
 		int degree = Locator::getRandomGenerator()->GenerateInt(-45, 45);
 		XMFLOAT3 newDirection = this->pHead->getDirection();
 
-		int radDegree = degree * PI / 180;
+		int radDegree = degree * DirectX::XM_PI / 180;
 
 		newDirection.x += std::cos(radDegree);
 		newDirection.z += std::sin(radDegree);
