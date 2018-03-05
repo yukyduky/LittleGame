@@ -6,6 +6,7 @@
 #include "GameTime.h"
 #include "RandomGeneration.h"
 #include "GamePlayState.h"
+#include "MainMenuState.h"
 #include "Renderer.h"
 #include "AudioManager.h"
 #include "GlobalEvents.h"
@@ -31,15 +32,14 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Provide the audioManager object to the service locator
 	Locator::provide(this->audio);
 	// Play music (MVP, this will/should be changed later on)
-	this->audio->play(MUSIC::ONEPUNCH);
-
-
+	//this->audio->play(MUSIC::ONEPUNCH);
 
 	// Start the game timer
 	Locator::getGameTime()->StartTimer();
 
 	// Set the first state of the game
-	StateManager::changeState(GamePlayState::getInstance());
+	StateManager::pushState(GamePlayState::getInstance());
+	StateManager::pushState(MainMenuState::getInstance());
 }
 
 void GameManager::cleanUp()

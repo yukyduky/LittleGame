@@ -8,11 +8,11 @@
 
 
 namespace OBJECTSTATE {
-	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, INVISIBLE, RECOVER, RESETCOLOR };
+	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, INVISIBLE, RECOVER, RESETCOLOR, GENERATORRISING, GENERATORACTIVE, STUNNED };
 }
 namespace OBJECTTYPE {
 	enum TYPE {
-		PLAYER, ENEMY, DOODAD, INDESTRUCTIBLE,
+		PLAYER, ENEMY, GENERATOR, INDESTRUCTIBLE,
 		PROJECTILE, NOT_SET,
 		SIZE
 	};
@@ -20,6 +20,8 @@ namespace OBJECTTYPE {
 
 class Component;
 class PhysicsComponent;
+class BlockComponent;
+class GUIComponent;
 
 using namespace DirectX;
 
@@ -34,10 +36,6 @@ struct Message
 class GameObject
 {
 private:
-	//XMMATRIX world;
-	//XMMATRIX translationMatrix;
-	//XMMATRIX scaleMatrix;
-	//XMMATRIX rotationMatrix;
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 translationMatrix;
 	XMFLOAT4X4 scaleMatrix;
@@ -46,8 +44,11 @@ private:
 protected:
 	std::list<Component*> components;
 	PhysicsComponent* physicsComponent = nullptr;
+	BlockComponent* graphicsComponent = nullptr;
+	GUIComponent* graphicsComponentUI = nullptr;
 
 	const size_t ID;
+	XMFLOAT3 previousPos;
 	XMFLOAT3 pos;
 	XMFLOAT3 velocity;
 	OBJECTTYPE::TYPE type;
@@ -79,24 +80,30 @@ public:
 
 	void setPosition(XMFLOAT3 pos) { this->pos = pos; }
 	void setPositionY(float value) { this->pos.y = value; }
+	void SETpreviousPos(XMFLOAT3 pos) { this->previousPos = pos; }
 	XMFLOAT3 GETPosition() const { return this->pos; }
+	XMFLOAT3 GETpreviousPos() const { return this->previousPos; }
 	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
 	XMFLOAT3 getVelocity() const { return this->velocity; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
-	XMMATRIX& getWorld();
-	void SETworldMatrix(XMMATRIX wMatrix);
-	void SETtranslationMatrix(XMMATRIX translationM);
-	void SETscaleMatrix(XMMATRIX scaleM);
-	void SETrotationMatrix(XMMATRIX rotationM);
+	XMFLOAT4X4& getWorld();
+	void SETworldMatrix(XMMATRIX& wMatrix);
+	void SETtranslationMatrix(XMMATRIX& translationM);
+	void SETscaleMatrix(XMMATRIX& scaleM);
+	void SETrotationMatrix(XMMATRIX& rotationM);
 	void updateWorldMatrix();
-	XMMATRIX getRotationMatrix();
+	XMFLOAT4X4& getRotationMatrix();
 
 	OBJECTTYPE::TYPE getType() const { return this->type; }
 	void setType(OBJECTTYPE::TYPE type) { this->type = type; }
 
 	void SETphysicsComponent(PhysicsComponent* physicsComponent_in) { this->physicsComponent = physicsComponent_in; }
 	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }
+
+	// Graphics: BLOCK_COMPONENT
+	void SETgraphicsComponent(BlockComponent* graphicsComponent_in) { this->graphicsComponent = graphicsComponent_in; }
+	BlockComponent* GETgraphicsComponent() { return this->graphicsComponent; }
 };
 
 #endif // !GAMEOBJECT_H

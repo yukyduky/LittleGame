@@ -5,7 +5,6 @@
 #include "SwarmerState.h"
 #include "ActorObject.h"
 #include "LevelManager.h"
-#include "FloorFallPatterns.h"	 // For struct 'Index'
 
 
 class EnemyObject;

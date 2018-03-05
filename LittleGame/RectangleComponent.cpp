@@ -35,10 +35,10 @@ void RectangleComponent::createVertices(const float r, const float g, const floa
 
 	std::array<PrimitiveVertexData, 4> vertexData;
 
-	vertexData[0] = PrimitiveVertexData(-1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
-	vertexData[1] = PrimitiveVertexData(1.0, 0.0, 1.0, 0.0, 1.0, 0.0, r, g, b, a);
-	vertexData[2] = PrimitiveVertexData(-1.0, 0.0, -1.0, 0.0, 1.0, 0.0, r, g, b, a);
-	vertexData[3] = PrimitiveVertexData(1.0, 0.0, -1.0, 0.0, 1.0, 0.0, r, g, b, a);
+	vertexData[0] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, 0.0f, 1.0f, 0.0f, r, g, b, a);
+	vertexData[1] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, 0.0f, 1.0f, 0.0f, r, g, b, a);
+	vertexData[2] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, 0.0f, 1.0f, 0.0f, r, g, b, a);
+	vertexData[3] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, 0.0f, 1.0f, 0.0f, r, g, b, a);
 
 	DWORD index[] = 
 	{
@@ -97,7 +97,7 @@ void RectangleComponent::receive(GameObject& obj, Message msg)
 void RectangleComponent::update()
 {
 	OBJECTSTATE::TYPE state = this->head->getState();
-	double dt = Locator::getGameTime()->getDeltaTime();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 	switch (state)	
 	{
@@ -122,6 +122,7 @@ void RectangleComponent::update()
 			}
 			else {
 				this->head->setState(OBJECTSTATE::TYPE::FALLING);
+				this->counter = 0.0;
 			}
 		}
 		break;
@@ -166,7 +167,7 @@ size_t& RectangleComponent::GETnumIndices()
 	return this->numIndices;
 }
 
-XMMATRIX& RectangleComponent::getWorld()
+DirectX::XMFLOAT4X4& RectangleComponent::getWorld()
 {
 	return this->head->getWorld();
 }
@@ -194,6 +195,23 @@ void RectangleComponent::updateColor(vColor newColor)
 
 	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
 }
+
+void RectangleComponent::updateVertexZ(int verticeNumber, float zInput)
+{
+	this->points[verticeNumber].z = (zInput - (1.0f - zInput));
+
+	std::array<PrimitiveVertexData, 4> vertexData;
+
+	vertexData[0] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normal.x, this->normal.y, this->normal.z, this->color.r, this->color.g, this->color.b, this->color.a);
+	vertexData[1] = PrimitiveVertexData(this->points[1].x, this->points[1].y, this->points[1].z, this->normal.x, this->normal.y, this->normal.z, this->color.r, this->color.g, this->color.b, this->color.a);
+	vertexData[2] = PrimitiveVertexData(this->points[2].x, this->points[2].y, this->points[2].z, this->normal.x, this->normal.y, this->normal.z, this->color.r, this->color.g, this->color.b, this->color.a);
+	vertexData[3] = PrimitiveVertexData(this->points[3].x, this->points[3].y, this->points[3].z, this->normal.x, this->normal.y, this->normal.z, this->color.r, this->color.g, this->color.b, this->color.a);
+
+	this->gVertexBuffer->Release();
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
+}
+
 
 /*_____________________________
 |          END OF             |

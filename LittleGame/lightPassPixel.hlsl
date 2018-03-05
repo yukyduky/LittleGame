@@ -2,7 +2,8 @@ Texture2D texPosition	: register(t0);
 Texture2D texNormal		: register(t1);
 Texture2D texDiffuse	: register(t2);
 
-struct PointLight {
+struct PointLight
+{
 	float3 pos;
 	float pad0;
 	float3 diffuse;
@@ -13,11 +14,26 @@ struct PointLight {
 	float specPower;
 };
 
-static const int MAX_NUM_LIGHTS = 3;
+struct FloorGrid
+{
+	float3 color;
+	float height;
+};
+
+static const int MAX_NUM_LIGHTS = 50;
+static const int MAX_NUM_FLOORGRIDS_X = 35;
+static const int MAX_NUM_FLOORGRIDS_Y = 35;
 
 cbuffer GeneralData : register (b0) {
+	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
+	float3 camPos;
 	float nrOfLights;
-	float3 pad0;
+	float3 camDir;
+	float pad0;
+	float2 arenaDims;
+	float2 gridDims;
+	float2 gridStartPos;
+	float2 pad1;
 }
 
 cbuffer Light : register (b1) {
@@ -25,21 +41,27 @@ cbuffer Light : register (b1) {
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
+void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
+float dot(float3 vec1, float3 vec2);
+void normalize(inout float3 vec);
 
 float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 {
 	float3 pos_W, normal, diffuse;
-	float emission;
+    float emission;
 	// position_S.xy is literally screen coords
 	float2 screenCoords = position_S.xy;
 
 	// Load all the data from the geo pass
 	loadGeoPassData(screenCoords, pos_W, normal, diffuse, emission);
 
+	renderFallingFloor(pos_W, normal, diffuse);
+
 	float4 finalColor = calcLight(pos_W, normal, diffuse, emission);
 
 	return finalColor;
+	//return float4(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission)
@@ -50,6 +72,68 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
 	emission = texDiffuse.Load(texCoords).w;
+//	normal = float3(0.0f, 1.0f, 0.0f);
+}
+
+void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
+{
+	if (pos_W.y == -0.5f)
+	{
+		float3 pToC = pos_W - camPos;
+		normalize(pToC);
+
+		float lDotN = dot(pToC, normal);
+		if (lDotN != 0.0f)
+		{
+			float i = 0.0f;
+			bool intersected = false;
+
+			do
+			{
+				float pOnQuadX = pos_W.x + pToC.x * (gridDims.x / 4.0f) * i; // gridDims.x / 2.0f stepsize
+				float pOnQuadY = pos_W.y + pToC.y * (gridDims.x / 4.0f) * i;
+				float pOnQuadZ = pos_W.z + pToC.z * (gridDims.y / 4.0f) * i;
+
+				int xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x;
+				int yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y;
+
+				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X &&
+					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y)
+				{
+					float height = grid[xGrid][yGrid].height;
+					float d = dot(float3(pOnQuadX, pOnQuadY, pOnQuadZ) - camPos, normal) / lDotN;
+					float3 p = d * pToC + camPos;
+
+					float offsetX = 7.0f;
+					float offsetY = 7.0f;
+					float offsetZ = 7.0f;
+
+					if (p.x >= pOnQuadX - offsetX && p.x < pOnQuadX + gridDims.x + offsetX &&
+						p.z >= pOnQuadZ - offsetZ && p.z < pOnQuadZ + gridDims.y + offsetZ &&
+						p.y >= height - offsetY && p.y < height + offsetY)
+					{
+						intersected = true;
+						pos_W.y = p.y;
+						diffuse = grid[xGrid][yGrid].color;
+						diffuse -= 0.001f * abs(p.y);
+						saturate(diffuse);
+					}
+				}
+				else
+				{
+					break;
+				}
+
+				i += 1.0f;
+
+			} while (!intersected);
+
+			if (!intersected)
+			{
+				diffuse = float3(0.0f, 0.0f, 0.0f);
+			}
+		}
+	}
 }
 
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission)
@@ -80,4 +164,15 @@ float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float em
 	}
 
 	return float4(saturate(pointLighting), 1.0f);
+}
+
+float dot(float3 vec1, float3 vec2)
+{
+	return float(vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
+}
+
+void normalize(inout float3 vec)
+{
+	float mag = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	vec = float3(vec.x / mag, vec.y / mag, vec.z / mag);
 }

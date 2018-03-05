@@ -11,8 +11,8 @@
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
-#include "EndState.h"
-#include "SwarmerEnemyAttack.h"
+//#include "EndState.h"
+#include "RewardMenuState.h"
 
 EnemyManager::EnemyManager()
 {
@@ -26,12 +26,11 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*> player
 	// Set up pointers
 	this->pGPS = &pGPS;
 	this->players = players; 
-	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
 //	this->pSwarmers = new ArrayList();
 }
 
-void EnemyManager::startLevel1()
+void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
@@ -51,7 +50,7 @@ void EnemyManager::startLevel1()
 		// Per Normal Enemy
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS);
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
@@ -84,8 +83,6 @@ void EnemyManager::startLevel1()
 		this->currentWaveSize += 1;
 	}
 
-	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
-	this->activeEnemiesCount--;
 }
 
 void EnemyManager::cleanLevel()
@@ -93,7 +90,7 @@ void EnemyManager::cleanLevel()
 	// Per wave
 	for (auto &currentWave : this->waves) {
 
-		for (int i = 0; i < currentWave->enemies.size(); i++) {
+		for (size_t i = 0; i < currentWave->enemies.size(); i++) {
 			currentWave->enemies[i]->cleanUp();
 			delete currentWave->enemies[i];
 		}
@@ -109,7 +106,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -124,35 +121,98 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	EnemyAttackingState* attackState = nullptr;
 	EnemyMovingState* moveState = nullptr;
 
+	bool reGenerateRandom = true;
+	int spawnLocation = 0;
+
 
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
-	int spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(400, 500);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
 
-	if (spawnLocation == 1)
-		pos = { -spawnOffset, scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	while (reGenerateRandom)
+	{
+		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
 
-	else if (spawnLocation == 2)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, -spawnOffset };
+		switch (spawnLocation) {
+		case 1:
+		{
+			if (spawnPosVectors.west.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
+				pos = {
+					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
+					scale.y,
+					spawnPosVectors.west.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 2:
+		{
+			if (spawnPosVectors.south.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
+				pos = {
+					spawnPosVectors.south.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 3:
+		{
+			if (spawnPosVectors.east.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
+				pos = {
+					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
+					scale.y,
+					spawnPosVectors.east.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 4:
+		{
+			if (spawnPosVectors.north.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
+				pos = {
+					spawnPosVectors.north.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		break;
+		}
+	}
 
-	else if (spawnLocation == 3)
-		pos = { (static_cast<float>(ARENAWIDTH) + spawnOffset), scale.y, static_cast<float>(ARENAHEIGHT * 0.5) };
+	//if (spawnLocation == 1)
+	//	pos = { -spawnOffset, scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
 
-	else if (spawnLocation == 4)
-		pos = { static_cast<float>(ARENAWIDTH * 0.5), scale.y, (static_cast<float>(ARENAHEIGHT) + spawnOffset) };
+	//else if (spawnLocation == 2)
+	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, -spawnOffset };
+
+	//else if (spawnLocation == 3)
+	//	pos = { (static_cast<float>(ARENADATA::GETarenaWidth()) + spawnOffset), scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
+
+	//else if (spawnLocation == 4)
+	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
-	float speed = 180;
+	float speed = 180.0f;
 	XMFLOAT3 velocity(speed, speed, speed);
-	XMFLOAT4 enemyColor(10.0f, 0.0, 0.0f, 255.0f);
-	XMFLOAT3 rotation(0, 0, 0);
-	float immolationDamage = 3;
-	float immolationDuration = 0.3;
-	float immolationRange = 80;
+	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 0.3f);
+	XMFLOAT3 rotation(0.0f, 0.0f, 0.0f);
+	float immolationDamage = 3.0f;
+	float immolationDuration = 0.3f;
+	float immolationRange = 50.0f;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -246,7 +306,6 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 {
 	this->pGPS = &pGPS;
 	this->players = players;
-	this->endState = new EndState();
 	this->activeEnemiesCount = 0;
 	this->pSwarmers = new ArrayList();
 }
@@ -298,7 +357,7 @@ void EnemyManager::update()
 	else {
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
-			StateManager::pushState(this->endState);
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 		}
 	}
 

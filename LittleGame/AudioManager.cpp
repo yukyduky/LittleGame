@@ -4,8 +4,8 @@
 
 AudioManager::AudioManager()
 {
-	this->soundVolume = 20;
-	this->musicVolume = 6;
+	this->soundVolume = 10.0f;
+	this->musicVolume = 3.0f;
 }
 
 int AudioManager::init()
@@ -133,23 +133,55 @@ void AudioManager::pause(SOUND::NAME name)
 {
 }
 
-void AudioManager::adjustMaster(size_t volume)
+void AudioManager::adjustMaster(float volume)
 {
 	this->adjustEffects(volume);
 
 	this->adjustMusic(volume);
 }
 
-void AudioManager::adjustMusic(size_t volume)
+void AudioManager::adjustMaster(bool value)
 {
-	for (size_t i = 0; i < MUSICSTATE::SIZE; i++)
+	if (value)
 	{
-		this->currentMusic[i].setVolume(this->musicVolume);
+		this->adjustEffects(this->musicVolume + 5.0f);
+		this->adjustMusic(this->soundVolume + 5.0f);
+	}
+	else
+	{
+		this->adjustEffects(this->musicVolume - 5.0f);
+		this->adjustMusic(this->soundVolume - 5.0f);
 	}
 }
 
-void AudioManager::adjustEffects(size_t volume)
+void AudioManager::adjustMusic(float volume)
 {
+	this->musicVolume = volume;
+	if (this->musicVolume < 0.0f)
+	{
+		this->musicVolume = 0.0f;
+	}
+	else if (this->musicVolume > 100.0f)
+	{
+		this->musicVolume = 100.0f;
+	}
+	for (int i = 0; i < MUSICSTATE::SIZE; i++)
+	{
+		this->currentMusic[i].setVolume(volume);
+	}
+}
+
+void AudioManager::adjustEffects(float volume)
+{
+	this->soundVolume = volume;
+	if (this->soundVolume < 0.0f)
+	{
+		this->soundVolume = 0.0f;
+	}
+	else if (this->soundVolume > 100.0f)
+	{
+		this->soundVolume = 100.0f;
+	}
 	this->currentSound.setVolume(this->soundVolume);
 }
 
@@ -160,25 +192,5 @@ void AudioManager::setRepeatMusic(bool repeat)
 
 void AudioManager::cleanUp()
 {
-	this->stopAll();
-	
-	for (int i = 0; i < this->sounds.size(); i++) {
-		this->sounds[i].~SoundBuffer();
-	}
-	
-	
-	for (int i = 0; i < this->musicFilenames.size(); i++) {
-		this->musicFilenames[i].clear();
-	}
-	
-	
-	for (int i = 0; i < this->soundQueue.size(); i++) {
-		this->soundQueue[i].~Sound();
-	}
-	
-	
-	for (int i = 0; i < this->currentMusic.size(); i++) {
-		this->currentMusic[i].~Music();
-	}
-	
+	this->stopAll();	
 }

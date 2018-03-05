@@ -5,10 +5,13 @@
 #include "Locator.h"
 #include "ActorObject.h"
 #include "GamePlayState.h"
+#include "BlockComponent.h"
+#include "GraphicsComponent.h"
+#include <algorithm>
 
 
 //Template for when glyphs become relevant
-enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3};
+enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3, SIZE};
 // Type to not need to check dynamic_cast NOT USED YET
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
 // State to have stages of spells
@@ -19,7 +22,8 @@ enum class NAME {
 	//Damage
 	AUTOATTACK, FIRE, BOMB
 	//Mobility
-	, DASH, BUFF
+	, DASH, BUFF,
+	SIZE
 };
 
 /* --- SPELLS
@@ -55,11 +59,17 @@ public:
 	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };
-	void setCoolDown(double input) { this->coolDown = input; };
+	void setCoolDown(float input) { this->coolDown = input; };
 	float getCoolDown() { return this->coolDown; };
+	void setCost(float input) { this->cost = input; }
+	float getCost() { return this->cost; }
+	void setActive(bool input) { this->active = input; }
+	bool getActive() { return this->active; }
 
 	// TSC = TimeSinceCast
-	size_t getTSC() { return this->timeSinceCast; };
+	float getTSC() { return this->timeSinceCast; };
+	// GUI Visual Cooldown float
+	float GETremainingCoolDownFloat();
 
 private:
 	//Array of glyphs
@@ -69,10 +79,13 @@ private:
 	NAME name;
 	ActorObject * player = nullptr;
 
-	double coolDown = 0.0f;
-	double timeSinceCast = 0.0f;
+	float coolDown = 0.0f;
+	float timeSinceCast = 0.0f;
 	// EnergyCost
-	size_t cost = 0;
+	float cost = 0;
+
+protected:
+	bool active = false;
 };
 
 

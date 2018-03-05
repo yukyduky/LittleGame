@@ -18,7 +18,8 @@ void Spell::updateCD()
 {
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
-		this->timeSinceCast += Locator::getGameTime()->getDeltaTime();
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+		this->timeSinceCast += dt;
 		if (this->timeSinceCast >= this->coolDown)
 		{
 			this->state = SPELLSTATE::READY;
@@ -35,8 +36,21 @@ Projectile* Spell::spawnProj(ProjProp props)
 
 	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
 	proj->setSpell(this);
-	proj->SETrotationMatrix(this->getPlayer()->getRotationMatrix());
+
+	proj->SETrotationMatrix(XMLoadFloat4x4(&this->getPlayer()->getRotationMatrix()));
 	proj->setRange(props.range);
 
 	return proj;
+}
+
+float Spell::GETremainingCoolDownFloat() {
+	float returnValue;
+
+	// NOTE: If-statement results in the ability being ready (visually) when OFF CD
+	if (this->timeSinceCast <= 0)
+		returnValue = 1.0f;
+	else
+		returnValue = (this->timeSinceCast / this->coolDown);
+
+	return returnValue;
 }

@@ -16,6 +16,8 @@
 #include "StateManager.h"
 
 #include "IncludeSpells.h"
+#include "RewardMenuState.h"
+
 
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -52,6 +54,10 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
+					if (k->getType() == OBJECTTYPE::TYPE::PROJECTILE &&
+						k->getState() == OBJECTSTATE::TYPE::DEAD)
+						int tester007 = 700;
+
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						// Dynamic Object must be within the same part of the quad tree
@@ -94,6 +100,277 @@ void GamePlayState::checkCollisions() {
 	}
 }
 
+void GamePlayState::updateFloorPattern() {
+
+	Index index;
+
+	if (totalLevelTime < this->mediumTime) {
+		this->currData = easyPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->easyPatterns.size() - 1)];
+	}
+	else if (totalLevelTime < this->hardTime) {
+		this->currData = mediumPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->mediumPatterns.size() - 1)];
+	}
+	else {
+		this->currData = hardPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->hardPatterns.size() - 1)];
+	}
+	for (int i = 0; i < this->currData.pattern.size(); i++) {
+		index.x = this->currData.pattern[i].x;
+		index.y = this->currData.pattern[i].y;
+		if (this->grid[index.x][index.y].state != TILESTATE::STATE::GENERATOR) {
+			this->grid[index.x][index.y].state = TILESTATE::TFALLING;
+			this->grid[index.x][index.y].counter = 0.0f;
+		}
+	}
+	this->counter = 0.0;
+}
+
+void GamePlayState::updateFloor()
+{
+	Index index(0, 0);
+	XMFLOAT3 currVel(0, 0, 0);
+	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
+	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
+	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
+	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
+	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.0f);
+	XMFLOAT3 cooledColor = XMFLOAT3(0.0f, 0.75f, 1.0f);
+	XMFLOAT3 tempColor1;
+	XMFLOAT3 tempColor2;
+	float baseHeight = 0.5f - 0.01f;
+
+	for (int i = 0; i < this->grid.size(); i++) {
+		for (int j = 0; j < this->grid[i].size(); j++) {
+			switch (this->grid[i][j].state)
+			{
+			case TILESTATE::ACTIVE:
+				break;
+			case TILESTATE::TFALLING:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					
+					tempColor2.x = (fallColor.x / (this->grid[i][j].stateTime)) * counter;
+					tempColor2.y = (fallColor.y / (this->grid[i][j].stateTime)) * counter;
+					tempColor2.z = (fallColor.z / (this->grid[i][j].stateTime)) * counter;
+
+					finalColor.x = tempColor1.x + tempColor2.x;
+					finalColor.y = tempColor1.y + tempColor2.y;
+					finalColor.z = tempColor1.z + tempColor2.z;
+
+					this->grid[i][j].color = finalColor;
+				}
+				else {
+					this->grid[i][j].color = fallColor;
+					this->grid[i][j].state = TILESTATE::FALLING;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::FALLING:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+					this->grid[i][j].posY += GRAVITY / 4.0f * this->counter;
+				}
+				else {
+					this->grid[i][j].posY = baseHeight;
+					this->grid[i][j].color = holeColor;
+					this->grid[i][j].state = TILESTATE::HOLE;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::HOLE:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > this->grid[i][j].stateTime) {
+					this->grid[i][j].state = TILESTATE::RECOVERING;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::RECOVERING:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+					tempColor1.x = (recoverColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = (recoverColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = (recoverColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					finalColor.x = tempColor1.x + holeColor.x;
+					finalColor.y = tempColor1.y + holeColor.y;
+					finalColor.z = tempColor1.z + holeColor.z;
+
+					this->grid[i][j].color = finalColor;
+				}
+				else {
+					this->grid[i][j].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
+					this->grid[i][j].state = TILESTATE::FLASH;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::FLASH:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > 0.2) {
+					this->grid[i][j].color = baseColor;
+					this->grid[i][j].state = TILESTATE::ACTIVE;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::GENERATOR:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > this->grid[i][j].coolDownTime) {
+					index.x = i;
+					index.y = j;
+					this->generatorDischarge(index);
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::TELECTRIFIED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (electrifiedColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (electrifiedColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (electrifiedColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color = tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = electrifiedColor;
+					this->grid[i][j].state = TILESTATE::ELECTRIFIED;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::ELECTRIFIED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > 0.2) {
+					this->grid[i][j].state = TILESTATE::ACTIVE;
+					this->grid[i][j].color = baseColor;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::THEATED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (heatedColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (heatedColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (heatedColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color = tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = heatedColor;
+					this->grid[i][j].state = TILESTATE::HEATED;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::HEATED:
+				this->grid[i][j].state = TILESTATE::ACTIVE;
+				this->grid[i][j].color = baseColor;
+				this->grid[i][j].counter = 0.0;
+				break;
+			case TILESTATE::TCOOLED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (cooledColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (cooledColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (cooledColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color =  tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = cooledColor;
+					this->grid[i][j].state = TILESTATE::COOLED;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::COOLED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > 0.2) {
+					this->grid[i][j].state = TILESTATE::ACTIVE;
+					this->grid[i][j].color = baseColor;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void GamePlayState::checkPlayerTileStatus() 
+{
+	TILESTATE::STATE state;
+	this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid, state);
+
+	//Check if the player is on a active floor tile or if he fell of the map.
+	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
+		if (state == TILESTATE::STATE::FALLING ||
+			state == TILESTATE::STATE::HOLE ||
+			state == TILESTATE::STATE::RECOVERING) {
+			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
+		} 
+		else {
+			switch (state) 
+			{
+			case TILESTATE::STATE::ACTIVE:
+				break;
+			case TILESTATE::STATE::HEATED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::HEATED);
+				break;
+			case TILESTATE::STATE::COOLED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::COOLED);
+				break;
+			case TILESTATE::STATE::ELECTRIFIED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+}
+
+void GamePlayState::generatorDischarge(Index index) 
+{
+	Index currIndex = index;
+	for (int i = index.y + 1; i < this->grid[index.x].size(); i++) {
+		if (this->grid[index.x][i].state == TILESTATE::ACTIVE) {
+			this->grid[index.x][i].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+	for (int i = index.y - 1; i >= 0; i--) {
+		if (this->grid[index.x][i].state == TILESTATE::ACTIVE) {
+			this->grid[index.x][i].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+	for (int i = index.x + 1; i < this->grid.size(); i++) {
+		if (this->grid[i][index.y].state == TILESTATE::ACTIVE) {
+			this->grid[i][index.y].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+	for (int i = index.x - 1; i >= 0; i--) {
+		if (this->grid[i][index.y].state == TILESTATE::ACTIVE) {
+			this->grid[i][index.y].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+}
+
+
+
 //_________________________________________//
 //                                         //
 //             END OF PRIVATE              //
@@ -110,32 +387,54 @@ void GamePlayState::checkCollisions() {
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void GamePlayState::init() {
-	this->initPlayer();
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, ARENAWIDTH, ARENAHEIGHT, *this, this->fallData, this->grid, this->staticObjects, this->dynamicObjects, this->graphics);
-	this->quadTree.initializeQuadTree(0, ARENAWIDTH, ARENAHEIGHT, 0, 0);
-	this->camera.init(ARENAWIDTH, ARENAHEIGHT);
+	this->lm.selectArena();
+	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
+	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
+	this->initPlayer();
+	this->ID = this->GUI.initGUI(
+		this->newID(),
+		this->camera.GETcameraPos(),
+		this->camera.GETfacingDir(),
+		this->GUIObjects,
+		this->graphics
+	);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
 		i++;
 	}
-	
 
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
 	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH * 0.5, ARENASQUARESIZE * 10, ARENAHEIGHT * 0.5), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(ARENAWIDTH - 200.0f, ARENASQUARESIZE * 3, ARENAHEIGHT - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
+	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
-	// To be changed when Ollie has done the rework on camera
-	XMFLOAT3 tempcDir;
-	XMStoreFloat3(&tempcDir, this->camera.GETfacingDir());
-	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDirFloat3());
-	this->enemyManager.startLevel1();
+	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
+	this->enemyManager.startLevel1(this->enemySpawnPos);
+
+	this->mediumTime = 120.0;
+	this->hardTime = 240.0;
+	this->totalLevelTime = 0.0;
+	this->timeBetweenPatterns = 20.0;
+	this->stateTime = 5.0;
+	this->recoveryMode = false;
+	this->counter = 0.0;
+	this->genTimer = 10.0;
+	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
+	this->floorState = FLOORSTATE::STATE::ACTIVE;
+	this->fallPatternCoolDown = 25.0;
+	
+
+	RewardMenuState::getInstance()->provide(this->player1);
+
+	// Player will always get 2 rewards as a base
+	this->nrOfPickedUpLoot = 2;
 }
 
 void GamePlayState::cleanUp()
@@ -165,25 +464,39 @@ void GamePlayState::cleanUp()
 	}
 	this->noCollisionDynamicObjects.clear();
 
-	for (int i = 0; i < this->playerInput.size(); i++) {
-		this->playerInput[i] = nullptr;
+	for (auto &iterator : this->GUIObjects) {
+		iterator->cleanUp();
+		delete iterator;
+	}
+	this->GUIObjects.clear();
+
+	for (auto &i : this->playerInput) {
+		i = nullptr;
 	}
 
 	this->quadTree.cleanup();
 
-	//for (auto && iterator2 : this->pointLights) {
-	//	delete &iterator2;
-	//}
-
 	this->pointLights.clear();
 	
 	this->graphics.clear();
+
+	//Clear the grid
+	this->grid.clear();
+	this->floorState = FLOORSTATE::STATE::ACTIVE;
+	//Clear FloorFallPattern arrays.
+	this->easyPatterns.clear();
+	this->mediumPatterns.clear();
+	this->hardPatterns.clear();
+	this->currData.pattern.clear();
+	//Clear enemySpawnPos
+	this->enemySpawnPos.cleanUp();
 
 	InputComponent::cleanup();
 
 	this->staticPhysicsCount = 0;
 	this->counter = 0;
 	this->ID = 0;
+	this->counter = 0;
 }
 
 void GamePlayState::pause()
@@ -213,80 +526,42 @@ void GamePlayState::handleEvents(GameManager * gm) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
 			StateManager::changeState(RestartState::getInstance());
 		}
+		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
+			//this->player1->GETSpells();
+			RestartState::getInstance()->provide(this->player1->GETSpells());
+			StateManager::changeState(RestartState::getInstance());
+			//Sends the number of Lootboxes picked up druring the game
+			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+		}
 	}
 }
 
 
 void GamePlayState::update(GameManager * gm)
 {	
-
-	this->counter += Locator::getGameTime()->getDeltaTime();
-	Index index;
-	//Make the next floor tile fall if the time is right.	
-	if (this->counter > this->fallData.time) {
-		if (!this->fallData.recoverMode) {
-			for (int i = 0; i < this->fallData.popsPerIteration; i++) {
-				if (this->fallData.pattern.size() == 0) { //Will be replaced by a check if all enemies are dead.
-					this->fallData.recoverMode = true;
-				}
-				else {
-					index.x = this->fallData.pattern[0].x;
-					index.y = this->fallData.pattern[0].y;
-					this->fallData.recoverPattern.push_back(this->fallData.pattern[0]);
-					this->fallData.pattern.erase(this->fallData.pattern.begin());
-					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::TFALLING, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-				}
-			}
-			this->counter = 0;
-		}
-		else {
-			//Recover a floor tile if the time is right
-			for (int i = 0; i < this->fallData.popsPerIteration; i++) {
-				if (this->fallData.recoverPattern.size() != 0) {
-					index.x = this->fallData.recoverPattern[0].x;
-					index.y = this->fallData.recoverPattern[0].y;
-					this->fallData.recoverPattern.erase(this->fallData.recoverPattern.begin());
-					this->lm.changeTileStateFromIndex(XMFLOAT2(index.x, index.y), OBJECTSTATE::TYPE::RECOVER, this->grid, this->staticObjects, this->noCollisionDynamicObjects);
-				}
-			}
-			this->counter = 0;
-		}
+	this->dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->totalLevelTime += this->dt;
+	this->counter += this->dt;
+	this->genCounter += this->dt;
+	this->GUI.updateGUI(this->player1);
+	
+	if (this->counter > this->fallPatternCoolDown) {
+		this->updateFloorPattern();
 	}
-	//Check if the player is on a active floor tile or if he fell of the map.
-	/*if (this->player1 != nullptr && this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
-		if (this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::FALLING || this->lm.checkTileStateFromPos(this->player1->GETPosition(), this->grid) == OBJECTSTATE::TYPE::INVISIBLE) {
-			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
-		}
-	}*/
+	if (this->genCounter > this->genTimer) {
+		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+		this->genCounter = 0.0;
+	}
+	this->updateFloor();
 
 	int ID;
+	Index genIndex;
+	XMFLOAT3 genPos;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (std::list<GameObject*>::iterator it = this->noCollisionDynamicObjects.begin(); it != this->noCollisionDynamicObjects.end(); it++) {
 		(*it)->update();
 	}
-	/*
-	MIGHT WANT THIS CODE LATER! LET IT BE COMMENTED OUT FOR THE TIME BEING.
-	for (int i = 0; i < this->noCollisionDynamicObjects.size(); i++) {
-		if (this->noCollisionDynamicObjects[i]->getState() != OBJECTSTATE::TYPE::DEAD) {
-			//noCollisionDynamicObjects[i]->update();
-		}
-
-		else {
-			ID = this->noCollisionDynamicObjects[i]->getID();
-			for (int j = 0; j < this->graphics.size(); j++) {
-				if (this->graphics[j]->getID() == ID) {
-					this->graphics.erase(this->graphics.begin() + j);
-					break;
-				}
-			}
-			this->noCollisionDynamicObjects[i]->cleanUp();
-			delete this->noCollisionDynamicObjects[i];
-			this->noCollisionDynamicObjects.erase(this->noCollisionDynamicObjects.begin() + i);
-		}
-	}
-	*/
-
-	this->enemyManager.update();
 
 	for (std::list<GameObject*>::iterator it = this->dynamicObjects.begin(); it != this->dynamicObjects.end(); it++) {
 		if ((*it)->getState() != OBJECTSTATE::TYPE::DEAD) {
@@ -302,12 +577,26 @@ void GamePlayState::update(GameManager * gm)
 				}
 				j--;
 			}
+			if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
+				genPos = (*it)->GETPosition();
+				genIndex = this->lm.findTileIndexFromPos(XMFLOAT2(genPos.x, genPos.z));
+				for (int i = 0; i < this->genIndex.size(); i++) {
+					if (genIndex.x == this->genIndex[i].x && genIndex.y == this->genIndex[i].y) {
+						this->grid[this->genIndex[i].x][this->genIndex[i].y].state = TILESTATE::ACTIVE;
+						this->genIndex.erase(this->genIndex.begin() + i);
+						break;
+					}
+				}
+			}
 			(*it)->cleanUp();
 			delete (*it);
 			it = this->dynamicObjects.erase(it);
 			it--;
 		}
 	}
+
+	this->checkPlayerTileStatus();
+	this->enemyManager.update();
 	this->checkCollisions();
 }
 
@@ -315,7 +604,7 @@ void GamePlayState::render(GameManager * gm)
 {
 	rio.render(this->graphics);
 	gm->setupSecondRenderPass();
-	rio.injectResourcesIntoSecondPass();
+	rio.injectResourcesIntoSecondPass(this->grid);
 	gm->display(this);
 }
 
@@ -345,12 +634,12 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
-	XMFLOAT3 playerPos(static_cast<float>(ARENAWIDTH * 0.5), playerScales.y, static_cast<float>(ARENAHEIGHT * 0.5));
+	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
 	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
@@ -421,15 +710,15 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(/*pos, */*proj, (props.size + 5));
+	phyComp = new PhysicsComponent(*proj, (props.size + 5));
 
 	
 	//Add proj to objectArrays
 	this->dynamicObjects.push_back(proj);
-//	this->projectiles.push_back(proj);
 
 	return proj;
 }
+
 //_________________________________________//
 //                                         //
 //              END OF PUBLIC              //

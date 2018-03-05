@@ -1,17 +1,25 @@
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
 #include <Windows.h>
 #include "GameManager.h"
 #include "Locator.h"
 #include "ID3D.h"
+#include "ID2D.h"
 #include "D3D.h"
+#include "D2D.h"
+#include <DirectXMath.h>
 
+using namespace DirectX;
+
+#ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
-
+#endif
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow)
 {
+#ifdef _DEBUG
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG);
 	_CrtMemState s1;
@@ -21,19 +29,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// 1936 something with the quadtree initialization
 	// 6054 something with KeyboardInput
 	// 6063, 6074 something in KeyboardInput or InputComponent
-//	_CrtSetBreakAlloc(6114);
+	//	_CrtSetBreakAlloc(6114);
+#endif
 
 	ID3D* d3d = new D3D();
+	ID2D* d2d = new D2D();
+
 	Locator::provide(d3d);
+	Locator::provide(d2d);
 
 	Locator::getD3D()->initializeWindow(hInstance, true, 1920, 1080, true);
 	Locator::getD3D()->createSwapChain();
 
+	Locator::getD2D()->Initialize();
+	
 	GameManager gm;
 	// Initialize the game
 	gm.init(hInstance, nCmdShow);
-	double deltaTime;
-	double timeLastFrame = 0;
+	double deltaTime = 0.0;
+	double timeLastFrame = 0.0;
 	int frames = 0;
 	char msgbuf[20];
 
@@ -53,7 +67,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		if (timeLastFrame > 1000.0) {
 			sprintf_s(msgbuf, "FPS: %d\n", frames);
 			frames = 0;
-			timeLastFrame = 0;
+			timeLastFrame = 0.0;
 			OutputDebugStringA(msgbuf);
 		}
 	}
@@ -62,12 +76,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	d3d->cleanup();
 	delete d3d;
 
+#ifdef _DEBUG
 	//_CrtDumpMemoryLeaks();
-	//_CrtMemState s2, s3;
-	//_CrtMemCheckpoint(&s2);
 	_CrtMemDumpAllObjectsSince(&s1);
-	/*if (_CrtMemDifference(&s3, &s1, &s2)) {
-		_CrtMemDumpStatistics(&s3);
-	}*/
+#endif
 	return 0;
 }

@@ -2,7 +2,7 @@
 #ifndef COLLISIONHANDLER_H
 #define COLLISIONHANDLER_H
 
-#define DISTANCE_FACTOR 1.4142135623730950488016887242097
+#define DISTANCE_FACTOR 1.414213f
 
 #include <d3d11.h>
 #include "D3D.h"
@@ -64,12 +64,12 @@ private:
 	float divisionFactor = 0.0f;
 
 	// calculateDistance variables
-	double distance = 0;
-	double xDiff = 0;
-	double zDiff = 0;
-	double minDiff = 0;
+	float distance = 0.0f;
+	float xDiff = 0.0f;
+	float zDiff = 0.0f;
+	float minDiff = 0.0f;
 
-	float stepper = 2.0;
+	float stepper = 2.0f;
 
 	int collisionID = 0;
 
@@ -79,16 +79,16 @@ private:
 
 	void collisionPlayerPlayer();
 	void collisionPlayerEnemy();
-	void collisionPlayerDoodad();
+	void collisionPlayerGenerator();
 	void collisionPlayerIndestruct();
 	void collisionPlayerProjectile();
 	void collisionEnemyEnemy();
-	void collisionEnemyDoodad();
+	void collisionEnemyGenerator();
 	void collisionEnemyIndestruct();
 	void collisionEnemyProjectile();
-	void collisionDoodadDoodad();
-	void collisionDoodadIndestruct();
-	void collisionDoodadProjectile();
+	void collisionGeneratorGenerator();
+	void collisionGeneratorIndestruct();
+	void collisionGeneratorProjectile();
 	void collisionIndestructIndestruct();
 	void collisionIndestrucProjectile();
 	void collisionProjectileProjectile();

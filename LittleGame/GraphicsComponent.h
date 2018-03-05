@@ -6,6 +6,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "GameObject.h"
+#include "MenuObject.h"
 
 using namespace DirectX;
 
@@ -44,7 +45,7 @@ public:
 	virtual size_t& GETstride() = 0;
 	virtual size_t& GEToffset() = 0;
 	virtual size_t& GETnumIndices() = 0;
-	virtual XMMATRIX& getWorld() = 0;
+	virtual XMFLOAT4X4& getWorld() = 0;
 	virtual OBJECTSTATE::TYPE GETstate() = 0;
 	
 };

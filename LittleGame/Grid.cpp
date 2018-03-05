@@ -30,8 +30,8 @@ Index Grid::convertPositionIntoIndex(XMFLOAT2 position)
 void Grid::initialize()
 {
 	int levelOfDetail = 10;
-	int widthLength = ARENAWIDTH / levelOfDetail;
-	int heightLength = ARENAHEIGHT / levelOfDetail;
+	int widthLength = ARENADATA::GETarenaWidth() / levelOfDetail;
+	int heightLength = ARENADATA::GETarenaHeight() / levelOfDetail;
 
 	// Allocation of the grid
 	this->theGrid = new GridSlot*[widthLength];

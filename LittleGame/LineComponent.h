@@ -2,6 +2,9 @@
 #ifndef LINECOMPONENT_H_
 #define LINECOMPONENT_H_
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+
 #include "GraphicsComponent.h"
 #include <Windows.h>
 #include <array>
@@ -47,7 +50,7 @@ public:
 	virtual size_t& GETstride();
 	virtual size_t& GEToffset();
 	virtual size_t& GETnumIndices();
-	virtual XMMATRIX& getWorld();
+	virtual XMFLOAT4X4& getWorld();
 	virtual bool checkIfDead();
 	
 };
