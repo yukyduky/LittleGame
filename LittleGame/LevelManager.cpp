@@ -22,7 +22,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(1.0f, 1.0f, 1.0f, 0.0f);
-	vColor actualColor(0.4f, 0.4f, 0.9f, 0.0f);
+	vColor actualColor(0.2f, 0.2f, 0.45f, 0.0f);
 	//Create all the squares representing the floor
 	
 	//Calculate center position of the next grid space
@@ -118,7 +118,7 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMMATRIX scaleM = XMMatrixScaling(static_cast<float>(this->squareSize) * 0.5f, static_cast<float>(this->wallHeight), static_cast<float>(this->squareSize) * 0.5f);
 	XMMATRIX translationM;
 	XMMATRIX worldM;
-	XMFLOAT4 color(155.0f / 255.0f, 48.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f);
+	XMFLOAT4 color(75.0f / 255.0f, 24.0f / 255.0f, 0.5f , 0.0f / 255.0f);
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
 	XMFLOAT2 spawnPos;
