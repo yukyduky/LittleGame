@@ -152,12 +152,12 @@ float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float em
 		// Calculate the "angle" between the normal and the light vector
 		float lightIntensity = saturate(dot(normal, pToL));
 		// Calculate the diffuse against the light and multiply with the light diffuse color
-		float3 finalColor = lightIntensity * diffuse * Lights[i].diffuse.xyz;
-		// Calculate the light falloff factor, aka attenuation
-		finalColor /= Lights[i].attenuation[0] + Lights[i].attenuation[1] * distance + Lights[i].attenuation[2] * distance * distance;
-
+		float3 finalColor = lightIntensity * diffuse * Lights[i].diffuse;
 		// Create an ambient color from the diffuse color of the object
 		float3 finalAmbient = diffuse * Lights[i].ambient;
+		// Calculate the light falloff factor, aka attenuation
+		finalColor /= Lights[i].attenuation[0] + Lights[i].attenuation[1] * distance + Lights[i].attenuation[2] * distance * distance;
+		finalAmbient /= Lights[i].attenuation[0] + Lights[i].attenuation[1] * distance + Lights[i].attenuation[2] * distance * distance;
 
 		// Add the ambient
 		pointLighting += finalColor + finalAmbient;

@@ -71,6 +71,7 @@
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="RewardMenuState.cpp" />
+    <ClCompile Include="IDHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -153,8 +154,10 @@
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="IDHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

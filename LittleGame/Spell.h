@@ -49,7 +49,7 @@ public:
 	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
 	// Spawns a projectile infront of the player
-	Projectile* spawnProj(ProjProp props);
+	Projectile* spawnProj(ProjProp props, Light light);
 
 	ActorObject* getPlayer() { return this->player; };
 	void setType(SPELLTYPE input) { this->type = input; };

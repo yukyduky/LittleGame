@@ -20,7 +20,7 @@
 #include "LevelManager.h"
 #include "QuadTree.h"
 #include "GUIManager.h"
-
+#include "IDHandler.h"
 #include "MouseInput.h"
 
 
@@ -104,6 +104,7 @@ private:
 	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	IDHandler lightIDs;
 	std::vector<Light> pointLights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
@@ -171,7 +172,7 @@ public:
 	void initPlayer();
 
 	/*call to shoot projectile*/
-	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props, Light light);
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }

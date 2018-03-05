@@ -39,7 +39,7 @@ bool SpBomb::castSpell()
 		{
 			this->active = true;
 			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, this->range, false);
-			this->theProj = this->spawnProj(props);
+			this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 			this->damage = this->start;
 		}
 

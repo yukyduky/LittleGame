@@ -22,7 +22,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(1.0f, 1.0f, 1.0f, 0.0f);
-	vColor actualColor(0.0f, 0.784f, 1.0f, 1.0f);
+	vColor actualColor(0.4f, 0.4f, 0.9f, 0.0f);
 	//Create all the squares representing the floor
 	
 	//Calculate center position of the next grid space
