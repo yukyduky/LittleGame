@@ -35,6 +35,9 @@ private:
 
 	RectangleComponent* rectBack[4];
 
+	std::list<GameObject*> enemyElementObjects;
+	std::list<RectangleComponent*> enemyElementRects;
+
 	int lastSpell = 0;
 
 	// vColor colorHP = { 255.0f, 0.0f, 0.0f, 255.0f };
@@ -52,6 +55,12 @@ private:
 
 	vColor colorBack = { 0.25f, 0.25f, 0.25f, 0.0f };
 	vColor colorBackSelected = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	float enemyElementPosX = 0.0f;
+	float enemyElementPosY = 0.0f;
+	float enemyElementPosZ = 0.0f;
+
+	float separationDistance = 0.01f;
 
 	void createGUIElement(
 		float r, float g, float b, float a,
@@ -76,6 +85,7 @@ public:
 	);
 
 	void updateGUI(ActorObject* player);
+	void pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics);
 
 	RectangleComponent* GETrectHP() { return this->rectHP; }
 	RectangleComponent* GETrectEnergy() { return this->rectEnergy; }
@@ -95,6 +105,10 @@ public:
 	vColor GETcolorAbility2() { return this->colorAbility2; }
 	vColor GETcolorAbility3() { return this->colorAbility3; }
 	vColor GETcolorAbility4() { return this->colorAbility4; }
+
+	void SETenemyElementPos(float inputX, float inputY, float inputZ);
+
+	void cleanUp();
 };
 
 #endif

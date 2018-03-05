@@ -106,7 +106,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
 
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700, 800);
 
 	while (reGenerateRandom)
 	{
@@ -220,7 +220,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->activeEnemiesCount = 0;
 }
 
-void EnemyManager::update()
+void EnemyManager::update(GUIManager* GUI)
 {
 	// If there are any waves left on the current level
 	if (this->waves.size() > 0) {
@@ -245,9 +245,11 @@ void EnemyManager::update()
 				freshEnemy->setState(OBJECTSTATE::TYPE::ACTIVATED);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
-				char msgbuf[20];
-				sprintf_s(msgbuf, "SPAWNED\n");
-				OutputDebugStringA(msgbuf);
+				GUI->pushEnemyElement(*this->pGPS->GETGUIObjects(), *this->pGPS->getGraphicsComponents());
+
+				//char msgbuf[20];
+				//sprintf_s(msgbuf, "SPAWNED\n");
+				//OutputDebugStringA(msgbuf);
 			}
 		}
 		// No enemies in this wave? Move on to the next wave

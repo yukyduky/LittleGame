@@ -172,7 +172,9 @@ public:
 	1. Returns a reference to the internal dynamicObjects vector.
 	- Currently only used by EnemyHandler for creation of enemies.
 	*/
+	std::list<GameObject*>* GETGUIObjects();
 	std::list<GameObject*>* getDynamicObjects();
+	std::list<GraphicsComponent*>* getGraphicsComponents();
 
 	void addGraphics(GraphicsComponent* graphicsComponent);
 

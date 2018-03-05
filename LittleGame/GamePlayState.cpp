@@ -392,6 +392,14 @@ void GamePlayState::init() {
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
+
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
+	int i = 0;
+	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
+		this->quadTree.insertStaticObject(*it);
+		i++;
+	}
+
 	this->ID = this->GUI.initGUI(
 		this->newID(),
 		this->camera.GETcameraPos(),
@@ -399,12 +407,6 @@ void GamePlayState::init() {
 		this->GUIObjects,
 		this->graphics
 	);
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
-	int i = 0;
-	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
-		this->quadTree.insertStaticObject(*it);
-		i++;
-	}
 
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
@@ -479,6 +481,8 @@ void GamePlayState::cleanUp()
 	this->pointLights.clear();
 	
 	this->graphics.clear();
+
+	this->GUI.cleanUp();
 
 	//Clear the grid
 	this->grid.clear();
@@ -596,7 +600,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 
 	this->checkPlayerTileStatus();
-	this->enemyManager.update();
+	this->enemyManager.update(&this->GUI);
 	this->checkCollisions();
 }
 
@@ -613,9 +617,19 @@ GamePlayState* GamePlayState::getInstance()
 	return &sGamePlayState;
 }
 
+std::list<GameObject*>* GamePlayState::GETGUIObjects()
+{
+	return &this->GUIObjects;
+}
+
 std::list<GameObject*>* GamePlayState::getDynamicObjects()
 {
 	return &this->dynamicObjects;
+}
+
+std::list<GraphicsComponent*>* GamePlayState::getGraphicsComponents()
+{
+	return &this->graphics;
 }
 
 void GamePlayState::addGraphics(GraphicsComponent * graphicsComponent)
@@ -639,7 +653,7 @@ void GamePlayState::initPlayer()
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
