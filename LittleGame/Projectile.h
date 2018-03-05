@@ -4,14 +4,16 @@
 
 #include "GameObject.h"
 #include "Locator.h"
+#include "RenderInputOrganizer.h"
+#include "IDHandler.h"
 
 class Spell;
 
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
-	~Projectile();
+	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
+	virtual ~Projectile();
 
 	/*Moves the projectile in the direction of the velocity with speed of this->speed, 
 	if it is dead it will cleanup and send the state to the components*/
@@ -41,6 +43,9 @@ private:
 	// Range of travel
 	float range = 0.0f;
 	int rangeCounter = 0;
+
+	std::pair<size_t, Light*> light;
+	IDHandler* lightIDs;
 	
 	std::list<GameObject*> previouslyHit;
 };

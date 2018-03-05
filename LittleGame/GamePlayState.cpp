@@ -129,14 +129,14 @@ void GamePlayState::updateFloor()
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
+	XMFLOAT3 baseColor(0.2f, 0.2f, 0.45f);
 	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.0f);
-	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.0f);
-	XMFLOAT3 cooledColor = XMFLOAT3(0.0f, 0.75f, 1.0f);
+	XMFLOAT3 electrifiedColor = XMFLOAT3(0.5f, 0.5f, 0.05f);
+	XMFLOAT3 heatedColor = XMFLOAT3(0.5f, 0.245f, 0.05f);
+	XMFLOAT3 cooledColor = XMFLOAT3(0.05f, 0.4f, 0.5f);
 	XMFLOAT3 tempColor1;
 	XMFLOAT3 tempColor2;
 	float baseHeight = 0.5f - 0.01f;
@@ -412,10 +412,11 @@ void GamePlayState::init() {
 	allPlayers.push_back(player1);
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
-	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
+	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
+	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
+	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
+	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1(this->enemySpawnPos);
@@ -704,7 +705,7 @@ void GamePlayState::initPlayer()
 }
 
 
-Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	int nextID = this->newID();
@@ -713,8 +714,13 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	BlockComponent* block = nullptr;
 	PhysicsComponent* phyComp = nullptr;
 
-	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
-	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE);
+	XMFLOAT3 position = { pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/ };
+
+	size_t lightID = this->lightIDs.getNewID();
+
+	this->pointLights[lightID] = light;
+
+	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);

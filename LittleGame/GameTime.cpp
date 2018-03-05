@@ -53,5 +53,5 @@ void GameTime::UpdateFrameTime()
 
 const double GameTime::getDeltaTime()
 {
-	return this->deltaTime;
+	return this->deltaTime * this->multiplier;
 }
