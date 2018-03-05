@@ -317,7 +317,15 @@ int GUIManager::initGUI(
 
 ///-------------------------------------------
 
+	this->createGUIElement(
+		0.0f, 1.0f, 0.0f, 1.0f,
+		-1.0f, 0.0f, 1.0f,
+		//-1.1f, 0.0f, 1.1f,
+		0.002f, 0.0f, 0.03f
+	);
 
+	GUIObjects.push_back(this->object);
+	graphics.push_back(this->rect);
 
 
 
