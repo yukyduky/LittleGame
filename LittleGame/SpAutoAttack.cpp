@@ -49,7 +49,7 @@ void SpAutoAttack::update()
 
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY) {
+	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
 		this->getPlayer()->addEnergy(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);

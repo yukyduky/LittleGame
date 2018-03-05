@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "InputComponent.h"
 #include "Locator.h"
+#include "LevelManager.h"
 
 #include "D3D.h"
 #include "list"
@@ -31,6 +32,10 @@ protected:
 	int selectedSpellIntValue = 0;
 	float hp = 0;
 	float hpMAX = 0;
+	TILESTATE::STATE statusEffect = TILESTATE::STATE::ACTIVE;
+	float counter = 0.0f;
+	XMFLOAT3 slowedVelocity;
+	XMFLOAT3 realVelocity;
 
 	float energy = 100;
 	float energyMAX = 100;
@@ -124,6 +129,7 @@ public:
 
 	//Crosshair
 	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }
+	void applyStatusEffect(TILESTATE::STATE effect);
 };
 
 

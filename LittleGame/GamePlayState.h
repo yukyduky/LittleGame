@@ -84,17 +84,23 @@ private:
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
-	float mediumTime;
-	float hardTime;
-	float totalLevelTime;
-	float gTimeLastFrame;
-	float stateTime;
-	float timeBetweenPatterns;
-	float tFallingTime;
-	float fallAndRecoveryTime;
-	float counter;
+	std::vector<Index> genIndex;
+	double mediumTime;
+	double hardTime;
+	double totalLevelTime;
+	double gTimeLastFrame;
+	double stateTime;
+	double timeBetweenPatterns;
+	double tFallingTime;
+	double fallAndRecoveryTime;
+	double counter;
+	double genTimer;
+	double genCounter;
+	double genEffectTime;
 	bool recoveryMode;
 	int currentPatternNr;
+	double fallPatternCoolDown;
+	double dt;
 
 	//All spawnPositions that will be used in the EnemyHandler
 	enemySpawnPositions enemySpawnPos;
@@ -112,10 +118,12 @@ private:
 	
 	void checkCollisions();
 	void updateFloorPattern();
+	void updateFloor();
 	void checkPlayerTileStatus();
 
 	// Template version of picked up loot, is provided to RMS
 	int nrOfPickedUpLoot = 0;
+	void generatorDischarge(Index index);
 
 	MouseInput* mousePicker = nullptr;
 	float tempFloater = 1.0f;
