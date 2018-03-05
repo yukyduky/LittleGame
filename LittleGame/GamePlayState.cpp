@@ -101,153 +101,275 @@ void GamePlayState::checkCollisions() {
 }
 
 void GamePlayState::updateFloorPattern() {
-	float dt = static_cast<float>(Locator::getGameTime()->GetTime()) - this->gTimeLastFrame;
-	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
-	this->totalLevelTime += dt;
-	this->counter += dt;
+
+	Index index;
+
+	if (totalLevelTime < this->mediumTime) {
+		this->currData = easyPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->easyPatterns.size() - 1)];
+	}
+	else if (totalLevelTime < this->hardTime) {
+		this->currData = mediumPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->mediumPatterns.size() - 1)];
+	}
+	else {
+		this->currData = hardPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->hardPatterns.size() - 1)];
+	}
+	for (int i = 0; i < this->currData.pattern.size(); i++) {
+		index.x = this->currData.pattern[i].x;
+		index.y = this->currData.pattern[i].y;
+		if (this->grid[index.x][index.y].state != TILESTATE::STATE::GENERATOR) {
+			this->grid[index.x][index.y].state = TILESTATE::TFALLING;
+			this->grid[index.x][index.y].counter = 0.0f;
+		}
+	}
+	this->counter = 0.0;
+}
+
+void GamePlayState::updateFloor()
+{
 	Index index(0, 0);
-	XMFLOAT3 currVel(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 currVel(0, 0, 0);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
 	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
 	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
-	switch (this->floorState)	
-	{
-	case FLOORSTATE::STATE::ACTIVE:
-		if (this->counter > this->stateTime) {
-			if (totalLevelTime < this->mediumTime) {
-				this->currData = easyPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->easyPatterns.size() - 1)];
-			}
-			else if (totalLevelTime < this->hardTime) {
-				this->currData = mediumPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->mediumPatterns.size() - 1)];
-			}
-			else {
-				this->currData = hardPatterns[Locator::getRandomGenerator()->GenerateInt(0, this->hardPatterns.size() - 1)];
-			}
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-			}
-			this->floorState = FLOORSTATE::STATE::TFALLING;
-			this->counter = 0.0f;
-		}
-		break;
-		
-	case FLOORSTATE::STATE::TFALLING:
-		if (this->counter < this->stateTime) {
-			baseColor.x = baseColor.x - (baseColor.x / (this->stateTime)) * counter;
-			baseColor.y = baseColor.y - (baseColor.y / (this->stateTime)) * counter;
-			baseColor.z = baseColor.z - (baseColor.z / (this->stateTime)) * counter;
-			fallColor.x = (fallColor.x / (this->stateTime)) * counter;
-			fallColor.y = (fallColor.y / (this->stateTime)) * counter;
-			fallColor.z = (fallColor.z / (this->stateTime)) * counter;
+	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.0f);
+	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.0f);
+	XMFLOAT3 cooledColor = XMFLOAT3(0.0f, 0.75f, 1.0f);
+	XMFLOAT3 tempColor1;
+	XMFLOAT3 tempColor2;
+	float baseHeight = 0.5f - 0.01f;
 
-			finalColor.x = baseColor.x + fallColor.x;
-			finalColor.y = baseColor.y + fallColor.y;
-			finalColor.z = baseColor.z + fallColor.z;
+	for (int i = 0; i < this->grid.size(); i++) {
+		for (int j = 0; j < this->grid[i].size(); j++) {
+			switch (this->grid[i][j].state)
+			{
+			case TILESTATE::ACTIVE:
+				break;
+			case TILESTATE::TFALLING:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					
+					tempColor2.x = (fallColor.x / (this->grid[i][j].stateTime)) * counter;
+					tempColor2.y = (fallColor.y / (this->grid[i][j].stateTime)) * counter;
+					tempColor2.z = (fallColor.z / (this->grid[i][j].stateTime)) * counter;
 
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = currData.pattern[i].x;
-				index.y = currData.pattern[i].y;
-				this->grid[index.x][index.y].color = finalColor;
+					finalColor.x = tempColor1.x + tempColor2.x;
+					finalColor.y = tempColor1.y + tempColor2.y;
+					finalColor.z = tempColor1.z + tempColor2.z;
+
+					this->grid[i][j].color = finalColor;
+				}
+				else {
+					this->grid[i][j].color = fallColor;
+					this->grid[i][j].state = TILESTATE::FALLING;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::FALLING:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+					this->grid[i][j].posY += GRAVITY / 4.0f * this->counter;
+				}
+				else {
+					this->grid[i][j].posY = baseHeight;
+					this->grid[i][j].color = holeColor;
+					this->grid[i][j].state = TILESTATE::HOLE;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::HOLE:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > this->grid[i][j].stateTime) {
+					this->grid[i][j].state = TILESTATE::RECOVERING;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::RECOVERING:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+					tempColor1.x = (recoverColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = (recoverColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = (recoverColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					finalColor.x = tempColor1.x + holeColor.x;
+					finalColor.y = tempColor1.y + holeColor.y;
+					finalColor.z = tempColor1.z + holeColor.z;
+
+					this->grid[i][j].color = finalColor;
+				}
+				else {
+					this->grid[i][j].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
+					this->grid[i][j].state = TILESTATE::FLASH;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::FLASH:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > 0.2) {
+					this->grid[i][j].color = baseColor;
+					this->grid[i][j].state = TILESTATE::ACTIVE;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::GENERATOR:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > this->grid[i][j].coolDownTime) {
+					index.x = i;
+					index.y = j;
+					this->generatorDischarge(index);
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::TELECTRIFIED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (electrifiedColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (electrifiedColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (electrifiedColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color = tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = electrifiedColor;
+					this->grid[i][j].state = TILESTATE::ELECTRIFIED;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::ELECTRIFIED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > 0.2) {
+					this->grid[i][j].state = TILESTATE::ACTIVE;
+					this->grid[i][j].color = baseColor;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::THEATED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (heatedColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (heatedColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (heatedColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color = tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = heatedColor;
+					this->grid[i][j].state = TILESTATE::HEATED;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::HEATED:
+				this->grid[i][j].state = TILESTATE::ACTIVE;
+				this->grid[i][j].color = baseColor;
+				this->grid[i][j].counter = 0.0;
+				break;
+			case TILESTATE::TCOOLED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (cooledColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (cooledColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (cooledColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color =  tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = cooledColor;
+					this->grid[i][j].state = TILESTATE::COOLED;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			case TILESTATE::COOLED:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter > 0.2) {
+					this->grid[i][j].state = TILESTATE::ACTIVE;
+					this->grid[i][j].color = baseColor;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
+			default:
+				break;
 			}
 		}
-		else {
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = currData.pattern[i].x;
-				index.y = currData.pattern[i].y;
-				this->grid[index.x][index.y].color = fallColor;
-				this->grid[index.x][index.y].status = TILESTATUS::STATUS::HOLE;
-			}
-			this->floorState = FLOORSTATE::STATE::FALLING;
-			this->counter = 0.0f;
-		}
-		break;
-
-	case FLOORSTATE::STATE::FALLING:
-		if (this->counter < stateTime) {
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY += GRAVITY / 4.0f * this->counter;
-			}
-		}
-		else {
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].posY = -0.5f;
-				this->grid[index.x][index.y].color = XMFLOAT3(0.0f, 0.0f, 0.0f);
-			}
-			this->floorState = FLOORSTATE::STATE::DEACTIVATED;
-			this->counter = 0.0f;
-		}
-		break;
-
-	case FLOORSTATE::STATE::DEACTIVATED:
-		if (this->counter > this->stateTime) {
-			this->floorState = FLOORSTATE::STATE::RECOVERING;
-			this->counter = 0.0f;
-		}
-		break;
-
-	case FLOORSTATE::STATE::RECOVERING:
-		if (this->counter < this->stateTime) {
-			recoverColor.x = (recoverColor.x / (this->stateTime)) * counter;
-			recoverColor.y = (recoverColor.y / (this->stateTime)) * counter;
-			recoverColor.z = (recoverColor.z / (this->stateTime)) * counter;
-
-			finalColor.x = recoverColor.x + holeColor.x;
-			finalColor.y = recoverColor.y + holeColor.y;
-			finalColor.z = recoverColor.z + holeColor.z;
-
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = currData.pattern[i].x;
-				index.y = currData.pattern[i].y;
-				this->grid[index.x][index.y].color = finalColor;
-			}
-		}
-		else {
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
-				this->grid[index.x][index.y].status = TILESTATUS::STATUS::IDLE;
-			}
-			this->floorState = FLOORSTATE::STATE::FLASH;
-			this->counter = 0.0f;
-		}
-		break;
-	case FLOORSTATE::STATE::FLASH:
-		if (counter > 0.2f) {
-			for (size_t i = 0; i < this->currData.pattern.size(); i++) {
-				index.x = this->currData.pattern[i].x;
-				index.y = this->currData.pattern[i].y;
-				this->grid[index.x][index.y].color = baseColor;
-			}
-			this->floorState = FLOORSTATE::STATE::ACTIVE;
-			this->counter = 0.0f;
-		}
-		break;
-
-	default:
-		break;
 	}
 }
 
 void GamePlayState::checkPlayerTileStatus() 
 {
-	TILESTATUS::STATUS status = this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid);
+	TILESTATE::STATE state;
+	this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid, state);
+
 	//Check if the player is on a active floor tile or if he fell of the map.
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
-		if (status == TILESTATUS::STATUS::HOLE) {
+		if (state == TILESTATE::STATE::FALLING ||
+			state == TILESTATE::STATE::HOLE ||
+			state == TILESTATE::STATE::RECOVERING) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
+		} 
+		else {
+			switch (state) 
+			{
+			case TILESTATE::STATE::ACTIVE:
+				break;
+			case TILESTATE::STATE::HEATED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::HEATED);
+				break;
+			case TILESTATE::STATE::COOLED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::COOLED);
+				break;
+			case TILESTATE::STATE::ELECTRIFIED:
+				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
 }
+
+void GamePlayState::generatorDischarge(Index index) 
+{
+	Index currIndex = index;
+	for (int i = index.y + 1; i < this->grid[index.x].size(); i++) {
+		if (this->grid[index.x][i].state == TILESTATE::ACTIVE) {
+			this->grid[index.x][i].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+	for (int i = index.y - 1; i >= 0; i--) {
+		if (this->grid[index.x][i].state == TILESTATE::ACTIVE) {
+			this->grid[index.x][i].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+	for (int i = index.x + 1; i < this->grid.size(); i++) {
+		if (this->grid[i][index.y].state == TILESTATE::ACTIVE) {
+			this->grid[i][index.y].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+	for (int i = index.x - 1; i >= 0; i--) {
+		if (this->grid[i][index.y].state == TILESTATE::ACTIVE) {
+			this->grid[i][index.y].state = this->grid[index.x][index.y].genEffect;
+		}
+	}
+}
+
+
 
 //_________________________________________//
 //                                         //
@@ -304,8 +426,10 @@ void GamePlayState::init() {
 	this->stateTime = 5.0;
 	this->recoveryMode = false;
 	this->counter = 0.0;
+	this->genTimer = 10.0;
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
+	this->fallPatternCoolDown = 25.0;
 	
 
 	RewardMenuState::getInstance()->provide(this->player1);
@@ -416,10 +540,25 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
+	this->dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
+	this->totalLevelTime += this->dt;
+	this->counter += this->dt;
+	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
-	this->updateFloorPattern();
+	
+	if (this->counter > this->fallPatternCoolDown) {
+		this->updateFloorPattern();
+	}
+	if (this->genCounter > this->genTimer) {
+		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+		this->genCounter = 0.0;
+	}
+	this->updateFloor();
 
 	int ID;
+	Index genIndex;
+	XMFLOAT3 genPos;
 	//Update the noCollisionDynamicObjects if the object isn't dead. Else remove the object.
 	for (std::list<GameObject*>::iterator it = this->noCollisionDynamicObjects.begin(); it != this->noCollisionDynamicObjects.end(); it++) {
 		(*it)->update();
@@ -438,6 +577,17 @@ void GamePlayState::update(GameManager * gm)
 					j++;
 				}
 				j--;
+			}
+			if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
+				genPos = (*it)->GETPosition();
+				genIndex = this->lm.findTileIndexFromPos(XMFLOAT2(genPos.x, genPos.z));
+				for (int i = 0; i < this->genIndex.size(); i++) {
+					if (genIndex.x == this->genIndex[i].x && genIndex.y == this->genIndex[i].y) {
+						this->grid[this->genIndex[i].x][this->genIndex[i].y].state = TILESTATE::ACTIVE;
+						this->genIndex.erase(this->genIndex.begin() + i);
+						break;
+					}
+				}
 			}
 			(*it)->cleanUp();
 			delete (*it);

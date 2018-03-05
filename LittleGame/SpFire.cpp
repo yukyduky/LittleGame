@@ -57,7 +57,7 @@ void SpFire::update()
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
-	if (target->getType() == OBJECTTYPE::ENEMY &&
+	if ((target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR) &&
 		!(std::find(proj->getPreviouslyHitList()->begin(), proj->getPreviouslyHitList()->end(), target)
 			!=
 			proj->getPreviouslyHitList()->end())) {

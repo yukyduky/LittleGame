@@ -110,7 +110,7 @@ void SpDash::update()
 
 void SpDash::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY)
+	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 }
 

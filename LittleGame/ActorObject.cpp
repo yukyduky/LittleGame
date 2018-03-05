@@ -25,6 +25,8 @@ ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 ve
 	this->speed = speed;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
+	this->realVelocity = velocity;
+	this->slowedVelocity = XMFLOAT3(velocity.x * 0.5f, velocity.y * 0.5f, velocity.z * 0.5f);
 	
 	// Balance
 	this->hp = hp_in;
@@ -86,6 +88,36 @@ void ActorObject::update()
 	float gravity = -9.82f * 4.0f;
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
+	switch (this->statusEffect)
+	{
+	case TILESTATE::COOLED:
+		this->counter += dt;
+		if (this->counter > 3.0f) {
+			this->statusEffect = TILESTATE::ACTIVE;
+			this->velocity = this->realVelocity;
+		}
+		else {
+			this->velocity = this->slowedVelocity;
+		}
+		break;
+	case TILESTATE::HEATED:
+		this->dealDmg(15.0f);
+		this->statusEffect = TILESTATE::ACTIVE;
+		break;
+	case TILESTATE::ELECTRIFIED:
+		this->counter += dt;
+		if (this->counter > 1.5f) {
+			this->statusEffect = TILESTATE::ACTIVE;
+			this->state = OBJECTSTATE::TYPE::ACTIVATED;
+		}
+		else {
+			this->state = OBJECTSTATE::TYPE::STUNNED;
+		}
+		break;
+	default:
+		break;
+	}
+
 	switch (this->state)
 	{
 	//State used to make an object fall and after a set time the object becomes "invisible"
@@ -98,6 +130,18 @@ void ActorObject::update()
 			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERDIED);
 		}
 		this->updateWorldMatrix();
+		break;
+	case OBJECTSTATE::TYPE::GENERATORRISING:
+		if (this->pos.y < 25.0f) {
+			this->pos.y += 0.5;
+		}
+		else {
+			this->pos.y = 25.0f;
+			this->state = OBJECTSTATE::TYPE::GENERATORACTIVE;
+		}
+		this->updateWorldMatrix();
+		break;
+	case OBJECTSTATE::TYPE::STUNNED:
 		break;
 	default:
 		for (auto &i : this->components) {
@@ -118,6 +162,7 @@ void ActorObject::move()
 	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	XMFLOAT3 actorPos = this->GETPosition();
+	this->previousPos = this->pos;
 	XMFLOAT3 actorVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = actorPos;
 	tempPos.x += MovementVector.x * actorVelocity.x * deltaTime;
@@ -157,6 +202,7 @@ void ActorObject::moveUp()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z += actorVelocity.z * dt;
 		if (playerPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
@@ -174,6 +220,7 @@ void ActorObject::moveLeft()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x -= actorVelocity.x * dt;
 		if (playerPos.x > ARENADATA::GETsquareSize()) {
@@ -190,6 +237,7 @@ void ActorObject::moveDown()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.z -= actorVelocity.z * dt;
 		if (playerPos.z > ARENADATA::GETsquareSize()) {
@@ -206,6 +254,7 @@ void ActorObject::moveRight()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 		XMFLOAT3 playerPos = this->GETPosition();
+		this->previousPos = this->pos;
 		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
 		playerPos.x += actorVelocity.x * dt;
 		if (playerPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
@@ -552,4 +601,10 @@ void ActorObject::switchSpell()
 void ActorObject::changeSpell(int spell, int glyph)
 {
 	this->spells[spell]->insertGlyph((GLYPHTYPE)glyph);
+}
+
+void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
+{
+	this->statusEffect = effect;
+	this->counter = 0.0f;
 }
