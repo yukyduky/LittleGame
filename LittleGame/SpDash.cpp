@@ -60,7 +60,7 @@ bool SpDash::castSpell()
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
-				flames.push_back(this->spawnProj(props));
+				flames.push_back(this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)));
 				flames[i]->setPosition(oldPos + (this->getPlayer()->getDirection(i * flameSize * 2)));
 			}
 			//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
@@ -110,7 +110,7 @@ void SpDash::update()
 
 void SpDash::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY)
+	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 }
 

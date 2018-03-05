@@ -39,7 +39,7 @@ bool SpBomb::castSpell()
 		{
 			this->active = true;
 			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, this->range, false);
-			this->theProj = this->spawnProj(props);
+			this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 			this->damage = this->start;
 		}
 
@@ -68,7 +68,7 @@ void SpBomb::update()
 			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
 			this->theProj->SETscaleMatrix(scaleM);
 		}
-		else if (this->collisionDuration < 0.2f) // delay so that the explosion can kill targets
+		else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
 		{
 			this->collisionDuration += dt;
 		}
@@ -84,7 +84,7 @@ void SpBomb::update()
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::TYPE::ENEMY)
+	if (target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
 	{
 		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
 	}

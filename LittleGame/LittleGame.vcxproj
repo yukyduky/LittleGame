@@ -159,6 +159,7 @@
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="IDHandler.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="IDHandler.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />

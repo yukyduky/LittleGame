@@ -79,16 +79,16 @@ private:
 
 	void collisionPlayerPlayer();
 	void collisionPlayerEnemy();
-	void collisionPlayerDoodad();
+	void collisionPlayerGenerator();
 	void collisionPlayerIndestruct();
 	void collisionPlayerProjectile();
 	void collisionEnemyEnemy();
-	void collisionEnemyDoodad();
+	void collisionEnemyGenerator();
 	void collisionEnemyIndestruct();
 	void collisionEnemyProjectile();
-	void collisionDoodadDoodad();
-	void collisionDoodadIndestruct();
-	void collisionDoodadProjectile();
+	void collisionGeneratorGenerator();
+	void collisionGeneratorIndestruct();
+	void collisionGeneratorProjectile();
 	void collisionIndestructIndestruct();
 	void collisionIndestrucProjectile();
 	void collisionProjectileProjectile();

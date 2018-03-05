@@ -28,13 +28,15 @@ void Spell::updateCD()
 	}
 }
 
-Projectile* Spell::spawnProj(ProjProp props)
+Projectile* Spell::spawnProj(ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
 
-	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props);
+	light.pos = newPos;
+
+	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props, light);
 	proj->setSpell(this);
 
 	proj->SETrotationMatrix(XMLoadFloat4x4(&this->getPlayer()->getRotationMatrix()));

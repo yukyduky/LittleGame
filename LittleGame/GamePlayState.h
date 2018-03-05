@@ -20,7 +20,7 @@
 #include "LevelManager.h"
 #include "QuadTree.h"
 #include "GUIManager.h"
-
+#include "IDHandler.h"
 #include "MouseInput.h"
 
 
@@ -84,17 +84,23 @@ private:
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
-	float mediumTime;
-	float hardTime;
-	float totalLevelTime;
-	float gTimeLastFrame;
-	float stateTime;
-	float timeBetweenPatterns;
-	float tFallingTime;
-	float fallAndRecoveryTime;
-	float counter;
+	std::vector<Index> genIndex;
+	double mediumTime;
+	double hardTime;
+	double totalLevelTime;
+	double gTimeLastFrame;
+	double stateTime;
+	double timeBetweenPatterns;
+	double tFallingTime;
+	double fallAndRecoveryTime;
+	double counter;
+	double genTimer;
+	double genCounter;
+	double genEffectTime;
 	bool recoveryMode;
 	int currentPatternNr;
+	double fallPatternCoolDown;
+	double dt;
 
 	//All spawnPositions that will be used in the EnemyHandler
 	enemySpawnPositions enemySpawnPos;
@@ -104,6 +110,7 @@ private:
 	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	IDHandler lightIDs;
 	std::vector<Light> pointLights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
@@ -112,10 +119,12 @@ private:
 	
 	void checkCollisions();
 	void updateFloorPattern();
+	void updateFloor();
 	void checkPlayerTileStatus();
 
 	// Template version of picked up loot, is provided to RMS
 	int nrOfPickedUpLoot = 0;
+	void generatorDischarge(Index index);
 
 	MouseInput* mousePicker = nullptr;
 	float tempFloater = 1.0f;
@@ -171,7 +180,7 @@ public:
 	void initPlayer();
 
 	/*call to shoot projectile*/
-	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props);
+	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props, Light light);
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }

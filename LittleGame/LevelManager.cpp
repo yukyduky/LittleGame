@@ -22,7 +22,7 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 	XMMATRIX translationM;
 	//Prepare the color of the rectangle
 	vColor color(1.0f, 1.0f, 1.0f, 0.0f);
-	vColor actualColor(0.0f, 0.784f, 1.0f, 1.0f);
+	vColor actualColor(0.4f, 0.4f, 0.9f, 0.0f);
 	//Create all the squares representing the floor
 	
 	//Calculate center position of the next grid space
@@ -49,45 +49,11 @@ void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::li
 		{
 			grid[i][j].baseColor = XMFLOAT3(color.r, color.g, color.b);
 			grid[i][j].color = XMFLOAT3(actualColor.r, actualColor.g, actualColor.b);
-			grid[i][j].posY = pos.y;
-			grid[i][j].ptr = object;
+			grid[i][j].posY = pos.y - 0.01f;
 		}
 	}
 	staticObjects.push_back(object);
 	graphics.push_back(rect);
-
-
-	/*
-	for (size_t i = 0; i < grid.size(); i++)
-	{
-		for (size_t j = 0; j < grid[i].size(); j++)
-		{
-			//Calculate center position of the next grid space
-			pos = XMFLOAT3(this->squareSize * 0.5f + i * this->squareSize, -0.5f, this->squareSize * 0.5f + j * this->squareSize);
-			nextID = this->nextID();
-			//Create the GameObject and calculate the world matrix
-			object = new ArenaObject(nextID, pos);
-			int test = sizeof(ArenaObject);
-			vec = XMLoadFloat3(&pos);
-			translationM = XMMatrixTranslationFromVector(vec);
-			worldM = scaleM * rotationM * translationM;
-			//Create the RectangleComponent
-			rect = new RectangleComponent(*object, color.r, color.g, color.b, color.a);
-			//Give the RectangleComponent to the ArenaObject and set it's world matrix
-			object->addComponent(rect);
-			object->SETworldMatrix(worldM);
-			object->SETrotationMatrix(rotationM);
-			object->SETscaleMatrix(scaleM);
-			//Push the new ArenaObject and GraphicsComponent into the vector arrays
-			grid[i][j].baseColor = XMFLOAT4(color.r, color.g, color.b, color.a);
-			grid[i][j].color = XMFLOAT4(color.r, color.g, color.b, color.a);
-			grid[i][j].posY = pos.y;
-			grid[i][j].ptr = object;
-			staticObjects.push_back(object);
-			graphics.push_back(rect);
-		}
-	}
-	*/
 }
 
 void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
@@ -147,7 +113,6 @@ void LevelManager::createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& co
 void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, enemySpawnPositions& enemySpawnPos, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
-//	int nextID = this->nextID();
 	XMMATRIX rotLR = XMMatrixRotationY(XM_PI * 0.5f);
 	XMMATRIX rotTB = XMMatrixIdentity();
 	XMMATRIX scaleM = XMMatrixScaling(static_cast<float>(this->squareSize) * 0.5f, static_cast<float>(this->wallHeight), static_cast<float>(this->squareSize) * 0.5f);
@@ -157,8 +122,6 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	XMFLOAT3 currPos;
 	XMVECTOR vec;
 	XMFLOAT2 spawnPos;
-	//XMFLOAT2 posIndex;
-	//XMFLOAT3 temp;
 
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
@@ -286,7 +249,6 @@ void LevelManager::createAWall(XMFLOAT3 pos, XMMATRIX& worldM, XMFLOAT4 color, s
 	object->SETworldMatrix(worldM);
 	staticObjects.push_back(object);
 
-	//graphics.push_back(block);
 	this->nrOfWalls++;
 }
 
@@ -333,14 +295,6 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 			k.type = SQUARETYPE::EMPTY;
 		}
 	}
-
-	/*for (size_t i = 0; i < grid.size(); i++)
-	{
-		grid[i].resize(depth / this->squareSize);
-		for (size_t k = 0; k < grid[i].size(); k++) {
-			grid[i][k].type = SQUARETYPE::EMPTY;
-		}
-	}*/
 	
 	// createLevelWalls needs to come first
 	this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
@@ -354,20 +308,20 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 
 void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
-	XMFLOAT2 index = this->findTileIndexFromPos(pos);
-	grid[(int)index.x][(int)index.y].ptr->setState(state);
+	Index index = this->findTileIndexFromPos(pos);
+//	grid[(int)index.x][(int)index.y].ptr->setState(state);
 
 
-	int ID = grid[(int)index.x][(int)index.y].ptr->getID();
+//	int ID = grid[(int)index.x][(int)index.y].ptr->getID();
 	switch (state)
 	{
 	case OBJECTSTATE::TYPE::TFALLING : 
 		for (std::list<GameObject*>::iterator it = staticObjects.begin(); it != staticObjects.end(); it++) {
-			if ((*it)->getID() == ID) {
-				dynamicObjects.push_back((*it));
-				staticObjects.erase(it);
+//			if ((*it)->getID() == ID) {
+//				dynamicObjects.push_back((*it));
+//				staticObjects.erase(it);
 				it--;
-			}
+//			}
 		}
 		break;
 	default:
@@ -377,7 +331,8 @@ void LevelManager::changeTileStateFromPos(XMFLOAT2 pos, OBJECTSTATE::TYPE state,
 
 void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& state, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicObjects)
 {
-	int ID = grid[x][y].ptr->getID();
+//	int ID = grid[x][y].ptr->getID();
+	int ID = -1;
 	std::list<GameObject*>::iterator it = staticObjects.begin();
 	int test = 0;
 
@@ -412,18 +367,68 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 	}
 }
 
-TILESTATUS::STATUS LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid)
+void LevelManager::checkTileStatusFromPos(XMFLOAT3 pos, std::vector<std::vector<tileData>>& grid, TILESTATE::STATE& state)
 {
-	return grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].status;
+	state = grid[static_cast<size_t>(pos.x / ARENADATA::GETsquareSize())][static_cast<size_t>(pos.z / ARENADATA::GETsquareSize())].state;
 }
 
-DirectX::XMFLOAT2 LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
+Index LevelManager::findTileIndexFromPos(XMFLOAT2 pos)
 {
-	XMFLOAT2 index = XMFLOAT2(0.0f, 0.0f);
+	Index index;
 	index.x = pos.x / this->squareSize;
 	index.y = pos.y / this->squareSize;
 
 	return index;
+}
+
+void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex)
+{
+	Index index;
+	do {
+		index.x = Locator::getRandomGenerator()->GenerateInt(1, grid.size() - 2);
+		index.y = Locator::getRandomGenerator()->GenerateInt(1, grid[0].size() - 2);
+	} while (grid[index.x][index.y].state == TILESTATE::GENERATOR);
+	
+	float squareSize = ARENADATA::GETsquareSize();
+	XMFLOAT3 genPos = XMFLOAT3(squareSize * 0.5f + index.x * squareSize, -squareSize * 0.5f, squareSize * 0.5f + index.y * squareSize);
+	int genType = Locator::getRandomGenerator()->GenerateInt(0, GENERATOR::TYPE::OVERCHARGED);
+	grid[index.x][index.y].state = TILESTATE::GENERATOR;
+	XMFLOAT4 genColor;
+
+	switch (genType)
+	{
+	case GENERATOR::TYPE::OVERHEATED:
+		genColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+		grid[index.x][index.y].genEffect = TILESTATE::THEATED;
+		break;
+	case GENERATOR::TYPE::COOLED:
+		genColor = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+		grid[index.x][index.y].genEffect = TILESTATE::TCOOLED;
+		break;
+	case GENERATOR::TYPE::OVERCHARGED:
+		genColor = XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f);
+		grid[index.x][index.y].genEffect = TILESTATE::TELECTRIFIED;
+		break;
+	default:
+		break;
+	}
+	genIndex.push_back(index);
+	
+	GameObject* object = nullptr;
+	BlockComponent* block = nullptr;
+	PhysicsComponent* bSphere = nullptr;
+	object = new ActorObject(ID, 0.0f, genPos, XMFLOAT3(0.0f, 0.0f, 0.0f), this->pGPS, OBJECTTYPE::ENEMY, 500.0f);
+	object->setType(OBJECTTYPE::GENERATOR);
+	object->setState(OBJECTSTATE::TYPE::GENERATORRISING);
+	XMFLOAT3 scale(this->squareSize * 0.5f, this->squareSize * 0.5f, this->squareSize * 0.5f);						// TOBE DELETED
+	XMFLOAT3 rotation(0, 0, 0);
+	block = new BlockComponent(*this->pGPS, *object, genColor, scale, rotation);
+	bSphere = new PhysicsComponent(*object, static_cast<float>(this->squareSize) * 0.75f);
+	XMFLOAT3 bSpherePos = genPos;
+	bSpherePos.y = this->squareSize * 0.5f;
+	bSphere->updateBoundingArea(bSpherePos);
+	//Give the world matrix to the new object and store the object and the block in the vector arrays
+	dynamicObjects.push_back(object);
 }
 
 void LevelManager::clean() {

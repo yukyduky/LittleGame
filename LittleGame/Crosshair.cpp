@@ -3,7 +3,7 @@
 Crosshair::Crosshair(ActorObject* player, const size_t ID) : GameObject(ID)
 {
 	this->player = player;
-	this->type = OBJECTTYPE::DOODAD;
+	this->type = OBJECTTYPE::NOT_SET;
 
 	this->radius = 60;
 }
