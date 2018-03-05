@@ -96,6 +96,12 @@ void MenuState::render(GameManager * gm) {
 	Locator::getD2D()->OnRender(this->menuObjects);
 }
 
+std::wstring MenuState::intToWchar(int input)
+{
+	std::wstring texten = std::to_wstring(input);
+	return texten;
+}
+
 void MenuState::displayMenu(Menu* menu)
 {
 	for (auto &i : this->menuObjects)
@@ -126,3 +132,4 @@ void MenuState::statsWindow()
 {
 	StateManager::changeState(StatisticsMenuState::getInstance());
 }
+

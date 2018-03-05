@@ -4,10 +4,12 @@
 
 StatsHeader::StatsHeader()
 {
-	for (auto i : this->stats.glyphs)
-	{
-		i = (int)GLYPHTYPE::NONE;
-	}
+	//Sets every glyph to 0 aka NONE
+	this->stats.glyphs[0] = 0.0f;
+	this->stats.glyphs[1] = 0.0f;
+	this->stats.glyphs[2] = 0.0f;
+	this->stats.glyphs[3] = 0.0f;
+	this->stats.glyphs[4] = 0.0f;
 
 	for (auto i : this->stats.enemyUpg)
 	{

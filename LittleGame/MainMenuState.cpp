@@ -22,6 +22,7 @@ Menu* MainMenuState::initStartMenu()
 	MenuObject* object = nullptr;
 	Button* pButton = nullptr;
 	WCHAR* text = nullptr;
+	std::wstring text2;
 	int nextID;
 
 	stMenu = new Menu();
