@@ -24,8 +24,8 @@ private:
 	//Sound object that will play the sound
 	sf::Sound currentSound;
 
-	float soundVolume = 0.0f;
-	float musicVolume = 0.0f;
+	float soundVolume;
+	float musicVolume;
 
 	// What MUSICSTATE the game is in, declared as LEVEL1 in current version
 	size_t currState = 0;

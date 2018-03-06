@@ -16,6 +16,7 @@ enum class SHADERTYPE { COLOR, TEXTURE };
 class Renderer
 {
 private:
+	ID3D11ShaderResourceView * gBackgroundSRV = nullptr;
 	std::array<ID3D11RenderTargetView*, NUM_DEFERRED_OUTPUTS> gRTVs;
 	std::array<ID3D11ShaderResourceView*, NUM_DEFERRED_OUTPUTS> gSRVs;
 	std::array<ID3D11Texture2D*, NUM_DEFERRED_OUTPUTS> gDeferredTexs;
@@ -37,6 +38,7 @@ private:
 	std::array<float, 4> clearColor;
 
 	void initShaders();
+	void loadBackgroundTexture();
 	void bindTextureToRTVAndSRV(ID3D11Texture2D** gTexure, ID3D11RenderTargetView** gRTV, ID3D11ShaderResourceView** gSRV, int width, int height, DXGI_FORMAT format);
 	void initSampler(ID3D11SamplerState** gSampler, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAdressModeU, D3D11_TEXTURE_ADDRESS_MODE texAdressModeV, D3D11_TEXTURE_ADDRESS_MODE texAdressModeW, D3D11_COMPARISON_FUNC compFunc);
 	void createQuad();

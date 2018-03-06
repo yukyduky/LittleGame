@@ -177,7 +177,7 @@ void GamePlayState::updateFloor()
 					this->grid[i][j].posY += GRAVITY / 4.0f * this->counter;
 				}
 				else {
-					this->grid[i][j].posY = baseHeight;
+					//this->grid[i][j].posY = baseHeight;
 					this->grid[i][j].color = holeColor;
 					this->grid[i][j].state = TILESTATE::HOLE;
 					this->grid[i][j].counter = 0.0;
@@ -192,7 +192,8 @@ void GamePlayState::updateFloor()
 				break;
 			case TILESTATE::RECOVERING:
 				this->grid[i][j].counter += this->dt;
-				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+				this->grid[i][j].posY -= GRAVITY / 4.0f * this->counter;
+				if (this->grid[i][j].posY < baseHeight) {
 					tempColor1.x = (recoverColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
 					tempColor1.y = (recoverColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
 					tempColor1.z = (recoverColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
@@ -207,6 +208,7 @@ void GamePlayState::updateFloor()
 					this->grid[i][j].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
 					this->grid[i][j].state = TILESTATE::FLASH;
 					this->grid[i][j].counter = 0.0;
+					this->grid[i][j].posY = baseHeight;
 				}
 				break;
 			case TILESTATE::FLASH:
@@ -645,7 +647,7 @@ void GamePlayState::initPlayer()
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
