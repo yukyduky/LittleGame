@@ -18,6 +18,15 @@ Button::Button(MenuState* pMS, size_t ID,
 	this->glyph = glyph;
 }
 
+Button::Button(MenuState * pMS, size_t ID, 
+	XMFLOAT4 pos, D2D1::ColorF color, std::wstring text, BEHAVIOR behavior, 
+	ENEMYUPGRADE eneUpg) : MenuObject(ID, pos, color, text)
+{
+	init(pMS, behavior);
+
+	this->eneUpg = eneUpg;
+}
+
 Button::~Button()
 {
 	this->cleanUp();
@@ -114,6 +123,14 @@ void Button::onPress()
 		this->choosen = true;
 		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
 		Locator::getStatsHeader()->addGlyph((int)this->spellname, (int)this->glyph);
+		this->nextButton->SETPrev(this->prevButton);
+		this->prevButton->SETNext(this->nextButton);
+		break;
+		// Rewardmenu
+	case BEHAVIOR::ADDENEMYUPG:
+		this->choosen = true;
+		//HERE GOES THE FUNCTION TO UPGRADE ENEMIES
+		//static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->getPGPS();
 		this->nextButton->SETPrev(this->prevButton);
 		this->prevButton->SETNext(this->nextButton);
 		break;

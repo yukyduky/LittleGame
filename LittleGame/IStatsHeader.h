@@ -4,6 +4,7 @@
 
 #include <array>
 
+// Level, kills, damage taken to player, 2 arrays that are set to 0 in constructor
 struct Statistics
 {
 	int level;
@@ -19,16 +20,24 @@ struct Statistics
 	{};
 };
 
+// Statics can be accessed by calling the struct with the stats in the getStats() function
 class IStatsHeader
 {
 public:
+	// Adds 1 to the level
 	virtual void addLevel() = 0;
+	// Adds 1 to the killcount
 	virtual void addKill() = 0;
+	// Input is damage that will be added to the damage taken
 	virtual void addDamageTaken(float dmg) = 0;
+	// Input is (int)ENEMYUPGRADE
 	virtual void addUpgrade(int type) = 0;
+	// Input is (int)NAME and (int)GLYPHTYPE
 	virtual void addGlyph(int spellName, int glyph) = 0;
 
+	// Returns struct
 	virtual Statistics getStats() = 0;
+	// Sets all stats to 0, used in reset game
 	virtual void resetStats() = 0;
 private:
 
