@@ -1,6 +1,9 @@
 Texture2D texPosition	: register(t0);
 Texture2D texNormal		: register(t1);
 Texture2D texDiffuse	: register(t2);
+Texture2D texBackground	: register(t3);
+
+SamplerState gSampler	: register(s0);
 
 struct PointLight
 {
@@ -28,12 +31,10 @@ cbuffer GeneralData : register (b0) {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
 	float3 camPos;
 	float nrOfLights;
-	float3 camDir;
-	float pad0;
 	float2 arenaDims;
 	float2 gridDims;
 	float2 gridStartPos;
-	float2 pad1;
+	float2 screenDims;
 }
 
 cbuffer Light : register (b1) {
@@ -42,6 +43,7 @@ cbuffer Light : register (b1) {
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
 void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
+float4 sampleBackground(in float2 screenCoords);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 float dot(float3 vec1, float3 vec2);
 void normalize(inout float3 vec);
@@ -58,10 +60,18 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 
 	renderFallingFloor(pos_W, normal, diffuse);
 
-	float4 finalColor = calcLight(pos_W, normal, diffuse, emission);
+	float4 finalColor;
+
+	if (diffuse.x + diffuse.z == 2.0f)
+	{
+		finalColor = float4(sampleBackground(screenCoords).xyz, 1.0f);
+	}
+	else
+	{
+		finalColor = calcLight(pos_W, normal, diffuse, emission);
+	}
 
 	return finalColor;
-	//return float4(0.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission)
@@ -72,7 +82,6 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	normal = texNormal.Load(texCoords).xyz;
 	diffuse = texDiffuse.Load(texCoords).xyz;
 	emission = texDiffuse.Load(texCoords).w;
-//	normal = float3(0.0f, 1.0f, 0.0f);
 }
 
 void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
@@ -130,10 +139,19 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 
 			if (!intersected)
 			{
-				//diffuse = float3(0.0f, 0.0f, 0.0f);
+				diffuse = float3(1.0f, 0.0f, 1.0f);
 			}
 		}
 	}
+}
+
+float4 sampleBackground(in float2 screenCoords)
+{
+	float2 texCoords = float2(screenCoords.x / screenDims.x, screenCoords.y / screenDims.y);
+
+	float3 diffuse = texBackground.Sample(gSampler, texCoords).rgb;
+
+	return float4(diffuse, 1.0f);
 }
 
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission)

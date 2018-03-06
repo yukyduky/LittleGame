@@ -4,6 +4,7 @@
 #include "Renderer.h"
 #include <Windows.h>
 #include "Locator.h"
+#include <WICTextureLoader.h>
 
 
 void Renderer::initShaders()
@@ -13,6 +14,16 @@ void Renderer::initShaders()
 	this->geoColorShaders.CreateShaders(Locator::getD3D()->GETgDevice(), this->fileNameGeoColorVertex, this->fileNameGeoColorPixel, this->geoColorInputDesc, GEOCOLOR_INPUT_DESC_SIZE);
 
 	this->lightShaders.CreateShaders(Locator::getD3D()->GETgDevice(), this->fileNameLightVertex, this->fileNameLightPixel, this->lightInputDesc, LIGHT_INPUT_DESC_SIZE);
+}
+
+void Renderer::loadBackgroundTexture()
+{
+	HRESULT hr = CreateWICTextureFromFile(Locator::getD3D()->GETgDevice(), L"Resources\\Textures\\background.png", nullptr, &this->gBackgroundSRV, NULL);
+	if (FAILED(hr))
+	{
+		MessageBox(0, "Create box diffuse texture from file - Failed", "Error", MB_OK);
+		_exit(0);
+	}
 }
 
 void Renderer::bindTextureToRTVAndSRV(ID3D11Texture2D** gTexure, ID3D11RenderTargetView** gRTV, ID3D11ShaderResourceView** gSRV, int width, int height, DXGI_FORMAT format)
@@ -197,9 +208,9 @@ void Renderer::createDepthStencilView(size_t width, size_t height, ID3D11DepthSt
 void Renderer::init()
 {
 	// Set the clear color
-	this->clearColor[0] = 0.0f;
+	this->clearColor[0] = 1.0f;
 	this->clearColor[1] = 0.0f;
-	this->clearColor[2] = 0.0f;
+	this->clearColor[2] = 1.0f;
 	this->clearColor[3] = 255.0f;
 
 	// Set current shaders to handle color objects
@@ -218,6 +229,8 @@ void Renderer::init()
 	for (int i = 0; i < NUM_DEFERRED_OUTPUTS; i++) {
 		this->bindTextureToRTVAndSRV(&this->gDeferredTexs[i], &this->gRTVs[i], &this->gSRVs[i], Locator::getD3D()->GETwWidth(), Locator::getD3D()->GETwHeight(), DXGI_FORMAT_R32G32B32A32_FLOAT);
 	}
+
+	this->loadBackgroundTexture();
 
 	// Create the quad to draw on
 	this->createQuad();
@@ -261,8 +274,11 @@ void Renderer::secondPassSetup()
 	ID3D11RenderTargetView* gNullRTV[NUM_DEFERRED_OUTPUTS] = { nullptr, nullptr, nullptr };
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(NUM_DEFERRED_OUTPUTS, gNullRTV, nullptr);
 
+	Locator::getD3D()->GETgDevCon()->PSSetSamplers(0, 1, &this->gSampler);
+
 	// Bind the ShaderResourceVies
 	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, this->gSRVs.data());
+	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(3, 1, &this->gBackgroundSRV);
 
 	// Set the rendertarget to the final rendertarget
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, nullptr);
@@ -306,6 +322,7 @@ void Renderer::cleanUp()
 		i->Release();
 	}
 
+	this->gBackgroundSRV->Release();
 	this->gFinalRTV->Release();
 	this->gDSV->Release();
 	this->gDSB->Release();
