@@ -65,11 +65,15 @@ public:
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }
 
+	std::wstring intToWchar(int input);
+
 	//Button functions
 	void displayMenu(Menu* menu);
 	void startGame();
+	void resumeGame();
+	void restartGame();
 	void quitMenu() { this->quit = true; };
-
+	void statsWindow();
 };
 
 #endif // !MENUSTATE_H

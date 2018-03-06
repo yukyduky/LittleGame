@@ -50,7 +50,7 @@ MenuObject::MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color) : ID(ID)
 	pRT->CreateSolidColorBrush(D2D1::ColorF(color), &this->pColorBrush);
 }
 
-MenuObject::MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color, const WCHAR * text) : ID(ID)
+MenuObject::MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color, std::wstring text) : ID(ID)
 {
 	this->pRT = Locator::getD2D()->GETRenderTarget();
 	this->menuSize = { 200.0f, 400.0f, 300.0f };
@@ -94,12 +94,12 @@ void MenuObject::render()
 {
 	pRT->FillRectangle(&this->rectangle, this->pColorBrush);
 
-	if (this->text)
+	if (this->text != L"")
 	{
 		//Renders the text ontop
 		this->pRT->DrawText(
-			this->text,
-			wcslen(this->text),
+			this->text.c_str(),
+			wcslen(this->text.c_str()),
 			Locator::getD2D()->GETTextFormat(),
 			this->rectangle,
 			this->pTextColorBrush

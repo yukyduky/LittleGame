@@ -72,6 +72,7 @@ Menu * RewardMenuState::initRewardMenu()
 	MenuObject* object = nullptr;
 	Button* pButton = nullptr;
 	WCHAR* text = nullptr;
+	std::wstring textStr;
 	int nextID;
 
 	menu = new Menu();
@@ -81,9 +82,15 @@ Menu * RewardMenuState::initRewardMenu()
 	object = new MenuObject(this->newID(),
 		{ 0.0f,0.0f, 400.0f,400.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
+	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
+		textStr);
+	menu->addQuad(object);
 
 	//Glyph desc
-	text = L" Glyph 1 (G1) lowers cooldown. \n\n Glyph 2 (G2) incresees power. \n\n Glyph 3 (G3) greatly incresees power but incresees cooldown.";
+	text = L" Glyph 1 (G1) lowers cooldown. \n\n Glyph 2 (G2) h'o'jer power. \n\n Glyph 3 (G3) greatly h'o'jer power but h'o'jer cooldown.";
 	object = new MenuObject(this->newID(),
 		{ -300.0f,0.0f, 200.0f,400.0f }, D2D1::ColorF::DarkKhaki,
 		text);
@@ -254,6 +261,14 @@ Menu * RewardMenuState::initRewardMenu()
 		start.y += 170.0f;
 	}
 
+	nextID = this->newID();
+	text = L"End to stats";
+	pButton = new Button(this, nextID,
+		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOSTATS);
+	menu->addButton(pButton);
+
+	start.y += 170.0f;
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
