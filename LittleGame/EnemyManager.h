@@ -42,11 +42,11 @@ private:
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
 	int currentWaveCount = 0;
-	int currentWaveSize = 0;
-	double spawnInterval = 0;
-	double waveInterval = 0;
-	double timePassed = 0;
-	double startTime = 0;
+	std::vector<int> currentWaveEnemyCount;
+	float spawnInterval = 0;
+	float waveInterval = 0;
+	float timePassed = 0;
+	float startTime = 0;
 
 	void cleanLevel();
 
@@ -62,7 +62,8 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
 	*/
-	void startLevel1(enemySpawnPositions spawnPosVectors);
+	void startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty);
+	void startRampLevel(enemySpawnPositions spawnPosVectors, float difficulty);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

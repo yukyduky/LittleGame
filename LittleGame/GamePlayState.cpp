@@ -422,7 +422,9 @@ void GamePlayState::init() {
 	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
-	this->enemyManager.startLevel1(this->enemySpawnPos);
+
+	this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	//this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -442,8 +444,7 @@ void GamePlayState::init() {
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
 
-	// Adds to the level each time it starts a level
-	Locator::getStatsHeader()->addLevel();
+	
 }
 
 void GamePlayState::cleanUp()

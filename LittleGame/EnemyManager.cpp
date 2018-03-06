@@ -29,15 +29,19 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& playe
 	this->activeEnemiesCount = 0;
 }
 
-void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
+void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty)
 {
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
-	this->spawnInterval = 0.2;
-	this->waveInterval = 5;
-	this->currentWaveCount = 4;
-	this->currentWaveSize = 20;
+	this->spawnInterval = 0.20f;
+	this->waveInterval = (5.1f - (difficulty * 0.5f));
+	this->currentWaveCount = (4 + static_cast<int>(difficulty));
+
+	this->currentWaveEnemyCount.resize(10);
+	for (int i = 0; i < this->currentWaveEnemyCount.size(); i++)
+		this->currentWaveEnemyCount.at(i) = (20 + static_cast<int>(difficulty));
+
 	Wave* currentWave = nullptr;
 
 	// Per wave
@@ -45,7 +49,39 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 		currentWave = new Wave();
 
 		// Per enemy
-		for (int j = 0; j < this->currentWaveSize; j++) {
+		for (int j = 0; j < this->currentWaveEnemyCount.size(); j++) {
+			// Create an enemy and attatch it to the wave.
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
+			currentWave->enemies.push_back(enemy);
+			this->activeEnemiesCount++;
+		}
+
+		// Attach the currentWave to our waves
+		this->waves.push_back(currentWave);
+	}
+}
+
+void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float difficulty)
+{
+	this->startTime = Locator::getGameTime()->GetTime();
+	this->timePassed = 0;
+	this->activeEnemiesCount = 0;
+	this->spawnInterval = 0.20f;
+	this->waveInterval = (5.1f - (difficulty * 0.5f));
+	this->currentWaveCount = 10;
+	
+	//this->currentWaveEnemyCount = new int [this->currentWaveCount];
+	for (int i = 0; i < this->currentWaveCount; i++)
+		this->currentWaveEnemyCount[i] = (4 + (4 * i));
+
+	Wave* currentWave = nullptr;
+
+	// Per wave
+	for (int i = 0; i < this->currentWaveCount; i++) {
+		currentWave = new Wave();
+
+		// Per enemy
+		for (int j = 0; j < this->currentWaveEnemyCount[i]; j++) {
 			// Create an enemy and attatch it to the wave.
 			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
@@ -56,7 +92,7 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 		this->waves.push_back(currentWave);
 
 		// Up the difficulty a bit maybe?
-		this->currentWaveSize += 1;
+		//this->currentWaveEnemyCount += 1;
 	}
 
 }

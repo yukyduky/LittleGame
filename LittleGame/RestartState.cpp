@@ -37,6 +37,9 @@ void RestartState::update(GameManager* gm)
 }
 void RestartState::render(GameManager* gm)
 {
+	// Adds to the level each time it starts a level
+	Locator::getStatsHeader()->addLevel();
+
 	RewardMenuState::getInstance()->provide(this->spellPackage);
 	StateManager::changeState(GamePlayState::getInstance());
 	StateManager::pushState(RewardMenuState::getInstance());

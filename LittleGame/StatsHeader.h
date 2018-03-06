@@ -10,6 +10,7 @@ public:
 	StatsHeader();
 
 	virtual void addLevel();
+	virtual void increaseDifficulty(float additiveValue);
 	virtual void addKill();
 	virtual void addDamageTaken(float dmg);
 	virtual void addUpgrade(int type);

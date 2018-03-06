@@ -8,13 +8,15 @@
 struct Statistics
 {
 	int level;
+	float difficulty;
 	int kills;
 	float damageTaken;
 	std::array<int, (size_t)5/*Need enum for types of enemy upgrades*/> enemyUpg;
 	std::array<int /*GLYPHTYPE*/, 5 /*NAME*/> glyphs;
 
 	Statistics() :
-		level(-1),
+		level(0),
+		difficulty(0),
 		kills(0),
 		damageTaken(0.0f)
 	{};
@@ -26,6 +28,8 @@ class IStatsHeader
 public:
 	// Adds 1 to the level
 	virtual void addLevel() = 0;
+	// Increases the difficulty by the input value
+	virtual void increaseDifficulty(float additiveValue) = 0;
 	// Adds 1 to the killcount
 	virtual void addKill() = 0;
 	// Input is damage that will be added to the damage taken
