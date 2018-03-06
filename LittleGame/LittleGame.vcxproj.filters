@@ -59,7 +59,6 @@
     </ClCompile>
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="Crosshair.cpp" />
-    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="EnemyObject.cpp">
       <Filter>Clusterer</Filter>
     </ClCompile>
@@ -95,6 +94,12 @@
       <Filter>Swarmer\Specific\States</Filter>
     </ClCompile>
     <ClCompile Include="EnemyState.cpp" />
+    <ClCompile Include="BossIntroState.cpp">
+      <Filter>BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossState.cpp">
+      <Filter>BossStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -162,7 +167,6 @@
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="Crosshair.h" />
-    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="EnemyObject.h">
       <Filter>Swarmer</Filter>
     </ClInclude>
@@ -204,6 +208,12 @@
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="BossIntroState.h">
+      <Filter>BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossState.h">
+      <Filter>BossStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -226,6 +236,9 @@
     </Filter>
     <Filter Include="Swarmer\Grid">
       <UniqueIdentifier>{917cd026-3d48-4e66-ba66-6f68d9feb979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BossStates">
+      <UniqueIdentifier>{40ebde2a-2545-4831-be7d-5be64ee3eb4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
