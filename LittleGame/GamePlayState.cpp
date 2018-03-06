@@ -57,7 +57,6 @@ void GamePlayState::checkCollisions() {
 				{
 					if (k->getType() == OBJECTTYPE::TYPE::PROJECTILE &&
 						k->getState() == OBJECTSTATE::TYPE::DEAD)
-						int tester007 = 700;
 
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
@@ -390,6 +389,13 @@ void GamePlayState::generatorDischarge(Index index)
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
 void GamePlayState::init() {
+	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
+	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
+	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
+	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
+	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
+
+
 	this->lm.selectArena();
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
@@ -402,7 +408,7 @@ void GamePlayState::init() {
 		this->GUIObjects,
 		this->graphics
 	);
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->pointLights, this->lightIDs);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -412,12 +418,6 @@ void GamePlayState::init() {
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
-
-	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
-	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
-	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
-	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
-	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1(this->enemySpawnPos);
