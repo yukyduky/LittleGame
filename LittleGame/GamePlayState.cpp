@@ -484,6 +484,7 @@ void GamePlayState::cleanUp()
 	this->quadTree.cleanup();
 
 	this->pointLights.clear();
+	this->lightIDs.clear();
 	
 	this->graphics.clear();
 
