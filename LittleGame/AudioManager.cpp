@@ -2,10 +2,8 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager()
+AudioManager::AudioManager() : soundVolume(0.0f), musicVolume(0.0f)
 {
-	this->soundVolume = 0.0f;
-	this->musicVolume = 0.0f;
 }
 
 int AudioManager::init()

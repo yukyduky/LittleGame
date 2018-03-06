@@ -39,12 +39,10 @@ struct LightPassData {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
 	XMFLOAT3 camPos;
 	float nrOfLights;
-	XMFLOAT3 camDir;
-	float pad0;
 	XMFLOAT2 arenaDims;
 	XMFLOAT2 gridDims;
 	XMFLOAT2 gridStartPos;
-	XMFLOAT2 pad1;
+	XMFLOAT2 screenDims;
 
 	LightPassData() {}
 };
