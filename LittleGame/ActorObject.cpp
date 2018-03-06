@@ -452,6 +452,8 @@ void ActorObject::dealDmg(float dmg)
 
 			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
 			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::ENEMYDIED);
+			Locator::getGlobalEvents()->incrementEnemyDeathCount();
+
 			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
 		}
 

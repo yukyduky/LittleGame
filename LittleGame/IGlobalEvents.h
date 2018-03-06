@@ -8,6 +8,8 @@ class IGlobalEvents {
 public:
 	virtual void generateMessage(GLOBALMESSAGES message) = 0;
 	virtual bool pollEvent(GLOBALMESSAGES &msg) = 0;
+	virtual void incrementEnemyDeathCount() = 0;
+	virtual int getEnemyDeathCount() = 0;
 };
 
 #endif

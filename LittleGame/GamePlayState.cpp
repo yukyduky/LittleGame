@@ -544,9 +544,12 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(RestartState::getInstance());
 		}
 
-		else if (globalmsg == GLOBALMESSAGES::ENEMYDIED) {
-			GUI.popEnemyElement(this->GUIObjects, this->graphics);
-		}
+		//else if (globalmsg == GLOBALMESSAGES::ENEMYDIED)
+		//{
+		//	int loopCount = Locator::getGlobalEvents()->getEnemyDeathCount();
+		//	for (int i = 0; i < loopCount; i++)
+		//		GUI.popEnemyElement(this->GUIObjects, this->graphics);
+		//}
 	}
 }
 
