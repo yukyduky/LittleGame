@@ -538,6 +538,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
 		}
+
+		else if (globalmsg == GLOBALMESSAGES::ENEMYDIED) {
+			GUI.popEnemyElement(this->GUIObjects, this->graphics);
+		}
 	}
 }
 

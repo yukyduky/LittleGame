@@ -10,7 +10,6 @@
 #include "GameObject.h"
 #include "GraphicsComponent.h"
 #include "ActorObject.h"
-#include "IDHandler.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
@@ -19,7 +18,6 @@ class RectangleComponent;
 class GUIManager
 {
 private:
-	GamePlayState * pGPS = nullptr;
 	int tempID;
 	DirectX::XMFLOAT3 cameraPos;
 	DirectX::XMFLOAT3 cameraFacingDir;
@@ -86,7 +84,8 @@ public:
 	);
 
 	void updateGUI(ActorObject* player);
-	void pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics);
+	void pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID);
+	void popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics);
 
 	RectangleComponent* GETrectHP() { return this->rectHP; }
 	RectangleComponent* GETrectEnergy() { return this->rectEnergy; }

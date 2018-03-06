@@ -245,7 +245,7 @@ void EnemyManager::update(GUIManager* GUI)
 				freshEnemy->setState(OBJECTSTATE::TYPE::ACTIVATED);
 				(*this->pGPS->getDynamicObjects()).push_back(freshEnemy);
 
-				GUI->pushEnemyElement(*this->pGPS->GETGUIObjects(), *this->pGPS->getGraphicsComponents());
+				GUI->pushEnemyElement(*this->pGPS->GETGUIObjects(), *this->pGPS->getGraphicsComponents(), this->pGPS->newID());
 
 				//char msgbuf[20];
 				//sprintf_s(msgbuf, "SPAWNED\n");

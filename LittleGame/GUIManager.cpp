@@ -387,8 +387,10 @@ void GUIManager::updateGUI(ActorObject* player)
 	}
 }
 
-void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics)
+void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID)
 {
+	this->tempID = ID;
+
 	this->createGUIElement(
 		0.0f, 1.0f, 0.0f, 1.0f,
 		this->enemyElementPosX, this->enemyElementPosY, this->enemyElementPosZ,
@@ -396,6 +398,9 @@ void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<
 	);
 
 	this->enemyElementPosX += this->separationDistance;
+
+	if (this->enemyElementPosX > 1.05f)
+		this->enemyElementPosX = -1.05f;
 
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
@@ -405,6 +410,20 @@ void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<
 	this->enemyElementRects.push_back(this->rect);
 }
 
+void GUIManager::popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics)
+{
+	GameObject* tempObjectHolder = this->enemyElementObjects.front();
+	GraphicsComponent* tempGraphicsHolder = this->enemyElementRects.front();
+
+	this->enemyElementObjects.pop_front();
+	this->enemyElementRects.pop_front();
+
+	GUIObjects.remove(tempObjectHolder);
+	graphics.remove(tempGraphicsHolder);
+
+	tempObjectHolder->cleanUp();
+	delete tempObjectHolder;
+}
 
 void GUIManager::cleanUp()
 {
