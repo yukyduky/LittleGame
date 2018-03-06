@@ -9,8 +9,14 @@ class MenuState;
 
 enum class BEHAVIOR {
 	GOSTART, GOOPTIONS, RESUMEGAME, STARTGAME, RESTARTGAME, NEWGAME, VOLUMEUP, VOLUMEDOWN, WINDOWSWITCH,
-	ADDGLYPH, REWSTARTGAME, GOSTATS,
-	QUIT};
+	ADDGLYPH, ADDENEMYUPG, REWSTARTGAME, GOSTATS,
+	QUIT
+};
+
+enum class ENEMYUPGRADE {
+	DAMAGE, HEALTH, AMOUNT, SPEED,
+	SIZE
+};
 
 class Button : public MenuObject
 {
@@ -20,6 +26,9 @@ public:
 	Button(MenuState* pMS, size_t ID,
 		XMFLOAT4 pos, D2D1::ColorF color, std::wstring text, BEHAVIOR behavior,
 		NAME spellname, GLYPHTYPE glyph);
+	Button(MenuState* pMS, size_t ID,
+		XMFLOAT4 pos, D2D1::ColorF color, std::wstring text, BEHAVIOR behavior,
+		ENEMYUPGRADE eneUpg);
 	~Button();
 	void init(MenuState* pMS, BEHAVIOR behavior);
 	void cleanUp();
@@ -42,6 +51,8 @@ private:
 	// Used for updating spells
 	NAME spellname;
 	GLYPHTYPE glyph;
+	//Used for upgrading enemies
+	ENEMYUPGRADE eneUpg;
 
 	Button* nextButton = nullptr;
 	Button* prevButton = nullptr;
