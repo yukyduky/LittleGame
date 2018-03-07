@@ -166,12 +166,13 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 						yGrid++;
 					}
 
-					float colorHardnessX = abs(pos_W.x - (xGrid * gridDims.x)) / (gridDims.x / 4.0f);
-					float colorHardnessY = abs(pos_W.z - (yGrid * gridDims.y)) / (gridDims.y / 4.0f);
+					float colorHardnessX = abs(pos_W.x - (xGrid * gridDims.x)) / (gridDims.x / 2.0f);
+					float colorHardnessY = abs(pos_W.z - (yGrid * gridDims.y)) / (gridDims.y / 2.0f);
 
 					if (colorHardnessX + colorHardnessY != 0.0f)
 					{
-						diffuse = float3(1.0f, 0.0f, 0.0f) / (colorHardnessX + colorHardnessY);
+						diffuse += float3(0.3f, 0.0f, 0.0f) / (colorHardnessX + colorHardnessY);
+						saturate(diffuse);
 					}
 				}
 			}
