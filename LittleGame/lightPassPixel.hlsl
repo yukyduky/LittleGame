@@ -24,17 +24,17 @@ struct FloorGrid
 };
 
 static const int MAX_NUM_LIGHTS = 75;
-static const int MAX_NUM_FLOORGRIDS_X = 35;
-static const int MAX_NUM_FLOORGRIDS_Y = 35;
+static const int MAX_NUM_FLOORGRIDS = 35;
 
 cbuffer GeneralData : register (b0) {
-	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
+	FloorGrid grid[MAX_NUM_FLOORGRIDS][MAX_NUM_FLOORGRIDS];
 	float3 camPos;
 	float nrOfLights;
 	float2 arenaDims;
 	float2 gridDims;
 	float2 gridStartPos;
 	float2 screenDims;
+	float2 gridPulsePoints[2][MAX_NUM_FLOORGRIDS + 1];
 }
 
 cbuffer Light : register (b1) {
@@ -106,8 +106,8 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 				int xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x;
 				int yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y;
 
-				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X &&
-					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y)
+				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS &&
+					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS)
 				{
 					float height = grid[xGrid][yGrid].height;
 					float d = dot(float3(pOnQuadX, pOnQuadY, pOnQuadZ) - camPos, normal) / lDotN;
@@ -145,7 +145,7 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 			{
 				float valueX = pos_W.x % gridDims.x;
 				float valueZ = pos_W.z % gridDims.y;
-				float lowerLimit = 32.0f;
+				float lowerLimit = 8.0f;
 				float upperLimit = (lowerLimit - 1.0f) / lowerLimit;
 
 				if (((valueX <= gridDims.x / lowerLimit || valueX >= gridDims.x * upperLimit) ||

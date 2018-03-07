@@ -8,8 +8,7 @@
 #include "Camera.h"
 
 constexpr int MAX_NUM_POINTLIGHTS = 75;
-constexpr int MAX_NUM_FLOORGRIDS_X = 35;
-constexpr int MAX_NUM_FLOORGRIDS_Y = 35;
+constexpr int MAX_NUM_FLOORGRIDS = 35;
 
 using namespace DirectX;
 
@@ -37,13 +36,14 @@ struct FloorGrid
 };
 
 struct LightPassData {
-	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
+	FloorGrid grid[MAX_NUM_FLOORGRIDS][MAX_NUM_FLOORGRIDS];
 	XMFLOAT3 camPos;
 	float nrOfLights;
 	XMFLOAT2 arenaDims;
 	XMFLOAT2 gridDims;
 	XMFLOAT2 gridStartPos;
 	XMFLOAT2 screenDims;
+	XMFLOAT2 gridPulsePoints[2][MAX_NUM_FLOORGRIDS + 1];
 
 	LightPassData() {}
 };
@@ -91,7 +91,7 @@ private:
 public:
 	void initialize(Camera& camera, std::vector<Light>& lights);
 	void render(std::list<GraphicsComponent*>& graphics);
-	void injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid);
+	void injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid, const std::vector<std::vector<XMFLOAT2>>& gridPulsePoints);
 	void cleanUp();
 };
 

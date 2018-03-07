@@ -108,6 +108,25 @@ void LevelManager::createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& co
 	graphics.push_back(rect);
 }
 
+void LevelManager::createGridPulsePoints(std::vector<std::vector<XMFLOAT2>>& gridPulsePoints)
+{
+	gridPulsePoints.resize(2);
+	gridPulsePoints[0].resize(this->arenaWidth / this->squareSize + 1);
+	gridPulsePoints[1].resize(this->arenaDepth / this->squareSize + 1);
+
+	for (int i = 0; i < gridPulsePoints[0].size(); i++)
+	{
+		gridPulsePoints[0][i].x = i * this->squareSize;
+		gridPulsePoints[0][i].y = i * rand() % this->arenaDepth;
+	}
+
+	for (int i = 0; i < gridPulsePoints[1].size(); i++)
+	{
+		gridPulsePoints[1][i].x = i * rand() % this->arenaWidth;
+		gridPulsePoints[1][i].y = i * this->squareSize;
+	}
+}
+
 void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, enemySpawnPositions& enemySpawnPos, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
 	//Prepare variables that we will need
@@ -275,7 +294,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 			std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects,
 			std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, 
 			std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, 
-			std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos)
+			std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos, std::vector<std::vector<XMFLOAT2>>& gridPulsePoints)
 {
 	this->pGPS = &pGPS;
 	this->squareSize = ARENADATA::GETsquareSize();
@@ -297,6 +316,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	// createLevelWalls needs to come first
 	this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
 	this->createFloor(grid, dynamicNoCollisionObjects, graphics);
+	this->createGridPulsePoints(gridPulsePoints);
 	//this->createNeonFloorGrid(staticObjects, graphics);
 	this->setFallPattern(pattern);
 	this->createFallPatterns(easy, medium, hard);

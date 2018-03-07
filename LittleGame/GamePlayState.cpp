@@ -405,7 +405,7 @@ void GamePlayState::init()
 		this->GUIObjects,
 		this->graphics
 	);
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -609,7 +609,7 @@ void GamePlayState::render(GameManager * gm)
 {
 	rio.render(this->graphics);
 	gm->setupSecondRenderPass();
-	rio.injectResourcesIntoSecondPass(this->grid);
+	rio.injectResourcesIntoSecondPass(this->grid, this->gridPulsePoints);
 	gm->display(this);
 }
 

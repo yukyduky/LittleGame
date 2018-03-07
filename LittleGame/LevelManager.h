@@ -136,6 +136,9 @@ private:
 	*/
 	void createNeonFloorGrid(std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	void createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
+
+	void createGridPulsePoints(std::vector<std::vector<XMFLOAT2>>& gridPulsePoints);
+
 	/*
 	1. Creates all the outer walls of the level by calling createAWall function for each wall.
 	*/
@@ -161,7 +164,7 @@ public:
 		setFallPattern.
 	2. returns the latest used ID.
 	*/
-	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos);
+	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos, std::vector<std::vector<XMFLOAT2>>& gridPulsePoints);
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given position.
 	*/

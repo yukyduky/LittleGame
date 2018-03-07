@@ -78,12 +78,20 @@ void RenderInputOrganizer::render(std::list<GraphicsComponent*>& graphics)
 	}
 }
 
-void RenderInputOrganizer::injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid)
+void RenderInputOrganizer::injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid, const std::vector<std::vector<XMFLOAT2>>& gridPulsePoints)
 {
 	for (size_t i = 0; i < grid.size(); i++) {
 		for (size_t j = 0; j < grid[i].size(); j++) {
 			this->lightPassData.grid[i][j].color = grid[i][j].color;
 			this->lightPassData.grid[i][j].height = grid[i][j].posY;
+		}
+	}
+
+	for (size_t i = 0; i < gridPulsePoints.size(); i++)
+	{
+		for (size_t k = 0; k < gridPulsePoints[i].size(); k++)
+		{
+			this->lightPassData.gridPulsePoints[i][k] = gridPulsePoints[i][k];
 		}
 	}
 
