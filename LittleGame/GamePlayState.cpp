@@ -55,10 +55,6 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->getType() == OBJECTTYPE::TYPE::PROJECTILE &&
-						k->getState() == OBJECTSTATE::TYPE::DEAD)
-						int tester007 = 700;
-
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						// Dynamic Object must be within the same part of the quad tree

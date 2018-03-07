@@ -203,13 +203,17 @@ bool QuadTree::checkDynamicObject(GameObject* dynamicObject, GameObject* compare
 	int indexDynamic = quadTreePointer->GETindex(dynamicObject);
 	int indexCompared = quadTreePointer->GETindex(comparedObject);
 
+	if (indexDynamic == -1 || indexCompared == -1) {
+		returnValue = true;
+	}
+
 	while (indexDynamic == indexCompared) {
 		quadTreePointer = quadTreePointer->nodes[indexDynamic];
 
 		int indexDynamic = quadTreePointer->GETindex(dynamicObject);
 		int indexCompared = quadTreePointer->GETindex(comparedObject);
 
-		if (indexDynamic == -1) {
+		if (indexDynamic == -1 || indexCompared == -1) {
 			returnValue = true;
 			break;
 		}
