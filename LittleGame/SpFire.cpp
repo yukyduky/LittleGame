@@ -201,7 +201,7 @@ SpFireG3::SpFireG3(ActorObject * player) : SpFire(player)
 	this->damage *= 2.0f;
 
 	// Higher starts a crash
-	this->range = 40;
+	this->range = 23;
 }
 
 SpFireG3::~SpFireG3()
@@ -221,16 +221,16 @@ bool SpFireG3::castSpell()
 			XMFLOAT3 plyPos = this->getPlayer()->GETPosition();
 
 			//Slow speed to compensate for the gap between the boxes
-			ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.2f), 20, 10, false);
+			ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.2f), 100, 10, false);
 
-			for (int i = 0; i < this->range; i++)
+			for (int i = 1; i < this->range; i++)
 			{
 				Projectile* proj = this->spawnProj(props, 
 					Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 						50));
-				proj->setPosition(plyPos + (this->getPlayer()->getDirection(i * props.size * 8)));
+				proj->setPosition(plyPos + (this->getPlayer()->getDirection(i * props.size * 14)));
 				// The multiplier below is half of above
-				XMMATRIX scaleM = XMMatrixScaling(props.size * 4.0f, props.size, props.size); 
+				XMMATRIX scaleM = XMMatrixScaling(props.size * 7.0f, props.size, props.size); 
 				proj->SETscaleMatrix(scaleM);
 			}
 			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);

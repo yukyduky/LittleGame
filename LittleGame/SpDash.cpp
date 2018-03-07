@@ -272,7 +272,7 @@ bool SpDashG2::castSpell()
 SpDashG3::SpDashG3(ActorObject * player) : SpDash(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->setCoolDown(this->getCoolDown() * 2.5f);
 	this->setCost(this->getCost() * 0.2f);
 }
 

@@ -662,7 +662,7 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0 (Autoattack):
-	actor->addSpell(new SpAutoAttack(actor));
+	actor->addSpell(new SpAutoAttackG3(actor));
 	// 1:
 	actor->addSpell(new SpFireG3(actor));
 	// 2: 
@@ -670,7 +670,7 @@ void GamePlayState::initPlayer()
 	// 3:
 	actor->addSpell(new SpDashG1(actor));
 	// 4:
-	actor->addSpell(new SpBuff(actor));
+	actor->addSpell(new SpBuffG3(actor));
 
 	actor->selectAbility1();
 

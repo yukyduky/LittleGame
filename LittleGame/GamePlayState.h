@@ -125,6 +125,8 @@ private:
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
+	// Set by one of SpBuff's glyph
+	bool berserkerMode = false;
 	Command* selectCommand = nullptr;
 	
 	void checkCollisions();
@@ -185,10 +187,11 @@ public:
 	*/
 	std::list<GameObject*>* getDynamicObjects();
 
+
+
 	void addGraphics(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
-
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props, Light light);
 
@@ -196,6 +199,8 @@ public:
 	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
+	void setBerserkerMode(bool input) { this->berserkerMode = input; }
+	bool getBerserkerMode() { return this->berserkerMode; }
 
 };
 
