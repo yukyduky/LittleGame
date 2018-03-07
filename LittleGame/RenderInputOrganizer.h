@@ -6,13 +6,14 @@
 #include <list>
 #include <array>
 #include "Camera.h"
-#include "LevelManager.h"
 
-constexpr int MAX_NUM_POINTLIGHTS = 50;
+constexpr int MAX_NUM_POINTLIGHTS = 75;
 constexpr int MAX_NUM_FLOORGRIDS_X = 35;
 constexpr int MAX_NUM_FLOORGRIDS_Y = 35;
 
 using namespace DirectX;
+
+struct tileData;
 
 struct Light {
 	XMFLOAT3 pos;
