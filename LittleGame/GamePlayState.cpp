@@ -668,7 +668,7 @@ void GamePlayState::initPlayer()
 	// 2: 
 	actor->addSpell(new SpBomb(actor));
 	// 3:
-	actor->addSpell(new SpDash(actor));
+	actor->addSpell(new SpDashG1(actor));
 	// 4:
 	actor->addSpell(new SpBuff(actor));
 

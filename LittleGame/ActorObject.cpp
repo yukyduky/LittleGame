@@ -391,7 +391,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+	//Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[4];

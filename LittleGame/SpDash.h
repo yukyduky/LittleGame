@@ -14,12 +14,12 @@ public:
 	SpDash(ActorObject* player);
 	~SpDash();
 
-	bool castSpell();
+	virtual bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
-	void collision(GameObject* target, Projectile* proj);
-	void update();
+	virtual void collision(GameObject* target, Projectile* proj);
+	virtual void update();
 protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
@@ -43,6 +43,10 @@ class SpDashG1 : public SpDash
 public:
 	SpDashG1(ActorObject* player);
 	virtual ~SpDashG1();
+
+	bool castSpell();
+	void collision(GameObject* target, Projectile* proj);
+	void update();
 private:
 };
 
@@ -52,7 +56,10 @@ class SpDashG2 : public SpDash
 public:
 	SpDashG2(ActorObject* player);
 	virtual ~SpDashG2();
+
+	bool castSpell();
 private:
+	float damageFromMiss;
 };
 
 
@@ -62,6 +69,8 @@ public:
 	SpDashG3(ActorObject* player);
 	virtual ~SpDashG3();
 private:
+	bool castSpell();
+	void update();
 };
 
 #endif // !SPDASH_H
