@@ -48,6 +48,7 @@ private:
 	float timePassed = 0;
 	float startTime = 0;
 	bool ramp = false;
+	bool pulse = false;
 
 	void cleanLevel();
 
@@ -65,6 +66,7 @@ public:
 	*/
 	void startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty);
 	void startRampLevel(enemySpawnPositions spawnPosVectors, float difficulty);
+	void startPulseLevel(enemySpawnPositions spawnPosVectors, float difficulty);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

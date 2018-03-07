@@ -28,6 +28,7 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& playe
 	this->players = players; 
 	this->activeEnemiesCount = 0;
 	this->ramp = false;
+	this->pulse = false;
 }
 
 void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty)
@@ -68,7 +69,7 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
 	this->spawnInterval = 0.20f;
-	this->waveInterval = 5.0f;
+	this->waveInterval = 10.1f;
 	this->currentWaveCount = 10;
 
 	// Turn the 'ramp' effect ON
@@ -76,7 +77,45 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 	
 	this->currentWaveEnemyCount.resize(10);
 	for (int i = 0; i < this->currentWaveEnemyCount.size(); i++)
-		this->currentWaveEnemyCount.at(i) = (4 + static_cast<int>(1.5f * i));
+		this->currentWaveEnemyCount.at(i) = (4 + (2 * i));
+		//this->currentWaveEnemyCount.at(i) = (4 + static_cast<int>(1.5f * i));
+
+	Wave* currentWave = nullptr;
+
+	// Per wave
+	for (int i = 0; i < this->currentWaveCount; i++) {
+		currentWave = new Wave();
+
+		// Per enemy
+		for (int j = 0; j < this->currentWaveEnemyCount.at(i); j++) {
+			// Create an enemy and attatch it to the wave.
+			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
+			currentWave->enemies.push_back(enemy);
+			this->activeEnemiesCount++;
+		}
+
+		// Attach the currentWave to our waves
+		this->waves.push_back(currentWave);
+
+		// Up the difficulty a bit maybe?
+		//this->currentWaveEnemyCount += 1;
+	}
+
+}
+
+void EnemyManager::startPulseLevel(enemySpawnPositions spawnPosVectors, float difficulty)
+{
+	this->startTime = Locator::getGameTime()->GetTime();
+	this->timePassed = 0;
+	this->activeEnemiesCount = 0;
+	this->spawnInterval = 0.0f;
+	this->waveInterval = 4.0f;
+	this->currentWaveCount = 10;
+
+	this->currentWaveEnemyCount.resize(10);
+	for (int i = 0; i < this->currentWaveEnemyCount.size(); i++)
+		this->currentWaveEnemyCount.at(i) = (8 + static_cast<int>(difficulty));
+	//this->currentWaveEnemyCount.at(i) = (4 + static_cast<int>(1.5f * i));
 
 	Wave* currentWave = nullptr;
 
@@ -145,8 +184,15 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
 	XMFLOAT3 pos = { 0, 0, 0 };
+	float spawnOffset = 0.0f;
 
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700, 800);
+	if (this->pulse) {
+		spawnOffset = 700.0f;
+	}
+
+	else {
+		spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700.0f, 800.0f);
+	}
 
 	while (reGenerateRandom)
 	{
@@ -259,6 +305,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->players = players;
 	this->activeEnemiesCount = 0;
 	this->ramp = false;
+	this->pulse = false;
 }
 
 void EnemyManager::update(GUIManager* GUI)
@@ -299,7 +346,7 @@ void EnemyManager::update(GUIManager* GUI)
 			
 			// Ramping the time between waves
 			if (this->ramp)
-				this->waveInterval -= 0.5f;
+				this->waveInterval -= 1.0f;
 
 			// Goodbye wave!
 			delete this->waves.front();

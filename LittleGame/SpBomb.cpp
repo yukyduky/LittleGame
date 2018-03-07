@@ -16,9 +16,10 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	// only 1 bomb out
 	this->active = false;
 
-	this->setCoolDown(1.5f);
+	this->setCoolDown(6.0f);
 	this->damage = this->start;
 	this->range = -1;
+	this->setCost(25);
 
 }
 
@@ -37,13 +38,17 @@ bool SpBomb::castSpell()
 	{
 		if (!this->active)
 		{
-			this->active = true;
-			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, this->range, false);
-			this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
-			this->damage = this->start;
-		}
+			// For further info, if needed, see 'useEnergy()' description
+			if (this->getPlayer()->useEnergy(this->getCost()))
+			{
+				this->active = true;
+				ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, this->range, false);
+				this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
+				this->damage = this->start;
 
-		this->setState(SPELLSTATE::COOLDOWN);
+				this->setState(SPELLSTATE::COOLDOWN);
+			}
+		}
 	}
 
 	return returnValue;
@@ -65,7 +70,7 @@ void SpBomb::update()
 		{
 			this->damage += 300 * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
+			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.3f);
 			this->theProj->SETscaleMatrix(scaleM);
 		}
 		else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
@@ -86,7 +91,7 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
 	{
-		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
+		static_cast<ActorObject*>(target)->dealDmg(200.0f);
 	}
 }
 

@@ -420,7 +420,7 @@ void GamePlayState::init() {
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 
 	//this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -665,7 +665,7 @@ void GamePlayState::initPlayer()
 	float actorSpeed = 1;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 200.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
