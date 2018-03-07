@@ -62,7 +62,6 @@ void SpBomb::update()
 	{
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
-
 		if (!this->landed)
 		{
 			XMFLOAT3 currPos = this->theProj->GETPosition();
@@ -74,6 +73,7 @@ void SpBomb::update()
 			{
 				this->landed = true;
 				this->damage = this->start;
+				this->collisionDuration = 0.0f;
 				this->theProj->setSpeed(0.0f);
 			}
 		}
@@ -92,8 +92,6 @@ void SpBomb::update()
 		{
 			this->active = false;
 			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
-			this->damage = this->start;
-			this->collisionDuration = 0.0f;
 		}
 	}
 }
