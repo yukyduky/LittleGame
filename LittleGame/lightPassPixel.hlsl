@@ -42,7 +42,7 @@ cbuffer Light : register (b1) {
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
-void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
+void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
 float4 sampleBackground(in float2 screenCoords);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 float dot(float3 vec1, float3 vec2);
@@ -58,7 +58,7 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 	// Load all the data from the geo pass
 	loadGeoPassData(screenCoords, pos_W, normal, diffuse, emission);
 
-	renderFallingFloor(pos_W, normal, diffuse);
+	renderFloor(pos_W, normal, diffuse);
 
 	float4 finalColor;
 
@@ -84,7 +84,7 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	emission = texDiffuse.Load(texCoords).w;
 }
 
-void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
+void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 {
 	if (pos_W.y == -0.5f)
 	{
@@ -138,10 +138,47 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 			} while (!intersected);
 
 			if (!intersected)
-			{
-				diffuse = float3(1.0f, 0.0f, 1.0f);
+			{				
+				diffuse = float3(1.0f, 0.0f, 1.0f);				
 			}
+			else
+			{
+				float valueX = pos_W.x % gridDims.x;
+				float valueZ = pos_W.z % gridDims.y;
+				float lowerLimit = 32.0f;
+				float upperLimit = (lowerLimit - 1.0f) / lowerLimit;
+
+				if (((valueX <= gridDims.x / lowerLimit || valueX >= gridDims.x * upperLimit) ||
+					(valueZ <= gridDims.y / lowerLimit || valueZ >= gridDims.y * upperLimit)) &&
+					pos_W.x < arenaDims.x && 
+					pos_W.z < arenaDims.y &&
+					pos_W.y > -0.6f)
+				{
+					int xGrid = floor(pos_W.x / gridDims.x);
+					int yGrid = floor(pos_W.z / gridDims.y);
+
+					if (valueX >= gridDims.x * 0.5f)
+					{
+						xGrid++;
+					}
+					if (valueZ >= gridDims.y * 0.5f)
+					{
+						yGrid++;
+					}
+
+					float colorHardnessX = abs(pos_W.x - (xGrid * gridDims.x)) / (gridDims.x / 4.0f);
+					float colorHardnessY = abs(pos_W.z - (yGrid * gridDims.y)) / (gridDims.y / 4.0f);
+
+					if (colorHardnessX + colorHardnessY != 0.0f)
+					{
+						diffuse = float3(1.0f, 0.0f, 0.0f) / (colorHardnessX + colorHardnessY);
+					}
+				}
+			}
+
 		}
+
+		
 	}
 }
 

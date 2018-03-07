@@ -130,7 +130,6 @@ private:
 	1. Creates all the RectangleComponents representing the arena floor.
 	*/
 	void createFloor(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
-	void createPulsingFloorGrid(std::vector<Light>& lights, IDHandler& lightIDs);
 	/*--------<INFORMATION>--------
 	1. Creates all the RectangleComponents representing the neon grid on the arena floor 
 		by calling createARectLine function for each line.
@@ -162,7 +161,7 @@ public:
 		setFallPattern.
 	2. returns the latest used ID.
 	*/
-	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos, std::vector<Light>& lights, IDHandler& lightIDs);
+	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos);
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given position.
 	*/
