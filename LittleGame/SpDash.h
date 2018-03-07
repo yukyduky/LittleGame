@@ -38,6 +38,7 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Jump back nad heal
 class SpDashG1 : public SpDash
 {
 public:
@@ -50,7 +51,7 @@ public:
 private:
 };
 
-
+// Long-dash - damages if jumping into walls
 class SpDashG2 : public SpDash
 {
 public:
@@ -62,7 +63,7 @@ private:
 	float damageFromMiss;
 };
 
-
+// Infinite wall
 class SpDashG3 : public SpDash
 {
 public:

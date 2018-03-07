@@ -35,7 +35,7 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
-
+// Flamethrower
 class SpFireG1 : public SpFire
 {
 public:
@@ -46,7 +46,7 @@ public:
 private:
 };
 
-
+// "Snowball"-efekt
 class SpFireG2 : public SpFire
 {
 public:
@@ -58,7 +58,7 @@ public:
 private:
 };
 
-
+// Railgun
 class SpFireG3 : public SpFire
 {
 public:

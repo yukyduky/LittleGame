@@ -7,7 +7,7 @@
 
 class GamePlayState;
 
-// Spells that use projectiles
+// No glyph
 class SpAutoAttack : public Spell
 {
 public:
@@ -32,6 +32,7 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Tripple-burst
 class SpAutoAttackG1 : public SpAutoAttack
 {
 public:
@@ -42,7 +43,7 @@ public:
 private:
 };
 
-
+// Sniper
 class SpAutoAttackG2 : public SpAutoAttack
 {
 public:
@@ -54,7 +55,7 @@ public:
 private:
 };
 
-
+// Faster fire, more energy-gain
 class SpAutoAttackG3 : public SpAutoAttack
 {
 public:

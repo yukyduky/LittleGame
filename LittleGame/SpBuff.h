@@ -40,6 +40,7 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Berserker mode - tripples all damage
 class SpBuffG1 : public SpBuff
 {
 public:
@@ -51,7 +52,7 @@ public:
 private:
 };
 
-
+// Enemies runs away - reverse direction vector
 class SpBuffG2 : public SpBuff
 {
 public:
@@ -60,7 +61,7 @@ public:
 private:
 };
 
-
+// Keep the movmentspeed in slow-mode
 class SpBuffG3 : public SpBuff
 {
 public:
