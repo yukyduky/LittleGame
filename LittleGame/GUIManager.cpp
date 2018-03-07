@@ -107,8 +107,6 @@ int GUIManager::initGUI(
 		this->rectBack[i] = nullptr;
 	}
 
-	float temptester123 = this->cameraPos.y / 630.0f;
-
 //----------------------------\
 //     HEALTH GUI ELEMENT     /
 //___________________________/

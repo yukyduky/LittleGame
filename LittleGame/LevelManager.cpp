@@ -101,7 +101,6 @@ void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, st
 		vec = XMLoadFloat3(&currentPos);
 		translationM = XMMatrixTranslationFromVector(vec);
 		worldM = scaleMV * rotationM * translationM;
-		void* test = &graphics;
 		this->createARectLine(currentPos, worldM, color, staticObjects, graphics);
 	}
 	//Create the horizontal lines
@@ -355,11 +354,6 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 //	int ID = grid[x][y].ptr->getID();
 	int ID = -1;
 	std::list<GameObject*>::iterator it = staticObjects.begin();
-	int test = 0;
-
-	if (state == OBJECTSTATE::TYPE::TFALLING) {
-		test++;
-	}
 
 	switch (state)
 	{
