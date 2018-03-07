@@ -48,6 +48,9 @@ float ControllerComponent::checkThumb(THUMB thumb, size_t deadzone, XINPUT_STATE
 	}
 	else {
 		mag = 0.0f;
+		if (thumb == THUMB::LTHUMB) {
+			int test = 0;
+		}
 	}
 
 	return mag;

@@ -23,7 +23,7 @@ struct FloorGrid
 	float height;
 };
 
-static const int MAX_NUM_LIGHTS = 100;
+static const int MAX_NUM_LIGHTS = 50;
 static const int MAX_NUM_FLOORGRIDS_X = 35;
 static const int MAX_NUM_FLOORGRIDS_Y = 35;
 

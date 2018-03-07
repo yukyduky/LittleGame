@@ -16,7 +16,9 @@ float RandomGeneration::GenerateFloat(float rangeStart, float rangeEnd) {
 	float randomFloat = 0.0f;
 	int integral = static_cast<int>((rangeEnd - rangeStart) * 100.0f);
 
-	randomFloat = (static_cast<float>((rand() % integral) * 0.01f) + rangeStart);
+	while (randomFloat == 0.0f) {
+		randomFloat = (static_cast<float>((rand() % integral) * 0.01f) + rangeStart);
+	}
 
 	return randomFloat;
 }

@@ -2,7 +2,6 @@
 #include "GraphicsComponent.h"
 #include "Locator.h"
 #include "ArenaGlobals.h"
-#include "LevelManager.h"
 
 
 void RenderInputOrganizer::packageMatrices() {

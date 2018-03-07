@@ -10,8 +10,6 @@
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
 #include "ArenaPatterns.h"
-#include "RenderInputOrganizer.h"
-#include "IDHandler.h"
 
 using namespace DirectX::SimpleMath;
 class GamePlayState;
@@ -134,8 +132,6 @@ private:
 	1. Creates all the RectangleComponents representing the neon grid on the arena floor 
 		by calling createARectLine function for each line.
 	*/
-	void createPulsingFloorGrid(std::vector<Light>& lights, IDHandler& lightIDs);
-
 	void createNeonFloorGrid(std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	void createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& color, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics);
 	/*
@@ -163,7 +159,7 @@ public:
 		setFallPattern.
 	2. returns the latest used ID.
 	*/
-	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos, std::vector<Light>& lights, IDHandler& lightIDs);
+	int initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, FloorFallData& pattern, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos);
 	/*--------<INFORMATION>--------
 	1. Changes the state of a floor tile from a given position.
 	*/
