@@ -102,6 +102,5 @@ Menu * StatisticsMenuState::initStatsMenu()
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 
-
 	return menu;
 }

@@ -21,13 +21,13 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 			text = L"AutoA NO";
 			break;
 		case 1: // GLYPHTYPE::GLYPH1:
-			text = L"AutoA G1";
+			text = L"AutoA \n Tripple-burst";
 			break;
 		case 2: // GLYPHTYPE::GLYPH2:
-			text = L"AutoA G2";
+			text = L"AutoA \n Sniper";
 			break;
 		case 3: // GLYPHTYPE::GLYPH3:
-			text = L"AutoA G3";
+			text = L"AutoA \n Firerate";
 			break;
 		default:
 			text = L"ERROR";
@@ -42,13 +42,13 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 			text = L"Fire NO";
 			break;
 		case 1: // GLYPHTYPE::GLYPH1:
-			text = L"Fire G1";
+			text = L"Fire \n Flamethrower";
 			break;
 		case 2: // GLYPHTYPE::GLYPH2:
-			text = L"Fire G2";
+			text = L"Fire \n Enlarge";
 			break;
 		case 3: // GLYPHTYPE::GLYPH3:
-			text = L"Fire G3";
+			text = L"Fire \n Railgun";
 			break;
 		default:
 			text = L"ERROR";
@@ -63,13 +63,13 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 			text = L"Bomb NO";
 			break;
 		case 1: // GLYPHTYPE::GLYPH1:
-			text = L"Bomb G1";
+			text = L"Bomb \n Splinter Bomb";
 			break;
 		case 2: // GLYPHTYPE::GLYPH2:
-			text = L"Bomb G2";
+			text = L"Bomb \n Mine";
 			break;
 		case 3: // GLYPHTYPE::GLYPH3:
-			text = L"Bomb G3";
+			text = L"Bomb \n Black-hole";
 			break;
 		default:
 			text = L"ERROR";
@@ -84,13 +84,13 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 			text = L"Dash NO";
 			break;
 		case 1: // GLYPHTYPE::GLYPH1:
-			text = L"Dash G1";
+			text = L"Dash \n Retreat";
 			break;
 		case 2: // GLYPHTYPE::GLYPH2:
-			text = L"Dash G2";
+			text = L"Dash \n Long-dash";
 			break;
 		case 3: // GLYPHTYPE::GLYPH3:
-			text = L"Dash G3";
+			text = L"Dash \n Everlasting";
 			break;
 		default:
 			text = L"ERROR";
@@ -105,13 +105,13 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 			text = L"Buff NO";
 			break;
 		case 1: // GLYPHTYPE::GLYPH1:
-			text = L"Buff G1";
+			text = L"Buff \n Berserk-mode";
 			break;
 		case 2: // GLYPHTYPE::GLYPH2:
-			text = L"Buff G2";
+			text = L"Buff \n Fear";
 			break;
 		case 3: // GLYPHTYPE::GLYPH3:
-			text = L"Buff G3";
+			text = L"Buff \n Keep Speed";
 			break;
 		default:
 			text = L"ERROR";
@@ -216,7 +216,7 @@ Menu * RewardMenuState::initLootMenu()
 	//Background
 	nextID = this->newID();
 	object = new MenuObject(this->newID(),
-		{ 0.0f,0.0f, 400.0f,400.0f }, D2D1::ColorF::DarkMagenta);
+		{ 0.0f,0.0f, 400.0f,700.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
 	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
 	nextID = this->newID();
@@ -226,14 +226,14 @@ Menu * RewardMenuState::initLootMenu()
 	menu->addQuad(object);
 
 	//Glyph desc
-	text = L" Glyph 1 (G1) lowers cooldown. \n\n Glyph 2 (G2) h'o'jer power. \n\n Glyph 3 (G3) greatly h'o'jer power but h'o'jer cooldown.";
+	text = L"Pick one of the 3 glyphs";
 	object = new MenuObject(this->newID(),
-		{ -300.0f,0.0f, 200.0f,400.0f }, D2D1::ColorF::DarkKhaki,
+		{ -300.0f,0.0f, 200.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
 		text);
 	menu->addQuad(object);
 	
 	//Buttons
-	XMFLOAT2 start{ 30.0f, 50.0f};
+	XMFLOAT2 start{ 100.0f, 50.0f};
 
 	std::list<XMINT2> prev;
 
@@ -282,16 +282,15 @@ Menu * RewardMenuState::initLootMenu()
 		text = this->getGlyphName((int)name, (int)glyph);
 
 		pButton = new Button(this, this->newID(),
-			{ start.x,start.y, 100.0f,100.0f }, color,
+			{ start.x,start.y, 200.0f,100.0f }, color,
 			text, BEHAVIOR::ADDGLYPH,
 			name, glyph);
 		menu->addButton(pButton);
 
-		start.x += 120.0f;
+		start.y += 105.0f;
 	}
 
-	start.x = 30.0f;
-	start.y += 170.0f;
+	start.y = 380.0f;
 
 	nextID = this->newID();
 	text = L"End to stats";
@@ -300,7 +299,7 @@ Menu * RewardMenuState::initLootMenu()
 		text, BEHAVIOR::GOSTATS);
 	menu->addButton(pButton);
 
-	start.y += 170.0f;
+	start.y += 120.0f;
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
@@ -325,7 +324,7 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 	//Background
 	nextID = this->newID();
 	object = new MenuObject(this->newID(),
-		{ 0.0f,0.0f, 400.0f,400.0f }, D2D1::ColorF::DarkMagenta);
+		{ 0.0f,0.0f, 400.0f,700.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
 	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
 	nextID = this->newID();
@@ -387,7 +386,8 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 		start.x += 120.0f;
 	}
 	start.x = 30.0f;
-	start.y += 170.0f;
+
+	start.y = 380.0f;
 
 	nextID = this->newID();
 	text = L"End to stats";
@@ -396,7 +396,8 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 		text, BEHAVIOR::GOSTATS);
 	menu->addButton(pButton);
 
-	start.y += 170.0f;
+	start.y += 120.0f;
+
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
@@ -421,7 +422,7 @@ Menu * RewardMenuState::initNextLevelMenu()
 	//Background
 	nextID = this->newID();
 	object = new MenuObject(this->newID(),
-		{ 0.0f,0.0f, 400.0f,400.0f }, D2D1::ColorF::DarkMagenta);
+		{ 0.0f,0.0f, 400.0f,700.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
 	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
 	nextID = this->newID();
@@ -439,8 +440,7 @@ Menu * RewardMenuState::initNextLevelMenu()
 		text, BEHAVIOR::REWSTARTGAME);
 	menu->addButton(pButton);
 
-	start.y += 170.0f;
-
+	start.y = 380.0f;
 
 	nextID = this->newID();
 	text = L"End to stats";
@@ -449,7 +449,8 @@ Menu * RewardMenuState::initNextLevelMenu()
 		text, BEHAVIOR::GOSTATS);
 	menu->addButton(pButton);
 
-	start.y += 170.0f;
+	start.y += 120.0f;
+
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,

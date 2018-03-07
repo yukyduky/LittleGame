@@ -20,8 +20,9 @@ HRESULT D2D::Initialize()
 
 HRESULT D2D::CreateDeviceIndependentResources()
 {
-	static const WCHAR msc_fontName[] = L"Verdana";
-	static const FLOAT msc_fontSize = 20;
+	// Will load a default font if the font is not installed on the PC
+	static const WCHAR msc_fontName[] = L"Agency FB"; // Verdana, Rockwell, Agency FB
+	static const FLOAT msc_fontSize = 30;
 	HRESULT hr = S_OK;
 
 	// Create a Direct2D factory.
@@ -51,6 +52,7 @@ HRESULT D2D::CreateDeviceIndependentResources()
 			L"", //locale
 			&this->m_pTextFormat
 		);
+
 	}
 	if (SUCCEEDED(hr))
 	{
