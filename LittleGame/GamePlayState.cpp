@@ -664,7 +664,7 @@ void GamePlayState::initPlayer()
 	// 0 (Autoattack):
 	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
-	actor->addSpell(new SpFireG2(actor));
+	actor->addSpell(new SpFireG3(actor));
 	// 2: 
 	actor->addSpell(new SpBomb(actor));
 	// 3:

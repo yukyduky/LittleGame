@@ -197,8 +197,11 @@ void SpFireG2::collision(GameObject * target, Projectile * proj)
 SpFireG3::SpFireG3(ActorObject * player) : SpFire(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->setCoolDown(this->getCoolDown() * 3.5f);
 	this->damage *= 2.0f;
+
+	// Higher starts a crash
+	this->range = 40;
 }
 
 SpFireG3::~SpFireG3()
@@ -207,5 +210,34 @@ SpFireG3::~SpFireG3()
 
 bool SpFireG3::castSpell()
 {
-	return false;
+	bool returnValue = false;
+
+	if (this->getState() != SPELLSTATE::COOLDOWN)
+	{
+		// For further info, if needed, see 'useEnergy()' description
+		if (this->getPlayer()->useEnergy(this->getCost()))
+		{
+			returnValue = true;
+			XMFLOAT3 plyPos = this->getPlayer()->GETPosition();
+
+			//Slow speed to compensate for the gap between the boxes
+			ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.2f), 20, 10, false);
+
+			for (int i = 0; i < this->range; i++)
+			{
+				Projectile* proj = this->spawnProj(props, 
+					Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
+						50));
+				proj->setPosition(plyPos + (this->getPlayer()->getDirection(i * props.size * 8)));
+				// The multiplier below is half of above
+				XMMATRIX scaleM = XMMatrixScaling(props.size * 4.0f, props.size, props.size); 
+				proj->SETscaleMatrix(scaleM);
+			}
+			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
+
+			this->setState(SPELLSTATE::COOLDOWN);
+		}
+	}
+
+	return returnValue;
 }
