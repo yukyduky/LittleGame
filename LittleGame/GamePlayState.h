@@ -34,6 +34,7 @@ struct ProjProp {
 	float speed;
 	float range;
 	bool spinn;
+	PROJBEHAVIOR behavior;
 
 	ProjProp(float s, XMFLOAT4 c, float spd, float r, bool spn) 
 		: size(s)
@@ -41,6 +42,15 @@ struct ProjProp {
 		, speed(spd)
 		, range(r)
 		, spinn(spn)
+		, behavior(PROJBEHAVIOR::NONE)
+	{}
+	ProjProp(float s, XMFLOAT4 c, float spd, float r, PROJBEHAVIOR beh)
+		: size(s)
+		, color(c)
+		, speed(spd)
+		, range(r)
+		, spinn(false)
+		, behavior(beh)
 	{}
 	ProjProp() {}
 };

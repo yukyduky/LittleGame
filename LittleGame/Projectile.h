@@ -7,12 +7,16 @@
 #include "RenderInputOrganizer.h"
 #include "IDHandler.h"
 
+enum class PROJBEHAVIOR {NONE, ENLARGE};
+
 class Spell;
 
 class Projectile : public GameObject
 {
 public:
+	Projectile();
 	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
+	Projectile(const size_t ID, float speed, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
 	virtual ~Projectile();
 
 	/*Moves the projectile in the direction of the velocity with speed of this->speed, 
@@ -38,6 +42,7 @@ private:
 	float speed = 0.0f;
 	// If the pojectile should spinn around its X-axis
 	bool spinn;
+	PROJBEHAVIOR behavior;
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel

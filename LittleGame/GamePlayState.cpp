@@ -664,7 +664,7 @@ void GamePlayState::initPlayer()
 	// 0 (Autoattack):
 	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
-	actor->addSpell(new SpFire(actor));
+	actor->addSpell(new SpFireG2(actor));
 	// 2: 
 	actor->addSpell(new SpBomb(actor));
 	// 3:
@@ -713,7 +713,8 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	this->pointLights[lightID] = light;
 
-	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+	proj = new Projectile(nextID, props.speed, props.behavior, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);

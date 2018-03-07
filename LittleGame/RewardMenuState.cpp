@@ -247,7 +247,8 @@ Menu * RewardMenuState::initLootMenu()
 		while (cpyFound)
 		{
 			//name = (NAME)Locator::getRandomGenerator()->GenerateInt(0, (int)NAME::SIZE - 1);
-			name = NAME::AUTOATTACK; // for debugging AA glyphs
+			//name = NAME::AUTOATTACK; // for debugging AA glyphs
+			name = NAME::FIRE; // for debugging Fire glyphs
 			glyph = (GLYPHTYPE)Locator::getRandomGenerator()->GenerateInt(1, (int)GLYPHTYPE::SIZE - 1);
 
 			cpyFound = false;

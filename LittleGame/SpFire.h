@@ -12,14 +12,14 @@ class SpFire : public Spell
 {
 public:
 	SpFire(ActorObject* player);
-	~SpFire();
+	virtual ~SpFire();
 
-	bool castSpell();
+	virtual bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
-	void collision(GameObject* target, Projectile* proj);
-	void update();
+	virtual void collision(GameObject* target, Projectile* proj);
+	virtual void update();
 protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
@@ -35,11 +35,14 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+
 class SpFireG1 : public SpFire
 {
 public:
 	SpFireG1(ActorObject* player);
 	virtual ~SpFireG1();
+
+	bool castSpell();
 private:
 };
 
@@ -49,6 +52,9 @@ class SpFireG2 : public SpFire
 public:
 	SpFireG2(ActorObject* player);
 	virtual ~SpFireG2();
+
+	bool castSpell();
+	void collision(GameObject* target, Projectile* proj);
 private:
 };
 
@@ -58,6 +64,8 @@ class SpFireG3 : public SpFire
 public:
 	SpFireG3(ActorObject* player);
 	virtual ~SpFireG3();
+
+	bool castSpell();
 private:
 };
 
