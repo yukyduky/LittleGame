@@ -7,7 +7,7 @@
 #include <array>
 #include "Camera.h"
 
-constexpr int MAX_NUM_POINTLIGHTS = 75;
+constexpr int MAX_NUM_POINTLIGHTS = 100;
 constexpr int MAX_NUM_FLOORGRIDS_X = 35;
 constexpr int MAX_NUM_FLOORGRIDS_Y = 35;
 
