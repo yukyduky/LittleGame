@@ -57,6 +57,10 @@ public:
 
 		return neighbours;
 	}
+	virtual XMFLOAT3 avoidWalls() {
+		// Only avoid walls if we're actually near them (We're on an EdgeGridSlot)
+		return XMFLOAT3(0, 0, 0);
+	}
 	virtual void cleanUp() {
 		this->occupants.clear();
 	};
@@ -64,9 +68,16 @@ public:
 class EdgeGridSlot : public GridSlot {
 private:
 	GridSlot* substitute = nullptr;
+	XMFLOAT3 avoidWallsVector = { 0, 0, 0 };
 public:
 	void assignSubstitute(GridSlot* substitute) {
 		this->substitute = substitute;
+	}
+	XMFLOAT3 avoidWalls() {
+		return this->avoidWallsVector;
+	}
+	void assignAvoidWallsVector(XMFLOAT3 avoidWallsVector) {
+		this->avoidWallsVector = avoidWallsVector;
 	}
 	std::vector<EnemyObject*> getNeighbours(GridSlot** *pTheGrid) {
 		return this->substitute->getNeighbours(pTheGrid);
@@ -113,6 +124,7 @@ public:
 	// Like inOrOut but with a bit of marginal, so you're definitely inside.
 	bool Grid::inOrOutPLUS(XMFLOAT2 position);
 	bool gridAlive();
+	XMFLOAT3 avoidWalls(XMFLOAT3 position);
 
 	void cleanUp();
 };

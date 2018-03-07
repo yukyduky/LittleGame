@@ -50,6 +50,7 @@ public:
 	virtual size_t& GETnumIndices();
 	virtual XMFLOAT4X4& getWorld();
 
+	void SETcolor(vColor color);
 	vColor GETcolor();
 
 	/*--------<INFORMATION>--------

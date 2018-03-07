@@ -160,10 +160,10 @@ void ActorObject::update()
 		}
 		for (auto &i : this->spells) {
 			i->update();
-			i->updateCD();
 		}
 		break;
 	}
+	int asdf = 3;
 }
 
 void ActorObject::move()
@@ -214,8 +214,6 @@ void ActorObject::move()
 		actorNewPos.y = actorPos.y;
 		this->setPosition(actorNewPos);
 	}
-
-	int asdf = 3;
 }
 
 void ActorObject::moveUp()

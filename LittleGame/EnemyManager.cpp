@@ -47,9 +47,9 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 	std::vector<EnemyObject*> localSwarmers;
 
 	// TESTING -----------
-	this->currentWaveCount = 2;
-	this->currentWaveSize = 5;
-	this->swarmerCount = 7;
+	this->currentWaveCount = 1;
+	this->currentWaveSize = 0;
+	this->swarmerCount = 1;
 	// TESTING -----------
 
 	// Per wave
@@ -338,7 +338,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 
 	float projectileDamage = 8;
 	float attackCooldown = 0.5;
-	float projectileRange = 450;
+	float projectileRange = 200;
 	float attackRange = 500;
 
 	/// A T T A C H M E N T
