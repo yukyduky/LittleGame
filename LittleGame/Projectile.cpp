@@ -155,11 +155,25 @@ Spell * Projectile::getSpell()
 
 void Projectile::move()
 {
+	XMFLOAT3 traveledDistance = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	float dt = Locator::getGameTime()->getDeltaTime();
+	this->previousPos = this->pos;
 
 	this->pos.x += (this->direction.x * this->velocity) * dt;
 	this->pos.z += (this->direction.z * this->velocity) * dt;
-	this->setPosition(pos);
+
+	traveledDistance = this->pos - this->previousPos;
+	XMVECTOR dist = XMLoadFloat3(&traveledDistance);
+	dist = XMVector3Length(dist);
+	XMStoreFloat3(&traveledDistance, dist);
+	this->rangeCounter += traveledDistance.x;
+
+	if (this->rangeCounter >= this->maxFlyingRange && this->maxFlyingRange != -1) {
+		this->setState(OBJECTSTATE::TYPE::DEAD);
+	}
+	else {
+		this->setPosition(pos);
+	}
 }
 
 void Projectile::steerTowardsPlayer()
@@ -214,6 +228,7 @@ void Projectile::update()
 	}
 
 	this->move();
+	
 
 	if (this->spinn)
 	{
@@ -222,11 +237,13 @@ void Projectile::update()
 		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
 	}
 
+	/*
 	this->rangeCounter++;
 	if (this->rangeCounter >= this->maxFlyingRange && this->maxFlyingRange != -1)
 	{
 		this->setState(OBJECTSTATE::TYPE::DEAD);
 	}
+	*/
 	
 }
 

@@ -181,6 +181,8 @@ public:
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props);
 
+	std::vector<std::vector<tileData>>& GETgrid();
+
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }
 

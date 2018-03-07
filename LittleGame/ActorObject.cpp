@@ -188,27 +188,24 @@ void ActorObject::move()
 		int WARNING = 0;
 	}
 
-	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (this->getType() == OBJECTTYPE::ENEMY) {
 		actorNewPos.z = tempPos.z;
-		this->physicsComponent->updateBoundingArea(actorPos);
-
 		actorNewPos.x = tempPos.x;
-		this->physicsComponent->updateBoundingArea(actorPos);
-
 		actorNewPos.y = actorPos.y;
+
+		this->physicsComponent->updateBoundingArea(actorNewPos);
 		this->setPosition(actorNewPos);
 	}
-
+	//Check so that the player still is inside the arena in x- and z-dimension.
 	else {
 		if (tempPos.z > ARENADATA::GETsquareSize() && tempPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
 			actorNewPos.z = tempPos.z;
-			this->physicsComponent->updateBoundingArea(actorPos);
+			this->physicsComponent->updateBoundingArea(actorNewPos);
 		}
 		else { actorNewPos.z = actorPos.z; }
 		if (tempPos.x > ARENADATA::GETsquareSize() && tempPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
 			actorNewPos.x = tempPos.x;
-			this->physicsComponent->updateBoundingArea(actorPos);
+			this->physicsComponent->updateBoundingArea(actorNewPos);
 		}
 		else { actorNewPos.x = actorPos.x; }
 		actorNewPos.y = actorPos.y;

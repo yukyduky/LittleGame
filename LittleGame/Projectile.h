@@ -57,7 +57,7 @@ private:
 	Spell* spell = nullptr;
 	// Range of travel
 	int maxFlyingRange = 0;
-	int rangeCounter = 0;
+	float rangeCounter = 0;
 	
 	std::list<GameObject*> previouslyHit;
 };

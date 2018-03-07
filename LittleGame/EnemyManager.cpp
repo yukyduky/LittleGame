@@ -18,6 +18,11 @@
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
 #include "RewardMenuState.h"
+//BOSS STATES
+#include "BossMoveToArenaState.h"
+
+// BOSS ATTACKS
+#include "SpBossBulletHell.h"
 
 EnemyManager::EnemyManager()
 {
@@ -92,6 +97,24 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 
 	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
 //	this->activeEnemiesCount--;
+}
+
+void EnemyManager::startBossLevel()
+{
+	this->startTime = Locator::getGameTime()->GetTime();
+	this->timePassed = 0;
+	this->activeEnemiesCount = 0;
+	this->spawnInterval = 1;
+	this->waveInterval = 0.1;
+	this->currentWaveCount = 1;
+	this->currentWaveSize = 1;
+	Wave* currentWave;
+
+	currentWave = new Wave();
+	EnemyObject* boss = this->createBoss(ENEMYTYPE::BOSS, AIBEHAVIOR::STRAIGHTTOWARDS);
+	currentWave->enemies.push_back(boss);
+	this->activeEnemiesCount++;
+	this->waves.push_back(currentWave);
 }
 
 void EnemyManager::cleanLevel()
@@ -365,6 +388,61 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemyObject;
+}
+
+EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior)
+{
+	/// D E C L A R A T I O N
+	// GRAND OBJECT
+	EnemyObject* enemyObject = nullptr;
+	// COMPONENTS
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
+	// STATES
+	EnemyState* bossMoveToArenaState = nullptr;
+
+	/// D E F I N I T I O N
+	size_t ID = this->pGPS->newID();
+	float bossScale = 150.0f;
+	XMFLOAT3 scale(bossScale, bossScale, bossScale);
+	XMFLOAT3 pos = { ARENADATA::GETarenaWidth() + 700.0f, bossScale, ARENADATA::GETarenaHeight() * 0.5f };
+
+
+	float velocity = 180;
+	XMFLOAT4 color(0.1f, 0.01f, 0.75f, 1.0f);
+	XMFLOAT3 rotation(0, 0, 0);
+
+	float projectileDamage = 8;
+	float attackCooldown = 0.5;
+	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
+	float attackRange = ARENADATA::GETarenaWidth();
+
+	/// A T T A C H M E N T
+	// OBJECT
+	enemyObject = new EnemyObject(
+		ENEMYTYPE::BOSS, ID, pos, velocity,
+		pGPS, &this->players,
+		OBJECTTYPE::ENEMY
+	);
+	// SPELL (Needs to be before States)
+	Spell* spell = new SpBossBulletHell(
+		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
+	);
+	enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
+
+
+									// COMPONENTS
+	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+	physicsComponent = new PhysicsComponent(*enemyObject, bossScale);
+	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::STRAIGHTTOWARDS);
+	// STATE
+	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);
+
+	return enemyObject;
+
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)

@@ -9,7 +9,7 @@ SpAutoAttack::SpAutoAttack(ActorObject* player) : Spell(player, NAME::AUTOATTACK
 	
 	this->setCoolDown(0.3f);
 	this->damage = 100.0f;
-	this->range = 50.0f;
+	this->range = 2000.0f;
 }
 
 SpAutoAttack::~SpAutoAttack()

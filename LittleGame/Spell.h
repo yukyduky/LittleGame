@@ -32,6 +32,9 @@ enum class NAME {
 	
 	// EnemySpells after this point
 	ENEM_SWARM, ENEM_IMMO,
+
+	//BossSpells
+	BULLETHELL,
 	
 	//
 	SIZE

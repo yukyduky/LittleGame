@@ -129,14 +129,15 @@ void GamePlayState::updateFloor()
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 baseColor(0.0f, 0.784f, 1.0f);
+	XMFLOAT3 baseColor(0.001f, 0.784f, 1.0f);
 	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.0f);
-	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.0f);
-	XMFLOAT3 cooledColor = XMFLOAT3(0.0f, 0.75f, 1.0f);
+	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.01f);
+	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.01f);
+	XMFLOAT3 cooledColor = XMFLOAT3(0.01f, 0.75f, 1.0f);
+	XMFLOAT3 bossTileColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
 	XMFLOAT3 tempColor1;
 	XMFLOAT3 tempColor2;
 	float baseHeight = 0.5f - 0.01f;
@@ -146,6 +147,7 @@ void GamePlayState::updateFloor()
 			switch (this->grid[i][j].state)
 			{
 			case TILESTATE::ACTIVE:
+				this->grid[i][j].color = baseColor;
 				break;
 			case TILESTATE::TFALLING:
 				this->grid[i][j].counter += this->dt;
@@ -303,6 +305,8 @@ void GamePlayState::updateFloor()
 					this->grid[i][j].counter = 0.0;
 				}
 				break;
+			case TILESTATE::BOSSTILE:
+				this->grid[i][j].color = bossTileColor;
 			default:
 				break;
 			}
@@ -417,7 +421,8 @@ void GamePlayState::init() {
 	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
-	this->enemyManager.startLevel1(this->enemySpawnPos);
+	//this->enemyManager.startLevel1(this->enemySpawnPos);
+	this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -554,13 +559,13 @@ void GamePlayState::update(GameManager * gm)
 	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
 	
-	if (this->counter > this->fallPatternCoolDown) {
-		this->updateFloorPattern();
-	}
-	if (this->genCounter > this->genTimer) {
-		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
-		this->genCounter = 0.0;
-	}
+//	if (this->counter > this->fallPatternCoolDown) {
+//		this->updateFloorPattern();
+//	}
+//	if (this->genCounter > this->genTimer) {
+//		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+//		this->genCounter = 0.0;
+//	}
 	this->updateFloor();
 
 	int ID;
@@ -708,7 +713,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, Pr
 	BlockComponent* block = nullptr;
 	PhysicsComponent* phyComp = nullptr;
 
-	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
+	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, /*pos.y*/ 40.0f /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
 	proj = new Projectile(nextID, props.speed, props.range, props.spinn, shooter, position, dir, OBJECTTYPE::PROJECTILE);
 
 	//input for blockComp
@@ -719,13 +724,18 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, Pr
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(*proj, (props.size + 5));
+	phyComp = new PhysicsComponent(*proj, (props.size));
 
 	
 	//Add proj to objectArrays
 	this->dynamicObjects.push_back(proj);
 
 	return proj;
+}
+
+std::vector<std::vector<tileData>>& GamePlayState::GETgrid()
+{
+	return this->grid;
 }
 
 //_________________________________________//

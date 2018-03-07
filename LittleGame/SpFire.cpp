@@ -10,7 +10,7 @@ SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
 	this->setCost(10);
 	this->setCoolDown(0.2f);
 	this->damage = 50;
-	this->range = 100;
+	this->range = 300;
 }
 
 SpFire::~SpFire()

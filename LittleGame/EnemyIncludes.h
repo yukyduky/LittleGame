@@ -7,6 +7,7 @@
 namespace ENEMYTYPE {
 	enum TYPE {
 		IMMOLATION, SWARMER,
+		BOSS,
 		SIZE
 	};
 }

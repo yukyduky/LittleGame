@@ -5,6 +5,8 @@
 #include "SpDash.h"
 #include "SpFire.h"
 #include "SpSwarmProjectile.h"
+#include "SpBossBulletHell.h"
+
 
 
 Spell::Spell(ActorObject* owner, NAME name)
@@ -80,6 +82,17 @@ Projectile* Spell::spawnProj(ProjProp props)
 		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
 
 		projectilesSpell = new SpSwarmProjectile(
+			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+			trueThis->getAttackRange(), trueThis->getCoolDown()
+		);
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::BULLETHELL: {
+		SpBossBulletHell* trueThis = static_cast<SpBossBulletHell*>(this);
+		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
+
+		projectilesSpell = new SpBossBulletHell(
 			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
 			trueThis->getAttackRange(), trueThis->getCoolDown()
 		);

@@ -8,7 +8,7 @@
 
 // Currently initializing entire QuadTree at the start; OBJECT_MAX is withheld
 ///#define OBJECTS_MAX 20
-#define LAYERS_MAX 5
+#define LAYERS_MAX 0
 
 struct QuadTreeSquare {
 	float widthLength = 0.0f;

@@ -236,8 +236,11 @@ void CollisionHandler::collisionPlayerEnemy() {
 		(this->stepper * 3) * (this->centerToCenterVector.z * this->divisionFactor)
 	};
 
+	DirectX::XMFLOAT3 newEnemyPos = this->collidable2->GETPosition() - (this->resultVector * this->stepper);
+
 	// Enemies are moved out of the way of players
-	this->collidable2->setPosition(this->collidable2->GETPosition() - (this->resultVector * this->stepper));
+	this->collidable2->setPosition(newEnemyPos);
+	this->collidable2->GETphysicsComponent()->updateBoundingArea(newEnemyPos);
 }
 
 void CollisionHandler::collisionPlayerGenerator() {
@@ -441,12 +444,13 @@ void CollisionHandler::collisionIndestrucProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	this->collidable2->setState(OBJECTSTATE::TYPE::DEAD);
+	//this->collidable2->setState(OBJECTSTATE::TYPE::DEAD);
 
 	Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
 
-	spell->setActive(false);
+	spell->collision(this->collidable1, proj);
+	//spell->setActive(false);
 }
 
 void CollisionHandler::collisionProjectileProjectile() {

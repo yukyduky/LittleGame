@@ -10,15 +10,20 @@
 class BossState : public EnemyState
 {
 private:
-	size_t ID = 0;
-
+	
 protected:
+	GamePlayState* pGPS;
+	float bossScale;
 
 public:
-	BossState(EnemyObject& pHead, AIComponent& pBrain, size_t ID) : EnemyState(pHead, pBrain) {
-		this->ID = ID;
+	BossState(EnemyObject& pHead, AIComponent& pBrain, GamePlayState& pGPS, float bossScale) : EnemyState(pHead, pBrain) 
+	{
+		this->pGPS = &pGPS;
+		this->bossScale = bossScale;
 	}
 
+
+	virtual void executeBehavior() = 0;
 
 };
 

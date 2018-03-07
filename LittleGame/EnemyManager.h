@@ -308,6 +308,7 @@ private:
 	*/
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
+	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();
@@ -317,6 +318,8 @@ public:
 	1. Saves the pGPS as an internal pointer.
 	*/
 	void startLevel1(enemySpawnPositions spawnPosVectors);
+
+	void startBossLevel();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

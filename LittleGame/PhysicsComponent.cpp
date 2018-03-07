@@ -1,6 +1,7 @@
 #include "PhysicsComponent.h"
 #include "GameObject.h"
-
+#include <SimpleMath.h>
+#include <DirectXMath.h>
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                             PHYSICS COMPONENT           /
 ///////////////////////////////////////////////////////////
@@ -32,7 +33,9 @@ PhysicsComponent::PhysicsComponent(GameObject& obj) : ID(obj.getID()) {
 	this->pHead = &obj;
 	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
-	this->selfBoundingSphere.Center = obj.GETPosition();
+	XMFLOAT3 testPos = obj.GETPosition();
+	testPos.y = 40.0f;
+	this->selfBoundingSphere.Center = testPos;
 	this->selfBoundingSphere.Radius = 1.0f;
 }
 
@@ -40,8 +43,10 @@ PhysicsComponent::PhysicsComponent(GameObject& obj, float boundingSphereRadius) 
 	this->pHead = &obj;
 	obj.SETphysicsComponent(this);
 	obj.addComponent(this);
+	XMFLOAT3 testPos = obj.GETPosition();
+	testPos.y = 40.0f;
 
-	this->selfBoundingSphere.Center = obj.GETPosition();
+	this->selfBoundingSphere.Center = testPos;
 	this->selfBoundingSphere.Radius = boundingSphereRadius;
 }
 
@@ -50,7 +55,31 @@ PhysicsComponent::~PhysicsComponent() {
 }
 
 bool PhysicsComponent::checkCollision(DirectX::BoundingSphere boundingSphere_in) {
-	return this->selfBoundingSphere.Intersects(boundingSphere_in);
+	bool returnValue = false;
+
+	float totalRadius = boundingSphere_in.Radius + this->selfBoundingSphere.Radius;
+	XMFLOAT3 dist = boundingSphere_in.Center;
+	XMFLOAT3 dist2 = this->selfBoundingSphere.Center;
+	dist.x = dist.x - dist2.x;
+	dist.y = dist.y - dist2.y;
+	dist.z = dist.z - dist2.z;
+	
+	XMVECTOR dist3 = XMLoadFloat3(&dist);
+	dist3 = XMVector3Length(dist3);
+	XMStoreFloat3(&dist, dist3);
+
+	if (dist.x < totalRadius) {
+		returnValue = true;
+	}
+	//return this->selfBoundingSphere.Intersects(boundingSphere_in);
+	/*
+	
+	returnValue = this->selfBoundingSphere.Intersects(boundingSphere_in);
+
+	if (returnValue == false)
+		returnValue = this->selfBoundingSphere.Contains(boundingSphere_in);
+	*/
+	return returnValue;
 }
 
 bool PhysicsComponent::checkCollision(DirectX::BoundingBox boundingBox_in) {
@@ -58,15 +87,22 @@ bool PhysicsComponent::checkCollision(DirectX::BoundingBox boundingBox_in) {
 }
 
 void PhysicsComponent::updateBoundingArea(DirectX::XMFLOAT3 centerPos) {
-	this->selfBoundingSphere.Center = centerPos;
+	XMFLOAT3 testPos = centerPos;
+	testPos.y = 40.0f;
+
+	this->selfBoundingSphere.Center = testPos;
 }
+
 
 void PhysicsComponent::updateBoundingArea(float radius) {
 	this->selfBoundingSphere.Radius = radius;
 }
 
 void PhysicsComponent::updateBoundingArea(DirectX::XMFLOAT3 centerPos, float radius) {
-	this->selfBoundingSphere.Center = centerPos;
+	XMFLOAT3 testPos = centerPos;
+	testPos.y = 40.0f;
+
+	this->selfBoundingSphere.Center = testPos;
 	this->selfBoundingSphere.Radius = radius;
 }
 
