@@ -30,6 +30,9 @@ protected:
 
 	Projectile* theProj = nullptr;
 	float start, end, collisionDuration;
+
+	bool landed = false;
+	float yAcc = 0.0f;
 };
 
 ////////////////////////////////////////////

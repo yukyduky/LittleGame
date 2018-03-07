@@ -18,7 +18,7 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 
 	this->setCoolDown(1.5f);
 	this->damage = this->start;
-	this->range = -1;
+	this->range = 300.0f;
 
 }
 
@@ -38,9 +38,10 @@ bool SpBomb::castSpell()
 		if (!this->active)
 		{
 			this->active = true;
-			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, this->range, false);
+			this->landed = false;
+			this->yAcc = 6.0f;
+			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, this->range, false/*PROJBEHAVIOR::ENLARGE*/);
 			this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
-			this->damage = this->start;
 		}
 
 		this->setState(SPELLSTATE::COOLDOWN);
@@ -61,9 +62,24 @@ void SpBomb::update()
 	{
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
-		if (this->damage < this->end)
+
+		if (!this->landed)
 		{
-			this->damage += 300 * dt;
+			XMFLOAT3 currPos = this->theProj->GETPosition();
+			currPos.y += this->yAcc;
+			this->yAcc += -15.0f * dt;
+			this->theProj->setPosition(currPos);
+
+			if (currPos.y <= 39.0f)
+			{
+				this->landed = true;
+				this->damage = this->start;
+				this->theProj->setSpeed(0.0f);
+			}
+		}
+		else if (this->damage < this->end)
+		{
+			this->damage += 300.0f * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
 			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
 			this->theProj->SETscaleMatrix(scaleM);
