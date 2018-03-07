@@ -433,13 +433,14 @@ void ActorObject::dealDmg(float damag)
 	this->hp -= dmg;
 	
 	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
-		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+		float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
 		this->GETgraphicsComponent()->updateColor(vColor(
-			this->GEThp() / this->GEThpMAX(),
-			0.0f,
-			0.0f,
-			colorHolder.a)
+			(colorHolder.r * healthRatioHolder),
+			(colorHolder.g * healthRatioHolder),
+			(colorHolder.b * healthRatioHolder),
+			(colorHolder.a * healthRatioHolder))
 		);
 	}
 	else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
@@ -456,6 +457,9 @@ void ActorObject::dealDmg(float damag)
 			Locator::getStatsHeader()->addKill();
 
 			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::ENEMYDIED);
+			Locator::getGlobalEvents()->incrementEnemyDeathCount();
+
 			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
 		}
 

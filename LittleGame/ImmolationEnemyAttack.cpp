@@ -39,6 +39,7 @@ void ImmolationEnemyAttack::cleanUp()
 {
 	// The object this is attached to is getting cleaned, which means, IT'S DEAD.
 	(*this->pActiveEnemiesCount)--;
+
 	int test = 1;
 }
 void ImmolationEnemyAttack::attack()

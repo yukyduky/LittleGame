@@ -55,10 +55,6 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->getType() == OBJECTTYPE::TYPE::PROJECTILE &&
-						k->getState() == OBJECTSTATE::TYPE::DEAD)
-						int tester007 = 700;
-
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						// Dynamic Object must be within the same part of the quad tree
@@ -395,6 +391,14 @@ void GamePlayState::init() {
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
+
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
+	int i = 0;
+	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
+		this->quadTree.insertStaticObject(*it);
+		i++;
+	}
+
 	this->ID = this->GUI.initGUI(
 		this->newID(),
 		this->camera.GETcameraPos(),
@@ -402,12 +406,6 @@ void GamePlayState::init() {
 		this->GUIObjects,
 		this->graphics
 	);
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
-	int i = 0;
-	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
-		this->quadTree.insertStaticObject(*it);
-		i++;
-	}
 
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
@@ -487,6 +485,8 @@ void GamePlayState::cleanUp()
 	
 	this->graphics.clear();
 
+	this->GUI.cleanUp();
+
 	//Clear the grid
 	this->grid.clear();
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
@@ -541,6 +541,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 			StateManager::changeState(RestartState::getInstance());
 		}
+
+		//else if (globalmsg == GLOBALMESSAGES::ENEMYDIED)
+		//{
+		//	int loopCount = Locator::getGlobalEvents()->getEnemyDeathCount();
+		//	for (int i = 0; i < loopCount; i++)
+		//		GUI.popEnemyElement(this->GUIObjects, this->graphics);
+		//}
 	}
 }
 
@@ -604,7 +611,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 
 	this->checkPlayerTileStatus();
-	this->enemyManager.update();
+	this->enemyManager.update(&this->GUI);
 	this->checkCollisions();
 }
 
@@ -621,9 +628,19 @@ GamePlayState* GamePlayState::getInstance()
 	return &sGamePlayState;
 }
 
+std::list<GameObject*>* GamePlayState::GETGUIObjects()
+{
+	return &this->GUIObjects;
+}
+
 std::list<GameObject*>* GamePlayState::getDynamicObjects()
 {
 	return &this->dynamicObjects;
+}
+
+std::list<GraphicsComponent*>* GamePlayState::getGraphicsComponents()
+{
+	return &this->graphics;
 }
 
 void GamePlayState::addGraphics(GraphicsComponent * graphicsComponent)

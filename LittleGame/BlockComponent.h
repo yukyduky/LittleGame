@@ -22,6 +22,7 @@ private:
 	size_t offset = 0;
 	size_t numIndices = 0;
 	vColor color;
+	vColor colorOriginal;
 	GameObject* head = nullptr;
 	XMFLOAT3 points[8];
 	XMFLOAT3 normals[6];
@@ -50,7 +51,8 @@ public:
 	virtual size_t& GETnumIndices();
 	virtual XMFLOAT4X4& getWorld();
 
-	vColor GETcolor();
+	vColor GETcolor() { return this->color; }
+	vColor GETcolorOriginal() { return this->colorOriginal; }
 
 	/*--------<INFORMATION>--------
 	1. Something

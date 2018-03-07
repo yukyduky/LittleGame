@@ -2,6 +2,7 @@
 #include "RectangleComponent.h"
 #include "ArenaObject.h"
 #include "Spell.h"
+#include "ArenaGlobals.h"
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                                   GUI MANAGER           /
@@ -108,6 +109,16 @@ int GUIManager::initGUI(
 	}
 
 	float temptester123 = this->cameraPos.y / 630.0f;
+
+	// Setting 'EnemyCount' GUI elements pos depending on arena size
+	// NOTE: This is due to varying camera positions.
+
+	if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 1600)
+	{
+		this->enemyElementPosX = -1.05f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 1.1f;
+	}
 
 //----------------------------\
 //     HEALTH GUI ELEMENT     /
@@ -321,6 +332,7 @@ int GUIManager::initGUI(
 
 
 
+
 	return this->tempID;
 }
 
@@ -375,6 +387,53 @@ void GUIManager::updateGUI(ActorObject* player)
 	}
 }
 
+void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID)
+{
+	this->tempID = ID;
+
+	this->createGUIElement(
+		0.0f, 1.0f, 0.0f, 1.0f,
+		this->enemyElementPosX, this->enemyElementPosY, this->enemyElementPosZ,
+		0.002f, 0.0f, 0.04f
+	);
+
+	this->enemyElementPosX += this->separationDistance;
+
+	if (this->enemyElementPosX > 1.05f)
+		this->enemyElementPosX = -1.05f;
+
+	GUIObjects.push_back(this->object);
+	graphics.push_back(this->rect);
+
+	// Pushing to specific 'enemy-only' lists
+	this->enemyElementObjects.push_back(this->object);
+	this->enemyElementRects.push_back(this->rect);
+}
+
+void GUIManager::popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics)
+{
+	GameObject* tempObjectHolder = this->enemyElementObjects.front();
+	GraphicsComponent* tempGraphicsHolder = this->enemyElementRects.front();
+
+	this->enemyElementObjects.pop_front();
+	this->enemyElementRects.pop_front();
+
+	GUIObjects.remove(tempObjectHolder);
+	graphics.remove(tempGraphicsHolder);
+
+	tempObjectHolder->cleanUp();
+	delete tempObjectHolder;
+}
+
+void GUIManager::cleanUp()
+{
+	this->enemyElementObjects.clear();
+	this->enemyElementRects.clear();
+
+	this->enemyElementPosX = 0.0f;
+	this->enemyElementPosY = 0.0f;
+	this->enemyElementPosZ = 0.0f;
+}
 //_________________________________________//
 //                                         //
 //              END OF PUBLIC              //

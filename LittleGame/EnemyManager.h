@@ -7,6 +7,7 @@
 #include "ActorObject.h"
 #include "AIComponent.h"
 #include "LevelManager.h"
+#include "GUIManager.h"
 
 
 // Forward declaration to prevent double includes
@@ -73,7 +74,7 @@ public:
 	(If there are waves/enemies left).
 	- Doesn't currently have any time in between waves.
 	*/
-	void update();
+	void update(GUIManager* GUI);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. No need to clean up objects if they are attatched to the GameObjects vector since they'll

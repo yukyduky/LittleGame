@@ -9,6 +9,7 @@
 class GlobalEvents : public IGlobalEvents {
 private:
 	std::map<GLOBALMESSAGES, GLOBALMESSAGES> messageMap;
+	int enemyDeathCount = 0;
 
 public:
 	GlobalEvents();
@@ -18,6 +19,9 @@ public:
 
 	std::map<GLOBALMESSAGES, GLOBALMESSAGES> GETmessageMap();
 	void SETmessageMap(std::map<GLOBALMESSAGES, GLOBALMESSAGES> messageMap);
+
+	void incrementEnemyDeathCount() { this->enemyDeathCount++; }
+	int getEnemyDeathCount();
 };
 
 #endif
