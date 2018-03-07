@@ -27,6 +27,7 @@ EnemyManager::EnemyManager(GamePlayState& pGPS, std::vector<ActorObject*>& playe
 	this->pGPS = &pGPS;
 	this->players = players; 
 	this->activeEnemiesCount = 0;
+	this->ramp = false;
 }
 
 void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty)
@@ -67,12 +68,15 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
 	this->spawnInterval = 0.20f;
-	this->waveInterval = (5.1f - (difficulty * 0.5f));
+	this->waveInterval = 5.0f;
 	this->currentWaveCount = 10;
+
+	// Turn the 'ramp' effect ON
+	this->ramp = true;
 	
-	//this->currentWaveEnemyCount = new int [this->currentWaveCount];
-	for (int i = 0; i < this->currentWaveCount; i++)
-		this->currentWaveEnemyCount[i] = (4 + (4 * i));
+	this->currentWaveEnemyCount.resize(10);
+	for (int i = 0; i < this->currentWaveEnemyCount.size(); i++)
+		this->currentWaveEnemyCount.at(i) = (4 + static_cast<int>(1.5f * i));
 
 	Wave* currentWave = nullptr;
 
@@ -81,7 +85,7 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 		currentWave = new Wave();
 
 		// Per enemy
-		for (int j = 0; j < this->currentWaveEnemyCount[i]; j++) {
+		for (int j = 0; j < this->currentWaveEnemyCount.at(i); j++) {
 			// Create an enemy and attatch it to the wave.
 			ActorObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
@@ -254,6 +258,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 	this->pGPS = &pGPS;
 	this->players = players;
 	this->activeEnemiesCount = 0;
+	this->ramp = false;
 }
 
 void EnemyManager::update(GUIManager* GUI)
@@ -291,6 +296,10 @@ void EnemyManager::update(GUIManager* GUI)
 		// No enemies in this wave? Move on to the next wave
 		else if (this->timePassed > this->waveInterval) {
 			this->timePassed = 0;
+			
+			// Ramping the time between waves
+			if (this->ramp)
+				this->waveInterval -= 0.5f;
 
 			// Goodbye wave!
 			delete this->waves.front();

@@ -55,6 +55,7 @@ private:
 	vColor colorBack = { 0.25f, 0.25f, 0.25f, 0.0f };
 	vColor colorBackSelected = { 1.0f, 1.0f, 0.9f, 1.0f };
 
+	float enemyElementPosXMax = 0.0f;
 	float enemyElementPosX = 0.0f;
 	float enemyElementPosY = 0.0f;
 	float enemyElementPosZ = 0.0f;
@@ -105,8 +106,6 @@ public:
 	vColor GETcolorAbility2() { return this->colorAbility2; }
 	vColor GETcolorAbility3() { return this->colorAbility3; }
 	vColor GETcolorAbility4() { return this->colorAbility4; }
-
-	void SETenemyElementPos(float inputX, float inputY, float inputZ);
 
 	void cleanUp();
 };

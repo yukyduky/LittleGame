@@ -47,6 +47,7 @@ private:
 	float waveInterval = 0;
 	float timePassed = 0;
 	float startTime = 0;
+	bool ramp = false;
 
 	void cleanLevel();
 

@@ -115,6 +115,47 @@ int GUIManager::initGUI(
 
 	if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 1600)
 	{
+		this->enemyElementPosXMax = 1.05f;
+		this->enemyElementPosX = -1.05f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 1.1f;
+	}
+
+	else if (ARENADATA::GETarenaHeight() == 1000 && ARENADATA::GETarenaWidth() == 1000)
+	{
+		this->enemyElementPosXMax = 1.07f;
+		this->enemyElementPosX = -1.07f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 1.15f;
+	}
+
+	else if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 800)
+	{
+		this->enemyElementPosXMax = 1.15f;
+		this->enemyElementPosX = -1.15f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 1.3f;
+	}
+
+	else if (ARENADATA::GETarenaHeight() == 1000 && ARENADATA::GETarenaWidth() == 1500)
+	{
+		this->enemyElementPosXMax = 1.0f;
+		this->enemyElementPosX = -1.0f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 0.95f;
+	}
+
+	else if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 1400)
+	{
+		this->enemyElementPosXMax = 1.1f;
+		this->enemyElementPosX = -1.1f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 1.13f;
+	}
+
+	else if (ARENADATA::GETarenaHeight() == 1200 && ARENADATA::GETarenaWidth() == 1200)
+	{
+		this->enemyElementPosXMax = 1.05f;
 		this->enemyElementPosX = -1.05f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 1.1f;
@@ -399,8 +440,8 @@ void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<
 
 	this->enemyElementPosX += this->separationDistance;
 
-	if (this->enemyElementPosX > 1.05f)
-		this->enemyElementPosX = -1.05f;
+	if (this->enemyElementPosX > this->enemyElementPosXMax)
+		this->enemyElementPosX = (this->enemyElementPosXMax * -1);
 
 	GUIObjects.push_back(this->object);
 	graphics.push_back(this->rect);
