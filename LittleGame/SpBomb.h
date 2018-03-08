@@ -14,12 +14,12 @@ public:
 	SpBomb(ActorObject* player);
 	virtual ~SpBomb();
 
-	bool castSpell();
+	virtual bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
-	void collision(GameObject* target, Projectile* proj);
-	void update();
+	virtual void collision(GameObject* target, Projectile* proj);
+	virtual void update();
 protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
@@ -38,15 +38,18 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Splinterbomb
 class SpBombG1 : public SpBomb
 {
 public:
 	SpBombG1(ActorObject* player);
 	virtual ~SpBombG1();
+
+
 private:
 };
 
-
+// Mine
 class SpBombG2 : public SpBomb
 {
 public:
@@ -55,7 +58,7 @@ public:
 private:
 };
 
-
+// Blackhole 
 class SpBombG3 : public SpBomb
 {
 public:
