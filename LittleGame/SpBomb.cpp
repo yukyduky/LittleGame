@@ -7,6 +7,8 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
+	this->theProj = nullptr;
+
 	// start-size
 	this->start = 0.0f;
 	// end-size
@@ -15,11 +17,9 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	this->collisionDuration = 0.0f;
 	// only 1 bomb out
 	this->active = false;
-
 	this->setCoolDown(1.5f);
 	this->damage = this->start;
 	this->range = 300.0f;
-
 }
 
 SpBomb::~SpBomb()
@@ -35,14 +35,16 @@ bool SpBomb::castSpell()
 	}
 	else
 	{
-		if (!this->active)
+		if (this->theProj != nullptr)
 		{
-			this->active = true;
-			this->landed = false;
-			this->yAcc = 6.0f;
-			ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, this->range, false/*PROJBEHAVIOR::ENLARGE*/);
-			this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
+			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
 		}
+
+		this->active = true;
+		this->landed = false;
+		this->yAcc = 6.0f;
+		ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, this->range, false/*PROJBEHAVIOR::ENLARGE*/);
+		this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
@@ -98,7 +100,8 @@ void SpBomb::update()
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
+	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR) 
+		&& this->landed)
 	{
 		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
 	}
@@ -175,6 +178,65 @@ SpBombG2::SpBombG2(ActorObject * player) : SpBomb(player)
 
 SpBombG2::~SpBombG2()
 {
+}
+
+void SpBombG2::collision(GameObject * target, Projectile * proj)
+{
+	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
+		&& this->landed)
+	{
+		static_cast<ActorObject*>(target)->dealDmg(1000.0f);
+		this->trip = true;
+	}
+
+}
+
+void SpBombG2::update()
+{
+	if (this->active)
+	{
+
+		if (!this->landed)
+		{
+			float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+			this->currPos = this->theProj->GETPosition();
+			this->currPos.y += this->yAcc;
+			this->yAcc += -25.0f * dt;
+			this->theProj->setPosition(this->currPos);
+
+			if (this->currPos.y <= 0.0f)
+			{
+				this->landed = true;
+				this->theProj->setSpeed(0.0f);
+				this->trip = false;
+				this->damage = this->start;
+			}
+		}
+		else if (this->trip)
+		{
+			float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+			if (this->damage < this->end)
+			{
+				this->damage += 300.0f * dt;
+				XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
+				this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
+				this->theProj->SETscaleMatrix(scaleM);
+			}
+			else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
+			{
+				this->collisionDuration += dt;
+			}
+			else
+			{
+				this->active = false;
+				this->trip = false;
+				this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
+			}
+		}
+		
+	}
 }
 
 

@@ -57,7 +57,11 @@ class SpBombG2 : public SpBomb
 public:
 	SpBombG2(ActorObject* player);
 	virtual ~SpBombG2();
+
+	void collision(GameObject* target, Projectile* proj);
+	void update();
 private:
+	bool trip = false;
 };
 
 // Blackhole 
