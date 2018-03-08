@@ -10,7 +10,7 @@
 #include "Renderer.h"
 #include "AudioManager.h"
 #include "GlobalEvents.h"
-
+#include "StatsHeader.h"
 
 void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 {
@@ -22,23 +22,27 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	this->gameTime = new GameTime;
 	this->randomGenerator = new RandomGeneration;
 	this->globalEvents = new GlobalEvents;
+	this->stats = new StatsHeader;
 	// Provide the gametime object to the service locator
 	Locator::provide(this->gameTime);
 	Locator::provide(this->randomGenerator);
 	Locator::provide(this->globalEvents);
+	Locator::provide(this->stats);
 
 	//// Create the AudioManager
 	this->audio = new AudioManager;
 	// Provide the audioManager object to the service locator
 	Locator::provide(this->audio);
 	// Play music (MVP, this will/should be changed later on)
-	//this->audio->play(MUSIC::ONEPUNCH);
+	this->audio->play(MUSIC::ONEPUNCH);
 
 	// Start the game timer
 
 	// Set the first state of the game
 	StateManager::pushState(GamePlayState::getInstance());
 	StateManager::pushState(MainMenuState::getInstance());
+
+	Locator::getStatsHeader()->addLevel();
 }
 
 void GameManager::cleanUp()

@@ -2,9 +2,10 @@
 #include "ActorObject.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "RenderInputOrganizer.h"
 #include "IncludeSpells.h"
 
-Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -53,6 +54,9 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bo
 	//this->spell = projectilesSpell;
 	
 
+
+	this->light = light;
+	this->lightIDs = lightIDs;
 }
 
 Projectile::~Projectile()
@@ -61,6 +65,10 @@ Projectile::~Projectile()
 
 void Projectile::cleanUp()
 {
+	this->lightIDs->remove(this->light.first);
+	this->light.second->diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->light.second->ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
 	for (auto &c : this->components) {
 		c->cleanUp();
 		delete c;
@@ -228,7 +236,7 @@ void Projectile::update()
 	}
 
 	this->move();
-	
+	this->light.second->pos = pos;
 
 	if (this->spinn)
 	{

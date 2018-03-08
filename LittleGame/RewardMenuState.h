@@ -14,6 +14,8 @@ private:
 	int nrOfLoot;
 
 	std::vector<Spell*> spellPackage;
+
+	WCHAR* getGlyphName(int name, int glyph);
 public:
 	static RewardMenuState* getInstance();
 		
@@ -25,7 +27,9 @@ public:
 
 	virtual void handleEvents(GameManager* gm);
 
-	Menu* initRewardMenu();
+	Menu* initLootMenu();
+	Menu* initEnemyUpgradeMenu();
+	Menu* initNextLevelMenu();
 	
 	void provide(std::vector<int> savedGlyphs);
 	void provide(ActorObject* player);

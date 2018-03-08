@@ -8,6 +8,7 @@
 #include "EnemyObject.h"
 #include "EnemyIncludes.h"
 #include "LevelManager.h"
+#include "GUIManager.h"
 
 /* ---------------------------------------------------------------------------
 	If you're here to look at anything that is NOT the swarmers, i highly recommend 
@@ -332,7 +333,7 @@ public:
 	2. Checks if all of the enemies has died.
 	3. Updates internal arrayList & grid.
 	*/
-	void update();
+	void update(GUIManager* GUI);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. No need to clean up objects if they are attatched to the GameObjects vector since they'll

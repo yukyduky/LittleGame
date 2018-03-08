@@ -36,12 +36,12 @@ void Spell::updateCD()
 	}
 }
 
-Projectile* Spell::spawnProj(ProjProp props)
+Projectile* Spell::spawnProj(ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	XMFLOAT3 distance = { this->getOwner()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getOwner()->GETPosition() + distance };
-
+	light.pos = newPos;
 	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props);
 
 	// Attach the relevant spell to the projectile

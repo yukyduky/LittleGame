@@ -8,6 +8,9 @@
 #include "IAudioManager.h"
 #include "IRandomGeneration.h"
 #include "IGlobalEvents.h"
+#include "IStatsHeader.h"
+
+
 
 /* Service Locator pattern */
 
@@ -20,6 +23,7 @@ private:
 	static IRandomGeneration* sRandomGeneration;
 	static IGlobalEvents* sGlobalEvents;
 	static IAudioManager* sAM;
+	static IStatsHeader* sSH;
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
@@ -31,12 +35,8 @@ public:
 	static void provide(ID2D* d2d) { sID2D = d2d; }
 	static void provide(IRandomGeneration* randomGeneration) { sRandomGeneration = randomGeneration; }
 	static void provide(IGlobalEvents* globalEvents) { sGlobalEvents = globalEvents; }
-	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Provides the address of 'audioManager'(obj) to the 'sAM'(ptr) Locator object.
-	2. Passes the pointer to 'gameTime'(obj) as a parameter.
-	3. Also initializes via AudioManager->init();
-	*/
 	static void provide(IAudioManager* audioManager) { sAM = audioManager; sAM->init(); }
+	static void provide(IStatsHeader* statsHeader) { sSH = statsHeader; }
 	
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the 'sGT'(ptr).
@@ -48,6 +48,7 @@ public:
 	static IRandomGeneration* getRandomGenerator() { return sRandomGeneration; }
 	static IGlobalEvents* getGlobalEvents() { return sGlobalEvents; }
 	static IAudioManager* getAudioManager() { return sAM; }
+	static IStatsHeader* getStatsHeader() { return sSH; }
 };
 
 #endif

@@ -4,6 +4,8 @@
 
 #include "GameObject.h"
 #include "Locator.h"
+#include "RenderInputOrganizer.h"
+#include "IDHandler.h"
 
 class Spell;
 class GameObject;
@@ -12,7 +14,7 @@ class ActorObject;
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, float speed, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType);
+	Projectile(const size_t ID, float speed, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
 	~Projectile();
 
 	/*Moves the projectile in this->direction with this->velocity * this->dt
@@ -56,6 +58,11 @@ private:
 	// Pointer to the spell to able to call the correct collision in CollsionHandler
 	Spell* spell = nullptr;
 	// Range of travel
+	float range = 0.0f;
+
+	std::pair<size_t, Light*> light;
+	IDHandler* lightIDs;
+	
 	int maxFlyingRange = 0;
 	float rangeCounter = 0;
 	

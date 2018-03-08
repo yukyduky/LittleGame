@@ -20,7 +20,7 @@
 #include "LevelManager.h"
 #include "QuadTree.h"
 #include "GUIManager.h"
-
+#include "IDHandler.h"
 #include "MouseInput.h"
 
 
@@ -111,6 +111,7 @@ private:
 	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	IDHandler lightIDs;
 	std::vector<Light> pointLights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
@@ -173,14 +174,16 @@ public:
 	1. Returns a reference to the internal dynamicObjects vector.
 	- Currently only used by EnemyHandler for creation of enemies.
 	*/
+	std::list<GameObject*>* GETGUIObjects();
 	std::list<GameObject*>* getDynamicObjects();
+	std::list<GraphicsComponent*>* getGraphicsComponents();
 
 	void addGraphics(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
 
 	/*call to shoot projectile*/
-	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props);
+	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light);
 
 	std::vector<std::vector<tileData>>& GETgrid();
 

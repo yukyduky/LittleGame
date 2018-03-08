@@ -112,6 +112,9 @@
     <ClCompile Include="BossBulletHellState.cpp">
       <Filter>Boss\BossStates</Filter>
     </ClCompile>
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
+    <ClCompile Include="IDHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -238,6 +241,10 @@
     <ClInclude Include="BossBulletHellState.h">
       <Filter>Boss\BossStates</Filter>
     </ClInclude>
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
+    <ClInclude Include="IStatsHeader.h" />
+    <ClInclude Include="IDHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

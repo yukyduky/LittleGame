@@ -48,10 +48,10 @@ void GameTime::UpdateFrameTime()
 	}
 
 	// Count divided by frequency equals time in milliseconds
-	this->deltaTime = frameCount / this->frequency;
+	this->deltaTime = frameCount / (this->frequency);
 }
 
 const double GameTime::getDeltaTime()
 {
-	return this->deltaTime;
+	return this->deltaTime * this->multiplier;
 }

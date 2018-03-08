@@ -26,7 +26,8 @@ bool SpAutoAttack::castSpell()
 	else
 	{
 		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000.0f, this->range, true);
-		this->spawnProj(props);
+
+		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
 		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
 

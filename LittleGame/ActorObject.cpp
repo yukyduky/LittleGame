@@ -404,6 +404,8 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
+	Locator::getStatsHeader()->resetStats();
+
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[3];
 		this->selectedSpellIntValue = 3;
@@ -451,14 +453,19 @@ void ActorObject::dealDmg(float dmg)
 	this->hp -= dmg * this->invulnerable;
 	
 	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
-		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+		float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
 		this->GETgraphicsComponent()->updateColor(vColor(
-			this->GEThp() / this->GEThpMAX(),
-			0.0f,
-			0.0f,
-			colorHolder.a)
+			(colorHolder.r * healthRatioHolder),
+			(colorHolder.g * healthRatioHolder),
+			(colorHolder.b * healthRatioHolder),
+			(colorHolder.a * healthRatioHolder))
 		);
+	}
+	else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
+	{
+		Locator::getStatsHeader()->addDamageTaken(dmg);
 	}
 
 	if (this->hp <= 0.0f) {
@@ -466,7 +473,13 @@ void ActorObject::dealDmg(float dmg)
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
 		if (this->getType() == OBJECTTYPE::TYPE::ENEMY) {
+			// Adds to the killcount
+			Locator::getStatsHeader()->addKill();
+
 			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::ENEMYDIED);
+			Locator::getGlobalEvents()->incrementEnemyDeathCount();
+
 			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
 		}
 

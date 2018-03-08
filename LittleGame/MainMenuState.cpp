@@ -18,44 +18,51 @@ MainMenuState* MainMenuState::getInstance() {
 
 Menu* MainMenuState::initStartMenu()
 {
-	Menu* stMenu = nullptr;
+	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
 	Button* pButton = nullptr;
 	WCHAR* text = nullptr;
+	std::wstring textStr;
 	int nextID;
 
-	stMenu = new Menu();
+	menu = new Menu();
 
 	//Background
 	nextID = this->newID();
 	object = new MenuObject(nextID);
-	stMenu->addQuad(object);
+	menu->addQuad(object);
+	textStr = L"Current level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
+		textStr);
+	menu->addQuad(object);
 
 	//Buttons
 	nextID = this->newID();
 	text = L"Start/Resume game";
 	pButton = new Button(this, nextID,
 		{ 100.0f,50.0f, 200.0f,150.0f }, D2D1::ColorF::Aqua,
-		text, BEHAVIOR::STARTGAME);
-	stMenu->addButton(pButton);
+		text, BEHAVIOR::RESUMEGAME);
+	menu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Options";
 	pButton = new Button(this, nextID,
 		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
-	stMenu->addButton(pButton);
+	menu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
 		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
-	stMenu->addButton(pButton);
+	menu->addButton(pButton);
 
 
 	//this->menus[MENUS::START] = stMenu;
-	return stMenu;
+	return menu;
 }
 
 Menu* MainMenuState::initOptionsMenu()

@@ -27,3 +27,11 @@ std::map<GLOBALMESSAGES, GLOBALMESSAGES> GlobalEvents::GETmessageMap() {
 void GlobalEvents::SETmessageMap(std::map<GLOBALMESSAGES, GLOBALMESSAGES> messageMap) {
 	this->messageMap = messageMap;
 }
+
+int GlobalEvents::getEnemyDeathCount()
+{
+	int returnValue = this->enemyDeathCount;
+	this->enemyDeathCount = 0;
+
+	return returnValue;
+}

@@ -24,6 +24,8 @@ public:
 	1. Returns the 'deltaTime'(obj).
 	*/
 	virtual const double getDeltaTime() = 0;
+
+	virtual void setMultiplier(double val) = 0;
 };
 
 #endif

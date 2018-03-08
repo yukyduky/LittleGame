@@ -1,4 +1,5 @@
 #include "GamePlayState.h"
+#include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "RectangleComponent.h"
@@ -54,10 +55,6 @@ void GamePlayState::checkCollisions() {
 				int kID = k->getID();
 				if (iID != kID)
 				{
-					if (k->getType() == OBJECTTYPE::TYPE::PROJECTILE &&
-						k->getState() == OBJECTSTATE::TYPE::DEAD)
-						int tester007 = 700;
-
 					if (k->getState() != OBJECTSTATE::TYPE::DEAD) {
 
 						// Dynamic Object must be within the same part of the quad tree
@@ -129,14 +126,15 @@ void GamePlayState::updateFloor()
 	Index index(0, 0);
 	XMFLOAT3 currVel(0, 0, 0);
 	XMFLOAT3 fallColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 baseColor(0.001f, 0.784f, 1.0f);
+	XMFLOAT3 baseColor(0.2f, 0.2f, 0.45f);
 	XMFLOAT3 holeColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 finalColor(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
-	XMFLOAT3 electrifiedColor = XMFLOAT3(1.0f, 1.0f, 0.01f);
-	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.01f);
-	XMFLOAT3 cooledColor = XMFLOAT3(0.01f, 0.75f, 1.0f);
+	XMFLOAT3 electrifiedColor = XMFLOAT3(0.5f, 0.5f, 0.05f);
+	XMFLOAT3 heatedColor = XMFLOAT3(0.5f, 0.245f, 0.05f);
+	XMFLOAT3 cooledColor = XMFLOAT3(0.05f, 0.4f, 0.5f);
+	
 	XMFLOAT3 bossTileColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
 	XMFLOAT3 teleportColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
 	XMFLOAT3 tempColor1;
@@ -179,7 +177,7 @@ void GamePlayState::updateFloor()
 					this->grid[i][j].posY += GRAVITY / 4.0f * this->counter;
 				}
 				else {
-					this->grid[i][j].posY = baseHeight;
+					//this->grid[i][j].posY = baseHeight;
 					this->grid[i][j].color = holeColor;
 					this->grid[i][j].state = TILESTATE::HOLE;
 					this->grid[i][j].counter = 0.0;
@@ -194,7 +192,8 @@ void GamePlayState::updateFloor()
 				break;
 			case TILESTATE::RECOVERING:
 				this->grid[i][j].counter += this->dt;
-				if (this->grid[i][j].counter < this->grid[i][j].stateTime) {
+				this->grid[i][j].posY -= GRAVITY / 4.0f * this->counter;
+				if (this->grid[i][j].posY < baseHeight) {
 					tempColor1.x = (recoverColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
 					tempColor1.y = (recoverColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
 					tempColor1.z = (recoverColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
@@ -209,6 +208,7 @@ void GamePlayState::updateFloor()
 					this->grid[i][j].color = XMFLOAT3(0.0f, 1.0f, 0.0f);
 					this->grid[i][j].state = TILESTATE::FLASH;
 					this->grid[i][j].counter = 0.0;
+					this->grid[i][j].posY = baseHeight;
 				}
 				break;
 			case TILESTATE::FLASH:
@@ -410,13 +410,7 @@ void GamePlayState::init() {
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->pointLights);
 	this->initPlayer();
-	this->ID = this->GUI.initGUI(
-		this->newID(),
-		this->camera.GETcameraPos(),
-		this->camera.GETfacingDir(),
-		this->GUIObjects,
-		this->graphics
-	);
+
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
@@ -424,14 +418,23 @@ void GamePlayState::init() {
 		i++;
 	}
 
+	this->ID = this->GUI.initGUI(
+		this->newID(),
+		this->camera.GETcameraPos(),
+		this->camera.GETfacingDir(),
+		this->GUIObjects,
+		this->graphics
+	);
+
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
-	this->pointLights.reserve(MAX_NUM_POINTLIGHTS);
-	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.8f, 0.0001f, 0.00001f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
-	this->pointLights.push_back(Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f));
+	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
+	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
+	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
+	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
+	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	//this->enemyManager.startLevel1(this->enemySpawnPos);
@@ -454,6 +457,9 @@ void GamePlayState::init() {
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
+
+	// Adds to the level each time it starts a level
+	Locator::getStatsHeader()->addLevel();
 }
 
 void GamePlayState::cleanUp()
@@ -502,6 +508,8 @@ void GamePlayState::cleanUp()
 	
 	this->graphics.clear();
 
+	this->GUI.cleanUp();
+
 	//Clear the grid
 	this->grid.clear();
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
@@ -546,10 +554,10 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
-			StateManager::changeState(RestartState::getInstance());
+			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			//this->player1->GETSpells();
+			// Give the RestartState the current spells so it can be saved for thet next level
 			RestartState::getInstance()->provide(this->player1->GETSpells());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
@@ -558,6 +566,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			// Change last so we've already done all of the changes.
 			StateManager::changeState(RestartState::getInstance());
 		}
+
+		//else if (globalmsg == GLOBALMESSAGES::ENEMYDIED)
+		//{
+		//	int loopCount = Locator::getGlobalEvents()->getEnemyDeathCount();
+		//	for (int i = 0; i < loopCount; i++)
+		//		GUI.popEnemyElement(this->GUIObjects, this->graphics);
+		//}
 	}
 }
 
@@ -623,7 +638,7 @@ void GamePlayState::update(GameManager * gm)
 	}
 
 	this->checkPlayerTileStatus();
-	this->enemyManager.update();
+	this->enemyManager.update(&this->GUI);
 	this->checkCollisions();
 }
 
@@ -640,9 +655,19 @@ GamePlayState* GamePlayState::getInstance()
 	return &sGamePlayState;
 }
 
+std::list<GameObject*>* GamePlayState::GETGUIObjects()
+{
+	return &this->GUIObjects;
+}
+
 std::list<GameObject*>* GamePlayState::getDynamicObjects()
 {
 	return &this->dynamicObjects;
+}
+
+std::list<GraphicsComponent*>* GamePlayState::getGraphicsComponents()
+{
+	return &this->graphics;
 }
 
 void GamePlayState::addGraphics(GraphicsComponent * graphicsComponent)
@@ -665,7 +690,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
+	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
@@ -716,7 +741,7 @@ void GamePlayState::initPlayer()
 }
 
 
-Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	int nextID = this->newID();
@@ -727,8 +752,13 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, Pr
 	BlockComponent* block = nullptr;
 	PhysicsComponent* phyComp = nullptr;
 
-	XMFLOAT3 position = {pos.x /*+ dir.x * props.size*/, /*pos.y*/ 40.0f /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/};
-	proj = new Projectile(nextID, props.speed, props.range, props.spinn, shooter, position, dir, OBJECTTYPE::PROJECTILE);
+	XMFLOAT3 position = { pos.x /*+ dir.x * props.size*/,  40.0f /*pos.y*/ /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/ };
+
+	size_t lightID = this->lightIDs.getNewID();
+
+	this->pointLights[lightID] = light;
+
+	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
