@@ -153,6 +153,11 @@ BlockComponent::BlockComponent(
 	obj.addComponent(this);
 	pGPS.addGraphics(this);
 	
+	this->colorOriginal.r = color.x;
+	this->colorOriginal.g = color.y;
+	this->colorOriginal.b = color.z;
+	this->colorOriginal.a = color.w;
+
 	this->color.r = color.x;
 	this->color.g = color.y;
 	this->color.b = color.z;
@@ -191,6 +196,25 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 void BlockComponent::update()
 {
 	this->head->updateWorldMatrix();
+
+	OBJECTSTATE::TYPE state = this->head->getState();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	switch (state)
+	{
+	case OBJECTSTATE::TYPE::ACTIVATED:
+		break;
+	case OBJECTSTATE::TYPE::BOSSINVULNERABLE:
+		this->updateColor(vColor(0.3f, 0.3f, 0.3f, 1.0f));
+		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
+		break;
+	case OBJECTSTATE::TYPE::BOSSVULNERABLE:
+		this->updateColor(this->color);
+		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
+		break;
+	default:
+		break;
+	}
 }
 
 void BlockComponent::cleanUp()
@@ -245,6 +269,11 @@ vColor BlockComponent::GETcolor() {
 	return this->color;
 }
 
+vColor BlockComponent::GETcolorOriginal()
+{
+	return this->colorOriginal;
+}
+
 const size_t BlockComponent::getID()
 {
 	return this->ID;
@@ -257,6 +286,8 @@ OBJECTSTATE::TYPE BlockComponent::GETstate()
 
 void BlockComponent::updateColor(vColor newColor)
 {
+	this->color = newColor;
+
 	std::array<PrimitiveVertexData, 24> vertexData;
 	//Front p0, p1, p2, p3
 	vertexData[0] = PrimitiveVertexData(this->points[0].x, this->points[0].y, this->points[0].z, this->normals[0].x, this->normals[0].y, this->normals[0].z, newColor.r, newColor.g, newColor.b, newColor.a);

@@ -32,6 +32,9 @@ enum class NAME {
 	
 	// EnemySpells after this point
 	ENEM_SWARM, ENEM_IMMO,
+
+	//BossSpells
+	BULLETHELL,
 	
 	//
 	SIZE
@@ -55,7 +58,7 @@ public:
 	// called in each frame to decrese the cooldown of each spell
 	virtual void updateCD();
 	// Spawns a projectile infront of the player
-	Projectile* spawnProj(ProjProp props);
+	Projectile* spawnProj(ProjProp props, Light light);
 
 	ActorObject* getOwner() { return this->owner; };
 	void setType(SPELLTYPE input) { this->type = input; };

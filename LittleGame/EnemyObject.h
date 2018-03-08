@@ -44,6 +44,10 @@ public:
 
 	virtual void update();
 	virtual void attack();
+	virtual void bossAttack01();
+	virtual void bossAttack02();
+	virtual void bossAttack03();
+
 };
 
 

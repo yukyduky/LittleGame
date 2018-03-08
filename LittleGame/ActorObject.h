@@ -39,6 +39,7 @@ protected:
 
 	float energy = 100;
 	float energyMAX = 100;
+	float invulnerable = 1.0f;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -109,7 +110,7 @@ public:
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
 	// Deals dmg to the Actors Hp
-	void dealDmg(float dmg);
+	void dealDmg(float damage);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Depletes the players energy by a certain amount.
 	2. NOTE: Should the function return true, then the energy HAS BEEN DEPLETED.
@@ -133,6 +134,10 @@ public:
 	// For enemies
 	Spell* getFirstSpell();
 	void applyStatusEffect(TILESTATE::STATE effect);
+	
+
+	void turnOnInvulnerability();
+	void turnOffInvulnerability();
 };
 
 

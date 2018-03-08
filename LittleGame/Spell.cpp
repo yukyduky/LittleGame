@@ -5,6 +5,8 @@
 #include "SpDash.h"
 #include "SpFire.h"
 #include "SpSwarmProjectile.h"
+#include "SpBossBulletHell.h"
+
 
 
 Spell::Spell(ActorObject* owner, NAME name)
@@ -34,13 +36,13 @@ void Spell::updateCD()
 	}
 }
 
-Projectile* Spell::spawnProj(ProjProp props)
+Projectile* Spell::spawnProj(ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	XMFLOAT3 distance = { this->getOwner()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getOwner()->GETPosition() + distance };
-
-	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props);
+	light.pos = newPos;
+	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props, light);
 
 	// Attach the relevant spell to the projectile
 	// (This could be optimized by adding copy constructors and using those instead of what's done below)
@@ -80,6 +82,17 @@ Projectile* Spell::spawnProj(ProjProp props)
 		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
 
 		projectilesSpell = new SpSwarmProjectile(
+			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+			trueThis->getAttackRange(), trueThis->getCoolDown()
+		);
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::BULLETHELL: {
+		SpBossBulletHell* trueThis = static_cast<SpBossBulletHell*>(this);
+		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
+
+		projectilesSpell = new SpBossBulletHell(
 			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
 			trueThis->getAttackRange(), trueThis->getCoolDown()
 		);

@@ -154,6 +154,16 @@ void ActorObject::update()
 		break;
 	case OBJECTSTATE::TYPE::STUNNED:
 		break;
+	case OBJECTSTATE::TYPE::TELEPORTED:
+		this->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+		for (auto &i : this->components) {
+			i->update();
+		}
+		for (auto &i : this->spells) {
+			i->update();
+			i->updateCD();
+		}
+		break;
 	default:
 		for (auto &i : this->components) {
 			i->update();
@@ -188,27 +198,24 @@ void ActorObject::move()
 		int WARNING = 0;
 	}
 
-	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (this->getType() == OBJECTTYPE::ENEMY) {
 		actorNewPos.z = tempPos.z;
-		this->physicsComponent->updateBoundingArea(actorPos);
-
 		actorNewPos.x = tempPos.x;
-		this->physicsComponent->updateBoundingArea(actorPos);
-
 		actorNewPos.y = actorPos.y;
+
+		this->physicsComponent->updateBoundingArea(actorNewPos);
 		this->setPosition(actorNewPos);
 	}
-
+	//Check so that the player still is inside the arena in x- and z-dimension.
 	else {
 		if (tempPos.z > ARENADATA::GETsquareSize() && tempPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
 			actorNewPos.z = tempPos.z;
-			this->physicsComponent->updateBoundingArea(actorPos);
+			this->physicsComponent->updateBoundingArea(actorNewPos);
 		}
 		else { actorNewPos.z = actorPos.z; }
 		if (tempPos.x > ARENADATA::GETsquareSize() && tempPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
 			actorNewPos.x = tempPos.x;
-			this->physicsComponent->updateBoundingArea(actorPos);
+			this->physicsComponent->updateBoundingArea(actorNewPos);
 		}
 		else { actorNewPos.x = actorPos.x; }
 		actorNewPos.y = actorPos.y;
@@ -356,7 +363,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::fireAbilityX()
 {
-	if ((this->state == OBJECTSTATE::TYPE::ACTIVATED) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell->castSpell();
 	}
 	else {
@@ -395,9 +402,12 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
+	Locator::getStatsHeader()->resetStats();
+
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[3];
-		this->selectedSpellIntValue = 3;
+		this->spells[3]->castSpell();
+		//this->selectedSpell = this->spells[3];
+		//this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -409,8 +419,10 @@ void ActorObject::selectAbility4()
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[4];
-		this->selectedSpellIntValue = 4;
+		this->spells[4]->castSpell();
+
+		//this->selectedSpell = this->spells[4];
+		//this->selectedSpellIntValue = 4;
 	}
 	else {
 
@@ -437,19 +449,30 @@ void ActorObject::decCD()
 	
 }
 
-void ActorObject::dealDmg(float dmg)
+void ActorObject::dealDmg(float damag)
 {
-	this->hp -= dmg;
+	float dmg = damag;
+	if (this->pGPS->getBerserkerMode())
+	{
+		dmg *= 3.0f;
+	}
+
+	this->hp -= dmg * this->invulnerable;
 	
 	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
-		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
+		vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+		float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
 		this->GETgraphicsComponent()->updateColor(vColor(
-			this->GEThp() / this->GEThpMAX(),
-			0.0f,
-			0.0f,
-			colorHolder.a)
+			(colorHolder.r * healthRatioHolder),
+			(colorHolder.g * healthRatioHolder),
+			(colorHolder.b * healthRatioHolder),
+			(colorHolder.a * healthRatioHolder))
 		);
+	}
+	else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
+	{
+		Locator::getStatsHeader()->addDamageTaken(dmg);
 	}
 
 	if (this->hp <= 0.0f) {
@@ -457,7 +480,13 @@ void ActorObject::dealDmg(float dmg)
 		this->state = OBJECTSTATE::TYPE::DEAD;
 
 		if (this->getType() == OBJECTTYPE::TYPE::ENEMY) {
+			// Adds to the killcount
+			Locator::getStatsHeader()->addKill();
+
 			Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_3);
+			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::ENEMYDIED);
+			Locator::getGlobalEvents()->incrementEnemyDeathCount();
+
 			//Locator::getAudioManager()->play(SOUND::NAME::ENEMYDEATH_4);
 		}
 
@@ -624,6 +653,16 @@ void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
 {
 	this->statusEffect = effect;
 	this->counter = 0.0f;
+}
+
+void ActorObject::turnOnInvulnerability()
+{
+	this->invulnerable = 0.0f;
+}
+
+void ActorObject::turnOffInvulnerability()
+{
+	this->invulnerable = 1.0f;
 }
 
 Spell * ActorObject::getFirstSpell()

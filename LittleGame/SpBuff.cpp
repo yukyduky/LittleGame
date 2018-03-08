@@ -9,7 +9,7 @@ SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
 
 	this->setCost(15.0f);
 	this->setCoolDown(10.0f);
-	this->duration = 1.5f;
+	this->duration = 3.5f;
 
 	this->range = 20.0f;
 	this->oriRadius = this->getOwner()->GETphysicsComponent()->GETBoundingSphere().Radius;
@@ -62,6 +62,7 @@ void SpBuff::update()
 
 		if (this->getTSC() > this->duration)
 		{
+			Locator::getGameTime()->setMultiplier(1.0);
 			this->getOwner()->setSpeed(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
@@ -71,6 +72,7 @@ void SpBuff::update()
 		}
 		else
 		{
+			Locator::getGameTime()->setMultiplier(0.3);
 			this->floatingValue += 5.0f * dt;
 			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
 
@@ -95,11 +97,52 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 SpBuffG1::SpBuffG1(ActorObject * player) : SpBuff(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->setCoolDown(0.1f);
+	//this->duration *= 3.0f;
 }
 
 SpBuffG1::~SpBuffG1()
 {
+}
+
+bool SpBuffG1::castSpell()
+{
+	bool returnValue = true;
+	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
+	{
+		returnValue = false;
+	}
+	else
+	{
+		if (this->getOwner()->useEnergy(this->getCost()))
+		{
+			this->active = true;
+			this->setState(SPELLSTATE::ACTIVE);
+
+			this->getOwner()->getPGPS()->setBerserkerMode(true);
+
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+		}
+	}
+
+	return returnValue;
+}
+
+void SpBuffG1::update()
+{
+	if (this->active)
+	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+		if (this->getTSC() > this->duration)
+		{
+			Locator::getGameTime()->setMultiplier(1.0);
+			this->active = false;
+			this->setState(SPELLSTATE::COOLDOWN);
+
+			this->getOwner()->getPGPS()->setBerserkerMode(false);
+
+		}
+	}
 }
 
 
@@ -123,10 +166,55 @@ SpBuffG2::~SpBuffG2()
 SpBuffG3::SpBuffG3(ActorObject * player) : SpBuff(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 1.5f);
-	this->setCost(this->getCost() * 0.2f);
+	this->strength *= 2.0f;
 }
 
 SpBuffG3::~SpBuffG3()
 {
+}
+
+bool SpBuffG3::castSpell()
+{
+	bool returnValue = true;
+	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
+	{
+		returnValue = false;
+	}
+	else
+	{
+		if (this->getOwner()->useEnergy(this->getCost()))
+		{
+			this->active = true;
+			this->setState(SPELLSTATE::ACTIVE);
+
+			this->getOwner()->setSpeed(this->strength);
+			this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
+
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+		}
+	}
+
+	return returnValue;
+}
+
+void SpBuffG3::update()
+{
+	if (this->active)
+	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+		if (this->getTSC() > this->duration)
+		{
+			Locator::getGameTime()->setMultiplier(1.0);
+			this->getOwner()->setSpeed(1.0f);
+			this->active = false;
+			this->setState(SPELLSTATE::COOLDOWN);
+
+			this->getOwner()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
+		}
+		else
+		{
+			Locator::getGameTime()->setMultiplier(0.3);
+		}
+	}
 }

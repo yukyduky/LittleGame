@@ -144,6 +144,12 @@
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="BossBattleIntroState.h" />
+    <ClInclude Include="BossBulletHellState.h" />
+    <ClInclude Include="BossMoveAwayFromArenaState.h" />
+    <ClInclude Include="SpBossBulletHell.h" />
+    <ClInclude Include="BossMoveToArenaState.h" />
+    <ClInclude Include="BossState.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
@@ -162,9 +168,11 @@
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="IDHandler.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
+    <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
@@ -209,6 +217,8 @@
     <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="SwarmerEnemyAttack.h" />
     <ClInclude Include="SwarmerOutsideState.h" />
     <ClInclude Include="SwarmerSeekingState.h" />
@@ -220,6 +230,12 @@
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="BossBattleIntroState.cpp" />
+    <ClCompile Include="BossBulletHellState.cpp" />
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
+    <ClCompile Include="BossMoveToArenaState.cpp" />
+    <ClCompile Include="SpBossBulletHell.cpp" />
+    <ClCompile Include="BossState.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -233,6 +249,7 @@
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="IDHandler.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
@@ -274,6 +291,8 @@
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="SpSwarmProjectile.cpp" />
     <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="SwarmerEnemyAttack.cpp" />
     <ClCompile Include="SwarmerSeekingState.cpp" />
     <ClCompile Include="SwarmerState.cpp" />

@@ -20,7 +20,7 @@
 #include "LevelManager.h"
 #include "QuadTree.h"
 #include "GUIManager.h"
-
+#include "IDHandler.h"
 #include "MouseInput.h"
 
 
@@ -34,6 +34,7 @@ struct ProjProp {
 	float speed;
 	float range;
 	bool spinn;
+	PROJBEHAVIOR behavior;
 
 	ProjProp(float s, XMFLOAT4 c, float spd, float r, bool spn) 
 		: size(s)
@@ -41,6 +42,15 @@ struct ProjProp {
 		, speed(spd)
 		, range(r)
 		, spinn(spn)
+		, behavior(PROJBEHAVIOR::NONE)
+	{}
+	ProjProp(float s, XMFLOAT4 c, float spd, float r, PROJBEHAVIOR beh)
+		: size(s)
+		, color(c)
+		, speed(spd)
+		, range(r)
+		, spinn(false)
+		, behavior(beh)
 	{}
 	ProjProp() {}
 };
@@ -80,27 +90,28 @@ private:
 	//Variables for falling floor
 	FloorFallData fallData; //OLD
 	FloorFallData currData;
-	FLOORSTATE::STATE floorState;
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
-	std::vector<Index> genIndex;
+
+	/// T I M E R S   F O R   T H E    F L O O R F A L L P A T T E R N S
+	//Times for when the different FloorPattern difficulties start.
 	double mediumTime;
 	double hardTime;
+	double fallPatternCoolDown;
 	double totalLevelTime;
 	double gTimeLastFrame;
-	double stateTime;
-	double timeBetweenPatterns;
-	double tFallingTime;
-	double fallAndRecoveryTime;
 	double counter;
+	/// G E N E R A T O R   S T U F F
+	//Saves the index of each square that has a generator.
+	//Time between each generator spawning and the counter for it.
+	std::vector<Index> genIndex;
 	double genTimer;
 	double genCounter;
-	double genEffectTime;
-	bool recoveryMode;
-	int currentPatternNr;
-	double fallPatternCoolDown;
+	//Games dt for each fram, used for easier access in different functions.
 	double dt;
+	//Used during the boss fight to tell the boss that the player stepped on a objective tile.
+	bool playerSteppedOnBossTile;
 
 	//All spawnPositions that will be used in the EnemyHandler
 	enemySpawnPositions enemySpawnPos;
@@ -110,10 +121,13 @@ private:
 	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
+	IDHandler lightIDs;
 	std::vector<Light> pointLights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
+	// Set by one of SpBuff's glyph
+	bool berserkerMode = false;
 	Command* selectCommand = nullptr;
 	
 	void checkCollisions();
@@ -172,19 +186,29 @@ public:
 	1. Returns a reference to the internal dynamicObjects vector.
 	- Currently only used by EnemyHandler for creation of enemies.
 	*/
+	std::list<GameObject*>* GETGUIObjects();
 	std::list<GameObject*>* getDynamicObjects();
+	std::list<GraphicsComponent*>* getGraphicsComponents();
+
+
 
 	void addGraphics(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
-
 	/*call to shoot projectile*/
-	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props);
+	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light);
+
+	std::vector<std::vector<tileData>>& GETgrid();
+
+	bool GETplayerSteppedOnBossTile();
+	void SETplayerSteppedOnBossTile(bool input);
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
+	void setBerserkerMode(bool input) { this->berserkerMode = input; }
+	bool getBerserkerMode() { return this->berserkerMode; }
 
 };
 

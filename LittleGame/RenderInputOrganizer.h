@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "LevelManager.h"
 
-constexpr int MAX_NUM_POINTLIGHTS = 50;
+constexpr int MAX_NUM_POINTLIGHTS = 150;
 constexpr int MAX_NUM_FLOORGRIDS_X = 35;
 constexpr int MAX_NUM_FLOORGRIDS_Y = 35;
 
@@ -24,7 +24,7 @@ struct Light {
 	XMFLOAT3 attenuation;
 	float specPower;
 
-	Light() {}
+	Light() : pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), diffuse(XMFLOAT3(0.0f, 0.0f, 0.0f)), ambient(XMFLOAT3(0.0f, 0.0f, 0.0f)) {}
 	Light(XMFLOAT3 pos, XMFLOAT3 diffuse, XMFLOAT3 ambient, XMFLOAT3 attenuation, float specPower) : 
 		pos(pos), diffuse(diffuse), ambient(ambient), attenuation(attenuation), specPower(specPower) {}
 };
@@ -39,12 +39,10 @@ struct LightPassData {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
 	XMFLOAT3 camPos;
 	float nrOfLights;
-	XMFLOAT3 camDir;
-	float pad0;
 	XMFLOAT2 arenaDims;
 	XMFLOAT2 gridDims;
 	XMFLOAT2 gridStartPos;
-	XMFLOAT2 pad1;
+	XMFLOAT2 screenDims;
 
 	LightPassData() {}
 };

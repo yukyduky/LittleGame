@@ -8,6 +8,7 @@
 #include "EnemyObject.h"
 #include "EnemyIncludes.h"
 #include "LevelManager.h"
+#include "GUIManager.h"
 
 /* ---------------------------------------------------------------------------
 	If you're here to look at anything that is NOT the swarmers, i highly recommend 
@@ -308,6 +309,7 @@ private:
 	*/
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
+	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:
 	EnemyManager();
@@ -317,6 +319,8 @@ public:
 	1. Saves the pGPS as an internal pointer.
 	*/
 	void startLevel1(enemySpawnPositions spawnPosVectors);
+
+	void startBossLevel();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
@@ -329,7 +333,7 @@ public:
 	2. Checks if all of the enemies has died.
 	3. Updates internal arrayList & grid.
 	*/
-	void update();
+	void update(GUIManager* GUI);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. No need to clean up objects if they are attatched to the GameObjects vector since they'll

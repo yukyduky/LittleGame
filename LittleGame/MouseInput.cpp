@@ -15,7 +15,7 @@ MouseInput::MouseInput(DirectX::XMFLOAT3 cPos, DirectX::XMFLOAT3 cDir)
 	dir = DirectX::XMVector3Normalize(dir);
 
 	// a plane on hte same height as the middel of the player
-	this->surface = { 0.0f, 1.0f, 0.0f, -40.f };
+	this->surface = XMFLOAT4{ 0.0f, 1.0f, 0.0f, -40.0f };
 
 	DirectX::XMStoreFloat3(&direction, dir);
 	this->cameraDirNor = cDir;
@@ -48,8 +48,8 @@ DirectX::XMFLOAT3 MouseInput::getWorldPosition()
 	size_t wWid = Locator::getD3D()->GETwWidth();
 	size_t wHei = Locator::getD3D()->GETwHeight();
 
-	this->mousePoint.x = ((2 * mousePoint.x) / wWid) - 1.0f;
-	this->mousePoint.y = ((2 * mousePoint.y) / wHei) - 1.0f;
+	this->mousePoint.x = (((2 * mousePoint.x) / wWid) - 1.0f) * 0.9f;
+	this->mousePoint.y = (((2 * mousePoint.y) / wHei) - 1.0f) * 0.9f;
 
 	DirectX::XMFLOAT3 vecX(1, 0, 0);
 	DirectX::XMFLOAT3 vecY(0, -1.0f * this->cameraDirNor.z, this->cameraDirNor.y);

@@ -3,6 +3,9 @@
 #define SWARMERSEEKINGSTATE_H
 
 #include "SwarmerState.h"
+#include "BossState.h"
+#include "AIComponent.h"
+
 
 class SwarmerSeekingState : public SwarmerState
 {

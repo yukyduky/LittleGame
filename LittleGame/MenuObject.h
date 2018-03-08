@@ -37,7 +37,7 @@ class MenuObject
 public:
 	MenuObject(size_t ID);
 	MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
-	MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color, const WCHAR* text);
+	MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color, std::wstring text);
 	~MenuObject();
 
 	void cleanUp();
@@ -48,7 +48,7 @@ public:
 
 private:
 	ID2D1SolidColorBrush * pColorBrush = nullptr;
-	const WCHAR* text = nullptr;
+	std::wstring text = L"";
 	ID2D1SolidColorBrush * pTextColorBrush = nullptr;
 
 protected:

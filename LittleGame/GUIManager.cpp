@@ -2,6 +2,7 @@
 #include "RectangleComponent.h"
 #include "ArenaObject.h"
 #include "Spell.h"
+#include "ArenaGlobals.h"
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 //                                   GUI MANAGER           /
@@ -109,6 +110,16 @@ int GUIManager::initGUI(
 
 	float temptester123 = this->cameraPos.y / 630.0f;
 
+	// Setting 'EnemyCount' GUI elements pos depending on arena size
+	// NOTE: This is due to varying camera positions.
+
+	if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 1600)
+	{
+		this->enemyElementPosX = -1.05f;
+		this->enemyElementPosY = 0.0f;
+		this->enemyElementPosZ = 1.1f;
+	}
+
 //----------------------------\
 //     HEALTH GUI ELEMENT     /
 //___________________________/
@@ -118,7 +129,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorHP.r, this->colorHP.g, this->colorHP.b, this->colorHP.a,
 		-0.58f, 0.0f, -0.55f,
-		0.06, 0.0f, 0.06f
+		0.06f, 0.0f, 0.06f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -131,7 +142,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		-0.58f, -0.001f, -0.55f,
-		0.075, 0.0f, 0.075f
+		0.075f, 0.0f, 0.075f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -152,7 +163,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorEnergy.r, this->colorEnergy.g, this->colorEnergy.b, this->colorEnergy.a,
 		0.58f, 0.0f, -0.55f,
-		0.06, 0.0f, 0.06f
+		0.06f, 0.0f, 0.06f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -165,7 +176,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		0.58f, -0.001f, -0.55f,
-		0.075, 0.0f, 0.075f
+		0.075f, 0.0f, 0.075f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -199,7 +210,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBackSelected.r, this->colorBackSelected.g, this->colorBackSelected.b, this->colorBackSelected.a,
 		-0.3f, -0.001f, -0.55f,
-		0.04, 0.0f, 0.04f
+		0.04f, 0.0f, 0.04f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -235,7 +246,7 @@ int GUIManager::initGUI(
 	this->createGUIElement(
 		this->colorBack.r, this->colorBack.g, this->colorBack.b, this->colorBack.a,
 		-0.1f, -0.001f, -0.55f,
-		0.04, 0.0f, 0.04f
+		0.04f, 0.0f, 0.04f
 	);
 
 	GUIObjects.push_back(this->object);
@@ -321,6 +332,7 @@ int GUIManager::initGUI(
 
 
 
+
 	return this->tempID;
 }
 
@@ -375,6 +387,53 @@ void GUIManager::updateGUI(ActorObject* player)
 	}
 }
 
+void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID)
+{
+	this->tempID = ID;
+
+	this->createGUIElement(
+		0.0f, 1.0f, 0.0f, 1.0f,
+		this->enemyElementPosX, this->enemyElementPosY, this->enemyElementPosZ,
+		0.002f, 0.0f, 0.04f
+	);
+
+	this->enemyElementPosX += this->separationDistance;
+
+	if (this->enemyElementPosX > 1.05f)
+		this->enemyElementPosX = -1.05f;
+
+	GUIObjects.push_back(this->object);
+	graphics.push_back(this->rect);
+
+	// Pushing to specific 'enemy-only' lists
+	this->enemyElementObjects.push_back(this->object);
+	this->enemyElementRects.push_back(this->rect);
+}
+
+void GUIManager::popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics)
+{
+	GameObject* tempObjectHolder = this->enemyElementObjects.front();
+	GraphicsComponent* tempGraphicsHolder = this->enemyElementRects.front();
+
+	this->enemyElementObjects.pop_front();
+	this->enemyElementRects.pop_front();
+
+	GUIObjects.remove(tempObjectHolder);
+	graphics.remove(tempGraphicsHolder);
+
+	tempObjectHolder->cleanUp();
+	delete tempObjectHolder;
+}
+
+void GUIManager::cleanUp()
+{
+	this->enemyElementObjects.clear();
+	this->enemyElementRects.clear();
+
+	this->enemyElementPosX = 0.0f;
+	this->enemyElementPosY = 0.0f;
+	this->enemyElementPosZ = 0.0f;
+}
 //_________________________________________//
 //                                         //
 //              END OF PUBLIC              //

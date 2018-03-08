@@ -28,7 +28,7 @@ void EnemyObject::updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos)
 
 
 EnemyObject::EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType)
-	: ActorObject(ID, pos, velocity, pGPS, objectType, 200.0f)
+	: ActorObject(ID, pos, velocity, pGPS, objectType, 2000.0f)
 {
 	this->enemyType = enemyType;
 	this->players = players;
@@ -88,4 +88,19 @@ void EnemyObject::attack()
 {
 //	this->attackComponent->attack();
 	this->spells[0]->castSpell();
+}
+
+void EnemyObject::bossAttack01()
+{
+	this->spells[0]->castSpell();
+}
+
+void EnemyObject::bossAttack02()
+{
+	this->spells[1]->castSpell();
+}
+
+void EnemyObject::bossAttack03()
+{
+	this->spells[2]->castSpell();
 }

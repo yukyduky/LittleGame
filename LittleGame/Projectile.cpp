@@ -2,9 +2,15 @@
 #include "ActorObject.h"
 #include "GameObject.h"
 #include "Component.h"
+#include "RenderInputOrganizer.h"
 #include "IncludeSpells.h"
 
-Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType) : GameObject(ID, pos)
+Projectile::Projectile() : GameObject(-1)
+{
+	this->setState(OBJECTSTATE::TYPE::DEAD);
+}
+
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -53,6 +59,25 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bo
 	//this->spell = projectilesSpell;
 	
 
+
+	this->light = light;
+	this->lightIDs = lightIDs;
+}
+
+Projectile::Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
+{
+	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
+	this->setType(OBJECTTYPE::PROJECTILE);
+	this->spell = nullptr;
+
+	this->type = objectType;
+	this->direction = dir;
+	this->behavior = behavior;
+	this->velocity = velocity;
+	this->rangeCounter = 0;
+
+	this->light = light;
+	this->lightIDs = lightIDs;
 }
 
 Projectile::~Projectile()
@@ -61,6 +86,10 @@ Projectile::~Projectile()
 
 void Projectile::cleanUp()
 {
+	this->lightIDs->remove(this->light.first);
+	this->light.second->diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->light.second->ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
 	for (auto &c : this->components) {
 		c->cleanUp();
 		delete c;
@@ -155,11 +184,25 @@ Spell * Projectile::getSpell()
 
 void Projectile::move()
 {
+	XMFLOAT3 traveledDistance = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	float dt = Locator::getGameTime()->getDeltaTime();
+	this->previousPos = this->pos;
 
 	this->pos.x += (this->direction.x * this->velocity) * dt;
 	this->pos.z += (this->direction.z * this->velocity) * dt;
-	this->setPosition(pos);
+
+	traveledDistance = this->pos - this->previousPos;
+	XMVECTOR dist = XMLoadFloat3(&traveledDistance);
+	dist = XMVector3Length(dist);
+	XMStoreFloat3(&traveledDistance, dist);
+	this->rangeCounter += traveledDistance.x;
+
+	if (this->rangeCounter >= this->maxFlyingRange && this->maxFlyingRange != -1) {
+		this->setState(OBJECTSTATE::TYPE::DEAD);
+	}
+	else {
+		this->setPosition(pos);
+	}
 }
 
 void Projectile::steerTowardsPlayer()
@@ -214,6 +257,7 @@ void Projectile::update()
 	}
 
 	this->move();
+	this->light.second->pos = pos;
 
 	if (this->spinn)
 	{
@@ -221,12 +265,21 @@ void Projectile::update()
 		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
 		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
 	}
+	else if (this->behavior == PROJBEHAVIOR::ENLARGE)
+	{
+		float size = this->rangeCounter * 4.0f;
+		XMMATRIX scaleM = XMMatrixScaling(size, size, size);
+		this->GETphysicsComponent()->updateBoundingArea(size);
+		this->SETscaleMatrix(scaleM);
+	}
 
+	/*
 	this->rangeCounter++;
 	if (this->rangeCounter >= this->maxFlyingRange && this->maxFlyingRange != -1)
 	{
 		this->setState(OBJECTSTATE::TYPE::DEAD);
 	}
+	*/
 	
 }
 

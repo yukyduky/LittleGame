@@ -2,10 +2,8 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager()
+AudioManager::AudioManager() : soundVolume(0.0f), musicVolume(0.0f)
 {
-	this->soundVolume = 10.0f;
-	this->musicVolume = 3.0f;
 }
 
 int AudioManager::init()
@@ -144,13 +142,13 @@ void AudioManager::adjustMaster(bool value)
 {
 	if (value)
 	{
-		this->adjustEffects(this->musicVolume + 5.0f);
-		this->adjustMusic(this->soundVolume + 5.0f);
+		this->adjustEffects(this->soundVolume + 5.0f);
+		this->adjustMusic(this->musicVolume + 1.0f);
 	}
 	else
 	{
-		this->adjustEffects(this->musicVolume - 5.0f);
-		this->adjustMusic(this->soundVolume - 5.0f);
+		this->adjustEffects(this->soundVolume - 5.0f);
+		this->adjustMusic(this->musicVolume - 1.0f);
 	}
 }
 
@@ -182,7 +180,10 @@ void AudioManager::adjustEffects(float volume)
 	{
 		this->soundVolume = 100.0f;
 	}
-	this->currentSound.setVolume(this->soundVolume);
+	for (int i = 0; i < SOUND::SIZE; i++)
+	{
+		this->soundQueue[i].setVolume(this->soundVolume);
+	}
 }
 
 void AudioManager::setRepeatMusic(bool repeat)

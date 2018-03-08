@@ -59,7 +59,6 @@
     </ClCompile>
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="Crosshair.cpp" />
-    <ClCompile Include="FloorFallPatterns.cpp" />
     <ClCompile Include="EnemyObject.cpp">
       <Filter>Clusterer</Filter>
     </ClCompile>
@@ -95,6 +94,27 @@
       <Filter>Swarmer\Specific\States</Filter>
     </ClCompile>
     <ClCompile Include="EnemyState.cpp" />
+    <ClCompile Include="BossState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="SpBossBulletHell.cpp">
+      <Filter>Boss\BossAttacks</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveToArenaState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBattleIntroState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBulletHellState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
+    <ClCompile Include="IDHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -162,7 +182,6 @@
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="Crosshair.h" />
-    <ClInclude Include="FloorFallPatterns.h" />
     <ClInclude Include="EnemyObject.h">
       <Filter>Swarmer</Filter>
     </ClInclude>
@@ -204,6 +223,28 @@
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="BossState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveToArenaState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBattleIntroState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="SpBossBulletHell.h">
+      <Filter>Boss\BossAttacks</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveAwayFromArenaState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBulletHellState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
+    <ClInclude Include="IStatsHeader.h" />
+    <ClInclude Include="IDHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -226,6 +267,15 @@
     </Filter>
     <Filter Include="Swarmer\Grid">
       <UniqueIdentifier>{917cd026-3d48-4e66-ba66-6f68d9feb979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss">
+      <UniqueIdentifier>{98af5f77-0939-47be-90a2-fe04e436126b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss\BossStates">
+      <UniqueIdentifier>{40ebde2a-2545-4831-be7d-5be64ee3eb4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss\BossAttacks">
+      <UniqueIdentifier>{55fad5b4-212c-463b-a3f2-89f3b0d933e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
