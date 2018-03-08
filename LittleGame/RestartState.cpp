@@ -38,7 +38,8 @@ void RestartState::update(GameManager* gm)
 }
 void RestartState::render(GameManager* gm)
 {
-	RewardMenuState::getInstance()->provide(this->vecGlyph);
+	Locator::getD2D()->saveScreen();
+	RewardMenuState::getInstance()->provide(this->spellPackage);
 	StateManager::changeState(GamePlayState::getInstance());
 	StateManager::pushState(RewardMenuState::getInstance());
 }

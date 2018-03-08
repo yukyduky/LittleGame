@@ -81,7 +81,6 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="D2D.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
@@ -115,6 +114,8 @@
     <ClCompile Include="StatisticsMenuState.cpp" />
     <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="IDHandler.cpp" />
+    <ClCompile Include="PauseMenuState.cpp" />
+    <ClCompile Include="HomeMenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -216,7 +217,6 @@
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="D2D.h" />
-    <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuState.h" />
@@ -245,6 +245,8 @@
     <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="PauseMenuState.h" />
+    <ClInclude Include="HomeMenuState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -277,5 +279,8 @@
     <Filter Include="Boss\BossAttacks">
       <UniqueIdentifier>{55fad5b4-212c-463b-a3f2-89f3b0d933e8}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="captureqwsx.bmp" />
   </ItemGroup>
 </Project>

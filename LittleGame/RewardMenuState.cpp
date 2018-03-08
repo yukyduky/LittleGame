@@ -466,18 +466,16 @@ Menu * RewardMenuState::initNextLevelMenu()
 
 void RewardMenuState::provide(std::vector<int> savedGlyphs)
 {
-	// First clear to avoid doubling of vectors
-	this->vecGlyph.clear();
-
-	for (int i = 0; i < savedGlyphs.size(); i++) {
-		this->vecGlyph.push_back(savedGlyphs[i]);
-	}
 }
 
 void RewardMenuState::provide(ActorObject * player)
 {
 	this->player = player;
 
+	for (int i = 0; i < (int)NAME::SIZE; i++)
+	{
+		this->player->changeSpell(i, Locator::getStatsHeader()->getStats().glyphs[i]);
+	}
 }
 
 void RewardMenuState::startGame()

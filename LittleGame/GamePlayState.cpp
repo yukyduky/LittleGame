@@ -456,6 +456,7 @@ void GamePlayState::init() {
 
 	// Adds to the level each time it starts a level
 	Locator::getStatsHeader()->addLevel();
+	Locator::getGameTime()->setMultiplier(1.0);
 }
 
 void GamePlayState::cleanUp()
