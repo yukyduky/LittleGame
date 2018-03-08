@@ -416,7 +416,7 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	GameObject* object = nullptr;
 	BlockComponent* block = nullptr;
 	PhysicsComponent* bSphere = nullptr;
-	object = new ActorObject(ID, 0.0f, genPos, XMFLOAT3(0.0f, 0.0f, 0.0f), this->pGPS, OBJECTTYPE::ENEMY, 500.0f);
+	object = new ActorObject(ID, 0.0f, 0.0f, genPos, this->pGPS, OBJECTTYPE::ENEMY, 500.0f);
 	object->setType(OBJECTTYPE::GENERATOR);
 	object->setState(OBJECTSTATE::TYPE::GENERATORRISING);
 	XMFLOAT3 scale(this->squareSize * 0.5f, this->squareSize * 0.5f, this->squareSize * 0.5f);						// TOBE DELETED

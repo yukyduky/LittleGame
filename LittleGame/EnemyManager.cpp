@@ -182,8 +182,8 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
-	float speed = 180.0f;
-	XMFLOAT3 velocity(speed, speed, speed);
+	float accelerationSpeed = 50.0f;
+	float topSpeed = 11.0f;
 	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 0.3f);
 	XMFLOAT3 rotation(0.0f, 0.0f, 0.0f);
 	float immolationDamage = 3.0f;
@@ -192,7 +192,7 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, speed, pos, velocity, 
+		ID, accelerationSpeed, topSpeed, pos, 
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY
 	);

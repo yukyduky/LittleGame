@@ -43,16 +43,9 @@ protected:
 
 	//Variable to be changed by Spells
 	float accelerationSpeed = 0;
-	float topSpeed = 10.0f;
-	float friction = 10.0f;
-	bool xDirectionChanged = false;
-	bool zDirectionChanged = false;
-	// HERE!!!!
-	// HERE!!!!
-	// HERE!!!!
-	// HERE!!!!
-	// HERE!!!!
-	// HERE!!!! Above; fixing friction
+	float topSpeed = 0;
+	float frictionFactor = 15.0f;
+	bool slowed = false;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -66,7 +59,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
+	ActorObject(const size_t ID, float accelerationSpeed, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
 	virtual ~ActorObject() {}
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();

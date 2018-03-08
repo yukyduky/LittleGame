@@ -660,11 +660,11 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
-	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
-	float actorSpeed = 80.0f;
+	float actorAccelerationSpeed = 150.0f;
+	float topSpeed = 11.0f;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);
+	actor = new ActorObject(nextID, actorAccelerationSpeed, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);

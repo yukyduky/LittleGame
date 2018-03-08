@@ -13,7 +13,7 @@
 #include <DirectXMath.h>
 
 
-ActorObject::ActorObject(const size_t ID, float accelerationSpeed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
+ActorObject::ActorObject(const size_t ID, float accelerationSpeed, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
@@ -23,10 +23,11 @@ ActorObject::ActorObject(const size_t ID, float accelerationSpeed, XMFLOAT3 pos,
 	this->velocity = { 0.0f, 0.0f, 0.0f };
 	this->state = OBJECTSTATE::TYPE::ACTIVATED;
 	this->accelerationSpeed = accelerationSpeed;
+	this->topSpeed = topSpeed;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
-	this->realVelocity = velocity;
-	this->slowedVelocity = XMFLOAT3(velocity.x * 0.5f, velocity.y * 0.5f, velocity.z * 0.5f);
+
+	this->frictionFactor = 15.0f;
 	
 	// Balance
 	this->hp = hp_in;
@@ -96,10 +97,13 @@ void ActorObject::update()
 		this->counter += dt;
 		if (this->counter > 3.0f) {
 			this->statusEffect = TILESTATE::ACTIVE;
-			this->velocity = this->realVelocity;
+			this->topSpeed *= 2.0f;
+			this->slowed = false;
 		}
-		else {
-			this->velocity = this->slowedVelocity;
+		else if (!slowed)
+		{
+			this->topSpeed *= 0.5f;
+			this->slowed = true;
 		}
 		break;
 	case TILESTATE::HEATED:
@@ -114,6 +118,8 @@ void ActorObject::update()
 		}
 		else {
 			this->state = OBJECTSTATE::TYPE::STUNNED;
+			this->velocity.x = 0.0f;
+			this->velocity.z = 0.0f;
 		}
 		break;
 	default:
@@ -163,42 +169,25 @@ void ActorObject::update()
 
 void ActorObject::updateVelocity()
 {
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	this->previousPos = this->pos;
+
 	//Create the new objects we will need for the calculations.
 	//DirectX::XMFLOAT2 movementInput = this->pInput->GETnormalizedVectorOfLeftStick();
 	this->MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
-	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-	XMFLOAT3 actorPos = this->GETPosition();
-	this->previousPos = this->pos;
-	XMFLOAT3 actorVelocity = this->getVelocity();
-	XMFLOAT3 tempPos = actorPos;
-	tempPos.x += this->MovementVector.x * actorVelocity.x * deltaTime;
-	tempPos.z += this->MovementVector.y * actorVelocity.z * deltaTime;
-	XMFLOAT3 actorNewPos;
 
-	//Check so that the player still is inside the arena in x- and z-dimension.
-	if (this->getType() == OBJECTTYPE::ENEMY) {
-		actorNewPos.z = tempPos.z;
-		actorNewPos.x = tempPos.x;
-		actorNewPos.y = actorPos.y;
+	this->velocity.x += (this->MovementVector.x * this->accelerationSpeed * dt);
+	this->velocity.z += (this->MovementVector.y * this->accelerationSpeed * dt);
 
-		this->physicsComponent->updateBoundingArea(actorPos);
-		this->setPosition(actorNewPos);
-	}
+	if (this->velocity.x > this->topSpeed)
+		this->velocity.x = this->topSpeed;
+	else if (this->velocity.x < (this->topSpeed * -1))
+		this->velocity.x = (this->topSpeed * -1);
 
-	else {
-		if (tempPos.z > ARENADATA::GETsquareSize() && tempPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
-			actorNewPos.z = tempPos.z;
-			this->physicsComponent->updateBoundingArea(actorPos);
-		}
-		else { actorNewPos.z = actorPos.z; }
-		if (tempPos.x > ARENADATA::GETsquareSize() && tempPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
-			actorNewPos.x = tempPos.x;
-			this->physicsComponent->updateBoundingArea(actorPos);
-		}
-		else { actorNewPos.x = actorPos.x; }
-		actorNewPos.y = actorPos.y;
-		this->setPosition(actorNewPos);
-	}
+	if (this->velocity.z > this->topSpeed)
+		this->velocity.z = this->topSpeed;
+	else if (this->velocity.z < (this->topSpeed * -1))
+		this->velocity.z = (this->topSpeed * -1);
 }
 
 void ActorObject::updateVelocityUp()
@@ -258,51 +247,66 @@ void ActorObject::move()
 	//newPos.y += this->velocity.y;
 	newPos.z += this->velocity.z;
 
-	float positiveFrictionBoundry = 1.0f;
-	float negativeFrictionBoundry = -1.0f;
+	// Friction for X-AXIS
+	if (this->velocity.x > 0.0f)
+	{
+		this->velocity.x -= this->frictionFactor * dt;
 
-	if (this->velocity.x > positiveFrictionBoundry)
-		this->velocity.x -= this->friction * dt;
-	else if (this->velocity.x < negativeFrictionBoundry)
-		this->velocity.x += this->friction * dt;
-	else
-		this->velocity.x = 0.0f;
+		if (this->velocity.x < 0.0f)
+			this->velocity.x = 0.0f;
+	} else if (this->velocity.x < 0.0f)
+	{
+		this->velocity.x += this->frictionFactor * dt;
+		
+		if (this->velocity.x > 0.0f)
+			this->velocity.x = 0.0f;
+	}
 
-	//if (this->velocity.y >(this->friction * 2))
-	//	this->velocity.y -= this->friction;
-	//else if (this->velocity.y < (this->friction * 2))
-	//	this->velocity.y += this->friction;
-	//else
-	//	this->velocity.y = 0.0f;
+	// Friction for Z-AXIS
+	if (this->velocity.z > 0.0f)
+	{
+		this->velocity.z -= this->frictionFactor * dt;
 
-	if (this->velocity.z > positiveFrictionBoundry)
-		this->velocity.z -= this->friction * dt;
-	else if (this->velocity.z < negativeFrictionBoundry)
-		this->velocity.z += this->friction * dt;
-	else
-		this->velocity.z = 0.0f;
+		if (this->velocity.z < 0.0f)
+			this->velocity.z = 0.0f;
+	} else if (this->velocity.z < 0.0f)
+	{
+		this->velocity.z += this->frictionFactor * dt;
+
+		if (this->velocity.z > 0.0f)
+			this->velocity.z = 0.0f;
+	}
 
 	this->pos = newPos;
+	this->physicsComponent->updateBoundingArea(pos);
 
-	// Attempting to exit arena, NORTH
-	if (newPos.z > ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
-		this->physicsComponent->updateBoundingArea(this->previousPos);
-		this->setPosition(this->previousPos);
-	}
-	// Attempting to exit arena, WEST
-	else if (newPos.x < ARENADATA::GETsquareSize()) {
-		this->physicsComponent->updateBoundingArea(this->previousPos);
-		this->setPosition(this->previousPos);
-	}
-	// Attempting to exit arena, SOUTH
-	else if (newPos.z < ARENADATA::GETsquareSize()) {
-		this->setPosition(this->previousPos);
-		this->physicsComponent->updateBoundingArea(this->previousPos);
-	}
-	// Attempting to exit arena, EAST
-	else if (newPos.x > ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
-		this->setPosition(this->previousPos);
-		this->physicsComponent->updateBoundingArea(this->previousPos);
+	// ANTI-'EXIT-ARENA' code for the PLAYER
+	if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
+	{
+		// Attempting to exit arena, NORTH
+		if (newPos.z > ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
+			this->physicsComponent->updateBoundingArea(this->previousPos);
+			this->setPosition(this->previousPos);
+			this->velocity.z *= -1;
+		}
+		// Attempting to exit arena, WEST
+		else if (newPos.x < ARENADATA::GETsquareSize()) {
+			this->physicsComponent->updateBoundingArea(this->previousPos);
+			this->setPosition(this->previousPos);
+			this->velocity.x *= -1;
+		}
+		// Attempting to exit arena, SOUTH
+		else if (newPos.z < ARENADATA::GETsquareSize()) {
+			this->setPosition(this->previousPos);
+			this->physicsComponent->updateBoundingArea(this->previousPos);
+			this->velocity.z *= -1;
+		}
+		// Attempting to exit arena, EAST
+		else if (newPos.x > ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
+			this->setPosition(this->previousPos);
+			this->physicsComponent->updateBoundingArea(this->previousPos);
+			this->velocity.x *= -1;
+		}
 	}
 }
 
