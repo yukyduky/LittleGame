@@ -4,6 +4,7 @@
 #include "EnemyObject.h"
 #include "EnemyMovingState.h"
 #include "EnemyAttackingState.h"
+#include "EnemyState.h"
 
 void AIComponent::bindCommands()
 {
@@ -39,7 +40,10 @@ void AIComponent::pushState(EnemyState& state)
 
 void AIComponent::popState()
 {
+	EnemyState* stateToBeRemoved = this->states.back();
 	this->states.pop_back();
+	stateToBeRemoved->cleanUp();
+	delete stateToBeRemoved;
 }
 
 void AIComponent::init()

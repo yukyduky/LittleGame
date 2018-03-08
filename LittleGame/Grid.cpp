@@ -12,7 +12,7 @@ Grid::Grid(ArrayList *& arrayList_)
 void Grid::initialize(ArrayList *& arrayList_)
 {
 	this->arrayList = arrayList_;
-	int levelOfDetail = 11;
+	int levelOfDetail = 10;
 	this->width = ARENADATA::GETarenaWidth();
 	this->height = ARENADATA::GETarenaHeight();
 	this->widthDivider = this->width / levelOfDetail;
@@ -98,7 +98,7 @@ void Grid::updateFromOccupant(AliveNode* aliveNode)
 	EnemyObject* swarmer = aliveNode->index->obj;
 	XMFLOAT3 position = swarmer->GETPosition();
 
-	if (this->inOrOut(XMFLOAT2(position.x, position.z))) {
+	if (this->inOrOutPLUS(XMFLOAT2(position.x, position.z))) {
 		// Add that swarmer to that GridSlot's 'occupants' list.
 		Index occupiedIndex = this->getIndex(XMFLOAT2(position.x, position.z));
 		GridSlot* occupiedGridSlot = this->theGrid[occupiedIndex.x][occupiedIndex.y];
@@ -173,7 +173,7 @@ std::vector<EnemyObject*> Grid::getNeighbours(XMFLOAT2 position)
 	Index index = this->getIndex(position);
 
 	// Only try to return neighbours if the position is inside the grid.
-	if (this->inOrOut(position)) {
+	if (this->inOrOutPLUS(position)) {
 		neighbours = this->theGrid[index.x][index.y]->getNeighbours(this->theGrid);
 	}
 

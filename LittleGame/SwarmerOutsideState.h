@@ -16,6 +16,9 @@ public:
 	{
 		this->pBrain->pushState(*this);
 	}
+	void cleanUp() {
+
+	}
 	void executeBehavior() {
 		/// Move inside the grid (move towards the player)
 		XMFLOAT2 vectorToPlayer = this->pHead->getVectorToPlayer();

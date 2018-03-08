@@ -68,7 +68,7 @@ public:
 class EdgeGridSlot : public GridSlot {
 private:
 	GridSlot* substitute = nullptr;
-	XMFLOAT3 avoidWallsVector = { 0, 0, 0 };
+	XMFLOAT3 avoidWallsVector = { 0, 0, 0.0001f };
 public:
 	void assignSubstitute(GridSlot* substitute) {
 		this->substitute = substitute;

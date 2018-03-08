@@ -25,6 +25,7 @@ private:
 	float originalVelocity = this->pHead->getVelocity();
 	float timeFactor = originalVelocity / pulseInterval;
 
+
 	// Used to balance how much/little the swarmers want to avoid walls/player
 	struct ScaredFactor {
 		float playerMaxFearFactor = 320;
@@ -97,7 +98,7 @@ protected:
 	XMFLOAT3 getDirectionToSeek() {
 		XMFLOAT3 myPosition = this->pHead->GETPosition();
 		XMFLOAT3 positionToSeek = this->getPositionToSeek();
-		XMFLOAT3 directionToSeek = { 0, 0, 0 };
+		XMFLOAT3 directionToSeek = { 0, 0, 0.0001f };
 		directionToSeek.x = positionToSeek.x - myPosition.x;
 		directionToSeek.y = positionToSeek.y - myPosition.y;
 		directionToSeek.z = positionToSeek.z - myPosition.z;
@@ -126,10 +127,10 @@ protected:
 	}
 	// Returns Normalized
 	XMFLOAT3 getDirectionToAveragePosition(std::vector<EnemyObject*> relevantEnemies) {
-		XMFLOAT3 averagePosition = { 0, 0, 0 };
-		XMFLOAT3 averageDirection = { 0, 0, 0 };
-		XMFLOAT3 currentNeighbourPosition = { 0, 0, 0 };
-		XMFLOAT3 myPosition = { 0, 0, 0 };
+		XMFLOAT3 averagePosition = { 0, 0, 0.0001f };
+		XMFLOAT3 averageDirection = { 0, 0, 0.0001f };
+		XMFLOAT3 currentNeighbourPosition = { 0, 0, 0.0001f };
+		XMFLOAT3 myPosition = { 0, 0, 0.0001f };
 
 		for (auto &currentEnemy : relevantEnemies) {
 			currentNeighbourPosition = currentEnemy->GETPosition();
@@ -187,16 +188,12 @@ protected:
 		DirectX::XMStoreFloat2(&steeringDirection, vecSteering);
 
 		// Affect the current direction
-		XMFLOAT3 currentDirection = { 0, 0, 0 };
+		XMFLOAT3 currentDirection = { 0, 0, 0.0001f };
 		currentDirection.x = this->pBrain->GETnormalizedVectorOfLeftStick().x;
 		currentDirection.z = this->pBrain->GETnormalizedVectorOfLeftStick().y;
 
 		currentDirection.x += steeringDirection.x * rotationSpeed * dt;
 		currentDirection.z += steeringDirection.y * rotationSpeed * dt;
-
-		char msgbuf[70];
-		sprintf_s(msgbuf, "X: %f, Y: %f\n", currentDirection.x, currentDirection.z);
-		OutputDebugStringA(msgbuf);
 
 		// Then normalize the current direction
 		XMVECTOR vecDirection = DirectX::XMLoadFloat3(&currentDirection);
@@ -246,9 +243,9 @@ protected:
 		return this->getGrid()->avoidWalls(myPos);
 
 //		// ------------------------------------
-//		XMFLOAT3 centerPos = { 0, 0, 0 };
+//		XMFLOAT3 centerPos = { 0, 0, 0.0001f };
 //		XMFLOAT3 myPos = this->pHead->GETPosition();
-//		XMFLOAT3 direction = { 0, 0, 0 };
+//		XMFLOAT3 direction = { 0, 0, 0.0001f };
 //		centerPos.x = ARENADATA::GETarenaWidth() / 2;
 //		centerPos.z = ARENADATA::GETarenaHeight() / 2;
 //

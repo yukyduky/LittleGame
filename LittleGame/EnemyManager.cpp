@@ -47,9 +47,9 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 	std::vector<EnemyObject*> localSwarmers;
 
 	// TESTING -----------
-	this->currentWaveCount = 1;
-	this->currentWaveSize = 0;
-	this->swarmerCount = 1;
+	this->currentWaveCount = 2;
+	this->currentWaveSize = 5;
+	this->swarmerCount = 5;
 	// TESTING -----------
 
 	// Per wave
@@ -136,7 +136,7 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0 };
+	XMFLOAT3 pos = { 0, 0, 0.0001f };
 
 	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
 
@@ -264,7 +264,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0 };
+	XMFLOAT3 pos = { 0, 0, 0.0001f };
 
 	bool reGenerateRandom = true;
 	int spawnLocation = 0;

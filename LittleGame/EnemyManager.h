@@ -57,7 +57,7 @@ private:
 	int capacity = -1;
 	int count = 0;
 	int toBeActivated = 0;
-	XMFLOAT3 averagePosition = { 0, 0, 0 };
+	XMFLOAT3 averagePosition = { 0, 0, 0.0001f };
 	ArrayNode* mainArray = nullptr;
 	AliveNode* firstAlive = nullptr;
 	DeadNode* firstDead = nullptr;
@@ -155,7 +155,7 @@ public:
 	}
 	void update() {
 		// Update the averagePosition
-		XMFLOAT3 averagePosition_ = { 0, 0, 0 };
+		XMFLOAT3 averagePosition_ = { 0, 0, 0.0001f };
 		XMFLOAT3 currentPosition = { 0, 0, 0 };
 		AliveNode* stepper = this->firstAlive;
 
@@ -218,7 +218,7 @@ public:
 					AliveNode* back = nodeToBeRemoved->back;
 					AliveNode* forward = nodeToBeRemoved->forward;
 
-					// If we're delesawdsawdting the first one
+					// If we're deleting the first one
 					if (nodeToBeRemoved == this->firstAlive) {
 						// And we have something in front of us
 						if (nodeToBeRemoved->forward != nullptr) {
@@ -240,8 +240,8 @@ public:
 							forward->back = back;
 							back->forward = forward;
 						}
-						// It only has one behind
-						else {
+						// Check behind
+						else if (back != nullptr) {
 							// Remove link so that 'back' has nothing in front of itself
 							back->forward = nullptr;
 						}

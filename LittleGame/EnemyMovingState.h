@@ -21,6 +21,7 @@ private:
 
 public:
 	EnemyMovingState(EnemyObject& pHead, AIComponent& pBrain);
+	void cleanUp();
 	virtual void executeBehavior();
 
 };

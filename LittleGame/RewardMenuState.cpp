@@ -12,9 +12,9 @@ RewardMenuState * RewardMenuState::getInstance()
 
 void RewardMenuState::init()
 {
-	for (int index = 0; index < player->GETSpells().size(); index++) {
-		this->player->changeSpell(index, (int)this->vecGlyph[index]);
-	}
+	//for (int index = 0; index < player->GETSpells().size(); index++) {
+	//	this->player->changeSpell(index, (int)this->vecGlyph[index]);
+	//} LHURE WILL FIX! LHURE PROMISE. LHURE GOOD BOY
 	MenuState::init();
 	this->displayMenu(this->initRewardMenu());
 }

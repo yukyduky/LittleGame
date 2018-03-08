@@ -22,6 +22,7 @@ protected:
 
 public:
 	EnemyState(EnemyObject& pHead, AIComponent& pBrain);
+	virtual void cleanUp() = 0;
 	virtual void executeBehavior() = 0;
 };
 

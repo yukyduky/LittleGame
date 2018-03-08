@@ -13,6 +13,11 @@ SwarmerSeekingState::SwarmerSeekingState(
 	this->pBrain->pushState(*this);
 }
 
+void SwarmerSeekingState::cleanUp()
+{
+
+}
+
 void SwarmerSeekingState::executeBehavior()
 {
 	XMFLOAT3 playerPos = (*this->pHead->getPlayers())[0]->GETPosition();
@@ -42,11 +47,11 @@ void SwarmerSeekingState::executeBehavior()
 	/// DIFFERENT MOTIVATORS FOR MOVEMENT
 	std::vector<EnemyObject*> neighbours = this->getNeighbours();
 	int neighbourCount = neighbours.size();
-	XMFLOAT3 averageDirection =		{ 0, 0, 0 };
-	XMFLOAT3 avoidDirection =		{ 0, 0, 0 };
-	XMFLOAT3 wanderDirection =		{ 0, 0, 0 };
-	XMFLOAT3 newDirection =			{ 0, 0, 0 };
-	XMFLOAT3 antiWallDirection =	{ 0, 0, 0 };
+	XMFLOAT3 averageDirection =		{ 0, 0, 0.0001f };
+	XMFLOAT3 avoidDirection =		{ 0, 0, 0.0001f };
+	XMFLOAT3 wanderDirection =		{ 0, 0, 0.0001f };
+	XMFLOAT3 newDirection =			{ 0, 0, 0.0001f };
+	XMFLOAT3 antiWallDirection =	{ 0, 0, 0.0001f };
 
 	//// Neighbours (If we have any)
 	if (neighbourCount > 1) {
@@ -57,13 +62,13 @@ void SwarmerSeekingState::executeBehavior()
 		this->pHead->setVelocity(this->getOriginalVelocity() * neighbourCount);
 
 		// Affect how fast we pulse
-	//	this->setPulseInterval(this->getOriginalPulseInterval() * neighbourCount);
+		this->setPulseInterval(this->getOriginalPulseInterval() * neighbourCount);
 	}
 	else {
 		// Reset if we have to
 		this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown());
 		this->pHead->setVelocity(this->getOriginalVelocity());
-		//this->setPulseInterval(this->getOriginalPulseInterval());
+		this->setPulseInterval(this->getOriginalPulseInterval());
 	}
 
 	// Look for the average of all swarmers
@@ -80,18 +85,12 @@ void SwarmerSeekingState::executeBehavior()
 
 	// Fear of the player
 	avoidDirection = this->avoidPlayer();
-	newDirection.x += avoidDirection.x * 5;
-	newDirection.y += avoidDirection.y * 5;
-	newDirection.z += avoidDirection.z * 5;
+	newDirection.x += avoidDirection.x * 100;
+	newDirection.y += avoidDirection.y * 100;
+	newDirection.z += avoidDirection.z * 100;
 
 	// Avoidance of walls
 	antiWallDirection = this->avoidWalls();
-	if (antiWallDirection.x != 0 ||
-		antiWallDirection.y != 0 ||
-		antiWallDirection.z != 0
-		) {
-		int test = 3;
-	}
 	newDirection.x += antiWallDirection.x * 300;
 	newDirection.y += antiWallDirection.y * 300;
 	newDirection.z += antiWallDirection.z * 300;
@@ -112,7 +111,7 @@ void SwarmerSeekingState::executeBehavior()
 	DirectX::XMStoreFloat3(&directionToPlayer, tempMath);
 
 	/// Set SimulatedMovement & Direction
-	if (this->timeToPulse) {
+		if (this->timeToPulse) {
 		this->timeToPulse = false;
 		this->pBrain->SETsimulatedMovement(XMFLOAT2(newDirection.x, newDirection.z));	
 	}
@@ -124,6 +123,10 @@ void SwarmerSeekingState::executeBehavior()
 	// Move!
 	this->pBrain->pushCommand(AICOMMANDS::MOVE);
 	// Cooldown is checked internally | This unit has unlimited attackrange
-
 	this->pBrain->pushCommand(AICOMMANDS::ATTACK);
+
+	/// If we've went outside the arena, move back in damnit!
+	if (this->inOrOutPlus() == false) {
+		this->pBrain->popState();
+	}
 }
