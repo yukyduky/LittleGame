@@ -381,8 +381,9 @@ void ActorObject::selectAbility3()
 	Locator::getStatsHeader()->resetStats();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[3];
-		this->selectedSpellIntValue = 3;
+		this->spells[3]->castSpell();
+		//this->selectedSpell = this->spells[3];
+		//this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -394,8 +395,10 @@ void ActorObject::selectAbility4()
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[4];
-		this->selectedSpellIntValue = 4;
+		this->spells[4]->castSpell();
+
+		//this->selectedSpell = this->spells[4];
+		//this->selectedSpellIntValue = 4;
 	}
 	else {
 

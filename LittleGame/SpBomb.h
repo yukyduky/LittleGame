@@ -29,6 +29,7 @@ protected:
 	float range = 0.0f;
 
 	Projectile* theProj = nullptr;
+	XMFLOAT3 currPos;
 	float start, end, collisionDuration;
 
 	bool landed = false;
@@ -45,8 +46,9 @@ public:
 	SpBombG1(ActorObject* player);
 	virtual ~SpBombG1();
 
-
+	void update();
 private:
+	int nrOfSplinters = 0;
 };
 
 // Mine

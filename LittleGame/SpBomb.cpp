@@ -40,7 +40,7 @@ bool SpBomb::castSpell()
 			this->active = true;
 			this->landed = false;
 			this->yAcc = 6.0f;
-			ProjProp props(30, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, this->range, false/*PROJBEHAVIOR::ENLARGE*/);
+			ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, this->range, false/*PROJBEHAVIOR::ENLARGE*/);
 			this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 		}
 
@@ -112,10 +112,55 @@ SpBombG1::SpBombG1(ActorObject * player) : SpBomb(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
+
+	this->damage = 50.0f;
+	this->nrOfSplinters = 8;
 }
 
 SpBombG1::~SpBombG1()
 {
+}
+
+void SpBombG1::update()
+{
+	if (this->active)
+	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+		if (!this->landed)
+		{
+			this->currPos = this->theProj->GETPosition();
+			this->currPos.y += this->yAcc;
+			this->yAcc += -15.0f * dt;
+			this->theProj->setPosition(this->currPos);
+
+			if (this->currPos.y <= 39.0f)
+			{
+				this->landed = true;
+				this->theProj->setSpeed(0.0f);
+			}
+		}
+		else
+		{
+			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, 10, true);
+
+			XMVECTOR direction = XMLoadFloat3(&this->getPlayer()->getDirection());
+			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
+
+			float angle = 6.24 /*2PI*/ / this->nrOfSplinters;
+			for (int i = 0; i < this->nrOfSplinters; i++)
+			{
+				direction = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, angle));
+
+				Projectile* proj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
+				proj->setDirection(direction);
+				proj->setPosition(this->currPos);
+			}
+
+			this->active = false;
+			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
+		}
+	}
 }
 
 
