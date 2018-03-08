@@ -89,3 +89,18 @@ void EnemyObject::attack()
 //	this->attackComponent->attack();
 	this->spells[0]->castSpell();
 }
+
+void EnemyObject::bossAttack01()
+{
+	this->spells[0]->castSpell();
+}
+
+void EnemyObject::bossAttack02()
+{
+	this->spells[1]->castSpell();
+}
+
+void EnemyObject::bossAttack03()
+{
+	this->spells[2]->castSpell();
+}

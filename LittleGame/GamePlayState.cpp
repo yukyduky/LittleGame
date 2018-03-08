@@ -138,6 +138,7 @@ void GamePlayState::updateFloor()
 	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.55f, 0.01f);
 	XMFLOAT3 cooledColor = XMFLOAT3(0.01f, 0.75f, 1.0f);
 	XMFLOAT3 bossTileColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
+	XMFLOAT3 teleportColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
 	XMFLOAT3 tempColor1;
 	XMFLOAT3 tempColor2;
 	float baseHeight = 0.5f - 0.01f;
@@ -307,6 +308,10 @@ void GamePlayState::updateFloor()
 				break;
 			case TILESTATE::BOSSTILE:
 				this->grid[i][j].color = bossTileColor;
+				break;
+			case TILESTATE::TELEPORT:
+				this->grid[i][j].color = teleportColor;
+				break;
 			default:
 				break;
 			}
@@ -317,7 +322,8 @@ void GamePlayState::updateFloor()
 void GamePlayState::checkPlayerTileStatus() 
 {
 	TILESTATE::STATE state;
-	this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid, state);
+	XMFLOAT3 playerPos = this->player1->GETPosition();
+	this->lm.checkTileStatusFromPos(playerPos, this->grid, state);
 
 	//Check if the player is on a active floor tile or if he fell of the map.
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
@@ -340,6 +346,13 @@ void GamePlayState::checkPlayerTileStatus()
 				break;
 			case TILESTATE::STATE::ELECTRIFIED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+				break;
+			case TILESTATE::STATE::BOSSTILE:
+				this->playerSteppedOnBossTile = true;
+				break;
+			case TILESTATE::STATE::TELEPORT:
+				this->player1->setPosition(XMFLOAT3(ARENADATA::GETsquareSize() * 1.5f, playerPos.y, ARENADATA::GETarenaHeight() * 0.5f - ARENADATA::GETsquareSize() * 0.5f));
+				this->player1->setState(OBJECTSTATE::TYPE::TELEPORTED);
 				break;
 			default:
 				break;
@@ -435,6 +448,7 @@ void GamePlayState::init() {
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	this->fallPatternCoolDown = 25.0;
+	this->playerSteppedOnBossTile = false;
 	
 	RewardMenuState::getInstance()->provide(this->player1);
 
@@ -736,6 +750,16 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, Pr
 std::vector<std::vector<tileData>>& GamePlayState::GETgrid()
 {
 	return this->grid;
+}
+
+bool GamePlayState::GETplayerSteppedOnBossTile()
+{
+	return this->playerSteppedOnBossTile;
+}
+
+void GamePlayState::SETplayerSteppedOnBossTile(bool input)
+{
+	this->playerSteppedOnBossTile = input;
 }
 
 //_________________________________________//

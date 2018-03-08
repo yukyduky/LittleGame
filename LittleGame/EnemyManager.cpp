@@ -436,7 +436,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 
 									// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
-	physicsComponent = new PhysicsComponent(*enemyObject, bossScale);
+	physicsComponent = new PhysicsComponent(*enemyObject, bossScale * 1.25f);
 	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::STRAIGHTTOWARDS);
 	// STATE
 	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);

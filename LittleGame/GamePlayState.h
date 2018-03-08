@@ -101,6 +101,7 @@ private:
 	int currentPatternNr;
 	double fallPatternCoolDown;
 	double dt;
+	bool playerSteppedOnBossTile;
 
 	//All spawnPositions that will be used in the EnemyHandler
 	enemySpawnPositions enemySpawnPos;
@@ -182,6 +183,9 @@ public:
 	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props);
 
 	std::vector<std::vector<tileData>>& GETgrid();
+
+	bool GETplayerSteppedOnBossTile();
+	void SETplayerSteppedOnBossTile(bool input);
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }

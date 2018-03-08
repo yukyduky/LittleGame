@@ -191,6 +191,25 @@ void BlockComponent::receive(GameObject& obj, Message msg)
 void BlockComponent::update()
 {
 	this->head->updateWorldMatrix();
+
+	OBJECTSTATE::TYPE state = this->head->getState();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	switch (state)
+	{
+	case OBJECTSTATE::TYPE::ACTIVATED:
+		break;
+	case OBJECTSTATE::TYPE::BOSSINVULNERABLE:
+		this->updateColor(vColor(0.3f, 0.3f, 0.3f, 1.0f));
+		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
+		break;
+	case OBJECTSTATE::TYPE::BOSSVULNERABLE:
+		this->updateColor(this->color);
+		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
+		break;
+	default:
+		break;
+	}
 }
 
 void BlockComponent::cleanUp()

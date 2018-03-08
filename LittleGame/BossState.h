@@ -21,8 +21,6 @@ public:
 		this->pGPS = &pGPS;
 		this->bossScale = bossScale;
 	}
-
-
 	virtual void executeBehavior() = 0;
 
 };

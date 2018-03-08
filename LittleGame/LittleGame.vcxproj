@@ -145,6 +145,8 @@
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="BossBattleIntroState.h" />
+    <ClInclude Include="BossBulletHellState.h" />
+    <ClInclude Include="BossMoveAwayFromArenaState.h" />
     <ClInclude Include="SpBossBulletHell.h" />
     <ClInclude Include="BossMoveToArenaState.h" />
     <ClInclude Include="BossState.h" />
@@ -224,6 +226,10 @@
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="BossBattleIntroState.cpp" />
+    <ClCompile Include="BossBulletHellState.cpp" />
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
+    <ClCompile Include="BossMoveToArenaState.cpp" />
     <ClCompile Include="SpBossBulletHell.cpp" />
     <ClCompile Include="BossState.cpp" />
     <ClCompile Include="Button.cpp" />

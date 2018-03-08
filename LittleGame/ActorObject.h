@@ -39,6 +39,7 @@ protected:
 
 	float energy = 100;
 	float energyMAX = 100;
+	float invulnerable = 1.0f;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -133,6 +134,10 @@ public:
 	// For enemies
 	Spell* getFirstSpell();
 	void applyStatusEffect(TILESTATE::STATE effect);
+	
+
+	void turnOnInvulnerability();
+	void turnOffInvulnerability();
 };
 
 

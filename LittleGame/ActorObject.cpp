@@ -154,6 +154,16 @@ void ActorObject::update()
 		break;
 	case OBJECTSTATE::TYPE::STUNNED:
 		break;
+	case OBJECTSTATE::TYPE::TELEPORTED:
+		this->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+		for (auto &i : this->components) {
+			i->update();
+		}
+		for (auto &i : this->spells) {
+			i->update();
+			i->updateCD();
+		}
+		break;
 	default:
 		for (auto &i : this->components) {
 			i->update();
@@ -438,7 +448,7 @@ void ActorObject::decCD()
 
 void ActorObject::dealDmg(float dmg)
 {
-	this->hp -= dmg;
+	this->hp -= dmg * this->invulnerable;
 	
 	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
 		vColor colorHolder = this->GETgraphicsComponent()->GETcolor();
@@ -623,6 +633,16 @@ void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
 {
 	this->statusEffect = effect;
 	this->counter = 0.0f;
+}
+
+void ActorObject::turnOnInvulnerability()
+{
+	this->invulnerable = 0.0f;
+}
+
+void ActorObject::turnOffInvulnerability()
+{
+	this->invulnerable = 1.0f;
 }
 
 Spell * ActorObject::getFirstSpell()

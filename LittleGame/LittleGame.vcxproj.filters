@@ -100,6 +100,18 @@
     <ClCompile Include="SpBossBulletHell.cpp">
       <Filter>Boss\BossAttacks</Filter>
     </ClCompile>
+    <ClCompile Include="BossMoveToArenaState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBattleIntroState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBulletHellState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -219,6 +231,12 @@
     </ClInclude>
     <ClInclude Include="SpBossBulletHell.h">
       <Filter>Boss\BossAttacks</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveAwayFromArenaState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBulletHellState.h">
+      <Filter>Boss\BossStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
