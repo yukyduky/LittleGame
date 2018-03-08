@@ -437,8 +437,8 @@ void GamePlayState::init() {
 	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
-	//this->enemyManager.startLevel1(this->enemySpawnPos);
-	this->enemyManager.startBossLevel();
+	this->enemyManager.startLevel1(this->enemySpawnPos);
+	//this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -583,13 +583,13 @@ void GamePlayState::update(GameManager * gm)
 	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
 	
-//	if (this->counter > this->fallPatternCoolDown) {
-//		this->updateFloorPattern();
-//	}
-//	if (this->genCounter > this->genTimer) {
-//		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
-//		this->genCounter = 0.0;
-//	}
+	if (this->counter > this->fallPatternCoolDown) {
+		this->updateFloorPattern();
+	}
+	if (this->genCounter > this->genTimer) {
+		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+		this->genCounter = 0.0;
+	}
 	this->updateFloor();
 
 	int ID;

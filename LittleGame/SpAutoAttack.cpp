@@ -90,15 +90,15 @@ bool SpAutoAttackG1::castSpell()
 	else
 	{
 		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000.0f, this->range, true);
-		XMFLOAT3 distance = { this->getPlayer()->getDirection() * 80 };
+		XMFLOAT3 distance = { this->getOwner()->getDirection() * 80 };
 
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 
 			50));
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 
-			50))->setPosition(this->getPlayer()->GETPosition() + distance);
-		distance = { this->getPlayer()->getDirection() * 120 };
+			50))->setPosition(this->getOwner()->GETPosition() + distance);
+		distance = { this->getOwner()->getDirection() * 120 };
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
-			50))->setPosition(this->getPlayer()->GETPosition() + distance);
+			50))->setPosition(this->getOwner()->GETPosition() + distance);
 
 		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
 
@@ -133,7 +133,7 @@ bool SpAutoAttackG2::castSpell()
 	else
 	{
 		ProjProp props(4, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1500.0f, this->range, true);
-		XMFLOAT3 distance = { this->getPlayer()->getDirection() * 80 };
+		XMFLOAT3 distance = { this->getOwner()->getDirection() * 80 };
 
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 			50));
@@ -149,7 +149,7 @@ bool SpAutoAttackG2::castSpell()
 void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
-		this->getPlayer()->addEnergy(5);
+		this->getOwner()->addEnergy(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 

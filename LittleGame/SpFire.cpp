@@ -108,13 +108,13 @@ bool SpFireG1::castSpell()
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
 			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, this->range, false);
 
-			XMVECTOR direction = XMLoadFloat3(&this->getPlayer()->getDirection());
+			XMVECTOR direction = XMLoadFloat3(&this->getOwner()->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
 			
 			XMVECTOR leDir = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, -0.3f));
@@ -164,7 +164,7 @@ bool SpFireG2::castSpell()
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
@@ -219,10 +219,10 @@ bool SpFireG3::castSpell()
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			returnValue = true;
-			XMFLOAT3 plyPos = this->getPlayer()->GETPosition();
+			XMFLOAT3 plyPos = this->getOwner()->GETPosition();
 
 			//Slow speed to compensate for the gap between the boxes
 			ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.2f), 100, 10, false);
@@ -232,7 +232,7 @@ bool SpFireG3::castSpell()
 				Projectile* proj = this->spawnProj(props, 
 					Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 						50));
-				proj->setPosition(plyPos + (this->getPlayer()->getDirection(i * props.size * 14)));
+				proj->setPosition(plyPos + (this->getOwner()->getDirection(i * props.size * 14)));
 				// The multiplier below is half of above
 				XMMATRIX scaleM = XMMatrixScaling(props.size * 7.0f, props.size, props.size); 
 				proj->SETscaleMatrix(scaleM);

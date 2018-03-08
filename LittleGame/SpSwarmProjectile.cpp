@@ -31,9 +31,9 @@ bool SpSwarmProjectile::castSpell()
 	{
 		Light light;
 		light.pos = this->getOwner()->GETPosition();
-		light.diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		light.diffuse = XMFLOAT3(0.25f, 0.0f, 0.0f);
 		light.ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		light.attenuation = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		light.attenuation = XMFLOAT3(0.0f, 0.0001f, 0.0001f);
 		light.specPower = 0.0f;
 
 		ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.1f), 200, this->projectilesMaxFlyingRange, false);

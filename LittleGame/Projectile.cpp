@@ -10,7 +10,7 @@ Projectile::Projectile() : GameObject(-1)
 	this->setState(OBJECTSTATE::TYPE::DEAD);
 }
 
-Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -64,7 +64,7 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bo
 	this->lightIDs = lightIDs;
 }
 
-Projectile::Projectile(const size_t ID, float speed, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -72,9 +72,8 @@ Projectile::Projectile(const size_t ID, float speed, PROJBEHAVIOR behavior, XMFL
 
 	this->type = objectType;
 	this->direction = dir;
-	this->speed = speed;
 	this->behavior = behavior;
-	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
+	this->velocity = velocity;
 	this->rangeCounter = 0;
 
 	this->light = light;

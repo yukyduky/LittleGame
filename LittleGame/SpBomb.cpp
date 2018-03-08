@@ -153,7 +153,7 @@ void SpBombG1::update()
 		{
 			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, 10, true);
 
-			XMVECTOR direction = XMLoadFloat3(&this->getPlayer()->getDirection());
+			XMVECTOR direction = XMLoadFloat3(&this->getOwner()->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
 
 			float angle = 6.24 /*2PI*/ / this->nrOfSplinters;

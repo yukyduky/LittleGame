@@ -150,12 +150,12 @@ bool SpDashG1::castSpell()
 	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
-			XMFLOAT3 oldPos = this->getPlayer()->GETPosition();
-			XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range };
+			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
+			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
 			XMFLOAT3 newPos = { oldPos - distance };
 
 			//XMFLOAT3 playerNewPos;
@@ -178,9 +178,9 @@ bool SpDashG1::castSpell()
 				newPos.x = static_cast<float>(ARENADATA::GETsquareSize());
 			}
 
-			this->getPlayer()->setPosition(newPos);
+			this->getOwner()->setPosition(newPos);
 			
-			this->getPlayer()->dealDmg(-this->damage);
+			this->getOwner()->dealDmg(-this->damage);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
@@ -226,12 +226,12 @@ bool SpDashG2::castSpell()
 	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
-			XMFLOAT3 oldPos = this->getPlayer()->GETPosition();
-			XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range };
+			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
+			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
 			XMFLOAT3 newPos = { oldPos + distance };
 
 			//XMFLOAT3 playerNewPos;
@@ -239,35 +239,35 @@ bool SpDashG2::castSpell()
 			if (newPos.z > static_cast<float>(ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()))
 			{
 				newPos.z = static_cast<float>(ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize());
-				this->getPlayer()->dealDmg(this->damageFromMiss);
+				this->getOwner()->dealDmg(this->damageFromMiss);
 			}
 			else if (newPos.z < ARENADATA::GETsquareSize())
 			{
 				newPos.z = static_cast<float>(ARENADATA::GETsquareSize());
-				this->getPlayer()->dealDmg(this->damageFromMiss);
+				this->getOwner()->dealDmg(this->damageFromMiss);
 			}
 
 			if (newPos.x > static_cast<float>(ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()))
 			{
 				newPos.x = static_cast<float>(ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize());
-				this->getPlayer()->dealDmg(this->damageFromMiss);
+				this->getOwner()->dealDmg(this->damageFromMiss);
 			}
 			else if (newPos.x < static_cast<float>(ARENADATA::GETsquareSize()))
 			{
 				newPos.x = static_cast<float>(ARENADATA::GETsquareSize());
-				this->getPlayer()->dealDmg(this->damageFromMiss);
+				this->getOwner()->dealDmg(this->damageFromMiss);
 			}
 
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
 				flames.push_back(this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)));
-				flames[i]->setPosition(oldPos + (this->getPlayer()->getDirection(i * flameSize * 2)));
+				flames[i]->setPosition(oldPos + (this->getOwner()->getDirection(i * flameSize * 2)));
 			}
 			//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
 			//this->spawnProj(props)->SETscaleMatrix(XMMatrixScaling(this->range - 40.0f, props.size, props.size));
 
-			this->getPlayer()->setPosition(newPos);
+			this->getOwner()->setPosition(newPos);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
@@ -300,7 +300,7 @@ bool SpDashG3::castSpell()
 	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			for (auto &i : this->flames)
 			{
@@ -310,8 +310,8 @@ bool SpDashG3::castSpell()
 
 			returnValue = true;
 
-			XMFLOAT3 oldPos = this->getPlayer()->GETPosition();
-			XMFLOAT3 distance = { this->getPlayer()->getDirection() * this->range };
+			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
+			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
 			XMFLOAT3 newPos = { oldPos + distance };
 
 
@@ -337,10 +337,10 @@ bool SpDashG3::castSpell()
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
 				flames.push_back(this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)));
-				flames[i]->setPosition(oldPos + (this->getPlayer()->getDirection(i * flameSize * 2)));
+				flames[i]->setPosition(oldPos + (this->getOwner()->getDirection(i * flameSize * 2)));
 			}
 
-			this->getPlayer()->setPosition(newPos);
+			this->getOwner()->setPosition(newPos);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 

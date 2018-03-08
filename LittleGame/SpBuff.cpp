@@ -113,12 +113,12 @@ bool SpBuffG1::castSpell()
 	}
 	else
 	{
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
 
-			this->getPlayer()->getPGPS()->setBerserkerMode(true);
+			this->getOwner()->getPGPS()->setBerserkerMode(true);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -139,7 +139,7 @@ void SpBuffG1::update()
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 
-			this->getPlayer()->getPGPS()->setBerserkerMode(false);
+			this->getOwner()->getPGPS()->setBerserkerMode(false);
 
 		}
 	}
@@ -182,13 +182,13 @@ bool SpBuffG3::castSpell()
 	}
 	else
 	{
-		if (this->getPlayer()->useEnergy(this->getCost()))
+		if (this->getOwner()->useEnergy(this->getCost()))
 		{
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
 
-			this->getPlayer()->setSpeed(this->strength);
-			this->getPlayer()->GETphysicsComponent()->updateBoundingArea(0.0f);
+			this->getOwner()->setSpeed(this->strength);
+			this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -206,11 +206,11 @@ void SpBuffG3::update()
 		if (this->getTSC() > this->duration)
 		{
 			Locator::getGameTime()->setMultiplier(1.0);
-			this->getPlayer()->setSpeed(1.0f);
+			this->getOwner()->setSpeed(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 
-			this->getPlayer()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
+			this->getOwner()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
 		}
 		else
 		{
