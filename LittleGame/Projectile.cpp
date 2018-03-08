@@ -5,6 +5,11 @@
 #include "RenderInputOrganizer.h"
 #include "IncludeSpells.h"
 
+Projectile::Projectile() : GameObject(-1)
+{
+	this->setState(OBJECTSTATE::TYPE::DEAD);
+}
+
 Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bool spinn, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
@@ -54,6 +59,23 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, bo
 	//this->spell = projectilesSpell;
 	
 
+
+	this->light = light;
+	this->lightIDs = lightIDs;
+}
+
+Projectile::Projectile(const size_t ID, float speed, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
+{
+	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
+	this->setType(OBJECTTYPE::PROJECTILE);
+	this->spell = nullptr;
+
+	this->type = objectType;
+	this->direction = dir;
+	this->speed = speed;
+	this->behavior = behavior;
+	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
+	this->rangeCounter = 0;
 
 	this->light = light;
 	this->lightIDs = lightIDs;
@@ -243,6 +265,13 @@ void Projectile::update()
 		XMVECTOR dir = XMLoadFloat3(&this->direction);
 		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
 		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
+	}
+	else if (this->behavior == PROJBEHAVIOR::ENLARGE)
+	{
+		float size = this->rangeCounter * 4.0f;
+		XMMATRIX scaleM = XMMatrixScaling(size, size, size);
+		this->GETphysicsComponent()->updateBoundingArea(size);
+		this->SETscaleMatrix(scaleM);
 	}
 
 	/*

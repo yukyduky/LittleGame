@@ -699,7 +699,7 @@ void GamePlayState::initPlayer()
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
-	// 0 (Autoattack):
+	// 0:
 	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
 	actor->addSpell(new SpFire(actor));
@@ -753,7 +753,8 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, Pr
 
 	this->pointLights[lightID] = light;
 
-	proj = new Projectile(nextID, props.speed, props.range, props.spinn, shooter, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+
+	proj = new Projectile(nextID, props.speed, props.range, props.behavior, shooter, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);

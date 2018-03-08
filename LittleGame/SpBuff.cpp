@@ -9,7 +9,7 @@ SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
 
 	this->setCost(15.0f);
 	this->setCoolDown(10.0f);
-	this->duration = 1.5f;
+	this->duration = 3.5f;
 
 	this->range = 20.0f;
 	this->oriRadius = this->getOwner()->GETphysicsComponent()->GETBoundingSphere().Radius;
@@ -97,11 +97,52 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 SpBuffG1::SpBuffG1(ActorObject * player) : SpBuff(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->setCoolDown(0.1f);
+	//this->duration *= 3.0f;
 }
 
 SpBuffG1::~SpBuffG1()
 {
+}
+
+bool SpBuffG1::castSpell()
+{
+	bool returnValue = true;
+	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
+	{
+		returnValue = false;
+	}
+	else
+	{
+		if (this->getPlayer()->useEnergy(this->getCost()))
+		{
+			this->active = true;
+			this->setState(SPELLSTATE::ACTIVE);
+
+			this->getPlayer()->getPGPS()->setBerserkerMode(true);
+
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+		}
+	}
+
+	return returnValue;
+}
+
+void SpBuffG1::update()
+{
+	if (this->active)
+	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+		if (this->getTSC() > this->duration)
+		{
+			Locator::getGameTime()->setMultiplier(1.0);
+			this->active = false;
+			this->setState(SPELLSTATE::COOLDOWN);
+
+			this->getPlayer()->getPGPS()->setBerserkerMode(false);
+
+		}
+	}
 }
 
 
@@ -125,10 +166,55 @@ SpBuffG2::~SpBuffG2()
 SpBuffG3::SpBuffG3(ActorObject * player) : SpBuff(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 1.5f);
-	this->setCost(this->getCost() * 0.2f);
+	this->strength *= 2.0f;
 }
 
 SpBuffG3::~SpBuffG3()
 {
+}
+
+bool SpBuffG3::castSpell()
+{
+	bool returnValue = true;
+	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
+	{
+		returnValue = false;
+	}
+	else
+	{
+		if (this->getPlayer()->useEnergy(this->getCost()))
+		{
+			this->active = true;
+			this->setState(SPELLSTATE::ACTIVE);
+
+			this->getPlayer()->setSpeed(this->strength);
+			this->getPlayer()->GETphysicsComponent()->updateBoundingArea(0.0f);
+
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+		}
+	}
+
+	return returnValue;
+}
+
+void SpBuffG3::update()
+{
+	if (this->active)
+	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+		if (this->getTSC() > this->duration)
+		{
+			Locator::getGameTime()->setMultiplier(1.0);
+			this->getPlayer()->setSpeed(1.0f);
+			this->active = false;
+			this->setState(SPELLSTATE::COOLDOWN);
+
+			this->getPlayer()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
+		}
+		else
+		{
+			Locator::getGameTime()->setMultiplier(0.3);
+		}
+	}
 }

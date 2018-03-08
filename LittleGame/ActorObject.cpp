@@ -365,7 +365,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::fireAbilityX()
 {
-	if ((this->state == OBJECTSTATE::TYPE::ACTIVATED) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell->castSpell();
 	}
 	else {
@@ -407,8 +407,9 @@ void ActorObject::selectAbility3()
 	Locator::getStatsHeader()->resetStats();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[3];
-		this->selectedSpellIntValue = 3;
+		this->spells[3]->castSpell();
+		//this->selectedSpell = this->spells[3];
+		//this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -420,8 +421,10 @@ void ActorObject::selectAbility4()
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[4];
-		this->selectedSpellIntValue = 4;
+		this->spells[4]->castSpell();
+
+		//this->selectedSpell = this->spells[4];
+		//this->selectedSpellIntValue = 4;
 	}
 	else {
 
@@ -448,8 +451,14 @@ void ActorObject::decCD()
 	
 }
 
-void ActorObject::dealDmg(float dmg)
+void ActorObject::dealDmg(float damag)
 {
+	float dmg = damag;
+	if (this->pGPS->getBerserkerMode())
+	{
+		dmg *= 3.0f;
+	}
+
 	this->hp -= dmg * this->invulnerable;
 	
 	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {

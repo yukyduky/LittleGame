@@ -34,6 +34,7 @@ struct ProjProp {
 	float speed;
 	float range;
 	bool spinn;
+	PROJBEHAVIOR behavior;
 
 	ProjProp(float s, XMFLOAT4 c, float spd, float r, bool spn) 
 		: size(s)
@@ -41,6 +42,15 @@ struct ProjProp {
 		, speed(spd)
 		, range(r)
 		, spinn(spn)
+		, behavior(PROJBEHAVIOR::NONE)
+	{}
+	ProjProp(float s, XMFLOAT4 c, float spd, float r, PROJBEHAVIOR beh)
+		: size(s)
+		, color(c)
+		, speed(spd)
+		, range(r)
+		, spinn(false)
+		, behavior(beh)
 	{}
 	ProjProp() {}
 };
@@ -116,6 +126,8 @@ private:
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;
+	// Set by one of SpBuff's glyph
+	bool berserkerMode = false;
 	Command* selectCommand = nullptr;
 	
 	void checkCollisions();
@@ -178,10 +190,11 @@ public:
 	std::list<GameObject*>* getDynamicObjects();
 	std::list<GraphicsComponent*>* getGraphicsComponents();
 
+
+
 	void addGraphics(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
-
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light);
 
@@ -194,6 +207,8 @@ public:
 	int newID() { return this->ID++; }
 
 	MouseInput* GETMouseInput() { return this->mousePicker; }
+	void setBerserkerMode(bool input) { this->berserkerMode = input; }
+	bool getBerserkerMode() { return this->berserkerMode; }
 
 };
 
