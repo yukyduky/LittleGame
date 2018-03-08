@@ -25,6 +25,13 @@ SpDash::~SpDash()
 bool SpDash::castSpell()
 {
 	bool returnValue = false;
+	//Temporary template for the light
+	Light light;
+	light.pos = this->getOwner()->GETPosition();
+	light.diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	light.ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	light.attenuation = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	light.specPower = 0.0f;
 
 	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
 	{
@@ -60,7 +67,7 @@ bool SpDash::castSpell()
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
-				flames.push_back(this->spawnProj(props));
+				flames.push_back(this->spawnProj(props, light));
 				flames[i]->setPosition(oldPos + (this->getOwner()->getDirection(i * flameSize * 2)));
 			}
 			//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);

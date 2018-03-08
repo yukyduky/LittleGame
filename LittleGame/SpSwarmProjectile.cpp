@@ -1,6 +1,8 @@
 #include "SpSwarmProjectile.h"
 #include "SwarmerState.h"
 #include "Spell.h"
+#include "GamePlayState.h"
+#include "GameObject.h"
 
 SpSwarmProjectile::SpSwarmProjectile(
 	EnemyObject* pShooter, ActorObject* pPlayer, int* pActiveEnemiesCount,
@@ -27,8 +29,15 @@ bool SpSwarmProjectile::castSpell()
 	}
 	else
 	{
+		Light light;
+		light.pos = this->getOwner()->GETPosition();
+		light.diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		light.ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		light.attenuation = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		light.specPower = 0.0f;
+
 		ProjProp props(5, XMFLOAT4(1.0f, 0.0f, 0.0f, 0.1f), 200, this->projectilesMaxFlyingRange, false);
-		Projectile* pProj = this->spawnProj(props);
+		Projectile* pProj = this->spawnProj(props, light);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 
 		Locator::getAudioManager()->play(SOUND::NAME::BEEP4);

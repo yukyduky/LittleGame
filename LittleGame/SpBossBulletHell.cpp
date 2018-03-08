@@ -20,6 +20,14 @@ bool SpBossBulletHell::castSpell()
 	XMMATRIX rotationM = XMMatrixRotationY(this->radians);
 	
 	bool returnValue = true;
+	//Temporary template for the light
+	Light light;
+	light.pos = this->getOwner()->GETPosition();
+	light.diffuse = XMFLOAT3(0.25f, 0.0f, 0.0f);
+	light.ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	light.attenuation = XMFLOAT3(0.0f, 0.0001f, 0.0001f);
+	light.specPower = 0.0f;
+
 	if (this->getState() == SPELLSTATE::COOLDOWN) {
 		returnValue = false;
 	}
@@ -38,12 +46,12 @@ bool SpBossBulletHell::castSpell()
 		this->getOwner()->setDirection(dir);
 
 		ProjProp props(10, XMFLOAT4(1.0f, 0.01f, 0.01f, 1.0f), 400.0f, this->projectilesMaxFlyingRange, true);
-		Projectile* pProj = this->spawnProj(props);
+	//	Projectile* pProj = this->spawnProj(props, light);
 
 		dir.z *= -1.0f;
 		this->getOwner()->setDirection(dir);
 
-		Projectile* pProj2 = this->spawnProj(props);
+	//	Projectile* pProj2 = this->spawnProj(props, light);
 
 		dir.z *= -1.0f;
 		this->getOwner()->setDirection(dir);

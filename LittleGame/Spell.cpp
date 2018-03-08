@@ -42,7 +42,7 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 	XMFLOAT3 distance = { this->getOwner()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getOwner()->GETPosition() + distance };
 	light.pos = newPos;
-	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props);
+	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props, light);
 
 	// Attach the relevant spell to the projectile
 	// (This could be optimized by adding copy constructors and using those instead of what's done below)

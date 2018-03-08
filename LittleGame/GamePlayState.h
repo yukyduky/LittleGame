@@ -80,27 +80,27 @@ private:
 	//Variables for falling floor
 	FloorFallData fallData; //OLD
 	FloorFallData currData;
-	FLOORSTATE::STATE floorState;
 	std::vector<FloorFallData> easyPatterns;
 	std::vector<FloorFallData> mediumPatterns;
 	std::vector<FloorFallData> hardPatterns;
-	std::vector<Index> genIndex;
+
+	/// T I M E R S   F O R   T H E    F L O O R F A L L P A T T E R N S
+	//Times for when the different FloorPattern difficulties start.
 	double mediumTime;
 	double hardTime;
+	double fallPatternCoolDown;
 	double totalLevelTime;
 	double gTimeLastFrame;
-	double stateTime;
-	double timeBetweenPatterns;
-	double tFallingTime;
-	double fallAndRecoveryTime;
 	double counter;
+	/// G E N E R A T O R   S T U F F
+	//Saves the index of each square that has a generator.
+	//Time between each generator spawning and the counter for it.
+	std::vector<Index> genIndex;
 	double genTimer;
 	double genCounter;
-	double genEffectTime;
-	bool recoveryMode;
-	int currentPatternNr;
-	double fallPatternCoolDown;
+	//Games dt for each fram, used for easier access in different functions.
 	double dt;
+	//Used during the boss fight to tell the boss that the player stepped on a objective tile.
 	bool playerSteppedOnBossTile;
 
 	//All spawnPositions that will be used in the EnemyHandler

@@ -443,13 +443,9 @@ void GamePlayState::init() {
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
 	this->totalLevelTime = 0.0;
-	this->timeBetweenPatterns = 20.0;
-	this->stateTime = 5.0;
-	this->recoveryMode = false;
 	this->counter = 0.0;
 	this->genTimer = 10.0;
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
-	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	this->fallPatternCoolDown = 25.0;
 	this->playerSteppedOnBossTile = false;
 	
@@ -512,7 +508,6 @@ void GamePlayState::cleanUp()
 
 	//Clear the grid
 	this->grid.clear();
-	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	//Clear FloorFallPattern arrays.
 	this->easyPatterns.clear();
 	this->mediumPatterns.clear();
@@ -690,7 +685,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);
+	actor = new ActorObject(nextID, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
@@ -758,7 +753,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, Pr
 
 	this->pointLights[lightID] = light;
 
-	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+	proj = new Projectile(nextID, props.speed, props.range, props.spinn, shooter, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
