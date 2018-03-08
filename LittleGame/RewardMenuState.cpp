@@ -463,22 +463,15 @@ Menu * RewardMenuState::initNextLevelMenu()
 
 void RewardMenuState::provide(std::vector<Spell*> spellPackage)
 {
-	this->spellPackage.clear();
-
-	for (auto i : spellPackage)
-	{
-		this->spellPackage.push_back(i);
-	}
-
 }
 
 void RewardMenuState::provide(ActorObject * player)
 {
 	this->player = player;
 
-	for (auto i : this->spellPackage)
+	for (int i = 0; i < (int)NAME::SIZE; i++)
 	{
-		this->player->changeSpell((int)i->getName(), (int)i->getGlyph());
+		this->player->changeSpell(i, Locator::getStatsHeader()->getStats().glyphs[i]);
 	}
 }
 

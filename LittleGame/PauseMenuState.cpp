@@ -1,22 +1,22 @@
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
 #include "GameManager.h"
 #include "Button.h"
 #include "StateManager.h"
 
-MainMenuState MainMenuState::sMainMenuState;
+PauseMenuState PauseMenuState::sPauseMenuState;
 
-void MainMenuState::init() 
+void PauseMenuState::init() 
 {
 	MenuState::init();
 
 	this->displayMenu(this->initStartMenu());
 }
 
-MainMenuState* MainMenuState::getInstance() {
-	return &sMainMenuState;
+PauseMenuState* PauseMenuState::getInstance() {
+	return &sPauseMenuState;
 }
 
-Menu* MainMenuState::initStartMenu()
+Menu* PauseMenuState::initStartMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -65,7 +65,7 @@ Menu* MainMenuState::initStartMenu()
 	return menu;
 }
 
-Menu* MainMenuState::initOptionsMenu()
+Menu* PauseMenuState::initOptionsMenu()
 {
 	Menu* opMenu = nullptr;
 	MenuObject* object = nullptr;
@@ -114,7 +114,7 @@ Menu* MainMenuState::initOptionsMenu()
 }
 
 
-void MainMenuState::FullScreenSwitch()
+void PauseMenuState::FullScreenSwitch()
 {
 	if (this->IsWindowMode)
 	{

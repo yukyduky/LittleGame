@@ -1,13 +1,13 @@
 #pragma once
-#ifndef MainMenuState_H
-#define MainMenuState_H
+#ifndef PauseMenuState_H
+#define PauseMenuState_H
 
 #include "MenuState.h"
 
-class MainMenuState : public MenuState
+class PauseMenuState : public MenuState
 {
 private:
-	static MainMenuState sMainMenuState;
+	static PauseMenuState sPauseMenuState;
 
 	BOOL IsWindowMode = TRUE;
 	WINDOWPLACEMENT wpc;
@@ -16,15 +16,15 @@ private:
 
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Initialize the 'MainMenuState'.
+	1. Initialize the 'PauseMenuState'.
 	*/
 	virtual void init();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
-	1. Cleanup the 'MainMenuState'; freeing memory, default settings, etc.
+	1. Cleanup the 'PauseMenuState'; freeing memory, default settings, etc.
 	*/
 
-	static MainMenuState* getInstance();
+	static PauseMenuState* getInstance();
 
 	void FullScreenSwitch();
 
@@ -35,4 +35,4 @@ public:
 
 };
 
-#endif // !MainMenuState_H
+#endif // !PauseMenuState_H

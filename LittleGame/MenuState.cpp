@@ -1,6 +1,7 @@
 #include "MenuState.h"
 #include "GamePlayState.h"
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
+#include "HomeMenuState.h"
 #include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
@@ -84,8 +85,9 @@ void MenuState::handleEvents(GameManager * gm) {
 		else if (globalmsg == GLOBALMESSAGES::RESTARTGAME) {
 			Locator::getStatsHeader()->resetStats();
 
-			StateManager::changeState(GamePlayState::getInstance());
-			StateManager::pushState(MainMenuState::getInstance());
+			StateManager::changeState(HomeMenuState::getInstance());
+			//StateManager::changeState(GamePlayState::getInstance());
+			//StateManager::pushState(PauseMenuState::getInstance());
 		}
 	}
 }
