@@ -25,6 +25,8 @@ private:
 	XMFLOAT2 normalizedVectorToPlayer;
 	float distanceToPlayer = 0.0f;
 
+	bool charged = false;
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Updates internal 'normalizedVectorToPlayer' and 'distanceToPlayer'
 	*/
@@ -33,8 +35,10 @@ private:
 public:
 	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
 
+	void setIfCharged(bool isItACharger);
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
 	EnemyAttackComponent* GETattackComponent();
+	bool getIfCharged();
 
 	XMFLOAT2 getVectorToPlayer();
 	float getDistanceToPlayer();

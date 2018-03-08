@@ -115,6 +115,7 @@
     <ClCompile Include="StatisticsMenuState.cpp" />
     <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="IDHandler.cpp" />
+    <ClCompile Include="TriangleComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="TriangleComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -34,6 +34,11 @@ EnemyObject::EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, flo
 	this->players = players;
 }
 
+void EnemyObject::setIfCharged(bool isItACharger)
+{
+	this->charged = isItACharger;
+}
+
 void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
 {
 	this->attackComponent = attackComponent;
@@ -42,6 +47,11 @@ void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
 EnemyAttackComponent * EnemyObject::GETattackComponent()
 {
 	return this->attackComponent;
+}
+
+bool EnemyObject::getIfCharged()
+{
+	return this->charged;
 }
 
 XMFLOAT2 EnemyObject::getVectorToPlayer()

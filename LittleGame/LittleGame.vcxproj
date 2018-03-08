@@ -224,6 +224,7 @@
     <ClInclude Include="SwarmerSeekingState.h" />
     <ClInclude Include="SwarmerState.h" />
     <ClInclude Include="SwarmerSyncingState.h" />
+    <ClInclude Include="TriangleComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActorObject.cpp" />
@@ -297,6 +298,7 @@
     <ClCompile Include="SwarmerSeekingState.cpp" />
     <ClCompile Include="SwarmerState.cpp" />
     <ClCompile Include="SwarmerSyncincState.cpp" />
+    <ClCompile Include="TriangleComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
