@@ -72,6 +72,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		}
 	}
 
+	d2d->cleanUp();
 	gm.cleanUp();
 	d3d->cleanup();
 	delete d3d;

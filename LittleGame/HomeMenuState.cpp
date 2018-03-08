@@ -64,3 +64,32 @@ Menu* HomeMenuState::initStartMenu()
 	//this->menus[MENUS::START] = stMenu;
 	return menu;
 }
+
+Menu* HomeMenuState::initOptionsMenu()
+{
+	Menu* opMenu = nullptr;
+	MenuObject* object = nullptr;
+	Button* pButton = nullptr;
+	WCHAR* text = nullptr;
+	int nextID;
+
+	opMenu = new Menu();
+
+	//Background
+	nextID = this->newID();
+	object = new MenuObject(nextID);
+	opMenu->addQuad(object);
+
+	//Buttons
+	text = L"Back to home";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 100.0f,50.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOSTART_HOME);
+	opMenu->addButton(pButton);
+
+	this->addOptionsButtons(opMenu);
+
+	//this->menus[MENUS::OPTIONS] = opMenu;
+	return opMenu;
+}

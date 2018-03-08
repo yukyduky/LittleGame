@@ -432,7 +432,6 @@ void GamePlayState::init() {
 	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	this->fallPatternCoolDown = 25.0;
 	
-
 	RewardMenuState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
@@ -440,6 +439,7 @@ void GamePlayState::init() {
 
 	// Adds to the level each time it starts a level
 	Locator::getStatsHeader()->addLevel();
+	Locator::getGameTime()->setMultiplier(1.0);
 }
 
 void GamePlayState::cleanUp()

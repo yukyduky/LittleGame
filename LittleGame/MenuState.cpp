@@ -14,7 +14,6 @@ using namespace DirectX::SimpleMath;
 
 void MenuState::init() 
 {
-	Locator::getD2D()->saveScreen();
 }
 
 void MenuState::cleanUp()
@@ -29,8 +28,6 @@ void MenuState::cleanUp()
 	this->menuObjects.clear();
 
 	this->ID = 0;
-
-	Locator::getD2D()->closeMenu();
 }
 
 void MenuState::pause() {
@@ -78,9 +75,11 @@ void MenuState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::STARTGAME) {
 			StateManager::changeState(GamePlayState::getInstance());
+			Locator::getD2D()->closeMenu();
 		}
 		else if (globalmsg == GLOBALMESSAGES::RESUMEGAME) {
 			StateManager::popState();
+			Locator::getD2D()->closeMenu();
 		}
 		else if (globalmsg == GLOBALMESSAGES::RESTARTGAME) {
 			Locator::getStatsHeader()->resetStats();

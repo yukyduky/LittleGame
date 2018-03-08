@@ -37,6 +37,7 @@ void RestartState::update(GameManager* gm)
 }
 void RestartState::render(GameManager* gm)
 {
+	Locator::getD2D()->saveScreen();
 	RewardMenuState::getInstance()->provide(this->spellPackage);
 	StateManager::changeState(GamePlayState::getInstance());
 	StateManager::pushState(RewardMenuState::getInstance());

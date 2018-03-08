@@ -8,12 +8,6 @@ class HomeMenuState : public PauseMenuState
 {
 private:
 	static HomeMenuState sHomeMenuState;
-
-	BOOL IsWindowMode = TRUE;
-	WINDOWPLACEMENT wpc;
-	LONG HWNDStyle = 0;
-	LONG HWNDStyleEx = 0;
-
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'HomeMenuState'.
@@ -27,6 +21,7 @@ public:
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
 	Menu* initStartMenu();
+	Menu* initOptionsMenu();
 };
 
 #endif // !HomeMenuState_H

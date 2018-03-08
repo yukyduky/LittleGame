@@ -5,10 +5,67 @@
 
 PauseMenuState PauseMenuState::sPauseMenuState;
 
-void PauseMenuState::init() 
+void PauseMenuState::addOptionsButtons(Menu * menu)
+{
+	Button* pButton = nullptr;
+	WCHAR* text = nullptr;
+	int nextID;
+
+	text = L"Master Volume +";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 20.0f,150.0f, 170.0f,50.0f }, D2D1::ColorF::Green,
+		text, BEHAVIOR::VOLUMEUP);
+	menu->addButton(pButton);
+
+	text = L"Master Volume -";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 210.0f,150.0f, 170.0f,50.0f }, D2D1::ColorF::Blue,
+		text, BEHAVIOR::VOLUMEDOWN);
+	menu->addButton(pButton);
+
+	text = L"Effect Volume +";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 20.0f,210.0f, 170.0f,50.0f }, D2D1::ColorF::Green,
+		text, BEHAVIOR::VOLUMEUP_E);
+	menu->addButton(pButton);
+
+	text = L"Effect Volume -";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 210.0f,210.0f, 170.0f,50.0f }, D2D1::ColorF::Blue,
+		text, BEHAVIOR::VOLUMEDOWN_E);
+	menu->addButton(pButton);
+
+	text = L"Music Volume +";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 20.0f,270.0f, 170.0f,50.0f }, D2D1::ColorF::Green,
+		text, BEHAVIOR::VOLUMEUP_M);
+	menu->addButton(pButton);
+
+	text = L"Music Volume -";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 210.0f,270.0f, 170.0f,50.0f }, D2D1::ColorF::Blue,
+		text, BEHAVIOR::VOLUMEDOWN_M);
+	menu->addButton(pButton);
+
+	text = L"Toggle Fullscreen";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 100.0f,370.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::WINDOWSWITCH);
+	menu->addButton(pButton);
+}
+
+void PauseMenuState::init()
 {
 	MenuState::init();
 
+	Locator::getD2D()->saveScreen();
 	this->displayMenu(this->initStartMenu());
 }
 
@@ -40,7 +97,7 @@ Menu* PauseMenuState::initStartMenu()
 
 	//Buttons
 	nextID = this->newID();
-	text = L"Start/Resume game";
+	text = L"Resume game";
 	pButton = new Button(this, nextID,
 		{ 100.0f,50.0f, 200.0f,150.0f }, D2D1::ColorF::Aqua,
 		text, BEHAVIOR::RESUMEGAME);
@@ -81,33 +138,14 @@ Menu* PauseMenuState::initOptionsMenu()
 	opMenu->addQuad(object);
 
 	//Buttons
-	text = L"Startmenu";
+	text = L"Back";
 	nextID = this->newID();
 	pButton = new Button(this, nextID,
 		{ 100.0f,50.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOSTART);
 	opMenu->addButton(pButton);
 
-	text = L"Volume +";
-	nextID = this->newID();
-	pButton = new Button(this, nextID,
-		{ 80.0f,150.0f, 120.0f,50.0f }, D2D1::ColorF::Green,
-		text, BEHAVIOR::VOLUMEUP);
-	opMenu->addButton(pButton);
-
-	text = L"Volume -";
-	nextID = this->newID();
-	pButton = new Button(this, nextID,
-		{ 260.0f,150.0f, 120.0f,50.0f }, D2D1::ColorF::Blue,
-		text, BEHAVIOR::VOLUMEDOWN);
-	opMenu->addButton(pButton);
-
-	text = L"Toggle Fullscreen";
-	nextID = this->newID();
-	pButton = new Button(this, nextID,
-		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::WINDOWSWITCH);
-	opMenu->addButton(pButton);
+	this->addOptionsButtons(opMenu);
 
 	//this->menus[MENUS::OPTIONS] = opMenu;
 	return opMenu;

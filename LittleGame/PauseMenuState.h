@@ -13,7 +13,8 @@ private:
 	WINDOWPLACEMENT wpc;
 	LONG HWNDStyle = 0;
 	LONG HWNDStyleEx = 0;
-
+protected:
+	virtual void addOptionsButtons(Menu* menu);
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Initialize the 'PauseMenuState'.
@@ -23,14 +24,13 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleanup the 'PauseMenuState'; freeing memory, default settings, etc.
 	*/
-
 	static PauseMenuState* getInstance();
 
 	void FullScreenSwitch();
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
-	Menu* initStartMenu();
-	Menu* initOptionsMenu();
+	virtual Menu* initStartMenu();
+	virtual Menu* initOptionsMenu();
 
 
 };
