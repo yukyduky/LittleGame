@@ -464,15 +464,11 @@ Menu * RewardMenuState::initNextLevelMenu()
 	return menu;
 }
 
-void RewardMenuState::provide(std::vector<int> savedGlyphs)
-{
-}
-
 void RewardMenuState::provide(ActorObject * player)
 {
 	this->player = player;
 
-	for (int i = 0; i < (int)NAME::SIZE; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		this->player->changeSpell(i, Locator::getStatsHeader()->getStats().glyphs[i]);
 	}

@@ -39,18 +39,6 @@ void RestartState::update(GameManager* gm)
 void RestartState::render(GameManager* gm)
 {
 	Locator::getD2D()->saveScreen();
-	RewardMenuState::getInstance()->provide(this->spellPackage);
 	StateManager::changeState(GamePlayState::getInstance());
 	StateManager::pushState(RewardMenuState::getInstance());
-}
-
-void RestartState::provide(std::vector<Spell*> spellPackage)
-{
-	// First clear to avoid doubling of vectors
-	this->vecGlyph.clear();
-
-	// Find out what the current values are and save them.
-	for (auto currentSpell : spellPackage) {
-		this->vecGlyph.push_back((int)currentSpell->getGlyph());
-	}
 }

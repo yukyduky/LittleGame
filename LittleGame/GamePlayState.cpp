@@ -553,8 +553,6 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			// Give the RestartState the current spells so it can be saved for thet next level
-			RestartState::getInstance()->provide(this->player1->GETSpells());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
 
