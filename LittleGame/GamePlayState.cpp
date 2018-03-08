@@ -307,6 +307,31 @@ void GamePlayState::updateFloor()
 			}
 		}
 	}
+
+	float pulseVelocity = 200.0f * this->dt;
+
+	
+	for (int i = 0; i < this->gridPulsePoints[0].size(); i++)
+	{
+		pulseVelocity *= -1;
+		this->gridPulsePoints[0][i].y += pulseVelocity;
+
+		if (this->gridPulsePoints[0][i].y > ARENADATA::GETarenaHeight())
+		{
+			this->gridPulsePoints[0][i].y = 0.0f;
+		}
+	}
+
+	for (int i = 0; i < this->gridPulsePoints[1].size(); i++)
+	{
+		pulseVelocity *= -1;
+		this->gridPulsePoints[1][i].x += pulseVelocity;
+
+		if (this->gridPulsePoints[1][i].x > ARENADATA::GETarenaWidth())
+		{
+			this->gridPulsePoints[1][i].x = 0.0f;
+		}
+	}
 }
 
 void GamePlayState::checkPlayerTileStatus() 
@@ -481,6 +506,8 @@ void GamePlayState::cleanUp()
 	this->quadTree.cleanup();
 
 	this->pointLights.clear();
+
+	this->gridPulsePoints.clear();
 	
 	this->graphics.clear();
 
@@ -716,7 +743,7 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	//XMFLOAT3 position = pos;
 	XMFLOAT4 tempColor(props.color);
-	XMFLOAT3 rotation(0, 0, 0);
+	XMFLOAT3 rotation(0.0f, 0.0f, 0.0f);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics

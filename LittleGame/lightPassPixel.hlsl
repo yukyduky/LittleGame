@@ -23,18 +23,24 @@ struct FloorGrid
 	float height;
 };
 
+struct PulseGrid
+{
+	float2 coords;
+	float2 pad0;
+};
+
 static const int MAX_NUM_LIGHTS = 75;
-static const int MAX_NUM_FLOORGRIDS = 35;
+static const int MAX_NUM_FLOORGRIDS = 36;
 
 cbuffer GeneralData : register (b0) {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS][MAX_NUM_FLOORGRIDS];
+	PulseGrid gridPulse[2][MAX_NUM_FLOORGRIDS + 1];
 	float3 camPos;
 	float nrOfLights;
 	float2 arenaDims;
 	float2 gridDims;
 	float2 gridStartPos;
 	float2 screenDims;
-	float2 gridPulsePoints[2][MAX_NUM_FLOORGRIDS + 1];
 }
 
 cbuffer Light : register (b1) {
@@ -148,9 +154,7 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 				float lowerLimit = 8.0f;
 				float upperLimit = (lowerLimit - 1.0f) / lowerLimit;
 
-				if (((valueX <= gridDims.x / lowerLimit || valueX >= gridDims.x * upperLimit) ||
-					(valueZ <= gridDims.y / lowerLimit || valueZ >= gridDims.y * upperLimit)) &&
-					pos_W.x < arenaDims.x && 
+				if (pos_W.x < arenaDims.x && 
 					pos_W.z < arenaDims.y &&
 					pos_W.y > -0.6f)
 				{
@@ -166,12 +170,34 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 						yGrid++;
 					}
 
-					float colorHardnessX = abs(pos_W.x - (xGrid * gridDims.x)) / (gridDims.x / 2.0f);
-					float colorHardnessY = abs(pos_W.z - (yGrid * gridDims.y)) / (gridDims.y / 2.0f);
+					float pulseRadius = pow(15.0f, 2);
+					float3 baseColorLines = float3(0.3f, 0.0f, 0.0f);
+					float3 baseColorPulse = float3(0.0f, 0.0f, 0.3f);
+					float lineWidth = 1.0f / 16.0f;
 
-					if (colorHardnessX + colorHardnessY != 0.0f)
+					float pulseInfluence = 0.20f;
+
+					for (int i = 0; i < MAX_NUM_FLOORGRIDS + 1; i++)
 					{
-						diffuse += float3(0.3f, 0.0f, 0.0f) / (colorHardnessX + colorHardnessY);
+						float pulseDistV = (pow(pos_W.x - gridPulse[0][i].coords.x, 2) + pow(pos_W.z - gridPulse[0][i].coords.y, 2)) * 3.14f;
+						float pulseDistH = (pow(pos_W.x - gridPulse[1][i].coords.x, 2) + pow(pos_W.z - gridPulse[1][i].coords.y, 2)) * 3.14f;
+
+						pulseInfluence += pulseRadius / pulseDistV + pulseRadius / pulseDistH;
+					}
+
+					float colorHardnessX = abs(pos_W.x - (xGrid * gridDims.x)) / (gridDims.x * lineWidth);
+					float colorHardnessY = abs(pos_W.z - (yGrid * gridDims.y)) / (gridDims.y * lineWidth);
+
+					if (colorHardnessX != 0.0f)
+					{
+						diffuse += baseColorLines / colorHardnessX;
+						diffuse += baseColorPulse * pulseInfluence;
+						saturate(diffuse);
+					}
+					if (colorHardnessY != 0.0f)
+					{
+						diffuse += baseColorLines / colorHardnessY;
+						diffuse += baseColorPulse * pulseInfluence;
 						saturate(diffuse);
 					}
 				}

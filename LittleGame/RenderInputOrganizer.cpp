@@ -91,7 +91,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass(const std::vector<std::
 	{
 		for (size_t k = 0; k < gridPulsePoints[i].size(); k++)
 		{
-			this->lightPassData.gridPulsePoints[i][k] = gridPulsePoints[i][k];
+			this->lightPassData.gridPulse[i][k].coords = gridPulsePoints[i][k];
 		}
 	}
 

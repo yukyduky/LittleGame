@@ -117,12 +117,12 @@ void LevelManager::createGridPulsePoints(std::vector<std::vector<XMFLOAT2>>& gri
 	for (int i = 0; i < gridPulsePoints[0].size(); i++)
 	{
 		gridPulsePoints[0][i].x = i * this->squareSize;
-		gridPulsePoints[0][i].y = i * rand() % this->arenaDepth;
+		gridPulsePoints[0][i].y = rand() % this->arenaDepth;
 	}
 
 	for (int i = 0; i < gridPulsePoints[1].size(); i++)
 	{
-		gridPulsePoints[1][i].x = i * rand() % this->arenaWidth;
+		gridPulsePoints[1][i].x = rand() % this->arenaWidth;
 		gridPulsePoints[1][i].y = i * this->squareSize;
 	}
 }

@@ -8,7 +8,7 @@
 #include "Camera.h"
 
 constexpr int MAX_NUM_POINTLIGHTS = 75;
-constexpr int MAX_NUM_FLOORGRIDS = 35;
+constexpr int MAX_NUM_FLOORGRIDS = 36;
 
 using namespace DirectX;
 
@@ -35,15 +35,21 @@ struct FloorGrid
 	float height;
 };
 
+struct PulseGrid
+{
+	XMFLOAT2 coords;
+	XMFLOAT2 pad0;
+};
+
 struct LightPassData {
 	FloorGrid grid[MAX_NUM_FLOORGRIDS][MAX_NUM_FLOORGRIDS];
+	PulseGrid gridPulse[2][MAX_NUM_FLOORGRIDS + 1];
 	XMFLOAT3 camPos;
 	float nrOfLights;
 	XMFLOAT2 arenaDims;
 	XMFLOAT2 gridDims;
 	XMFLOAT2 gridStartPos;
 	XMFLOAT2 screenDims;
-	XMFLOAT2 gridPulsePoints[2][MAX_NUM_FLOORGRIDS + 1];
 
 	LightPassData() {}
 };
@@ -57,7 +63,8 @@ struct MatrixBufferCalc {
 	XMFLOAT4X4 worldViewProj;
 };
 
-struct MatrixBufferPack {
+struct MatrixBufferPack 
+{
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 worldViewProj;
 };
