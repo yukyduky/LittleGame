@@ -661,7 +661,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
 	XMFLOAT3 playerVelocity(300.0f, -300.0f, 300.0f);
-	float actorSpeed = 1;
+	float actorSpeed = 80.0f;
 
 	/// ACTOR OBJECT:
 	actor = new ActorObject(nextID, actorSpeed, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 10000.0f);

@@ -36,12 +36,23 @@ protected:
 	float counter = 0.0f;
 	XMFLOAT3 slowedVelocity;
 	XMFLOAT3 realVelocity;
+	DirectX::XMFLOAT2 MovementVector;
 
 	float energy = 100;
 	float energyMAX = 100;
 
-	//Varible to be changed by Spells
-	float speed = 0;
+	//Variable to be changed by Spells
+	float accelerationSpeed = 0;
+	float topSpeed = 10.0f;
+	float friction = 10.0f;
+	bool xDirectionChanged = false;
+	bool zDirectionChanged = false;
+	// HERE!!!!
+	// HERE!!!!
+	// HERE!!!!
+	// HERE!!!!
+	// HERE!!!!
+	// HERE!!!! Above; fixing friction
 
 	//Used to calculate angle to fire
 	float rotation = 0;
@@ -62,7 +73,7 @@ public:
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
-	virtual void setSpeed(float speed);
+	virtual void SETaccelerationSpeed(float speed);
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
 	std::vector<Spell*> GETSpells() { return this->spells; };
@@ -76,15 +87,17 @@ public:
 	1. Moves the Actor according to data fetched from the internal InputComponent
 	2. Only called when the player is using a controller
 	*/
-	void move();
+	void updateVelocity();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Affects the position of the ActorObject
 	2. Only called when the player is using a keyboard
 	*/
-	void moveUp();
-	void moveLeft();
-	void moveDown();
-	void moveRight();
+	void updateVelocityUp();
+	void updateVelocityLeft();
+	void updateVelocityDown();
+	void updateVelocityRight();
+
+	void move();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent

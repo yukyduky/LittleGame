@@ -13,16 +13,16 @@
 #include <DirectXMath.h>
 
 
-ActorObject::ActorObject(const size_t ID, float speed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
+ActorObject::ActorObject(const size_t ID, float accelerationSpeed, XMFLOAT3 pos, XMFLOAT3 velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in)
 	: GameObject(ID, pos)
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
 
 	this->type = objectType;
-	this->velocity = velocity;	
+	this->velocity = { 0.0f, 0.0f, 0.0f };
 	this->state = OBJECTSTATE::TYPE::ACTIVATED;
-	this->speed = speed;
+	this->accelerationSpeed = accelerationSpeed;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
 	this->realVelocity = velocity;
@@ -58,9 +58,9 @@ XMFLOAT3 ActorObject::getDirection(float length)
 	return XMFLOAT3(-std::cos(this->rotation) * length, 0.0f, std::sin(this->rotation) * length);
 }
 
-void ActorObject::setSpeed(float speed)
+void ActorObject::SETaccelerationSpeed(float accelerationSpeed)
 {
-	this->speed = speed;
+	this->accelerationSpeed = accelerationSpeed;
 }
 
 void ActorObject::receive(GameObject & obj, Message msg)
@@ -87,6 +87,8 @@ void ActorObject::update()
 {
 	float gravity = -9.82f * 4.0f;
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	this->move();
 
 	switch (this->statusEffect)
 	{
@@ -122,6 +124,10 @@ void ActorObject::update()
 	{
 	//State used to make an object fall and after a set time the object becomes "invisible"
 	case OBJECTSTATE::TYPE::FALLING:
+		// Set x- and z-velocity to 0 in order to fall straight down
+		this->velocity.x = 0.0f;
+		this->velocity.z = 0.0f;
+
 		this->velocity.y += gravity * dt * 4;
 		this->pos.y += this->velocity.y * dt;
 		if (this->pos.y < -500.0f) {
@@ -155,29 +161,27 @@ void ActorObject::update()
 	}
 }
 
-void ActorObject::move()
+void ActorObject::updateVelocity()
 {
 	//Create the new objects we will need for the calculations.
-	DirectX::XMFLOAT2 MovementVector;
-	MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
+	//DirectX::XMFLOAT2 movementInput = this->pInput->GETnormalizedVectorOfLeftStick();
+	this->MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	float deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 	XMFLOAT3 actorPos = this->GETPosition();
 	this->previousPos = this->pos;
 	XMFLOAT3 actorVelocity = this->getVelocity();
 	XMFLOAT3 tempPos = actorPos;
-	tempPos.x += MovementVector.x * actorVelocity.x * deltaTime;
-	tempPos.z += MovementVector.y * actorVelocity.z * deltaTime;
+	tempPos.x += this->MovementVector.x * actorVelocity.x * deltaTime;
+	tempPos.z += this->MovementVector.y * actorVelocity.z * deltaTime;
 	XMFLOAT3 actorNewPos;
 
 	//Check so that the player still is inside the arena in x- and z-dimension.
 	if (this->getType() == OBJECTTYPE::ENEMY) {
 		actorNewPos.z = tempPos.z;
-		this->physicsComponent->updateBoundingArea(actorPos);
-
 		actorNewPos.x = tempPos.x;
-		this->physicsComponent->updateBoundingArea(actorPos);
-
 		actorNewPos.y = actorPos.y;
+
+		this->physicsComponent->updateBoundingArea(actorPos);
 		this->setPosition(actorNewPos);
 	}
 
@@ -197,73 +201,108 @@ void ActorObject::move()
 	}
 }
 
-void ActorObject::moveUp()
+void ActorObject::updateVelocityUp()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->velocity.z < this->topSpeed) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-		XMFLOAT3 playerPos = this->GETPosition();
-		this->previousPos = this->pos;
-		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
-		playerPos.z += actorVelocity.z * dt;
-		if (playerPos.z < ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
-			this->physicsComponent->updateBoundingArea(playerPos);
-			this->setPosition(playerPos);
-		}
-	}
-	else {
 
+		this->velocity.z += this->accelerationSpeed * dt;
+
+		if (this->velocity.z > this->topSpeed)
+			this->velocity.z = this->topSpeed;
 	}
 }
 
-void ActorObject::moveLeft()
+void ActorObject::updateVelocityLeft()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->velocity.x > (this->topSpeed * -1)) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-		XMFLOAT3 playerPos = this->GETPosition();
-		this->previousPos = this->pos;
-		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
-		playerPos.x -= actorVelocity.x * dt;
-		if (playerPos.x > ARENADATA::GETsquareSize()) {
-			this->physicsComponent->updateBoundingArea(playerPos);
-			this->setPosition(playerPos);
-		}
-	}
-	else {
 
+		this->velocity.x -= this->accelerationSpeed * dt;
+
+		if (this->velocity.x < (this->topSpeed * -1))
+			this->velocity.x = (this->topSpeed * -1);
 	}
 }
-void ActorObject::moveDown()
+void ActorObject::updateVelocityDown()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->velocity.z > (this->topSpeed * -1)) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-		XMFLOAT3 playerPos = this->GETPosition();
-		this->previousPos = this->pos;
-		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
-		playerPos.z -= actorVelocity.z * dt;
-		if (playerPos.z > ARENADATA::GETsquareSize()) {
-			this->setPosition(playerPos);
-			this->physicsComponent->updateBoundingArea(playerPos);
-		}
-	}
-	else {
 
+		this->velocity.z -= this->accelerationSpeed * dt;
+
+		if (this->velocity.z < (this->topSpeed * -1))
+			this->velocity.z = (this->topSpeed * -1);
 	}
 }
-void ActorObject::moveRight()
+void ActorObject::updateVelocityRight()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->velocity.x < this->topSpeed) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-		XMFLOAT3 playerPos = this->GETPosition();
-		this->previousPos = this->pos;
-		XMFLOAT3 actorVelocity = this->getVelocity() * this->speed;
-		playerPos.x += actorVelocity.x * dt;
-		if (playerPos.x < ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
-			this->setPosition(playerPos);
-			this->physicsComponent->updateBoundingArea(playerPos);
-		}
-	}
-	else {
 
+		this->velocity.x += this->accelerationSpeed * dt;
+
+		if (this->velocity.x > this->topSpeed)
+			this->velocity.x = this->topSpeed;
+	}
+}
+
+void ActorObject::move()
+{
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	this->previousPos = this->pos;
+	XMFLOAT3 newPos = this->pos;
+
+	newPos.x += this->velocity.x;
+	//newPos.y += this->velocity.y;
+	newPos.z += this->velocity.z;
+
+	float positiveFrictionBoundry = 1.0f;
+	float negativeFrictionBoundry = -1.0f;
+
+	if (this->velocity.x > positiveFrictionBoundry)
+		this->velocity.x -= this->friction * dt;
+	else if (this->velocity.x < negativeFrictionBoundry)
+		this->velocity.x += this->friction * dt;
+	else
+		this->velocity.x = 0.0f;
+
+	//if (this->velocity.y >(this->friction * 2))
+	//	this->velocity.y -= this->friction;
+	//else if (this->velocity.y < (this->friction * 2))
+	//	this->velocity.y += this->friction;
+	//else
+	//	this->velocity.y = 0.0f;
+
+	if (this->velocity.z > positiveFrictionBoundry)
+		this->velocity.z -= this->friction * dt;
+	else if (this->velocity.z < negativeFrictionBoundry)
+		this->velocity.z += this->friction * dt;
+	else
+		this->velocity.z = 0.0f;
+
+	this->pos = newPos;
+
+	// Attempting to exit arena, NORTH
+	if (newPos.z > ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()) {
+		this->physicsComponent->updateBoundingArea(this->previousPos);
+		this->setPosition(this->previousPos);
+	}
+	// Attempting to exit arena, WEST
+	else if (newPos.x < ARENADATA::GETsquareSize()) {
+		this->physicsComponent->updateBoundingArea(this->previousPos);
+		this->setPosition(this->previousPos);
+	}
+	// Attempting to exit arena, SOUTH
+	else if (newPos.z < ARENADATA::GETsquareSize()) {
+		this->setPosition(this->previousPos);
+		this->physicsComponent->updateBoundingArea(this->previousPos);
+	}
+	// Attempting to exit arena, EAST
+	else if (newPos.x > ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()) {
+		this->setPosition(this->previousPos);
+		this->physicsComponent->updateBoundingArea(this->previousPos);
 	}
 }
 
