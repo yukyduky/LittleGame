@@ -309,6 +309,25 @@ void GamePlayState::updateFloor()
 			case TILESTATE::BOSSTILE:
 				this->grid[i][j].color = bossTileColor;
 				break;
+			case TILESTATE::TTELEPORT:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (teleportColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (teleportColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (teleportColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color = tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = teleportColor;
+					this->grid[i][j].state = TILESTATE::TELEPORT;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
 			case TILESTATE::TELEPORT:
 				this->grid[i][j].color = teleportColor;
 				break;
@@ -349,6 +368,7 @@ void GamePlayState::checkPlayerTileStatus()
 				break;
 			case TILESTATE::STATE::BOSSTILE:
 				this->playerSteppedOnBossTile = true;
+				this->player1->restoreFullHealth();
 				break;
 			case TILESTATE::STATE::TELEPORT:
 				this->player1->setPosition(XMFLOAT3(ARENADATA::GETsquareSize() * 1.5f, playerPos.y, ARENADATA::GETarenaHeight() * 0.5f - ARENADATA::GETsquareSize() * 0.5f));
@@ -437,8 +457,8 @@ void GamePlayState::init() {
 	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
-	this->enemyManager.startLevel1(this->enemySpawnPos);
-	//this->enemyManager.startBossLevel();
+	//this->enemyManager.startLevel1(this->enemySpawnPos);
+	this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -583,13 +603,13 @@ void GamePlayState::update(GameManager * gm)
 	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
 	
-	if (this->counter > this->fallPatternCoolDown) {
-		this->updateFloorPattern();
-	}
-	if (this->genCounter > this->genTimer) {
-		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
-		this->genCounter = 0.0;
-	}
+	//if (this->counter > this->fallPatternCoolDown) {
+	//	this->updateFloorPattern();
+	//}
+	//if (this->genCounter > this->genTimer) {
+	//	this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+	//	this->genCounter = 0.0;
+	//}
 	this->updateFloor();
 
 	int ID;
@@ -786,6 +806,20 @@ bool GamePlayState::GETplayerSteppedOnBossTile()
 void GamePlayState::SETplayerSteppedOnBossTile(bool input)
 {
 	this->playerSteppedOnBossTile = input;
+}
+
+void GamePlayState::spawnBossGenerators()
+{
+	this->lm.createBossGenerators(this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+}
+
+bool GamePlayState::checkGenerators()
+{
+	bool returnValue = false;
+	if (this->genIndex.size() == 0) {
+		returnValue = true;
+	}
+	return returnValue;
 }
 
 //_________________________________________//

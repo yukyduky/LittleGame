@@ -27,7 +27,7 @@ namespace TILESTATE {
 	enum STATE {
 		ACTIVE, TFALLING, FALLING, HOLE, RECOVERING, FLASH,
 		GENERATOR, ELECTRIFIED, HEATED, COOLED, TELECTRIFIED,
-		THEATED, TCOOLED, BOSSTILE, TELEPORT, SIZE
+		THEATED, TCOOLED, BOSSTILE, TTELEPORT, TELEPORT, SIZE
 	};
 }
 
@@ -41,7 +41,7 @@ namespace EFFECTSTATUS {
 }
 
 namespace GENERATOR {
-	enum TYPE { OVERHEATED, COOLED, OVERCHARGED, SIZE};
+	enum TYPE { OVERHEATED, COOLED, OVERCHARGED, SHIELD, SIZE};
 }
 
 struct tileData {
@@ -180,6 +180,8 @@ public:
 
 
 	void createGenerator(int ID, std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex);
+
+	void createBossGenerators(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex);
 
 	void clean();
 };

@@ -202,6 +202,9 @@ public:
 
 	bool GETplayerSteppedOnBossTile();
 	void SETplayerSteppedOnBossTile(bool input);
+	void spawnBossGenerators();
+
+	bool checkGenerators();
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }

@@ -8,7 +8,7 @@ SpBossBulletHell::SpBossBulletHell(EnemyObject* pShooter, ActorObject* pPlayer, 
 	this->projectilesMaxFlyingRange = range;
 	this->damage = dmg;
 	this->attackRange = attackRange;
-	this->setCoolDown(0.05f);
+	this->setCoolDown(0.1f);
 }
 SpBossBulletHell::~SpBossBulletHell()
 {
@@ -46,12 +46,12 @@ bool SpBossBulletHell::castSpell()
 		this->getOwner()->setDirection(dir);
 
 		ProjProp props(10, XMFLOAT4(1.0f, 0.01f, 0.01f, 1.0f), 400.0f, this->projectilesMaxFlyingRange, true);
-	//	Projectile* pProj = this->spawnProj(props, light);
+		Projectile* pProj = this->spawnProj(props, light);
 
 		dir.z *= -1.0f;
 		this->getOwner()->setDirection(dir);
 
-	//	Projectile* pProj2 = this->spawnProj(props, light);
+		Projectile* pProj2 = this->spawnProj(props, light);
 
 		dir.z *= -1.0f;
 		this->getOwner()->setDirection(dir);

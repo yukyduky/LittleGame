@@ -24,6 +24,7 @@ private:
 	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
 	float distanceToPlayer = 0.0f;
+	float maxHealth;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Updates internal 'normalizedVectorToPlayer' and 'distanceToPlayer'
@@ -31,7 +32,7 @@ private:
 	void updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos);
 
 public:
-	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
+	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType, float hp_in);
 
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
 	EnemyAttackComponent* GETattackComponent();

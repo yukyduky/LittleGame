@@ -243,12 +243,13 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	float immolationDamage = 3;
 	float attackCooldown = 0.5;
 	float attackRange = 70;
+	float health = 100.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ENEMYTYPE::IMMOLATION, ID, pos, velocity,
 		this->pGPS, &this->players, 
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, health 
 	);
 	Spell* spell = new SpEnemyImmolation(
 		enemyObject, this->players[0], &this->activeEnemiesCount,
@@ -363,13 +364,14 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	float attackCooldown = 0.5;
 	float projectileRange = 450;
 	float attackRange = 500;
+	float health = 100.0f;
 
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ENEMYTYPE::SWARMER, ID, pos, velocity,
 		pGPS, &this->players, 
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, health
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpSwarmProjectile(
@@ -419,13 +421,14 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	float attackCooldown = 0.5;
 	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
 	float attackRange = ARENADATA::GETarenaWidth();
+	float health = 10000.0f;
 
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ENEMYTYPE::BOSS, ID, pos, velocity,
 		pGPS, &this->players,
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, health
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpBossBulletHell(

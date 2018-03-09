@@ -71,6 +71,11 @@ void ActorObject::setSpeed(float speed)
 	//this->speed = speed;
 }
 
+void ActorObject::restoreFullHealth()
+{
+	this->hp = this->hpMAX;
+}
+
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 

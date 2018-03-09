@@ -146,6 +146,7 @@
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="BossBattleIntroState.h" />
     <ClInclude Include="BossBulletHellState.h" />
+    <ClInclude Include="BossGeneratorBattleState.h" />
     <ClInclude Include="BossMoveAwayFromArenaState.h" />
     <ClInclude Include="SpBossBulletHell.h" />
     <ClInclude Include="BossMoveToArenaState.h" />
@@ -232,6 +233,7 @@
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="BossBattleIntroState.cpp" />
     <ClCompile Include="BossBulletHellState.cpp" />
+    <ClCompile Include="BossGeneratorBattleState.cpp" />
     <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
     <ClCompile Include="BossMoveToArenaState.cpp" />
     <ClCompile Include="SpBossBulletHell.cpp" />
