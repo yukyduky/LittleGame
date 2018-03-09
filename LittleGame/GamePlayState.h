@@ -22,6 +22,7 @@
 #include "GUIManager.h"
 #include "IDHandler.h"
 #include "MouseInput.h"
+#include "idlist.h"
 
 
 class Command;
@@ -113,6 +114,7 @@ private:
 
 	IDHandler lightIDs;
 	std::vector<Light> pointLights;
+	idlist<Light> lights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;

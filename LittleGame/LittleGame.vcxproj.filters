@@ -160,6 +160,7 @@
     <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="idlist.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

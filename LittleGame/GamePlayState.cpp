@@ -412,6 +412,8 @@ void GamePlayState::generatorDischarge(Index index)
 
 void GamePlayState::init() 
 {
+	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f));
+
 	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
 	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
 	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
