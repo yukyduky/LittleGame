@@ -108,8 +108,6 @@ int GUIManager::initGUI(
 		this->rectBack[i] = nullptr;
 	}
 
-	float temptester123 = this->cameraPos.y / 630.0f;
-
 	// Setting 'EnemyCount' GUI elements pos depending on arena size
 	// NOTE: This is due to varying camera positions.
 

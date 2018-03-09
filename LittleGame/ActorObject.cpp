@@ -89,8 +89,6 @@ void ActorObject::update()
 	float gravity = -9.82f * 4.0f;
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
-	this->move();
-
 	switch (this->statusEffect)
 	{
 	case TILESTATE::COOLED:
@@ -188,6 +186,8 @@ void ActorObject::updateVelocity()
 		this->velocity.z = this->topSpeed;
 	else if (this->velocity.z < (this->topSpeed * -1))
 		this->velocity.z = (this->topSpeed * -1);
+
+	this->move();
 }
 
 void ActorObject::updateVelocityUp()
@@ -200,6 +200,8 @@ void ActorObject::updateVelocityUp()
 		if (this->velocity.z > this->topSpeed)
 			this->velocity.z = this->topSpeed;
 	}
+
+	this->move();
 }
 
 void ActorObject::updateVelocityLeft()
@@ -212,6 +214,8 @@ void ActorObject::updateVelocityLeft()
 		if (this->velocity.x < (this->topSpeed * -1))
 			this->velocity.x = (this->topSpeed * -1);
 	}
+
+	this->move();
 }
 void ActorObject::updateVelocityDown()
 {
@@ -223,6 +227,8 @@ void ActorObject::updateVelocityDown()
 		if (this->velocity.z < (this->topSpeed * -1))
 			this->velocity.z = (this->topSpeed * -1);
 	}
+
+	this->move();
 }
 void ActorObject::updateVelocityRight()
 {
@@ -234,6 +240,8 @@ void ActorObject::updateVelocityRight()
 		if (this->velocity.x > this->topSpeed)
 			this->velocity.x = this->topSpeed;
 	}
+
+	this->move();
 }
 
 void ActorObject::move()

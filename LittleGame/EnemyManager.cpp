@@ -169,19 +169,6 @@ ActorObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 		}
 	}
 
-	//if (spawnLocation == 1)
-	//	pos = { -spawnOffset, scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
-
-	//else if (spawnLocation == 2)
-	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, -spawnOffset };
-
-	//else if (spawnLocation == 3)
-	//	pos = { (static_cast<float>(ARENADATA::GETarenaWidth()) + spawnOffset), scale.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5) };
-
-	//else if (spawnLocation == 4)
-	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
-
-
 	float accelerationSpeed = 50.0f;
 	float topSpeed = 11.0f;
 	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 0.3f);

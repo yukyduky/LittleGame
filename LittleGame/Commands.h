@@ -73,10 +73,7 @@ public:
 class CommandControllerMove : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) {
-		actor.updateVelocity();
-		actor.move();
-	}
+	virtual void execute(ActorObject& actor) { actor.updateVelocity(); }
 };
 // -+-+-+
 

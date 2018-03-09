@@ -673,8 +673,8 @@ void GamePlayState::initPlayer()
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
 	/// INPUT COMPONENT:
-	//input = new ControllerComponent(*actor, 0);
-	input = new KeyboardComponent(*actor);
+	input = new ControllerComponent(*actor, 0);
+	//input = new KeyboardComponent(*actor);
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
