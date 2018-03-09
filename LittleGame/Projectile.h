@@ -5,14 +5,14 @@
 #include "GameObject.h"
 #include "Locator.h"
 #include "RenderInputOrganizer.h"
-#include "IDHandler.h"
+#include "idlist.h"
 
 class Spell;
 
 class Projectile : public GameObject
 {
 public:
-	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
+	Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, size_t lightID, idlist<Light>* lights);
 	virtual ~Projectile();
 
 	/*Moves the projectile in the direction of the velocity with speed of this->speed, 
@@ -44,9 +44,9 @@ private:
 	float range = 0.0f;
 	int rangeCounter = 0;
 
-	std::pair<size_t, Light*> light;
-	IDHandler* lightIDs;
-	
+	size_t lightID;
+	idlist<Light>* lights;
+
 	std::list<GameObject*> previouslyHit;
 };
 

@@ -112,8 +112,6 @@ private:
 	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 
-	IDHandler lightIDs;
-	std::vector<Light> pointLights;
 	idlist<Light> lights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented

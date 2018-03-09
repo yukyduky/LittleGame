@@ -414,16 +414,10 @@ void GamePlayState::init()
 {
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f));
 
-	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
-	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
-	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
-	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
-	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
-
 	this->lm.selectArena();
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
-	this->rio.initialize(this->camera, this->pointLights);
+	this->rio.initialize(this->camera, this->lights);
 	this->initPlayer();
 	this->ID = this->GUI.initGUI(
 		this->newID(),
@@ -507,7 +501,7 @@ void GamePlayState::cleanUp()
 
 	this->quadTree.cleanup();
 
-	this->pointLights.clear();
+	this->lights.clear();
 
 	this->gridPulsePoints.clear();
 	
@@ -735,11 +729,9 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 
 	XMFLOAT3 position = { pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/ };
 
-	size_t lightID = this->lightIDs.getNewID();
+	size_t lightID = this->lights.push(light);
 
-	this->pointLights[lightID] = light;
-
-	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, lightID, &lights);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);

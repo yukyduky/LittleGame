@@ -48,7 +48,7 @@ void RenderInputOrganizer::drawGraphics(GraphicsComponent *& graphics)
 	Locator::getD3D()->GETgDevCon()->DrawIndexed(graphics->GETnumIndices(), 0, 0);
 }
 
-void RenderInputOrganizer::initialize(Camera& camera, std::vector<Light>& lights) {
+void RenderInputOrganizer::initialize(Camera& camera, idlist<Light>& lights) {
 	this->lights = &lights;
 
 	this->rawMatrixData.view = &camera.GETviewMatrix();

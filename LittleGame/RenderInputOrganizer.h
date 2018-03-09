@@ -6,6 +6,7 @@
 #include <list>
 #include <array>
 #include "Camera.h"
+#include "idlist.h"
 
 constexpr int MAX_NUM_POINTLIGHTS = 75;
 constexpr int MAX_NUM_FLOORGRIDS = 36;
@@ -77,7 +78,7 @@ class GraphicsComponent;
 class RenderInputOrganizer
 {
 private:
-	std::vector<Light>* lights = nullptr;
+	idlist<Light>* lights = nullptr;
 
 	MatrixBufferCalc rawMatrixData;
 	MatrixBufferPack packagedMatrixData;
@@ -96,7 +97,7 @@ private:
 	void drawGraphics(GraphicsComponent*& graphics);
 
 public:
-	void initialize(Camera& camera, std::vector<Light>& lights);
+	void initialize(Camera& camera, idlist<Light>& lights);
 	void render(std::list<GraphicsComponent*>& graphics);
 	void injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid, const std::vector<std::vector<XMFLOAT2>>& gridPulsePoints);
 	void cleanUp();

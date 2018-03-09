@@ -2,6 +2,7 @@
 #ifndef IDLIST_H
 #define IDLIST_H
 
+#include <list>
 #include <vector>
 #include <unordered_map>
 #include <queue>
@@ -11,7 +12,7 @@ template<class T>
 class idlist
 {
 private:
-	std::priority_queue<size_t, std::vector<size_t>, std::greater<size_t>> m_AvailableIDs;
+	std::list<size_t> m_AvailableIDs;
 	std::priority_queue<size_t, std::vector<size_t>, std::greater<size_t>> m_AvailableIndexes;
 	std::unordered_map<size_t, size_t> m_IDToIndex;
 	std::unordered_map<size_t, size_t> m_IndexToID;
@@ -53,16 +54,16 @@ inline size_t idlist<T>::push(typename T element)
 	size_t index = m_NrOfElements;
 	size_t id = index;
 
-	if (m_AvailableIDs.empty()) {
+	if (m_AvailableIDs.empty()) 
+	{
 		m_Container.push_back(element);
 		m_IDToIndex.insert(m_IDToIndex.end(), std::pair<size_t, size_t>(id, index));
 		m_IndexToID.insert(m_IndexToID.end(), std::pair<size_t, size_t>(index, id));
-		m_NrOfElements++;
 	}
 	else 
 	{
-		id = m_AvailableIDs.top();
-		m_AvailableIDs.pop();
+		id = m_AvailableIDs.front();
+		m_AvailableIDs.pop_front();
 		index = m_AvailableIndexes.top();
 		m_AvailableIndexes.pop();
 
@@ -70,6 +71,8 @@ inline size_t idlist<T>::push(typename T element)
 		m_IDToIndex[id] = index;
 		m_IndexToID[index] = id;
 	}
+
+	m_NrOfElements++;
 
 	return id;
 }
@@ -83,7 +86,7 @@ inline void idlist<T>::remove(const size_t id)
 	{
 		m_IDToIndex.erase(id);
 		m_IndexToID.erase(lastIndex);
-		m_AvailableIDs.push(id);
+		m_AvailableIDs.push_front(id);
 		m_AvailableIndexes.push(lastIndex);
 		m_NrOfElements--;
 	}
@@ -99,7 +102,7 @@ inline void idlist<T>::remove(const size_t id)
 
 		m_IDToIndex.erase(id);
 		m_IndexToID.erase(lastIndex);
-		m_AvailableIDs.push(id);
+		m_AvailableIDs.push_front(id);
 		m_AvailableIndexes.push(lastIndex);
 		m_NrOfElements--;
 	}
@@ -108,11 +111,12 @@ inline void idlist<T>::remove(const size_t id)
 template<class T>
 inline void idlist<T>::resize(const size_t size)
 {
-	if (size > m_Container.size()) {
+	if (size > m_Container.size()) 
+	{
 		m_Container.resize(size);
 		for (size_t i = m_NrOfElements; i < size; i++)
 		{
-			m_AvailableIDs.push(i);
+			m_AvailableIDs.push_back(i);
 			m_AvailableIndexes.push(i);
 			m_IDToIndex.insert(m_IDToIndex.end(), std::pair<size_t, size_t>(i, i));
 			m_IndexToID.insert(m_IndexToID.end(), std::pair<size_t, size_t>(i, i));
@@ -142,7 +146,11 @@ inline void idlist<T>::clear()
 	m_IDToIndex.clear();
 	m_IndexToID.clear();
 	m_AvailableIDs.clear();
-	m_AvailableIndexes.clear();
+
+	for (size_t i = 0; i < m_AvailableIndexes.size(); i++)
+	{
+		m_AvailableIndexes.pop();
+	}
 }
 
 template<class T>
@@ -172,7 +180,7 @@ inline T* idlist<T>::data()
 template<class T>
 inline size_t idlist<T>::peekNextID()
 {
-	return m_AvailableIDs.top();
+	return m_AvailableIDs.front();
 }
 
 template<class T>
