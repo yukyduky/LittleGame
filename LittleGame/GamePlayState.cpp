@@ -747,7 +747,7 @@ bool GamePlayState::switchControllerInput()
 }
 
 
-Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, GameObject* shooter, ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	int nextID = this->newID();

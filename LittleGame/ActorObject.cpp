@@ -169,8 +169,8 @@ void ActorObject::update()
 			i->update();
 		}
 		for (auto &i : this->spells) {
-			i->update();
-			i->updateCD();
+			//i->update(); The update of the spell should be done in Projectile
+			i->updateCD();// The player only wants the CD of hte spell
 		}
 		break;
 	}

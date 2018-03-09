@@ -200,7 +200,7 @@ public:
 	bool switchControllerInput();
 
 	/*call to shoot projectile*/
-	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light);
+	Projectile* initProjectile(XMFLOAT3 pos, GameObject* shooter, ProjProp props, Light light);
 
 	std::vector<std::vector<tileData>>& GETgrid();
 

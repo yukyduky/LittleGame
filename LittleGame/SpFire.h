@@ -11,7 +11,7 @@ class GamePlayState;
 class SpFire : public Spell
 {
 public:
-	SpFire();
+	SpFire(GameObject* owner);
 	virtual ~SpFire();
 
 	virtual bool castSpell();
@@ -40,7 +40,7 @@ protected:
 class SpFireG1 : public SpFire
 {
 public:
-	SpFireG1();
+	SpFireG1(GameObject* owner);
 	virtual ~SpFireG1();
 
 	bool castSpell();
@@ -51,7 +51,7 @@ private:
 class SpFireG2 : public SpFire
 {
 public:
-	SpFireG2();
+	SpFireG2(GameObject* owner);
 	virtual ~SpFireG2();
 
 	bool castSpell();
@@ -63,7 +63,7 @@ private:
 class SpFireG3 : public SpFire
 {
 public:
-	SpFireG3();
+	SpFireG3(GameObject* owner);
 	virtual ~SpFireG3();
 
 	bool castSpell();

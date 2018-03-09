@@ -1,7 +1,7 @@
 
 #include "SpDash.h"
 
-SpDash::SpDash() : Spell(NAME::DASH)
+SpDash::SpDash(GameObject* owner) : Spell(owner, NAME::DASH)
 {
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
@@ -15,7 +15,6 @@ SpDash::SpDash() : Spell(NAME::DASH)
 	this->damage = 40.0f;
 
 	this->flameSize = this->range / static_cast<float>((this->nrOfFlames * 2));
-	this->burning = false;
 }
 
 SpDash::~SpDash()
@@ -24,19 +23,20 @@ SpDash::~SpDash()
 
 bool SpDash::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 	//Temporary template for the light
 	Light light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50);
 
-	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
+	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
 			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
-			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
+			XMFLOAT3 distance = { this->actOwner->getDirection() * this->range};
 			XMFLOAT3 newPos = { oldPos + distance };
 
 			//XMFLOAT3 playerNewPos;
@@ -59,21 +59,21 @@ bool SpDash::castSpell()
 				newPos.x = static_cast<float>(ARENADATA::GETsquareSize());
 			}
 
+			this->getOwner()->setPosition(newPos);
+
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
-				flames.push_back(this->spawnProj(props, light));
-				flames[i]->setPosition(oldPos + (this->getOwner()->getDirection(i * flameSize * 2)));
+				this->spawnProj(props, light)
+					->setPosition(oldPos + (this->actOwner->getDirection(i * flameSize * 2)));
 			}
 			//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
 			//this->spawnProj(props)->SETscaleMatrix(XMMatrixScaling(this->range - 40.0f, props.size, props.size));
 
-			this->getOwner()->setPosition(newPos);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
 			this->setState(SPELLSTATE::COOLDOWN);
-			this->burning = true;
 		}
 	}
 	return returnValue;
@@ -89,7 +89,7 @@ void SpDash::update()
 {
 	this->updateCD();
 
-	if (this->getState() == SPELLSTATE::READY)
+	/*if (this->getState() == SPELLSTATE::READY)
 	{
 		this->burning = false;
 		for (auto &i : this->flames)
@@ -100,15 +100,16 @@ void SpDash::update()
 
 		this->strength = this->getCoolDown();
 	}
-	else if (this->burning)
+	else */
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	this->strength -= dt;
+	if (this->strength > 0.0f)
 	{
-		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-		this->strength -= dt;
-
-		for (auto &i : this->flames)
-		{
-			i->SETscaleMatrix(XMMatrixScaling(this->flameSize, this->flameSize * this->strength, this->flameSize));
-		}
+		this->owner->SETscaleMatrix(XMMatrixScaling(this->flameSize, this->flameSize * this->strength, this->flameSize));
+	}
+	else
+	{
+		this->owner->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }
 
@@ -126,7 +127,7 @@ void SpDash::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpDashG1::SpDashG1() : SpDash()
+SpDashG1::SpDashG1(GameObject* owner) : SpDash(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(1.0f);
@@ -140,17 +141,18 @@ SpDashG1::~SpDashG1()
 
 bool SpDashG1::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
-	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
+	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
 			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
-			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
+			XMFLOAT3 distance = { this->actOwner->getDirection() * this->range };
 			XMFLOAT3 newPos = { oldPos - distance };
 
 			//XMFLOAT3 playerNewPos;
@@ -175,7 +177,7 @@ bool SpDashG1::castSpell()
 
 			this->getOwner()->setPosition(newPos);
 			
-			this->getOwner()->dealDmg(-this->damage);
+			this->actOwner->dealDmg(-this->damage);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
@@ -199,7 +201,7 @@ void SpDashG1::update()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpDashG2::SpDashG2() : SpDash()
+SpDashG2::SpDashG2(GameObject* owner) : SpDash(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCost(this->getCost() * 0.6f);
@@ -216,17 +218,18 @@ SpDashG2::~SpDashG2()
 
 bool SpDashG2::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
-	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
+	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
 			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
-			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
+			XMFLOAT3 distance = { this->actOwner->getDirection() * this->range };
 			XMFLOAT3 newPos = { oldPos + distance };
 
 			//XMFLOAT3 playerNewPos;
@@ -234,30 +237,30 @@ bool SpDashG2::castSpell()
 			if (newPos.z > static_cast<float>(ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize()))
 			{
 				newPos.z = static_cast<float>(ARENADATA::GETarenaHeight() - ARENADATA::GETsquareSize());
-				this->getOwner()->dealDmg(this->damageFromMiss);
+				this->actOwner->dealDmg(this->damageFromMiss);
 			}
 			else if (newPos.z < ARENADATA::GETsquareSize())
 			{
 				newPos.z = static_cast<float>(ARENADATA::GETsquareSize());
-				this->getOwner()->dealDmg(this->damageFromMiss);
+				this->actOwner->dealDmg(this->damageFromMiss);
 			}
 
 			if (newPos.x > static_cast<float>(ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize()))
 			{
 				newPos.x = static_cast<float>(ARENADATA::GETarenaWidth() - ARENADATA::GETsquareSize());
-				this->getOwner()->dealDmg(this->damageFromMiss);
+				this->actOwner->dealDmg(this->damageFromMiss);
 			}
 			else if (newPos.x < static_cast<float>(ARENADATA::GETsquareSize()))
 			{
 				newPos.x = static_cast<float>(ARENADATA::GETsquareSize());
-				this->getOwner()->dealDmg(this->damageFromMiss);
+				this->actOwner->dealDmg(this->damageFromMiss);
 			}
 
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
-				flames.push_back(this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)));
-				flames[i]->setPosition(oldPos + (this->getOwner()->getDirection(i * flameSize * 2)));
+				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
+					->setPosition(oldPos + (this->actOwner->getDirection(i * flameSize * 2)));
 			}
 			//ProjProp props(10.0f, XMFLOAT3(1.0f, 1.0f, 0.0f), 0, -1);
 			//this->spawnProj(props)->SETscaleMatrix(XMMatrixScaling(this->range - 40.0f, props.size, props.size));
@@ -267,7 +270,6 @@ bool SpDashG2::castSpell()
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
 
 			this->setState(SPELLSTATE::COOLDOWN);
-			this->burning = true;
 		}
 	}
 	return returnValue;
@@ -277,7 +279,7 @@ bool SpDashG2::castSpell()
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpDashG3::SpDashG3() : SpDash()
+SpDashG3::SpDashG3(GameObject* owner) : SpDash(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 2.5f);
@@ -290,23 +292,24 @@ SpDashG3::~SpDashG3()
 
 bool SpDashG3::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
-	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
+	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
-			for (auto &i : this->flames)
-			{
-				i->setState(OBJECTSTATE::TYPE::DEAD);
-			}
-			this->flames.clear();
+			//for (auto &i : this->flames)
+			//{
+			//	i->setState(OBJECTSTATE::TYPE::DEAD);
+			//}
+			//this->flames.clear();
 
 			returnValue = true;
 
 			XMFLOAT3 oldPos = this->getOwner()->GETPosition();
-			XMFLOAT3 distance = { this->getOwner()->getDirection() * this->range };
+			XMFLOAT3 distance = { this->actOwner->getDirection() * this->range };
 			XMFLOAT3 newPos = { oldPos + distance };
 
 
@@ -331,8 +334,8 @@ bool SpDashG3::castSpell()
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
-				flames.push_back(this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)));
-				flames[i]->setPosition(oldPos + (this->getOwner()->getDirection(i * flameSize * 2)));
+				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
+					->setPosition(oldPos + (this->actOwner->getDirection(i * flameSize * 2)));
 			}
 
 			this->getOwner()->setPosition(newPos);

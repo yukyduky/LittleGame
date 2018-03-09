@@ -1,7 +1,7 @@
 
 #include "SpAutoAttack.h"
 
-SpAutoAttack::SpAutoAttack() : Spell(NAME::AUTOATTACK)
+SpAutoAttack::SpAutoAttack(GameObject* owner) : Spell(owner, NAME::AUTOATTACK)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -18,6 +18,7 @@ SpAutoAttack::~SpAutoAttack()
 
 bool SpAutoAttack::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN)
 	{
@@ -55,7 +56,7 @@ void SpAutoAttack::cleanUp()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
-		this->getOwner()->addEnergy(5);
+		//this->getOwner()->addEnergy(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
@@ -70,7 +71,7 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpAutoAttackG1::SpAutoAttackG1() : SpAutoAttack(player)
+SpAutoAttackG1::SpAutoAttackG1(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(this->getCoolDown() * 2.0f);
@@ -82,6 +83,7 @@ SpAutoAttackG1::~SpAutoAttackG1()
 
 bool SpAutoAttackG1::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN)
 	{
@@ -90,13 +92,17 @@ bool SpAutoAttackG1::castSpell()
 	else
 	{
 		ProjProp props(10, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1000.0f, this->range, true);
-		XMFLOAT3 distance = { this->getOwner()->getDirection() * 80 };
+		XMFLOAT3 dir = this->actOwner->getDirection();
+		XMFLOAT3 distance = { dir * 80 };
 
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 
 			50));
+
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 
 			50))->setPosition(this->getOwner()->GETPosition() + distance);
-		distance = { this->getOwner()->getDirection() * 120 };
+
+		distance = { dir * 120 };
+
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 			50))->setPosition(this->getOwner()->GETPosition() + distance);
 
@@ -112,7 +118,7 @@ bool SpAutoAttackG1::castSpell()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpAutoAttackG2::SpAutoAttackG2() : SpAutoAttack(player)
+SpAutoAttackG2::SpAutoAttackG2(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 2.5f;
@@ -125,6 +131,7 @@ SpAutoAttackG2::~SpAutoAttackG2()
 
 bool SpAutoAttackG2::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN)
 	{
@@ -133,7 +140,8 @@ bool SpAutoAttackG2::castSpell()
 	else
 	{
 		ProjProp props(4, XMFLOAT4(200.5f, 200.5f, 0.5f, 0.2f), 1500.0f, this->range, true);
-		XMFLOAT3 distance = { this->getOwner()->getDirection() * 80 };
+		XMFLOAT3 dir = this->actOwner->getDirection();
+		XMFLOAT3 distance = { dir * 80 };
 
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 			50));
@@ -149,7 +157,7 @@ bool SpAutoAttackG2::castSpell()
 void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
-		this->getOwner()->addEnergy(5);
+		//this->getOwner()->addEnergy(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
@@ -164,7 +172,7 @@ void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpAutoAttackG3::SpAutoAttackG3() : SpAutoAttack(player)
+SpAutoAttackG3::SpAutoAttackG3(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->damage *= 0.5f;

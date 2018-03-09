@@ -10,7 +10,7 @@ Projectile::Projectile() : GameObject(-1)
 	this->setState(OBJECTSTATE::TYPE::DEAD);
 }
 
-Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -19,10 +19,13 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PR
 	this->type = objectType;
 	this->direction = dir;
 	this->velocity = velocity;
-	this->spinn = spinn;
+	this->spinn = false;
 	this->rangeCounter = 0;
 	this->maxFlyingRange = maxFlyingRange;
-	this->SETrotationMatrix(DirectX::XMLoadFloat4x4(&shooter->getRotationMatrix()));
+	
+	// Dose nothing, the matrix is assigned as 0,0,0 when it gets the blockcomp
+	// This is instead done in spawnProj
+	//this->SETrotationMatrix(DirectX::XMLoadFloat4x4(&shooter->getRotationMatrix()));
 
 	// IGNORE THIS ATM, IT IS AN OPTIMIZATION WHICH COULD BE IMPLEMENTED (setSpell should be done inside the constructor)
 	//Spell* projectilesSpell = nullptr;
@@ -179,9 +182,9 @@ void Projectile::setSpell(Spell * spell)
 	this->spell = spell;
 }
 
-void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
+void Projectile::setSpellByName(int spellName, int glyph)
 {
-	Spell* i; // Will hold the new spell to be set into the proj
+	Spell* i = nullptr; // Will hold the new spell to be set into the proj
 	NAME name = (NAME)spellName;
 	GLYPHTYPE glyphtype = (GLYPHTYPE)glyph;
 
@@ -193,16 +196,16 @@ void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
 		switch (glyphtype)
 		{
 		case GLYPHTYPE::NONE:
-			i = new SpAutoAttack();
+			i = new SpAutoAttack(this);
 			break;
 		case GLYPHTYPE::GLYPH1:
-			i = new SpAutoAttackG1();
+			i = new SpAutoAttackG1(this);
 			break;
 		case GLYPHTYPE::GLYPH2:
-			i = new SpAutoAttackG2();
+			i = new SpAutoAttackG2(this);
 			break;
 		case GLYPHTYPE::GLYPH3:
-			i = new SpAutoAttackG3();
+			i = new SpAutoAttackG3(this);
 			break;
 		}
 		break;
@@ -211,16 +214,16 @@ void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
 		switch (glyphtype)
 		{
 		case GLYPHTYPE::NONE:
-			i = new SpFire();
+			i = new SpFire(this);
 			break;
 		case GLYPHTYPE::GLYPH1:
-			i = new SpFireG1();
+			i = new SpFireG1(this);
 			break;
 		case GLYPHTYPE::GLYPH2:
-			i = new SpFireG2();
+			i = new SpFireG2(this);
 			break;
 		case GLYPHTYPE::GLYPH3:
-			i = new SpFireG3();
+			i = new SpFireG3(this);
 			break;
 		}
 		break;
@@ -229,16 +232,16 @@ void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
 		switch (glyphtype)
 		{
 		case GLYPHTYPE::NONE:
-			i = new SpBomb();
+			i = new SpBomb(this);
 			break;
 		case GLYPHTYPE::GLYPH1:
-			i = new SpBombG1();
+			i = new SpBombG1(this);
 			break;
 		case GLYPHTYPE::GLYPH2:
-			i = new SpBombG2();
+			i = new SpBombG2(this);
 			break;
 		case GLYPHTYPE::GLYPH3:
-			i = new SpBombG3();
+			i = new SpBombG3(this);
 			break;
 		}
 		break;
@@ -247,16 +250,16 @@ void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
 		switch (glyphtype)
 		{
 		case GLYPHTYPE::NONE:
-			i = new SpDash();
+			i = new SpDash(this);
 			break;
 		case GLYPHTYPE::GLYPH1:
-			i = new SpDashG1();
+			i = new SpDashG1(this);
 			break;
 		case GLYPHTYPE::GLYPH2:
-			i = new SpDashG2();
+			i = new SpDashG2(this);
 			break;
 		case GLYPHTYPE::GLYPH3:
-			i = new SpDashG3();
+			i = new SpDashG3(this);
 			break;
 		}
 		break;
@@ -265,16 +268,16 @@ void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
 		switch (glyphtype)
 		{
 		case GLYPHTYPE::NONE:
-			i = new SpBuff();
+			i = new SpBuff(this);
 			break;
 		case GLYPHTYPE::GLYPH1:
-			i = new SpBuffG1();
+			i = new SpBuffG1(this);
 			break;
 		case GLYPHTYPE::GLYPH2:
-			i = new SpBuffG2();
+			i = new SpBuffG2(this);
 			break;
 		case GLYPHTYPE::GLYPH3:
-			i = new SpBuffG3();
+			i = new SpBuffG3(this);
 			break;
 		}
 		break;
@@ -361,6 +364,8 @@ void Projectile::update()
 	for (auto &i : this->components) {
 		i->update();
 	}
+	
+	this->spell->update();
 
 	this->move();
 	this->light.second->pos = pos;

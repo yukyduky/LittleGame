@@ -88,6 +88,7 @@ public:
 	XMFLOAT3 GETpreviousPos() const { return this->previousPos; }
 	void setVelocity(float velocity) { this->velocity = velocity; }
 	float getVelocity() const { return this->velocity; }
+	virtual XMFLOAT3 getDirection() { return this->pos; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
 	XMFLOAT4X4& getWorld();
