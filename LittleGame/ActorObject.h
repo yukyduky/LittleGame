@@ -41,8 +41,8 @@ protected:
 	float energy = 100;
 	float energyMAX = 100;
 
-	//Variable to be changed by Spells
-	float accelerationSpeed = 0;
+	XMFLOAT3 moveDirection;
+	float velocityMagnitude = 0;
 	float topSpeed = 0;
 	float frictionFactor = 15.0f;
 	bool slowed = false;
@@ -55,6 +55,10 @@ protected:
 
 	Crosshair* crossHair = nullptr;
 
+	void truncateKineticVector();
+	void applyFriction(float dt);
+	void preventLeaveArena();
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
@@ -66,7 +70,7 @@ public:
 	virtual float getRotation();
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
-	virtual void SETaccelerationSpeed(float speed);
+	virtual void SETvelocityMagnitude(float speed);
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
 	std::vector<Spell*> GETSpells() { return this->spells; };
@@ -80,15 +84,15 @@ public:
 	1. Moves the Actor according to data fetched from the internal InputComponent
 	2. Only called when the player is using a controller
 	*/
-	void updateVelocity();
+	void updatekineticVector();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Affects the position of the ActorObject
 	2. Only called when the player is using a keyboard
 	*/
-	void updateVelocityUp();
-	void updateVelocityLeft();
-	void updateVelocityDown();
-	void updateVelocityRight();
+	void updatekineticVectorUp();
+	void updatekineticVectorLeft();
+	void updatekineticVectorDown();
+	void updatekineticVectorRight();
 
 	void move();
 

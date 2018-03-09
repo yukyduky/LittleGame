@@ -49,11 +49,11 @@ void ArenaObject::update()
 	{
 	//State used to make a object fall and after the object reaches a set distance it turns "INVISIBLE"
 	case OBJECTSTATE::TYPE::FALLING:
-		this->velocity.y += gravity * dt * 4.0f;
-		this->pos.y += this->velocity.y * dt;
+		this->kineticVector.y += gravity * dt * 4.0f;
+		this->pos.y += this->kineticVector.y * dt;
 		if (this->pos.y < this->maxFallDepth) {
 			this->pos.y = this->maxFallDepth;
-			this->velocity.y = 0.0f;
+			this->kineticVector.y = 0.0f;
 //			this->state = OBJECTSTATE::TYPE::INVISIBLE;
 			this->state = OBJECTSTATE::TYPE::RECOVER;
 		}
@@ -61,11 +61,11 @@ void ArenaObject::update()
 		break;
 	//State used to restore the arena floor at the end of the stage.
 	case OBJECTSTATE::TYPE::RECOVER:
-		this->velocity.y += gravity * dt * 4.0f;
-		this->pos.y -= this->velocity.y * dt;
+		this->kineticVector.y += gravity * dt * 4.0f;
+		this->pos.y -= this->kineticVector.y * dt;
 		if (this->pos.y > this->startPos.y) {
 			this->pos.y = this->startPos.y;
-			this->velocity.y = 0.0f;
+			this->kineticVector.y = 0.0f;
 			this->state = OBJECTSTATE::TYPE::RESETCOLOR;
 		}
 		this->updateWorldMatrix();

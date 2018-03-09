@@ -13,7 +13,7 @@ Projectile::Projectile(const size_t ID, float speed, bool spinn, XMFLOAT3 pos, X
 	this->direction = dir;
 	this->speed = speed;
 	this->spinn = spinn;
-	this->velocity = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
+	this->kineticVector = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
 	this->rangeCounter = 0;
 
 	this->light = light;
@@ -61,9 +61,9 @@ void Projectile::update()
 	}
 
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
-	this->pos.x += this->velocity.x * dt;
+	this->pos.x += this->kineticVector.x * dt;
 	// Projectiles dosnt move in Y
-	this->pos.z += this->velocity.z * dt;
+	this->pos.z += this->kineticVector.z * dt;
 	this->setPosition(pos);
 	this->light.second->pos = pos;
 	if (this->spinn)

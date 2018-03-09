@@ -50,7 +50,8 @@ protected:
 	const size_t ID;
 	XMFLOAT3 previousPos;
 	XMFLOAT3 pos;
-	XMFLOAT3 velocity;
+	XMFLOAT3 newPos;
+	XMFLOAT3 kineticVector;
 	OBJECTTYPE::TYPE type;
 	OBJECTSTATE::TYPE state;
 	double counter = 0;
@@ -83,8 +84,8 @@ public:
 	void SETpreviousPos(XMFLOAT3 pos) { this->previousPos = pos; }
 	XMFLOAT3 GETPosition() const { return this->pos; }
 	XMFLOAT3 GETpreviousPos() const { return this->previousPos; }
-	void setVelocity(XMFLOAT3 velocity) { this->velocity = velocity; }
-	XMFLOAT3 getVelocity() const { return this->velocity; }
+	void setkineticVector(XMFLOAT3 kineticVector) { this->kineticVector = kineticVector; }
+	XMFLOAT3 getkineticVector() const { return this->kineticVector; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
 	XMFLOAT4X4& getWorld();

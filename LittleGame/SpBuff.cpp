@@ -36,7 +36,7 @@ bool SpBuff::castSpell()
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
 
-			this->getPlayer()->SETaccelerationSpeed(this->strength);
+			this->getPlayer()->SETvelocityMagnitude(this->strength);
 			this->getPlayer()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
@@ -61,7 +61,7 @@ void SpBuff::update()
 		if (this->getTSC() > this->duration)
 		{
 			Locator::getGameTime()->setMultiplier(1.0);
-			this->getPlayer()->SETaccelerationSpeed(1.0f);
+			this->getPlayer()->SETvelocityMagnitude(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 

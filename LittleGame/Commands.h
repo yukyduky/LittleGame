@@ -41,7 +41,7 @@ public:
 class CommandMoveUp : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) { actor.updateVelocityUp(); }
+	virtual void execute(ActorObject& actor) { actor.updatekineticVectorUp(); }
 };
 // -+-+-+
 
@@ -49,7 +49,7 @@ public:
 class CommandMoveLeft : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) { actor.updateVelocityLeft(); }
+	virtual void execute(ActorObject& actor) { actor.updatekineticVectorLeft(); }
 };
 // -+-+-+
 
@@ -57,7 +57,7 @@ public:
 class CommandMoveDown : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) { actor.updateVelocityDown(); }
+	virtual void execute(ActorObject& actor) { actor.updatekineticVectorDown(); }
 };
 // -+-+-+
 
@@ -65,7 +65,7 @@ public:
 class CommandMoveRight : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) { actor.updateVelocityRight(); }
+	virtual void execute(ActorObject& actor) { actor.updatekineticVectorRight(); }
 };
 // -+-+-+
 
@@ -73,10 +73,7 @@ public:
 class CommandControllerMove : public Command
 {
 public:
-	virtual void execute(ActorObject& actor) {
-		actor.updateVelocity();
-		actor.move();
-	}
+	virtual void execute(ActorObject& actor) { actor.updatekineticVector();	}
 };
 // -+-+-+
 
