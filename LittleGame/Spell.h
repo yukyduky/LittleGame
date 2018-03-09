@@ -43,7 +43,7 @@ enum class NAME {
 class Spell
 {
 public:
-	Spell(ActorObject* shooter, NAME name);
+	Spell(NAME name);
 	virtual ~Spell();
 
 	// Returns false if spell in unavalible to cast

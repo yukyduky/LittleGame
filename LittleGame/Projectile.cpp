@@ -179,6 +179,110 @@ void Projectile::setSpell(Spell * spell)
 	this->spell = spell;
 }
 
+void Projectile::setSpellByName(int spellName, int glyph, ActorObject* owner)
+{
+	Spell* i; // Will hold the new spell to be set into the proj
+	NAME name = (NAME)spellName;
+	GLYPHTYPE glyphtype = (GLYPHTYPE)glyph;
+
+	switch (name)
+	{
+
+	case NAME::AUTOATTACK:
+		// Looks at what new spell will replace depending on what glyph has been added to the spell
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpAutoAttack();
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpAutoAttackG1();
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpAutoAttackG2();
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpAutoAttackG3();
+			break;
+		}
+		break;
+
+	case NAME::FIRE:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpFire();
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpFireG1();
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpFireG2();
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpFireG3();
+			break;
+		}
+		break;
+
+	case NAME::BOMB:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpBomb();
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpBombG1();
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpBombG2();
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpBombG3();
+			break;
+		}
+		break;
+
+	case NAME::DASH:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpDash();
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpDashG1();
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpDashG2();
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpDashG3();
+			break;
+		}
+		break;
+
+	case NAME::BUFF:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpBuff();
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpBuffG1();
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpBuffG2();
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpBuffG3();
+			break;
+		}
+		break;
+	}// i is holding the new Spell
+
+	this->spell = i;
+}
+
 Spell * Projectile::getSpell()
 {
 	return this->spell;

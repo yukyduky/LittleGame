@@ -1,7 +1,7 @@
 
 #include "SpFire.h"
 
-SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
+SpFire::SpFire() : Spell(NAME::FIRE)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -88,7 +88,7 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpFireG1::SpFireG1(ActorObject * player) : SpFire(player)
+SpFireG1::SpFireG1() : SpFire()
 {
 	// WHEN BALANCING, DONT FORGET THAT THERE IS A CAP ON PROJECTILES FOR THIS SPELL
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
@@ -144,7 +144,7 @@ bool SpFireG1::castSpell()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpFireG2::SpFireG2(ActorObject * player) : SpFire(player)
+SpFireG2::SpFireG2() : SpFire()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 2.2f;
@@ -198,7 +198,7 @@ void SpFireG2::collision(GameObject * target, Projectile * proj)
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpFireG3::SpFireG3(ActorObject * player) : SpFire(player)
+SpFireG3::SpFireG3() : SpFire()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 3.5f);

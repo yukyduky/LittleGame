@@ -1,7 +1,7 @@
 
 #include "SpBomb.h"
 
-SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
+SpBomb::SpBomb() : Spell(NAME::BOMB)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -117,7 +117,7 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBombG1::SpBombG1(ActorObject * player) : SpBomb(player)
+SpBombG1::SpBombG1() : SpBomb()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
@@ -176,7 +176,7 @@ void SpBombG1::update()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBombG2::SpBombG2(ActorObject * player) : SpBomb(player)
+SpBombG2::SpBombG2() : SpBomb()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 1.2f;
@@ -249,7 +249,7 @@ void SpBombG2::update()
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBombG3::SpBombG3(ActorObject * player) : SpBomb(player)
+SpBombG3::SpBombG3() : SpBomb()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 1.5f);

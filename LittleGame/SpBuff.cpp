@@ -1,7 +1,7 @@
 
 #include "SpBuff.h"
 
-SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
+SpBuff::SpBuff() : Spell(NAME::BUFF)
 {
 	this->strength = 2.0f;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -94,7 +94,7 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBuffG1::SpBuffG1(ActorObject * player) : SpBuff(player)
+SpBuffG1::SpBuffG1() : SpBuff()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	//this->duration *= 3.0f;
@@ -149,7 +149,7 @@ void SpBuffG1::update()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBuffG2::SpBuffG2(ActorObject * player) : SpBuff(player)
+SpBuffG2::SpBuffG2() : SpBuff()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCost(this->getCost() * 0.6f);
@@ -163,7 +163,7 @@ SpBuffG2::~SpBuffG2()
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBuffG3::SpBuffG3(ActorObject * player) : SpBuff(player)
+SpBuffG3::SpBuffG3() : SpBuff()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->strength *= 2.0f;

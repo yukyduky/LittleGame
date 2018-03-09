@@ -1,7 +1,7 @@
 
 #include "SpDash.h"
 
-SpDash::SpDash(ActorObject* player) : Spell(player, NAME::DASH)
+SpDash::SpDash() : Spell(NAME::DASH)
 {
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
@@ -126,7 +126,7 @@ void SpDash::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpDashG1::SpDashG1(ActorObject * player) : SpDash(player)
+SpDashG1::SpDashG1() : SpDash()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(1.0f);
@@ -199,7 +199,7 @@ void SpDashG1::update()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpDashG2::SpDashG2(ActorObject * player) : SpDash(player)
+SpDashG2::SpDashG2() : SpDash()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCost(this->getCost() * 0.6f);
@@ -277,7 +277,7 @@ bool SpDashG2::castSpell()
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpDashG3::SpDashG3(ActorObject * player) : SpDash(player)
+SpDashG3::SpDashG3() : SpDash()
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 2.5f);

@@ -15,7 +15,7 @@ protected:
 	ActorObject * pPlayer = nullptr;
 
 public:
-	EnemySpell(EnemyObject* pShooter, int* pActiveEnemiesCount, NAME name) : Spell(pShooter, name) { 
+	EnemySpell(EnemyObject* pShooter, int* pActiveEnemiesCount, NAME name) : Spell(name) { 
 		this->pActiveEnemiesCount = pActiveEnemiesCount;
 	}
 	

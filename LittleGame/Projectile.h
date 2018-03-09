@@ -38,6 +38,7 @@ public:
 	void setRange(int maxFlyingRange) { this->maxFlyingRange = maxFlyingRange; }
 	void setSeeking(float rotationSpeed, ActorObject* pPlayer);	// Only relevant to seekling projectiles
 	void setSpell(Spell* spell);
+	void setSpellByName(int spellName, int glyph, ActorObject* owner);
 	Spell* getSpell();	// Gets allocated by player.spell->castSpell()
 
 

@@ -11,7 +11,7 @@ class GamePlayState;
 class SpDash : public Spell
 {
 public:
-	SpDash(ActorObject* player);
+	SpDash();
 	~SpDash();
 
 	virtual bool castSpell();
@@ -43,7 +43,7 @@ protected:
 class SpDashG1 : public SpDash
 {
 public:
-	SpDashG1(ActorObject* player);
+	SpDashG1();
 	virtual ~SpDashG1();
 
 	bool castSpell();
@@ -56,7 +56,7 @@ private:
 class SpDashG2 : public SpDash
 {
 public:
-	SpDashG2(ActorObject* player);
+	SpDashG2();
 	virtual ~SpDashG2();
 
 	bool castSpell();
@@ -68,7 +68,7 @@ private:
 class SpDashG3 : public SpDash
 {
 public:
-	SpDashG3(ActorObject* player);
+	SpDashG3();
 	virtual ~SpDashG3();
 private:
 	bool castSpell();

@@ -7,12 +7,12 @@
 #include "SpSwarmProjectile.h"
 #include "SpBossBulletHell.h"
 
+//#include "GamePlayState.h"
 
 
-Spell::Spell(ActorObject* owner, NAME name)
+Spell::Spell(NAME name)
 {
 	this->glyph = GLYPHTYPE::NONE;
-	this->owner = owner;
 	this->name = name;
 	this->timeSinceCast = 0.0;
 	this->cost = 0;
@@ -42,7 +42,8 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 	XMFLOAT3 distance = { this->getOwner()->getDirection() * 40 };
 	XMFLOAT3 newPos = { this->getOwner()->GETPosition() + distance };
 	light.pos = newPos;
-	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props, light);
+	proj = GamePlayState::getInstance()->initProjectile(newPos, this->getOwner(), props, light);
+	//proj = this->getOwner()->getPGPS()
 
 	// Attach the relevant spell to the projectile
 	// (This could be optimized by adding copy constructors and using those instead of what's done below)
@@ -50,10 +51,10 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 
 	switch (this->name) {
 		case NAME::AUTOATTACK: {
-			//SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
+			SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
 
-			//projectilesSpell = new SpAutoAttack(this->getOwner());
-			proj->setSpell(this);
+			projectilesSpell = new SpAutoAttack(this->getOwner());
+			proj->setSpell(projectilesSpell);
 			break;
 		}
 		case NAME::BOMB: {

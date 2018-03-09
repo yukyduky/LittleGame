@@ -1,7 +1,7 @@
 
 #include "SpAutoAttack.h"
 
-SpAutoAttack::SpAutoAttack(ActorObject* player) : Spell(player, NAME::AUTOATTACK)
+SpAutoAttack::SpAutoAttack() : Spell(NAME::AUTOATTACK)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -70,7 +70,7 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpAutoAttackG1::SpAutoAttackG1(ActorObject * player) : SpAutoAttack(player)
+SpAutoAttackG1::SpAutoAttackG1() : SpAutoAttack(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(this->getCoolDown() * 2.0f);
@@ -112,7 +112,7 @@ bool SpAutoAttackG1::castSpell()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpAutoAttackG2::SpAutoAttackG2(ActorObject * player) : SpAutoAttack(player)
+SpAutoAttackG2::SpAutoAttackG2() : SpAutoAttack(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 2.5f;
@@ -164,7 +164,7 @@ void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpAutoAttackG3::SpAutoAttackG3(ActorObject * player) : SpAutoAttack(player)
+SpAutoAttackG3::SpAutoAttackG3() : SpAutoAttack(player)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->damage *= 0.5f;

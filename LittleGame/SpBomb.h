@@ -11,7 +11,7 @@ class GamePlayState;
 class SpBomb : public Spell
 {
 public:
-	SpBomb(ActorObject* player);
+	SpBomb();
 	virtual ~SpBomb();
 
 	virtual bool castSpell();
@@ -44,7 +44,7 @@ protected:
 class SpBombG1 : public SpBomb
 {
 public:
-	SpBombG1(ActorObject* player);
+	SpBombG1();
 	virtual ~SpBombG1();
 
 	void update();
@@ -56,7 +56,7 @@ private:
 class SpBombG2 : public SpBomb
 {
 public:
-	SpBombG2(ActorObject* player);
+	SpBombG2();
 	virtual ~SpBombG2();
 
 	void collision(GameObject* target, Projectile* proj);
@@ -69,7 +69,7 @@ private:
 class SpBombG3 : public SpBomb
 {
 public:
-	SpBombG3(ActorObject* player);
+	SpBombG3();
 	virtual ~SpBombG3();
 private:
 };
