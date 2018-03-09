@@ -19,7 +19,7 @@ namespace AIBEHAVIOR {
 
 namespace AICOMMANDS {
 	enum KEY {
-		MOVE, ATTACK,
+		MOVE, ATTACK, BOSSATTACK01, BOSSATTACK02, BOSSATTACK03,
 		SIZE
 	};
 }
@@ -42,7 +42,7 @@ private:
 	XMFLOAT2 simulatedRotation;
 
 	void bindCommands();
-
+	
 
 public:
 	AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior);
@@ -58,6 +58,8 @@ public:
 
 	void cleanUp();
 
+	EnemyState* getCurrentState();
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1.  Adds commands to the command queue depending on where the player is and the AIBEHAVIOR
 	*/
@@ -72,7 +74,7 @@ public:
 	*/
 	void execute();
 
-	void SETnormalizedVectorOfLeftStick(XMFLOAT2 simulatedMovement);
+	void SETsimulatedMovement(XMFLOAT2 simulatedMovement);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Returns the simulated vector movement.

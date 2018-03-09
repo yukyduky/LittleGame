@@ -1,10 +1,18 @@
 
 #include "Spell.h"
+#include "SpAutoAttack.h"
+#include "SpBomb.h"
+#include "SpDash.h"
+#include "SpFire.h"
+#include "SpSwarmProjectile.h"
+#include "SpBossBulletHell.h"
 
-Spell::Spell(ActorObject* player, NAME name)
+
+
+Spell::Spell(ActorObject* owner, NAME name)
 {
 	this->glyph = GLYPHTYPE::NONE;
-	this->player = player;
+	this->owner = owner;
 	this->name = name;
 	this->timeSinceCast = 0.0;
 	this->cost = 0;
@@ -31,16 +39,68 @@ void Spell::updateCD()
 Projectile* Spell::spawnProj(ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
-	XMFLOAT3 distance = { this->getPlayer()->getDirection() * 40 };
-	XMFLOAT3 newPos = { this->getPlayer()->GETPosition() + distance };
-
+	XMFLOAT3 distance = { this->getOwner()->getDirection() * 40 };
+	XMFLOAT3 newPos = { this->getOwner()->GETPosition() + distance };
 	light.pos = newPos;
+	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props, light);
 
-	proj = this->getPlayer()->getPGPS()->initProjectile(newPos, this->getPlayer()->getDirection(), props, light);
-	proj->setSpell(this);
+	// Attach the relevant spell to the projectile
+	// (This could be optimized by adding copy constructors and using those instead of what's done below)
+	Spell* projectilesSpell = nullptr;
 
-	proj->SETrotationMatrix(XMLoadFloat4x4(&this->getPlayer()->getRotationMatrix()));
-	proj->setRange(props.range);
+	switch (this->name) {
+	case NAME::AUTOATTACK: {
+		SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
+
+		projectilesSpell = new SpAutoAttack(this->getOwner());
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::BOMB: {
+		SpBomb* trueThis = static_cast<SpBomb*>(this);
+
+		projectilesSpell = new SpBomb(this->getOwner());
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::DASH: {
+		SpDash* trueThis = static_cast<SpDash*>(this);
+
+		projectilesSpell = new SpDash(this->getOwner());
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::FIRE: {
+		SpFire* trueThis = static_cast<SpFire*>(this);
+
+		projectilesSpell = new SpFire(this->getOwner());
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::ENEM_SWARM: {
+		SpSwarmProjectile* trueThis = static_cast<SpSwarmProjectile*>(this);
+		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
+
+		projectilesSpell = new SpSwarmProjectile(
+			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+			trueThis->getAttackRange(), trueThis->getCoolDown()
+		);
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	case NAME::BULLETHELL: {
+		SpBossBulletHell* trueThis = static_cast<SpBossBulletHell*>(this);
+		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
+
+		projectilesSpell = new SpBossBulletHell(
+			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+			trueThis->getAttackRange(), trueThis->getCoolDown()
+		);
+		proj->setSpell(projectilesSpell);
+		break;
+	}
+	}
+	
 
 	return proj;
 }

@@ -10,16 +10,20 @@ class EnemyAttackComponent : public Component
 {
 protected:
 	ActorObject * pHead = nullptr;
-	std::vector<ActorObject*>* players = nullptr;
-	float passedTime = 0.0f;
-	float attackDamage = 0.0f;
-	float attackDuration = 0.0f;
-	float attackRange = 0.0f;
+	std::vector<ActorObject*>* players;
+	int* pActiveEnemiesCount = nullptr; // Correlates to the value 'activeEnemiesCount' inside EnemyManager.
+	float passedTime;
+	float attackDamage;
+	float attackCooldown;
+	float attackRange;
 
 public:
 	virtual const size_t getID() = 0;
 	virtual void receive(GameObject & obj, Message msg) = 0;
-	virtual void update() = 0;
+	virtual void update() {
+		this->passedTime += Locator::getGameTime()->getDeltaTime();
+	}
+
 	virtual void cleanUp() = 0;
 
 	virtual void attack() = 0;
@@ -30,7 +34,7 @@ public:
 	*/
 	virtual bool timeToAttack() {
 		this->passedTime += static_cast<float>(Locator::getGameTime()->getDeltaTime());
-		if (this->passedTime > attackDuration) {
+		if (this->passedTime > attackCooldown) {
 			this->passedTime = 0.0f;
 			return true;
 		}
@@ -40,8 +44,8 @@ public:
 	float GETattackDamage() {
 		return this->attackDamage;
 	}
-	float GETattackDuration() {
-		return this->attackDuration;
+	float GETattackCooldown() {
+		return this->attackCooldown;
 	}
 	float GETattackRange() {
 		return this->attackRange;

@@ -296,11 +296,13 @@ void Camera::init(float arenaWidth, float arenaDepth)
 	DirectX::XMVECTOR cameraStartFacingDir;
 
 	//cameraStartPos = DirectX::XMVECTOR{ static_cast<float>(arenaWidth * 0.5f), static_cast<float>(sqrt((arenaWidth * arenaWidth + arenaDepth * arenaDepth) / 4)), static_cast<float>((arenaDepth * 0.5f) * 0.30f) };
-	//cameraStartPos = DirectX::XMVECTOR{ arenaWidth * 0.4f, 1000.0f, arenaDepth * 0.5f };
-	cameraStartPos = DirectX::XMVECTOR{ arenaWidth * 0.5f, sqrt((arenaWidth * arenaWidth + arenaDepth * arenaDepth) * 0.30f), arenaDepth * 0.5f * 0.25f };
+	//cameraStartPos = DirectX::XMVECTOR{ arenaWidth * 0.5f, 1000.0f, arenaDepth * 0.5f };
+	
+	cameraStartPos = DirectX::XMVECTOR{ arenaWidth * 0.5f, sqrt((arenaWidth * arenaWidth + arenaDepth * arenaDepth) / 4), arenaDepth * 0.5f * 0.30f };
 	DirectX::XMVECTOR cameraLookAtPos = DirectX::XMVECTOR{ arenaWidth * 0.5f, 0.0f, (arenaDepth * 0.5f) * 0.75f };
 	cameraStartFacingDir = DirectX::XMVectorSubtract(cameraLookAtPos, cameraStartPos);
 	cameraStartFacingDir = DirectX::XMVector3Normalize(cameraStartFacingDir);
+	
 	//cameraStartFacingDir = DirectX::XMVECTOR{ arenaWidth * 0.5f, 0.0f, arenaDepth * 0.5f };
 	//cameraStartFacingDir = DirectX::XMVECTOR{ 0.0f, -1.0f, 0.0f };
 

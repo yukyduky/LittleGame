@@ -14,12 +14,13 @@ public:
 	SpBuff(ActorObject* player);
 	~SpBuff();
 
-	bool castSpell();
+	virtual bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
 	void collision(GameObject* target, Projectile* proj);
-	void update();
+	virtual void update();
+	void cleanUp();
 protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
@@ -40,15 +41,19 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Berserker mode - tripples all damage
 class SpBuffG1 : public SpBuff
 {
 public:
 	SpBuffG1(ActorObject* player);
 	virtual ~SpBuffG1();
+
+	bool castSpell();
+	void update();
 private:
 };
 
-
+// Enemies runs away - reverse direction vector
 class SpBuffG2 : public SpBuff
 {
 public:
@@ -57,12 +62,15 @@ public:
 private:
 };
 
-
+// Keep the movmentspeed in slow-mode
 class SpBuffG3 : public SpBuff
 {
 public:
 	SpBuffG3(ActorObject* player);
 	virtual ~SpBuffG3();
+
+	bool castSpell();
+	void update();
 private:
 };
 

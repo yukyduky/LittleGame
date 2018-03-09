@@ -4,11 +4,15 @@
 #include "EnemyObject.h"
 #include "EnemyMovingState.h"
 #include "EnemyAttackingState.h"
+#include "EnemyState.h"
 
 void AIComponent::bindCommands()
 {
 	this->commands[AICOMMANDS::MOVE] = new CommandControllerMove;
 	this->commands[AICOMMANDS::ATTACK] = new CommandEnemyAttack;
+	this->commands[AICOMMANDS::BOSSATTACK01] = new CommandBossAttack01;
+	this->commands[AICOMMANDS::BOSSATTACK02] = new CommandBossAttack02;
+	this->commands[AICOMMANDS::BOSSATTACK03] = new CommandBossAttack03;
 }
 
 AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior) : commands()
@@ -17,6 +21,7 @@ AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior) : command
 	this->pHead = &obj;
 	this->pHead->SETinputComponent(this);
 	this->ID = obj.getID();
+	
 
 	/// Set internal data
 	this->behavior = aiBehavior;
@@ -38,7 +43,10 @@ void AIComponent::pushState(EnemyState& state)
 
 void AIComponent::popState()
 {
+	EnemyState* stateToBeRemoved = this->states.back();
 	this->states.pop_back();
+	stateToBeRemoved->cleanUp();
+	delete stateToBeRemoved;
 }
 
 void AIComponent::init()
@@ -61,35 +69,13 @@ void AIComponent::cleanUp()
 	// Might be missing things in accordance with vector!
 }
 
+EnemyState * AIComponent::getCurrentState()
+{
+	return this->states.back();
+}
+
 void AIComponent::generateCommands()
 {
-	//XMVECTOR direction;
-
-	//// O L D
-	//switch (this->behavior) {
-	//	case AIBEHAVIOR::STRAIGHTTOWARDS: {
-	//		// Update Movement
-	//		this->simulatedMovement = this->pHead->getVectorToPlayer();
-
-	//		// Update Rotation
-
-	//		// Push back the command!
-	//		this->commandQueue.push_back(this->commands[AICOMMANDS::MOVE]);
-	//		break;
-	//	}
-	//	case AIBEHAVIOR::TEMPLATE0: {
-
-	//		break;
-	//	}
-	//	case AIBEHAVIOR::TEMPLATE1: {
-
-	//		break;
-	//	}
-	//}
-
-	// Update Movement
-	this->simulatedMovement = this->pHead->getVectorToPlayer();
-
 	/// Execute behavior according to current state
 	this->states.back()->executeBehavior();
 }
@@ -108,7 +94,7 @@ void AIComponent::execute()
 	this->commandQueue.clear();
 }
 
-void AIComponent::SETnormalizedVectorOfLeftStick(XMFLOAT2 simulatedMovement)
+void AIComponent::SETsimulatedMovement(XMFLOAT2 simulatedMovement)
 {
 	this->simulatedMovement = simulatedMovement;
 }

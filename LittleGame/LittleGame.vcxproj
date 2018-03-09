@@ -144,6 +144,12 @@
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="BossBattleIntroState.h" />
+    <ClInclude Include="BossBulletHellState.h" />
+    <ClInclude Include="BossMoveAwayFromArenaState.h" />
+    <ClInclude Include="SpBossBulletHell.h" />
+    <ClInclude Include="BossMoveToArenaState.h" />
+    <ClInclude Include="BossState.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
@@ -154,17 +160,21 @@
     <ClInclude Include="D2D.h" />
     <ClInclude Include="D3D.h" />
     <ClInclude Include="EnemyAttackingState.h" />
+    <ClInclude Include="EnemyIncludes.h" />
     <ClInclude Include="EnemyMovingState.h" />
+    <ClInclude Include="EnemySpell.h" />
     <ClInclude Include="EnemyState.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="HomeMenuState.h" />
     <ClInclude Include="ID2D.h" />
     <ClInclude Include="IDHandler.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="IStatsHeader.h" />
-    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="PauseMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuState.h" />
@@ -203,17 +213,30 @@
     <ClInclude Include="SpBuff.h" />
     <ClInclude Include="SpDash.h" />
     <ClInclude Include="Spell.h" />
+    <ClInclude Include="SpEnemyImmolation.h" />
     <ClInclude Include="SpFire.h" />
+    <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
     <ClInclude Include="StatisticsMenuState.h" />
     <ClInclude Include="StatsHeader.h" />
+    <ClInclude Include="SwarmerEnemyAttack.h" />
+    <ClInclude Include="SwarmerOutsideState.h" />
+    <ClInclude Include="SwarmerSeekingState.h" />
+    <ClInclude Include="SwarmerState.h" />
+    <ClInclude Include="SwarmerSyncingState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActorObject.cpp" />
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="BossBattleIntroState.cpp" />
+    <ClCompile Include="BossBulletHellState.cpp" />
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
+    <ClCompile Include="BossMoveToArenaState.cpp" />
+    <ClCompile Include="SpBossBulletHell.cpp" />
+    <ClCompile Include="BossState.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -224,13 +247,16 @@
     <ClCompile Include="EnemyAttackComponent.h" />
     <ClCompile Include="EnemyAttackingState.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="HomeMenuState.cpp" />
     <ClCompile Include="IDHandler.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="PauseMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="RestartState.cpp" />
@@ -263,10 +289,16 @@
     <ClCompile Include="SpBuff.cpp" />
     <ClCompile Include="SpDash.cpp" />
     <ClCompile Include="Spell.cpp" />
+    <ClCompile Include="SpEnemyImmolation.cpp" />
     <ClCompile Include="SpFire.cpp" />
+    <ClCompile Include="SpSwarmProjectile.cpp" />
     <ClCompile Include="StateManager.cpp" />
     <ClCompile Include="StatisticsMenuState.cpp" />
     <ClCompile Include="StatsHeader.cpp" />
+    <ClCompile Include="SwarmerEnemyAttack.cpp" />
+    <ClCompile Include="SwarmerSeekingState.cpp" />
+    <ClCompile Include="SwarmerState.cpp" />
+    <ClCompile Include="SwarmerSyncincState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -332,6 +364,9 @@
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="captureqwsx.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

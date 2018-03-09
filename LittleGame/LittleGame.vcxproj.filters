@@ -59,6 +59,21 @@
     </ClCompile>
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="Crosshair.cpp" />
+    <ClCompile Include="EnemyObject.cpp">
+      <Filter>Clusterer</Filter>
+    </ClCompile>
+    <ClCompile Include="SwarmerEnemyAttack.cpp">
+      <Filter>Swarmer\Specific</Filter>
+    </ClCompile>
+    <ClCompile Include="SwarmerSyncincState.cpp">
+      <Filter>Swarmer\Specific\States</Filter>
+    </ClCompile>
+    <ClCompile Include="SwarmerState.cpp">
+      <Filter>Swarmer\Specific\States</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Swarmer\Grid</Filter>
+    </ClCompile>
     <ClCompile Include="RestartState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
@@ -66,14 +81,41 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="D2D.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
     <ClCompile Include="RewardMenuState.cpp" />
+    <ClCompile Include="SpSwarmProjectile.cpp">
+      <Filter>Swarmer</Filter>
+    </ClCompile>
+    <ClCompile Include="SpEnemyImmolation.cpp" />
+    <ClCompile Include="SwarmerSeekingState.cpp">
+      <Filter>Swarmer\Specific\States</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyState.cpp" />
+    <ClCompile Include="BossState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="SpBossBulletHell.cpp">
+      <Filter>Boss\BossAttacks</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveToArenaState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBattleIntroState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBulletHellState.cpp">
+      <Filter>Boss\BossStates</Filter>
+    </ClCompile>
     <ClCompile Include="StatisticsMenuState.cpp" />
     <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="IDHandler.cpp" />
+    <ClCompile Include="PauseMenuState.cpp" />
+    <ClCompile Include="HomeMenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -96,7 +138,6 @@
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EnemyManager.h" />
-    <ClInclude Include="EnemyObject.h" />
     <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="LevelManager.h" />
@@ -142,26 +183,104 @@
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="Crosshair.h" />
+    <ClInclude Include="EnemyObject.h">
+      <Filter>Swarmer</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerEnemyAttack.h">
+      <Filter>Swarmer\Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerSyncingState.h">
+      <Filter>Swarmer\Specific\States</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerState.h">
+      <Filter>Swarmer\Specific\States</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Swarmer\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalEvents.h" />
+    <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="RestartState.h" />
+    <ClInclude Include="SpSwarmProjectile.h">
+      <Filter>Swarmer</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpell.h" />
+    <ClInclude Include="SpEnemyImmolation.h" />
+    <ClInclude Include="EnemyIncludes.h" />
+    <ClInclude Include="SwarmerSeekingState.h">
+      <Filter>Swarmer\Specific\States</Filter>
+    </ClInclude>
+    <ClInclude Include="SwarmerOutsideState.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="ArenaPatterns.h" />
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="D2D.h" />
-    <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="RewardMenuState.h" />
     <ClInclude Include="D2D.h" />
     <ClInclude Include="ID2D.h" />
+    <ClInclude Include="BossState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveToArenaState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBattleIntroState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="SpBossBulletHell.h">
+      <Filter>Boss\BossAttacks</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMoveAwayFromArenaState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBulletHellState.h">
+      <Filter>Boss\BossStates</Filter>
+    </ClInclude>
     <ClInclude Include="StatisticsMenuState.h" />
     <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="PauseMenuState.h" />
+    <ClInclude Include="HomeMenuState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="EnemyStates">
+      <UniqueIdentifier>{46f08af3-2cb4-4d05-aa85-f1c8cc631ae7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="commands">
+      <UniqueIdentifier>{93f036e5-4317-4fa6-992f-34db81e43336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Swarmer">
+      <UniqueIdentifier>{ab4f5436-863a-433a-bc76-6b48f405ff28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Swarmer\Specific">
+      <UniqueIdentifier>{976318a9-8a70-4d62-a495-5d8e8c576690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Swarmer\Specific\States">
+      <UniqueIdentifier>{f3438d75-b948-4a15-a5f9-a7a00462c143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Swarmer\Grid">
+      <UniqueIdentifier>{917cd026-3d48-4e66-ba66-6f68d9feb979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss">
+      <UniqueIdentifier>{98af5f77-0939-47be-90a2-fe04e436126b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss\BossStates">
+      <UniqueIdentifier>{40ebde2a-2545-4831-be7d-5be64ee3eb4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss\BossAttacks">
+      <UniqueIdentifier>{55fad5b4-212c-463b-a3f2-89f3b0d933e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="captureqwsx.bmp" />
   </ItemGroup>
 </Project>

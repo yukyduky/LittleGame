@@ -8,7 +8,9 @@
 
 
 namespace OBJECTSTATE {
-	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, INVISIBLE, RECOVER, RESETCOLOR, GENERATORRISING, GENERATORACTIVE, STUNNED };
+	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, 
+		INVISIBLE, RECOVER, RESETCOLOR, GENERATORRISING, GENERATORACTIVE, STUNNED, 
+		BOSSVULNERABLE, BOSSINVULNERABLE, TELEPORTED };
 }
 namespace OBJECTTYPE {
 	enum TYPE {
@@ -56,6 +58,14 @@ protected:
 	OBJECTSTATE::TYPE state;
 	double counter = 0;
 	double transitionTime = 0;
+
+	// Movement related values
+	XMFLOAT3 moveDirection;
+	float velocityMagnitude = 0;
+	float topSpeed = 0;
+	float frictionFactor = 15.0f;
+	bool slowed = false;
+
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::TYPE::ACTIVATED), type(OBJECTTYPE::NOT_SET), physicsComponent(nullptr) {}

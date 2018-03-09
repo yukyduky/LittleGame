@@ -3,20 +3,23 @@
 #define ENEMYOBJECT_H
 
 #include "ActorObject.h"
-#include "GameObject.h"
-#include "EnemyAttackComponent.h"
-#include "EnemyState.h"
+#include "EnemyIncludes.h"
 
-
+class ActorObject;
+class EnemyState;
 class EnemyMovingState;
+class EnemyAttackComponent;
+class AIComponent;
+
+
 
 class EnemyObject : public ActorObject
 {
 private:
+	ENEMYTYPE::TYPE enemyType = ENEMYTYPE::SIZE;
 	EnemyAttackComponent * attackComponent = nullptr;
+	AIComponent* pBrain = nullptr;
 	std::vector<ActorObject*>* players = nullptr;
-	// Same vector as the one which relies in this, soon-to-be, AI-component
-	std::vector<EnemyState*> states;
 
 	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
@@ -27,21 +30,24 @@ private:
 	*/
 	void updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos);
 
-	
-
 public:
-	EnemyObject(const size_t ID, float accelerationSpeed, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
+	EnemyObject(const size_t ID, float velocityMagnitude, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
 
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
+	EnemyAttackComponent* GETattackComponent();
 
 	XMFLOAT2 getVectorToPlayer();
 	float getDistanceToPlayer();
 	void dealDmgToPlayer(size_t playerID, float damage);
 	std::vector<ActorObject*>* getPlayers();
-
+	ENEMYTYPE::TYPE getEnemyType();
 
 	virtual void update();
 	virtual void attack();
+	virtual void bossAttack01();
+	virtual void bossAttack02();
+	virtual void bossAttack03();
+
 };
 
 

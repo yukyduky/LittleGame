@@ -50,6 +50,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	double timeLastFrame = 0.0;
 	int frames = 0;
 	char msgbuf[20];
+	
+	Locator::getGameTime()->StartTimer();
+	Locator::getGameTime()->UpdateFrameTime();
 
 	// Game loop
 	while (gm.getIsRunning()) {
@@ -70,8 +73,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			timeLastFrame = 0.0;
 			OutputDebugStringA(msgbuf);
 		}
+
 	}
 
+	d2d->cleanUp();
 	gm.cleanUp();
 	d3d->cleanup();
 	delete d3d;

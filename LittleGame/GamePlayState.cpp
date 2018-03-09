@@ -134,6 +134,9 @@ void GamePlayState::updateFloor()
 	XMFLOAT3 electrifiedColor = XMFLOAT3(0.5f, 0.5f, 0.05f);
 	XMFLOAT3 heatedColor = XMFLOAT3(0.5f, 0.245f, 0.05f);
 	XMFLOAT3 cooledColor = XMFLOAT3(0.05f, 0.4f, 0.5f);
+	
+	XMFLOAT3 bossTileColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
+	XMFLOAT3 teleportColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
 	XMFLOAT3 tempColor1;
 	XMFLOAT3 tempColor2;
 	float baseHeight = 0.5f - 0.01f;
@@ -143,6 +146,7 @@ void GamePlayState::updateFloor()
 			switch (this->grid[i][j].state)
 			{
 			case TILESTATE::ACTIVE:
+				this->grid[i][j].color = baseColor;
 				break;
 			case TILESTATE::TFALLING:
 				this->grid[i][j].counter += this->dt;
@@ -302,6 +306,12 @@ void GamePlayState::updateFloor()
 					this->grid[i][j].counter = 0.0;
 				}
 				break;
+			case TILESTATE::BOSSTILE:
+				this->grid[i][j].color = bossTileColor;
+				break;
+			case TILESTATE::TELEPORT:
+				this->grid[i][j].color = teleportColor;
+				break;
 			default:
 				break;
 			}
@@ -312,7 +322,8 @@ void GamePlayState::updateFloor()
 void GamePlayState::checkPlayerTileStatus() 
 {
 	TILESTATE::STATE state;
-	this->lm.checkTileStatusFromPos(this->player1->GETPosition(), this->grid, state);
+	XMFLOAT3 playerPos = this->player1->GETPosition();
+	this->lm.checkTileStatusFromPos(playerPos, this->grid, state);
 
 	//Check if the player is on a active floor tile or if he fell of the map.
 	if (this->player1->getState() != OBJECTSTATE::TYPE::FALLING) {
@@ -320,6 +331,7 @@ void GamePlayState::checkPlayerTileStatus()
 			state == TILESTATE::STATE::HOLE ||
 			state == TILESTATE::STATE::RECOVERING) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
+			this->player1->SETvelocityMagnitude(this->player1->GETvelocityMagnitude() * -1);
 		} 
 		else {
 			switch (state) 
@@ -334,6 +346,13 @@ void GamePlayState::checkPlayerTileStatus()
 				break;
 			case TILESTATE::STATE::ELECTRIFIED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+				break;
+			case TILESTATE::STATE::BOSSTILE:
+				this->playerSteppedOnBossTile = true;
+				break;
+			case TILESTATE::STATE::TELEPORT:
+				this->player1->setPosition(XMFLOAT3(ARENADATA::GETsquareSize() * 1.5f, playerPos.y, ARENADATA::GETarenaHeight() * 0.5f - ARENADATA::GETsquareSize() * 0.5f));
+				this->player1->setState(OBJECTSTATE::TYPE::TELEPORTED);
 				break;
 			default:
 				break;
@@ -419,20 +438,17 @@ void GamePlayState::init() {
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 	this->enemyManager.startLevel1(this->enemySpawnPos);
+	//this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
 	this->totalLevelTime = 0.0;
-	this->timeBetweenPatterns = 20.0;
-	this->stateTime = 5.0;
-	this->recoveryMode = false;
 	this->counter = 0.0;
 	this->genTimer = 10.0;
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
-	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	this->fallPatternCoolDown = 25.0;
+	this->playerSteppedOnBossTile = false;
 	
-
 	RewardMenuState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
@@ -440,6 +456,7 @@ void GamePlayState::init() {
 
 	// Adds to the level each time it starts a level
 	Locator::getStatsHeader()->addLevel();
+	Locator::getGameTime()->setMultiplier(1.0);
 }
 
 void GamePlayState::cleanUp()
@@ -448,7 +465,6 @@ void GamePlayState::cleanUp()
 	// Direct internal objects
 	this->rio.cleanUp();
 	// this->camera.cleanUp();
-	this->enemyManager.cleanUp();
 
 	// GameObjects which will on their own clean up all of their connected components
 	for (auto &iterator : this->staticObjects) {
@@ -462,6 +478,10 @@ void GamePlayState::cleanUp()
 		delete iterator;
 	}
 	this->dynamicObjects.clear();
+
+	// Needs to be after dynamic objects:
+	// No Playerobject-->no unique clean for enemy-->spells clean up swarmers from grid-->swarmers try using grid after it's deleted
+	this->enemyManager.cleanUp();
 
 	for (auto &iterator : this->noCollisionDynamicObjects) {
 		iterator->cleanUp();
@@ -489,7 +509,6 @@ void GamePlayState::cleanUp()
 
 	//Clear the grid
 	this->grid.clear();
-	this->floorState = FLOORSTATE::STATE::ACTIVE;
 	//Clear FloorFallPattern arrays.
 	this->easyPatterns.clear();
 	this->mediumPatterns.clear();
@@ -534,11 +553,11 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			// Give the RestartState the current spells so it can be saved for thet next level
-			RestartState::getInstance()->provide(this->player1->GETSpells());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
 
+
+			// Change last so we've already done all of the changes.
 			StateManager::changeState(RestartState::getInstance());
 		}
 
@@ -557,6 +576,8 @@ void GamePlayState::update(GameManager * gm)
 	this->dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
 	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
 	this->totalLevelTime += this->dt;
+	if (dt < 0)
+		dt = 0;
 	this->counter += this->dt;
 	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
@@ -659,12 +680,13 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
+	float velocityMagnitude = 300.0f;
 	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
 	float actorAccelerationSpeed = 150.0f;
 	float topSpeed = 11.0f;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, actorAccelerationSpeed, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
+	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
@@ -678,7 +700,7 @@ void GamePlayState::initPlayer()
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
-	// 0 (Autoattack):
+	// 0:
 	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
 	actor->addSpell(new SpFire(actor));
@@ -715,22 +737,25 @@ void GamePlayState::initPlayer()
 }
 
 
-Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp props, Light light)
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	int nextID = this->newID();
+
+	XMFLOAT3 dir = shooter->getDirection();
 
 	// Declare Components
 	BlockComponent* block = nullptr;
 	PhysicsComponent* phyComp = nullptr;
 
-	XMFLOAT3 position = { pos.x /*+ dir.x * props.size*/, pos.y /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/ };
+	XMFLOAT3 position = { pos.x /*+ dir.x * props.size*/,  40.0f /*pos.y*/ /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/ };
 
 	size_t lightID = this->lightIDs.getNewID();
 
 	this->pointLights[lightID] = light;
 
-	proj = new Projectile(nextID, props.speed, props.spinn, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+
+	proj = new Projectile(nextID, props.speed, props.range, props.behavior, shooter, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
@@ -740,13 +765,28 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, XMFLOAT3 dir, ProjProp p
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics
-	phyComp = new PhysicsComponent(*proj, (props.size + 5));
+	phyComp = new PhysicsComponent(*proj, (props.size));
 
 	
 	//Add proj to objectArrays
 	this->dynamicObjects.push_back(proj);
 
 	return proj;
+}
+
+std::vector<std::vector<tileData>>& GamePlayState::GETgrid()
+{
+	return this->grid;
+}
+
+bool GamePlayState::GETplayerSteppedOnBossTile()
+{
+	return this->playerSteppedOnBossTile;
+}
+
+void GamePlayState::SETplayerSteppedOnBossTile(bool input)
+{
+	this->playerSteppedOnBossTile = input;
 }
 
 //_________________________________________//

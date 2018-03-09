@@ -1,7 +1,7 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
 #include "RewardMenuState.h"
@@ -125,9 +125,18 @@ float ActorObject::getRotation()
 	return this->rotation;
 }
 
+void ActorObject::setDirection()
+{
+	this->direction = XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
+}
+void ActorObject::setDirection(XMFLOAT3 direction)
+{
+	this->direction = direction;
+}
+
 XMFLOAT3 ActorObject::getDirection()
 {
-	return XMFLOAT3(-std::cos(this->rotation), 0.0f, std::sin(this->rotation));
+	return this->direction;
 }
 
 XMFLOAT3 ActorObject::getDirection(float length)
@@ -148,9 +157,10 @@ void ActorObject::receive(GameObject & obj, Message msg)
 void ActorObject::cleanUp()
 {
 	// Clean up all internal data
-	//for (auto &i : this->spells) {
-	//	delete i;
-	//}
+	for (int i = 0; i < this->spells.size(); i++) {
+		this->spells[i]->cleanUp();
+		delete this->spells[i];
+	}
 	this->spells.clear();
 	// Cleanup all the components
 	for (auto &c : this->components) {
@@ -202,6 +212,7 @@ void ActorObject::update()
 		break;
 	}
 
+
 	switch (this->state)
 	{
 	//State used to make an object fall and after a set time the object becomes "invisible"
@@ -231,7 +242,8 @@ void ActorObject::update()
 		break;
 	case OBJECTSTATE::TYPE::STUNNED:
 		break;
-	default:
+	case OBJECTSTATE::TYPE::TELEPORTED:
+		this->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
 		for (auto &i : this->components) {
 			i->update();
 		}
@@ -240,7 +252,16 @@ void ActorObject::update()
 			i->updateCD();
 		}
 		break;
+	default:
+		for (auto &i : this->components) {
+			i->update();
+		}
+		for (auto &i : this->spells) {
+			i->update();
+		}
+		break;
 	}
+	int asdf = 3;
 }
 
 void ActorObject::updatekineticVector()
@@ -368,6 +389,9 @@ void ActorObject::rotate()
 	//this->rotate();
 
 	this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+
+	// Update direction
+	this->setDirection();
 }
 
 void ActorObject::rotate(XMFLOAT3 aimVec)
@@ -396,6 +420,9 @@ void ActorObject::rotate(XMFLOAT3 aimVec)
 	//this->rotate();
 
 	this->SETrotationMatrix(XMMatrixRotationY(this->rotation));
+
+	// Update direction
+	this->setDirection();
 }
 
 void ActorObject::rotate(XMFLOAT2 aimVec)
@@ -415,7 +442,7 @@ void ActorObject::fireAbility0()
 
 void ActorObject::fireAbilityX()
 {
-	if ((this->state == OBJECTSTATE::TYPE::ACTIVATED) && this->spells[4]->getState() != SPELLSTATE::ACTIVE) {
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell->castSpell();
 	}
 	else {
@@ -425,7 +452,7 @@ void ActorObject::fireAbilityX()
 
 void ActorObject::pauseMenu()
 {
-	StateManager::pushState(MainMenuState::getInstance());
+	StateManager::pushState(PauseMenuState::getInstance());
 }
 
 void ActorObject::selectAbility1()
@@ -457,8 +484,9 @@ void ActorObject::selectAbility3()
 	Locator::getStatsHeader()->resetStats();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[3];
-		this->selectedSpellIntValue = 3;
+		this->spells[3]->castSpell();
+		//this->selectedSpell = this->spells[3];
+		//this->selectedSpellIntValue = 3;
 	}
 	else {
 
@@ -470,8 +498,10 @@ void ActorObject::selectAbility4()
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
-		this->selectedSpell = this->spells[4];
-		this->selectedSpellIntValue = 4;
+		this->spells[4]->castSpell();
+
+		//this->selectedSpell = this->spells[4];
+		//this->selectedSpellIntValue = 4;
 	}
 	else {
 
@@ -498,9 +528,15 @@ void ActorObject::decCD()
 	
 }
 
-void ActorObject::dealDmg(float dmg)
+void ActorObject::dealDmg(float damag)
 {
-	this->hp -= dmg;
+	float dmg = damag;
+	if (this->pGPS->getBerserkerMode())
+	{
+		dmg *= 3.0f;
+	}
+
+	this->hp -= dmg * this->invulnerable;
 	
 	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
 		vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
@@ -696,4 +732,22 @@ void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
 {
 	this->statusEffect = effect;
 	this->counter = 0.0f;
+}
+
+void ActorObject::turnOnInvulnerability()
+{
+	this->invulnerable = 0.0f;
+}
+
+void ActorObject::turnOffInvulnerability()
+{
+	this->invulnerable = 1.0f;
+}
+
+Spell * ActorObject::getFirstSpell()
+{
+	if (this->spells[0] != nullptr) {
+		return this->spells[0];
+	}
+	return nullptr;
 }

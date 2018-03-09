@@ -3,6 +3,8 @@
 #include "CollisionHandler.h"
 #include "EnemyMovingState.h"
 #include "EnemyState.h"
+#include "GameObject.h"
+#include "Spell.h"
 
 //#define DISTANCE_FACTOR 1.4142135623730950488016887242097	// Fetched from CollisionHandler.h
 
@@ -25,15 +27,21 @@ void EnemyObject::updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos)
 
 
 
-EnemyObject::EnemyObject(const size_t ID, float accelerationSpeed, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType)
-	: ActorObject(ID, accelerationSpeed, topSpeed, pos, pGPS, objectType, 200.0f)
+EnemyObject::EnemyObject(const size_t ID, float velocityMagnitude, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType)
+	: ActorObject(ID, velocityMagnitude, topSpeed, pos, pGPS, objectType, 200.0f)
 {
+	this->enemyType = enemyType;
 	this->players = players;
 }
 
 void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
 {
 	this->attackComponent = attackComponent;
+}
+
+EnemyAttackComponent * EnemyObject::GETattackComponent()
+{
+	return this->attackComponent;
 }
 
 XMFLOAT2 EnemyObject::getVectorToPlayer()
@@ -56,9 +64,14 @@ std::vector<ActorObject*>* EnemyObject::getPlayers()
 	return this->players;
 }
 
+ENEMYTYPE::TYPE EnemyObject::getEnemyType()
+{
+	return this->enemyType;
+}
+
 void EnemyObject::update()
 {
-	// Find out where you are in relevance to the player.
+	// Find out where you are in relation to the player.
 	XMFLOAT3 playerPos = (*players)[0]->GETPosition();
 	this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
 
@@ -66,9 +79,28 @@ void EnemyObject::update()
 	for (auto &component : this->components) {
 		component->update();
 	}
+
+	// Also update the cooldown on spells
+	this->spells[0]->update();
 }
 
 void EnemyObject::attack()
 {
-	this->attackComponent->attack();
+//	this->attackComponent->attack();
+	this->spells[0]->castSpell();
+}
+
+void EnemyObject::bossAttack01()
+{
+	this->spells[0]->castSpell();
+}
+
+void EnemyObject::bossAttack02()
+{
+	this->spells[1]->castSpell();
+}
+
+void EnemyObject::bossAttack03()
+{
+	this->spells[2]->castSpell();
 }

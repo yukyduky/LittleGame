@@ -34,21 +34,17 @@ protected:
 	float hpMAX = 0;
 	TILESTATE::STATE statusEffect = TILESTATE::STATE::ACTIVE;
 	float counter = 0.0f;
-	XMFLOAT3 slowedVelocity;
-	XMFLOAT3 realVelocity;
+	//XMFLOAT3 slowedVelocity;
+	//XMFLOAT3 realVelocity;
 	DirectX::XMFLOAT2 MovementVector;
 
 	float energy = 100;
 	float energyMAX = 100;
-
-	XMFLOAT3 moveDirection;
-	float velocityMagnitude = 0;
-	float topSpeed = 0;
-	float frictionFactor = 15.0f;
-	bool slowed = false;
+	float invulnerable = 1.0f;
 
 	//Used to calculate angle to fire
 	float rotation = 0;
+	XMFLOAT3 direction = { 0, 0, 0.0001f };	// Can't be initialized as 0 vector or shooting during loads will crash the game.
 
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
@@ -63,14 +59,17 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, float accelerationSpeed, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
+	ActorObject(const size_t ID, float velocityMagnitude, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
 	virtual ~ActorObject() {}
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
 	virtual float getRotation();
+	virtual void setDirection();
+	virtual void setDirection(XMFLOAT3 direction);
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void SETvelocityMagnitude(float speed);
+	virtual float GETvelocityMagnitude() { return this->velocityMagnitude; }
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
 	std::vector<Spell*> GETSpells() { return this->spells; };
@@ -119,7 +118,7 @@ public:
 	//Lowers the cooldown of each ability
 	void decCD();	//To be implemented into actors update from another branch
 	// Deals dmg to the Actors Hp
-	void dealDmg(float dmg);
+	void dealDmg(float damage);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Depletes the players energy by a certain amount.
 	2. NOTE: Should the function return true, then the energy HAS BEEN DEPLETED.
@@ -139,7 +138,14 @@ public:
 
 	//Crosshair
 	void addCrosshair(Crosshair* cross) { this->crossHair = cross; }
+
+	// For enemies
+	Spell* getFirstSpell();
 	void applyStatusEffect(TILESTATE::STATE effect);
+	
+
+	void turnOnInvulnerability();
+	void turnOffInvulnerability();
 };
 
 

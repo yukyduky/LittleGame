@@ -14,12 +14,13 @@ public:
 	SpDash(ActorObject* player);
 	~SpDash();
 
-	bool castSpell();
+	virtual bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
-	void collision(GameObject* target, Projectile* proj);
-	void update();
+	virtual void collision(GameObject* target, Projectile* proj);
+	virtual void update();
+	void cleanUp();
 protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
@@ -38,30 +39,40 @@ protected:
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Jump back nad heal
 class SpDashG1 : public SpDash
 {
 public:
 	SpDashG1(ActorObject* player);
 	virtual ~SpDashG1();
+
+	bool castSpell();
+	void collision(GameObject* target, Projectile* proj);
+	void update();
 private:
 };
 
-
+// Long-dash - damages if jumping into walls
 class SpDashG2 : public SpDash
 {
 public:
 	SpDashG2(ActorObject* player);
 	virtual ~SpDashG2();
+
+	bool castSpell();
 private:
+	float damageFromMiss;
 };
 
-
+// Infinite wall
 class SpDashG3 : public SpDash
 {
 public:
 	SpDashG3(ActorObject* player);
 	virtual ~SpDashG3();
 private:
+	bool castSpell();
+	void update();
 };
 
 #endif // !SPDASH_H

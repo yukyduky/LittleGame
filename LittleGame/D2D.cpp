@@ -20,8 +20,9 @@ HRESULT D2D::Initialize()
 
 HRESULT D2D::CreateDeviceIndependentResources()
 {
-	static const WCHAR msc_fontName[] = L"Verdana";
-	static const FLOAT msc_fontSize = 20;
+	// Will load a default font if the font is not installed on the PC
+	static const WCHAR msc_fontName[] = L"Agency FB"; // Verdana, Rockwell, Agency FB
+	static const FLOAT msc_fontSize = 30;
 	HRESULT hr = S_OK;
 
 	// Create a Direct2D factory.
@@ -51,6 +52,7 @@ HRESULT D2D::CreateDeviceIndependentResources()
 			L"", //locale
 			&this->m_pTextFormat
 		);
+
 	}
 	if (SUCCEEDED(hr))
 	{
@@ -299,7 +301,7 @@ HRESULT D2D::OnRender(std::vector<MenuObject*> objects)
 
 		this->m_pRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
-		this->m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkGray));
+		this->m_pRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::DarkRed));
 		
 		D2D1_SIZE_F rtSize = m_pRenderTarget->GetSize();
 
@@ -365,4 +367,22 @@ void D2D::closeMenu()
 	
 		//Removes the screenshot from the directory
 		DeleteFile("include/screenSaved.bmp");
+}
+
+void D2D::cleanUp()
+{
+	// D2D device
+	SafeRelease(&this->m_pDirect2dFactory);
+	// Render target, dose all calls to render
+	SafeRelease(&this->m_pRenderTarget);
+	// D2D device for text
+	SafeRelease(&this->m_pDirectWriteFactory);
+	// Holds formating for text, ea Font
+	SafeRelease(&this->m_pTextFormat);
+	//Background
+	SafeRelease(&this->pGridColor);
+	// Image factory
+	SafeRelease(&this->pIWICFactory);
+	// Background-screenshot
+	this->closeMenu();
 }

@@ -14,12 +14,13 @@ public:
 	SpBomb(ActorObject* player);
 	virtual ~SpBomb();
 
-	bool castSpell();
+	virtual bool castSpell();
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
-	void collision(GameObject* target, Projectile* proj);
-	void update();
+	virtual void collision(GameObject* target, Projectile* proj);
+	virtual void update();
+	void cleanUp();
 protected:
 	// Template: Modifies the spell befor glyph is implemented
 	float strength = 0.0f;
@@ -29,30 +30,42 @@ protected:
 	float range = 0.0f;
 
 	Projectile* theProj = nullptr;
+	XMFLOAT3 currPos;
 	float start, end, collisionDuration;
+
+	bool landed = false;
+	float yAcc = 0.0f;
 };
 
 ////////////////////////////////////////////
 //// GLYPHS ////////////////////////////////////////////
 ////////////////////////////////////////////
+// Splinterbomb
 class SpBombG1 : public SpBomb
 {
 public:
 	SpBombG1(ActorObject* player);
 	virtual ~SpBombG1();
+
+	void update();
 private:
+	int nrOfSplinters = 0;
 };
 
-
+// Mine
 class SpBombG2 : public SpBomb
 {
 public:
 	SpBombG2(ActorObject* player);
 	virtual ~SpBombG2();
+
+	void collision(GameObject* target, Projectile* proj);
+	void update();
 private:
+	bool trip = false;
 };
 
-
+// Blackhole 
 class SpBombG3 : public SpBomb
 {
 public:

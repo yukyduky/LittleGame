@@ -12,7 +12,6 @@ private:
 	ActorObject* player = nullptr;
 	int nrOfLoot;
 
-	std::vector<Spell*> spellPackage;
 
 	WCHAR* getGlyphName(int name, int glyph);
 public:
@@ -30,7 +29,6 @@ public:
 	Menu* initEnemyUpgradeMenu();
 	Menu* initNextLevelMenu();
 	
-	void provide(std::vector<Spell*> spellPackage);
 	void provide(ActorObject* player);
 	void provide(int nrOfLoot) { this->nrOfLoot = nrOfLoot; };
 	ActorObject* GETPlayer() { return this->player; };

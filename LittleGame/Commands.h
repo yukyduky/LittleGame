@@ -7,6 +7,15 @@
 /* Command pattern */
 class ActorObject;
 
+/*
+mapKeyCodesToEnums();
+mapCommands();
+mapKeys();
+command
+
+
+
+*/
 
 class Command
 {
@@ -14,6 +23,39 @@ public:
 	// Executes the command
 	virtual void execute(ActorObject& actor) = 0;
 };
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+class CommandBossAttack01 : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) {
+		EnemyObject* trueObject = static_cast<EnemyObject*>(&actor);
+		trueObject->bossAttack01();
+	}
+};
+
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+class CommandBossAttack02 : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) {
+		EnemyObject* trueObject = static_cast<EnemyObject*>(&actor);
+		trueObject->bossAttack02();
+	}
+};
+
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+class CommandBossAttack03 : public Command
+{
+public:
+	virtual void execute(ActorObject& actor) {
+		EnemyObject* trueObject = static_cast<EnemyObject*>(&actor);
+		trueObject->bossAttack03();
+	}
+};
+
 // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 // +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 class CommandEnemyAttack : public Command
