@@ -120,6 +120,7 @@ private:
 	//All objects that wants to be renederd
 	std::list<GraphicsComponent*> graphics;
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
+	bool useController = false;
 
 	IDHandler lightIDs;
 	std::vector<Light> pointLights;
@@ -195,6 +196,9 @@ public:
 	void addGraphics(GraphicsComponent* graphicsComponent);
 
 	void initPlayer();
+	// returns the current mode
+	bool switchControllerInput();
+
 	/*call to shoot projectile*/
 	Projectile* initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light);
 

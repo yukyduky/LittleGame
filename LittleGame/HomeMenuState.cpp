@@ -90,6 +90,14 @@ Menu* HomeMenuState::initOptionsMenu()
 
 	this->addOptionsButtons(opMenu);
 
+	text = L"Input: Keyboard";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 100.0f,440.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::USECONTROLLER);
+	opMenu->addButton(pButton);
+
+
 	//this->menus[MENUS::OPTIONS] = opMenu;
 	return opMenu;
 }

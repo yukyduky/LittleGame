@@ -693,8 +693,14 @@ void GamePlayState::initPlayer()
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
 	/// INPUT COMPONENT:
-	//input = new ControllerComponent(*actor, 0);
-	input = new KeyboardComponent(*actor);
+	if (this->useController)
+	{
+		input = new ControllerComponent(*actor, 0);
+	}
+	else
+	{
+		input = new KeyboardComponent(*actor);
+	}
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
@@ -732,6 +738,12 @@ void GamePlayState::initPlayer()
 	physics = nullptr;
 	block = nullptr;
 	input = nullptr;
+}
+
+bool GamePlayState::switchControllerInput()
+{
+	this->useController = !this->useController;
+	return useController;
 }
 
 

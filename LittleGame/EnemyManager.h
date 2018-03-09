@@ -304,11 +304,35 @@ private:
 
 	void cleanLevel();
 
+	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, enemySpawnPositions spawnPosVectors) {
+		EnemyObject* newEnemy;
+
+		switch(enemyType) {
+		case ENEMYTYPE::SWARMER: 
+			newEnemy = this->createSwarmer(spawnPosVectors);
+			break;
+
+		case ENEMYTYPE::IMMOLATION:
+			newEnemy = this->createMinion(spawnPosVectors);
+			break;
+		default:
+			newEnemy = this->createMinion(spawnPosVectors);
+			break;
+
+		}
+		/// Upgrade depending on players choices (if there are any)
+		Locator::getStatsHeader();
+		newEnemy;
+
+		return newEnemy;
+	}
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
+	
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
-	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
+	EnemyObject* createMinion(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:

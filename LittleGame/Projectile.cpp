@@ -64,21 +64,21 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PR
 	this->lightIDs = lightIDs;
 }
 
-Projectile::Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
-{
-	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
-	this->setType(OBJECTTYPE::PROJECTILE);
-	this->spell = nullptr;
-
-	this->type = objectType;
-	this->direction = dir;
-	this->behavior = behavior;
-	this->velocity = velocity;
-	this->rangeCounter = 0;
-
-	this->light = light;
-	this->lightIDs = lightIDs;
-}
+//Projectile::Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
+//{
+//	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
+//	this->setType(OBJECTTYPE::PROJECTILE);
+//	this->spell = nullptr;
+//
+//	this->type = objectType;
+//	this->direction = dir;
+//	this->behavior = behavior;
+//	this->velocity = velocity;
+//	this->rangeCounter = 0;
+//
+//	this->light = light;
+//	this->lightIDs = lightIDs;
+//}
 
 Projectile::~Projectile()
 {
@@ -94,7 +94,9 @@ void Projectile::cleanUp()
 		c->cleanUp();
 		delete c;
 	}
-	if (this->spell != nullptr) {
+
+	// Detta tar bort spelarens egna spell
+	if (this->spell != nullptr && this->spell->getOwner()->getType() != OBJECTTYPE::PLAYER) {
 		delete this->spell;
 	}
 }
