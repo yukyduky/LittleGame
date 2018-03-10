@@ -22,6 +22,7 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PR
 	this->spinn = spinn;
 	this->kineticVector = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
 	this->rangeCounter = 0;
+	this->maxFlyingRange = maxFlyingRange;
 
 	this->light = light;
 	this->lightIDs = lightIDs;
