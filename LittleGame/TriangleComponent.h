@@ -12,6 +12,23 @@
 struct PrimitiveVertexData;
 class GamePlayState;
 
+namespace T_NORMALS {
+	enum {
+		NORTH, SOUTH_EAST, SOUTH_WEST,
+		UP, DOWN
+	};
+}
+	/*
+[4]	 _____________ [5]
+	|\          / | 
+[1] \ \        / / [2]
+     \ \      /	/	    ^ z
+	  \ \    / /	y \ |
+	   \ \[3]/ /	   \---> x
+		\ \/ /
+	     \ |/
+		  [0]
+	*/
 class TriangleComponent : public GraphicsComponent
 {
 private:
@@ -38,6 +55,9 @@ private:
 	4. Creates indices for the indexBuffer.
 	*/
 	void createVertices(XMFLOAT4 color);
+
+	XMFLOAT3 calculateNormal(XMFLOAT3 point0, XMFLOAT3 joinedPoint, XMFLOAT3 point1);
+	PrimitiveVertexData createPrimitiveVertexData(XMFLOAT3 point, XMFLOAT3 normal, XMFLOAT4 colour);
 
 public:
 	TriangleComponent(GamePlayState& pGPS, GameObject& obj, XMFLOAT4 color, XMFLOAT3 scale, XMFLOAT3 rotation);

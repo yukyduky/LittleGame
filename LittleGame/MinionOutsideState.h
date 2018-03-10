@@ -1,20 +1,19 @@
 #pragma once
-#ifndef SWARMEROUTSIDESTATE_H
-#define SWARMEROUTSIDESTATE_H
+#ifndef MINIONOUTSIDESTATE_H
+#define MINIONOUTSIDESTATE_H
 
 #include "SwarmerState.h"
 #include "EnemyObject.h"
 #include "AIComponent.h"
 #include "SwarmerSeekingState.h"
 
-class SwarmerOutsideState : public SwarmerState
+class MinionOutsideState : public SwarmerState
 {
 private:
 	XMFLOAT3 openingInTheArena = { 0, 0, 0.01 };
-	EnemyState* nextState = nullptr;
 
 public:
-	SwarmerOutsideState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID, XMFLOAT3 openingInTheArena)
+	MinionOutsideState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID, XMFLOAT3 openingInTheArena)
 		: SwarmerState(pHead, pBrain, pGrid_, swarmerID)
 	{
 		this->pBrain->pushState(*this);
@@ -38,10 +37,7 @@ public:
 
 		// If we've come inside the grid, ACT LIKE IT.
 		if (this->inOrOutPlus()) {
-			EnemyState* seekingState = new SwarmerSeekingState(
-				*this->pHead, *this->pBrain, this->getGrid(), this->getSwarmerID()
-			);
-			this->getGrid()->activateMe(this->getSwarmerID()); // can this be moved inside the constructor?
+			EnemyState* seekingState = new EnemyMovingState(*this->pHead, *this->pBrain);
 		}
 	}
 };

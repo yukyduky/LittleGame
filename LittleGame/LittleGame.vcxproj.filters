@@ -116,6 +116,7 @@
     <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="IDHandler.cpp" />
     <ClCompile Include="TriangleComponent.cpp" />
+    <ClCompile Include="MinionOutsideState.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />

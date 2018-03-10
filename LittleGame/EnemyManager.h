@@ -307,9 +307,15 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
+	EnemyObject* createCharger(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns an XMFLOAT3vector where [0] is the spawnPosition and [1] is the opening in the wall.
+	*/
+	std::vector<XMFLOAT3> generateEnemySpawnPositions(enemySpawnPositions spawnPosVectors, XMFLOAT3 scale);
 
 public:
 	EnemyManager();

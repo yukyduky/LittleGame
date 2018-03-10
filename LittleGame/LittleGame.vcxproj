@@ -235,6 +235,7 @@
     <ClCompile Include="BossBulletHellState.cpp" />
     <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
     <ClCompile Include="BossMoveToArenaState.cpp" />
+    <ClCompile Include="MinionOutsideState.h" />
     <ClCompile Include="SpBossBulletHell.cpp" />
     <ClCompile Include="BossState.cpp" />
     <ClCompile Include="Button.cpp" />
