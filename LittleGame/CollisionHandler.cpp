@@ -20,27 +20,35 @@ void CollisionHandler::createCollisionID() {
 		// 3	=	PLAYER				+			GENERATOR
 		// 4	=	PLAYER				+			INDESTRUCTIBLE
 		// 5	=	PLAYER				+			PROJECTILE
+		// 6	=	PLAYER				+			BOSS
 
 		// E   N   E   M   Y
-		// 6	=	ENEMY				+			ENEMY
-		// 7	=	ENEMY				+			GENERATOR
-		// 8	=	ENEMY				+			INDESCTRUCTIBLE
-		// 9	=	ENEMY				+			PROJECTILE
+		// 7	=	ENEMY				+			ENEMY
+		// 8	=	ENEMY				+			GENERATOR
+		// 9	=	ENEMY				+			INDESCTRUCTIBLE
+		// 10	=	ENEMY				+			PROJECTILE
+		// 11	=	ENEMY				+			BOSS
 
-		// G  E  N  E  R  A  T  O  R
-		// 10	=	GENERATOR			+			GENERATOR
-		// 11	=	GENERATOR			+			INDESTRUCTIBLE
-		// 12	=	GENERATOR			+			PROJECTILE
+		// D   O   O   D   A   D
+		// 12	=	GENERATOR			+			GENERATOR
+		// 13	=	GENERATOR			+			INDESTRUCTIBLE
+		// 14	=	GENERATOR			+			PROJECTILE
+		// 15	=	GENERATOR			+			BOSS
 
 		// I  N  D  E  S  T  R  U  C  T  I  B  L  E
-		// 13	=	INDESTRUCTIBLE		+			INDESTRUCTIBLE
-		// 14	=	INDESTRUCTIBLE		+			PROJECTILE
+		// 16	=	INDESTRUCTIBLE		+			INDESTRUCTIBLE
+		// 17	=	INDESTRUCTIBLE		+			PROJECTILE
+		// 18	=	INDESTRUCTIBLE		+			BOSS
 
 		// P   R   O   J   E   C   T   I   L   E
-		// 15	=	PROJECTILE			+			PROJECTILE
+		// 19	=	PROJECTILE			+			PROJECTILE
+		// 20	=	PROJECTILE			+			BOSS
+
+		// B   O   S   S
+		// 21	=	BOSS				+			BOSS
 		*/
 
-		// Collidable #1 = PLAYER
+		// Collidable1 = PLAYER
 	case OBJECTTYPE::PLAYER: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // PLAYER <--> PLAYER
@@ -63,10 +71,14 @@ void CollisionHandler::createCollisionID() {
 			this->collisionID = 5;
 			break;
 		}
+		case OBJECTTYPE::BOSS: { // PLAYER <--> BOSS
+			this->collisionID = 6;
+			break;
+		}
 		}
 		break;
 	}
-		// Collidable #1 = ENEMY
+		// Collidable1 = ENEMY
 	case OBJECTTYPE::ENEMY: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // ENEMY <--> PLAYER
@@ -74,25 +86,29 @@ void CollisionHandler::createCollisionID() {
 			break;
 		}
 		case OBJECTTYPE::ENEMY: { // ENEMY <--> ENEMY
-			this->collisionID = 6;
-			break;
-		}
-		case OBJECTTYPE::GENERATOR: { // ENEMY <--> GENERATOR
 			this->collisionID = 7;
 			break;
 		}
-		case OBJECTTYPE::INDESTRUCTIBLE: { // ENEMY <--> INDESTRUCTIBLE
+		case OBJECTTYPE::GENERATOR: { // ENEMY <--> GENERATOR
 			this->collisionID = 8;
 			break;
 		}
-		case OBJECTTYPE::PROJECTILE: { // ENEMY <--> PROJECTILE
+		case OBJECTTYPE::INDESTRUCTIBLE: { // ENEMY <--> INDESTRUCTIBLE
 			this->collisionID = 9;
+			break;
+		}
+		case OBJECTTYPE::PROJECTILE: { // ENEMY <--> PROJECTILE
+			this->collisionID = 10;
+			break;
+		}
+		case OBJECTTYPE::BOSS: { // ENEMY <--> BOSS
+			this->collisionID = 11;
 			break;
 		}
 		}
 		break;
 	}
-		// Collidable #1 = GENERATOR
+		// Collidable1 = GENERATOR
 	case OBJECTTYPE::GENERATOR: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // GENERATOR <--> PLAYER
@@ -100,20 +116,23 @@ void CollisionHandler::createCollisionID() {
 			break;
 		}
 		case OBJECTTYPE::ENEMY: { // GENERATOR <--> ENEMY
-			this->collisionID = 7;
+			this->collisionID = 8;
 			break;
 		}
 		case OBJECTTYPE::GENERATOR: { // GENERATOR <--> GENERATOR
-			this->collisionID = 10;
+			this->collisionID = 12;
 			break;
 		}
 		case OBJECTTYPE::INDESTRUCTIBLE: { // GENERATOR <--> INDESTRUCTIBLE
-			this->collisionID = 11;
+			this->collisionID = 13;
 			break;
 		}
 		case OBJECTTYPE::PROJECTILE: { // GENERATOR <--> PROJECTILE
-			this->collisionID = 12;
+			this->collisionID = 14;
 			break;
+		}
+		case OBJECTTYPE::BOSS: { // GENERATOR <--> BOSS
+			this->collisionID = 15;
 		}
 		}
 		break;
@@ -126,25 +145,29 @@ void CollisionHandler::createCollisionID() {
 			break;
 		}
 		case OBJECTTYPE::ENEMY: { // INDESTRUCTIBLE <--> ENEMY
-			this->collisionID = 8;
+			this->collisionID = 9;
 			break;
 		}
 		case OBJECTTYPE::GENERATOR: { // INDESTRUCTIBLE <--> GENERATOR
-			this->collisionID = 11;
-			break;
-		}
-		case OBJECTTYPE::INDESTRUCTIBLE: { // INDESTRUCTIBLE <--> INDESTRUCTIBLE
 			this->collisionID = 13;
 			break;
 		}
+		case OBJECTTYPE::INDESTRUCTIBLE: { // INDESTRUCTIBLE <--> INDESTRUCTIBLE
+			this->collisionID = 16;
+			break;
+		}
 		case OBJECTTYPE::PROJECTILE: { // INDESTRUCTIBLE <--> PROJECTILE
-			this->collisionID = 14;
+			this->collisionID = 17;
+			break;
+		}
+		case OBJECTTYPE::BOSS: { // INDESTRUCTIBLE <--> BOSS
+			this->collisionID = 18;
 			break;
 		}
 		}
 		break;
 	}
-		// Collidable #1 = PROJECTILE
+		// Collidable1 = PROJECTILE
 	case OBJECTTYPE::PROJECTILE: {
 		switch (this->collidable2->getType()) {
 		case OBJECTTYPE::PLAYER: { // PROJECTILE <--> PLAYER
@@ -152,23 +175,54 @@ void CollisionHandler::createCollisionID() {
 			break;
 		}
 		case OBJECTTYPE::ENEMY: { // PROJECTILE <--> ENEMY
-			this->collisionID = 9;
+			this->collisionID = 10;
 			break;
 		}
-		case OBJECTTYPE::GENERATOR: { // PROJECTILE <--> DOODAD
-			this->collisionID = 12;
-			break;
-		}
-		case OBJECTTYPE::INDESTRUCTIBLE: { // PROJECTILE <--> INDESTRUCTIBLE
+		case OBJECTTYPE::GENERATOR: { // PROJECTILE <--> GENERATOR
 			this->collisionID = 14;
 			break;
 		}
-		case OBJECTTYPE::PROJECTILE: { // PROJECTILE <--> PROJECTILE
-			this->collisionID = 15;
+		case OBJECTTYPE::INDESTRUCTIBLE: { // PROJECTILE <--> INDESTRUCTIBLE
+			this->collisionID = 17;
 			break;
+		}
+		case OBJECTTYPE::PROJECTILE: { // PROJECTILE <--> PROJECTILE
+			this->collisionID = 19;
+			break;
+		}
+		case OBJECTTYPE::BOSS: { // PROJECTILE <--> BOSS
+			this->collisionID = 20;
 		}
 		}
 		break;
+	}
+	case OBJECTTYPE::BOSS: {
+		switch (this->collidable2->getType()) {
+		case OBJECTTYPE::PLAYER: {
+			this->collisionID = 6;
+			break;
+		}
+		case OBJECTTYPE::ENEMY: {
+			this->collisionID = 11;
+			break;
+		}
+		case OBJECTTYPE::GENERATOR: {
+			this->collisionID = 15;
+			break;
+		}
+		case OBJECTTYPE::INDESTRUCTIBLE: {
+			this->collisionID = 18;
+			break;
+		}
+		case OBJECTTYPE::PROJECTILE: {
+			this->collisionID = 20;
+			break;
+		}
+		case OBJECTTYPE::BOSS: {
+			this->collisionID = 21;
+			break;
+		}
+		}
 	}
 	}
 }
@@ -328,6 +382,18 @@ void CollisionHandler::collisionEnemyEnemy() {
 	this->collidable2->setPosition(this->collidable2->GETPosition() - this->resultVector);
 }
 
+void CollisionHandler::collisionPlayerBoss() {
+	// Swapping places of collidables with eachother if necessary
+	// COLLIDABLE1 = PLAYER
+	if (this->collidable1->getType() != OBJECTTYPE::PLAYER) {
+		this->tempCollidableHolder = this->collidable1;
+		this->collidable1 = this->collidable2;
+		this->collidable2 = this->tempCollidableHolder;
+	}
+
+	// CODE GOES HERE
+}
+
 void CollisionHandler::collisionEnemyGenerator() {
 	// Swapping places of collidables with eachother if necessary
 	// COLLIDABLE1 = ENEMY
@@ -388,12 +454,22 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable1 = this->collidable2;
 		this->collidable2 = this->tempCollidableHolder;
 	}
-	
-
 
 	Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
 	spell->collision(this->collidable1, proj);
+}
+
+void CollisionHandler::collisionEnemyBoss() {
+	// Swapping places of collidables with eachother if necessary
+	// COLLIDABLE1 = ENEMY
+	if (this->collidable1->getType() != OBJECTTYPE::ENEMY) {
+		this->tempCollidableHolder = this->collidable1;
+		this->collidable1 = this->collidable2;
+		this->collidable2 = this->tempCollidableHolder;
+	}
+
+	// CODE GOES HERE
 }
 
 void CollisionHandler::collisionGeneratorGenerator() {
@@ -433,6 +509,18 @@ void CollisionHandler::collisionGeneratorProjectile() {
 	/// Regardless, this too does nothing for now.
 }
 
+void CollisionHandler::collisionGeneratorBoss() {
+	// Swapping places of collidables with eachother if necessary
+	// collidable1 = DOODAD
+	if (this->collidable1->getType() != OBJECTTYPE::GENERATOR) {
+		this->tempCollidableHolder = this->collidable1;
+		this->collidable1 = this->collidable2;
+		this->collidable2 = this->tempCollidableHolder;
+	}
+
+	// CODE GOES HERE
+}
+
 void CollisionHandler::collisionIndestructIndestruct() {
 	// Seems somewhat unlikely.
 	/// Does nothing for now.
@@ -456,10 +544,39 @@ void CollisionHandler::collisionIndestrucProjectile() {
 	//spell->setActive(false);
 }
 
+void CollisionHandler::collisionIndestrucBoss() {
+	// Swapping places of collidables with eachother if necessary
+	// COLLIDABLE1 = INDESTRUCTIBLE
+	if (this->collidable1->getType() != OBJECTTYPE::INDESTRUCTIBLE) {
+		this->tempCollidableHolder = this->collidable1;
+		this->collidable1 = this->collidable2;
+		this->collidable2 = this->tempCollidableHolder;
+	}
+
+	// CODE GOES HERE
+}
+
 void CollisionHandler::collisionProjectileProjectile() {
 	// Somewhat skillfull if you manage to pull this off.
 	// At least assuming that the game is still single player.
-	/// Does nothing for now.
+
+	// DOES NOTHING FOR NOW.
+}
+
+void CollisionHandler::collisionProjectileBoss() {
+	// Swapping places of collidables with eachother if necessary
+	// COLLIDABLE1 = INDESTRUCTIBLE
+	if (this->collidable1->getType() != OBJECTTYPE::PROJECTILE) {
+		this->tempCollidableHolder = this->collidable1;
+		this->collidable1 = this->collidable2;
+		this->collidable2 = this->tempCollidableHolder;
+	}
+
+	// CODE GOES HERE.
+}
+
+void CollisionHandler::collisionBossBoss() {
+	// CODE GOES HERE.
 }
 //_________________________________________//
 //                                         //
@@ -517,29 +634,42 @@ void CollisionHandler::executeCollision(
 		break;
 	case 5: this->collisionPlayerProjectile();
 		break;
+	case 6: this->collisionPlayerBoss();
+		break;
 		// ENEMY
-	case 6: this->collisionEnemyEnemy();
+	case 7: this->collisionEnemyEnemy();
 		break;
-	case 7: this->collisionEnemyGenerator();
+	case 8: this->collisionEnemyGenerator();
 		break;
-	case 8: this->collisionEnemyIndestruct();
+	case 9: this->collisionEnemyIndestruct();
 		break;
-	case 9: this->collisionEnemyProjectile();
+	case 10: this->collisionEnemyProjectile();
+		break;
+	case 11: this->collisionEnemyBoss();
 		break;
 		// DOODAD
-	case 10: this->collisionGeneratorGenerator();
+	case 12: this->collisionGeneratorGenerator();
 		break;
-	case 11: this->collisionGeneratorIndestruct();
+	case 13: this->collisionGeneratorIndestruct();
 		break;
-	case 12: this->collisionGeneratorProjectile();
+	case 14: this->collisionGeneratorProjectile();
+		break;
+	case 15: this->collisionGeneratorBoss();
 		break;
 		// INDESTRUCTIBLE
-	case 13: this->collisionIndestructIndestruct();
+	case 16: this->collisionIndestructIndestruct();
 		break;
-	case 14: this->collisionIndestrucProjectile();
+	case 17: this->collisionIndestrucProjectile();
+		break;
+	case 18: this->collisionIndestrucBoss();
 		break;
 		// PROJECTILE
-	case 15: this->collisionProjectileProjectile();
+	case 19: this->collisionProjectileProjectile();
+		break;
+	case 20: this->collisionProjectileBoss();
+		break;
+		// BOSS
+	case 21: this->collisionBossBoss();
 		break;
 	}
 
