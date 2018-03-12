@@ -71,6 +71,9 @@ class SpBombG3 : public SpBomb
 public:
 	SpBombG3(GameObject* owner);
 	virtual ~SpBombG3();
+
+	void update();
+	void collision(GameObject* target, Projectile* proj);
 private:
 };
 

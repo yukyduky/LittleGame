@@ -56,7 +56,7 @@ void SpAutoAttack::cleanUp()
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
-		//this->getOwner()->addEnergy(5);
+		GamePlayState::getInstance()->addEnergyToPlayer(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
@@ -157,7 +157,7 @@ bool SpAutoAttackG2::castSpell()
 void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 {
 	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
-		//this->getOwner()->addEnergy(5);
+		GamePlayState::getInstance()->addEnergyToPlayer(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
