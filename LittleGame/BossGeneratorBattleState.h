@@ -18,10 +18,12 @@ private:
 	bool teleported;
 	bool generatorsSpawned;
 	float counter;
+	float bossMaxHealth;
 
 public:
 	BossGeneratorBattleState(EnemyObject& pHead, AIComponent& pBrain, GamePlayState& pGPS, float bossScale);
 	void executeBehavior();
+	void cleanUp();
 };
 
 

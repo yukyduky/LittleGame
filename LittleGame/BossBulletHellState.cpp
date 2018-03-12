@@ -10,7 +10,6 @@ BossBulletHellState::BossBulletHellState(EnemyObject& pHead, AIComponent& pBrain
 	this->currPhase = 0;
 	//Make sure the boss is the correct color and is able to take damage
 	this->pHead->turnOffInvulnerability();
-	this->pHead->setState(OBJECTSTATE::TYPE::BOSSVULNERABLE);
 }
 
 void BossBulletHellState::cleanUp()

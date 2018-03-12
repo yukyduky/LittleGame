@@ -107,7 +107,7 @@ void EnemyManager::startBossLevel()
 	this->spawnInterval = 1;
 	this->waveInterval = 0.1;
 	this->currentWaveCount = 1;
-	this->currentWaveSize = 1;
+	this->currentWaveSize = 20;
 	Wave* currentWave;
 
 	currentWave = new Wave();
@@ -115,6 +115,117 @@ void EnemyManager::startBossLevel()
 	currentWave->enemies.push_back(boss);
 	this->activeEnemiesCount++;
 	this->waves.push_back(currentWave);
+}
+
+void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
+{
+	Wave* currentWave;
+	this->swarmerCount = 5;
+	std::vector<EnemyObject*> localSwarmers;
+
+	// Per wave
+	for (int i = 0; i < this->currentWaveCount; i++) {
+		currentWave = new Wave();
+
+		// Per minion
+		for (int j = 0; j < this->currentWaveSize; j++) {
+			// Create an enemy and attatch it to the wave.
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, spawnPosVectors);
+			currentWave->enemies.push_back(enemy);
+			this->activeEnemiesCount++;
+		}
+
+		// Per Swarmer
+		for (int k = 0; k < swarmerCount; k++) {
+			// Create the actual object
+			EnemyObject* swarmer = this->createSwarmer(spawnPosVectors);
+
+			// Attach a pointer to waves
+			currentWave->enemies.push_back(swarmer);
+
+			// Attach a pointer to swarmspecific (used by grid)
+			localSwarmers.push_back(swarmer);
+
+			this->activeEnemiesCount++;
+		}
+
+		// Attach the currentWave to our waves
+		this->waves.push_back(currentWave);
+
+		// Up the difficulty a bit maybe?
+		//	this->currentWaveSize += 1;				REMOVED WHILE IMMOLATION IS NOT DONE
+	}
+
+	// Initialize the swarmers! (if there are any)
+	if (this->swarmerCount > 0) {
+		this->pSwarmers->initialize(localSwarmers);
+	}
+
+	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
+	//	this->activeEnemiesCount--;
+}
+
+void EnemyManager::createBossChargers(std::list<GameObject*>& bossChargers, float hp)
+{
+	/// D E C L A R A T I O N
+	// GRAND OBJECT
+	EnemyObject* enemyObject = nullptr;
+	// COMPONENTS
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
+	// STATES
+	EnemyState* bossState = nullptr;
+
+	/// D E F I N I T I O N
+	float bossScale = 50.0f;
+	XMFLOAT3 scale(bossScale, bossScale, bossScale);
+	XMFLOAT3 pos[4];
+	pos[0] = { 300.0f, -bossScale, ARENADATA::GETarenaHeight() - 300.0f };
+	pos[1] = { 300.0f, -bossScale, 300.0f };
+	pos[2] = { ARENADATA::GETarenaWidth() - 300.0f, -bossScale, ARENADATA::GETarenaHeight() - 300.0f };
+	pos[3] = { ARENADATA::GETarenaWidth() - 300.0f, -bossScale, 300.0f };
+
+	float velocity = 180;
+	XMFLOAT4 color(0.1f, 0.01f, 0.75f, 1.0f);
+	XMFLOAT3 rotation(0, 0, 0);
+
+	float projectileDamage = 8;
+	float attackCooldown = 5.0;
+	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
+	float attackRange = ARENADATA::GETarenaWidth();
+	float health = hp / 3.0f;
+
+	Spell* spell = nullptr;
+
+	for (int i = 0; i < 4; i++) {
+		/// A T T A C H M E N T
+		// OBJECT
+		enemyObject = new EnemyObject(
+			ENEMYTYPE::BOSS, this->pGPS->newID(), pos[i], velocity,
+			pGPS, &this->players,
+			OBJECTTYPE::ENEMY, health
+		);
+		// SPELL (Needs to be before States)
+		 spell = new SpBossBulletHell(
+			enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
+		);
+		enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
+		// COMPONENTS
+		graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+		physicsComponent = new PhysicsComponent(*enemyObject, bossScale * 1.25f);
+		aiComponent = new AIComponent(*enemyObject);
+		// STATE
+		// STATES
+		bossState = new EnemyMovingState(*enemyObject, *aiComponent);
+	//	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);
+		enemyObject->setState(OBJECTSTATE::TYPE::BOSSEMERGE);
+		enemyObject->turnOnInvulnerability();
+		bossChargers.push_back(enemyObject);
+	}
+
 }
 
 void EnemyManager::cleanLevel()
@@ -421,7 +532,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float projectileDamage = 8;
-	float attackCooldown = 0.5;
+	float attackCooldown = 0.1;
 	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
 	float attackRange = ARENADATA::GETarenaWidth();
 	float health = 10000.0f;

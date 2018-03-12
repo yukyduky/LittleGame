@@ -443,7 +443,7 @@ void LevelManager::createBossGenerators(std::vector<std::vector<tileData>>& grid
 
 
 	XMFLOAT3 genPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	XMFLOAT4 genColor = XMFLOAT4(0.001f, 0.001f, 0.001f, 1.0f);
+	XMFLOAT4 genColor = XMFLOAT4(0.6f, 0.001f, 1.0f, 1.0f);
 	GameObject* object = nullptr;
 	BlockComponent* block = nullptr;
 	PhysicsComponent* bSphere = nullptr;

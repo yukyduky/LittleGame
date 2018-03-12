@@ -101,6 +101,8 @@ void ActorObject::update()
 {
 	float gravity = -9.82f * 4.0f;
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+	float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
 	switch (this->statusEffect)
 	{
@@ -123,9 +125,18 @@ void ActorObject::update()
 		if (this->counter > 1.5f) {
 			this->statusEffect = TILESTATE::ACTIVE;
 			this->state = OBJECTSTATE::TYPE::ACTIVATED;
+
+			this->GETgraphicsComponent()->updateColor(vColor(
+				(colorHolder.r * healthRatioHolder),
+				(colorHolder.g * healthRatioHolder),
+				(colorHolder.b * healthRatioHolder),
+				(colorHolder.a * healthRatioHolder))
+			);
+
 		}
 		else {
 			this->state = OBJECTSTATE::TYPE::STUNNED;
+			this->GETgraphicsComponent()->updateColor(vColor(0.784f, 0.784f, 0.001f, 1.0f));
 		}
 		break;
 	default:
@@ -150,9 +161,11 @@ void ActorObject::update()
 	case OBJECTSTATE::TYPE::GENERATORRISING:
 		if (this->pos.y < 25.0f) {
 			this->pos.y += 0.5;
+			this->turnOnInvulnerability();
 		}
 		else {
 			this->pos.y = 25.0f;
+			this->turnOffInvulnerability();
 			this->state = OBJECTSTATE::TYPE::GENERATORACTIVE;
 		}
 		this->updateWorldMatrix();
@@ -465,7 +478,7 @@ void ActorObject::dealDmg(float damag)
 
 	this->hp -= dmg * this->invulnerable;
 	
-	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
+	if (this->getType() != OBJECTTYPE::TYPE::PLAYER && this->invulnerable != 0.0f) {
 		vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
 		float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
@@ -664,11 +677,21 @@ void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
 void ActorObject::turnOnInvulnerability()
 {
 	this->invulnerable = 0.0f;
+	this->GETgraphicsComponent()->updateColor(vColor(0.3f, 0.3f, 0.3f, 1.0f));
 }
 
 void ActorObject::turnOffInvulnerability()
 {
 	this->invulnerable = 1.0f;
+	vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+	float healthRatioHolder = this->GEThp() / this->GEThpMAX();
+
+	this->GETgraphicsComponent()->updateColor(vColor(
+		(colorHolder.r * healthRatioHolder),
+		(colorHolder.g * healthRatioHolder),
+		(colorHolder.b * healthRatioHolder),
+		(colorHolder.a * healthRatioHolder))
+	);
 }
 
 Spell * ActorObject::getFirstSpell()

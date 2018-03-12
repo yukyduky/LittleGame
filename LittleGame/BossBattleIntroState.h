@@ -22,6 +22,7 @@ private:
 	int numSquareHorizontal;
 	bool teleported;
 	float bossMaxHealth;
+	int latestWaveOpeningIndex;
 	std::vector<TeleportWave> waves;
 	float counter = 0.0f;
 	std::vector<std::vector<tileData>>* grid;

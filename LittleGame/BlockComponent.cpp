@@ -204,14 +204,6 @@ void BlockComponent::update()
 	{
 	case OBJECTSTATE::TYPE::ACTIVATED:
 		break;
-	case OBJECTSTATE::TYPE::BOSSINVULNERABLE:
-		this->updateColor(vColor(0.3f, 0.3f, 0.3f, 1.0f));
-		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
-		break;
-	case OBJECTSTATE::TYPE::BOSSVULNERABLE:
-		this->updateColor(this->color);
-		this->head->setState(OBJECTSTATE::TYPE::ACTIVATED);
-		break;
 	default:
 		break;
 	}
@@ -286,7 +278,7 @@ OBJECTSTATE::TYPE BlockComponent::GETstate()
 
 void BlockComponent::updateColor(vColor newColor)
 {
-	this->color = newColor;
+	//this->color = newColor;
 
 	std::array<PrimitiveVertexData, 24> vertexData;
 	//Front p0, p1, p2, p3

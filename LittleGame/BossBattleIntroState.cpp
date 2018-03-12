@@ -8,8 +8,16 @@
 void BossBattleIntroState::createNewWave()
 {
 	TeleportWave newWave;
-	//int openingIndex = Locator::getRandomGenerator()->GenerateInt(3, this->numSquareVertical - 4);
-	int openingIndex = 10;
+	int openingIndexStepper = Locator::getRandomGenerator()->GenerateInt(-15, 15);
+	int openingIndex = this->latestWaveOpeningIndex + openingIndexStepper;
+	if (openingIndex < 3) {
+		openingIndex = this->latestWaveOpeningIndex - openingIndexStepper;
+	}
+	else if (openingIndex > this->numSquareVertical - 4) {
+		openingIndex = this->latestWaveOpeningIndex - openingIndexStepper;
+	}
+	this->latestWaveOpeningIndex = openingIndex;
+
 	for (int i = 0; i < this->numSquareVertical; i++) {
 		if (i != openingIndex && i
 			!= openingIndex + 1 && i != openingIndex + 2 &&
@@ -30,12 +38,12 @@ BossBattleIntroState::BossBattleIntroState(EnemyObject& pHead, AIComponent& pBra
 	this->pBrain->pushState(*this);
 	this->grid = &this->pGPS->GETgrid();
 	this->pHead->turnOnInvulnerability();
-	this->pHead->setState(OBJECTSTATE::TYPE::BOSSINVULNERABLE);
 	this->numSquareHorizontal = ARENADATA::GETarenaWidth() / ARENADATA::GETsquareSize();
 	this->numSquareVertical = ARENADATA::GETarenaHeight() / ARENADATA::GETsquareSize();
 	this->waveIterations = 4;
 	this->teleported = false;
 	this->bossMaxHealth = this->pHead->GEThpMAX();
+	this->latestWaveOpeningIndex = this->numSquareVertical / 2;
 
 }
 

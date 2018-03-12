@@ -477,6 +477,9 @@ void GamePlayState::init() {
 	// Adds to the level each time it starts a level
 	Locator::getStatsHeader()->addLevel();
 	Locator::getGameTime()->setMultiplier(1.0);
+
+	//FOR TESTING
+	this->player1->turnOnInvulnerability();
 }
 
 void GamePlayState::cleanUp()
@@ -651,6 +654,29 @@ void GamePlayState::update(GameManager * gm)
 		}
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////
+	for (std::list<GameObject*>::iterator it = this->bossChargers.begin(); it != this->bossChargers.end(); it++) {
+		if ((*it)->getState() != OBJECTSTATE::TYPE::DEAD) {
+			(*it)->update();
+		}
+		else {
+			ID = (*it)->getID();
+			int j = this->graphics.size();
+			for (std::list<GraphicsComponent*>::reverse_iterator rit = this->graphics.rbegin(); rit != this->graphics.rend() && j > this->staticPhysicsCount; rit++) {
+				if ((*rit)->getID() == ID) {
+					this->graphics.erase(std::next(rit).base());
+					j++;
+				}
+				j--;
+			}
+			(*it)->cleanUp();
+			delete (*it);
+			it = this->bossChargers.erase(it);
+			it--;
+		}
+	}
+	///////////////////////////////////////////////////////////////////////////////////
+
 	this->checkPlayerTileStatus();
 	this->enemyManager.update(&this->GUI);
 	this->checkCollisions();
@@ -824,6 +850,11 @@ void GamePlayState::spawnBossGenerators()
 	this->lm.createBossGenerators(this->grid, this->dynamicObjects, this->graphics, this->genIndex);
 }
 
+void GamePlayState::spawnBossChargers(float hp)
+{
+	this->enemyManager.createBossChargers(this->bossChargers, hp);
+}
+
 bool GamePlayState::checkGenerators()
 {
 	bool returnValue = false;
@@ -831,6 +862,11 @@ bool GamePlayState::checkGenerators()
 		returnValue = true;
 	}
 	return returnValue;
+}
+
+void GamePlayState::createABossWave()
+{
+	this->enemyManager.createBossWave(this->enemySpawnPos);
 }
 
 //_________________________________________//

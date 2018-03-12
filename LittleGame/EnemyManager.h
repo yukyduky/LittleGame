@@ -267,7 +267,7 @@ public:
 			}
 			if (this->mainArray[i].alive != nullptr) {
 				delete this->mainArray[i].alive;
-				this->mainArray[i].dead = nullptr;
+				this->mainArray[i].alive = nullptr;
 			}
 			// All objects clean themselves, we're only using pointers here.
 		}
@@ -345,6 +345,10 @@ public:
 	void startLevel1(enemySpawnPositions spawnPosVectors);
 
 	void startBossLevel();
+
+	void createBossWave(enemySpawnPositions spawnPosVectors);
+
+	void createBossChargers(std::list<GameObject*>& bossChargers, float hp);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

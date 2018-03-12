@@ -8,7 +8,7 @@ SpBossBulletHell::SpBossBulletHell(EnemyObject* pShooter, ActorObject* pPlayer, 
 	this->projectilesMaxFlyingRange = range;
 	this->damage = dmg;
 	this->attackRange = attackRange;
-	this->setCoolDown(0.1f);
+	this->setCoolDown(cooldown);
 }
 SpBossBulletHell::~SpBossBulletHell()
 {

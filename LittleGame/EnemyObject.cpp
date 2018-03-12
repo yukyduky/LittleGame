@@ -74,12 +74,40 @@ void EnemyObject::update()
 	// Find out where you are in relation to the player.
 	XMFLOAT3 playerPos = (*players)[0]->GETPosition();
 	this->updateRelationsToPlayer(XMFLOAT2(this->pos.x, this->pos.z), XMFLOAT2(playerPos.x, playerPos.z));
-
-	// Act according to current state
-	for (auto &component : this->components) {
-		component->update();
+	
+	switch (this->state)
+	{
+	case OBJECTSTATE::TYPE::ACTIVATED:
+		// Act according to current state
+		for (auto &component : this->components) {
+			component->update();
+		}
+		break;
+	case OBJECTSTATE::TYPE::BOSSSUBMERGE:
+		if (this->pos.y > -300.0f) {
+			this->pos.y -= 3.0f;
+			this->updateWorldMatrix();
+		}
+		else {
+			this->pos.y = -300.0f;
+			this->state = OBJECTSTATE::TYPE::ACTIVATED;
+		}
+		break;
+	case OBJECTSTATE::TYPE::BOSSEMERGE:
+		if (this->pos.y < 50.0f) {
+			this->pos.y += 3.0f;
+			this->updateWorldMatrix();
+		}
+		else {
+			this->pos.y = 50.0f;
+			this->state = OBJECTSTATE::TYPE::ACTIVATED;
+			this->turnOffInvulnerability();
+		}
+		break;
+	default:
+		break;
 	}
-
+	
 	// Also update the cooldown on spells
 	this->spells[0]->update();
 }
