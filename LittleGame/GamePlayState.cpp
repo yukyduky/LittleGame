@@ -720,13 +720,13 @@ void GamePlayState::initPlayer()
 	// 0:
 	actor->addSpell(new SpAutoAttackG3(actor));
 	// 1:
-	actor->addSpell(new SpFireG3(actor));
+	actor->addSpell(new SpFire(actor));
 	// 2: 
 	actor->addSpell(new SpBombG3(actor));
 	// 3:
 	actor->addSpell(new SpDashG3(actor));
 	// 4:
-	actor->addSpell(new SpBuff(actor));
+	actor->addSpell(new SpBuffG2(actor));
 
 	actor->selectAbility1();
 

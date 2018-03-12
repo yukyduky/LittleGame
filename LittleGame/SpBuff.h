@@ -34,6 +34,8 @@ protected:
 	float oriY, oriRadius;
 	// needs to be lower than CD.
 	float duration = 0.0f;
+	// Its own time to set back to default
+	float timeSC = 0.0f;
 };
 
 
@@ -59,6 +61,10 @@ class SpBuffG2 : public SpBuff
 public:
 	SpBuffG2(GameObject* owner);
 	virtual ~SpBuffG2();
+
+	bool castSpell();
+	void update();
+	void collision(GameObject* target, Projectile* proj);
 private:
 };
 
@@ -73,7 +79,6 @@ public:
 	void update();
 	void collision(GameObject* target, Projectile* proj);
 private:
-	float timeSC = 0.0f;
 };
 
 #endif // !SPBUFF_H

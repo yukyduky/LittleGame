@@ -40,6 +40,9 @@ public:
 	void setMultiplier(double val) {
 		multiplier = val;
 	}
+	double getMultiplier() {
+		return this->multiplier;
+	}
 };
 
 #endif

@@ -15,15 +15,16 @@
 
 void ActorObject::truncateKineticVector()
 {
-	if (this->kineticVector.x < (this->topSpeed * -1))
-		this->kineticVector.x = (this->topSpeed * -1);
-	else if (this->kineticVector.x > this->topSpeed)
-		this->kineticVector.x = this->topSpeed;
+	float multiSpeed = Locator::getGameTime()->getMultiplier() * this->topSpeed * this->topSpeedMagnitude;
+	if (this->kineticVector.x < (multiSpeed * -1))
+		this->kineticVector.x = (multiSpeed * -1);
+	else if (this->kineticVector.x > multiSpeed)
+		this->kineticVector.x = multiSpeed;
 
-	if (this->kineticVector.z > this->topSpeed)
-		this->kineticVector.z = (this->topSpeed);
-	else if (this->kineticVector.z < (this->topSpeed * -1))
-		this->kineticVector.z = (this->topSpeed * -1);
+	if (this->kineticVector.z > multiSpeed)
+		this->kineticVector.z = (multiSpeed);
+	else if (this->kineticVector.z < (multiSpeed * -1))
+		this->kineticVector.z = (multiSpeed* -1);
 }
 
 void ActorObject::applyFriction(float dt)
@@ -147,6 +148,11 @@ XMFLOAT3 ActorObject::getDirection(float length)
 void ActorObject::SETvelocityMagnitude(float velocityMagnitude)
 {
 	this->velocityMagnitude = velocityMagnitude;
+}
+
+void ActorObject::SETtopSpeedMagnitude(float speed)
+{
+	this->topSpeedMagnitude = speed;
 }
 
 void ActorObject::receive(GameObject & obj, Message msg)
@@ -286,7 +292,8 @@ void ActorObject::updatekineticVector()
 
 void ActorObject::updatekineticVectorUp()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { 0.0f, 0.0f, 1.0f };
@@ -300,7 +307,8 @@ void ActorObject::updatekineticVectorUp()
 
 void ActorObject::updatekineticVectorLeft()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { -1.0f, 0.0f, 0.0f };
@@ -313,7 +321,8 @@ void ActorObject::updatekineticVectorLeft()
 }
 void ActorObject::updatekineticVectorDown()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { 0.0f, 0.0f, -1.0f };
@@ -326,7 +335,8 @@ void ActorObject::updatekineticVectorDown()
 }
 void ActorObject::updatekineticVectorRight()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { 1.0f, 0.0f, 0.0f };
