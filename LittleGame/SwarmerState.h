@@ -20,9 +20,9 @@ private:
 	float originalSpellCooldown = this->pHead->getFirstSpell()->getCoolDown();
 	float spellCooldown = originalSpellCooldown;
 	float passedTime = 0;
-	float originalPulseInterval = 3.5;
+	float originalPulseInterval = 1.5;
 	float pulseInterval = originalPulseInterval;
-	float originalVelocity = this->pHead->getVelocity();
+	float originalVelocity = this->pHead->GETvelocityMagnitude();
 	float timeFactor = originalVelocity / pulseInterval;
 
 
@@ -34,12 +34,14 @@ private:
 	ScaredFactor scaredFactor;
 
 	float pulseFormula(float dt) {
-		float returnValue = (originalVelocity - timeFactor * dt);
-		// Let's not even have the possibility of negative velocity
-		if (returnValue > 0)
-			return returnValue;
-		else
-			return 0;
+		//float returnValue = originalVelocity - timeFactor * dt);
+		//// Let's not even have the possibility of negative velocity
+		//if (returnValue > 0)
+		//	return returnValue;
+		//else
+		//	return 0;
+
+		return this->originalVelocity;
 	}
 
 protected:
@@ -62,10 +64,12 @@ protected:
 		this->passedTime += dt;
 
 		// Adjust velocity based on time
-		this->pHead->setVelocity(pulseFormula(this->passedTime));
+//		this->pHead->SETvelocityMagnitude(pulseFormula(this->passedTime));
 
 		// Reset if necessary
 		if (this->passedTime > pulseInterval) {
+			// Move!
+			this->pBrain->pushCommand(AICOMMANDS::MOVE);
 			this->passedTime = 0;
 			this->timeToPulse = true;
 		}

@@ -59,7 +59,7 @@ void SwarmerSeekingState::executeBehavior()
 		this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown() / neighbourCount);
 
 		// Affect velocity
-		this->pHead->setVelocity(this->getOriginalVelocity() * neighbourCount);
+		this->pHead->SETvelocityMagnitude(this->getOriginalVelocity() * neighbourCount);
 
 		// Affect how fast we pulse
 		this->setPulseInterval(this->getOriginalPulseInterval() * neighbourCount);
@@ -67,21 +67,21 @@ void SwarmerSeekingState::executeBehavior()
 	else {
 		// Reset if we have to
 		this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown());
-		this->pHead->setVelocity(this->getOriginalVelocity());
+		this->pHead->SETvelocityMagnitude(this->getOriginalVelocity());
 		this->setPulseInterval(this->getOriginalPulseInterval());
 	}
 
 	// Look for the average of all swarmers
 	averageDirection = this->getDirectionToSeek();
-	newDirection.x += averageDirection.x * 2;
-	newDirection.y += averageDirection.y * 2;
-	newDirection.z += averageDirection.z * 2;
+	newDirection.x += averageDirection.x * 100;
+	newDirection.y += averageDirection.y * 100;
+	newDirection.z += averageDirection.z * 100;
 	
 	// Wander
 	wanderDirection = this->wander();
-	newDirection.x += wanderDirection.x * 150;
-	newDirection.y += wanderDirection.y * 150;
-	newDirection.z += wanderDirection.z * 150;
+	newDirection.x += wanderDirection.x * 50;
+	newDirection.y += wanderDirection.y * 50;
+	newDirection.z += wanderDirection.z * 50;
 
 	// Fear of the player
 	avoidDirection = this->avoidPlayer();
@@ -120,13 +120,11 @@ void SwarmerSeekingState::executeBehavior()
 	// Adjust velocity based on pulsing
 	this->pulse();
 
-	// Move!
-	this->pBrain->pushCommand(AICOMMANDS::MOVE);
 	// Cooldown is checked internally | This unit has unlimited attackrange
 	this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 
 	/// If we've went outside the arena, move back in damnit!
-	if (this->inOrOut() == false) {
+	if (this->inOrOutPlus() == false) {
 		this->pBrain->popState();
 	}
 }

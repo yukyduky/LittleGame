@@ -1,5 +1,6 @@
 #include "Button.h"
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
+#include "HomeMenuState.h"
 #include "RewardMenuState.h"
 
 Button::Button(MenuState* pMS, size_t ID,
@@ -91,13 +92,17 @@ void Button::deSelectButton()
 
 void Button::onPress()
 {
+	bool currSetting;
 	switch (this->behavior)
 	{
 	case BEHAVIOR::GOSTART:
-		this->pMS->displayMenu(static_cast<MainMenuState*>(this->pMS)->initStartMenu());
+		this->pMS->displayMenu(static_cast<PauseMenuState*>(this->pMS)->initStartMenu());
+		break;
+	case BEHAVIOR::GOSTART_HOME:
+		this->pMS->displayMenu(static_cast<HomeMenuState*>(this->pMS)->initStartMenu());
 		break;
 	case BEHAVIOR::GOOPTIONS:
-		this->pMS->displayMenu(static_cast<MainMenuState*>(this->pMS)->initOptionsMenu());
+		this->pMS->displayMenu(static_cast<PauseMenuState*>(this->pMS)->initOptionsMenu());
 		break;
 	case BEHAVIOR::RESUMEGAME:
 		this->pMS->resumeGame();
@@ -108,14 +113,39 @@ void Button::onPress()
 	case BEHAVIOR::RESTARTGAME:
 		this->pMS->restartGame();
 		break;
+
+		//Options
 	case BEHAVIOR::VOLUMEUP:
 		Locator::getAudioManager()->adjustMaster(true);
 		break;
 	case BEHAVIOR::VOLUMEDOWN:
 		Locator::getAudioManager()->adjustMaster(false);
 		break;
+	case BEHAVIOR::VOLUMEUP_E:
+		Locator::getAudioManager()->adjustEffects(5.0f);
+		break;
+	case BEHAVIOR::VOLUMEDOWN_E:
+		Locator::getAudioManager()->adjustEffects(-5.0f);
+		break;
+	case BEHAVIOR::VOLUMEUP_M:
+		Locator::getAudioManager()->adjustMusic(5.0f);
+		break;
+	case BEHAVIOR::VOLUMEDOWN_M:
+		Locator::getAudioManager()->adjustMusic(-5.0f);
+		break;
 	case BEHAVIOR::WINDOWSWITCH:
-		static_cast<MainMenuState*>(this->pMS)->FullScreenSwitch();
+		static_cast<PauseMenuState*>(this->pMS)->FullScreenSwitch();
+		break;
+	case BEHAVIOR::USECONTROLLER:
+		currSetting = GamePlayState::getInstance()->switchControllerInput();
+		if (currSetting)
+		{
+			this->text = L"Input: Controller";
+		}
+		else
+		{
+			this->text = L"Input: Keyboard";
+		}
 		break;
 
 	// Rewardmenu

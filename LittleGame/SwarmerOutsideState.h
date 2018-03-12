@@ -40,7 +40,7 @@ public:
 		this->pHead->setDirection(XMFLOAT3(vectorToOpening.x, 0, vectorToOpening.y));
 
 		// Move!
-		this->pBrain->pushCommand(AICOMMANDS::MOVE);
+		this->pulse();
 
 		// If we've come inside the grid, ACT LIKE IT.
 		if (this->inOrOut()) {

@@ -17,8 +17,8 @@ class Projectile : public GameObject
 {
 public:
 	Projectile();
-	Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
-	Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
+	//Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
+	Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
 	virtual ~Projectile();
 	
 	/*Moves the projectile in this->direction with this->velocity * this->dt
@@ -38,6 +38,7 @@ public:
 	void setRange(int maxFlyingRange) { this->maxFlyingRange = maxFlyingRange; }
 	void setSeeking(float rotationSpeed, ActorObject* pPlayer);	// Only relevant to seekling projectiles
 	void setSpell(Spell* spell);
+	void setSpellByName(int spellName, int glyph);
 	Spell* getSpell();	// Gets allocated by player.spell->castSpell()
 
 

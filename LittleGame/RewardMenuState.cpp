@@ -249,7 +249,7 @@ Menu * RewardMenuState::initLootMenu()
 
 		while (cpyFound)
 		{
-			name = (NAME)Locator::getRandomGenerator()->GenerateInt(0, (int)NAME::SIZE - 1);
+			name = (NAME)Locator::getRandomGenerator()->GenerateInt(0, 4 /*Number of player spells*/ );
 			glyph = (GLYPHTYPE)Locator::getRandomGenerator()->GenerateInt(1, (int)GLYPHTYPE::SIZE - 1);
 
 			cpyFound = false;
@@ -464,20 +464,14 @@ Menu * RewardMenuState::initNextLevelMenu()
 	return menu;
 }
 
-void RewardMenuState::provide(std::vector<int> savedGlyphs)
-{
-	// First clear to avoid doubling of vectors
-	this->vecGlyph.clear();
-
-	for (int i = 0; i < savedGlyphs.size(); i++) {
-		this->vecGlyph.push_back(savedGlyphs[i]);
-	}
-}
-
 void RewardMenuState::provide(ActorObject * player)
 {
 	this->player = player;
 
+	for (int i = 0; i < 5; i++)
+	{
+		this->player->changeSpell(i, Locator::getStatsHeader()->getStats().glyphs[i]);
+	}
 }
 
 void RewardMenuState::startGame()

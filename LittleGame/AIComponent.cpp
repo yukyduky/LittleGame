@@ -15,7 +15,7 @@ void AIComponent::bindCommands()
 	this->commands[AICOMMANDS::BOSSATTACK03] = new CommandBossAttack03;
 }
 
-AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior) : commands()
+AIComponent::AIComponent(EnemyObject& obj) : commands()
 {
 	/// Set up head
 	this->pHead = &obj;
@@ -24,7 +24,6 @@ AIComponent::AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior) : command
 	
 
 	/// Set internal data
-	this->behavior = aiBehavior;
 	this->players = obj.getPlayers();
 
 	/// Initialize

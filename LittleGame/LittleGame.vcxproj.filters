@@ -81,7 +81,6 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="D2D.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
@@ -117,6 +116,8 @@
     <ClCompile Include="IDHandler.cpp" />
     <ClCompile Include="TriangleComponent.cpp" />
     <ClCompile Include="MinionOutsideState.h" />
+    <ClCompile Include="PauseMenuState.cpp" />
+    <ClCompile Include="HomeMenuState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
@@ -218,7 +219,6 @@
     <ClInclude Include="GUIManager.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="D2D.h" />
-    <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuState.h" />
@@ -260,6 +260,8 @@
     <ClInclude Include="ChargerState.h">
       <Filter>Charger</Filter>
     </ClInclude>
+    <ClInclude Include="PauseMenuState.h" />
+    <ClInclude Include="HomeMenuState.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -295,5 +297,8 @@
     <Filter Include="Charger">
       <UniqueIdentifier>{b704713e-25dc-41cd-88e9-4816ae49b163}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="captureqwsx.bmp" />
   </ItemGroup>
 </Project>

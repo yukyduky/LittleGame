@@ -6,7 +6,8 @@
 #include "GameTime.h"
 #include "RandomGeneration.h"
 #include "GamePlayState.h"
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
+#include "HomeMenuState.h"
 #include "Renderer.h"
 #include "AudioManager.h"
 #include "GlobalEvents.h"
@@ -39,8 +40,8 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Start the game timer
 
 	// Set the first state of the game
-	StateManager::pushState(GamePlayState::getInstance());
-	StateManager::pushState(MainMenuState::getInstance());
+	//StateManager::pushState(GamePlayState::getInstance());
+	StateManager::pushState(HomeMenuState::getInstance());
 
 	Locator::getStatsHeader()->addLevel();
 }

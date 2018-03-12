@@ -14,6 +14,7 @@ SpEnemyImmolation::SpEnemyImmolation(
 
 bool SpEnemyImmolation::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	// Only coded to work against 1 player atm!
 	this->GETpPlayer()->dealDmg(this->damage);
 

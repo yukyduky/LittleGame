@@ -45,7 +45,7 @@ private:
 	
 
 public:
-	AIComponent(EnemyObject& obj, AIBEHAVIOR::KEY aiBehavior);
+	AIComponent(EnemyObject& obj);
 	virtual ~AIComponent() {}
 
 	void pushCommand(AICOMMANDS::KEY command);

@@ -1,7 +1,7 @@
 
 #include "SpFire.h"
 
-SpFire::SpFire(ActorObject* player) : Spell(player, NAME::FIRE)
+SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -19,12 +19,13 @@ SpFire::~SpFire()
 
 bool SpFire::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
@@ -88,7 +89,7 @@ void SpFire::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpFireG1::SpFireG1(ActorObject * player) : SpFire(player)
+SpFireG1::SpFireG1(GameObject* owner) : SpFire(owner)
 {
 	// WHEN BALANCING, DONT FORGET THAT THERE IS A CAP ON PROJECTILES FOR THIS SPELL
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
@@ -103,18 +104,19 @@ SpFireG1::~SpFireG1()
 
 bool SpFireG1::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
 			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, this->range, false);
 
-			XMVECTOR direction = XMLoadFloat3(&this->getOwner()->getDirection());
+			XMVECTOR direction = XMLoadFloat3(&this->actOwner->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
 			
 			XMVECTOR leDir = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, -0.3f));
@@ -144,7 +146,7 @@ bool SpFireG1::castSpell()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpFireG2::SpFireG2(ActorObject * player) : SpFire(player)
+SpFireG2::SpFireG2(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 2.2f;
@@ -159,12 +161,13 @@ SpFireG2::~SpFireG2()
 
 bool SpFireG2::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 
@@ -198,7 +201,7 @@ void SpFireG2::collision(GameObject * target, Projectile * proj)
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpFireG3::SpFireG3(ActorObject * player) : SpFire(player)
+SpFireG3::SpFireG3(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 3.5f);
@@ -214,12 +217,13 @@ SpFireG3::~SpFireG3()
 
 bool SpFireG3::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = false;
 
 	if (this->getState() != SPELLSTATE::COOLDOWN)
 	{
 		// For further info, if needed, see 'useEnergy()' description
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			returnValue = true;
 			XMFLOAT3 plyPos = this->getOwner()->GETPosition();
@@ -232,7 +236,7 @@ bool SpFireG3::castSpell()
 				Projectile* proj = this->spawnProj(props, 
 					Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 						50));
-				proj->setPosition(plyPos + (this->getOwner()->getDirection(i * props.size * 14)));
+				proj->setPosition(plyPos + (this->actOwner->getDirection(i * props.size * 14)));
 				// The multiplier below is half of above
 				XMMATRIX scaleM = XMMatrixScaling(props.size * 7.0f, props.size, props.size); 
 				proj->SETscaleMatrix(scaleM);

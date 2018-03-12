@@ -33,6 +33,8 @@ public:
 	virtual void saveScreen() = 0;
 	// Clears the screenshot
 	virtual void closeMenu() = 0;
+	// Cleans memory
+	virtual void cleanUp() = 0;
 };
 
 
