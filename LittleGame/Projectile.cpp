@@ -99,9 +99,9 @@ void Projectile::cleanUp()
 	}
 
 	// Detta tar bort spelarens egna spell
-	if (this->spell != nullptr && this->spell->getOwner()->getType() != OBJECTTYPE::PLAYER) {
-		delete this->spell;
-	}
+	//if (this->spell != nullptr && this->spell->getOwner()->getType() != OBJECTTYPE::PLAYER) {
+	delete this->spell;
+	//}
 }
 
 float Projectile::getAngleTowardsPlayer()
