@@ -10,13 +10,15 @@ struct Statistics
 	int level;
 	int kills;
 	float damageTaken;
+	float difficulty;
 	std::array<int, (size_t)5/*Need enum for types of enemy upgrades*/> enemyUpg;
 	std::array<int /*GLYPHTYPE*/, 5 /*NAME*/> glyphs;
 
 	Statistics() :
-		level(-1),
+		level(0),
 		kills(0),
-		damageTaken(0.0f)
+		damageTaken(0.0f),
+		difficulty(1.0f)
 	{};
 };
 

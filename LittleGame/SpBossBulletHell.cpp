@@ -16,6 +16,7 @@ SpBossBulletHell::~SpBossBulletHell()
 
 bool SpBossBulletHell::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	XMVECTOR dirVec;
 	XMMATRIX rotationM = XMMatrixRotationY(this->radians);
 	

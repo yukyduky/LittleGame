@@ -34,8 +34,9 @@ protected:
 	float hpMAX = 0;
 	TILESTATE::STATE statusEffect = TILESTATE::STATE::ACTIVE;
 	float counter = 0.0f;
-	float slowedVelocity;
-	float realVelocity;
+	//XMFLOAT3 slowedVelocity;
+	//XMFLOAT3 realVelocity;
+	DirectX::XMFLOAT2 MovementVector;
 
 	float energy = 100;
 	float energyMAX = 100;
@@ -50,11 +51,15 @@ protected:
 
 	Crosshair* crossHair = nullptr;
 
+	void truncateKineticVector();
+	void applyFriction(float dt);
+	void preventLeaveArena();
+
 public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Only currently sets the pos, doesn't update world with it.
 	*/
-	ActorObject(const size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
+	ActorObject(const size_t ID, float velocityMagnitude, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, OBJECTTYPE::TYPE objectType, float hp_in);
 	virtual ~ActorObject() {}
 	virtual const size_t getID();
 	virtual GamePlayState* getPGPS();
@@ -63,7 +68,8 @@ public:
 	virtual void setDirection(XMFLOAT3 direction);
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
-	virtual void setSpeed(float speed);
+	virtual void SETvelocityMagnitude(float speed);
+	virtual float GETvelocityMagnitude() { return this->velocityMagnitude; }
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
 	std::vector<Spell*> GETSpells() { return this->spells; };
@@ -78,15 +84,17 @@ public:
 	1. Moves the Actor according to data fetched from the internal InputComponent
 	2. Only called when the player is using a controller
 	*/
-	void move();
+	void updatekineticVector();
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Affects the position of the ActorObject
 	2. Only called when the player is using a keyboard
 	*/
-	void moveUp();
-	void moveLeft();
-	void moveDown();
-	void moveRight();
+	void updatekineticVectorUp();
+	void updatekineticVectorLeft();
+	void updatekineticVectorDown();
+	void updatekineticVectorRight();
+
+	void move();
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Moves the Actor according to data fetched from the internal InputComponent

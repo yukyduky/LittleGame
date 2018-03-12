@@ -11,7 +11,7 @@ class GamePlayState;
 class SpDash : public Spell
 {
 public:
-	SpDash(ActorObject* player);
+	SpDash(GameObject* owner);
 	~SpDash();
 
 	virtual bool castSpell();
@@ -29,11 +29,9 @@ protected:
 	// Travel-range of spell
 	float range = 0.0f;
 
-	std::vector<Projectile*> flames;
+	//std::vector<Projectile*> flames;
 	int nrOfFlames = 0;
 	float flameSize = 0.0f;
-	// Workaround to making sure that the flames are gone before the user spawns new
-	bool burning;
 };
 
 ////////////////////////////////////////////
@@ -43,7 +41,7 @@ protected:
 class SpDashG1 : public SpDash
 {
 public:
-	SpDashG1(ActorObject* player);
+	SpDashG1(GameObject* owner);
 	virtual ~SpDashG1();
 
 	bool castSpell();
@@ -56,7 +54,7 @@ private:
 class SpDashG2 : public SpDash
 {
 public:
-	SpDashG2(ActorObject* player);
+	SpDashG2(GameObject* owner);
 	virtual ~SpDashG2();
 
 	bool castSpell();
@@ -68,7 +66,7 @@ private:
 class SpDashG3 : public SpDash
 {
 public:
-	SpDashG3(ActorObject* player);
+	SpDashG3(GameObject* owner);
 	virtual ~SpDashG3();
 private:
 	bool castSpell();

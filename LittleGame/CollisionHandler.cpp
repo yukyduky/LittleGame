@@ -293,6 +293,7 @@ void CollisionHandler::collisionPlayerIndestruct() {
 
 	// Moving the player only, since the indestructibles cannot move.
 	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
+	//collidable1->setVelocity(this->resultVector);
 }
 
 void CollisionHandler::collisionPlayerProjectile() {
@@ -388,6 +389,8 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 	
+
+
 	Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
 	spell->collision(this->collidable1, proj);

@@ -22,7 +22,7 @@ private:
 	float passedTime = 0;
 	float originalPulseInterval = 3.5;
 	float pulseInterval = originalPulseInterval;
-	float originalVelocity = this->pHead->getVelocity();
+	float originalVelocity = this->pHead->GETvelocityMagnitude();
 	float timeFactor = originalVelocity / pulseInterval;
 
 
@@ -62,7 +62,7 @@ protected:
 		this->passedTime += dt;
 
 		// Adjust velocity based on time
-		this->pHead->setVelocity(pulseFormula(this->passedTime));
+		this->pHead->SETvelocityMagnitude(pulseFormula(this->passedTime));
 
 		// Reset if necessary
 		if (this->passedTime > pulseInterval) {

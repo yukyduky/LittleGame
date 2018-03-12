@@ -7,9 +7,10 @@
 #include "SpSwarmProjectile.h"
 #include "SpBossBulletHell.h"
 
+//#include "GamePlayState.h"
 
 
-Spell::Spell(ActorObject* owner, NAME name)
+Spell::Spell(GameObject* owner, NAME name)
 {
 	this->glyph = GLYPHTYPE::NONE;
 	this->owner = owner;
@@ -39,44 +40,18 @@ void Spell::updateCD()
 Projectile* Spell::spawnProj(ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
-	XMFLOAT3 distance = { this->getOwner()->getDirection() * 40 };
-	XMFLOAT3 newPos = { this->getOwner()->GETPosition() + distance };
+	XMFLOAT3 dir = this->owner->getDirection();
+	XMFLOAT3 distance = { dir * 40 };
+	XMFLOAT3 newPos = { this->owner->GETPosition() + distance };
 	light.pos = newPos;
-	proj = this->getOwner()->getPGPS()->initProjectile(newPos, this->getOwner(), props, light);
+	proj = GamePlayState::getInstance()->initProjectile(newPos, this->owner, props, light);
+	//proj = this->getOwner()->getPGPS()
 
 	// Attach the relevant spell to the projectile
 	// (This could be optimized by adding copy constructors and using those instead of what's done below)
 	Spell* projectilesSpell = nullptr;
 
 	switch (this->name) {
-		case NAME::AUTOATTACK: {
-			//SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
-
-			//projectilesSpell = new SpAutoAttack(this->getOwner());
-			proj->setSpell(this);
-			break;
-		}
-		case NAME::BOMB: {
-			//SpBomb* trueThis = static_cast<SpBomb*>(this);
-
-			//projectilesSpell = new SpBomb(this->getOwner());
-			proj->setSpell(this);
-			break;
-		}
-		case NAME::DASH: {
-			//SpDash* trueThis = static_cast<SpDash*>(this);
-
-			//projectilesSpell = new SpDash(this->getOwner());
-			proj->setSpell(this);
-			break;
-		}
-		case NAME::FIRE: {
-			//SpFire* trueThis = static_cast<SpFire*>(this);
-
-			//projectilesSpell = new SpFire(this->getOwner());
-			proj->setSpell(this);
-			break;
-		}
 		case NAME::ENEM_SWARM: {
 			SpSwarmProjectile* trueThis = static_cast<SpSwarmProjectile*>(this);
 			EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
@@ -98,9 +73,13 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 			);
 			proj->setSpell(projectilesSpell);
 			break;
+		}
+		default:
+			proj->setSpellByName((int)this->name, (int)this->glyph);
+			proj->SETrotationMatrix(XMLoadFloat4x4(&this->owner->getRotationMatrix())); // Enemies dont turn, can be added later
+			break;
 	}
-	}
-	
+
 
 	return proj;
 }

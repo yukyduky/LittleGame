@@ -59,7 +59,7 @@ void SwarmerSeekingState::executeBehavior()
 		this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown() / neighbourCount);
 
 		// Affect velocity
-		this->pHead->setVelocity(this->getOriginalVelocity() * neighbourCount);
+		this->pHead->SETvelocityMagnitude(this->getOriginalVelocity() * neighbourCount);
 
 		// Affect how fast we pulse
 		this->setPulseInterval(this->getOriginalPulseInterval() * neighbourCount);
@@ -67,7 +67,7 @@ void SwarmerSeekingState::executeBehavior()
 	else {
 		// Reset if we have to
 		this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown());
-		this->pHead->setVelocity(this->getOriginalVelocity());
+		this->pHead->SETvelocityMagnitude(this->getOriginalVelocity());
 		this->setPulseInterval(this->getOriginalPulseInterval());
 	}
 

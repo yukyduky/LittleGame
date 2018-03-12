@@ -4,7 +4,7 @@
 
 #include "Spell.h"
 
-class ActorObject;
+//class ActorObject;
 
 class EnemySpell : public Spell
 {
@@ -43,6 +43,8 @@ public:
 	void setpPlayer(ActorObject* pPlayer) {
 		this->pPlayer = pPlayer;
 	}
+
+	ActorObject* getOwner() { return static_cast<ActorObject*>(this->owner); };
 
 	
 	// Returns false if spell in unavalible to cast

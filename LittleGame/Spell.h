@@ -43,7 +43,7 @@ enum class NAME {
 class Spell
 {
 public:
-	Spell(ActorObject* shooter, NAME name);
+	Spell(GameObject* owner, NAME name);
 	virtual ~Spell();
 
 	// Returns false if spell in unavalible to cast
@@ -60,7 +60,7 @@ public:
 	// Spawns a projectile infront of the player
 	Projectile* spawnProj(ProjProp props, Light light);
 
-	ActorObject* getOwner() { return this->owner; };
+	virtual GameObject* getOwner() { return this->owner; };
 	void setType(SPELLTYPE input) { this->type = input; };
 	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
@@ -88,7 +88,7 @@ private:
 	GLYPHTYPE glyph;
 	SPELLSTATE state;
 	NAME name;
-	ActorObject * owner = nullptr;
+
 
 	float coolDown = 0.0f;
 	float timeSinceCast = 0.0f;
@@ -99,7 +99,11 @@ protected:
 	int attackRange = -1;
 	float cost = 0;
 
-protected:
+	// This will be Proj when used in update and Actor in cast
+	GameObject * owner = nullptr;
+	ActorObject* actOwner = nullptr;
+	Projectile* projOwner = nullptr;
+
 	bool active = false;
 };
 
