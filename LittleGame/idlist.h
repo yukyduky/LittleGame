@@ -110,9 +110,15 @@ inline void idlist<T>::remove(const size_t id)
 template<class T>
 inline void idlist<T>::reserve(const size_t size)
 {
-	m_Container.reserve(size);
+	m_Container.resize(size);
 	m_IDToIndex.reserve(size);
 	m_IndexToID.reserve(size);
+
+	for (size_t i = m_NrOfElements + m_AvailableIDs.size(); i < size; i++)
+	{
+		m_AvailableIDs.push_back(i);
+		m_AvailableIndexes.push(i);
+	}
 }
 
 template<class T>
@@ -133,6 +139,8 @@ inline void idlist<T>::clear()
 	{
 		m_AvailableIndexes.pop();
 	}
+
+	m_NrOfElements = 0;
 }
 
 template<class T>

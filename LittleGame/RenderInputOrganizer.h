@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "idlist.h"
 
-constexpr int MAX_NUM_POINTLIGHTS = 75;
+constexpr int MAX_NUM_POINTLIGHTS = 150;
 constexpr int MAX_NUM_FLOORGRIDS = 36;
 
 using namespace DirectX;
@@ -25,7 +25,7 @@ struct Light {
 	XMFLOAT3 attenuation;
 	float specPower;
 
-	Light() : pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), diffuse(XMFLOAT3(0.0f, 0.0f, 0.0f)), ambient(XMFLOAT3(0.0f, 0.0f, 0.0f)) {}
+	Light() : pos(0.0f, 0.0f, 0.0f), diffuse(0.0f, 0.0f, 0.0f), ambient(0.0f, 0.0f, 0.0f), attenuation(0.1f, 0.0f, 0.0f) {}
 	Light(XMFLOAT3 pos, XMFLOAT3 diffuse, XMFLOAT3 ambient, XMFLOAT3 attenuation, float specPower) : 
 		pos(pos), diffuse(diffuse), ambient(ambient), attenuation(attenuation), specPower(specPower) {}
 };
