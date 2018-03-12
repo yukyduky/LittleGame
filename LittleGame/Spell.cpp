@@ -77,6 +77,10 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 		default:
 			proj->setSpellByName((int)this->name, (int)this->glyph);
 			proj->SETrotationMatrix(XMLoadFloat4x4(&this->owner->getRotationMatrix())); // Enemies dont turn, can be added later
+			if (this->name == NAME::BUFF)
+			{
+				proj->getSpell()->setActOwner(static_cast<ActorObject*>(this->owner));
+			}
 			break;
 	}
 

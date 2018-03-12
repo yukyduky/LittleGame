@@ -13,7 +13,6 @@ SpBuff::SpBuff(GameObject* owner) :  Spell(owner, NAME::BUFF)
 
 	this->range = 20.0f;
 	this->oriRadius = this->getOwner()->GETphysicsComponent()->GETBoundingSphere().Radius;
-	this->active = false;
 	this->floatingValue = 0.0f;
 	this->oriY = this->getOwner()->GETPosition().y + this->range;
 }
@@ -34,11 +33,9 @@ bool SpBuff::castSpell()
 	{
 		if (this->actOwner->useEnergy(this->getCost()))
 		{
-			this->active = true;
-			this->setState(SPELLSTATE::ACTIVE);
+			this->setState(SPELLSTATE::COOLDOWN);
 
 			this->getOwner()->SETvelocityMagnitude(this->strength);
-			this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -55,31 +52,27 @@ void SpBuff::upgrade(float modif)
 
 void SpBuff::update()
 {
-	this->updateCD();
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
-	if (this->active)
+	if (this->getTSC() > this->duration)
 	{
-		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+		Locator::getGameTime()->setMultiplier(1.0);
+		this->getOwner()->SETvelocityMagnitude(1.0f);
+		this->active = false;
+		this->setState(SPELLSTATE::COOLDOWN);
 
-		if (this->getTSC() > this->duration)
-		{
-			Locator::getGameTime()->setMultiplier(1.0);
-			this->getOwner()->SETvelocityMagnitude(1.0f);
-			this->active = false;
-			this->setState(SPELLSTATE::COOLDOWN);
-
-			this->getOwner()->setPositionY(this->oriY - this->range);
-			this->getOwner()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
-		}
-		else
-		{
-			Locator::getGameTime()->setMultiplier(0.3);
-			this->floatingValue += 5.0f * dt;
-			float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
-
-			this->getOwner()->setPositionY(parameter);
-		}
+		this->getOwner()->setPositionY(this->oriY - this->range);
+		this->getOwner()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
 	}
+	else
+	{
+		Locator::getGameTime()->setMultiplier(0.3);
+		this->floatingValue += 5.0f * dt;
+		float parameter = this->oriY + sin(this->floatingValue) * 7.0f;
+
+		this->getOwner()->setPositionY(parameter);
+	}
+	
 }
 
 void SpBuff::cleanUp()
@@ -118,11 +111,11 @@ bool SpBuffG1::castSpell()
 		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			this->active = true;
-			this->setState(SPELLSTATE::ACTIVE);
 
 			this->actOwner->getPGPS()->setBerserkerMode(true);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			this->setState(SPELLSTATE::COOLDOWN);
 		}
 	}
 
@@ -131,20 +124,18 @@ bool SpBuffG1::castSpell()
 
 void SpBuffG1::update()
 {
-	if (this->active)
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+	if (this->getTSC() > this->duration)
 	{
-		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+		Locator::getGameTime()->setMultiplier(1.0);
+		this->active = false;
+		this->setState(SPELLSTATE::COOLDOWN);
 
-		if (this->getTSC() > this->duration)
-		{
-			Locator::getGameTime()->setMultiplier(1.0);
-			this->active = false;
-			this->setState(SPELLSTATE::COOLDOWN);
+		this->actOwner->getPGPS()->setBerserkerMode(false);
 
-			this->actOwner->getPGPS()->setBerserkerMode(false);
-
-		}
 	}
+	
 }
 
 
@@ -169,6 +160,11 @@ SpBuffG3::SpBuffG3(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->strength *= 2.0f;
+	this->range = 300.0f;
+
+	this->duration = 1.5f;
+	this->setCoolDown(8.0f);
+	this->timeSC = 0.0f;
 }
 
 SpBuffG3::~SpBuffG3()
@@ -177,7 +173,7 @@ SpBuffG3::~SpBuffG3()
 
 bool SpBuffG3::castSpell()
 {
-	this->actOwner = static_cast<ActorObject*>(this->owner);
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
@@ -187,13 +183,12 @@ bool SpBuffG3::castSpell()
 	{
 		if (this->actOwner->useEnergy(this->getCost()))
 		{
-			this->active = true;
-			this->setState(SPELLSTATE::ACTIVE);
-
-			this->getOwner()->SETvelocityMagnitude(this->strength);
-			this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
+			ProjProp props(0, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, -1, false/*PROJBEHAVIOR::ENLARGE*/);
+			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
+				->GETphysicsComponent()->updateBoundingArea(this->range);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			this->setState(SPELLSTATE::COOLDOWN);
 		}
 	}
 
@@ -202,22 +197,30 @@ bool SpBuffG3::castSpell()
 
 void SpBuffG3::update()
 {
-	if (this->active)
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	this->timeSC += dt;
+	if (this->timeSC >= this->duration)
 	{
-		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+		this->owner->setState(OBJECTSTATE::TYPE::DEAD);
+	}
+	else
+	{
+		XMFLOAT3 actPos = this->actOwner->GETPosition();
+		actPos.z += 1.0f;
+		this->owner->setPosition(actPos);
+	}
+}
 
-		if (this->getTSC() > this->duration)
-		{
-			Locator::getGameTime()->setMultiplier(1.0);
-			this->getOwner()->SETvelocityMagnitude(1.0f);
-			this->active = false;
-			this->setState(SPELLSTATE::COOLDOWN);
+void SpBuffG3::collision(GameObject * target, Projectile * proj)
+{
+	if (target->getType() == OBJECTTYPE::TYPE::ENEMY)
+	{
+		XMVECTOR pushDir = XMVectorSubtract(XMLoadFloat3(&target->GETPosition()), XMLoadFloat3(&proj->GETPosition()));
 
-			this->getOwner()->GETphysicsComponent()->updateBoundingArea(this->oriRadius);
-		}
-		else
-		{
-			Locator::getGameTime()->setMultiplier(0.3);
-		}
+		pushDir = XMVector3Normalize(pushDir);
+
+		XMFLOAT3 kinvectorFloat3;
+		XMStoreFloat3(&kinvectorFloat3, pushDir);
+		static_cast<ActorObject*>(target)->setkineticVector(kinvectorFloat3 * 300.0f);
 	}
 }

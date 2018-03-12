@@ -18,7 +18,7 @@ public:
 	// Adds a glyph (template version of glyph so only has a float to modiy strength)
 	void upgrade(float modif);
 	//What the spell will do with the target
-	void collision(GameObject* target, Projectile* proj);
+	virtual void collision(GameObject* target, Projectile* proj);
 	virtual void update();
 	void cleanUp();
 protected:
@@ -71,7 +71,9 @@ public:
 
 	bool castSpell();
 	void update();
+	void collision(GameObject* target, Projectile* proj);
 private:
+	float timeSC = 0.0f;
 };
 
 #endif // !SPBUFF_H

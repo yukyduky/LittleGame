@@ -726,7 +726,7 @@ void GamePlayState::initPlayer()
 	// 3:
 	actor->addSpell(new SpDashG3(actor));
 	// 4:
-	actor->addSpell(new SpBuffG1(actor));
+	actor->addSpell(new SpBuff(actor));
 
 	actor->selectAbility1();
 

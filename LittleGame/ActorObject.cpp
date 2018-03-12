@@ -248,7 +248,7 @@ void ActorObject::update()
 			i->update();
 		}
 		for (auto &i : this->spells) {
-			i->update();
+			//i->update();
 			i->updateCD();
 		}
 		break;
@@ -262,7 +262,6 @@ void ActorObject::update()
 		}
 		break;
 	}
-	int asdf = 3;
 }
 
 void ActorObject::updatekineticVector()
@@ -469,7 +468,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	this->pGPS->GETMouseInput()->getWorldPosition();
+	//this->pGPS->GETMouseInput()->getWorldPosition();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
@@ -482,7 +481,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	Locator::getStatsHeader()->resetStats();
+	//Locator::getStatsHeader()->resetStats();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[3]->castSpell();
@@ -496,7 +495,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+	//Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[4]->castSpell();
@@ -520,14 +519,14 @@ InputComponent* ActorObject::GETinputComponent()
 	return this->pInput;
 }
 
-void ActorObject::decCD()
-{
-	for (auto itteration : spells)
-	{
-		itteration->updateCD();
-	}
-	
-}
+//void ActorObject::decCD()
+//{
+//	for (auto itteration : spells)
+//	{
+//		itteration->updateCD();
+//	}
+//	
+//}
 
 void ActorObject::dealDmg(float damag)
 {
@@ -579,7 +578,7 @@ void ActorObject::dealDmg(float damag)
 bool ActorObject::useEnergy(float energyUse) {
 	bool returnValue = false;
 
-	if (energyUse <= this->energy) {
+if (energyUse <= this->energy) {
 		this->energy -= energyUse;
 		returnValue = true;
 	}
@@ -708,10 +707,10 @@ void ActorObject::switchSpell()
 
 	}
 
-	//// Clean up old spells
-	//for (auto &i : this->spells) {
-	//	delete i;
-	//}
+	// Clean up old spells
+	for (auto &i : this->spells) {
+		delete i;
+	}
 	this->spells.clear();
 	
 	for (auto i : newSpells)
