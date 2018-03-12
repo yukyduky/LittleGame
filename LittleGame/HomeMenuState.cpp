@@ -47,22 +47,64 @@ Menu* HomeMenuState::initStartMenu()
 	menu->addButton(pButton);
 
 	nextID = this->newID();
+	text = L"Controls";
+	pButton = new Button(this, nextID,
+		{ 100.0f, 250.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOCONTROLS);
+	menu->addButton(pButton);
+
+	nextID = this->newID();
 	text = L"Options";
 	pButton = new Button(this, nextID,
-		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
 	menu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
-		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,450.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 
 
 	//this->menus[MENUS::START] = stMenu;
 	return menu;
+}
+
+Menu* HomeMenuState::initControlsMenu()
+{
+	Menu* contMenu = nullptr;
+	MenuObject* object = nullptr;
+	Button* pButton = nullptr;
+	MenuObject* pObject = nullptr;
+	WCHAR* text = nullptr;
+	int nextID;
+
+	contMenu = new Menu();
+
+	//Background
+	nextID = this->newID();
+	object = new MenuObject(nextID);
+	contMenu->addQuad(object);
+
+	//Buttons
+	text = L"Back";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ 100.0f, 50.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOSTART_HOME);
+	contMenu->addButton(pButton);
+
+	//Controls Description
+	text = L"1: Fireball (Selectable)\n2: Bomb (Selectable)\n3: Dash (Quickcast)\n4: Slow Time (Quickcast)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ 50.0f, 150.0f, 300.0f, 400.0f }, D2D1::ColorF::DarkViolet,
+		text);
+	contMenu->addQuad(pObject);
+
+	return contMenu;
 }
 
 Menu* HomeMenuState::initOptionsMenu()

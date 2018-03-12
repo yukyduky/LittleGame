@@ -104,16 +104,23 @@ Menu* PauseMenuState::initStartMenu()
 	menu->addButton(pButton);
 
 	nextID = this->newID();
+	text = L"Controls";
+	pButton = new Button(this, nextID,
+		{ 100.0f, 250.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOCONTROLS);
+	menu->addButton(pButton);
+
+	nextID = this->newID();
 	text = L"Options";
 	pButton = new Button(this, nextID,
-		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
 	menu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
-		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,450.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 
