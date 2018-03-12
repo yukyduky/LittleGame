@@ -80,7 +80,7 @@ void SpBomb::update()
 				this->landed = true;
 				this->damage = this->start;
 				this->collisionDuration = 0.0f;
-				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
+				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
 			}
 		}
 		else if (this->damage < this->end)
@@ -148,7 +148,7 @@ void SpBombG1::update()
 			if (this->currPos.y <= 39.0f)
 			{
 				this->landed = true;
-				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
+				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
 			}
 		}
 		else
@@ -215,7 +215,7 @@ void SpBombG2::update()
 			if (this->currPos.y <= 0.0f)
 			{
 				this->landed = true;
-				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
+				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
 				this->trip = false;
 				this->damage = this->start;
 			}
@@ -279,12 +279,12 @@ void SpBombG3::update()
 				this->landed = true;
 				this->damage = this->start;
 				this->collisionDuration = 0.0f;
-				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
+				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
 			}
 		}
 		else if (this->damage < this->end)
 		{
-			this->damage += 300.0f * dt;
+			this->damage += 30.0f * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
 			this->owner->GETphysicsComponent()->updateBoundingArea(this->damage * 10.5f);
 			this->owner->SETscaleMatrix(scaleM);
@@ -307,7 +307,24 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 		&& this->landed)
 	{
 		ActorObject* actorTarget = static_cast<ActorObject*>(target);
-		//actorTarget->setPosition();
+
+		XMVECTOR pullDir = XMVectorSubtract(XMLoadFloat3(&proj->GETPosition()), XMLoadFloat3(&target->GETPosition()));
+		XMVECTOR pullLenghtVector = XMVector3Length(pullDir);
+		float pullLenght;
+		XMStoreFloat(&pullLenght, pullLenghtVector);
+
+		if (pullLenght < this->damage)
+		{
+			actorTarget->dealDmg(this->damage);
+		}
+
+		pullDir = XMVector3Normalize(pullDir);
+
+		XMFLOAT3 kinvectorFloat3;
+		XMStoreFloat3(&kinvectorFloat3, pullDir);
+
+		// The multiplier is the strenght of the spell
+		actorTarget->setkineticVector(kinvectorFloat3 * 300.0f);
 	}
 }
 
