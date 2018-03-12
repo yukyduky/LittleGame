@@ -66,7 +66,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	// Define specific SWARMER count PER WAVE
 	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
 	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
-		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount * i);
+		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount + i);
 
 	Wave* currentWave = nullptr;
 
@@ -130,7 +130,7 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 	// Define specific SWARMER count PER WAVE
 	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
 	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
-		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount * i);
+		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount + i);
 
 	Wave* currentWave = nullptr;
 

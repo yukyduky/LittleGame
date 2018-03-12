@@ -437,9 +437,15 @@ void GamePlayState::init() {
 	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
-	//this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	//this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+
+	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
+
+	switch (randomLevel)
+	{
+	case 1: this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	case 2: this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	case 3: this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	}
 	//this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
