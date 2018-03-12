@@ -298,7 +298,7 @@ void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
 	//	this->activeEnemiesCount--;
 }
 
-void EnemyManager::createBossChargers(std::list<GameObject*>& bossChargers, float hp)
+void EnemyManager::createBossChargers(std::vector<GameObject*>& bossChargers, std::list<GameObject*>& dynamicObjects, float hp)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -359,6 +359,7 @@ void EnemyManager::createBossChargers(std::list<GameObject*>& bossChargers, floa
 		enemyObject->setState(OBJECTSTATE::TYPE::BOSSEMERGE);
 		enemyObject->turnOnInvulnerability();
 		bossChargers.push_back(enemyObject);
+		dynamicObjects.push_back(enemyObject);
 	}
 
 }

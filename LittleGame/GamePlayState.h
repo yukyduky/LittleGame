@@ -83,7 +83,7 @@ private:
 	std::list<GameObject*> GUIObjects;
 	std::list<GameObject*> staticObjects;
 	std::list<GameObject*> dynamicObjects;
-	std::list<GameObject*> bossChargers;
+	std::vector<GameObject*> bossChargers;
 	// Count below represents static objects that have collision (see 'checkCollisions()' function)
 	std::list<GameObject*> noCollisionDynamicObjects;
 	int staticPhysicsCount = 0;
@@ -213,6 +213,8 @@ public:
 	bool checkGenerators();
 
 	void createABossWave();
+
+	float checkBossChargersHealth();
 
 	/*RETURNS THE NEW ID*/
 	int newID() { return this->ID++; }

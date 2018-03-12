@@ -49,6 +49,8 @@ public:
 	virtual void bossAttack02();
 	virtual void bossAttack03();
 
+	virtual void setHp(float hp);
+
 };
 
 

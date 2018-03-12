@@ -132,3 +132,8 @@ void EnemyObject::bossAttack03()
 {
 	this->spells[2]->castSpell();
 }
+
+void EnemyObject::setHp(float hp)
+{
+	this->hp = hp;
+}

@@ -458,15 +458,16 @@ void GamePlayState::init() {
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 
+	/*
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
-
 	switch (randomLevel)
 	{
 	case 1: this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
 	case 2: this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
 	case 3: this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
 	}
-	//this->enemyManager.startBossLevel();
+	*/
+	this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
@@ -636,6 +637,12 @@ void GamePlayState::update(GameManager * gm)
 		}
 		else {
 			ID = (*it)->getID();
+			//TEST
+			for (int i = 0; i < this->bossChargers.size(); i++) {
+				if (ID == this->bossChargers[i]->getID()) {
+					this->bossChargers.erase(this->bossChargers.begin() + i);
+				}
+			}
 			int j = this->graphics.size();
 			for (std::list<GraphicsComponent*>::reverse_iterator rit = this->graphics.rbegin(); rit != this->graphics.rend() && j > this->staticPhysicsCount; rit++) {
 				if ((*rit)->getID() == ID) {
@@ -664,29 +671,6 @@ void GamePlayState::update(GameManager * gm)
 			it--;
 		}
 	}
-
-	///////////////////////////////////////////////////////////////////////////////////
-	for (std::list<GameObject*>::iterator it = this->bossChargers.begin(); it != this->bossChargers.end(); it++) {
-		if ((*it)->getState() != OBJECTSTATE::TYPE::DEAD) {
-			(*it)->update();
-		}
-		else {
-			ID = (*it)->getID();
-			int j = this->graphics.size();
-			for (std::list<GraphicsComponent*>::reverse_iterator rit = this->graphics.rbegin(); rit != this->graphics.rend() && j > this->staticPhysicsCount; rit++) {
-				if ((*rit)->getID() == ID) {
-					this->graphics.erase(std::next(rit).base());
-					j++;
-				}
-				j--;
-			}
-			(*it)->cleanUp();
-			delete (*it);
-			it = this->bossChargers.erase(it);
-			it--;
-		}
-	}
-	///////////////////////////////////////////////////////////////////////////////////
 
 	this->checkPlayerTileStatus();
 	this->enemyManager.update(&this->GUI);
@@ -738,7 +722,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	float velocityMagnitude = 100.0f;
-	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
+	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() * 0.5f), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5f));
 	float actorAccelerationSpeed = 150.0f;
 	float topSpeed = 11.0f;
 
@@ -865,7 +849,7 @@ void GamePlayState::spawnBossGenerators()
 
 void GamePlayState::spawnBossChargers(float hp)
 {
-	this->enemyManager.createBossChargers(this->bossChargers, hp);
+	this->enemyManager.createBossChargers(this->bossChargers, this->dynamicObjects, hp);
 }
 
 bool GamePlayState::checkGenerators()
@@ -880,6 +864,20 @@ bool GamePlayState::checkGenerators()
 void GamePlayState::createABossWave()
 {
 	this->enemyManager.createBossWave(this->enemySpawnPos);
+}
+
+float GamePlayState::checkBossChargersHealth() {
+	float totalBossHealth = 0.0f;
+	for (int i = 0; i < this->bossChargers.size(); i++) {
+			totalBossHealth += static_cast<EnemyObject*>(this->bossChargers[i])->GEThp();
+	}
+	for (int i = 0; i < this->bossChargers.size(); i++) {
+		static_cast<EnemyObject*>(this->bossChargers[i])->setHp(totalBossHealth / this->bossChargers.size());
+	}
+	if (totalBossHealth < 0.0f) {
+		int warning = 1;
+	}
+	return totalBossHealth;
 }
 
 //_________________________________________//

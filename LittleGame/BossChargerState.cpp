@@ -34,6 +34,12 @@ void BossChargerState::executeBehavior()
 		}
 		break;
 	case CHARGERPHASE::SECOND:
+		if (this->pGPS->checkBossChargersHealth() == 0.0f) {
+			this->pHead->setState(OBJECTSTATE::TYPE::DEAD);
+		}
+		else {
+
+		}
 		break;
 	
 	default:

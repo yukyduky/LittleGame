@@ -355,7 +355,7 @@ public:
 
 	void createBossWave(enemySpawnPositions spawnPosVectors);
 
-	void createBossChargers(std::list<GameObject*>& bossChargers, float hp);
+	void createBossChargers(std::vector<GameObject*>& bossChargers, std::list<GameObject*>& dynamicObjects, float hp);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

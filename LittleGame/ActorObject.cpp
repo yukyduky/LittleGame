@@ -94,6 +94,7 @@ ActorObject::ActorObject(const size_t ID, float velocityMagnitude, float topSpee
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
+	this->previousPos = pos;
 
 	this->type = objectType;
 	this->kineticVector = { 0.0f, 0.0f, 0.0f };
@@ -266,7 +267,6 @@ void ActorObject::update()
 			i->update();
 		}
 		for (auto &i : this->spells) {
-			i->update();
 			i->updateCD();
 		}
 		break;
@@ -275,7 +275,6 @@ void ActorObject::update()
 			i->update();
 		}
 		for (auto &i : this->spells) {
-			//i->update(); The update of the spell should be done in Projectile
 			i->updateCD();// The player only wants the CD of hte spell
 		}
 		break;

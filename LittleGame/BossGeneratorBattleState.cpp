@@ -70,7 +70,7 @@ void BossGeneratorBattleState::executeBehavior()
 				else {
 					this->counter += Locator::getGameTime()->getDeltaTime();
 					if (this->counter >= 10.0f) {
-						this->pGPS->createABossWave();
+					//	this->pGPS->createABossWave();
 						this->counter = 0.0f;
 					}
 				}
