@@ -1,27 +1,31 @@
 #pragma once
-#ifndef MINIONOUTSIDESTATE_H
-#define MINIONOUTSIDESTATE_H
+#ifndef CHARGEROUTSIDESTATE_H
+#define CHARGEROUTSIDESTATE_H
 
-#include "SwarmerState.h"
-#include "EnemyObject.h"
+#include "ChargerState.h"
+#include <DirectXmath.h>
 #include "AIComponent.h"
-#include "SwarmerSeekingState.h"
+#include "EnemyObject.h"
+#include "ChargerChannelingState.h"
+using namespace DirectX;
 
-class MinionOutsideState : public SwarmerState
+class ChargerOutsideState : public ChargerState
 {
 private:
 	XMFLOAT3 openingInTheArena = { 0, 0, 0.01 };
 
+protected:
+	
 public:
-	MinionOutsideState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID, XMFLOAT3 openingInTheArena)
-		: SwarmerState(pHead, pBrain, pGrid_, swarmerID)
-	{
+	ChargerOutsideState(EnemyObject& pHead, AIComponent& pBrain, XMFLOAT3 openingInTheArena_) 
+		: ChargerState(pHead, pBrain) {
 		this->pBrain->pushState(*this);
+		this->openingInTheArena = openingInTheArena_;
 	}
-	void cleanUp() {
+	virtual void cleanUp() {
 
 	}
-	void executeBehavior() {
+	virtual void executeBehavior() {
 		/// Move inside the grid (move towards the player)
 		XMFLOAT2 vectorToOpening;
 		XMFLOAT3 myPos3 = this->pHead->GETPosition();
@@ -41,9 +45,12 @@ public:
 		this->pBrain->pushCommand(AICOMMANDS::MOVE);
 
 		// If we've come inside the grid, ACT LIKE IT.
-		if (this->inOrOutPlus()) {
-			EnemyState* seekingState = new EnemyMovingState(*this->pHead, *this->pBrain);
+		if (this->inOrOut()) {
+			EnemyState* nextState = new ChargerChannelingState(*this->pHead, *this->pBrain);
 		}
 	}
 };
+
+
+
 #endif

@@ -14,6 +14,7 @@
 #include "SwarmerEnemyAttack.h"
 #include "SwarmerSeekingState.h"
 #include "SwarmerOutsideState.h"
+#include "ChargerOutsideState.h"
 #include "MinionOutsideState.h"
 #include "SpSwarmProjectile.h"
 #include "SpEnemyImmolation.h"
@@ -53,9 +54,9 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 	std::vector<EnemyObject*> localSwarmers;
 
 	// TESTING -----------
-	this->currentWaveCount = 2;
-	this->currentWaveSize = 5;
-	this->swarmerCount = 5;
+	this->currentWaveCount = 1;
+	this->currentWaveSize = 0;
+	this->swarmerCount = 0;
 	// TESTING -----------
 
 	// Per wave
@@ -83,6 +84,19 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 
 			this->activeEnemiesCount++;
 		}
+
+		//1
+		EnemyObject* charger = this->createCharger(spawnPosVectors);
+		currentWave->enemies.push_back(charger);
+		this->activeEnemiesCount++;
+		////2
+		//EnemyObject* charger = this->createCharger(spawnPosVectors);
+		//currentWave->enemies.push_back(charger);
+		//this->activeEnemiesCount++;
+		////3
+		//EnemyObject* charger = this->createCharger(spawnPosVectors);
+		//currentWave->enemies.push_back(charger);
+		//this->activeEnemiesCount++;
 
 		// Attach the currentWave to our waves
 		this->waves.push_back(currentWave);
@@ -255,7 +269,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
 	// STATES
-	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++, openingPos);
+	moveState = new ChargerOutsideState(*enemyObject, *aiComponent, openingPos);
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
@@ -393,7 +407,7 @@ std::vector<XMFLOAT3> EnemyManager::generateEnemySpawnPositions(enemySpawnPositi
 	{
 		// Random a cardinal direction, repeat if there are no openings for that side.
 		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-
+		
 		switch (spawnLocation) {
 		case 1:
 		{	// W E S T

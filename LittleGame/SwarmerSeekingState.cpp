@@ -126,7 +126,7 @@ void SwarmerSeekingState::executeBehavior()
 	this->pBrain->pushCommand(AICOMMANDS::ATTACK);
 
 	/// If we've went outside the arena, move back in damnit!
-	if (this->inOrOutPlus() == false) {
+	if (this->inOrOut() == false) {
 		this->pBrain->popState();
 	}
 }

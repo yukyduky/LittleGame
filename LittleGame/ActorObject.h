@@ -43,7 +43,7 @@ protected:
 
 	//Used to calculate angle to fire
 	float rotation = 0;
-	XMFLOAT3 direction = { 0, 0, 0.0001f };	// Can't be initialized as 0 vector or shooting during loads will crash the game.
+	XMFLOAT3 direction = { 1, 0, 0 };	// Can't be initialized as 0 vector or shooting during loads will crash the game.
 
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;

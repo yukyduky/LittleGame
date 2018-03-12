@@ -147,6 +147,10 @@
     <ClInclude Include="BossBattleIntroState.h" />
     <ClInclude Include="BossBulletHellState.h" />
     <ClInclude Include="BossMoveAwayFromArenaState.h" />
+    <ClInclude Include="ChargerChannelingState.h" />
+    <ClInclude Include="ChargerCHARGINGstate.h" />
+    <ClInclude Include="ChargerOutsideState.h" />
+    <ClInclude Include="ChargerState.h" />
     <ClInclude Include="SpBossBulletHell.h" />
     <ClInclude Include="BossMoveToArenaState.h" />
     <ClInclude Include="BossState.h" />
