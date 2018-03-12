@@ -240,7 +240,6 @@ void EnemyManager::startBossLevel()
 	this->spawnInterval = 1;
 	this->waveInterval = 0.1;
 	this->currentWaveCount = 1;
-	this->currentWaveSize = 20;
 	Wave* currentWave;
 
 	currentWave = new Wave();
@@ -255,15 +254,16 @@ void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
 	Wave* currentWave;
 	this->swarmerCount = 5;
 	std::vector<EnemyObject*> localSwarmers;
+	int currentWaveSize = 20.0f;
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
 		currentWave = new Wave();
 
 		// Per minion
-		for (int j = 0; j < this->currentWaveSize; j++) {
+		for (int j = 0; j < currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, spawnPosVectors);
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
@@ -330,6 +330,8 @@ void EnemyManager::createBossChargers(std::list<GameObject*>& bossChargers, floa
 	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
 	float attackRange = ARENADATA::GETarenaWidth();
 	float health = hp / 3.0f;
+	float topSpeed = 12.0f;
+	float velocityMagnitude = 60.0f;
 
 	Spell* spell = nullptr;
 
@@ -337,7 +339,7 @@ void EnemyManager::createBossChargers(std::list<GameObject*>& bossChargers, floa
 		/// A T T A C H M E N T
 		// OBJECT
 		enemyObject = new EnemyObject(
-			ENEMYTYPE::BOSS, this->pGPS->newID(), pos[i], velocity,
+			this->pGPS->newID(), velocityMagnitude, topSpeed, pos[i],
 			pGPS, &this->players,
 			OBJECTTYPE::ENEMY, health
 		);

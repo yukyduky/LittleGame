@@ -450,11 +450,13 @@ void LevelManager::createBossGenerators(std::vector<std::vector<tileData>>& grid
 	XMFLOAT3 scale(this->squareSize * 0.5f, this->squareSize * 0.5f, this->squareSize * 0.5f);						// TOBE DELETED
 	XMFLOAT3 rotation(0, 0, 0);
 	XMFLOAT3 bSpherePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	float velocityMagnitude = 0.0f;
+	float topSpeed = 0.0f;
 	for (int i = 0; i < 4; i++) {
 		genPos = XMFLOAT3(squareSize * 0.5f + index[i].x * squareSize, -squareSize * 0.5f, squareSize * 0.5f + index[i].y * squareSize);
 		grid[index[i].x][index[i].y].state = TILESTATE::GENERATOR;
 		genIndex.push_back(index[i]);
-		object = new ActorObject(this->pGPS->newID(), genPos, 0, this->pGPS, OBJECTTYPE::GENERATOR, 1000.0f);
+		object = new ActorObject(this->pGPS->newID(), velocityMagnitude, topSpeed, genPos, this->pGPS, OBJECTTYPE::GENERATOR, 1000.0f);
 		object->setState(OBJECTSTATE::TYPE::GENERATORRISING);
 		block = new BlockComponent(*this->pGPS, *object, genColor, scale, rotation);
 		bSphere = new PhysicsComponent(*object, static_cast<float>(this->squareSize) * 0.75f);
