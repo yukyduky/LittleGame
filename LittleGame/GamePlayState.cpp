@@ -331,7 +331,7 @@ void GamePlayState::checkPlayerTileStatus()
 			state == TILESTATE::STATE::HOLE ||
 			state == TILESTATE::STATE::RECOVERING) {
 			this->player1->setState(OBJECTSTATE::TYPE::FALLING);
-			this->player1->setVelocity(this->player1->getVelocity() * -1);
+			this->player1->SETvelocityMagnitude(this->player1->GETvelocityMagnitude() * -1);
 		} 
 		else {
 			switch (state) 
@@ -437,7 +437,15 @@ void GamePlayState::init() {
 	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
-	this->enemyManager.startLevel1(this->enemySpawnPos);
+
+	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
+
+	switch (randomLevel)
+	{
+	case 1: this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	case 2: this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	case 3: this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	}
 	//this->enemyManager.startBossLevel();
 
 	this->mediumTime = 120.0;
@@ -613,7 +621,10 @@ void GamePlayState::update(GameManager * gm)
 				}
 				j--;
 			}
-			if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
+			if ((*it)->getType() == OBJECTTYPE::TYPE::ENEMY)
+				this->GUI.popEnemyElement(this->GUIObjects, this->graphics);
+
+			else if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
 				genPos = (*it)->GETPosition();
 				genIndex = this->lm.findTileIndexFromPos(XMFLOAT2(genPos.x, genPos.z));
 				for (int i = 0; i < this->genIndex.size(); i++) {
@@ -680,11 +691,13 @@ void GamePlayState::initPlayer()
 	XMFLOAT4 playerColor(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f);
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
-	float playerVelocity = 300.0f;
+	float velocityMagnitude = 100.0f;
 	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
+	float actorAccelerationSpeed = 150.0f;
+	float topSpeed = 11.0f;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, playerPos, playerVelocity, this, OBJECTTYPE::PLAYER, 100.0f);
+	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);

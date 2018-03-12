@@ -17,71 +17,16 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PR
 	this->spell = nullptr;
 
 	this->type = objectType;
-	this->direction = dir;
-	this->velocity = velocity;
-	this->spinn = false;
+	this->moveDirection = dir;
+	this->velocityMagnitude = velocity;
+	this->spinn = spinn;
+	this->kineticVector = XMFLOAT3(dir.x * this->speed, dir.y * this->speed, dir.z * this->speed);
 	this->rangeCounter = 0;
 	this->maxFlyingRange = maxFlyingRange;
-	
-	// Dose nothing, the matrix is assigned as 0,0,0 when it gets the blockcomp
-	// This is instead done in spawnProj
-	//this->SETrotationMatrix(DirectX::XMLoadFloat4x4(&shooter->getRotationMatrix()));
-
-	// IGNORE THIS ATM, IT IS AN OPTIMIZATION WHICH COULD BE IMPLEMENTED (setSpell should be done inside the constructor)
-	//Spell* projectilesSpell = nullptr;
-
-	//switch (this->name) {
-	//case NAME::AUTOATTACK: {
-	//	projectilesSpell = new SpAutoAttack(shooter);
-	//	break;
-	//}
-	//case NAME::BOMB: {
-	//	projectilesSpell = new SpBomb(shooter);
-	//	break;
-	//}
-	//case NAME::DASH: {
-	//	projectilesSpell = new SpDash(shooter);
-	//	break;
-	//}
-	//case NAME::FIRE: {
-	//	projectilesSpell = new SpFire(shooter);
-	//	break;
-	//}
-	//case NAME::ENEM_SWARM: {
-	////	SpSwarmProjectile* trueThis = static_cast<SpSwarmProjectile*>(this);
-	//	EnemyObject* trueCaster = static_cast<EnemyObject*>(shooter);
-
-	//	projectilesSpell = new SpSwarmProjectile(
-	//		shooter, trueThis->getRange(), trueThis->getDamage(),
-	//		trueThis->getAggroRange(), trueThis->getCoolDown()
-	//	);
-	//	break;
-	//}
-	//}
-
-	//this->spell = projectilesSpell;
-	
-
 
 	this->light = light;
 	this->lightIDs = lightIDs;
 }
-
-//Projectile::Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler * lightIDs) : GameObject(ID, pos)
-//{
-//	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
-//	this->setType(OBJECTTYPE::PROJECTILE);
-//	this->spell = nullptr;
-//
-//	this->type = objectType;
-//	this->direction = dir;
-//	this->behavior = behavior;
-//	this->velocity = velocity;
-//	this->rangeCounter = 0;
-//
-//	this->light = light;
-//	this->lightIDs = lightIDs;
-//}
 
 Projectile::~Projectile()
 {
@@ -116,11 +61,11 @@ float Projectile::getAngleTowardsPlayer()
 	floatToPlayer.z = (playerPos).z - this->pos.z;
 
 	// Convert to XMVECTOR
-	XMVECTOR vecCurrentDirection = XMLoadFloat3(&this->direction);
-	XMVECTOR vecDesiredDirection = XMLoadFloat3(&floatToPlayer);;
+	XMVECTOR vecCurrentmoveDirection = XMLoadFloat3(&this->moveDirection);
+	XMVECTOR vecDesiredmoveDirection = XMLoadFloat3(&floatToPlayer);;
 
 	// Use optimized math
-	XMVECTOR vecAngle = XMVector3AngleBetweenVectors(vecDesiredDirection, vecCurrentDirection);
+	XMVECTOR vecAngle = XMVector3AngleBetweenVectors(vecDesiredmoveDirection, vecCurrentmoveDirection);
 	XMStoreFloat3(&floatAngle, vecAngle);	// x,y,z of floatAngle all contain the same angle.
 	angle = floatAngle.x;		// I'd only like 1 of the values thank you!
 
@@ -133,15 +78,15 @@ void Projectile::turnLeft()
 	XMFLOAT3 floatUp(0, 1, 0);
 	
 	// Convert into XMVECTOR for optimization
-	XMVECTOR vecDirection = XMLoadFloat3(&this->direction);
+	XMVECTOR vecmoveDirection = XMLoadFloat3(&this->moveDirection);
 	XMVECTOR vecUp = XMLoadFloat3(&floatUp);
 	
 	// Rotate with quaternions so no axis-locks happen
 	XMVECTOR rotationQuaternion = XMQuaternionRotationAxis(vecUp, -this->rotationSpeed*dt);
-	vecDirection = DirectX::XMVector3Rotate(vecDirection, rotationQuaternion);
+	vecmoveDirection = DirectX::XMVector3Rotate(vecmoveDirection, rotationQuaternion);
 
 	// Convert back into XMFloat
-	XMStoreFloat3(&this->direction, vecDirection);
+	XMStoreFloat3(&this->moveDirection, vecmoveDirection);
 }
 
 void Projectile::turnRight()
@@ -150,24 +95,24 @@ void Projectile::turnRight()
 	XMFLOAT3 floatUp(0, 1, 0);
 
 	// Convert into XMVECTOR for optimization
-	XMVECTOR vecDirection = XMLoadFloat3(&this->direction);
+	XMVECTOR vecmoveDirection = XMLoadFloat3(&this->moveDirection);
 	XMVECTOR vecUp = XMLoadFloat3(&floatUp);
 
 	// Rotate with quaternions so no axis-locks happen
 	XMVECTOR rotationQuaternion = XMQuaternionRotationAxis(vecUp, this->rotationSpeed*dt);
-	vecDirection = DirectX::XMVector3Rotate(vecDirection, rotationQuaternion);
+	vecmoveDirection = DirectX::XMVector3Rotate(vecmoveDirection, rotationQuaternion);
 
 	// Convert back into XMFloat
-	XMStoreFloat3(&this->direction, vecDirection);
+	XMStoreFloat3(&this->moveDirection, vecmoveDirection);
 }
 
 void Projectile::setDirection(XMVECTOR dir) {
-	DirectX::XMStoreFloat3(&this->direction, dir);
+	DirectX::XMStoreFloat3(&this->moveDirection, dir);
 }
 
 DirectX::XMFLOAT3 Projectile::getDirection()
 {	
-	return this->direction;
+	return this->moveDirection;
 }
 
 void Projectile::setSeeking(float rotationSpeed, ActorObject* pPlayer)
@@ -295,10 +240,12 @@ void Projectile::move()
 {
 	XMFLOAT3 traveledDistance = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	float dt = Locator::getGameTime()->getDeltaTime();
+
+	// Save old position to relevant targets
 	this->previousPos = this->pos;
 
-	this->pos.x += (this->direction.x * this->velocity) * dt;
-	this->pos.z += (this->direction.z * this->velocity) * dt;
+	this->pos.x += (this->moveDirection.x * this->velocityMagnitude) * dt;
+	this->pos.z += (this->moveDirection.z * this->velocityMagnitude) * dt;
 
 	traveledDistance = this->pos - this->previousPos;
 	XMVECTOR dist = XMLoadFloat3(&traveledDistance);
@@ -312,6 +259,9 @@ void Projectile::move()
 	else {
 		this->setPosition(pos);
 	}
+
+	// Save new position to relevant targets
+	this->light.second->pos = pos;
 }
 
 void Projectile::steerTowardsPlayer()
@@ -332,9 +282,9 @@ void Projectile::steerTowardsPlayer()
 	DirectX::XMStoreFloat3(&desiredDirection, vecDesired);
 
 	// Calculate the steering direction
-	steeringDirection.x = desiredDirection.x - this->direction.x;
-	steeringDirection.y = desiredDirection.y - this->direction.y;
-	steeringDirection.z = desiredDirection.z - this->direction.z;
+	steeringDirection.x = desiredDirection.x - this->moveDirection.x;
+	steeringDirection.y = desiredDirection.y - this->moveDirection.y;
+	steeringDirection.z = desiredDirection.z - this->moveDirection.z;
 
 	// Normalize it
 	XMVECTOR vecSteering = DirectX::XMLoadFloat3(&steeringDirection);
@@ -342,14 +292,14 @@ void Projectile::steerTowardsPlayer()
 	DirectX::XMStoreFloat3(&steeringDirection, vecSteering);
 
 	// Affect the current direction
-	this->direction.x += steeringDirection.x * this->rotationSpeed * dt;
-	this->direction.y += steeringDirection.y * this->rotationSpeed * dt;
-	this->direction.z += steeringDirection.z * this->rotationSpeed * dt;
+	this->moveDirection.x += steeringDirection.x * this->rotationSpeed * dt;
+	this->moveDirection.y += steeringDirection.y * this->rotationSpeed * dt;
+	this->moveDirection.z += steeringDirection.z * this->rotationSpeed * dt;
 
 	// Then normalize the current direction
-	XMVECTOR vecDirection = DirectX::XMLoadFloat3(&this->direction);
+	XMVECTOR vecDirection = DirectX::XMLoadFloat3(&this->moveDirection);
 	vecDirection = XMVector3Normalize(vecDirection);
-	DirectX::XMStoreFloat3(&this->direction, vecDirection);
+	DirectX::XMStoreFloat3(&this->moveDirection, vecDirection);
 }
 
 
@@ -368,11 +318,10 @@ void Projectile::update()
 	this->spell->update();
 
 	this->move();
-	this->light.second->pos = pos;
 
 	if (this->spinn)
 	{
-		XMVECTOR dir = XMLoadFloat3(&this->direction);
+		XMVECTOR dir = XMLoadFloat3(&this->moveDirection);
 		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
 		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
 	}

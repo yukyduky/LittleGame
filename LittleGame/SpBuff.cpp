@@ -37,8 +37,8 @@ bool SpBuff::castSpell()
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
 
-		this->actOwner->setSpeed(this->strength);
-		this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
+			this->getOwner()->SETvelocityMagnitude(this->strength);
+			this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -64,7 +64,7 @@ void SpBuff::update()
 		if (this->getTSC() > this->duration)
 		{
 			Locator::getGameTime()->setMultiplier(1.0);
-			this->actOwner->setSpeed(1.0f);
+			this->getOwner()->SETvelocityMagnitude(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 
@@ -190,7 +190,7 @@ bool SpBuffG3::castSpell()
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
 
-			this->actOwner->setSpeed(this->strength);
+			this->getOwner()->SETvelocityMagnitude(this->strength);
 			this->getOwner()->GETphysicsComponent()->updateBoundingArea(0.0f);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
@@ -209,7 +209,7 @@ void SpBuffG3::update()
 		if (this->getTSC() > this->duration)
 		{
 			Locator::getGameTime()->setMultiplier(1.0);
-			this->actOwner->setSpeed(1.0f);
+			this->getOwner()->SETvelocityMagnitude(1.0f);
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 

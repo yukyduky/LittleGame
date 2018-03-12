@@ -53,11 +53,20 @@ protected:
 	XMFLOAT3 previousPos;
 	XMFLOAT3 pos;
 	XMFLOAT3 direction;
-	float velocity;
+	XMFLOAT3 newPos;
+	XMFLOAT3 kineticVector;
 	OBJECTTYPE::TYPE type;
 	OBJECTSTATE::TYPE state;
 	double counter = 0;
 	double transitionTime = 0;
+
+	// Movement related values
+	XMFLOAT3 moveDirection;
+	float velocityMagnitude = 0;
+	float topSpeed = 0;
+	float frictionFactor = 15.0f;
+	bool slowed = false;
+
 
 public:
 	GameObject(const size_t ID) : ID(ID), pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), state(OBJECTSTATE::TYPE::ACTIVATED), type(OBJECTTYPE::NOT_SET), physicsComponent(nullptr) {}
@@ -86,8 +95,9 @@ public:
 	void SETpreviousPos(XMFLOAT3 pos) { this->previousPos = pos; }
 	XMFLOAT3 GETPosition() const { return this->pos; }
 	XMFLOAT3 GETpreviousPos() const { return this->previousPos; }
-	void setVelocity(float velocity) { this->velocity = velocity; }
-	float getVelocity() const { return this->velocity; }
+	void setkineticVector(XMFLOAT3 kineticVector) { this->kineticVector = kineticVector; }
+	XMFLOAT3 getkineticVector() const { return this->kineticVector; }
+	void SETvelocityMagnitude(float input) { this->velocityMagnitude = input; }
 	virtual XMFLOAT3 getDirection() { return this->pos; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }

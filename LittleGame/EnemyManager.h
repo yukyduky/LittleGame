@@ -296,15 +296,20 @@ private:
 	// Push to the back, pop from the front, [0] is the first wave and [n] is the last wave.
 	std::deque<Wave*> waves;
 	int currentWaveCount = 0;
-	int currentWaveSize = 0;
-	double spawnInterval = 0;
-	double waveInterval = 0;
-	double timePassed = 0;
-	double startTime = 0;
+	std::vector<int> currentWaveMinionCount;
+	std::vector<int> currentWaveSwarmerCount;
+	float spawnInterval = 0.0f;
+	float waveInterval = 0.0f;
+	int minionCount = 0;
+	float timePassed = 0.0f;
+	float startTime = 0.0f;
+
+	bool ramp = false;
+	bool pulse = false;
 
 	void cleanLevel();
 
-	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, enemySpawnPositions spawnPosVectors) {
+	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors) {
 		EnemyObject* newEnemy;
 
 		switch(enemyType) {
@@ -342,7 +347,9 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
 	*/
-	void startLevel1(enemySpawnPositions spawnPosVectors);
+	void startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty);
+	void startRampLevel(enemySpawnPositions spawnPosVectors, float difficulty);
+	void startPulseLevel(enemySpawnPositions spawnPosVectors, float difficulty);
 
 	void startBossLevel();
 

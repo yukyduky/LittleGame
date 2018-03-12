@@ -31,7 +31,7 @@ private:
 	void updateRelationsToPlayer(XMFLOAT2 myPos, XMFLOAT2 playerPos);
 
 public:
-	EnemyObject(ENEMYTYPE::TYPE enemyType, size_t ID, XMFLOAT3 pos, float velocity, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType);
+	EnemyObject(const size_t ID, float velocityMagnitude, float topSpeed, XMFLOAT3 pos, GamePlayState* pGPS, std::vector<ActorObject*>* players, OBJECTTYPE::TYPE objectType, float hp_in);
 
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
 	EnemyAttackComponent* GETattackComponent();
