@@ -281,6 +281,11 @@ void ActorObject::updatekineticVector()
 	this->kineticVector.z += additiveVector.z;
 }
 
+void ActorObject::setKineticVector(XMFLOAT3 kineticVector_)
+{
+	this->kineticVector = kineticVector_;
+}
+
 void ActorObject::updatekineticVectorUp()
 {
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
@@ -743,7 +748,7 @@ void ActorObject::turnOffInvulnerability()
 
 Spell * ActorObject::getFirstSpell()
 {
-	if (this->spells[0] != nullptr) {
+	if (this->spells.size() > 0) {
 		return this->spells[0];
 	}
 	return nullptr;

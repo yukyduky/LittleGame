@@ -26,6 +26,7 @@ private:
 	float distanceToPlayer = 0.0f;
 
 	bool charged = false;
+	float collisionDamage = 0.0f;
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Updates internal 'normalizedVectorToPlayer' and 'distanceToPlayer'
@@ -39,6 +40,9 @@ public:
 	void SETattackComponent(EnemyAttackComponent* attackComponent);
 	EnemyAttackComponent* GETattackComponent();
 	bool getIfCharged();
+
+	void setCollisionDamage(float collisionDamage);
+	float getCollisionDamage();
 
 	XMFLOAT2 getVectorToPlayer();
 	float getDistanceToPlayer();

@@ -223,24 +223,35 @@ void CollisionHandler::collisionPlayerEnemy() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
-	this->calculateDistance(
-		this->collidable1->GETPosition(),
-		this->collidable2->GETPosition()
-	);
+	// Check if we're colliding with something that's charged
+	EnemyObject* trueEnemy = static_cast<EnemyObject*>(this->collidable2);
+	if (trueEnemy->getIfCharged()) {
+		ActorObject* truePlayer = static_cast<ActorObject*>(this->collidable1);
+		truePlayer->dealDmg(trueEnemy->getCollisionDamage());
+		trueEnemy->setIfCharged(false);
+		Locator::getAudioManager()->play(SOUND::TRIANGLESLICE);
+	}
+	// Collide normally
+	else {
+		this->calculateDistance(
+			this->collidable1->GETPosition(),
+			this->collidable2->GETPosition()
+		);
 
-	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
-	this->divisionFactor = (1.0f / this->distance);
-	this->resultVector = {
-		(this->stepper * 3) * (this->centerToCenterVector.x * this->divisionFactor),
-		0.0,
-		(this->stepper * 3) * (this->centerToCenterVector.z * this->divisionFactor)
-	};
+		this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+		this->divisionFactor = (1.0f / this->distance);
+		this->resultVector = {
+			(this->stepper * 3) * (this->centerToCenterVector.x * this->divisionFactor),
+			0.0,
+			(this->stepper * 3) * (this->centerToCenterVector.z * this->divisionFactor)
+		};
 
-	DirectX::XMFLOAT3 newEnemyPos = this->collidable2->GETPosition() - (this->resultVector * this->stepper);
+		DirectX::XMFLOAT3 newEnemyPos = this->collidable2->GETPosition() - (this->resultVector * this->stepper);
 
-	// Enemies are moved out of the way of players
-	this->collidable2->setPosition(newEnemyPos);
-	this->collidable2->GETphysicsComponent()->updateBoundingArea(newEnemyPos);
+		// Enemies are moved out of the way of players
+		this->collidable2->setPosition(newEnemyPos);
+		this->collidable2->GETphysicsComponent()->updateBoundingArea(newEnemyPos);
+	}
 }
 
 void CollisionHandler::collisionPlayerGenerator() {

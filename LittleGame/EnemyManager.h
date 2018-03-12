@@ -208,7 +208,13 @@ public:
 		this->activateIndex(index);
 	}
 	void activateMe(size_t swarmerID) {
-		this->activateIndex(swarmerID);
+		if (swarmerID < this->capacity) {
+			this->activateIndex(swarmerID);
+		}
+		else {
+			// You've initialized this class twice, don't do that.
+			assert(false);
+		}
 	}
 	void remove(int index) {
 		if (this->count > 0) {
@@ -267,7 +273,7 @@ public:
 			}
 			if (this->mainArray[i].alive != nullptr) {
 				delete this->mainArray[i].alive;
-				this->mainArray[i].dead = nullptr;
+				this->mainArray[i].alive = nullptr;
 			}
 			// All objects clean themselves, we're only using pointers here.
 		}
@@ -298,6 +304,7 @@ private:
 	int currentWaveCount = 0;
 	std::vector<int> currentWaveMinionCount;
 	std::vector<int> currentWaveSwarmerCount;
+	std::vector<int> currentWaveChargerCount;
 	float spawnInterval = 0.0f;
 	float waveInterval = 0.0f;
 	int minionCount = 0;

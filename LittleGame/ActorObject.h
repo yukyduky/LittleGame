@@ -84,6 +84,7 @@ public:
 	2. Only called when the player is using a controller
 	*/
 	void updatekineticVector();
+	void setKineticVector(XMFLOAT3 kineticVector);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Affects the position of the ActorObject
 	2. Only called when the player is using a keyboard

@@ -5,6 +5,7 @@
 #include "Locator.h"
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
+#include "TriangleComponent.h"
 #include "AIComponent.h"
 #include "EnemyAttackComponent.h"
 #include "ImmolationEnemyAttack.h"
@@ -60,12 +61,13 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	// Deciding on how individual enemy counts will be calculated
 	this->minionCount = (2 + static_cast<int>(difficulty));
 	this->swarmerCount = (1 + static_cast<int>(difficulty));
+	this->chargerCount = (1 + static_cast<int>(difficulty));
 
 	// ---------- TESTING ------------
-	this->minionCount = 0;
-	this->swarmerCount = 2;
-	this->chargerCount = 0;
-
+	//this->currentWaveCount = 1;
+	//this->minionCount = 0;
+	//this->swarmerCount = 0;
+	//this->chargerCount = 0;
 	// ---------- TESTING ------------
 
 	// Define specific MINION count PER WAVE
@@ -76,6 +78,10 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
 	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
 		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount + i);
+	// Define specific CHARGER count PER WAVE
+	this->currentWaveChargerCount.resize(this->currentWaveCount);
+	for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
+		this->currentWaveChargerCount.at(i) = (this->chargerCount + i);
 	
 
 	Wave* currentWave = nullptr;
@@ -87,7 +93,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 
 		// Per Minion
 		for (int j = 0; j < this->currentWaveMinionCount.at(i); j++) {
-			// Create an enemy and attatch it to the wave.
+			// Create an enemy and attach it to the wave.
 			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
@@ -101,6 +107,16 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 			currentWave->enemies.push_back(swarmer);
 			// Attach a pointer to swarmspecific (used by grid)
 			localSwarmers.push_back(swarmer);
+
+			this->activeEnemiesCount++;
+		}
+
+		// Per Charger
+		for (int l = 0; l < this->currentWaveChargerCount.at(i); l++) {
+			// Create the actual object
+			EnemyObject* charger = this->createCharger(spawnPosVectors);
+			// Attach a pointer to waves
+			currentWave->enemies.push_back(charger);
 
 			this->activeEnemiesCount++;
 		}
@@ -233,19 +249,6 @@ void EnemyManager::startPulseLevel(enemySpawnPositions spawnPosVectors, float di
 			this->activeEnemiesCount++;
 		}
 
-		//1
-		EnemyObject* charger = this->createCharger(spawnPosVectors);
-		currentWave->enemies.push_back(charger);
-		this->activeEnemiesCount++;
-		////2
-		//EnemyObject* charger = this->createCharger(spawnPosVectors);
-		//currentWave->enemies.push_back(charger);
-		//this->activeEnemiesCount++;
-		////3
-		//EnemyObject* charger = this->createCharger(spawnPosVectors);
-		//currentWave->enemies.push_back(charger);
-		//this->activeEnemiesCount++;
-
 		// Attach the currentWave to our waves
 		this->waves.push_back(currentWave);
 	}
@@ -377,7 +380,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	/// D E F I N I T I O N
 	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
-	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
+	XMFLOAT3 scale(15.0f, 2.50f, 15.0f);
 	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
 	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.01f };
 
@@ -386,7 +389,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	openingPos = generatedPositions[1];
 
 
-	float velocity = 180;
+	float velocity = 100;
 	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
@@ -403,19 +406,16 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 		pGPS, &this->players,
 		OBJECTTYPE::ENEMY, hp
 	);
-	// SPELL (Needs to be before States)
-	Spell* spell = new SpSwarmProjectile(
-		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
-	);
-	enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
 
-
-									// COMPONENTS
-	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+	// COMPONENTS
+	graphicsComponent = new TriangleComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject);
 	// STATES
-	moveState = new ChargerOutsideState(*enemyObject, *aiComponent, openingPos);
+	float chargeUpTime = 5.0f;
+	float maxSpinSpeed = 60.0f;
+	float collisionDamage = 30.0f;
+	moveState = new ChargerOutsideState(*enemyObject, *aiComponent, openingPos, chargeUpTime, maxSpinSpeed, collisionDamage);
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
@@ -557,7 +557,6 @@ std::vector<XMFLOAT3> EnemyManager::generateEnemySpawnPositions(enemySpawnPositi
 	if (this->pulse) {
 		spawnOffset = 700.0f;
 	}
-	spawnOffset = 50.0f;	// TESTING -------------
 
 	// Random a position
 	while (reGenerateRandom)

@@ -13,9 +13,10 @@ private:
 	XMFLOAT3 openingInTheArena = { 0, 0, 0.01 };
 
 public:
-	MinionOutsideState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID, XMFLOAT3 openingInTheArena)
+	MinionOutsideState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID, XMFLOAT3 openingInTheArena_)
 		: SwarmerState(pHead, pBrain, pGrid_, swarmerID)
 	{
+		this->openingInTheArena = openingInTheArena_;
 		this->pBrain->pushState(*this);
 	}
 	void cleanUp() {
@@ -41,9 +42,10 @@ public:
 		this->pBrain->pushCommand(AICOMMANDS::MOVE);
 
 		// If we've come inside the grid, ACT LIKE IT.
-		if (this->inOrOutPlus()) {
+		if (this->inOrOut()) {
 			EnemyState* seekingState = new EnemyMovingState(*this->pHead, *this->pBrain);
 		}
 	}
 };
+
 #endif

@@ -78,6 +78,7 @@ void SpSwarmProjectile::cleanUp()
 		AIComponent* trueInput = static_cast<AIComponent*>(this->getOwner()->GETinputComponent());
 		SwarmerState* trueState = static_cast<SwarmerState*>(trueInput->getCurrentState());
 		trueState->removeFromGrid();
+		
 
 		(*this->pActiveEnemiesCount)--;
 	}

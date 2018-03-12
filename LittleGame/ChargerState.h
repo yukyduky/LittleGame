@@ -7,6 +7,20 @@
 class ChargerState : public EnemyState
 {
 protected:
+	float passedTime = 0.0f;
+	float chargeUpTime = 5.0f;
+	float maxSpinSpeed = 60.0f; // Radians
+	float currentSpinSpeed = maxSpinSpeed;
+
+	void rotate(float spinSpeed) {
+		// Affect rotation
+		XMFLOAT3 axis = { 0, 1, 0 };
+		XMVECTOR vecAxis;
+		vecAxis = DirectX::XMLoadFloat3(&axis);
+		XMMATRIX rotationMatrix = DirectX::XMMatrixRotationAxis(vecAxis, spinSpeed);
+		this->pHead->SETrotationMatrix(rotationMatrix);
+	}
+	// Loosely checks if your inside
 	bool inOrOut() {
 		XMFLOAT3 position = this->pHead->GETPosition();
 		bool result = false;
@@ -20,6 +34,7 @@ protected:
 
 		return result;
 	}
+	// Checks if ur inside with margin
 	bool inOrOutPlus()
 	{
 		XMFLOAT3 position = this->pHead->GETPosition();
@@ -36,15 +51,12 @@ protected:
 	}
 
 public:
-	ChargerState(EnemyObject& pHead, AIComponent& pBrain) : EnemyState(pHead, pBrain) {
-
+	ChargerState(EnemyObject& pHead, AIComponent& pBrain, float chargeUpTime_, float maxSpinSpeed_) : EnemyState(pHead, pBrain) {
+		this->chargeUpTime = chargeUpTime_;
+		this->maxSpinSpeed = maxSpinSpeed_;
 	}
-	virtual void cleanUp() {
-
-	}
-	virtual void executeBehavior() {
-
-	}
+	virtual void cleanUp() = 0;
+	virtual void executeBehavior() = 0;
 };
 
 #endif

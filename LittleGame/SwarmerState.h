@@ -117,9 +117,6 @@ protected:
 		XMFLOAT3 myPosition = this->pHead->GETPosition();
 		return this->pGrid->getNeighbours(XMFLOAT2(myPosition.x, myPosition.z));
 	}
-	Grid* getGrid() {
-		return this->pGrid;
-	}
 	// In = true | out = false
 	bool inOrOut() {	
 		XMFLOAT3 position = this->pHead->GETPosition();
@@ -283,6 +280,9 @@ public:
 		if (this->pGrid->gridAlive()) {
 			this->pGrid->removeSwarmer(this->swarmerID);
 		}
+	}
+	Grid* getGrid() {
+		return this->pGrid;
 	}
 	virtual void executeBehavior() = 0;
 

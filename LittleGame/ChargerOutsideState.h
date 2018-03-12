@@ -17,10 +17,12 @@ private:
 protected:
 	
 public:
-	ChargerOutsideState(EnemyObject& pHead, AIComponent& pBrain, XMFLOAT3 openingInTheArena_) 
-		: ChargerState(pHead, pBrain) {
+	ChargerOutsideState(EnemyObject& pHead, AIComponent& pBrain, XMFLOAT3 openingInTheArena_, float chargeUpTime_, float maxSpinSpeed_, float collisionDamage_)
+		: ChargerState(pHead, pBrain, chargeUpTime_, maxSpinSpeed_) {
+		// Set values
 		this->pBrain->pushState(*this);
 		this->openingInTheArena = openingInTheArena_;
+		this->pHead->setCollisionDamage(collisionDamage_);
 	}
 	virtual void cleanUp() {
 
@@ -44,9 +46,10 @@ public:
 		// Move!
 		this->pBrain->pushCommand(AICOMMANDS::MOVE);
 
-		// If we've come inside the grid, ACT LIKE IT.
+		// If we've come inside the arena, switch to the channeling state and let it solve the rest
 		if (this->inOrOut()) {
-			EnemyState* nextState = new ChargerChannelingState(*this->pHead, *this->pBrain);
+			this->pHead->setKineticVector(XMFLOAT3(0, 0, 0));
+			EnemyState* nextState = new ChargerChannelingState(*this->pHead, *this->pBrain, this->chargeUpTime, this->maxSpinSpeed);
 		}
 	}
 };

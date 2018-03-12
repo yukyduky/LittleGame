@@ -175,7 +175,7 @@ TriangleComponent::TriangleComponent(
 {
 	// Connections
 	this->head = &obj;
-//	obj.SETgraphicsComponent(this);
+	obj.SETgraphicsComponent(this);
 	obj.addComponent(this);
 	pGPS.addGraphics(this);
 	

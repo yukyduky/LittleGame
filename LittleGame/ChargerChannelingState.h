@@ -8,11 +8,10 @@
 class ChargerChannelingState : public ChargerState
 {
 private:
-	float passedTime = 0;
-	float chargeUpTime = 5;
 
 public:
-	ChargerChannelingState(EnemyObject& pHead, AIComponent& pBrain) : ChargerState(pHead, pBrain) {
+	ChargerChannelingState(EnemyObject& pHead, AIComponent& pBrain, float chargeUpTime_, float maxSpinSpeed_) 
+		: ChargerState(pHead, pBrain, chargeUpTime_, maxSpinSpeed_) {
 		this->pBrain->pushState(*this);
 	}
 	virtual void cleanUp() {
@@ -20,10 +19,11 @@ public:
 	}
 	virtual void executeBehavior() {
 		// Increase passed time
-		passedTime += Locator::getGameTime()->getDeltaTime();
+		this->passedTime += Locator::getGameTime()->getDeltaTime();
 
-		// Affect rotation
-	//	this->pHead->SETrotationMatrix();
+		// Rotate depending on how much we've charged up
+		currentSpinSpeed = maxSpinSpeed * (this->passedTime / chargeUpTime);
+		this->rotate(currentSpinSpeed);
 
 		// Keep aiming for the player
 		XMFLOAT3 myPos = this->pHead->GETPosition();
@@ -33,10 +33,13 @@ public:
 
 		// Check if we're done charging
 		if (passedTime > chargeUpTime) {
-			passedTime = 0;
-			EnemyState* newState = new ChargerChargingState(*pHead, *pBrain);
+			// Reset timer
+			this->passedTime = 0;
+			// Enable collisionDamage
+			this->pHead->setIfCharged(true); 
+			// Charge!
+			EnemyState* newState = new ChargerChargingState(*pHead, *pBrain, this->chargeUpTime, this->maxSpinSpeed);
 		}
-		// Charge!
 	}
 };
 

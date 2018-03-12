@@ -439,13 +439,21 @@ void GamePlayState::init() {
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
-	randomLevel = 1; // TESTING ------------------------ 
+	// TESTING ------------------------ 
+	randomLevel = 1; 
+	// TESTING ------------------------ 
 
 	switch (randomLevel)
 	{
-	case 1: this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	case 2: this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	case 3: this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	case 1:
+		this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+		break;
+	case 2: 
+		this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+		break;
+	case 3: 
+		this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+		break;
 	}
 	//this->enemyManager.startBossLevel();
 
@@ -698,7 +706,7 @@ void GamePlayState::initPlayer()
 	float topSpeed = 11.0f;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
+	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 100.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
