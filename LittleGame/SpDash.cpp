@@ -300,11 +300,12 @@ bool SpDashG3::castSpell()
 		// For further info, if needed, see 'useEnergy()' description
 		if (this->actOwner->useEnergy(this->getCost()))
 		{
-			//for (auto &i : this->flames)
-			//{
-			//	i->setState(OBJECTSTATE::TYPE::DEAD);
-			//}
-			//this->flames.clear();
+			for (auto &i : this->flames)
+			{
+				i->setState(OBJECTSTATE::TYPE::DEAD);
+				//i->cleanUp();
+			}
+			this->flames.clear();
 
 			returnValue = true;
 
@@ -334,8 +335,8 @@ bool SpDashG3::castSpell()
 			for (int i = 0; i < this->nrOfFlames; i++)
 			{
 				ProjProp props(flameSize, XMFLOAT4(1.0f, 1.0f, 0.0f, 0.2f), 0, -1, false);
-				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
-					->setPosition(oldPos + (this->actOwner->getDirection(i * flameSize * 2)));
+				this->flames.push_back(this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)));
+				this->flames.back()->setPosition(oldPos + (this->actOwner->getDirection(i * flameSize * 2)));
 			}
 
 			this->getOwner()->setPosition(newPos);

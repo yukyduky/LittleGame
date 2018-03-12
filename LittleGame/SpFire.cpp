@@ -10,7 +10,7 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 	this->setCost(10);
 	this->setCoolDown(0.2f);
 	this->damage = 50;
-	this->range = 300;
+	this->range = 700;
 }
 
 SpFire::~SpFire()
@@ -93,9 +93,9 @@ SpFireG1::SpFireG1(GameObject* owner) : SpFire(owner)
 {
 	// WHEN BALANCING, DONT FORGET THAT THERE IS A CAP ON PROJECTILES FOR THIS SPELL
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->setCoolDown(0.01f);
+	this->setCoolDown(0.07f);
 	this->setCost(0.1f);
-	this->range = 5;
+	this->range = 150.0f;
 }
 
 SpFireG1::~SpFireG1()
@@ -114,7 +114,7 @@ bool SpFireG1::castSpell()
 		{
 			returnValue = true;
 
-			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, this->range, false);
+			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 300, this->range, false);
 
 			XMVECTOR direction = XMLoadFloat3(&this->actOwner->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
@@ -152,7 +152,9 @@ SpFireG2::SpFireG2(GameObject* owner) : SpFire(owner)
 	this->damage *= 2.2f;
 	this->setCoolDown(2.0f);
 	this->setCost(30.0f);
-	this->range = 100.0f;
+	this->range = 1000.0f;
+
+	this->size = 0.0f;
 }
 
 SpFireG2::~SpFireG2()
@@ -171,7 +173,7 @@ bool SpFireG2::castSpell()
 		{
 			returnValue = true;
 
-			ProjProp props(1, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, this->range, PROJBEHAVIOR::ENLARGE);
+			ProjProp props(1, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 400, this->range, PROJBEHAVIOR::ENLARGE);
 
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
@@ -182,6 +184,14 @@ bool SpFireG2::castSpell()
 	}
 
 	return returnValue;
+}
+
+void SpFireG2::update()
+{
+	this->size += 3.0f;
+	XMMATRIX scaleM = XMMatrixScaling(this->size, this->size, this->size);
+	this->owner->GETphysicsComponent()->updateBoundingArea(this->size);
+	this->owner->SETscaleMatrix(scaleM);
 }
 
 void SpFireG2::collision(GameObject * target, Projectile * proj)

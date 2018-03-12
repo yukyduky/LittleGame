@@ -12,7 +12,7 @@
 
 Spell::Spell(GameObject* owner, NAME name)
 {
-	this->glyph = GLYPHTYPE::NONE;
+	//this->glyph = GLYPHTYPE::NONE;
 	this->owner = owner;
 	this->name = name;
 	this->timeSinceCast = 0.0;
