@@ -11,7 +11,7 @@ class GamePlayState;
 class SpAutoAttack : public Spell
 {
 public:
-	SpAutoAttack(ActorObject* player);
+	SpAutoAttack(GameObject* owner);
 	virtual ~SpAutoAttack();
 
 	virtual bool castSpell();
@@ -38,7 +38,7 @@ protected:
 class SpAutoAttackG1 : public SpAutoAttack
 {
 public:
-	SpAutoAttackG1(ActorObject* player);
+	SpAutoAttackG1(GameObject* owner);
 	virtual ~SpAutoAttackG1();
 
 	bool castSpell();
@@ -49,7 +49,7 @@ private:
 class SpAutoAttackG2 : public SpAutoAttack
 {
 public:
-	SpAutoAttackG2(ActorObject* player);
+	SpAutoAttackG2(GameObject* owner);
 	virtual ~SpAutoAttackG2();
 
 	bool castSpell();
@@ -61,7 +61,7 @@ private:
 class SpAutoAttackG3 : public SpAutoAttack
 {
 public:
-	SpAutoAttackG3(ActorObject* player);
+	SpAutoAttackG3(GameObject* owner);
 	virtual ~SpAutoAttackG3();
 
 private:

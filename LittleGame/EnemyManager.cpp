@@ -271,7 +271,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors)
+EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -371,12 +371,13 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	float immolationDamage = 3.0f;
 	float attackCooldown = 0.3f;
 	float attackRange = 50.0f;
+	float hp = 200.0f;
 	
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ID, velocityMagnitude, topSpeed, pos, 
 		this->pGPS, &this->players, 
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, hp
 	);
 	Spell* spell = new SpEnemyImmolation(
 		enemyObject, this->players[0], &this->activeEnemiesCount,
@@ -387,7 +388,7 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
-	aiComponent = new AIComponent(*enemyObject, aiBehavior);
+	aiComponent = new AIComponent(*enemyObject);
 	
 	// STATES
 	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
@@ -483,13 +484,14 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	}
 
 
-	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
+	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float projectileDamage = 8.0f;
 	float attackCooldown = 0.5f;
-	float projectileRange = 2000.0f;
+	float projectileRange = 200.0f;
 	float attackRange = 500.0f;
+	float hp = 200.0f;
 
 	float velocityMagnitude = 180.0f;
 	float topSpeed = 11.0f;
@@ -498,7 +500,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	enemyObject = new EnemyObject(
 		ID, velocityMagnitude, topSpeed, pos,
 		this->pGPS, &this->players,
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, hp
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpSwarmProjectile(
@@ -510,9 +512,12 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
-	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
+	aiComponent = new AIComponent(*enemyObject);
 	// STATES
 	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++);
+
+
+
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
@@ -540,13 +545,14 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	XMFLOAT3 pos = { ARENADATA::GETarenaWidth() + 700.0f, bossScale, ARENADATA::GETarenaHeight() * 0.5f };
 
 
-	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
+	XMFLOAT4 color(0.1f, 0.01f, 0.75f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float projectileDamage = 8.0f;
 	float attackCooldown = 0.5f;
-	float projectileRange = 2000.0f;
-	float attackRange = 500.0f;
+	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
+	float attackRange = ARENADATA::GETarenaWidth();
+	float hp = 10000.0f;
 
 	float velocityMagnitude = 180.0f;
 	float topSpeed = 11.0f;
@@ -555,7 +561,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	enemyObject = new EnemyObject(
 		ID, velocityMagnitude, topSpeed, pos,
 		this->pGPS, &this->players,
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, hp
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpBossBulletHell(
@@ -567,7 +573,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 									// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, bossScale * 1.25f);
-	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::STRAIGHTTOWARDS);
+	aiComponent = new AIComponent(*enemyObject);
 	// STATE
 	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);
 

@@ -1,13 +1,13 @@
 
 #include "SpBomb.h"
 
-SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
+SpBomb::SpBomb(GameObject* owner) : Spell(owner, NAME::BOMB)
 {
 	this->strength = 1;
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->theProj = nullptr;
+	//this->theProj = nullptr;
 
 	// start-size
 	this->start = 0.0f;
@@ -16,10 +16,14 @@ SpBomb::SpBomb(ActorObject* player) : Spell(player, NAME::BOMB)
 	// Time bomb has to kill enemies
 	this->collisionDuration = 0.0f;
 	// only 1 bomb out
-	this->active = false;
+	this->active = true;
 	this->setCoolDown(1.5f);
 	this->damage = this->start;
 	this->range = 300.0f;
+
+	this->active = true;
+	this->landed = false;
+	this->yAcc = 6.0f;
 }
 
 SpBomb::~SpBomb()
@@ -28,6 +32,7 @@ SpBomb::~SpBomb()
 
 bool SpBomb::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN)
 	{
@@ -35,16 +40,13 @@ bool SpBomb::castSpell()
 	}
 	else
 	{
-		if (this->theProj != nullptr)
-		{
-			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
-		}
+		//if (this->owner != nullptr)
+		//{
+		//	this->projOwner->setState(OBJECTSTATE::TYPE::DEAD);
+		//}
 
-		this->active = true;
-		this->landed = false;
-		this->yAcc = 6.0f;
-		ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, this->range, false/*PROJBEHAVIOR::ENLARGE*/);
-		this->theProj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
+		ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, -1, false/*PROJBEHAVIOR::ENLARGE*/);
+		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
@@ -68,25 +70,25 @@ void SpBomb::update()
 
 		if (!this->landed)
 		{
-			XMFLOAT3 currPos = this->theProj->GETPosition();
+			XMFLOAT3 currPos = this->owner->GETPosition();
 			currPos.y += this->yAcc;
 			this->yAcc += -15.0f * dt;
-			this->theProj->setPosition(currPos);
+			this->owner->setPosition(currPos);
 
 			if (currPos.y <= 39.0f)
 			{
 				this->landed = true;
 				this->damage = this->start;
 				this->collisionDuration = 0.0f;
-				this->theProj->setSpeed(0.0f);
+				static_cast<Projectile*>(this->owner)->setSpeed(0.0f);
 			}
 		}
 		else if (this->damage < this->end)
 		{
 			this->damage += 300.0f * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-			this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
-			this->theProj->SETscaleMatrix(scaleM);
+			this->owner->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
+			this->owner->SETscaleMatrix(scaleM);
 		}
 		else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
 		{
@@ -95,7 +97,7 @@ void SpBomb::update()
 		else
 		{
 			this->active = false;
-			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
+			this->owner->setState(OBJECTSTATE::TYPE::DEAD);
 		}
 	}
 }
@@ -117,7 +119,7 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBombG1::SpBombG1(ActorObject * player) : SpBomb(player)
+SpBombG1::SpBombG1(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
@@ -132,28 +134,29 @@ SpBombG1::~SpBombG1()
 
 void SpBombG1::update()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	if (this->active)
 	{
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		if (!this->landed)
 		{
-			this->currPos = this->theProj->GETPosition();
+			this->currPos = this->owner->GETPosition();
 			this->currPos.y += this->yAcc;
 			this->yAcc += -15.0f * dt;
-			this->theProj->setPosition(this->currPos);
+			this->owner->setPosition(this->currPos);
 
 			if (this->currPos.y <= 39.0f)
 			{
 				this->landed = true;
-				this->theProj->setSpeed(0.0f);
+				static_cast<Projectile*>(this->owner)->setSpeed(0.0f);
 			}
 		}
 		else
 		{
 			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, 10, true);
 
-			XMVECTOR direction = XMLoadFloat3(&this->getOwner()->getDirection());
+			XMVECTOR direction = XMLoadFloat3(&static_cast<ActorObject*>(this->getOwner())->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
 
 			float angle = 6.24 /*2PI*/ / this->nrOfSplinters;
@@ -161,13 +164,13 @@ void SpBombG1::update()
 			{
 				direction = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, angle));
 
-				Projectile* proj = this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
-				proj->setDirection(direction);
-				proj->setPosition(this->currPos);
+				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
+				//proj->setDirection(direction);
+				//proj->setPosition(this->currPos);
 			}
 
 			this->active = false;
-			this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
+			this->owner->setState(OBJECTSTATE::TYPE::DEAD);
 		}
 	}
 }
@@ -176,7 +179,7 @@ void SpBombG1::update()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBombG2::SpBombG2(ActorObject * player) : SpBomb(player)
+SpBombG2::SpBombG2(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->damage *= 1.2f;
@@ -206,15 +209,15 @@ void SpBombG2::update()
 		{
 			float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
-			this->currPos = this->theProj->GETPosition();
+			this->currPos = this->owner->GETPosition();
 			this->currPos.y += this->yAcc;
 			this->yAcc += -25.0f * dt;
-			this->theProj->setPosition(this->currPos);
+			this->owner->setPosition(this->currPos);
 
 			if (this->currPos.y <= 0.0f)
 			{
 				this->landed = true;
-				this->theProj->setSpeed(0.0f);
+				static_cast<Projectile*>(this->owner)->setSpeed(0.0f);
 				this->trip = false;
 				this->damage = this->start;
 			}
@@ -227,8 +230,8 @@ void SpBombG2::update()
 			{
 				this->damage += 300.0f * dt;
 				XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-				this->theProj->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
-				this->theProj->SETscaleMatrix(scaleM);
+				this->owner->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
+				this->owner->SETscaleMatrix(scaleM);
 			}
 			else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
 			{
@@ -238,7 +241,7 @@ void SpBombG2::update()
 			{
 				this->active = false;
 				this->trip = false;
-				this->theProj->setState(OBJECTSTATE::TYPE::DEAD);
+				this->owner->setState(OBJECTSTATE::TYPE::DEAD);
 			}
 		}
 		
@@ -249,7 +252,7 @@ void SpBombG2::update()
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBombG3::SpBombG3(ActorObject * player) : SpBomb(player)
+SpBombG3::SpBombG3(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 1.5f);

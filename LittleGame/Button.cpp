@@ -92,6 +92,7 @@ void Button::deSelectButton()
 
 void Button::onPress()
 {
+	bool currSetting;
 	switch (this->behavior)
 	{
 	case BEHAVIOR::GOSTART:
@@ -112,6 +113,8 @@ void Button::onPress()
 	case BEHAVIOR::RESTARTGAME:
 		this->pMS->restartGame();
 		break;
+
+		//Options
 	case BEHAVIOR::VOLUMEUP:
 		Locator::getAudioManager()->adjustMaster(true);
 		break;
@@ -132,6 +135,17 @@ void Button::onPress()
 		break;
 	case BEHAVIOR::WINDOWSWITCH:
 		static_cast<PauseMenuState*>(this->pMS)->FullScreenSwitch();
+		break;
+	case BEHAVIOR::USECONTROLLER:
+		currSetting = GamePlayState::getInstance()->switchControllerInput();
+		if (currSetting)
+		{
+			this->text = L"Input: Controller";
+		}
+		else
+		{
+			this->text = L"Input: Keyboard";
+		}
 		break;
 
 	// Rewardmenu

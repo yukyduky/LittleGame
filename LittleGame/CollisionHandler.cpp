@@ -389,6 +389,8 @@ void CollisionHandler::collisionEnemyProjectile() {
 		this->collidable2 = this->tempCollidableHolder;
 	}
 	
+
+
 	Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
 	spell->collision(this->collidable1, proj);

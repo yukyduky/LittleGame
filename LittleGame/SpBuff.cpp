@@ -1,7 +1,7 @@
 
 #include "SpBuff.h"
 
-SpBuff::SpBuff(ActorObject* player) : Spell(player, NAME::BUFF)
+SpBuff::SpBuff(GameObject* owner) :  Spell(owner, NAME::BUFF)
 {
 	this->strength = 2.0f;
 	this->setType(SPELLTYPE::DAMAGE);
@@ -24,6 +24,7 @@ SpBuff::~SpBuff()
 
 bool SpBuff::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
@@ -31,7 +32,7 @@ bool SpBuff::castSpell()
 	}
 	else
 	{
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
@@ -94,7 +95,7 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 ////////////////////////////////////////////
 //// GLYPH 1 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBuffG1::SpBuffG1(ActorObject * player) : SpBuff(player)
+SpBuffG1::SpBuffG1(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	//this->duration *= 3.0f;
@@ -106,6 +107,7 @@ SpBuffG1::~SpBuffG1()
 
 bool SpBuffG1::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
@@ -113,12 +115,12 @@ bool SpBuffG1::castSpell()
 	}
 	else
 	{
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);
 
-			this->getOwner()->getPGPS()->setBerserkerMode(true);
+			this->actOwner->getPGPS()->setBerserkerMode(true);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -139,7 +141,7 @@ void SpBuffG1::update()
 			this->active = false;
 			this->setState(SPELLSTATE::COOLDOWN);
 
-			this->getOwner()->getPGPS()->setBerserkerMode(false);
+			this->actOwner->getPGPS()->setBerserkerMode(false);
 
 		}
 	}
@@ -149,7 +151,7 @@ void SpBuffG1::update()
 ////////////////////////////////////////////
 //// GLYPH 2 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBuffG2::SpBuffG2(ActorObject * player) : SpBuff(player)
+SpBuffG2::SpBuffG2(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCost(this->getCost() * 0.6f);
@@ -163,7 +165,7 @@ SpBuffG2::~SpBuffG2()
 ////////////////////////////////////////////
 //// GLYPH 3 ////////////////////////////////////////////
 ////////////////////////////////////////////
-SpBuffG3::SpBuffG3(ActorObject * player) : SpBuff(player)
+SpBuffG3::SpBuffG3(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->strength *= 2.0f;
@@ -175,6 +177,7 @@ SpBuffG3::~SpBuffG3()
 
 bool SpBuffG3::castSpell()
 {
+	this->actOwner = static_cast<ActorObject*>(this->owner);
 	bool returnValue = true;
 	if (this->getState() == SPELLSTATE::COOLDOWN || this->getState() == SPELLSTATE::ACTIVE)
 	{
@@ -182,7 +185,7 @@ bool SpBuffG3::castSpell()
 	}
 	else
 	{
-		if (this->getOwner()->useEnergy(this->getCost()))
+		if (this->actOwner->useEnergy(this->getCost()))
 		{
 			this->active = true;
 			this->setState(SPELLSTATE::ACTIVE);

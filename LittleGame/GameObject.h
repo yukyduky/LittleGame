@@ -52,6 +52,7 @@ protected:
 	const size_t ID;
 	XMFLOAT3 previousPos;
 	XMFLOAT3 pos;
+	XMFLOAT3 direction;
 	XMFLOAT3 newPos;
 	XMFLOAT3 kineticVector;
 	OBJECTTYPE::TYPE type;
@@ -96,6 +97,8 @@ public:
 	XMFLOAT3 GETpreviousPos() const { return this->previousPos; }
 	void setkineticVector(XMFLOAT3 kineticVector) { this->kineticVector = kineticVector; }
 	XMFLOAT3 getkineticVector() const { return this->kineticVector; }
+	void SETvelocityMagnitude(float input) { this->velocityMagnitude = input; }
+	virtual XMFLOAT3 getDirection() { return this->pos; }
 	void setState(OBJECTSTATE::TYPE state) { this->state = state; }
 	OBJECTSTATE::TYPE getState() const { return this->state; }
 	XMFLOAT4X4& getWorld();

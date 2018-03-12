@@ -11,7 +11,7 @@ class GamePlayState;
 class SpBuff : public Spell
 {
 public:
-	SpBuff(ActorObject* player);
+	SpBuff(GameObject* owner);
 	~SpBuff();
 
 	virtual bool castSpell();
@@ -45,7 +45,7 @@ protected:
 class SpBuffG1 : public SpBuff
 {
 public:
-	SpBuffG1(ActorObject* player);
+	SpBuffG1(GameObject* owner);
 	virtual ~SpBuffG1();
 
 	bool castSpell();
@@ -57,7 +57,7 @@ private:
 class SpBuffG2 : public SpBuff
 {
 public:
-	SpBuffG2(ActorObject* player);
+	SpBuffG2(GameObject* owner);
 	virtual ~SpBuffG2();
 private:
 };
@@ -66,7 +66,7 @@ private:
 class SpBuffG3 : public SpBuff
 {
 public:
-	SpBuffG3(ActorObject* player);
+	SpBuffG3(GameObject* owner);
 	virtual ~SpBuffG3();
 
 	bool castSpell();

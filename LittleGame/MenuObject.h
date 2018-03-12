@@ -47,11 +47,11 @@ public:
 	
 
 private:
-	ID2D1SolidColorBrush * pColorBrush = nullptr;
-	std::wstring text = L"";
 	ID2D1SolidColorBrush * pTextColorBrush = nullptr;
+	ID2D1SolidColorBrush * pColorBrush = nullptr;
 
 protected:
+	std::wstring text = L"";
 	D2D1_RECT_F rectangle;
 	ID2D1HwndRenderTarget * pRT = nullptr;
 	// radius in -x, radius in y, offset in x

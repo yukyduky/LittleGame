@@ -10,7 +10,7 @@ Projectile::Projectile() : GameObject(-1)
 	this->setState(OBJECTSTATE::TYPE::DEAD);
 }
 
-Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, ActorObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -42,9 +42,11 @@ void Projectile::cleanUp()
 		c->cleanUp();
 		delete c;
 	}
-	if (this->spell != nullptr) {
-		delete this->spell;
-	}
+
+	// Detta tar bort spelarens egna spell
+	//if (this->spell != nullptr && this->spell->getOwner()->getType() != OBJECTTYPE::PLAYER) {
+	delete this->spell;
+	//}
 }
 
 float Projectile::getAngleTowardsPlayer()
@@ -123,6 +125,110 @@ void Projectile::setSeeking(float rotationSpeed, ActorObject* pPlayer)
 void Projectile::setSpell(Spell * spell)
 {
 	this->spell = spell;
+}
+
+void Projectile::setSpellByName(int spellName, int glyph)
+{
+	Spell* i = nullptr; // Will hold the new spell to be set into the proj
+	NAME name = (NAME)spellName;
+	GLYPHTYPE glyphtype = (GLYPHTYPE)glyph;
+
+	switch (name)
+	{
+
+	case NAME::AUTOATTACK:
+		// Looks at what new spell will replace depending on what glyph has been added to the spell
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpAutoAttack(this);
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpAutoAttackG1(this);
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpAutoAttackG2(this);
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpAutoAttackG3(this);
+			break;
+		}
+		break;
+
+	case NAME::FIRE:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpFire(this);
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpFireG1(this);
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpFireG2(this);
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpFireG3(this);
+			break;
+		}
+		break;
+
+	case NAME::BOMB:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpBomb(this);
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpBombG1(this);
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpBombG2(this);
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpBombG3(this);
+			break;
+		}
+		break;
+
+	case NAME::DASH:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpDash(this);
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpDashG1(this);
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpDashG2(this);
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpDashG3(this);
+			break;
+		}
+		break;
+
+	case NAME::BUFF:
+		switch (glyphtype)
+		{
+		case GLYPHTYPE::NONE:
+			i = new SpBuff(this);
+			break;
+		case GLYPHTYPE::GLYPH1:
+			i = new SpBuffG1(this);
+			break;
+		case GLYPHTYPE::GLYPH2:
+			i = new SpBuffG2(this);
+			break;
+		case GLYPHTYPE::GLYPH3:
+			i = new SpBuffG3(this);
+			break;
+		}
+		break;
+	}// i is holding the new Spell
+
+	this->spell = i;
 }
 
 Spell * Projectile::getSpell()
@@ -208,6 +314,8 @@ void Projectile::update()
 	for (auto &i : this->components) {
 		i->update();
 	}
+	
+	this->spell->update();
 
 	this->move();
 

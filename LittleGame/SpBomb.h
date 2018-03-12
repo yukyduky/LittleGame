@@ -11,7 +11,7 @@ class GamePlayState;
 class SpBomb : public Spell
 {
 public:
-	SpBomb(ActorObject* player);
+	SpBomb(GameObject* owner);
 	virtual ~SpBomb();
 
 	virtual bool castSpell();
@@ -29,7 +29,7 @@ protected:
 	// Travel-range of spell
 	float range = 0.0f;
 
-	Projectile* theProj = nullptr;
+	//Projectile* theProj = nullptr;
 	XMFLOAT3 currPos;
 	float start, end, collisionDuration;
 
@@ -44,7 +44,7 @@ protected:
 class SpBombG1 : public SpBomb
 {
 public:
-	SpBombG1(ActorObject* player);
+	SpBombG1(GameObject* owner);
 	virtual ~SpBombG1();
 
 	void update();
@@ -56,7 +56,7 @@ private:
 class SpBombG2 : public SpBomb
 {
 public:
-	SpBombG2(ActorObject* player);
+	SpBombG2(GameObject* owner);
 	virtual ~SpBombG2();
 
 	void collision(GameObject* target, Projectile* proj);
@@ -69,7 +69,7 @@ private:
 class SpBombG3 : public SpBomb
 {
 public:
-	SpBombG3(ActorObject* player);
+	SpBombG3(GameObject* owner);
 	virtual ~SpBombG3();
 private:
 };

@@ -706,8 +706,14 @@ void GamePlayState::initPlayer()
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
 	/// INPUT COMPONENT:
-	//input = new ControllerComponent(*actor, 0);
-	input = new KeyboardComponent(*actor);
+	if (this->useController)
+	{
+		input = new ControllerComponent(*actor, 0);
+	}
+	else
+	{
+		input = new KeyboardComponent(*actor);
+	}
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
@@ -747,8 +753,14 @@ void GamePlayState::initPlayer()
 	input = nullptr;
 }
 
+bool GamePlayState::switchControllerInput()
+{
+	this->useController = !this->useController;
+	return useController;
+}
 
-Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, ActorObject* shooter, ProjProp props, Light light)
+
+Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, GameObject* shooter, ProjProp props, Light light)
 {
 	Projectile* proj = nullptr;
 	int nextID = this->newID();
