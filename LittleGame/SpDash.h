@@ -71,6 +71,8 @@ public:
 private:
 	bool castSpell();
 	void update();
+
+	std::list<Projectile *> flames;
 };
 
 #endif // !SPDASH_H

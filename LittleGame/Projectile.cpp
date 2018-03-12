@@ -376,13 +376,6 @@ void Projectile::update()
 		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
 		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
 	}
-	else if (this->behavior == PROJBEHAVIOR::ENLARGE)
-	{
-		float size = this->rangeCounter * 4.0f;
-		XMMATRIX scaleM = XMMatrixScaling(size, size, size);
-		this->GETphysicsComponent()->updateBoundingArea(size);
-		this->SETscaleMatrix(scaleM);
-	}
 
 	/*
 	this->rangeCounter++;

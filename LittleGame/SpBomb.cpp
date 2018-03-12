@@ -80,7 +80,7 @@ void SpBomb::update()
 				this->landed = true;
 				this->damage = this->start;
 				this->collisionDuration = 0.0f;
-				static_cast<Projectile*>(this->owner)->setSpeed(0.0f);
+				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
 			}
 		}
 		else if (this->damage < this->end)
@@ -134,7 +134,6 @@ SpBombG1::~SpBombG1()
 
 void SpBombG1::update()
 {
-	this->actOwner = static_cast<ActorObject*>(this->owner);
 	if (this->active)
 	{
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
@@ -149,24 +148,23 @@ void SpBombG1::update()
 			if (this->currPos.y <= 39.0f)
 			{
 				this->landed = true;
-				static_cast<Projectile*>(this->owner)->setSpeed(0.0f);
+				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
 			}
 		}
 		else
 		{
-			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 1000, 10, true);
+			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, 300, true);
 
-			XMVECTOR direction = XMLoadFloat3(&static_cast<ActorObject*>(this->getOwner())->getDirection());
+			XMVECTOR direction = XMLoadFloat3(&static_cast<Projectile*>(this->getOwner())->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
 
-			float angle = 6.24 /*2PI*/ / this->nrOfSplinters;
+			float angle = 6.24 /*=2PI*/ / this->nrOfSplinters;
 			for (int i = 0; i < this->nrOfSplinters; i++)
 			{
 				direction = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, angle));
 
-				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
-				//proj->setDirection(direction);
-				//proj->setPosition(this->currPos);
+				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
+					->setDirection(direction);
 			}
 
 			this->active = false;
@@ -217,7 +215,7 @@ void SpBombG2::update()
 			if (this->currPos.y <= 0.0f)
 			{
 				this->landed = true;
-				static_cast<Projectile*>(this->owner)->setSpeed(0.0f);
+				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
 				this->trip = false;
 				this->damage = this->start;
 			}
@@ -261,5 +259,55 @@ SpBombG3::SpBombG3(GameObject* owner) : SpBomb(owner)
 
 SpBombG3::~SpBombG3()
 {
+}
+
+void SpBombG3::update()
+{
+	if (this->active)
+	{
+		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+
+		if (!this->landed)
+		{
+			XMFLOAT3 currPos = this->owner->GETPosition();
+			currPos.y += this->yAcc;
+			this->yAcc += -15.0f * dt;
+			this->owner->setPosition(currPos);
+
+			if (currPos.y <= 39.0f)
+			{
+				this->landed = true;
+				this->damage = this->start;
+				this->collisionDuration = 0.0f;
+				static_cast<Projectile*>(this->owner)->setVelocity(0.0f);
+			}
+		}
+		else if (this->damage < this->end)
+		{
+			this->damage += 300.0f * dt;
+			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
+			this->owner->GETphysicsComponent()->updateBoundingArea(this->damage * 10.5f);
+			this->owner->SETscaleMatrix(scaleM);
+		}
+		else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
+		{
+			this->collisionDuration += dt;
+		}
+		else
+		{
+			this->active = false;
+			this->owner->setState(OBJECTSTATE::TYPE::DEAD);
+		}
+	}
+}
+
+void SpBombG3::collision(GameObject * target, Projectile * proj)
+{
+	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
+		&& this->landed)
+	{
+		ActorObject* actorTarget = static_cast<ActorObject*>(target);
+		//actorTarget->setPosition();
+	}
 }
 

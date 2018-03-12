@@ -214,6 +214,7 @@ public:
 	void setBerserkerMode(bool input) { this->berserkerMode = input; }
 	bool getBerserkerMode() { return this->berserkerMode; }
 
+	void addEnergyToPlayer(float energy) { if (this->player1 != nullptr) { this->player1->addEnergy(energy); } };
 };
 
 #endif // !GAMEPLAYSTATE_H
