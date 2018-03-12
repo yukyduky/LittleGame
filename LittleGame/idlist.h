@@ -24,7 +24,6 @@ public:
 
 	size_t push(typename T element);
 	void remove(const size_t id);
-	void resize(const size_t size);
 	void reserve(const size_t size);
 	size_t capacity();
 	void clear();
@@ -80,7 +79,7 @@ inline size_t idlist<T>::push(typename T element)
 template<class T>
 inline void idlist<T>::remove(const size_t id)
 {
-	size_t lastIndex = m_NrOfElements - m_AvailableIDs.size() - 1;
+	size_t lastIndex = m_NrOfElements - 1;
 
 	if (lastIndex == 0)
 	{
@@ -105,23 +104,6 @@ inline void idlist<T>::remove(const size_t id)
 		m_AvailableIDs.push_front(id);
 		m_AvailableIndexes.push(lastIndex);
 		m_NrOfElements--;
-	}
-}
-
-template<class T>
-inline void idlist<T>::resize(const size_t size)
-{
-	if (size > m_Container.size()) 
-	{
-		m_Container.resize(size);
-		for (size_t i = m_NrOfElements; i < size; i++)
-		{
-			m_AvailableIDs.push_back(i);
-			m_AvailableIndexes.push(i);
-			m_IDToIndex.insert(m_IDToIndex.end(), std::pair<size_t, size_t>(i, i));
-			m_IndexToID.insert(m_IndexToID.end(), std::pair<size_t, size_t>(i, i));
-		}
-		m_NrOfElements = size;
 	}
 }
 
