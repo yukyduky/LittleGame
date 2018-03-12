@@ -9,6 +9,10 @@ BossMoveAwayFromArenaState::BossMoveAwayFromArenaState(EnemyObject& pHead, AICom
 	this->pHead->turnOnInvulnerability();
 }
 
+void BossMoveAwayFromArenaState::cleanUp()
+{
+}
+
 void BossMoveAwayFromArenaState::executeBehavior() {
 	// Move away from the arena
 	XMFLOAT2 vectorAwayFromArena = XMFLOAT2(1.0f, 0.0f);

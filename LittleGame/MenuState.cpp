@@ -1,6 +1,7 @@
 #include "MenuState.h"
 #include "GamePlayState.h"
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
+#include "HomeMenuState.h"
 #include "StatisticsMenuState.h"
 #include "GameManager.h"
 #include "Locator.h"
@@ -13,7 +14,6 @@ using namespace DirectX::SimpleMath;
 
 void MenuState::init() 
 {
-	Locator::getD2D()->saveScreen();
 }
 
 void MenuState::cleanUp()
@@ -28,8 +28,6 @@ void MenuState::cleanUp()
 	this->menuObjects.clear();
 
 	this->ID = 0;
-
-	Locator::getD2D()->closeMenu();
 }
 
 void MenuState::pause() {
@@ -77,15 +75,18 @@ void MenuState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::STARTGAME) {
 			StateManager::changeState(GamePlayState::getInstance());
+			Locator::getD2D()->closeMenu();
 		}
 		else if (globalmsg == GLOBALMESSAGES::RESUMEGAME) {
 			StateManager::popState();
+			Locator::getD2D()->closeMenu();
 		}
 		else if (globalmsg == GLOBALMESSAGES::RESTARTGAME) {
 			Locator::getStatsHeader()->resetStats();
 
-			StateManager::changeState(GamePlayState::getInstance());
-			StateManager::pushState(MainMenuState::getInstance());
+			StateManager::changeState(HomeMenuState::getInstance());
+			//StateManager::changeState(GamePlayState::getInstance());
+			//StateManager::pushState(PauseMenuState::getInstance());
 		}
 	}
 }

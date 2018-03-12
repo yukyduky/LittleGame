@@ -10,6 +10,11 @@ BossMoveToArenaState::BossMoveToArenaState(EnemyObject& pHead, AIComponent& pBra
 	this->pHead->turnOnInvulnerability();
 }
 
+void BossMoveToArenaState::cleanUp()
+{
+
+}
+
 void BossMoveToArenaState::executeBehavior()
 {
 	/// Move to the arena

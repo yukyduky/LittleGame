@@ -476,6 +476,7 @@ void GamePlayState::init() {
 
 	// Adds to the level each time it starts a level
 	Locator::getStatsHeader()->addLevel();
+	Locator::getGameTime()->setMultiplier(1.0);
 }
 
 void GamePlayState::cleanUp()
@@ -572,8 +573,6 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			// Give the RestartState the current spells so it can be saved for thet next level
-			RestartState::getInstance()->provide(this->player1->GETSpells());
 			//Sends the number of Lootboxes picked up druring the game
 			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
 
@@ -714,8 +713,14 @@ void GamePlayState::initPlayer()
 	block = new BlockComponent(*this, *actor, playerColor, playerScales, playerRotation);
 
 	/// INPUT COMPONENT:
-	//input = new ControllerComponent(*actor, 0);
-	input = new KeyboardComponent(*actor);
+	if (this->useController)
+	{
+		input = new ControllerComponent(*actor, 0);
+	}
+	else
+	{
+		input = new KeyboardComponent(*actor);
+	}
 
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
@@ -753,6 +758,12 @@ void GamePlayState::initPlayer()
 	physics = nullptr;
 	block = nullptr;
 	input = nullptr;
+}
+
+bool GamePlayState::switchControllerInput()
+{
+	this->useController = !this->useController;
+	return useController;
 }
 
 

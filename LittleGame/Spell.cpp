@@ -49,55 +49,55 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 	Spell* projectilesSpell = nullptr;
 
 	switch (this->name) {
-	case NAME::AUTOATTACK: {
-		SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
+		case NAME::AUTOATTACK: {
+			//SpAutoAttack* trueThis = static_cast<SpAutoAttack*>(this);
 
-		projectilesSpell = new SpAutoAttack(this->getOwner());
-		proj->setSpell(projectilesSpell);
-		break;
-	}
-	case NAME::BOMB: {
-		SpBomb* trueThis = static_cast<SpBomb*>(this);
+			//projectilesSpell = new SpAutoAttack(this->getOwner());
+			proj->setSpell(this);
+			break;
+		}
+		case NAME::BOMB: {
+			//SpBomb* trueThis = static_cast<SpBomb*>(this);
 
-		projectilesSpell = new SpBomb(this->getOwner());
-		proj->setSpell(projectilesSpell);
-		break;
-	}
-	case NAME::DASH: {
-		SpDash* trueThis = static_cast<SpDash*>(this);
+			//projectilesSpell = new SpBomb(this->getOwner());
+			proj->setSpell(this);
+			break;
+		}
+		case NAME::DASH: {
+			//SpDash* trueThis = static_cast<SpDash*>(this);
 
-		projectilesSpell = new SpDash(this->getOwner());
-		proj->setSpell(projectilesSpell);
-		break;
-	}
-	case NAME::FIRE: {
-		SpFire* trueThis = static_cast<SpFire*>(this);
+			//projectilesSpell = new SpDash(this->getOwner());
+			proj->setSpell(this);
+			break;
+		}
+		case NAME::FIRE: {
+			//SpFire* trueThis = static_cast<SpFire*>(this);
 
-		projectilesSpell = new SpFire(this->getOwner());
-		proj->setSpell(projectilesSpell);
-		break;
-	}
-	case NAME::ENEM_SWARM: {
-		SpSwarmProjectile* trueThis = static_cast<SpSwarmProjectile*>(this);
-		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
+			//projectilesSpell = new SpFire(this->getOwner());
+			proj->setSpell(this);
+			break;
+		}
+		case NAME::ENEM_SWARM: {
+			SpSwarmProjectile* trueThis = static_cast<SpSwarmProjectile*>(this);
+			EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
 
-		projectilesSpell = new SpSwarmProjectile(
-			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
-			trueThis->getAttackRange(), trueThis->getCoolDown()
-		);
-		proj->setSpell(projectilesSpell);
-		break;
-	}
-	case NAME::BULLETHELL: {
-		SpBossBulletHell* trueThis = static_cast<SpBossBulletHell*>(this);
-		EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
+			projectilesSpell = new SpSwarmProjectile(
+				trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+				trueThis->getAttackRange(), trueThis->getCoolDown()
+			);
+			proj->setSpell(projectilesSpell);
+			break;
+		}
+		case NAME::BULLETHELL: {
+			SpBossBulletHell* trueThis = static_cast<SpBossBulletHell*>(this);
+			EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
 
-		projectilesSpell = new SpBossBulletHell(
-			trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
-			trueThis->getAttackRange(), trueThis->getCoolDown()
-		);
-		proj->setSpell(projectilesSpell);
-		break;
+			projectilesSpell = new SpBossBulletHell(
+				trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+				trueThis->getAttackRange(), trueThis->getCoolDown()
+			);
+			proj->setSpell(projectilesSpell);
+			break;
 	}
 	}
 	

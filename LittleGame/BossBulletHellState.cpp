@@ -13,6 +13,10 @@ BossBulletHellState::BossBulletHellState(EnemyObject& pHead, AIComponent& pBrain
 	this->pHead->setState(OBJECTSTATE::TYPE::BOSSVULNERABLE);
 }
 
+void BossBulletHellState::cleanUp()
+{
+}
+
 void BossBulletHellState::executeBehavior()
 {
 	this->counter += Locator::getGameTime()->getDeltaTime();

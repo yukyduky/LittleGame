@@ -54,7 +54,7 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 	// TESTING -----------
 	this->currentWaveCount = 2;
 	this->currentWaveSize = 5;
-	this->swarmerCount = 7;
+	this->swarmerCount = 5;
 	// TESTING -----------
 
 	// Per wave
@@ -64,7 +64,7 @@ void EnemyManager::startLevel1(enemySpawnPositions spawnPosVectors)
 		// Per minion
 		for (int j = 0; j < this->currentWaveSize; j++) {
 			// Create an enemy and attatch it to the wave.
-			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
+			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
 		}
@@ -138,7 +138,7 @@ void EnemyManager::cleanLevel()
 	}
 }
 
-EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors)
+EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 {
 	/// D E C L A R A T I O N
 	// GRAND OBJECT
@@ -159,7 +159,7 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0 };
+	XMFLOAT3 pos = { 0, 0, 0.0001f };
 
 	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700, 800);
 
@@ -260,7 +260,7 @@ EnemyObject* EnemyManager::createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KE
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, enemyColor, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
-	aiComponent = new AIComponent(*enemyObject, aiBehavior);
+	aiComponent = new AIComponent(*enemyObject);
 	
 	// STATES
 	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
@@ -288,7 +288,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	/// D E F I N I T I O N
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0 };
+	XMFLOAT3 pos = { 0, 0, 0.0001f };
 
 	bool reGenerateRandom = true;
 	int spawnLocation = 0;
@@ -362,7 +362,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 
 	float projectileDamage = 8;
 	float attackCooldown = 0.5;
-	float projectileRange = 450;
+	float projectileRange = 200;
 	float attackRange = 500;
 	float health = 100.0f;
 
@@ -383,9 +383,12 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
-	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::TEMPLATE0);
+	aiComponent = new AIComponent(*enemyObject);
 	// STATES
 	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++);
+
+
+
 
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
@@ -440,7 +443,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 									// COMPONENTS
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, bossScale * 1.25f);
-	aiComponent = new AIComponent(*enemyObject, AIBEHAVIOR::KEY::STRAIGHTTOWARDS);
+	aiComponent = new AIComponent(*enemyObject);
 	// STATE
 	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);
 

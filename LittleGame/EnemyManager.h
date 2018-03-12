@@ -58,7 +58,7 @@ private:
 	int capacity = -1;
 	int count = 0;
 	int toBeActivated = 0;
-	XMFLOAT3 averagePosition = { 0, 0, 0 };
+	XMFLOAT3 averagePosition = { 0, 0, 0.0001f };
 	ArrayNode* mainArray = nullptr;
 	AliveNode* firstAlive = nullptr;
 	DeadNode* firstDead = nullptr;
@@ -156,7 +156,7 @@ public:
 	}
 	void update() {
 		// Update the averagePosition
-		XMFLOAT3 averagePosition_ = { 0, 0, 0 };
+		XMFLOAT3 averagePosition_ = { 0, 0, 0.0001f };
 		XMFLOAT3 currentPosition = { 0, 0, 0 };
 		AliveNode* stepper = this->firstAlive;
 
@@ -219,7 +219,7 @@ public:
 					AliveNode* back = nodeToBeRemoved->back;
 					AliveNode* forward = nodeToBeRemoved->forward;
 
-					// If we're delesawdsawdting the first one
+					// If we're deleting the first one
 					if (nodeToBeRemoved == this->firstAlive) {
 						// And we have something in front of us
 						if (nodeToBeRemoved->forward != nullptr) {
@@ -241,8 +241,8 @@ public:
 							forward->back = back;
 							back->forward = forward;
 						}
-						// It only has one behind
-						else {
+						// Check behind
+						else if (back != nullptr) {
 							// Remove link so that 'back' has nothing in front of itself
 							back->forward = nullptr;
 						}
@@ -304,11 +304,35 @@ private:
 
 	void cleanLevel();
 
+	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, enemySpawnPositions spawnPosVectors) {
+		EnemyObject* newEnemy;
+
+		switch(enemyType) {
+		case ENEMYTYPE::SWARMER: 
+			newEnemy = this->createSwarmer(spawnPosVectors);
+			break;
+
+		case ENEMYTYPE::IMMOLATION:
+			newEnemy = this->createMinion(spawnPosVectors);
+			break;
+		default:
+			newEnemy = this->createMinion(spawnPosVectors);
+			break;
+
+		}
+		/// Upgrade depending on players choices (if there are any)
+		Locator::getStatsHeader();
+		newEnemy;
+
+		return newEnemy;
+	}
+
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
+	
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
-	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors);
+	EnemyObject* createMinion(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
 public:

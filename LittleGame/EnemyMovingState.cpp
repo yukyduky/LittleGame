@@ -10,6 +10,11 @@ EnemyMovingState::EnemyMovingState(EnemyObject & pHead, AIComponent & pBrain) : 
 	this->pBrain->pushState(*this);
 }
 
+void EnemyMovingState::cleanUp()
+{
+
+}
+
 void EnemyMovingState::executeBehavior()
 {
 	/// Move towards the player

@@ -260,6 +260,20 @@ DirectX::XMFLOAT4X4& BlockComponent::getWorld()
 	return this->head->getWorld();
 }
 
+void BlockComponent::SETcolor(vColor color)
+{
+	this->color = color;
+}
+
+vColor BlockComponent::GETcolor() {
+	return this->color;
+}
+
+vColor BlockComponent::GETcolorOriginal()
+{
+	return this->colorOriginal;
+}
+
 const size_t BlockComponent::getID()
 {
 	return this->ID;

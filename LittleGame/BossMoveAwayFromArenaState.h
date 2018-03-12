@@ -9,6 +9,7 @@ class BossMoveAwayFromArenaState : public BossState
 private:
 public:
 	BossMoveAwayFromArenaState(EnemyObject& pHead, AIComponent& pBrain, GamePlayState& pGPS, float bossScale);
+	void cleanUp();
 	void executeBehavior();
 	void changeState();
 };

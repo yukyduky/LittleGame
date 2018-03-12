@@ -39,6 +39,10 @@ BossBattleIntroState::BossBattleIntroState(EnemyObject& pHead, AIComponent& pBra
 
 }
 
+void BossBattleIntroState::cleanUp()
+{
+}
+
 void BossBattleIntroState::executeBehavior()
 {
 	float dt = Locator::getGameTime()->getDeltaTime();

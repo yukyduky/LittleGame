@@ -19,6 +19,7 @@ private:
 	int currPhase;
 public:
 	BossBulletHellState(EnemyObject& pHead, AIComponent& pBrain, GamePlayState& pGPS, float bossScale);
+	void cleanUp();
 	void executeBehavior();
 };
 

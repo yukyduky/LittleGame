@@ -168,13 +168,14 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="GlobalEvents.h" />
     <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="HomeMenuState.h" />
     <ClInclude Include="ID2D.h" />
     <ClInclude Include="IDHandler.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="IStatsHeader.h" />
-    <ClInclude Include="MainMenuState.h" />
+    <ClInclude Include="PauseMenuState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuState.h" />
@@ -251,8 +252,9 @@
     <ClCompile Include="EnemyState.cpp" />
     <ClCompile Include="GlobalEvents.cpp" />
     <ClCompile Include="GUIManager.cpp" />
+    <ClCompile Include="HomeMenuState.cpp" />
     <ClCompile Include="IDHandler.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="PauseMenuState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
@@ -364,6 +366,9 @@
       <EnableDebuggingInformation Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</EnableDebuggingInformation>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="captureqwsx.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

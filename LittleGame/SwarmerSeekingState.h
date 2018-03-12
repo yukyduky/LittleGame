@@ -13,6 +13,7 @@ private:
 
 public:
 	SwarmerSeekingState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID);
+	void cleanUp();
 	void executeBehavior();
 
 };

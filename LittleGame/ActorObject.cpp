@@ -1,7 +1,7 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
-#include "MainMenuState.h"
+#include "PauseMenuState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
 #include "RewardMenuState.h"
@@ -179,6 +179,7 @@ void ActorObject::update()
 		}
 		break;
 	}
+	int asdf = 3;
 }
 
 void ActorObject::move()
@@ -226,8 +227,6 @@ void ActorObject::move()
 		actorNewPos.y = actorPos.y;
 		this->setPosition(actorNewPos);
 	}
-
-	int asdf = 3;
 }
 
 void ActorObject::moveUp()
@@ -380,7 +379,7 @@ void ActorObject::fireAbilityX()
 
 void ActorObject::pauseMenu()
 {
-	StateManager::pushState(MainMenuState::getInstance());
+	StateManager::pushState(PauseMenuState::getInstance());
 }
 
 void ActorObject::selectAbility1()

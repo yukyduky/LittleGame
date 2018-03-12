@@ -26,12 +26,7 @@ bool SpDash::castSpell()
 {
 	bool returnValue = false;
 	//Temporary template for the light
-	Light light;
-	light.pos = this->getOwner()->GETPosition();
-	light.diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	light.ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	light.attenuation = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	light.specPower = 0.0f;
+	Light light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50);
 
 	if (!this->burning && this->getState() != SPELLSTATE::COOLDOWN)
 	{

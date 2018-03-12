@@ -19,6 +19,7 @@ public:
 	virtual IDWriteTextFormat* GETTextFormat() { return this->m_pTextFormat; }
 	virtual void saveScreen() { this->saveScreenshot(); this->loadBitmap(); };
 	virtual void closeMenu();
+	virtual void cleanUp();
 private:
 	// D2D device
 	ID2D1Factory* m_pDirect2dFactory = nullptr;
