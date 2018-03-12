@@ -237,18 +237,19 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	//	pos = { static_cast<float>(ARENADATA::GETarenaWidth() * 0.5), scale.y, (static_cast<float>(ARENADATA::GETarenaHeight()) + spawnOffset) };
 
 
-	float velocity = 180;
-	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 1.0f);
+	float velocity = 180.0f;
+	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float immolationDamage = 3;
-	float attackCooldown = 0.5;
-	float attackRange = 70;
+	float immolationDamage = 3.0f;
+	float attackCooldown = 0.5f;
+	float attackRange = 70.0f;
+	float hp = 200.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ENEMYTYPE::IMMOLATION, ID, pos, velocity,
 		this->pGPS, &this->players, 
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, hp
 	);
 	Spell* spell = new SpEnemyImmolation(
 		enemyObject, this->players[0], &this->activeEnemiesCount,
@@ -355,21 +356,22 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	}
 
 
-	float velocity = 180;
-	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
+	float velocity = 180.0f;
+	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float projectileDamage = 8;
-	float attackCooldown = 0.5;
-	float projectileRange = 200;
-	float attackRange = 500;
+	float projectileDamage = 8.0f;
+	float attackCooldown = 0.5f;
+	float projectileRange = 200.0f;
+	float attackRange = 500.0f;
+	float hp = 200.0f;
 
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ENEMYTYPE::SWARMER, ID, pos, velocity,
 		pGPS, &this->players, 
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, hp
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpSwarmProjectile(
@@ -414,21 +416,22 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	XMFLOAT3 pos = { ARENADATA::GETarenaWidth() + 700.0f, bossScale, ARENADATA::GETarenaHeight() * 0.5f };
 
 
-	float velocity = 180;
+	float velocity = 180.0f;
 	XMFLOAT4 color(0.1f, 0.01f, 0.75f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float projectileDamage = 8;
-	float attackCooldown = 0.5;
+	float projectileDamage = 8.0f;
+	float attackCooldown = 0.5f;
 	float projectileRange = ARENADATA::GETarenaWidth() - 200.0f;
 	float attackRange = ARENADATA::GETarenaWidth();
+	float hp = 10000.0f;
 
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
 		ENEMYTYPE::BOSS, ID, pos, velocity,
 		pGPS, &this->players,
-		OBJECTTYPE::ENEMY
+		OBJECTTYPE::ENEMY, hp
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpBossBulletHell(
