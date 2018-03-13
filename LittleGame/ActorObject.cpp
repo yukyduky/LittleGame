@@ -515,8 +515,6 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	//Locator::getStatsHeader()->resetStats();
-
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[3]->castSpell();
 		//this->selectedSpell = this->spells[3];
