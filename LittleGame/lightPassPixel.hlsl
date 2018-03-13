@@ -171,8 +171,8 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 					}
 
 					float pulseRadius = pow(15.0f, 2);
-					float3 baseColorLines = float3(0.3f, 0.0f, 0.0f);
-					float3 baseColorPulse = float3(0.0f, 0.0f, 0.3f);
+					float3 baseColorLines = float3(0.0f, 0.0f, 0.3f);
+					float3 baseColorPulse = float3(0.1f, 0.0f, 0.2f);
 					float lineWidth = 1.0f / 16.0f;
 
 					float pulseInfluence = 0.20f;
