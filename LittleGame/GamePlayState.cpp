@@ -751,15 +751,15 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0:
-	actor->addSpell(new SpAutoAttackG3(actor));
+	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
 	actor->addSpell(new SpFire(actor));
 	// 2: 
-	actor->addSpell(new SpBombG3(actor));
+	actor->addSpell(new SpBomb(actor));
 	// 3:
-	actor->addSpell(new SpDashG3(actor));
+	actor->addSpell(new SpDash(actor));
 	// 4:
-	actor->addSpell(new SpBuffG3(actor));
+	actor->addSpell(new SpBuff(actor));
 
 	actor->selectAbility1();
 

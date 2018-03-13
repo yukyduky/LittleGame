@@ -153,7 +153,10 @@ void SpBombG1::update()
 		}
 		else
 		{
-			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, 300, true);
+			this->setName(NAME::AUTOATTACK);
+			//this->insertGlyph()
+
+			ProjProp props(10, XMFLOAT4(0.3f, 0.1f, 0.3f, 0.1f), 500, 300, true);
 
 			XMVECTOR direction = XMLoadFloat3(&static_cast<Projectile*>(this->getOwner())->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
@@ -303,7 +306,7 @@ void SpBombG3::update()
 
 void SpBombG3::collision(GameObject * target, Projectile * proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
+	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY)
 		&& this->landed)
 	{
 		ActorObject* actorTarget = static_cast<ActorObject*>(target);
@@ -323,7 +326,8 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 		XMFLOAT3 kinvectorFloat3;
 		XMStoreFloat3(&kinvectorFloat3, pullDir);
 
-		actorTarget->setkineticVector(kinvectorFloat3 * 300.0f);
+		;
+		actorTarget->setkineticVector((actorTarget->getkineticVector()) + (kinvectorFloat3 * (400.0f / pullLenght)));
 	}
 }
 
