@@ -5,7 +5,7 @@
 #include "GameObject.h"
 #include "Locator.h"
 #include "RenderInputOrganizer.h"
-#include "IDHandler.h"
+#include "idlist.h"
 
 enum class PROJBEHAVIOR {NONE, ENLARGE};
 
@@ -18,7 +18,7 @@ class Projectile : public GameObject
 public:
 	Projectile();
 	//Projectile(const size_t ID, float velocity, PROJBEHAVIOR behavior, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
-	Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs);
+	Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, size_t lightID, idlist<Light>* lights);
 	virtual ~Projectile();
 	
 	/*Moves the projectile in this->direction with this->velocity * this->dt
@@ -66,8 +66,8 @@ private:
 	// Range of travel
 	float range = 0.0f;
 
-	std::pair<size_t, Light*> light;
-	IDHandler* lightIDs;
+	size_t lightID;
+	idlist<Light>* lights;
 	
 	int maxFlyingRange = 0;
 	float rangeCounter = 0;

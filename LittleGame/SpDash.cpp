@@ -71,7 +71,7 @@ bool SpDash::castSpell()
 			//this->spawnProj(props)->SETscaleMatrix(XMMatrixScaling(this->range - 40.0f, props.size, props.size));
 
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY3_GLYPH0);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}
@@ -179,7 +179,7 @@ bool SpDashG1::castSpell()
 			
 			this->actOwner->dealDmg(-this->damage);
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY3_GLYPH1);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}
@@ -267,7 +267,7 @@ bool SpDashG2::castSpell()
 
 			this->getOwner()->setPosition(newPos);
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY3_GLYPH0);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}
@@ -341,7 +341,7 @@ bool SpDashG3::castSpell()
 
 			this->getOwner()->setPosition(newPos);
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_TELEPORT);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY3_GLYPH0);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}

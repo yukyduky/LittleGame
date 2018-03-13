@@ -131,7 +131,7 @@ bool SpFireG1::castSpell()
 			
 
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH0);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH1);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 
@@ -177,7 +177,7 @@ bool SpFireG2::castSpell()
 
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH0);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH2);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}

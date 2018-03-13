@@ -66,6 +66,18 @@ void AIComponent::cleanUp()
 //	this->keyboardCommandMap.clear();
 //	this->mouseCommandMap.clear();
 	// Might be missing things in accordance with vector!
+
+	EnemyState* stateToBeRemoved = nullptr;
+	for (auto &currentState : this->states) {
+		// Fetch state
+		stateToBeRemoved = currentState;
+		// Delete it
+		delete stateToBeRemoved;
+		// Set pointers to nullptr
+		currentState = nullptr;
+		stateToBeRemoved = nullptr;
+	}
+	this->states.clear();
 }
 
 EnemyState * AIComponent::getCurrentState()

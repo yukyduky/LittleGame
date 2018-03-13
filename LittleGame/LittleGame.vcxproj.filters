@@ -114,6 +114,8 @@
     <ClCompile Include="StatisticsMenuState.cpp" />
     <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="IDHandler.cpp" />
+    <ClCompile Include="TriangleComponent.cpp" />
+    <ClCompile Include="MinionOutsideState.h" />
     <ClCompile Include="PauseMenuState.cpp" />
     <ClCompile Include="HomeMenuState.cpp" />
   </ItemGroup>
@@ -245,8 +247,22 @@
     <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="IStatsHeader.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="TriangleComponent.h" />
+    <ClInclude Include="ChargerOutsideState.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="ChargerChannelingState.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="ChargerCHARGINGstate.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="ChargerState.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
     <ClInclude Include="PauseMenuState.h" />
     <ClInclude Include="HomeMenuState.h" />
+    <ClInclude Include="idlist.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -278,6 +294,9 @@
     </Filter>
     <Filter Include="Boss\BossAttacks">
       <UniqueIdentifier>{55fad5b4-212c-463b-a3f2-89f3b0d933e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charger">
+      <UniqueIdentifier>{b704713e-25dc-41cd-88e9-4816ae49b163}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

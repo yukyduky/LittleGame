@@ -6,7 +6,6 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
-
 namespace OBJECTSTATE {
 	enum class TYPE { ACTIVATED, DEAD, FROZEN, ATTACKING, STOP, FALLING, TFALLING, 
 		INVISIBLE, RECOVER, RESETCOLOR, GENERATORRISING, GENERATORACTIVE, STUNNED, 
@@ -22,6 +21,7 @@ namespace OBJECTTYPE {
 
 class Component;
 class PhysicsComponent;
+class GraphicsComponent;
 class BlockComponent;
 class GUIComponent;
 
@@ -46,7 +46,7 @@ private:
 protected:
 	std::list<Component*> components;
 	PhysicsComponent* physicsComponent = nullptr;
-	BlockComponent* graphicsComponent = nullptr;
+	GraphicsComponent* graphicsComponent = nullptr;
 	GUIComponent* graphicsComponentUI = nullptr;
 
 	const size_t ID;
@@ -62,8 +62,9 @@ protected:
 
 	// Movement related values
 	XMFLOAT3 moveDirection;
-	float velocityMagnitude = 0;
-	float topSpeed = 0;
+	float velocityMagnitude = 0.0f;
+	float topSpeedMagnitude = 1.0f;
+	float topSpeed = 0.0f;
 	float frictionFactor = 15.0f;
 	bool slowed = false;
 
@@ -116,8 +117,8 @@ public:
 	PhysicsComponent* GETphysicsComponent() { return this->physicsComponent; }
 
 	// Graphics: BLOCK_COMPONENT
-	void SETgraphicsComponent(BlockComponent* graphicsComponent_in) { this->graphicsComponent = graphicsComponent_in; }
-	BlockComponent* GETgraphicsComponent() { return this->graphicsComponent; }
+	void SETgraphicsComponent(GraphicsComponent* graphicsComponent_in) { this->graphicsComponent = graphicsComponent_in; }
+	GraphicsComponent* GETgraphicsComponent() { return this->graphicsComponent; }
 };
 
 #endif // !GAMEOBJECT_H

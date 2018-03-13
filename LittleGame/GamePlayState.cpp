@@ -317,6 +317,31 @@ void GamePlayState::updateFloor()
 			}
 		}
 	}
+
+	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	float pulseVelocity = 1000.0f * dt;
+
+	for (int i = 0; i < this->gridPulsePoints[0].size(); i++)
+	{
+		pulseVelocity *= -1;
+		this->gridPulsePoints[0][i].y += pulseVelocity;
+
+		if (this->gridPulsePoints[0][i].y > ARENADATA::GETarenaHeight())
+		{
+			this->gridPulsePoints[0][i].y = this->gridPulsePoints[0][i].y - ARENADATA::GETarenaHeight();
+		}
+	}
+
+	for (int i = 0; i < this->gridPulsePoints[1].size(); i++)
+	{
+		pulseVelocity *= -1;
+		this->gridPulsePoints[1][i].x += pulseVelocity;
+
+		if (this->gridPulsePoints[1][i].x > ARENADATA::GETarenaWidth())
+		{
+			this->gridPulsePoints[1][i].x = this->gridPulsePoints[1][i].x - ARENADATA::GETarenaWidth();
+		}
+	}
 }
 
 void GamePlayState::checkPlayerTileStatus() 
@@ -404,20 +429,16 @@ void GamePlayState::generatorDischarge(Index index)
   |           PUBLIC            |
    -_-_-_-_-_-_-_-_-_-_-_-_-_-*/
 
-void GamePlayState::init() {
+void GamePlayState::init() 
+{
+	this->lights.reserve(MAX_NUM_POINTLIGHTS);
+	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
+
 	this->lm.selectArena();
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
-	this->rio.initialize(this->camera, this->pointLights);
+	this->rio.initialize(this->camera, this->lights);
 	this->initPlayer();
-
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos);
-	int i = 0;
-	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
-		this->quadTree.insertStaticObject(*it);
-		i++;
-	}
-
 	this->ID = this->GUI.initGUI(
 		this->newID(),
 		this->camera.GETcameraPos(),
@@ -425,26 +446,35 @@ void GamePlayState::init() {
 		this->GUIObjects,
 		this->graphics
 	);
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
+	int i = 0;
+	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
+		this->quadTree.insertStaticObject(*it);
+		i++;
+	}
 
 	std::vector<ActorObject*> allPlayers;
 	allPlayers.push_back(player1);
 	this->enemyManager.initialize(sGamePlayState, allPlayers);
 
-	this->pointLights.resize(MAX_NUM_POINTLIGHTS);
-	this->lightIDs.resize(MAX_NUM_POINTLIGHTS);
-	this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.5f, 0.5f, 0.5f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.000f, 0.0000f), 50.0f);
-	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth()) - 200.0f, static_cast<float>(ARENADATA::GETsquareSize() * 3), static_cast<float>(ARENADATA::GETarenaHeight()) - 200.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
-	//this->pointLights[this->lightIDs.getNewID()] = Light(XMFLOAT3(200.0f, 150.0f, 200.0f), XMFLOAT3(0.0f, 0.0f, 0.5f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(1.0f, 0.0f, 0.0f), 50.0f);
-
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
+	// TESTING ------------------------ 
+	randomLevel = 1; 
+	// TESTING ------------------------ 
 
 	switch (randomLevel)
 	{
-	case 1: this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	case 2: this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-	case 3: this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+	case 1:
+		this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+		break;
+	case 2: 
+		this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+		break;
+	case 3: 
+		this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+		break;
 	}
 	//this->enemyManager.startBossLevel();
 
@@ -509,7 +539,9 @@ void GamePlayState::cleanUp()
 
 	this->quadTree.cleanup();
 
-	this->pointLights.clear();
+	this->lights.clear();
+
+	this->gridPulsePoints.clear();
 	
 	this->graphics.clear();
 
@@ -581,7 +613,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 void GamePlayState::update(GameManager * gm)
 {	
-	this->dt = Locator::getGameTime()->GetTime() - this->gTimeLastFrame;
+	this->dt = Locator::getGameTime()->getDeltaTime();
 	this->gTimeLastFrame = Locator::getGameTime()->GetTime();
 	this->totalLevelTime += this->dt;
 	if (dt < 0)
@@ -651,7 +683,7 @@ void GamePlayState::render(GameManager * gm)
 {
 	rio.render(this->graphics);
 	gm->setupSecondRenderPass();
-	rio.injectResourcesIntoSecondPass(this->grid);
+	rio.injectResourcesIntoSecondPass(this->grid, this->gridPulsePoints);
 	gm->display(this);
 }
 
@@ -722,11 +754,11 @@ void GamePlayState::initPlayer()
 	// 1:
 	actor->addSpell(new SpFireG3(actor));
 	// 2: 
-	actor->addSpell(new SpBombG3(actor));
+	actor->addSpell(new SpBombG1(actor));
 	// 3:
 	actor->addSpell(new SpDashG3(actor));
 	// 4:
-	actor->addSpell(new SpBuffG1(actor));
+	actor->addSpell(new SpBuff(actor));
 
 	actor->selectAbility1();
 
@@ -773,18 +805,15 @@ Projectile* GamePlayState::initProjectile(XMFLOAT3 pos, GameObject* shooter, Pro
 
 	XMFLOAT3 position = { pos.x /*+ dir.x * props.size*/,  40.0f /*pos.y*/ /*+ dir.y * props.size */, pos.z /*+ dir.z * props.size*/ };
 
-	size_t lightID = this->lightIDs.getNewID();
+	size_t lightID = this->lights.push(light);
 
-	this->pointLights[lightID] = light;
-
-
-	proj = new Projectile(nextID, props.speed, props.range, props.behavior, shooter, position, dir, OBJECTTYPE::PROJECTILE, std::pair<size_t, Light*>(lightID, &this->pointLights[lightID]), &this->lightIDs);
+	proj = new Projectile(nextID, props.speed, props.range, props.behavior, shooter, position, dir, OBJECTTYPE::PROJECTILE, lightID, &lights);
 
 	//input for blockComp
 	XMFLOAT3 scale(props.size, props.size, props.size);
 	//XMFLOAT3 position = pos;
 	XMFLOAT4 tempColor(props.color);
-	XMFLOAT3 rotation(0, 0, 0);
+	XMFLOAT3 rotation(0.0f, 0.0f, 0.0f);
 	block = new BlockComponent(*this, *proj, tempColor, scale, rotation);
 
 	//Template for Physics

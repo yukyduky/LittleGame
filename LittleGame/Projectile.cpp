@@ -10,7 +10,7 @@ Projectile::Projectile() : GameObject(-1)
 	this->setState(OBJECTSTATE::TYPE::DEAD);
 }
 
-Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, std::pair<size_t, Light*> light, IDHandler* lightIDs) : GameObject(ID, pos)
+Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PROJBEHAVIOR behavior, GameObject* shooter, XMFLOAT3 pos, XMFLOAT3 dir, OBJECTTYPE::TYPE objectType, size_t lightID, idlist<Light>* lights) : GameObject(ID, pos)
 {
 	this->setState(OBJECTSTATE::TYPE::ACTIVATED);
 	this->setType(OBJECTTYPE::PROJECTILE);
@@ -24,8 +24,8 @@ Projectile::Projectile(const size_t ID, float velocity, float maxFlyingRange, PR
 	this->rangeCounter = 0;
 	this->maxFlyingRange = maxFlyingRange;
 
-	this->light = light;
-	this->lightIDs = lightIDs;
+	this->lightID = lightID;
+	this->lights = lights;
 }
 
 Projectile::~Projectile()
@@ -34,9 +34,7 @@ Projectile::~Projectile()
 
 void Projectile::cleanUp()
 {
-	this->lightIDs->remove(this->light.first);
-	this->light.second->diffuse = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	this->light.second->ambient = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	this->lights->remove(lightID);
 
 	for (auto &c : this->components) {
 		c->cleanUp();
@@ -261,7 +259,7 @@ void Projectile::move()
 	}
 
 	// Save new position to relevant targets
-	this->light.second->pos = pos;
+	(*this->lights).getElementByID(this->lightID).pos = pos;
 }
 
 void Projectile::steerTowardsPlayer()
@@ -335,4 +333,3 @@ void Projectile::update()
 	*/
 	
 }
-

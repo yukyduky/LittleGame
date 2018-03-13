@@ -49,6 +49,9 @@ bool SpBomb::castSpell()
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
 		this->setState(SPELLSTATE::COOLDOWN);
+
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH0_THROW);
+
 	}
 
 	return returnValue;
@@ -81,6 +84,8 @@ void SpBomb::update()
 				this->damage = this->start;
 				this->collisionDuration = 0.0f;
 				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
+
+				Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH0_EXPLOSION);
 			}
 		}
 		else if (this->damage < this->end)
@@ -149,6 +154,7 @@ void SpBombG1::update()
 			{
 				this->landed = true;
 				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
+				Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH1_EXPLOSION);
 			}
 		}
 		else
@@ -280,6 +286,7 @@ void SpBombG3::update()
 				this->damage = this->start;
 				this->collisionDuration = 0.0f;
 				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
+				Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH3_EXPLOSION);
 			}
 		}
 		else if (this->damage < this->end)
@@ -323,7 +330,6 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 		XMFLOAT3 kinvectorFloat3;
 		XMStoreFloat3(&kinvectorFloat3, pullDir);
 
-		// The multiplier is the strenght of the spell
 		actorTarget->setkineticVector(kinvectorFloat3 * 300.0f);
 	}
 }

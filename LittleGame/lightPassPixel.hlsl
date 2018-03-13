@@ -23,12 +23,18 @@ struct FloorGrid
 	float height;
 };
 
+struct PulseGrid
+{
+	float2 coords;
+	float2 pad0;
+};
+
 static const int MAX_NUM_LIGHTS = 150;
-static const int MAX_NUM_FLOORGRIDS_X = 35;
-static const int MAX_NUM_FLOORGRIDS_Y = 35;
+static const int MAX_NUM_FLOORGRIDS = 36;
 
 cbuffer GeneralData : register (b0) {
-	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
+	FloorGrid grid[MAX_NUM_FLOORGRIDS][MAX_NUM_FLOORGRIDS];
+	PulseGrid gridPulse[2][MAX_NUM_FLOORGRIDS + 1];
 	float3 camPos;
 	float nrOfLights;
 	float2 arenaDims;
@@ -42,7 +48,7 @@ cbuffer Light : register (b1) {
 }
 
 void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal, out float3 diffuse, out float emission);
-void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
+void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse);
 float4 sampleBackground(in float2 screenCoords);
 float4 calcLight(in float3 pos, in float3 normal, in float3 diffuse, in float emission);
 float dot(float3 vec1, float3 vec2);
@@ -58,7 +64,7 @@ float4 PS(float4 position_S : SV_POSITION) : SV_TARGET
 	// Load all the data from the geo pass
 	loadGeoPassData(screenCoords, pos_W, normal, diffuse, emission);
 
-	renderFallingFloor(pos_W, normal, diffuse);
+	renderFloor(pos_W, normal, diffuse);
 
 	float4 finalColor;
 
@@ -84,7 +90,7 @@ void loadGeoPassData(in float2 screenCoords, out float3 pos_W, out float3 normal
 	emission = texDiffuse.Load(texCoords).w;
 }
 
-void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
+void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 {
 	if (pos_W.y == -0.5f)
 	{
@@ -106,8 +112,8 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 				int xGrid = (pOnQuadX - gridStartPos.x) / gridDims.x;
 				int yGrid = (pOnQuadZ - gridStartPos.y) / gridDims.y;
 
-				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS_X &&
-					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS_Y)
+				if (xGrid >= 0 && xGrid < MAX_NUM_FLOORGRIDS &&
+					yGrid >= 0 && yGrid < MAX_NUM_FLOORGRIDS)
 				{
 					float height = grid[xGrid][yGrid].height;
 					float d = dot(float3(pOnQuadX, pOnQuadY, pOnQuadZ) - camPos, normal) / lDotN;
@@ -138,10 +144,68 @@ void renderFallingFloor(inout float3 pos_W, inout float3 normal, inout float3 di
 			} while (!intersected);
 
 			if (!intersected)
-			{
-				diffuse = float3(1.0f, 0.0f, 1.0f);
+			{				
+				diffuse = float3(1.0f, 0.0f, 1.0f);				
 			}
+			else
+			{
+				float valueX = pos_W.x % gridDims.x;
+				float valueZ = pos_W.z % gridDims.y;
+				float lowerLimit = 8.0f;
+				float upperLimit = (lowerLimit - 1.0f) / lowerLimit;
+
+				if (pos_W.x < arenaDims.x && 
+					pos_W.z < arenaDims.y &&
+					pos_W.y > -0.6f)
+				{
+					int xGrid = floor(pos_W.x / gridDims.x);
+					int yGrid = floor(pos_W.z / gridDims.y);
+
+					if (valueX >= gridDims.x * 0.5f)
+					{
+						xGrid++;
+					}
+					if (valueZ >= gridDims.y * 0.5f)
+					{
+						yGrid++;
+					}
+
+					float pulseRadius = pow(15.0f, 2);
+					float3 baseColorLines = float3(0.3f, 0.0f, 0.0f);
+					float3 baseColorPulse = float3(0.0f, 0.0f, 0.3f);
+					float lineWidth = 1.0f / 16.0f;
+
+					float pulseInfluence = 0.20f;
+
+					for (int i = 0; i < MAX_NUM_FLOORGRIDS + 1; i++)
+					{
+						float pulseDistV = (pow(pos_W.x - gridPulse[0][i].coords.x, 2) + pow(pos_W.z - gridPulse[0][i].coords.y, 2)) * 3.14f;
+						float pulseDistH = (pow(pos_W.x - gridPulse[1][i].coords.x, 2) + pow(pos_W.z - gridPulse[1][i].coords.y, 2)) * 3.14f;
+
+						pulseInfluence += pulseRadius / pulseDistV + pulseRadius / pulseDistH;
+					}
+
+					float colorHardnessX = abs(pos_W.x - (xGrid * gridDims.x)) / (gridDims.x * lineWidth);
+					float colorHardnessY = abs(pos_W.z - (yGrid * gridDims.y)) / (gridDims.y * lineWidth);
+
+					if (colorHardnessX != 0.0f)
+					{
+						diffuse += baseColorLines / colorHardnessX;
+						diffuse += baseColorPulse * pulseInfluence;
+						saturate(diffuse);
+					}
+					if (colorHardnessY != 0.0f)
+					{
+						diffuse += baseColorLines / colorHardnessY;
+						diffuse += baseColorPulse * pulseInfluence;
+						saturate(diffuse);
+					}
+				}
+			}
+
 		}
+
+		
 	}
 }
 

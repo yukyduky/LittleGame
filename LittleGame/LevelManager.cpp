@@ -80,7 +80,6 @@ void LevelManager::createNeonFloorGrid(std::list<GameObject*>& staticObjects, st
 		vec = XMLoadFloat3(&currentPos);
 		translationM = XMMatrixTranslationFromVector(vec);
 		worldM = scaleMV * rotationM * translationM;
-		void* test = &graphics;
 		this->createARectLine(currentPos, worldM, color, staticObjects, graphics);
 	}
 	//Create the horizontal lines
@@ -107,6 +106,25 @@ void LevelManager::createARectLine(XMFLOAT3& pos, XMMATRIX& worldM, XMFLOAT4& co
 	object->addComponent(rect);
 	staticObjects.push_back(object);
 	graphics.push_back(rect);
+}
+
+void LevelManager::createGridPulsePoints(std::vector<std::vector<XMFLOAT2>>& gridPulsePoints)
+{
+	gridPulsePoints.resize(2);
+	gridPulsePoints[0].resize(this->arenaWidth / this->squareSize + 1);
+	gridPulsePoints[1].resize(this->arenaDepth / this->squareSize + 1);
+
+	for (int i = 0; i < gridPulsePoints[0].size(); i++)
+	{
+		gridPulsePoints[0][i].x = i * this->squareSize;
+		gridPulsePoints[0][i].y = rand() % this->arenaDepth;
+	}
+
+	for (int i = 0; i < gridPulsePoints[1].size(); i++)
+	{
+		gridPulsePoints[1][i].x = rand() % this->arenaWidth;
+		gridPulsePoints[1][i].y = i * this->squareSize;
+	}
 }
 
 void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::vector<tileData>>& grid, enemySpawnPositions& enemySpawnPos, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
@@ -277,7 +295,7 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 			std::list<GameObject*>& staticObjects, std::list<GameObject*>& dynamicNoCollisionObjects,
 			std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, 
 			std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, 
-			std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos)
+			std::vector<FloorFallData>& hard, enemySpawnPositions& enemySpawnPos, std::vector<std::vector<XMFLOAT2>>& gridPulsePoints)
 {
 	this->pGPS = &pGPS;
 	this->squareSize = ARENADATA::GETsquareSize();
@@ -299,7 +317,8 @@ int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS
 	// createLevelWalls needs to come first
 	this->createLevelWalls(staticPhysicsCount, grid, enemySpawnPos, staticObjects, graphics);
 	this->createFloor(grid, dynamicNoCollisionObjects, graphics);
-	this->createNeonFloorGrid(staticObjects, graphics);
+	this->createGridPulsePoints(gridPulsePoints);
+	//this->createNeonFloorGrid(staticObjects, graphics);
 	this->setFallPattern(pattern);
 	this->createFallPatterns(easy, medium, hard);
 
@@ -334,11 +353,6 @@ void LevelManager::changeTileStateFromIndex(int& x, int& y, OBJECTSTATE::TYPE& s
 //	int ID = grid[x][y].ptr->getID();
 	int ID = -1;
 	std::list<GameObject*>::iterator it = staticObjects.begin();
-	int test = 0;
-
-	if (state == OBJECTSTATE::TYPE::TFALLING) {
-		test++;
-	}
 
 	switch (state)
 	{
