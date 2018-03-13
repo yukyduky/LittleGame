@@ -98,6 +98,7 @@ void RenderInputOrganizer::injectResourcesIntoSecondPass(const std::vector<std::
 	size_t size = this->lights->size() < MAX_NUM_POINTLIGHTS ? this->lights->size() : MAX_NUM_POINTLIGHTS;
 
 	this->lightPassData.nrOfLights = static_cast<float>(size);
+	this->lightPassData.deltaTime = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 	Locator::getD3D()->mapConstantBuffer(&this->cLightPassDataBuffer, &this->lightPassData, sizeof(LightPassData));
 	Locator::getD3D()->setConstantBuffer(this->cLightPassDataBuffer, SHADER::PIXEL, 0, 1);

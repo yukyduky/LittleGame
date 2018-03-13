@@ -51,6 +51,8 @@ struct LightPassData {
 	XMFLOAT2 gridDims;
 	XMFLOAT2 gridStartPos;
 	XMFLOAT2 screenDims;
+	float deltaTime;
+	XMFLOAT3 pad0;
 
 	LightPassData() {}
 };
