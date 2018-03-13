@@ -42,8 +42,6 @@ void GameManager::init(HINSTANCE hInstance, int nCmdShow)
 	// Set the first state of the game
 	//StateManager::pushState(GamePlayState::getInstance());
 	StateManager::pushState(HomeMenuState::getInstance());
-
-	Locator::getStatsHeader()->addLevel();
 }
 
 void GameManager::cleanUp()

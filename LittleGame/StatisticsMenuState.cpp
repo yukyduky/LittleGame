@@ -30,12 +30,28 @@ Menu * StatisticsMenuState::initStatsMenu()
 	object = new MenuObject(nextID);
 	menu->addQuad(object);
 
-	textStr = L"Last level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level - 1) + L" of 10";
-	nextID = this->newID();
-	object = new MenuObject(nextID,
-		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
-		textStr);
-	menu->addQuad(object);
+	if (false /*Lost*/)
+	{
+		textStr = L"VICTORY!";
+		nextID = this->newID();
+		object = new MenuObject(nextID,
+			{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
+			textStr);
+		menu->addQuad(object);
+	}
+	else // Won
+	{
+		textStr = L"GAME OVER! \n Last level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+		nextID = this->newID();
+		object = new MenuObject(nextID,
+			{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
+			textStr);
+		menu->addQuad(object);
+	}
+
+
+	//Loadout
+	this->addLoadOut(menu);
 
 
 	// Info 
