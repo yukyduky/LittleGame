@@ -46,6 +46,10 @@ public:
 	virtual Statistics getStats() = 0;
 	// Sets all stats to 0, used in reset game
 	virtual void resetStats() = 0;
+
+
+	virtual void completeGame() = 0;
+	virtual bool gameCompleted() = 0;
 private:
 
 };

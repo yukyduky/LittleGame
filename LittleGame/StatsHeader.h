@@ -17,9 +17,13 @@ public:
 
 	virtual Statistics getStats();
 	virtual void resetStats();
+
+	void completeGame() { this->playerCompletedGame = true; };
+	bool gameCompleted() { return this->playerCompletedGame; };
 private:
 	Statistics stats;
 
+	bool playerCompletedGame = false;
 };
 
 #endif //!STATSHEADER_H
