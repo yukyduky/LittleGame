@@ -237,8 +237,8 @@ void EnemyManager::startBossLevel()
 	this->startTime = Locator::getGameTime()->GetTime();
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
-	this->spawnInterval = 1;
-	this->waveInterval = 0.1;
+	this->spawnInterval = 0.5f;
+	this->waveInterval = 0.1f;
 	this->currentWaveCount = 1;
 	Wave* currentWave;
 
@@ -253,8 +253,19 @@ void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
 {
 	Wave* currentWave;
 	this->swarmerCount = 5;
+
 	std::vector<EnemyObject*> localSwarmers;
 	int currentWaveSize = 20.0f;
+
+	// Adapt for reoccuring waves
+	ArrayList* newArrayList = new ArrayList();
+	Grid* newGrid = new Grid(newArrayList);
+	this->BossSwarmers.push_back(newArrayList);
+	this->BossGrids.push_back(newGrid);
+
+	char msgbuf[40];
+	sprintf_s(msgbuf, "CREATED NEW BOSS WAVE.\n");
+	OutputDebugStringA(msgbuf);
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -271,7 +282,7 @@ void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
 		// Per Swarmer
 		for (int k = 0; k < swarmerCount; k++) {
 			// Create the actual object
-			EnemyObject* swarmer = this->createSwarmer(spawnPosVectors);
+			EnemyObject* swarmer = this->createBossSwarmer(spawnPosVectors);
 
 			// Attach a pointer to waves
 			currentWave->enemies.push_back(swarmer);
@@ -290,8 +301,9 @@ void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
 	}
 
 	// Initialize the swarmers! (if there are any)
+
 	if (this->swarmerCount > 0) {
-		this->pSwarmers->initialize(localSwarmers);
+		this->BossSwarmers.back()->initialize(localSwarmers);
 	}
 
 	// I couldn't figure out why, but the above loop creates 1 less enemy than it claims to.
@@ -631,6 +643,127 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++);
 
 
+	// Make the enemy inactive
+	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return enemyObject;
+}
+
+EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors)
+{
+	/// D E C L A R A T I O N
+	// GRAND OBJECT
+	EnemyObject* enemyObject = nullptr;
+	// COMPONENTS
+	BlockComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
+	// STATES
+	EnemyState* moveState = nullptr;
+
+	/// D E F I N I T I O N
+	size_t ID = this->pGPS->newID();
+	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
+	XMFLOAT3 pos = { 0, 0, 0.0001f };
+
+	bool reGenerateRandom = true;
+	int spawnLocation = 0;
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
+
+	while (reGenerateRandom)
+	{
+		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
+
+		switch (spawnLocation) {
+		case 1:
+		{
+			if (spawnPosVectors.west.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
+				pos = {
+					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
+					scale.y,
+					spawnPosVectors.west.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 2:
+		{
+			if (spawnPosVectors.south.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
+				pos = {
+					spawnPosVectors.south.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 3:
+		{
+			if (spawnPosVectors.east.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
+				pos = {
+					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
+					scale.y,
+					spawnPosVectors.east.at(spawnLocation).y
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 4:
+		{
+			if (spawnPosVectors.north.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
+				pos = {
+					spawnPosVectors.north.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
+				};
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		break;
+		}
+	}
+
+
+	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
+	XMFLOAT3 rotation(0, 0, 0);
+
+	float projectileDamage = 8.0f;
+	float attackCooldown = 0.5f;
+	float projectileRange = 200.0f;
+	float attackRange = 500.0f;
+	float hp = 200.0f;
+
+	float velocityMagnitude = 180.0f;
+	float topSpeed = 11.0f;
+
+	// OBJECT
+	enemyObject = new EnemyObject(
+		ID, velocityMagnitude, topSpeed, pos,
+		this->pGPS, &this->players,
+		OBJECTTYPE::ENEMY, hp
+	);
+	// SPELL (Needs to be before States)
+	Spell* spell = new SpSwarmProjectile(
+		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
+	);
+	enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
+
+
+	// COMPONENTS
+	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+	physicsComponent = new PhysicsComponent(*enemyObject, 20);
+	aiComponent = new AIComponent(*enemyObject);
+	// STATES
+	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->BossGrids.back(), this->swarmerIDs++);
 
 
 	// Make the enemy inactive
@@ -797,6 +930,16 @@ void EnemyManager::cleanUp()
 	delete this->pSwarmers;
 	this->pSwarmers = nullptr;
 	
-
+	// Boss specific
+	for (auto &currentGrid : this->BossGrids) {
+		currentGrid->cleanUp();
+		delete currentGrid;
+		currentGrid = nullptr;
+	}
+	for (auto &currentArrayList : this->BossSwarmers) {
+		currentArrayList->cleanUp();
+		delete currentArrayList;
+		currentArrayList = nullptr;
+	}
 	
 }

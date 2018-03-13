@@ -307,6 +307,11 @@ private:
 	bool ramp = false;
 	bool pulse = false;
 
+	// BOSS
+	std::vector<Grid*> BossGrids;
+	std::vector<ArrayList*> BossSwarmers;
+	// BOSS
+
 	void cleanLevel();
 
 	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors) {
@@ -337,6 +342,7 @@ private:
 	*/
 	
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
+	EnemyObject* createBossSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createMinion(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
