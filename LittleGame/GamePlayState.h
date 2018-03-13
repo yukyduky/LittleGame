@@ -22,6 +22,7 @@
 #include "GUIManager.h"
 #include "IDHandler.h"
 #include "MouseInput.h"
+#include "idlist.h"
 
 
 class Command;
@@ -79,6 +80,7 @@ private:
 	GUIManager GUI;
 	RenderInputOrganizer rio;
 	std::vector<std::vector<tileData>> grid;
+	std::vector<std::vector<XMFLOAT2>> gridPulsePoints;
 	//everything that will exist in this level
 	std::list<GameObject*> GUIObjects;
 	std::list<GameObject*> staticObjects;
@@ -122,8 +124,7 @@ private:
 	std::array<InputComponent*, 1> playerInput;	// '1' for testing purposes, should be '5'
 	bool useController = false;
 
-	IDHandler lightIDs;
-	std::vector<Light> pointLights;
+	idlist<Light> lights;
 
 	//Template to be able to update player1, changed to vector when multiplayer is implemented
 	ActorObject* player1 = nullptr;

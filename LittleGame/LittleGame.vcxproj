@@ -170,6 +170,7 @@
     <ClInclude Include="HomeMenuState.h" />
     <ClInclude Include="ID2D.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="idlist.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />

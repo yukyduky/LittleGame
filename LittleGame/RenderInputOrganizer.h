@@ -6,13 +6,14 @@
 #include <list>
 #include <array>
 #include "Camera.h"
-#include "LevelManager.h"
+#include "idlist.h"
 
 constexpr int MAX_NUM_POINTLIGHTS = 150;
-constexpr int MAX_NUM_FLOORGRIDS_X = 35;
-constexpr int MAX_NUM_FLOORGRIDS_Y = 35;
+constexpr int MAX_NUM_FLOORGRIDS = 36;
 
 using namespace DirectX;
+
+struct tileData;
 
 struct Light {
 	XMFLOAT3 pos;
@@ -24,7 +25,7 @@ struct Light {
 	XMFLOAT3 attenuation;
 	float specPower;
 
-	Light() : pos(XMFLOAT3(0.0f, 0.0f, 0.0f)), diffuse(XMFLOAT3(0.0f, 0.0f, 0.0f)), ambient(XMFLOAT3(0.0f, 0.0f, 0.0f)), attenuation(0.1f, 0.0f, 0.0f) {}
+	Light() : pos(0.0f, 0.0f, 0.0f), diffuse(0.0f, 0.0f, 0.0f), ambient(0.0f, 0.0f, 0.0f), attenuation(0.1f, 0.0f, 0.0f) {}
 	Light(XMFLOAT3 pos, XMFLOAT3 diffuse, XMFLOAT3 ambient, XMFLOAT3 attenuation, float specPower) : 
 		pos(pos), diffuse(diffuse), ambient(ambient), attenuation(attenuation), specPower(specPower) {}
 };
@@ -35,8 +36,15 @@ struct FloorGrid
 	float height;
 };
 
+struct PulseGrid
+{
+	XMFLOAT2 coords;
+	XMFLOAT2 pad0;
+};
+
 struct LightPassData {
-	FloorGrid grid[MAX_NUM_FLOORGRIDS_X][MAX_NUM_FLOORGRIDS_Y];
+	FloorGrid grid[MAX_NUM_FLOORGRIDS][MAX_NUM_FLOORGRIDS];
+	PulseGrid gridPulse[2][MAX_NUM_FLOORGRIDS + 1];
 	XMFLOAT3 camPos;
 	float nrOfLights;
 	XMFLOAT2 arenaDims;
@@ -56,7 +64,8 @@ struct MatrixBufferCalc {
 	XMFLOAT4X4 worldViewProj;
 };
 
-struct MatrixBufferPack {
+struct MatrixBufferPack 
+{
 	XMFLOAT4X4 world;
 	XMFLOAT4X4 worldViewProj;
 };
@@ -69,7 +78,7 @@ class GraphicsComponent;
 class RenderInputOrganizer
 {
 private:
-	std::vector<Light>* lights = nullptr;
+	idlist<Light>* lights = nullptr;
 
 	MatrixBufferCalc rawMatrixData;
 	MatrixBufferPack packagedMatrixData;
@@ -88,9 +97,9 @@ private:
 	void drawGraphics(GraphicsComponent*& graphics);
 
 public:
-	void initialize(Camera& camera, std::vector<Light>& lights);
+	void initialize(Camera& camera, idlist<Light>& lights);
 	void render(std::list<GraphicsComponent*>& graphics);
-	void injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid);
+	void injectResourcesIntoSecondPass(const std::vector<std::vector<tileData>>& grid, const std::vector<std::vector<XMFLOAT2>>& gridPulsePoints);
 	void cleanUp();
 };
 
