@@ -29,7 +29,7 @@ void ActorObject::truncateKineticVector()
 
 void ActorObject::applyFriction(float dt)
 {
-	float appliedFriction = this->frictionFactor * dt * this->topSpeedMagnitude;
+	float appliedFriction = this->frictionFactor * dt/* * this->topSpeedMagnitude*/;
 	// Friction for X-AXIS
 	if (this->kineticVector.x > 0.0f)
 	{

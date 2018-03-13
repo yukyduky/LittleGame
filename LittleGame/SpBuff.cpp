@@ -39,7 +39,6 @@ bool SpBuff::castSpell()
 				;
 
 			this->setState(SPELLSTATE::COOLDOWN);
-			//this->actOwner->SETvelocityMagnitude(this->strength);
 			Locator::getGameTime()->setMultiplier(0.3);
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -62,8 +61,6 @@ void SpBuff::update()
 	{
 		Locator::getGameTime()->setMultiplier(1.0);
 		this->owner->setState(OBJECTSTATE::TYPE::DEAD);
-
-		//this->actOwner->SETvelocityMagnitude(1.0f);
 	}
 	else
 	{
@@ -114,7 +111,6 @@ bool SpBuffG1::castSpell()
 				;
 
 			this->setState(SPELLSTATE::COOLDOWN);
-			//this->actOwner->SETvelocityMagnitude(this->strength);
 			GamePlayState::getInstance()->setBerserkerMode(true);
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
@@ -222,10 +218,7 @@ SpBuffG3::SpBuffG3(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->strength = 10.0f;
-	this->range = 300.0f;
 
-	this->duration = 1.5f;
-	this->setCoolDown(8.0f);
 	this->timeSC = 0.0f;
 }
 
@@ -250,7 +243,7 @@ bool SpBuffG3::castSpell()
 				;
 
 			this->setState(SPELLSTATE::COOLDOWN);
-			this->actOwner->SETvelocityMagnitude(60.0f);
+			this->actOwner->SETvelocityMagnitude(300.0f);
 			this->actOwner->SETtopSpeedMagnitude(3.0f);
 			Locator::getGameTime()->setMultiplier(0.3);
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
@@ -267,6 +260,9 @@ void SpBuffG3::update()
 	if (this->timeSC >= this->duration)
 	{
 		this->owner->setState(OBJECTSTATE::TYPE::DEAD);
+		this->actOwner->SETvelocityMagnitude(100.0f);
+		this->actOwner->SETtopSpeedMagnitude(1.0f);
+		Locator::getGameTime()->setMultiplier(1.0);
 	}
 	else
 	{
@@ -278,14 +274,4 @@ void SpBuffG3::update()
 
 void SpBuffG3::collision(GameObject * target, Projectile * proj)
 {
-	if (target->getType() == OBJECTTYPE::TYPE::ENEMY)
-	{
-		XMVECTOR pushDir = XMVectorSubtract(XMLoadFloat3(&target->GETPosition()), XMLoadFloat3(&proj->GETPosition()));
-
-		pushDir = XMVector3Normalize(pushDir);
-
-		XMFLOAT3 kinvectorFloat3;
-		XMStoreFloat3(&kinvectorFloat3, pushDir);
-		static_cast<ActorObject*>(target)->setkineticVector(kinvectorFloat3 * 300.0f);
-	}
 }
