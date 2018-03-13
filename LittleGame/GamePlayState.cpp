@@ -479,27 +479,30 @@ void GamePlayState::init()
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 
-	/*
+	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	randomLevel = 1; 
+	//randomLevel = 1; 
 	// TESTING ------------------------ 
 
-	switch (randomLevel)
-	{
-	case 1:
-		this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-		break;
-	case 2: 
-		this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-		break;
-	case 3: 
-		this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-		break;
+	if (Locator::getStatsHeader()->getStats().level < 10) {
+		switch (randomLevel)
+		{
+		case 1:
+			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			break;
+		case 2:
+			this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			break;
+		case 3:
+			this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			break;
+		}
 	}
-	*/
-	this->enemyManager.startBossLevel();
-
+	else {
+		this->enemyManager.startBossLevel();
+	}
+	
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
 	this->totalLevelTime = 0.0;
@@ -647,13 +650,15 @@ void GamePlayState::update(GameManager * gm)
 	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
 	
-	//if (this->counter > this->fallPatternCoolDown) {
-	//	this->updateFloorPattern();
-	//}
-	//if (this->genCounter > this->genTimer) {
-	//	this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
-	//	this->genCounter = 0.0;
-	//}
+	if (Locator::getStatsHeader()->getStats().level < 10) {
+		if (this->counter > this->fallPatternCoolDown) {
+			this->updateFloorPattern();
+		}
+		if (this->genCounter > this->genTimer) {
+			this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+			this->genCounter = 0.0;
+		}
+	}
 	this->updateFloor();
 
 	int ID;

@@ -130,8 +130,10 @@ void EnemyObject::update()
 	}
 	
 	// Also update the cooldown on spells
-	if (this->spells.size() > 0)
+	if (this->spells.size() > 0) {
 		this->spells[0]->update();
+	}
+		
 }
 
 void EnemyObject::attack()

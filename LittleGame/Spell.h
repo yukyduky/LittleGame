@@ -35,6 +35,9 @@ enum class NAME {
 
 	//BossSpells
 	BULLETHELL,
+
+	// For charger
+	NOSPELL,
 	
 	//
 	SIZE

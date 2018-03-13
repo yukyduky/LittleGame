@@ -172,8 +172,11 @@ void ActorObject::cleanUp()
 {
 	// Clean up all internal data
 	for (int i = 0; i < this->spells.size(); i++) {
-		this->spells[i]->cleanUp();
-		delete this->spells[i];
+		if (this->spells[i] != nullptr) {
+			this->spells[i]->cleanUp();
+			delete this->spells[i];
+			this->spells[i] = nullptr;
+		}
 	}
 	this->spells.clear();
 	// Cleanup all the components

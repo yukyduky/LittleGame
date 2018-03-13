@@ -13,6 +13,15 @@
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="ArenaGlobals.cpp" />
     <ClCompile Include="ArenaObject.cpp" />
+    <ClCompile Include="BossBattleIntroState.cpp" />
+    <ClCompile Include="BossBulletHellState.cpp" />
+    <ClCompile Include="BossChargerState.cpp" />
+    <ClCompile Include="BossGeneratorBattleState.cpp" />
+    <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
+    <ClCompile Include="BossMoveToArenaState.cpp" />
+    <ClCompile Include="MinionOutsideState.h" />
+    <ClCompile Include="SpBossBulletHell.cpp" />
+    <ClCompile Include="BossState.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControllerComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -75,43 +84,25 @@
     <ClCompile Include="SwarmerSeekingState.cpp" />
     <ClCompile Include="SwarmerState.cpp" />
     <ClCompile Include="SwarmerSyncincState.cpp" />
-    <ClCompile Include="SpBossBulletHell.cpp">
-      <Filter>BOSS\BossAttacks</Filter>
-    </ClCompile>
-    <ClCompile Include="BossState.cpp">
-      <Filter>BOSS\BossStates</Filter>
-    </ClCompile>
-    <ClCompile Include="BossMoveToArenaState.cpp">
-      <Filter>BOSS\BossStates\Phase1</Filter>
-    </ClCompile>
-    <ClCompile Include="BossBattleIntroState.cpp">
-      <Filter>BOSS\BossStates\Phase1</Filter>
-    </ClCompile>
-    <ClCompile Include="BossGeneratorBattleState.cpp">
-      <Filter>BOSS\BossStates\Phase2</Filter>
-    </ClCompile>
-    <ClCompile Include="BossChargerState.cpp">
-      <Filter>BOSS\BossStates\Phase3</Filter>
-    </ClCompile>
-    <ClCompile Include="BossBulletHellState.cpp">
-      <Filter>BOSS\BossStates\Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="StatisticsMenuState.cpp" />
-    <ClCompile Include="StatsHeader.cpp" />
-    <ClCompile Include="IDHandler.cpp" />
     <ClCompile Include="TriangleComponent.cpp" />
-    <ClCompile Include="MinionOutsideState.h" />
-    <ClCompile Include="PauseMenuState.cpp" />
-    <ClCompile Include="HomeMenuState.cpp" />
-    <ClCompile Include="BossMoveAwayFromArenaState.cpp">
-      <Filter>BOSS\BossStates\Misc</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorObject.h" />
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="ArenaGlobals.h" />
     <ClInclude Include="ArenaObject.h" />
+    <ClInclude Include="BossBattleIntroState.h" />
+    <ClInclude Include="BossBulletHellState.h" />
+    <ClInclude Include="BossChargerState.h" />
+    <ClInclude Include="BossGeneratorBattleState.h" />
+    <ClInclude Include="BossMoveAwayFromArenaState.h" />
+    <ClInclude Include="ChargerChannelingState.h" />
+    <ClInclude Include="ChargerCHARGINGstate.h" />
+    <ClInclude Include="ChargerOutsideState.h" />
+    <ClInclude Include="ChargerState.h" />
+    <ClInclude Include="SpBossBulletHell.h" />
+    <ClInclude Include="BossMoveToArenaState.h" />
+    <ClInclude Include="BossState.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CollisionHandler.h" />
@@ -132,6 +123,7 @@
     <ClInclude Include="HomeMenuState.h" />
     <ClInclude Include="ID2D.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="idlist.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
@@ -187,81 +179,13 @@
     <ClInclude Include="SwarmerSeekingState.h" />
     <ClInclude Include="SwarmerState.h" />
     <ClInclude Include="SwarmerSyncingState.h" />
-    <ClInclude Include="SpBossBulletHell.h">
-      <Filter>BOSS\BossAttacks</Filter>
-    </ClInclude>
-    <ClInclude Include="BossState.h">
-      <Filter>BOSS\BossStates</Filter>
-    </ClInclude>
-    <ClInclude Include="BossMoveToArenaState.h">
-      <Filter>BOSS\BossStates\Phase1</Filter>
-    </ClInclude>
-    <ClInclude Include="BossBattleIntroState.h">
-      <Filter>BOSS\BossStates\Phase1</Filter>
-    </ClInclude>
-    <ClInclude Include="BossGeneratorBattleState.h">
-      <Filter>BOSS\BossStates\Phase2</Filter>
-    </ClInclude>
-    <ClInclude Include="BossChargerState.h">
-      <Filter>BOSS\BossStates\Phase3</Filter>
-    </ClInclude>
-    <ClInclude Include="BossBulletHellState.h">
-      <Filter>BOSS\BossStates\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="BossMoveAwayFromArenaState.h">
-      <Filter>BOSS\BossStates\Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="StatisticsMenuState.h" />
-    <ClInclude Include="StatsHeader.h" />
-    <ClInclude Include="IStatsHeader.h" />
-    <ClInclude Include="IDHandler.h" />
     <ClInclude Include="TriangleComponent.h" />
-    <ClInclude Include="ChargerOutsideState.h">
-      <Filter>Charger</Filter>
-    </ClInclude>
-    <ClInclude Include="ChargerChannelingState.h">
-      <Filter>Charger</Filter>
-    </ClInclude>
-    <ClInclude Include="ChargerCHARGINGstate.h">
-      <Filter>Charger</Filter>
-    </ClInclude>
-    <ClInclude Include="ChargerState.h">
-      <Filter>Charger</Filter>
-    </ClInclude>
-    <ClInclude Include="PauseMenuState.h" />
-    <ClInclude Include="HomeMenuState.h" />
-    <ClInclude Include="idlist.h" />
+    <ClInclude Include="SpNo.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="captureqwsx.bmp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="BOSS">
-      <UniqueIdentifier>{a48273eb-1cd7-4445-a97e-a4ce5d58cc1e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BOSS\BossAttacks">
-      <UniqueIdentifier>{c6403a04-e23a-454d-8422-06c5fe2f1a31}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BOSS\BossStates">
-      <UniqueIdentifier>{64c98164-2f61-417a-aff2-ebdbce4df2f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BOSS\BossStates\Phase1">
-      <UniqueIdentifier>{d614bc54-03a0-46fc-8f23-c53fcb464a3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BOSS\BossStates\Phase2">
-      <UniqueIdentifier>{4746818a-938f-4dc2-bb3a-e8ed838755c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BOSS\BossStates\Phase3">
-      <UniqueIdentifier>{571ec285-3f00-4f8f-92f0-f628edfdb13c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BOSS\BossStates\Misc">
-      <UniqueIdentifier>{bf432a90-4f27-479e-9612-1a8af8056c1a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Charger">
-      <UniqueIdentifier>{b704713e-25dc-41cd-88e9-4816ae49b163}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

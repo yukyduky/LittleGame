@@ -7,14 +7,29 @@
 #include "AIComponent.h"
 #include "SwarmerSeekingState.h"
 
-class MinionOutsideState : public SwarmerState
+class MinionOutsideState : public EnemyState
 {
 private:
 	XMFLOAT3 openingInTheArena = { 0, 0, 0.01 };
 
+	bool inOrOutPlus()
+	{
+		XMFLOAT3 position = this->pHead->GETPosition();
+		bool result = false;
+		int margin = 0;// ARENADATA::GETlengthOfWall() + ARENADATA::GETsquareSize() * 3;
+
+		if ((position.x > margin) && (position.x < ARENADATA::GETarenaWidth() - margin)) {
+			if ((position.z > margin) && (position.z < ARENADATA::GETarenaHeight() - margin)) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
 public:
-	MinionOutsideState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID, XMFLOAT3 openingInTheArena_)
-		: SwarmerState(pHead, pBrain, pGrid_, swarmerID)
+	MinionOutsideState(EnemyObject& pHead, AIComponent& pBrain, XMFLOAT3 openingInTheArena_)
+		: EnemyState(pHead, pBrain)
 	{
 		this->openingInTheArena = openingInTheArena_;
 		this->pBrain->pushState(*this);
@@ -42,7 +57,7 @@ public:
 		this->pBrain->pushCommand(AICOMMANDS::MOVE);
 
 		// If we've come inside the grid, ACT LIKE IT.
-		if (this->inOrOut()) {
+		if (this->inOrOutPlus()) {
 			EnemyState* seekingState = new EnemyMovingState(*this->pHead, *this->pBrain);
 		}
 	}

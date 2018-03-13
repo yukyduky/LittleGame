@@ -120,5 +120,5 @@ void SpBossBulletHell::update()
 
 void SpBossBulletHell::cleanUp()
 {
-	
+	(*this->pActiveEnemiesCount)--;
 }

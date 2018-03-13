@@ -213,7 +213,7 @@ public:
 		}
 		else {
 			// You've initialized this class twice, don't do that.
-			assert(false);
+			//assert(false);
 		}
 	}
 	void remove(int index) {

@@ -222,6 +222,7 @@
     <ClInclude Include="Spell.h" />
     <ClInclude Include="SpEnemyImmolation.h" />
     <ClInclude Include="SpFire.h" />
+    <ClInclude Include="SpNo.h" />
     <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />

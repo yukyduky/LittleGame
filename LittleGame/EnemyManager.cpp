@@ -18,11 +18,13 @@
 #include "ChargerOutsideState.h"
 #include "MinionOutsideState.h"
 #include "SpSwarmProjectile.h"
+#include "SpNo.h"
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
 #include "RewardMenuState.h"
 //BOSS STATES
 #include "BossMoveToArenaState.h"
+#include "ChargerChannelingState.h"
 
 // BOSS ATTACKS
 #include "SpBossBulletHell.h"
@@ -56,7 +58,8 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 
 	std::vector<EnemyObject*> localSwarmers;
 
-	this->currentWaveCount = 10;
+	this->currentWaveCount = 2;
+	//this->currentWaveCount = 10;
 
 	// Deciding on how individual enemy counts will be calculated
 	this->minionCount = (2 + static_cast<int>(difficulty));
@@ -285,6 +288,7 @@ void EnemyManager::createBossWave(enemySpawnPositions spawnPosVectors)
 	int currentWaveSize = 20.0f;
 
 	// Adapt for reoccuring waves
+	this->swarmerIDs = 0;
 	ArrayList* newArrayList = new ArrayList();
 	Grid* newGrid = new Grid(newArrayList);
 	this->BossSwarmers.push_back(newArrayList);
@@ -373,6 +377,7 @@ void EnemyManager::createBossChargers(std::vector<GameObject*>& bossChargers, st
 	float velocityMagnitude = 60.0f;
 
 	Spell* spell = nullptr;
+	
 
 	for (int i = 0; i < 4; i++) {
 		/// A T T A C H M E N T
@@ -383,7 +388,7 @@ void EnemyManager::createBossChargers(std::vector<GameObject*>& bossChargers, st
 			OBJECTTYPE::BOSS, health
 		);
 		// SPELL (Needs to be before States)
-		 spell = new SpBossBulletHell(
+		spell = new SpBossBulletHell(
 			enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
 		);
 		enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
@@ -393,12 +398,14 @@ void EnemyManager::createBossChargers(std::vector<GameObject*>& bossChargers, st
 		aiComponent = new AIComponent(*enemyObject);
 		// STATE
 		// STATES
-		bossState = new EnemyMovingState(*enemyObject, *aiComponent);
+		bossState = new ChargerChannelingState(*enemyObject, *aiComponent, 3.0f, 40.0f);
 	//	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);
 		enemyObject->setState(OBJECTSTATE::TYPE::BOSSEMERGE);
 		enemyObject->turnOnInvulnerability();
 		bossChargers.push_back(enemyObject);
 		dynamicObjects.push_back(enemyObject);
+
+		this->activeEnemiesCount++;
 	}
 
 }
@@ -481,7 +488,7 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	aiComponent = new AIComponent(*enemyObject);
 	
 	// STATES
-	moveState = new MinionOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++, openingPos);
+	moveState = new MinionOutsideState(*enemyObject, *aiComponent, openingPos);
 
 	
 	// Make the enemy inactive
@@ -519,7 +526,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float topSpeed = 100;
+	float topSpeed = 14;
 	float projectileDamage = 8.0f;
 	float attackCooldown = 0.5f;
 	float projectileRange = 200.0f;
@@ -533,6 +540,8 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 		pGPS, &this->players,
 		OBJECTTYPE::ENEMY, hp
 	);
+	Spell* NoSpell = new SpNo(enemyObject, &this->activeEnemiesCount, NAME::NOSPELL);
+	enemyObject->addSpell(NoSpell);
 
 	// COMPONENTS
 	graphicsComponent = new TriangleComponent(*this->pGPS, *enemyObject, color, scale, rotation);
@@ -583,8 +592,8 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	float attackRange = 500.0f;
 	float hp = 200.0f;
 
-	float velocityMagnitude = 1000.0f;
-	float topSpeed = 20.0f;
+	float velocityMagnitude = 500.0f;
+	float topSpeed = 14.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -627,75 +636,15 @@ EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors
 	EnemyState* moveState = nullptr;
 
 	/// D E F I N I T I O N
+	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0.0001f };
+	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
+	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.01f };
 
-	bool reGenerateRandom = true;
-	int spawnLocation = 0;
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
-
-	while (reGenerateRandom)
-	{
-		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-
-		switch (spawnLocation) {
-		case 1:
-		{
-			if (spawnPosVectors.west.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
-				pos = {
-					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
-					scale.y,
-					spawnPosVectors.west.at(spawnLocation).y
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 2:
-		{
-			if (spawnPosVectors.south.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
-				pos = {
-					spawnPosVectors.south.at(spawnLocation).x,
-					scale.y,
-					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 3:
-		{
-			if (spawnPosVectors.east.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
-				pos = {
-					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
-					scale.y,
-					spawnPosVectors.east.at(spawnLocation).y
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 4:
-		{
-			if (spawnPosVectors.north.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
-				pos = {
-					spawnPosVectors.north.at(spawnLocation).x,
-					scale.y,
-					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		break;
-		}
-	}
-
+	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
+	spawnPos = generatedPositions[0];
+	openingPos = generatedPositions[1];
 
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
@@ -711,7 +660,7 @@ EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors
 
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, velocityMagnitude, topSpeed, pos,
+		ID, velocityMagnitude, topSpeed, spawnPos,
 		this->pGPS, &this->players,
 		OBJECTTYPE::ENEMY, hp
 	);
@@ -726,8 +675,9 @@ EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors
 	graphicsComponent = new BlockComponent(*this->pGPS, *enemyObject, color, scale, rotation);
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject);
+
 	// STATES
-	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->BossGrids.back(), this->swarmerIDs++);
+	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->BossGrids.back(), this->swarmerIDs++, openingPos);
 
 
 	// Make the enemy inactive
@@ -1022,5 +972,8 @@ void EnemyManager::cleanUp()
 		delete currentArrayList;
 		currentArrayList = nullptr;
 	}
-	
+	while (this->BossGrids.size() > 0)
+		this->BossGrids.pop_back();
+	while (this->BossSwarmers.size() > 0)
+		this->BossSwarmers.pop_back();
 }
