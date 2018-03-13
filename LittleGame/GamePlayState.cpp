@@ -732,6 +732,8 @@ void GamePlayState::initPlayer()
 	/// ACTOR OBJECT:
 	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 100.0f);
 
+	actor->turnOnInvulnerability();
+
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
 

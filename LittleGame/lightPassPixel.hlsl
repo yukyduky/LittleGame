@@ -41,6 +41,8 @@ cbuffer GeneralData : register (b0) {
 	float2 gridDims;
 	float2 gridStartPos;
 	float2 screenDims;
+	float deltaTime;
+	float3 pad0;
 }
 
 cbuffer Light : register (b1) {
@@ -130,7 +132,7 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 						intersected = true;
 						pos_W.y = p.y;
 						diffuse = grid[xGrid][yGrid].color;
-						diffuse -= 0.001f * abs(p.y);
+						diffuse -= abs(p.y) * deltaTime;
 						saturate(diffuse);
 					}
 				}
@@ -151,8 +153,6 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 			{
 				float valueX = pos_W.x % gridDims.x;
 				float valueZ = pos_W.z % gridDims.y;
-				float lowerLimit = 8.0f;
-				float upperLimit = (lowerLimit - 1.0f) / lowerLimit;
 
 				if (pos_W.x < arenaDims.x && 
 					pos_W.z < arenaDims.y &&
