@@ -42,7 +42,7 @@ void BossGeneratorBattleState::executeBehavior()
 				}
 				this->pHead->setPosition(XMFLOAT3(ARENADATA::GETarenaWidth() * 0.5f, bossPosition.y, ARENADATA::GETarenaHeight() - this->bossScale));
 			}
-			// Spawn four generators that the player will have to destroy to be able to damage the boss
+			// Spawn four "shield" generators that the player will have to destroy to be able to damage the boss
 			if ((*this->grid)[0][0].state == TILESTATE::TELEPORT && !this->teleported) {
 				this->teleported = true;
 			}
@@ -57,6 +57,7 @@ void BossGeneratorBattleState::executeBehavior()
 			break;
 		case GENERATORBATTLEPHASE::ENEMYWAVESPHASE:
 			if (!this->generatorsSpawned) {
+				this->pGPS->createABossWave();
 				this->pGPS->spawnBossGenerators();
 				this->generatorsSpawned = true;
 			}
@@ -70,7 +71,7 @@ void BossGeneratorBattleState::executeBehavior()
 				else {
 					this->counter += Locator::getGameTime()->getDeltaTime();
 					if (this->counter >= 10.0f) {
-					//	this->pGPS->createABossWave();
+						this->pGPS->createABossWave();
 						this->counter = 0.0f;
 					}
 				}
