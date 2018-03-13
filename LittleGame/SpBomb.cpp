@@ -323,7 +323,6 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 		XMFLOAT3 kinvectorFloat3;
 		XMStoreFloat3(&kinvectorFloat3, pullDir);
 
-		// The multiplier is the strenght of the spell
 		actorTarget->setkineticVector(kinvectorFloat3 * 300.0f);
 	}
 }
