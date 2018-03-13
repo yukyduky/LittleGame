@@ -18,11 +18,46 @@ void Renderer::initShaders()
 
 void Renderer::loadBackgroundTexture()
 {
-	HRESULT hr = CreateWICTextureFromFile(Locator::getD3D()->GETgDevice(), L"Resources\\Textures\\background.png", nullptr, &this->gBackgroundSRV, NULL);
-	if (FAILED(hr))
+	std::wstring filename(L"Resources\\Textures\\background_00.png");
+	std::wstring::iterator it = filename.end();
+	it -= 6;
+	size_t k = 0;
+	size_t h = 1;
+	for (size_t i = 0; i < this->gBackgroundSRVs.size(); i++)
 	{
-		MessageBox(0, "Create box diffuse texture from file - Failed", "Error", MB_OK);
-		_exit(0);
+		*it = *(std::to_wstring(k).c_str());
+		it++;
+		*it = *(std::to_wstring(h++).c_str());
+		it--;
+
+		if (h == 10)
+		{
+			k++;
+			h = 0;
+		}
+
+		HRESULT hr = CreateWICTextureFromFile(Locator::getD3D()->GETgDevice(), filename.c_str(), nullptr, &this->gBackgroundSRVs[i], NULL);
+		if (FAILED(hr))
+		{
+			MessageBox(0, "Create background texture from file - Failed", "Error", MB_OK);
+			_exit(0);
+		}
+	}
+}
+
+void Renderer::updateBackgroundFrame()
+{
+	this->currBackgroundFrameTime += Locator::getGameTime()->getDeltaTime();
+
+	if (this->currBackgroundFrameTime >= 0.07f)
+	{
+		this->currBackgroundFrameTime = 0.0f;
+		this->currBackgroundFrame++;
+
+		if (this->currBackgroundFrame == NUM_BACKGROUND_IMAGES)
+		{
+			this->currBackgroundFrame = 0;
+		}
 	}
 }
 
@@ -276,9 +311,11 @@ void Renderer::secondPassSetup()
 
 	Locator::getD3D()->GETgDevCon()->PSSetSamplers(0, 1, &this->gSampler);
 
+	this->updateBackgroundFrame();
+
 	// Bind the ShaderResourceVies
 	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, this->gSRVs.data());
-	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(3, 1, &this->gBackgroundSRV);
+	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(3, 1, &this->gBackgroundSRVs[this->currBackgroundFrame]);
 
 	// Set the rendertarget to the final rendertarget
 	Locator::getD3D()->GETgDevCon()->OMSetRenderTargets(1, &this->gFinalRTV, nullptr);
@@ -292,7 +329,7 @@ void Renderer::secondPass()
 	Locator::getD3D()->GETswapChain()->Present(0, 0);
 
 	// Unbind the ShaderResourceViews
-	ID3D11ShaderResourceView* gNullSRV[NUM_DEFERRED_OUTPUTS] = { nullptr, nullptr, nullptr };
+	ID3D11ShaderResourceView* gNullSRV[NUM_DEFERRED_OUTPUTS + 1] = { nullptr, nullptr, nullptr, nullptr };
 	Locator::getD3D()->GETgDevCon()->PSSetShaderResources(0, NUM_DEFERRED_OUTPUTS, gNullSRV);
 }
 
@@ -321,8 +358,11 @@ void Renderer::cleanUp()
 	for (auto &i : this->gDeferredTexs) {
 		i->Release();
 	}
+	for (auto &i : this->gBackgroundSRVs)
+	{
+		i->Release();
+	}
 
-	this->gBackgroundSRV->Release();
 	this->gFinalRTV->Release();
 	this->gDSV->Release();
 	this->gDSB->Release();

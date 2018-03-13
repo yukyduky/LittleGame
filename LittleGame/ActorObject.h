@@ -69,6 +69,7 @@ public:
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void SETvelocityMagnitude(float speed);
+	virtual void SETtopSpeedMagnitude(float speed);
 	virtual float GETvelocityMagnitude() { return this->velocityMagnitude; }
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }

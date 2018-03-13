@@ -262,6 +262,7 @@
     </ClInclude>
     <ClInclude Include="PauseMenuState.h" />
     <ClInclude Include="HomeMenuState.h" />
+    <ClInclude Include="idlist.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

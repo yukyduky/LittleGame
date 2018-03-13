@@ -21,6 +21,7 @@ public:
 
 	//std::array<Menu*, MENUS::SIZE> GETMenus() { return this->menus; };
 	Menu* initStartMenu();
+	Menu* initControlsMenu();
 	Menu* initOptionsMenu();
 };
 
