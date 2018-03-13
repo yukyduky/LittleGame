@@ -145,7 +145,7 @@ void renderFloor(inout float3 pos_W, inout float3 normal, inout float3 diffuse)
 
 			if (!intersected)
 			{				
-				diffuse = float3(1.0f, 1.0f, 1.0f);				
+				diffuse = float3(1.0f, 0.0f, 1.0f);				
 			}
 			else
 			{
