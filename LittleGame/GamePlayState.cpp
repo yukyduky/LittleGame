@@ -522,7 +522,7 @@ void GamePlayState::init()
 	Locator::getGameTime()->setMultiplier(1.0);
 
 	//FOR TESTING
-	this->player1->turnOnInvulnerability();
+//	this->player1->turnOnInvulnerability();
 }
 
 void GamePlayState::cleanUp()
@@ -767,8 +767,6 @@ void GamePlayState::initPlayer()
 
 	/// ACTOR OBJECT:
 	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 100.0f);
-
-	actor->turnOnInvulnerability();
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);
