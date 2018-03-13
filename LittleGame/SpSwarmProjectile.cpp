@@ -40,8 +40,6 @@ bool SpSwarmProjectile::castSpell()
 		Projectile* pProj = this->spawnProj(props, light);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 
-		Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
-
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
 

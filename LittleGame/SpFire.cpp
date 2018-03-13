@@ -33,7 +33,7 @@ bool SpFire::castSpell()
 
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
-			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH0);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 
@@ -131,7 +131,7 @@ bool SpFireG1::castSpell()
 			
 
 
-			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH0);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 
@@ -177,7 +177,7 @@ bool SpFireG2::castSpell()
 
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
-			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH0);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}
@@ -251,7 +251,7 @@ bool SpFireG3::castSpell()
 				XMMATRIX scaleM = XMMatrixScaling(props.size * 7.0f, props.size, props.size); 
 				proj->SETscaleMatrix(scaleM);
 			}
-			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH3);
 
 			this->setState(SPELLSTATE::COOLDOWN);
 		}

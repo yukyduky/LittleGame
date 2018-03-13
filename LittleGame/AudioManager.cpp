@@ -2,7 +2,7 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager() : soundVolume(0.0f), musicVolume(0.0f)
+AudioManager::AudioManager() : soundVolume(10.0f), musicVolume(0.0f)
 {
 }
 
@@ -12,11 +12,10 @@ int AudioManager::init()
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
 	error += this->loadSound(std::string("include/Sound/gulp_x.wav"), SOUND::GULP);
-	error += this->loadSound(std::string("include/Sound/beep0.wav"), SOUND::BEEP0);
-	error += this->loadSound(std::string("include/Sound/beep1.wav"), SOUND::BEEP1);
-	error += this->loadSound(std::string("include/Sound/beep2.wav"), SOUND::BEEP2);
-	error += this->loadSound(std::string("include/Sound/beep3.wav"), SOUND::BEEP3);
-	error += this->loadSound(std::string("include/Sound/beep4.wav"), SOUND::BEEP4);
+
+	error += this->loadSound(std::string("include/Sound/Ability0_Glyph0.wav"), SOUND::ABILITY0_GLYPH0);
+	error += this->loadSound(std::string("include/Sound/Ability1_Glyph0.wav"), SOUND::ABILITY1_GLYPH0);
+	error += this->loadSound(std::string("include/Sound/Ability1_Glyph3.wav"), SOUND::ABILITY1_GLYPH3);
 
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_1.wav"), SOUND::ENEMYATTACK_1);
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_2.wav"), SOUND::ENEMYATTACK_2);
