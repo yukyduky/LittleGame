@@ -296,10 +296,6 @@ void ActorObject::updatekineticVector()
 
 	this->kineticVector.x += additiveVector.x;
 	this->kineticVector.z += additiveVector.z;
-
-	if (this->getType() == OBJECTTYPE::ENEMY) {
-		this->move();
-	}
 }
 
 void ActorObject::updatekineticVectorUp()

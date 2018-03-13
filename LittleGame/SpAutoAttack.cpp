@@ -55,15 +55,16 @@ void SpAutoAttack::cleanUp()
 
 void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
+	OBJECTTYPE::TYPE type = target->getType();
+	if (type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) {
 		GamePlayState::getInstance()->addEnergyToPlayer(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
-
-	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
+	else if (type == OBJECTTYPE::INDESTRUCTIBLE) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }
@@ -156,14 +157,15 @@ bool SpAutoAttackG2::castSpell()
 
 void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::GENERATOR) {
+	OBJECTTYPE::TYPE type = target->getType();
+	if (type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) {
 		GamePlayState::getInstance()->addEnergyToPlayer(5);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
 	}
-
-	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
+	else if (type == OBJECTTYPE::INDESTRUCTIBLE) {
 		proj->setState(OBJECTSTATE::TYPE::DEAD);
 	}
 }

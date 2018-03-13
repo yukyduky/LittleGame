@@ -38,10 +38,13 @@ void BossChargerState::executeBehavior()
 			this->pHead->setState(OBJECTSTATE::TYPE::DEAD);
 		}
 		else {
-
+			this->counter += Locator::getGameTime()->getDeltaTime();
+			if (this->counter >= 5.0f) {
+				this->pGPS->createABossWave();
+				this->counter = 0.0f;
+			}
 		}
 		break;
-	
 	default:
 		break;
 	}

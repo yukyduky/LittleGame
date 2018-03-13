@@ -119,8 +119,9 @@ void SpDash::cleanUp()
 
 void SpDash::collision(GameObject * target, Projectile* proj)
 {
-	if (target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
-		static_cast<ActorObject*>(target)->dealDmg(this->damage);
+	OBJECTTYPE::TYPE type = target->getType();
+	if (type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) static_cast<ActorObject*>(target)->dealDmg(this->damage);
 }
 
 

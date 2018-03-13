@@ -108,8 +108,9 @@ void SpBomb::cleanUp()
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR) 
-		&& this->landed)
+	OBJECTTYPE::TYPE type = target->getType();
+	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || 
+		type == OBJECTTYPE::BOSS) && this->landed)
 	{
 		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
 	}
@@ -189,8 +190,9 @@ SpBombG2::~SpBombG2()
 
 void SpBombG2::collision(GameObject * target, Projectile * proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
-		&& this->landed)
+	OBJECTTYPE::TYPE type = target->getType();
+	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) && this->landed)
 	{
 		static_cast<ActorObject*>(target)->dealDmg(1000.0f);
 		this->trip = true;
@@ -303,8 +305,9 @@ void SpBombG3::update()
 
 void SpBombG3::collision(GameObject * target, Projectile * proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
-		&& this->landed)
+	OBJECTTYPE::TYPE type = target->getType();
+	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) && this->landed)
 	{
 		ActorObject* actorTarget = static_cast<ActorObject*>(target);
 

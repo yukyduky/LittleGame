@@ -392,6 +392,21 @@ void CollisionHandler::collisionPlayerBoss() {
 	}
 
 	// CODE GOES HERE
+	this->calculateDistance(
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
+	);
+
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+	this->divisionFactor = (1.0f / this->distance);
+	this->resultVector = {
+		this->centerToCenterVector.x * this->divisionFactor,
+		0.0,
+		this->centerToCenterVector.z * this->divisionFactor
+	};
+
+	// Moving the player only, since the indestructibles cannot move.
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionEnemyGenerator() {
@@ -470,6 +485,21 @@ void CollisionHandler::collisionEnemyBoss() {
 	}
 
 	// CODE GOES HERE
+	this->calculateDistance(
+		this->collidable1->GETPosition(),
+		this->collidable2->GETPosition()
+	);
+
+	this->centerToCenterVector = (collidable1->GETPosition() - collidable2->GETPosition());
+	this->divisionFactor = (1.0f / this->distance);
+	this->resultVector = {
+		this->centerToCenterVector.x * this->divisionFactor,
+		0.0,
+		this->centerToCenterVector.z * this->divisionFactor
+	};
+
+	// Moving the player only, since the indestructibles cannot move.
+	collidable1->setPosition(this->collidable1->GETPosition() + (this->resultVector * this->stepper));
 }
 
 void CollisionHandler::collisionGeneratorGenerator() {
@@ -566,13 +596,16 @@ void CollisionHandler::collisionProjectileProjectile() {
 void CollisionHandler::collisionProjectileBoss() {
 	// Swapping places of collidables with eachother if necessary
 	// COLLIDABLE1 = INDESTRUCTIBLE
-	if (this->collidable1->getType() != OBJECTTYPE::PROJECTILE) {
+	if (this->collidable1->getType() != OBJECTTYPE::BOSS) {
 		this->tempCollidableHolder = this->collidable1;
 		this->collidable1 = this->collidable2;
 		this->collidable2 = this->tempCollidableHolder;
 	}
 
 	// CODE GOES HERE.
+	Projectile* proj = static_cast<Projectile*>(this->collidable2);
+	Spell* spell = proj->getSpell();
+	spell->collision(this->collidable1, proj);
 }
 
 void CollisionHandler::collisionBossBoss() {

@@ -341,7 +341,7 @@ void EnemyManager::createBossChargers(std::vector<GameObject*>& bossChargers, st
 		enemyObject = new EnemyObject(
 			this->pGPS->newID(), velocityMagnitude, topSpeed, pos[i],
 			pGPS, &this->players,
-			OBJECTTYPE::ENEMY, health
+			OBJECTTYPE::BOSS, health
 		);
 		// SPELL (Needs to be before States)
 		 spell = new SpBossBulletHell(
@@ -675,7 +675,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	enemyObject = new EnemyObject(
 		ID, velocityMagnitude, topSpeed, pos,
 		this->pGPS, &this->players,
-		OBJECTTYPE::ENEMY, hp
+		OBJECTTYPE::BOSS, hp
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpBossBulletHell(

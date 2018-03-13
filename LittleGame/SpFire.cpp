@@ -61,8 +61,9 @@ void SpFire::cleanUp()
 
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
+	OBJECTTYPE::TYPE type = target->getType();
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
-	if ((target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR) &&
+	if ((type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || type == OBJECTTYPE::BOSS) &&
 		!(std::find(proj->getPreviouslyHitList()->begin(), proj->getPreviouslyHitList()->end(), target)
 			!=
 			proj->getPreviouslyHitList()->end())) {
@@ -196,8 +197,9 @@ void SpFireG2::update()
 
 void SpFireG2::collision(GameObject * target, Projectile * proj)
 {
+	OBJECTTYPE::TYPE type = target->getType();
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
-	if ((target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)) 
+	if ((type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || type == OBJECTTYPE::BOSS)) 
 	{
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 	}
