@@ -14,10 +14,6 @@ enum class BEHAVIOR {
 	QUIT
 };
 
-enum class ENEMYUPGRADE {
-	DAMAGE, HEALTH, AMOUNT, SPEED,
-	SIZE
-};
 
 class Button : public MenuObject
 {
