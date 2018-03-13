@@ -55,8 +55,10 @@ public:
 	virtual ~SpFireG2();
 
 	bool castSpell();
+	void update();
 	void collision(GameObject* target, Projectile* proj);
 private:
+	float size = 0.0f;
 };
 
 // Railgun

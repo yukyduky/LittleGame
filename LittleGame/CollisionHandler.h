@@ -19,27 +19,35 @@ using namespace SimpleMath;
 // P   L   A   Y   E   R
 // 1	=	PLAYER				+			PLAYER
 // 2	=	PLAYER				+			ENEMY
-// 3	=	PLAYER				+			DOODAD
+// 3	=	PLAYER				+			GENERATOR
 // 4	=	PLAYER				+			INDESTRUCTIBLE
 // 5	=	PLAYER				+			PROJECTILE
+// 6	=	PLAYER				+			BOSS
 
 // E   N   E   M   Y
-// 6	=	ENEMY				+			ENEMY
-// 7	=	ENEMY				+			DOODAD
-// 8	=	ENEMY				+			INDESCTRUCTIBLE
-// 9	=	ENEMY				+			PROJECTILE
+// 7	=	ENEMY				+			ENEMY
+// 8	=	ENEMY				+			GENERATOR
+// 9	=	ENEMY				+			INDESCTRUCTIBLE
+// 10	=	ENEMY				+			PROJECTILE
+// 11	=	ENEMY				+			BOSS
 
 // D   O   O   D   A   D
-// 10	=	DOODAD				+			DOODAD
-// 11	=	DOODAD				+			INDESTRUCTIBLE
-// 12	=	DOODAD				+			PROJECTILE
+// 12	=	GENERATOR			+			GENERATOR
+// 13	=	GENERATOR			+			INDESTRUCTIBLE
+// 14	=	GENERATOR			+			PROJECTILE
+// 15	=	GENERATOR			+			BOSS
 
 // I  N  D  E  S  T  R  U  C  T  I  B  L  E
-// 13	=	INDESTRUCTIBLE		+			INDESTRUCTIBLE
-// 14	=	INDESTRUCTIBLE		+			PROJECTILE
+// 16	=	INDESTRUCTIBLE		+			INDESTRUCTIBLE
+// 17	=	INDESTRUCTIBLE		+			PROJECTILE
+// 18	=	INDESTRUCTIBLE		+			BOSS
 
 // P   R   O   J   E   C   T   I   L   E
-// 15	=	PROJECTILE			+			PROJECTILE
+// 19	=	PROJECTILE			+			PROJECTILE
+// 20	=	PROJECTILE			+			BOSS
+
+// B   O   S   S
+// 21	=	BOSS				+			BOSS
 */
 
 /* _+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_
@@ -82,16 +90,22 @@ private:
 	void collisionPlayerGenerator();
 	void collisionPlayerIndestruct();
 	void collisionPlayerProjectile();
+	void collisionPlayerBoss();
 	void collisionEnemyEnemy();
 	void collisionEnemyGenerator();
 	void collisionEnemyIndestruct();
 	void collisionEnemyProjectile();
+	void collisionEnemyBoss();
 	void collisionGeneratorGenerator();
 	void collisionGeneratorIndestruct();
 	void collisionGeneratorProjectile();
+	void collisionGeneratorBoss();
 	void collisionIndestructIndestruct();
 	void collisionIndestrucProjectile();
+	void collisionIndestrucBoss();
 	void collisionProjectileProjectile();
+	void collisionProjectileBoss();
+	void collisionBossBoss();
 
 public:
 	CollisionHandler();

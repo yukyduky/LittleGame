@@ -14,9 +14,9 @@
 2. The player will call for castSpell when using a spell
 3. Has the collision for all projectiels
 4. Inserting a glyph into a spell will switch spell when actor calls "switchSpell()"
+5. The projectile will call the update and then this->owner will be the projectile
 */
 
-//Template for when glyphs become relevant
 enum class GLYPHTYPE {NONE, GLYPH1, GLYPH2, GLYPH3, SIZE};
 // Type to not need to check dynamic_cast NOT USED YET
 enum class SPELLTYPE {BUFF, MOBILITY, DAMAGE};
@@ -63,7 +63,7 @@ public:
 	virtual GameObject* getOwner() { return this->owner; };
 	void setType(SPELLTYPE input) { this->type = input; };
 	SPELLTYPE getType() { return this->type; };
-	void insertGlyph(GLYPHTYPE input) { this->glyph = input; };
+	void insertGlyph(GLYPHTYPE input) { this->glyph = input; Locator::getStatsHeader()->addGlyph((int)this->name, (int)this->glyph); };
 	GLYPHTYPE getGlyph() { return this->glyph; };
 	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
@@ -92,8 +92,6 @@ private:
 
 	float coolDown = 0.0f;
 	float timeSinceCast = 0.0f;
-	// EnergyCost
-//	size_t cost;
 
 protected:
 	int attackRange = -1;
