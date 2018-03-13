@@ -451,6 +451,7 @@ void GamePlayState::generatorDischarge(Index index)
 
 void GamePlayState::init() 
 {
+	Locator::getStatsHeader()->addLevel();
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
@@ -511,14 +512,13 @@ void GamePlayState::init()
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->fallPatternCoolDown = 25.0;
 	this->playerSteppedOnBossTile = false;
-	
 	RewardMenuState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
 
 	// Adds to the level each time it starts a level
-	Locator::getStatsHeader()->addLevel();
+	
 	Locator::getGameTime()->setMultiplier(1.0);
 
 	//FOR TESTING

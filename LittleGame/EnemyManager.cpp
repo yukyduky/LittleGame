@@ -57,9 +57,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 		this->waveInterval = 0.0f;
 
 	std::vector<EnemyObject*> localSwarmers;
-
-	this->currentWaveCount = 2;
-	//this->currentWaveCount = 10;
+	this->currentWaveCount = 10;
 
 	int amountModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[2] * 0.25f);
 	// Deciding on how individual enemy counts will be calculated
@@ -72,6 +70,10 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	//this->minionCount = 0;
 	//this->swarmerCount = 0;
 	//this->chargerCount = 0;
+	//this->minionCount = 2;//(2 + static_cast<int>(difficulty)) * amountModifier;
+	//this->swarmerCount = 2; //(1 + static_cast<int>(difficulty)) * amountModifier;
+	//this->chargerCount = 2; //(1 + static_cast<int>(difficulty)) * amountModifier;
+
 	// ---------- TESTING ------------
 
 	// Define specific MINION count PER WAVE
