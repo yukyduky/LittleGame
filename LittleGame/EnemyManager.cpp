@@ -61,10 +61,11 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	this->currentWaveCount = 2;
 	//this->currentWaveCount = 10;
 
+	int amountModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[2] * 0.25f);
 	// Deciding on how individual enemy counts will be calculated
-	this->minionCount = (2 + static_cast<int>(difficulty));
-	this->swarmerCount = (1 + static_cast<int>(difficulty));
-	this->chargerCount = (1 + static_cast<int>(difficulty));
+	this->minionCount = (2 + static_cast<int>(difficulty)) * amountModifier;
+	this->swarmerCount = (1 + static_cast<int>(difficulty)) * amountModifier;
+	this->chargerCount = (1 + static_cast<int>(difficulty)) * amountModifier;
 
 	// ---------- TESTING ------------
 	//this->currentWaveCount = 1;
@@ -149,9 +150,10 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 
 	this->currentWaveCount = 10;
 
+	int amountModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[2] * 0.25f);
 	// Deciding on how individual enemy counts will be calculated
-	this->minionCount = (4 + static_cast<int>(difficulty));
-	this->swarmerCount = (1 + static_cast<int>(difficulty));
+	this->minionCount = (4 + static_cast<int>(difficulty)) * amountModifier;
+	this->swarmerCount = (1 + static_cast<int>(difficulty)) * amountModifier;
 
 	// Define specific MINION count PER WAVE
 	this->currentWaveMinionCount.resize(this->currentWaveCount);
@@ -213,9 +215,10 @@ void EnemyManager::startPulseLevel(enemySpawnPositions spawnPosVectors, float di
 
 	this->currentWaveCount = 10;
 
+	int amountModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[2] * 0.25f);
 	// Deciding on how individual enemy counts will be calculated
-	this->minionCount = (2 + static_cast<int>(difficulty));
-	this->swarmerCount = (1 + static_cast<int>(difficulty));
+	this->minionCount = (2 + static_cast<int>(difficulty)) * amountModifier;
+	this->swarmerCount = (1 + static_cast<int>(difficulty)) * amountModifier;
 
 	// Define specific MINION count PER WAVE
 	this->currentWaveMinionCount.resize(this->currentWaveCount);
@@ -582,18 +585,21 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
 	spawnPos = generatedPositions[0];
 	openingPos = generatedPositions[1];
+	float damageModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[0] * 0.25f);
+	float healthModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[1] * 0.25f);
+	float sppedModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[3] * 0.25f);
 
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float projectileDamage = 8.0f;
+	float projectileDamage = 8.0f * damageModifier;
 	float attackCooldown = 0.5f;
 	float projectileRange = 200.0f;
 	float attackRange = 500.0f;
-	float hp = 200.0f;
+	float hp = 200.0f * healthModifier;
 
-	float velocityMagnitude = 500.0f;
-	float topSpeed = 14.0f;
+	float velocityMagnitude = 500.0f * sppedModifier;
+	float topSpeed = 14.0f * sppedModifier;
 
 	// OBJECT
 	enemyObject = new EnemyObject(

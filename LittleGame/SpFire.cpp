@@ -217,10 +217,10 @@ SpFireG3::SpFireG3(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 3.5f);
-	this->damage *= 2.0f;
+	this->damage *= 20.0f;
 
 	// Higher starts a crash
-	this->range = 23;
+	this->range = 30;
 }
 
 SpFireG3::~SpFireG3()
@@ -248,9 +248,9 @@ bool SpFireG3::castSpell()
 				Projectile* proj = this->spawnProj(props, 
 					Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 						50));
-				proj->setPosition(plyPos + (this->actOwner->getDirection(i * props.size * 14)));
+				proj->setPosition(plyPos + (this->actOwner->getDirection(i * props.size * 10)));
 				// The multiplier below is half of above
-				XMMATRIX scaleM = XMMatrixScaling(props.size * 7.0f, props.size, props.size); 
+				XMMATRIX scaleM = XMMatrixScaling(props.size * 5.0f, props.size, props.size); 
 				proj->SETscaleMatrix(scaleM);
 			}
 			Locator::getAudioManager()->play(SOUND::NAME::BEEP4);

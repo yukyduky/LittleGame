@@ -95,6 +95,9 @@ Menu* PauseMenuState::initStartMenu()
 		textStr);
 	menu->addQuad(object);
 
+	//Loadout
+	this->addLoadOut(menu);
+
 	//Buttons
 	nextID = this->newID();
 	text = L"Resume game";

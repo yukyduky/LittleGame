@@ -163,7 +163,7 @@ void Button::onPress()
 	case BEHAVIOR::ADDENEMYUPG:
 		this->choosen = true;
 		//HERE GOES THE FUNCTION TO UPGRADE ENEMIES
-		//static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->getPGPS();
+		Locator::getStatsHeader()->addUpgrade((int)this->eneUpg);
 		this->nextButton->SETPrev(this->prevButton);
 		this->prevButton->SETNext(this->nextButton);
 		break;

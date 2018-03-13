@@ -4,6 +4,10 @@
 
 #include <array>
 
+enum class ENEMYUPGRADE {
+	DAMAGE, HEALTH, AMOUNT, SPEED,
+	SIZE
+};
 // Level, kills, damage taken to player, 2 arrays that are set to 0 in constructor
 struct Statistics
 {
@@ -11,7 +15,8 @@ struct Statistics
 	int kills;
 	float damageTaken;
 	float difficulty;
-	std::array<int, (size_t)5/*Need enum for types of enemy upgrades*/> enemyUpg;
+	// 0 = Damage, 1 = Health, 2 = Speed, 3 = Amount
+	std::array<int, (size_t)ENEMYUPGRADE::SIZE/*Need enum for types of enemy upgrades*/> enemyUpg;
 	std::array<int /*GLYPHTYPE*/, 5 /*NAME*/> glyphs;
 
 	Statistics() :
