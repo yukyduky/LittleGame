@@ -83,24 +83,40 @@ Menu* HomeMenuState::initControlsMenu()
 
 	contMenu = new Menu();
 
-	//Background
-	nextID = this->newID();
-	object = new MenuObject(nextID);
-	contMenu->addQuad(object);
-
 	//Buttons
 	text = L"Back";
 	nextID = this->newID();
 	pButton = new Button(this, nextID,
-		{ 100.0f, 50.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
+		{ -200.0f, 50.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOSTART_HOME);
 	contMenu->addButton(pButton);
 
 	//Controls Description
-	text = L"1: Fireball (Selectable)\n2: Bomb (Selectable)\n3: Dash (Quickcast)\n4: Slow Time (Quickcast)";
+	text = L"1: Fireball (Selectable)";
 	nextID = this->newID();
 	pObject = new MenuObject(nextID,
-		{ 50.0f, 150.0f, 300.0f, 400.0f }, D2D1::ColorF::DarkViolet,
+		{ -800.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::Orchid,
+		text);
+	contMenu->addQuad(pObject);
+
+	text = L"2: Bomb (Selectable)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ -400.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::Gray,
+		text);
+	contMenu->addQuad(pObject);
+
+	text = L"3: Dash (Quickcast)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ 0.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::Orange,
+		text);
+	contMenu->addQuad(pObject);
+
+	text = L"4: Slow Time (Quickcast)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ 400.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::RoyalBlue,
 		text);
 	contMenu->addQuad(pObject);
 
