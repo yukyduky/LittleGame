@@ -76,6 +76,7 @@ public:
 	bool getActive() { return this->active; }
 	void setAttackRange(int attackRange) { this->attackRange = attackRange; }
 	int getAttackRange() { return this->attackRange; };
+	void setActOwner(ActorObject* actOwner) { this->actOwner = actOwner; }
 
 	// TSC = TimeSinceCast
 	float getTSC() { return this->timeSinceCast; };

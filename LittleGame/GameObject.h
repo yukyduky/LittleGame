@@ -62,8 +62,9 @@ protected:
 
 	// Movement related values
 	XMFLOAT3 moveDirection;
-	float velocityMagnitude = 0;
-	float topSpeed = 0;
+	float velocityMagnitude = 0.0f;
+	float topSpeedMagnitude = 1.0f;
+	float topSpeed = 0.0f;
 	float frictionFactor = 15.0f;
 	bool slowed = false;
 

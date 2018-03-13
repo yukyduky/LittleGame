@@ -26,6 +26,7 @@ public:
 	virtual const double getDeltaTime() = 0;
 
 	virtual void setMultiplier(double val) = 0;
+	virtual double getMultiplier() = 0;
 };
 
 #endif
