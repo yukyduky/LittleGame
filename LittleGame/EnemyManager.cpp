@@ -379,7 +379,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 
 	/// D E F I N I T I O N
 	std::vector<XMFLOAT3> generatedPositions;
-	size_t ID = this->pGPS->newID();
+	size_t ID_ = this->pGPS->newID();
 	XMFLOAT3 scale(15.0f, 2.50f, 15.0f);
 	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
 	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.01f };
@@ -393,16 +393,17 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
+	float topSpeed = 100;
 	float projectileDamage = 8.0f;
 	float attackCooldown = 0.5f;
 	float projectileRange = 200.0f;
 	float attackRange = 500.0f;
-	float hp = 200.0f;
+	float hp = 100.0f;
 
 	/// A T T A C H M E N T
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ENEMYTYPE::SWARMER, ID, velocity, spawnPos,
+		ID_, velocity, topSpeed, spawnPos,
 		pGPS, &this->players,
 		OBJECTTYPE::ENEMY, hp
 	);

@@ -245,7 +245,9 @@ public:
 						if (forward != nullptr) {
 							// So it has one ahead and back
 							forward->back = back;
-							back->forward = forward;
+							if (back != nullptr) {
+								back->forward = forward;
+							}
 						}
 						// Check behind
 						else if (back != nullptr) {
