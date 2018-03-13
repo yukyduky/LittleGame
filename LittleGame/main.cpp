@@ -54,8 +54,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	Locator::getGameTime()->StartTimer();
 	Locator::getGameTime()->UpdateFrameTime();
 
-	Locator::getGameTime()->UpdateFrameTime();
-
 	// Game loop
 	while (gm.getIsRunning()) {
 		// Update delta time

@@ -328,7 +328,7 @@ void GamePlayState::updateFloor()
 
 		if (this->gridPulsePoints[0][i].y > ARENADATA::GETarenaHeight())
 		{
-			this->gridPulsePoints[0][i].y = 0.0f;
+			this->gridPulsePoints[0][i].y = this->gridPulsePoints[0][i].y - ARENADATA::GETarenaHeight();
 		}
 	}
 
@@ -339,7 +339,7 @@ void GamePlayState::updateFloor()
 
 		if (this->gridPulsePoints[1][i].x > ARENADATA::GETarenaWidth())
 		{
-			this->gridPulsePoints[1][i].x = 0.0f;
+			this->gridPulsePoints[1][i].x = this->gridPulsePoints[1][i].x - ARENADATA::GETarenaWidth();
 		}
 	}
 }
