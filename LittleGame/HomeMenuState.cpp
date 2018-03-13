@@ -47,22 +47,80 @@ Menu* HomeMenuState::initStartMenu()
 	menu->addButton(pButton);
 
 	nextID = this->newID();
+	text = L"Controls";
+	pButton = new Button(this, nextID,
+		{ 100.0f, 250.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOCONTROLS);
+	menu->addButton(pButton);
+
+	nextID = this->newID();
 	text = L"Options";
 	pButton = new Button(this, nextID,
-		{ 100.0f,250.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::GOOPTIONS);
 	menu->addButton(pButton);
 
 	nextID = this->newID();
 	text = L"Quit";
 	pButton = new Button(this, nextID,
-		{ 100.0f,350.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,450.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 
 
 	//this->menus[MENUS::START] = stMenu;
 	return menu;
+}
+
+Menu* HomeMenuState::initControlsMenu()
+{
+	Menu* contMenu = nullptr;
+	MenuObject* object = nullptr;
+	Button* pButton = nullptr;
+	MenuObject* pObject = nullptr;
+	WCHAR* text = nullptr;
+	int nextID;
+
+	contMenu = new Menu();
+
+	//Buttons
+	text = L"Back";
+	nextID = this->newID();
+	pButton = new Button(this, nextID,
+		{ -200.0f, 50.0f, 200.0f, 50.0f }, D2D1::ColorF::DarkViolet,
+		text, BEHAVIOR::GOSTART_HOME);
+	contMenu->addButton(pButton);
+
+	//Controls Description
+	text = L"1: Fireball (Selectable)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ -800.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::Orchid,
+		text);
+	contMenu->addQuad(pObject);
+
+	text = L"2: Bomb (Selectable)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ -400.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::Gray,
+		text);
+	contMenu->addQuad(pObject);
+
+	text = L"3: Dash (Quickcast)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ 0.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::Orange,
+		text);
+	contMenu->addQuad(pObject);
+
+	text = L"4: Slow Time (Quickcast)";
+	nextID = this->newID();
+	pObject = new MenuObject(nextID,
+		{ 400.0f, 350.0f, 200.0f, 200.0f }, D2D1::ColorF::RoyalBlue,
+		text);
+	contMenu->addQuad(pObject);
+
+	return contMenu;
 }
 
 Menu* HomeMenuState::initOptionsMenu()
