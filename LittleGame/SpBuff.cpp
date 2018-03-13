@@ -148,9 +148,12 @@ void SpBuffG1::update()
 SpBuffG2::SpBuffG2(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
-	this->setCost(this->getCost() * 0.6f);
+	this->setCost(this->getCost() * 1.0f);
+	this->range = 300.0f;
+
 	this->duration = 1.5f;
 	this->setCoolDown(8.0f);
+	this->timeSC = 0.0f;
 }
 
 SpBuffG2::~SpBuffG2()
@@ -218,7 +221,7 @@ void SpBuffG2::collision(GameObject * target, Projectile * proj)
 SpBuffG3::SpBuffG3(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->strength *= 2.0f;
+	this->strength = 10.0f;
 	this->range = 300.0f;
 
 	this->duration = 1.5f;
@@ -244,10 +247,13 @@ bool SpBuffG3::castSpell()
 		{
 			ProjProp props(0, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 0.0f, -1, false/*PROJBEHAVIOR::ENLARGE*/);
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
-				->GETphysicsComponent()->updateBoundingArea(this->range);
+				;
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 			this->setState(SPELLSTATE::COOLDOWN);
+			this->actOwner->SETvelocityMagnitude(60.0f);
+			this->actOwner->SETtopSpeedMagnitude(3.0f);
+			Locator::getGameTime()->setMultiplier(0.3);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
 		}
 	}
 

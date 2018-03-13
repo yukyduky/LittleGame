@@ -29,17 +29,18 @@ void ActorObject::truncateKineticVector()
 
 void ActorObject::applyFriction(float dt)
 {
+	float appliedFriction = this->frictionFactor * dt * this->topSpeedMagnitude;
 	// Friction for X-AXIS
 	if (this->kineticVector.x > 0.0f)
 	{
-		this->kineticVector.x -= this->frictionFactor * dt;
+		this->kineticVector.x -= appliedFriction;
 
 		if (this->kineticVector.x < 0.0f)
 			this->kineticVector.x = 0.0f;
 	}
 	else if (this->kineticVector.x < 0.0f)
 	{
-		this->kineticVector.x += this->frictionFactor * dt;
+		this->kineticVector.x += appliedFriction;
 
 		if (this->kineticVector.x > 0.0f)
 			this->kineticVector.x = 0.0f;
@@ -48,14 +49,14 @@ void ActorObject::applyFriction(float dt)
 	// Friction for Z-AXIS
 	if (this->kineticVector.z > 0.0f)
 	{
-		this->kineticVector.z -= this->frictionFactor * dt;
+		this->kineticVector.z -= appliedFriction;
 
 		if (this->kineticVector.z < 0.0f)
 			this->kineticVector.z = 0.0f;
 	}
 	else if (this->kineticVector.z < 0.0f)
 	{
-		this->kineticVector.z += this->frictionFactor * dt;
+		this->kineticVector.z += appliedFriction;
 
 		if (this->kineticVector.z > 0.0f)
 			this->kineticVector.z = 0.0f;
@@ -101,6 +102,7 @@ ActorObject::ActorObject(const size_t ID, float velocityMagnitude, float topSpee
 	this->state = OBJECTSTATE::TYPE::ACTIVATED;
 	this->velocityMagnitude = velocityMagnitude;
 	this->topSpeed = topSpeed;
+	this->topSpeedMagnitude = 1.0f;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
 
