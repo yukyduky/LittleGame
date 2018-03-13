@@ -5,6 +5,7 @@
 #include "ArenaGlobals.h"
 #include "StateManager.h"
 #include "RewardMenuState.h"
+#include "StatisticsMenuState.h"
 
 #include "RestartState.h"
 //Include spells
@@ -481,7 +482,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	//this->pGPS->GETMouseInput()->getWorldPosition();
+	Locator::getStatsHeader()->completeGame();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];

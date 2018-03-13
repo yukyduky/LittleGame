@@ -30,16 +30,16 @@ Menu * StatisticsMenuState::initStatsMenu()
 	object = new MenuObject(nextID);
 	menu->addQuad(object);
 
-	if (false /*Lost*/)
+	if (Locator::getStatsHeader()->gameCompleted()) // Won
 	{
-		textStr = L"VICTORY!";
+		textStr = L"VICTORY! \nYou completed all 10 levels!";
 		nextID = this->newID();
 		object = new MenuObject(nextID,
 			{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
 			textStr);
 		menu->addQuad(object);
 	}
-	else // Won
+	else // Lost
 	{
 		textStr = L"GAME OVER! \n Last level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
 		nextID = this->newID();
