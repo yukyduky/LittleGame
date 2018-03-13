@@ -8,8 +8,8 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 	this->setState(SPELLSTATE::READY);
 
 	this->setCost(10);
-	this->setCoolDown(0.2f);
-	this->damage = 50;
+	this->setCoolDown(0.4f);
+	this->damage = 60;
 	this->range = 700;
 }
 
@@ -150,8 +150,8 @@ bool SpFireG1::castSpell()
 SpFireG2::SpFireG2(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
-	this->damage *= 2.2f;
-	this->setCoolDown(2.0f);
+	this->setCoolDown(this->getCoolDown() * 3.0f);
+	this->damage = (this->damage * 2.0f);
 	this->setCost(30.0f);
 	this->range = 1000.0f;
 
@@ -216,8 +216,9 @@ void SpFireG2::collision(GameObject * target, Projectile * proj)
 SpFireG3::SpFireG3(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 3.5f);
-	this->damage *= 20.0f;
+	this->setCoolDown(this->getCoolDown() * 4.5f);
+	this->damage = (this->damage * 2.5f);
+	this->cost = 10.0f;
 
 	// Higher starts a crash
 	this->range = 30;
