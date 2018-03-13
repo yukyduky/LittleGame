@@ -5,6 +5,7 @@
 #include "ArenaGlobals.h"
 #include "StateManager.h"
 #include "RewardMenuState.h"
+#include "StatisticsMenuState.h"
 
 #include "RestartState.h"
 //Include spells
@@ -96,6 +97,7 @@ ActorObject::ActorObject(const size_t ID, float velocityMagnitude, float topSpee
 {
 	this->pGPS = pGPS;
 	this->pos = pos;
+	this->previousPos = pos;
 
 	this->type = objectType;
 	this->kineticVector = { 0.0f, 0.0f, 0.0f };
@@ -157,6 +159,11 @@ void ActorObject::SETtopSpeedMagnitude(float speed)
 	this->topSpeedMagnitude = speed;
 }
 
+void ActorObject::restoreFullHealth()
+{
+	this->hp = this->hpMAX;
+}
+
 void ActorObject::receive(GameObject & obj, Message msg)
 {
 
@@ -166,8 +173,11 @@ void ActorObject::cleanUp()
 {
 	// Clean up all internal data
 	for (int i = 0; i < this->spells.size(); i++) {
-		this->spells[i]->cleanUp();
-		delete this->spells[i];
+		if (this->spells[i] != nullptr) {
+			this->spells[i]->cleanUp();
+			delete this->spells[i];
+			this->spells[i] = nullptr;
+		}
 	}
 	this->spells.clear();
 	// Cleanup all the components
@@ -182,6 +192,8 @@ void ActorObject::update()
 {
 	float gravity = -9.82f * 4.0f;
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+	float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
 	this->move();
 
@@ -209,11 +221,20 @@ void ActorObject::update()
 		if (this->counter > 1.5f) {
 			this->statusEffect = TILESTATE::ACTIVE;
 			this->state = OBJECTSTATE::TYPE::ACTIVATED;
+
+			this->GETgraphicsComponent()->updateColor(vColor(
+				(colorHolder.r * healthRatioHolder),
+				(colorHolder.g * healthRatioHolder),
+				(colorHolder.b * healthRatioHolder),
+				(colorHolder.a * healthRatioHolder))
+			);
+
 		}
 		else {
 			this->state = OBJECTSTATE::TYPE::STUNNED;
 			this->kineticVector.x = 0.0f;
 			this->kineticVector.z = 0.0f;
+			this->GETgraphicsComponent()->updateColor(vColor(0.784f, 0.784f, 0.001f, 1.0f));
 		}
 		break;
 	default:
@@ -241,9 +262,11 @@ void ActorObject::update()
 	case OBJECTSTATE::TYPE::GENERATORRISING:
 		if (this->pos.y < 25.0f) {
 			this->pos.y += 0.5;
+			this->turnOnInvulnerability();
 		}
 		else {
 			this->pos.y = 25.0f;
+			this->turnOffInvulnerability();
 			this->state = OBJECTSTATE::TYPE::GENERATORACTIVE;
 		}
 		this->updateWorldMatrix();
@@ -256,7 +279,6 @@ void ActorObject::update()
 			i->update();
 		}
 		for (auto &i : this->spells) {
-			//i->update();
 			i->updateCD();
 		}
 		break;
@@ -265,7 +287,6 @@ void ActorObject::update()
 			i->update();
 		}
 		for (auto &i : this->spells) {
-			//i->update(); The update of the spell should be done in Projectile
 			i->updateCD();// The player only wants the CD of hte spell
 		}
 		break;
@@ -481,7 +502,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	//this->pGPS->GETMouseInput()->getWorldPosition();
+	Locator::getStatsHeader()->completeGame();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
@@ -494,8 +515,6 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	//Locator::getStatsHeader()->resetStats();
-
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[3]->castSpell();
 		//this->selectedSpell = this->spells[3];
@@ -508,7 +527,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	//Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[4]->castSpell();
@@ -551,7 +570,7 @@ void ActorObject::dealDmg(float damag)
 
 	this->hp -= dmg * this->invulnerable;
 	
-	if (this->getType() != OBJECTTYPE::TYPE::PLAYER) {
+	if (this->getType() != OBJECTTYPE::TYPE::PLAYER && this->invulnerable != 0.0f) {
 		vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
 		float healthRatioHolder = this->GEThp() / this->GEThpMAX();
 
@@ -750,11 +769,21 @@ void ActorObject::applyStatusEffect(TILESTATE::STATE effect)
 void ActorObject::turnOnInvulnerability()
 {
 	this->invulnerable = 0.0f;
+	this->GETgraphicsComponent()->updateColor(vColor(0.3f, 0.3f, 0.3f, 1.0f));
 }
 
 void ActorObject::turnOffInvulnerability()
 {
 	this->invulnerable = 1.0f;
+	vColor colorHolder = this->GETgraphicsComponent()->GETcolorOriginal();
+	float healthRatioHolder = this->GEThp() / this->GEThpMAX();
+
+	this->GETgraphicsComponent()->updateColor(vColor(
+		(colorHolder.r * healthRatioHolder),
+		(colorHolder.g * healthRatioHolder),
+		(colorHolder.b * healthRatioHolder),
+		(colorHolder.a * healthRatioHolder))
+	);
 }
 
 Spell * ActorObject::getFirstSpell()

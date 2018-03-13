@@ -146,6 +146,8 @@
     <ClInclude Include="ArenaObject.h" />
     <ClInclude Include="BossBattleIntroState.h" />
     <ClInclude Include="BossBulletHellState.h" />
+    <ClInclude Include="BossChargerState.h" />
+    <ClInclude Include="BossGeneratorBattleState.h" />
     <ClInclude Include="BossMoveAwayFromArenaState.h" />
     <ClInclude Include="ChargerChannelingState.h" />
     <ClInclude Include="ChargerCHARGINGstate.h" />
@@ -220,6 +222,7 @@
     <ClInclude Include="Spell.h" />
     <ClInclude Include="SpEnemyImmolation.h" />
     <ClInclude Include="SpFire.h" />
+    <ClInclude Include="SpNo.h" />
     <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
@@ -239,6 +242,8 @@
     <ClCompile Include="ArenaObject.cpp" />
     <ClCompile Include="BossBattleIntroState.cpp" />
     <ClCompile Include="BossBulletHellState.cpp" />
+    <ClCompile Include="BossChargerState.cpp" />
+    <ClCompile Include="BossGeneratorBattleState.cpp" />
     <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
     <ClCompile Include="BossMoveToArenaState.cpp" />
     <ClCompile Include="MinionOutsideState.h" />

@@ -4,10 +4,19 @@
 
 #include "EnemySpell.h"
 
+namespace ATTACKPATTERN {
+	enum PATTERN {
+		NORMAL, RANDOM, WAVE, SZIE, 
+	};
+}
+
 class SpBossBulletHell : public EnemySpell
 {
 private:
 	float radians = 0.3f;
+	float counter;
+	int currentPattern;
+	int deadCopies = 0;
 public:
 	SpBossBulletHell(EnemyObject* pShooter, ActorObject* pPlayer, int* pActiveEnemiesCount,
 		int range, int dmg, int attackRange, double cooldown

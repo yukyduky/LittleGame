@@ -9,12 +9,10 @@ RewardMenuState RewardMenuState::sRewardMenuState;
 WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 {
 	WCHAR* text = nullptr;
-	D2D1::ColorF color = D2D1::ColorF::WhiteSmoke;
 
 	switch (name)
 	{
 	case 0: //NAME::AUTOATTACK:
-		color = D2D1::ColorF::DarkGoldenrod;
 		switch (glyph)
 		{
 		case 0: //GLYPHTYPE::NONE:
@@ -35,7 +33,6 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 		}
 		break;
 	case 1: //NAME::FIRE:
-		color = D2D1::ColorF::OrangeRed;
 		switch (glyph)
 		{
 		case 0: //GLYPHTYPE::NONE:
@@ -56,7 +53,6 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 		}
 		break;
 	case 2: //NAME::BOMB:
-		color = D2D1::ColorF::DarkBlue;
 		switch (glyph)
 		{
 		case 0: //GLYPHTYPE::NONE:
@@ -77,7 +73,6 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 		}
 		break;
 	case 3: //NAME::DASH:
-		color = D2D1::ColorF::DarkOrange;
 		switch (glyph)
 		{
 		case 0: //GLYPHTYPE::NONE:
@@ -98,7 +93,6 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 		}
 		break;
 	case 4: //NAME::BUFF:
-		color = D2D1::ColorF::DarkCyan;
 		switch (glyph)
 		{
 		case 0: //GLYPHTYPE::NONE:
@@ -120,7 +114,6 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 		break;
 	default:
 		text = L"ERROR";
-		color = D2D1::ColorF::WhiteSmoke;
 		break;
 	}
 
@@ -133,10 +126,7 @@ RewardMenuState * RewardMenuState::getInstance()
 }
 
 void RewardMenuState::init()
-{
-	//for (int index = 0; index < player->GETSpells().size(); index++) {
-	//	this->player->changeSpell(index, (int)this->vecGlyph[index]);
-	//} LHURE WILL FIX! LHURE PROMISE. LHURE GOOD BOY
+{	
 	MenuState::init();
 	this->displayMenu(this->initLootMenu());
 }
@@ -228,12 +218,8 @@ Menu * RewardMenuState::initLootMenu()
 		textStr);
 	menu->addQuad(object);
 
-	//Glyph desc
-	text = L"Pick one of the 3 glyphs";
-	object = new MenuObject(this->newID(),
-		{ -300.0f,0.0f, 200.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
-		text);
-	menu->addQuad(object);
+	//Loadout
+	this->addLoadOut(menu);
 	
 	//Buttons
 	XMFLOAT2 start{ 100.0f, 50.0f};
@@ -269,16 +255,16 @@ Menu * RewardMenuState::initLootMenu()
 			color = D2D1::ColorF::DarkGoldenrod;
 			break;
 		case NAME::FIRE:
-			color = D2D1::ColorF::OrangeRed;
+			color = D2D1::ColorF::Orchid;
 			break;
 		case NAME::BOMB:
-			color = D2D1::ColorF::DarkBlue;
+			color = D2D1::ColorF::Gray;
 			break;
 		case NAME::DASH:
-			color = D2D1::ColorF::DarkOrange;
+			color = D2D1::ColorF::Orange;
 			break;
 		case NAME::BUFF:
-			color = D2D1::ColorF::DarkCyan;
+			color = D2D1::ColorF::RoyalBlue;
 			break;
 		}
 
@@ -336,6 +322,9 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 		textStr);
 	menu->addQuad(object);
 
+	//Loadout
+	this->addLoadOut(menu);
+
 	//Buttons
 	XMFLOAT2 start{ 30.0f, 50.0f };
 
@@ -344,7 +333,7 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 	{
 		bool cpyFound = true;
 		ENEMYUPGRADE eneUpg;
-		D2D1::ColorF color = D2D1::ColorF::Gray;
+		D2D1::ColorF color = D2D1::ColorF::DarkSlateGray;
 
 		while (cpyFound)
 		{
@@ -433,6 +422,9 @@ Menu * RewardMenuState::initNextLevelMenu()
 		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
 		textStr);
 	menu->addQuad(object);
+
+	//Loadout
+	this->addLoadOut(menu);
 
 	//Buttons
 	XMFLOAT2 start{ 30.0f, 50.0f };

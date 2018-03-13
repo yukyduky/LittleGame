@@ -8,8 +8,8 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 	this->setState(SPELLSTATE::READY);
 
 	this->setCost(10);
-	this->setCoolDown(0.2f);
-	this->damage = 50;
+	this->setCoolDown(0.4f);
+	this->damage = 60;
 	this->range = 700;
 }
 
@@ -61,8 +61,9 @@ void SpFire::cleanUp()
 
 void SpFire::collision(GameObject * target, Projectile* proj)
 {
+	OBJECTTYPE::TYPE type = target->getType();
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
-	if ((target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR) &&
+	if ((type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || type == OBJECTTYPE::BOSS) &&
 		!(std::find(proj->getPreviouslyHitList()->begin(), proj->getPreviouslyHitList()->end(), target)
 			!=
 			proj->getPreviouslyHitList()->end())) {
@@ -149,8 +150,8 @@ bool SpFireG1::castSpell()
 SpFireG2::SpFireG2(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
-	this->damage *= 2.2f;
-	this->setCoolDown(2.0f);
+	this->setCoolDown(this->getCoolDown() * 3.0f);
+	this->damage = (this->damage * 2.0f);
 	this->setCost(30.0f);
 	this->range = 1000.0f;
 
@@ -196,8 +197,9 @@ void SpFireG2::update()
 
 void SpFireG2::collision(GameObject * target, Projectile * proj)
 {
+	OBJECTTYPE::TYPE type = target->getType();
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
-	if ((target->getType() == OBJECTTYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)) 
+	if ((type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || type == OBJECTTYPE::BOSS)) 
 	{
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 	}
@@ -214,11 +216,12 @@ void SpFireG2::collision(GameObject * target, Projectile * proj)
 SpFireG3::SpFireG3(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 3.5f);
-	this->damage *= 2.0f;
+	this->setCoolDown(this->getCoolDown() * 4.5f);
+	this->damage = (this->damage * 2.5f);
+	this->cost = 10.0f;
 
 	// Higher starts a crash
-	this->range = 23;
+	this->range = 30;
 }
 
 SpFireG3::~SpFireG3()
@@ -246,9 +249,9 @@ bool SpFireG3::castSpell()
 				Projectile* proj = this->spawnProj(props, 
 					Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 						50));
-				proj->setPosition(plyPos + (this->actOwner->getDirection(i * props.size * 14)));
+				proj->setPosition(plyPos + (this->actOwner->getDirection(i * props.size * 10)));
 				// The multiplier below is half of above
-				XMMATRIX scaleM = XMMatrixScaling(props.size * 7.0f, props.size, props.size); 
+				XMMATRIX scaleM = XMMatrixScaling(props.size * 5.0f, props.size, props.size); 
 				proj->SETscaleMatrix(scaleM);
 			}
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH3);

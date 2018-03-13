@@ -35,6 +35,9 @@ enum class NAME {
 
 	//BossSpells
 	BULLETHELL,
+
+	// For charger
+	NOSPELL,
 	
 	//
 	SIZE
@@ -65,6 +68,7 @@ public:
 	SPELLTYPE getType() { return this->type; };
 	void insertGlyph(GLYPHTYPE input) { this->glyph = input; Locator::getStatsHeader()->addGlyph((int)this->name, (int)this->glyph); };
 	GLYPHTYPE getGlyph() { return this->glyph; };
+	void setName(NAME name) { this->name = name; };
 	NAME getName() { return this->name; };
 	void setState(SPELLSTATE input) { this->state = input; };
 	SPELLSTATE getState() { return this->state; };

@@ -24,6 +24,7 @@ private:
 	// Almost normalized
 	XMFLOAT2 normalizedVectorToPlayer;
 	float distanceToPlayer = 0.0f;
+	float maxHealth;
 
 	bool charged = false;
 	float collisionDamage = 0.0f;
@@ -55,6 +56,8 @@ public:
 	virtual void bossAttack01();
 	virtual void bossAttack02();
 	virtual void bossAttack03();
+
+	virtual void setHp(float hp);
 
 };
 

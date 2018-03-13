@@ -7,6 +7,7 @@
 #include "ArenaGlobals.h"
 #include <string>
 #include <sstream>
+#include "GamePlayState.h"
 
 void LevelManager::createFloor(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& staticObjects, std::list<GraphicsComponent*>& graphics)
 {
@@ -443,6 +444,42 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	bSphere->updateBoundingArea(bSpherePos);
 	//Give the world matrix to the new object and store the object and the block in the vector arrays
 	dynamicObjects.push_back(object);
+}
+
+void LevelManager::createBossGenerators(std::vector<std::vector<tileData>>& grid, std::list<GameObject*>& dynamicObjects, std::list<GraphicsComponent*>& graphics, std::vector<Index>& genIndex)
+{
+	float squareSize = ARENADATA::GETsquareSize();
+	Index index[4];
+	index[0] = Index(10, 10);
+	index[1] = Index(10, ARENADATA::GETarenaHeight() / squareSize - 10);
+	index[2] = Index(ARENADATA::GETarenaWidth() / squareSize - 10, 10);
+	index[3] = Index(ARENADATA::GETarenaWidth() / squareSize - 10, ARENADATA::GETarenaHeight() / squareSize - 10);
+
+
+	XMFLOAT3 genPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT4 genColor = XMFLOAT4(0.6f, 0.001f, 1.0f, 1.0f);
+	GameObject* object = nullptr;
+	BlockComponent* block = nullptr;
+	PhysicsComponent* bSphere = nullptr;
+	XMFLOAT3 scale(this->squareSize * 0.5f, this->squareSize * 0.5f, this->squareSize * 0.5f);						// TOBE DELETED
+	XMFLOAT3 rotation(0, 0, 0);
+	XMFLOAT3 bSpherePos = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	float velocityMagnitude = 0.0f;
+	float topSpeed = 0.0f;
+	for (int i = 0; i < 4; i++) {
+		genPos = XMFLOAT3(squareSize * 0.5f + index[i].x * squareSize, -squareSize * 0.5f, squareSize * 0.5f + index[i].y * squareSize);
+		grid[index[i].x][index[i].y].state = TILESTATE::GENERATOR;
+		genIndex.push_back(index[i]);
+		object = new ActorObject(this->pGPS->newID(), velocityMagnitude, topSpeed, genPos, this->pGPS, OBJECTTYPE::GENERATOR, 1000.0f);
+		object->setState(OBJECTSTATE::TYPE::GENERATORRISING);
+		block = new BlockComponent(*this->pGPS, *object, genColor, scale, rotation);
+		bSphere = new PhysicsComponent(*object, static_cast<float>(this->squareSize) * 0.75f);
+		bSpherePos = genPos;
+		bSpherePos.y = this->squareSize * 0.5f;
+		bSphere->updateBoundingArea(bSpherePos);
+		//Give the world matrix to the new object and store the object and the block in the vector arrays
+		dynamicObjects.push_back(object);
+	}
 }
 
 void LevelManager::clean() {

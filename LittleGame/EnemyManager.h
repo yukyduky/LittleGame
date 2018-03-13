@@ -213,7 +213,7 @@ public:
 		}
 		else {
 			// You've initialized this class twice, don't do that.
-			assert(false);
+			//assert(false);
 		}
 	}
 	void remove(int index) {
@@ -317,6 +317,11 @@ private:
 	bool ramp = false;
 	bool pulse = false;
 
+	// BOSS
+	std::vector<Grid*> BossGrids;
+	std::vector<ArrayList*> BossSwarmers;
+	// BOSS
+
 	void cleanLevel();
 
 	EnemyObject* createEnemy(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior, enemySpawnPositions spawnPosVectors) {
@@ -347,6 +352,7 @@ private:
 	*/
 	EnemyObject* createCharger(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
+	EnemyObject* createBossSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createMinion(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
 
@@ -367,6 +373,10 @@ public:
 	void startPulseLevel(enemySpawnPositions spawnPosVectors, float difficulty);
 
 	void startBossLevel();
+
+	void createBossWave(enemySpawnPositions spawnPosVectors);
+
+	void createBossChargers(std::vector<GameObject*>& bossChargers, std::list<GameObject*>& dynamicObjects, float hp);
 
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.

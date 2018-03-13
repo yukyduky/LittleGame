@@ -309,6 +309,25 @@ void GamePlayState::updateFloor()
 			case TILESTATE::BOSSTILE:
 				this->grid[i][j].color = bossTileColor;
 				break;
+			case TILESTATE::TTELEPORT:
+				this->grid[i][j].counter += this->dt;
+				if (this->grid[i][j].counter < this->grid[i][j].chargeTime) {
+					tempColor1.x = baseColor.x - (baseColor.x / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.y = baseColor.y - (baseColor.y / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+					tempColor1.z = baseColor.z - (baseColor.z / (this->grid[i][j].stateTime)) * this->grid[i][j].counter;
+
+					tempColor2.x = (teleportColor.x / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.y = (teleportColor.y / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+					tempColor2.z = (teleportColor.z / (this->grid[i][j].chargeTime)) * this->grid[i][j].counter;
+
+					this->grid[i][j].color = tempColor1 + tempColor2;
+				}
+				else {
+					this->grid[i][j].color = teleportColor;
+					this->grid[i][j].state = TILESTATE::TELEPORT;
+					this->grid[i][j].counter = 0.0;
+				}
+				break;
 			case TILESTATE::TELEPORT:
 				this->grid[i][j].color = teleportColor;
 				break;
@@ -374,6 +393,7 @@ void GamePlayState::checkPlayerTileStatus()
 				break;
 			case TILESTATE::STATE::BOSSTILE:
 				this->playerSteppedOnBossTile = true;
+				this->player1->restoreFullHealth();
 				break;
 			case TILESTATE::STATE::TELEPORT:
 				this->player1->setPosition(XMFLOAT3(ARENADATA::GETsquareSize() * 1.5f, playerPos.y, ARENADATA::GETarenaHeight() * 0.5f - ARENADATA::GETsquareSize() * 0.5f));
@@ -431,6 +451,7 @@ void GamePlayState::generatorDischarge(Index index)
 
 void GamePlayState::init() 
 {
+	Locator::getStatsHeader()->addLevel();
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
@@ -459,25 +480,30 @@ void GamePlayState::init()
 
 	this->mousePicker = new MouseInput(this->camera.GETcameraPos(), this->camera.GETfacingDir());
 
+	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	randomLevel = 1; 
+	//randomLevel = 1; 
 	// TESTING ------------------------ 
 
-	switch (randomLevel)
-	{
-	case 1:
-		this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-		break;
-	case 2: 
-		this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-		break;
-	case 3: 
-		this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
-		break;
+	if (Locator::getStatsHeader()->getStats().level < 10) {
+		switch (randomLevel)
+		{
+		case 1:
+			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			break;
+		case 2:
+			this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			break;
+		case 3:
+			this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			break;
+		}
 	}
-	//this->enemyManager.startBossLevel();
-
+	else {
+		this->enemyManager.startBossLevel();
+	}
+	
 	this->mediumTime = 120.0;
 	this->hardTime = 240.0;
 	this->totalLevelTime = 0.0;
@@ -486,15 +512,17 @@ void GamePlayState::init()
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->fallPatternCoolDown = 25.0;
 	this->playerSteppedOnBossTile = false;
-	
 	RewardMenuState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
 
 	// Adds to the level each time it starts a level
-	Locator::getStatsHeader()->addLevel();
+	
 	Locator::getGameTime()->setMultiplier(1.0);
+
+	//FOR TESTING
+//	this->player1->turnOnInvulnerability();
 }
 
 void GamePlayState::cleanUp()
@@ -590,15 +618,23 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			Locator::getD2D()->saveScreen();
 			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			//Sends the number of Lootboxes picked up druring the game
-			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
-
-
-			// Change last so we've already done all of the changes.
-			StateManager::changeState(RestartState::getInstance());
+			if (Locator::getStatsHeader()->getStats().level < 10)
+			{
+				//Sends the number of Lootboxes picked up druring the game
+				RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+				// Change last so we've already done all of the changes.
+				StateManager::changeState(RestartState::getInstance());
+			}
+			else if (Locator::getStatsHeader()->getStats().level == 10)
+			{
+				Locator::getStatsHeader()->completeGame();
+				Locator::getD2D()->saveScreen();
+				StateManager::changeState(StatisticsMenuState::getInstance());
+			}
 		}
 
 		//else if (globalmsg == GLOBALMESSAGES::ENEMYDIED)
@@ -622,12 +658,14 @@ void GamePlayState::update(GameManager * gm)
 	this->genCounter += this->dt;
 	this->GUI.updateGUI(this->player1);
 	
-	if (this->counter > this->fallPatternCoolDown) {
-		this->updateFloorPattern();
-	}
-	if (this->genCounter > this->genTimer) {
-		this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
-		this->genCounter = 0.0;
+	if (Locator::getStatsHeader()->getStats().level < 10) {
+		if (this->counter > this->fallPatternCoolDown) {
+			this->updateFloorPattern();
+		}
+		if (this->genCounter > this->genTimer) {
+			this->lm.createGenerator(this->newID(), this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+			this->genCounter = 0.0;
+		}
 	}
 	this->updateFloor();
 
@@ -645,6 +683,12 @@ void GamePlayState::update(GameManager * gm)
 		}
 		else {
 			ID = (*it)->getID();
+			//TEST
+			for (int i = 0; i < this->bossChargers.size(); i++) {
+				if (ID == this->bossChargers[i]->getID()) {
+					this->bossChargers.erase(this->bossChargers.begin() + i);
+				}
+			}
 			int j = this->graphics.size();
 			for (std::list<GraphicsComponent*>::reverse_iterator rit = this->graphics.rbegin(); rit != this->graphics.rend() && j > this->staticPhysicsCount; rit++) {
 				if ((*rit)->getID() == ID) {
@@ -724,7 +768,7 @@ void GamePlayState::initPlayer()
 	XMFLOAT3 playerRotation(0, 0, 0);
 	XMFLOAT3 playerScales(10.0f, 40.0f, 10.0f);
 	float velocityMagnitude = 100.0f;
-	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() / 2), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() / 2));
+	XMFLOAT3 playerPos(static_cast<float>(ARENADATA::GETarenaWidth() * 0.5f), playerScales.y, static_cast<float>(ARENADATA::GETarenaHeight() * 0.5f));
 	float actorAccelerationSpeed = 150.0f;
 	float topSpeed = 11.0f;
 
@@ -750,13 +794,13 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0:
-	actor->addSpell(new SpAutoAttackG3(actor));
+	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
 	actor->addSpell(new SpFireG3(actor));
 	// 2: 
 	actor->addSpell(new SpBombG1(actor));
 	// 3:
-	actor->addSpell(new SpDashG3(actor));
+	actor->addSpell(new SpDash(actor));
 	// 4:
 	actor->addSpell(new SpBuff(actor));
 
@@ -839,6 +883,44 @@ bool GamePlayState::GETplayerSteppedOnBossTile()
 void GamePlayState::SETplayerSteppedOnBossTile(bool input)
 {
 	this->playerSteppedOnBossTile = input;
+}
+
+void GamePlayState::spawnBossGenerators()
+{
+	this->lm.createBossGenerators(this->grid, this->dynamicObjects, this->graphics, this->genIndex);
+}
+
+void GamePlayState::spawnBossChargers(float hp)
+{
+	this->enemyManager.createBossChargers(this->bossChargers, this->dynamicObjects, hp);
+}
+
+bool GamePlayState::checkGenerators()
+{
+	bool returnValue = false;
+	if (this->genIndex.size() == 0) {
+		returnValue = true;
+	}
+	return returnValue;
+}
+
+void GamePlayState::createABossWave()
+{
+	this->enemyManager.createBossWave(this->enemySpawnPos);
+}
+
+float GamePlayState::checkBossChargersHealth() {
+	float totalBossHealth = 0.0f;
+	for (int i = 0; i < this->bossChargers.size(); i++) {
+			totalBossHealth += static_cast<EnemyObject*>(this->bossChargers[i])->GEThp();
+	}
+	for (int i = 0; i < this->bossChargers.size(); i++) {
+		static_cast<EnemyObject*>(this->bossChargers[i])->setHp(totalBossHealth / this->bossChargers.size());
+	}
+	if (totalBossHealth < 0.0f) {
+		int warning = 1;
+	}
+	return totalBossHealth;
 }
 
 //_________________________________________//

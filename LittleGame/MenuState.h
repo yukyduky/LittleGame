@@ -67,6 +67,9 @@ public:
 
 	std::wstring intToWchar(int input);
 
+	void addLoadOut(Menu* menu);
+	WCHAR* getCurrSpellText(NAME name);
+
 	//Button functions
 	void displayMenu(Menu* menu);
 	void startGame();

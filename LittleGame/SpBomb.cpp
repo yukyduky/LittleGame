@@ -20,6 +20,7 @@ SpBomb::SpBomb(GameObject* owner) : Spell(owner, NAME::BOMB)
 	this->setCoolDown(1.5f);
 	this->damage = this->start;
 	this->range = 300.0f;
+	this->cost = 20.0f;
 
 	this->active = true;
 	this->landed = false;
@@ -113,10 +114,11 @@ void SpBomb::cleanUp()
 
 void SpBomb::collision(GameObject * target, Projectile* proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR) 
-		&& this->landed)
+	OBJECTTYPE::TYPE type = target->getType();
+	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || 
+		type == OBJECTTYPE::BOSS) && this->landed)
 	{
-		static_cast<ActorObject*>(target)->dealDmg(10000.0f);
+		static_cast<ActorObject*>(target)->dealDmg(100.0f);
 	}
 }
 
@@ -127,9 +129,8 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 SpBombG1::SpBombG1(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->setCoolDown(0.1f);
-
-	this->damage = 50.0f;
+	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->damage = 70.0f;
 	this->nrOfSplinters = 8;
 }
 
@@ -159,7 +160,10 @@ void SpBombG1::update()
 		}
 		else
 		{
-			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 500, 300, true);
+			// Set the projectiles to be the same as AutoAttack base
+			this->setName(NAME::AUTOATTACK);
+			this->insertGlyph(GLYPHTYPE::NONE);
+			ProjProp props(10, XMFLOAT4(0.3f, 0.1f, 0.3f, 0.1f), 500, 300, true);
 
 			XMVECTOR direction = XMLoadFloat3(&static_cast<Projectile*>(this->getOwner())->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
@@ -186,7 +190,7 @@ void SpBombG1::update()
 SpBombG2::SpBombG2(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
-	this->damage *= 1.2f;
+	this->setCoolDown(this->getCoolDown() * 1.5f);
 }
 
 SpBombG2::~SpBombG2()
@@ -195,8 +199,9 @@ SpBombG2::~SpBombG2()
 
 void SpBombG2::collision(GameObject * target, Projectile * proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
-		&& this->landed)
+	OBJECTTYPE::TYPE type = target->getType();
+	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) && this->landed)
 	{
 		static_cast<ActorObject*>(target)->dealDmg(1000.0f);
 		this->trip = true;
@@ -259,8 +264,8 @@ void SpBombG2::update()
 SpBombG3::SpBombG3(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->setCoolDown(this->getCoolDown() * 1.5f);
-	this->damage *= 2.0f;
+	this->setCoolDown(this->getCoolDown() * 4.5f);
+	this->cost = 50.0f;
 }
 
 SpBombG3::~SpBombG3()
@@ -310,8 +315,9 @@ void SpBombG3::update()
 
 void SpBombG3::collision(GameObject * target, Projectile * proj)
 {
-	if ((target->getType() == OBJECTTYPE::TYPE::ENEMY || target->getType() == OBJECTTYPE::TYPE::GENERATOR)
-		&& this->landed)
+	OBJECTTYPE::TYPE type = target->getType();
+	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
+		type == OBJECTTYPE::BOSS) && this->landed)
 	{
 		ActorObject* actorTarget = static_cast<ActorObject*>(target);
 
@@ -330,7 +336,7 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 		XMFLOAT3 kinvectorFloat3;
 		XMStoreFloat3(&kinvectorFloat3, pullDir);
 
-		actorTarget->setkineticVector(kinvectorFloat3 * 300.0f);
+		actorTarget->setkineticVector((actorTarget->getkineticVector()) + (kinvectorFloat3 * (500.0f / pullLenght)));
 	}
 }
 
