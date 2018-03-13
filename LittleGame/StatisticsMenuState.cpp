@@ -88,17 +88,45 @@ Menu * StatisticsMenuState::initStatsMenu()
 		textStr);
 	menu->addQuad(object);
 
+	textStr = L"Enemy Damage: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[0]);
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,400.0f, 300.0f,50.0f }, D2D1::ColorF::DarkGoldenrod,
+		textStr);
+	menu->addQuad(object);
+
+	textStr = L"Enemy Health: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[1]);
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,450.0f, 300.0f,50.0f }, D2D1::ColorF::DarkGoldenrod,
+		textStr);
+	menu->addQuad(object);
+
+	textStr = L"Enemy Amount: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[2]);
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,500.0f, 300.0f,50.0f }, D2D1::ColorF::DarkGoldenrod,
+		textStr);
+	menu->addQuad(object);
+
+	textStr = L"Enemy Speed: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[3]);
+	nextID = this->newID();
+	object = new MenuObject(nextID,
+		{ 50.0f,550.0f, 300.0f,50.0f }, D2D1::ColorF::DarkGoldenrod,
+		textStr);
+	menu->addQuad(object);
+
 	//Buttons
 	text = L"Restart";
 	nextID = this->newID();
 	pButton = new Button(this, nextID,
-		{ 100.0f,450.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,650.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::RESTARTGAME);
 	menu->addButton(pButton);
 	text = L"Quit";
 	nextID = this->newID();
 	pButton = new Button(this, nextID,
-		{ 100.0f,550.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
+		{ 100.0f,720.0f, 200.0f,50.0f }, D2D1::ColorF::DarkViolet,
 		text, BEHAVIOR::QUIT);
 	menu->addButton(pButton);
 

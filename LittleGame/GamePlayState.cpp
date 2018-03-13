@@ -559,6 +559,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
 			StateManager::changeState(StatisticsMenuState::getInstance());
+			Locator::getD2D()->saveScreen();
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			//Sends the number of Lootboxes picked up druring the game

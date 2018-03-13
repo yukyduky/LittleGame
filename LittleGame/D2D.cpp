@@ -4,6 +4,8 @@ HRESULT D2D::Initialize()
 {
 	HRESULT hr;
 
+	this->closeMenu();
+
 	hr = CreateDeviceIndependentResources();
 
 	if (SUCCEEDED(hr))
@@ -108,6 +110,8 @@ HRESULT D2D::CreateDeviceResources()
 
 void D2D::saveScreenshot()
 {
+	this->closeMenu();
+
 	RECT rc;
 	GetClientRect(Locator::getD3D()->GEThwnd(), &rc);
 
