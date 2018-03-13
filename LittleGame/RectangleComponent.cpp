@@ -212,6 +212,11 @@ void RectangleComponent::updateVertexZ(int verticeNumber, float zInput)
 	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
 }
 
+vColor RectangleComponent::GETcolorOriginal()
+{
+	return this->color;
+}
+
 
 /*_____________________________
 |          END OF             |

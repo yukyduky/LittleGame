@@ -34,6 +34,11 @@ EnemyObject::EnemyObject(const size_t ID, float velocityMagnitude, float topSpee
 	this->players = players;
 }
 
+void EnemyObject::setIfCharged(bool isItACharger)
+{
+	this->charged = isItACharger;
+}
+
 void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
 {
 	this->attackComponent = attackComponent;
@@ -42,6 +47,21 @@ void EnemyObject::SETattackComponent(EnemyAttackComponent* attackComponent)
 EnemyAttackComponent * EnemyObject::GETattackComponent()
 {
 	return this->attackComponent;
+}
+
+bool EnemyObject::getIfCharged()
+{
+	return this->charged;
+}
+
+void EnemyObject::setCollisionDamage(float collisionDamage_)
+{
+	this->collisionDamage = collisionDamage_;
+}
+
+float EnemyObject::getCollisionDamage()
+{
+	return this->collisionDamage;
 }
 
 XMFLOAT2 EnemyObject::getVectorToPlayer()
@@ -110,7 +130,8 @@ void EnemyObject::update()
 	}
 	
 	// Also update the cooldown on spells
-	this->spells[0]->update();
+	if (this->spells.size() > 0)
+		this->spells[0]->update();
 }
 
 void EnemyObject::attack()

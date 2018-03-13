@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "Locator.h"
+#include "GraphicsComponent.h"
 
 
 void GameObject::send(Message msg)

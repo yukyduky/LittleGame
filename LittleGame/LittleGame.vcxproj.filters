@@ -96,6 +96,13 @@
     <ClCompile Include="BossBulletHellState.cpp">
       <Filter>BOSS\BossStates\Misc</Filter>
     </ClCompile>
+    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="StatsHeader.cpp" />
+    <ClCompile Include="IDHandler.cpp" />
+    <ClCompile Include="TriangleComponent.cpp" />
+    <ClCompile Include="MinionOutsideState.h" />
+    <ClCompile Include="PauseMenuState.cpp" />
+    <ClCompile Include="HomeMenuState.cpp" />
     <ClCompile Include="BossMoveAwayFromArenaState.cpp">
       <Filter>BOSS\BossStates\Misc</Filter>
     </ClCompile>
@@ -204,6 +211,26 @@
     <ClInclude Include="BossMoveAwayFromArenaState.h">
       <Filter>BOSS\BossStates\Misc</Filter>
     </ClInclude>
+    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="StatsHeader.h" />
+    <ClInclude Include="IStatsHeader.h" />
+    <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="TriangleComponent.h" />
+    <ClInclude Include="ChargerOutsideState.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="ChargerChannelingState.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="ChargerCHARGINGstate.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="ChargerState.h">
+      <Filter>Charger</Filter>
+    </ClInclude>
+    <ClInclude Include="PauseMenuState.h" />
+    <ClInclude Include="HomeMenuState.h" />
+    <ClInclude Include="idlist.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="captureqwsx.bmp" />
@@ -232,6 +259,9 @@
     </Filter>
     <Filter Include="BOSS\BossStates\Misc">
       <UniqueIdentifier>{bf432a90-4f27-479e-9612-1a8af8056c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Charger">
+      <UniqueIdentifier>{b704713e-25dc-41cd-88e9-4816ae49b163}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

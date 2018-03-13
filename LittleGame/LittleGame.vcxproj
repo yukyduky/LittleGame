@@ -149,6 +149,10 @@
     <ClInclude Include="BossChargerState.h" />
     <ClInclude Include="BossGeneratorBattleState.h" />
     <ClInclude Include="BossMoveAwayFromArenaState.h" />
+    <ClInclude Include="ChargerChannelingState.h" />
+    <ClInclude Include="ChargerCHARGINGstate.h" />
+    <ClInclude Include="ChargerOutsideState.h" />
+    <ClInclude Include="ChargerState.h" />
     <ClInclude Include="SpBossBulletHell.h" />
     <ClInclude Include="BossMoveToArenaState.h" />
     <ClInclude Include="BossState.h" />
@@ -172,6 +176,7 @@
     <ClInclude Include="HomeMenuState.h" />
     <ClInclude Include="ID2D.h" />
     <ClInclude Include="IDHandler.h" />
+    <ClInclude Include="idlist.h" />
     <ClInclude Include="IGlobalEvents.h" />
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
@@ -227,6 +232,7 @@
     <ClInclude Include="SwarmerSeekingState.h" />
     <ClInclude Include="SwarmerState.h" />
     <ClInclude Include="SwarmerSyncingState.h" />
+    <ClInclude Include="TriangleComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActorObject.cpp" />
@@ -239,6 +245,7 @@
     <ClCompile Include="BossGeneratorBattleState.cpp" />
     <ClCompile Include="BossMoveAwayFromArenaState.cpp" />
     <ClCompile Include="BossMoveToArenaState.cpp" />
+    <ClCompile Include="MinionOutsideState.h" />
     <ClCompile Include="SpBossBulletHell.cpp" />
     <ClCompile Include="BossState.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -303,6 +310,7 @@
     <ClCompile Include="SwarmerSeekingState.cpp" />
     <ClCompile Include="SwarmerState.cpp" />
     <ClCompile Include="SwarmerSyncincState.cpp" />
+    <ClCompile Include="TriangleComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

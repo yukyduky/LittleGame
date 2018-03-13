@@ -208,7 +208,13 @@ public:
 		this->activateIndex(index);
 	}
 	void activateMe(size_t swarmerID) {
-		this->activateIndex(swarmerID);
+		if (swarmerID < this->capacity) {
+			this->activateIndex(swarmerID);
+		}
+		else {
+			// You've initialized this class twice, don't do that.
+			assert(false);
+		}
 	}
 	void remove(int index) {
 		if (this->count > 0) {
@@ -239,7 +245,9 @@ public:
 						if (forward != nullptr) {
 							// So it has one ahead and back
 							forward->back = back;
-							back->forward = forward;
+							if (back != nullptr) {
+								back->forward = forward;
+							}
 						}
 						// Check behind
 						else if (back != nullptr) {
@@ -298,9 +306,11 @@ private:
 	int currentWaveCount = 0;
 	std::vector<int> currentWaveMinionCount;
 	std::vector<int> currentWaveSwarmerCount;
+	std::vector<int> currentWaveChargerCount;
 	float spawnInterval = 0.0f;
 	float waveInterval = 0.0f;
 	int minionCount = 0;
+	int chargerCount = 0;
 	float timePassed = 0.0f;
 	float startTime = 0.0f;
 
@@ -340,11 +350,16 @@ private:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Creates an Actor, attaches necessary components and returns him to you!
 	*/
-	
+	EnemyObject* createCharger(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBossSwarmer(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createMinion(enemySpawnPositions spawnPosVectors);
 	EnemyObject* createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY aiBehavior);
+
+	/*- - - - - - - -<INFORMATION>- - - - - - - -
+	1. Returns an XMFLOAT3vector where [0] is the spawnPosition and [1] is the opening in the wall.
+	*/
+	std::vector<XMFLOAT3> generateEnemySpawnPositions(enemySpawnPositions spawnPosVectors, XMFLOAT3 scale);
 
 public:
 	EnemyManager();

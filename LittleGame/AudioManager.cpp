@@ -17,6 +17,7 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/beep2.wav"), SOUND::BEEP2);
 	error += this->loadSound(std::string("include/Sound/beep3.wav"), SOUND::BEEP3);
 	error += this->loadSound(std::string("include/Sound/beep4.wav"), SOUND::BEEP4);
+	error += this->loadSound(std::string("include/Sound/TriangleSlice.wav"), SOUND::TRIANGLESLICE);
 
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_1.wav"), SOUND::ENEMYATTACK_1);
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_2.wav"), SOUND::ENEMYATTACK_2);

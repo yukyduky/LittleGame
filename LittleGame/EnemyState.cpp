@@ -7,5 +7,10 @@ EnemyState::EnemyState(EnemyObject& pHead, AIComponent& pBrain) {
 	this->pHead = &pHead;
 	this->pBrain = &pBrain;
 	// Set up other internal data.
-	this->attackRange = this->pHead->getFirstSpell()->getAttackRange();
+	if (this->pHead->getFirstSpell() != nullptr) {
+		this->attackRange = this->pHead->getFirstSpell()->getAttackRange();
+	}
+	else {
+		this->attackRange = -1;
+	}
 }

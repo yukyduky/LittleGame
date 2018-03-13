@@ -44,7 +44,7 @@ protected:
 
 	//Used to calculate angle to fire
 	float rotation = 0;
-	XMFLOAT3 direction = { 0, 0, 0.0001f };	// Can't be initialized as 0 vector or shooting during loads will crash the game.
+	XMFLOAT3 direction = { 1, 0, 0 };	// Can't be initialized as 0 vector or shooting during loads will crash the game.
 
 	//Pointer to be able to initiate projectiles in GamePlayState
 	GamePlayState* pGPS = nullptr;
@@ -69,6 +69,7 @@ public:
 	virtual XMFLOAT3 getDirection();
 	virtual XMFLOAT3 getDirection(float length);
 	virtual void SETvelocityMagnitude(float speed);
+	virtual void SETtopSpeedMagnitude(float speed);
 	virtual float GETvelocityMagnitude() { return this->velocityMagnitude; }
 	virtual float GEThp() { return this->hp; }
 	virtual float GEThpMAX() { return this->hpMAX; }
@@ -85,6 +86,7 @@ public:
 	2. Only called when the player is using a controller
 	*/
 	void updatekineticVector();
+	void setKineticVector(XMFLOAT3 kineticVector);
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Affects the position of the ActorObject
 	2. Only called when the player is using a keyboard

@@ -6,6 +6,7 @@
 #include <array>
 #include "Shader.h"
 
+const int NUM_BACKGROUND_IMAGES = 39;
 const int NUM_DEFERRED_OUTPUTS = 3;
 const int GEOCOLOR_INPUT_DESC_SIZE = 3;
 const int GEOTEX_INPUT_DESC_SIZE = 3;
@@ -16,7 +17,6 @@ enum class SHADERTYPE { COLOR, TEXTURE };
 class Renderer
 {
 private:
-	ID3D11ShaderResourceView * gBackgroundSRV = nullptr;
 	std::array<ID3D11RenderTargetView*, NUM_DEFERRED_OUTPUTS> gRTVs;
 	std::array<ID3D11ShaderResourceView*, NUM_DEFERRED_OUTPUTS> gSRVs;
 	std::array<ID3D11Texture2D*, NUM_DEFERRED_OUTPUTS> gDeferredTexs;
@@ -26,7 +26,10 @@ private:
 	ID3D11SamplerState* gSampler = nullptr;
 	ID3D11Buffer* gQuadVertexBuffer = nullptr;
 	D3D11_VIEWPORT viewport;
+	std::array<ID3D11ShaderResourceView*, NUM_BACKGROUND_IMAGES> gBackgroundSRVs;
 
+	size_t currBackgroundFrame = 0;
+	float currBackgroundFrameTime = 0.0f;
 	size_t vertBufferStride = 0;
 	size_t vertBufferOffset = 0;
 	Shader geoColorShaders;
@@ -39,6 +42,7 @@ private:
 
 	void initShaders();
 	void loadBackgroundTexture();
+	void updateBackgroundFrame();
 	void bindTextureToRTVAndSRV(ID3D11Texture2D** gTexure, ID3D11RenderTargetView** gRTV, ID3D11ShaderResourceView** gSRV, int width, int height, DXGI_FORMAT format);
 	void initSampler(ID3D11SamplerState** gSampler, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE texAdressModeU, D3D11_TEXTURE_ADDRESS_MODE texAdressModeV, D3D11_TEXTURE_ADDRESS_MODE texAdressModeW, D3D11_COMPARISON_FUNC compFunc);
 	void createQuad();

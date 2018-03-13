@@ -15,30 +15,32 @@
 
 void ActorObject::truncateKineticVector()
 {
-	if (this->kineticVector.x < (this->topSpeed * -1))
-		this->kineticVector.x = (this->topSpeed * -1);
-	else if (this->kineticVector.x > this->topSpeed)
-		this->kineticVector.x = this->topSpeed;
+	float multiSpeed = Locator::getGameTime()->getMultiplier() * this->topSpeed * this->topSpeedMagnitude;
+	if (this->kineticVector.x < (multiSpeed * -1))
+		this->kineticVector.x = (multiSpeed * -1);
+	else if (this->kineticVector.x > multiSpeed)
+		this->kineticVector.x = multiSpeed;
 
-	if (this->kineticVector.z > this->topSpeed)
-		this->kineticVector.z = (this->topSpeed);
-	else if (this->kineticVector.z < (this->topSpeed * -1))
-		this->kineticVector.z = (this->topSpeed * -1);
+	if (this->kineticVector.z > multiSpeed)
+		this->kineticVector.z = (multiSpeed);
+	else if (this->kineticVector.z < (multiSpeed * -1))
+		this->kineticVector.z = (multiSpeed* -1);
 }
 
 void ActorObject::applyFriction(float dt)
 {
+	float appliedFriction = this->frictionFactor * dt/* * this->topSpeedMagnitude*/;
 	// Friction for X-AXIS
 	if (this->kineticVector.x > 0.0f)
 	{
-		this->kineticVector.x -= this->frictionFactor * dt;
+		this->kineticVector.x -= appliedFriction;
 
 		if (this->kineticVector.x < 0.0f)
 			this->kineticVector.x = 0.0f;
 	}
 	else if (this->kineticVector.x < 0.0f)
 	{
-		this->kineticVector.x += this->frictionFactor * dt;
+		this->kineticVector.x += appliedFriction;
 
 		if (this->kineticVector.x > 0.0f)
 			this->kineticVector.x = 0.0f;
@@ -47,14 +49,14 @@ void ActorObject::applyFriction(float dt)
 	// Friction for Z-AXIS
 	if (this->kineticVector.z > 0.0f)
 	{
-		this->kineticVector.z -= this->frictionFactor * dt;
+		this->kineticVector.z -= appliedFriction;
 
 		if (this->kineticVector.z < 0.0f)
 			this->kineticVector.z = 0.0f;
 	}
 	else if (this->kineticVector.z < 0.0f)
 	{
-		this->kineticVector.z += this->frictionFactor * dt;
+		this->kineticVector.z += appliedFriction;
 
 		if (this->kineticVector.z > 0.0f)
 			this->kineticVector.z = 0.0f;
@@ -101,6 +103,7 @@ ActorObject::ActorObject(const size_t ID, float velocityMagnitude, float topSpee
 	this->state = OBJECTSTATE::TYPE::ACTIVATED;
 	this->velocityMagnitude = velocityMagnitude;
 	this->topSpeed = topSpeed;
+	this->topSpeedMagnitude = 1.0f;
 	this->counter = 0.0f;
 	this->transitionTime = 5.0f;
 
@@ -148,6 +151,11 @@ XMFLOAT3 ActorObject::getDirection(float length)
 void ActorObject::SETvelocityMagnitude(float velocityMagnitude)
 {
 	this->velocityMagnitude = velocityMagnitude;
+}
+
+void ActorObject::SETtopSpeedMagnitude(float speed)
+{
+	this->topSpeedMagnitude = speed;
 }
 
 void ActorObject::restoreFullHealth()
@@ -279,7 +287,6 @@ void ActorObject::update()
 		}
 		break;
 	}
-	int asdf = 3;
 }
 
 void ActorObject::updatekineticVector()
@@ -288,7 +295,7 @@ void ActorObject::updatekineticVector()
 	this->previousPos = this->pos;
 
 	//Create the new objects we will need for the calculations.
-	//DirectX::XMFLOAT2 movementInput = this->pInput->GETnormalizedVectorOfLeftStick();
+	//DirectX::XMFLOAT2 movementInput = this->pInput->GE&TnormalizedVectorOfLeftStick();
 	this->MovementVector = this->pInput->GETnormalizedVectorOfLeftStick();
 	this->moveDirection = { MovementVector.x, 0.0f, MovementVector.y };
 
@@ -298,9 +305,15 @@ void ActorObject::updatekineticVector()
 	this->kineticVector.z += additiveVector.z;
 }
 
+void ActorObject::setKineticVector(XMFLOAT3 kineticVector_)
+{
+	this->kineticVector = kineticVector_;
+}
+
 void ActorObject::updatekineticVectorUp()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { 0.0f, 0.0f, 1.0f };
@@ -314,7 +327,8 @@ void ActorObject::updatekineticVectorUp()
 
 void ActorObject::updatekineticVectorLeft()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { -1.0f, 0.0f, 0.0f };
@@ -327,7 +341,8 @@ void ActorObject::updatekineticVectorLeft()
 }
 void ActorObject::updatekineticVectorDown()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { 0.0f, 0.0f, -1.0f };
@@ -340,7 +355,8 @@ void ActorObject::updatekineticVectorDown()
 }
 void ActorObject::updatekineticVectorRight()
 {
-	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed) {
+	float multiplier = Locator::getGameTime()->getMultiplier() * this->topSpeedMagnitude;
+	if (this->state == OBJECTSTATE::TYPE::ACTIVATED && this->kineticVector.z < this->topSpeed * multiplier) {
 		float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
 
 		this->moveDirection = { 1.0f, 0.0f, 0.0f };
@@ -482,7 +498,7 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	this->pGPS->GETMouseInput()->getWorldPosition();
+	//this->pGPS->GETMouseInput()->getWorldPosition();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
@@ -495,7 +511,7 @@ void ActorObject::selectAbility2()
 
 void ActorObject::selectAbility3()
 {
-	Locator::getStatsHeader()->resetStats();
+	//Locator::getStatsHeader()->resetStats();
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[3]->castSpell();
@@ -509,7 +525,7 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+	//Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[4]->castSpell();
@@ -533,14 +549,14 @@ InputComponent* ActorObject::GETinputComponent()
 	return this->pInput;
 }
 
-void ActorObject::decCD()
-{
-	for (auto itteration : spells)
-	{
-		itteration->updateCD();
-	}
-	
-}
+//void ActorObject::decCD()
+//{
+//	for (auto itteration : spells)
+//	{
+//		itteration->updateCD();
+//	}
+//	
+//}
 
 void ActorObject::dealDmg(float damag)
 {
@@ -592,7 +608,7 @@ void ActorObject::dealDmg(float damag)
 bool ActorObject::useEnergy(float energyUse) {
 	bool returnValue = false;
 
-	if (energyUse <= this->energy) {
+if (energyUse <= this->energy) {
 		this->energy -= energyUse;
 		returnValue = true;
 	}
@@ -721,10 +737,10 @@ void ActorObject::switchSpell()
 
 	}
 
-	//// Clean up old spells
-	//for (auto &i : this->spells) {
-	//	delete i;
-	//}
+	// Clean up old spells
+	for (auto &i : this->spells) {
+		delete i;
+	}
 	this->spells.clear();
 	
 	for (auto i : newSpells)
@@ -770,7 +786,7 @@ void ActorObject::turnOffInvulnerability()
 
 Spell * ActorObject::getFirstSpell()
 {
-	if (this->spells[0] != nullptr) {
+	if (this->spells.size() > 0) {
 		return this->spells[0];
 	}
 	return nullptr;

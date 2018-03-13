@@ -5,6 +5,7 @@
 #include "Locator.h"
 #include "PhysicsComponent.h"
 #include "BlockComponent.h"
+#include "TriangleComponent.h"
 #include "AIComponent.h"
 #include "EnemyAttackComponent.h"
 #include "ImmolationEnemyAttack.h"
@@ -14,6 +15,8 @@
 #include "SwarmerEnemyAttack.h"
 #include "SwarmerSeekingState.h"
 #include "SwarmerOutsideState.h"
+#include "ChargerOutsideState.h"
+#include "MinionOutsideState.h"
 #include "SpSwarmProjectile.h"
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
@@ -58,6 +61,14 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	// Deciding on how individual enemy counts will be calculated
 	this->minionCount = (2 + static_cast<int>(difficulty));
 	this->swarmerCount = (1 + static_cast<int>(difficulty));
+	this->chargerCount = (1 + static_cast<int>(difficulty));
+
+	// ---------- TESTING ------------
+	//this->currentWaveCount = 1;
+	//this->minionCount = 0;
+	//this->swarmerCount = 0;
+	//this->chargerCount = 0;
+	// ---------- TESTING ------------
 
 	// Define specific MINION count PER WAVE
 	this->currentWaveMinionCount.resize(this->currentWaveCount);
@@ -67,8 +78,14 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
 	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
 		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount + i);
+	// Define specific CHARGER count PER WAVE
+	this->currentWaveChargerCount.resize(this->currentWaveCount);
+	for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
+		this->currentWaveChargerCount.at(i) = (this->chargerCount + i);
+	
 
 	Wave* currentWave = nullptr;
+
 
 	// Per wave
 	for (int i = 0; i < this->currentWaveCount; i++) {
@@ -76,7 +93,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 
 		// Per Minion
 		for (int j = 0; j < this->currentWaveMinionCount.at(i); j++) {
-			// Create an enemy and attatch it to the wave.
+			// Create an enemy and attach it to the wave.
 			EnemyObject* enemy = this->createEnemy(ENEMYTYPE::IMMOLATION, AIBEHAVIOR::STRAIGHTTOWARDS, spawnPosVectors);
 			currentWave->enemies.push_back(enemy);
 			this->activeEnemiesCount++;
@@ -90,6 +107,16 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 			currentWave->enemies.push_back(swarmer);
 			// Attach a pointer to swarmspecific (used by grid)
 			localSwarmers.push_back(swarmer);
+
+			this->activeEnemiesCount++;
+		}
+
+		// Per Charger
+		for (int l = 0; l < this->currentWaveChargerCount.at(i); l++) {
+			// Create the actual object
+			EnemyObject* charger = this->createCharger(spawnPosVectors);
+			// Attach a pointer to waves
+			currentWave->enemies.push_back(charger);
 
 			this->activeEnemiesCount++;
 		}
@@ -403,105 +430,42 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	// GRAND OBJECT
 	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent = nullptr;
+	GraphicsComponent* graphicsComponent = nullptr;
 	AIComponent* aiComponent = nullptr;
 	InputComponent* input = nullptr;
 	PhysicsComponent* physicsComponent = nullptr;
 	EnemyAttackComponent* attackComponent = nullptr;
 	// STATES
-	EnemyMovingState* moveState = nullptr;
+	EnemyState* moveState = nullptr;
 
 	bool reGenerateRandom = true;
 	int spawnLocation = 0;
 
 
 	/// D E F I N I T I O N
+	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0.0001f };
-	float spawnOffset = 0.0f;
+	XMFLOAT3 spawnPos = { 0, 0, 0.0001f };
+	XMFLOAT3 openingPos = { 0, 0, 0.0001f };
 
-	if (this->pulse) {
-		spawnOffset = 700.0f;
-	}
 
-	else {
-		spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700.0f, 800.0f);
-	}
+	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
+	spawnPos = generatedPositions[0];
+	openingPos = generatedPositions[1];
 
-	while (reGenerateRandom)
-	{
-		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-
-		switch (spawnLocation) {
-		case 1:
-		{
-			if (spawnPosVectors.west.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
-				pos = {
-					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
-					scale.y,
-					spawnPosVectors.west.at(spawnLocation).y
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 2:
-		{
-			if (spawnPosVectors.south.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
-				pos = {
-					spawnPosVectors.south.at(spawnLocation).x,
-					scale.y,
-					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 3:
-		{
-			if (spawnPosVectors.east.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
-				pos = {
-					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
-					scale.y,
-					spawnPosVectors.east.at(spawnLocation).y
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 4:
-		{
-			if (spawnPosVectors.north.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
-				pos = {
-					spawnPosVectors.north.at(spawnLocation).x,
-					scale.y,
-					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		break;
-		}
-	}
-
-	float velocityMagnitude = 50.0f;
-	float topSpeed = 11.0f;
-	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 0.3f);
-	XMFLOAT3 rotation(0.0f, 0.0f, 0.0f);
-	float immolationDamage = 3.0f;
-	float attackCooldown = 0.3f;
-	float attackRange = 50.0f;
+	float velocityMagnitude = 180.0f;
+	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 1.0f);
+	XMFLOAT3 rotation(0, 0, 0);
+	float immolationDamage = 3;
+	float attackCooldown = 0.5;
+	float attackRange = 70;
 	float hp = 200.0f;
-	
+	float topSpeed = 12.0f;
+
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, velocityMagnitude, topSpeed, pos, 
+		ID, velocityMagnitude, topSpeed, spawnPos,
 		this->pGPS, &this->players, 
 		OBJECTTYPE::ENEMY, hp
 	);
@@ -517,9 +481,69 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	aiComponent = new AIComponent(*enemyObject);
 	
 	// STATES
-	moveState = new EnemyMovingState(*enemyObject, *aiComponent);
+	moveState = new MinionOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++, openingPos);
 
 	
+	// Make the enemy inactive
+	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
+	return enemyObject;
+}
+
+EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
+{
+	/// D E C L A R A T I O N
+	// GRAND OBJECT
+	EnemyObject* enemyObject = nullptr;
+	// COMPONENTS
+	GraphicsComponent* graphicsComponent = nullptr;
+	AIComponent* aiComponent = nullptr;
+	InputComponent* input = nullptr;
+	PhysicsComponent* physicsComponent = nullptr;
+	EnemyAttackComponent* attackComponent = nullptr;
+	// STATES
+	EnemyState* moveState = nullptr;
+
+	/// D E F I N I T I O N
+	std::vector<XMFLOAT3> generatedPositions;
+	size_t ID_ = this->pGPS->newID();
+	XMFLOAT3 scale(15.0f, 2.50f, 15.0f);
+	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
+	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.01f };
+
+	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
+	spawnPos = generatedPositions[0];
+	openingPos = generatedPositions[1];
+
+
+	float velocity = 100;
+	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
+	XMFLOAT3 rotation(0, 0, 0);
+
+	float topSpeed = 100;
+	float projectileDamage = 8.0f;
+	float attackCooldown = 0.5f;
+	float projectileRange = 200.0f;
+	float attackRange = 500.0f;
+	float hp = 100.0f;
+
+	/// A T T A C H M E N T
+	// OBJECT
+	enemyObject = new EnemyObject(
+		ID_, velocity, topSpeed, spawnPos,
+		pGPS, &this->players,
+		OBJECTTYPE::ENEMY, hp
+	);
+
+	// COMPONENTS
+	graphicsComponent = new TriangleComponent(*this->pGPS, *enemyObject, color, scale, rotation);
+	physicsComponent = new PhysicsComponent(*enemyObject, 20);
+	aiComponent = new AIComponent(*enemyObject);
+	// STATES
+	float chargeUpTime = 5.0f;
+	float maxSpinSpeed = 60.0f;
+	float collisionDamage = 30.0f;
+	moveState = new ChargerOutsideState(*enemyObject, *aiComponent, openingPos, chargeUpTime, maxSpinSpeed, collisionDamage);
+
 	// Make the enemy inactive
 	enemyObject->setState(OBJECTSTATE::TYPE::DEAD);
 	return enemyObject;
@@ -531,7 +555,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	// GRAND OBJECT
 	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent = nullptr;
+	GraphicsComponent* graphicsComponent = nullptr;
 	AIComponent* aiComponent = nullptr;
 	InputComponent* input = nullptr;
 	PhysicsComponent* physicsComponent = nullptr;
@@ -540,75 +564,15 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	EnemyState* moveState = nullptr;
 
 	/// D E F I N I T I O N
+	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 pos = { 0, 0, 0.0001f };
+	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
+	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.01f };
 
-	bool reGenerateRandom = true;
-	int spawnLocation = 0;
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(550, 650);
-
-	while (reGenerateRandom)
-	{
-		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
-
-		switch (spawnLocation) {
-		case 1:
-		{
-			if (spawnPosVectors.west.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
-				pos = {
-					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
-					scale.y,
-					spawnPosVectors.west.at(spawnLocation).y
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 2:
-		{
-			if (spawnPosVectors.south.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
-				pos = {
-					spawnPosVectors.south.at(spawnLocation).x,
-					scale.y,
-					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 3:
-		{
-			if (spawnPosVectors.east.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
-				pos = {
-					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
-					scale.y,
-					spawnPosVectors.east.at(spawnLocation).y
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		case 4:
-		{
-			if (spawnPosVectors.north.size() > 0) {
-				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
-				pos = {
-					spawnPosVectors.north.at(spawnLocation).x,
-					scale.y,
-					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
-				};
-				reGenerateRandom = false;
-			}
-			break;
-		}
-		break;
-		}
-	}
-
+	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
+	spawnPos = generatedPositions[0];
+	openingPos = generatedPositions[1];
 
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
@@ -619,12 +583,12 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	float attackRange = 500.0f;
 	float hp = 200.0f;
 
-	float velocityMagnitude = 180.0f;
-	float topSpeed = 11.0f;
+	float velocityMagnitude = 1000.0f;
+	float topSpeed = 20.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
-		ID, velocityMagnitude, topSpeed, pos,
+		ID, velocityMagnitude, topSpeed, spawnPos,
 		this->pGPS, &this->players,
 		OBJECTTYPE::ENEMY, hp
 	);
@@ -640,7 +604,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	physicsComponent = new PhysicsComponent(*enemyObject, 20);
 	aiComponent = new AIComponent(*enemyObject);
 	// STATES
-	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++);
+	moveState = new SwarmerOutsideState(*enemyObject, *aiComponent, this->pGrid, this->swarmerIDs++, openingPos);
 
 
 	// Make the enemy inactive
@@ -777,7 +741,7 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	// GRAND OBJECT
 	EnemyObject* enemyObject = nullptr;
 	// COMPONENTS
-	BlockComponent* graphicsComponent = nullptr;
+	GraphicsComponent* graphicsComponent = nullptr;
 	AIComponent* aiComponent = nullptr;
 	InputComponent* input = nullptr;
 	PhysicsComponent* physicsComponent = nullptr;
@@ -825,7 +789,124 @@ EnemyObject* EnemyManager::createBoss(ENEMYTYPE::TYPE enemyType, AIBEHAVIOR::KEY
 	bossMoveToArenaState = new BossMoveToArenaState(*enemyObject, *aiComponent, *this->pGPS, bossScale);
 
 	return enemyObject;
+}
 
+std::vector<XMFLOAT3> EnemyManager::generateEnemySpawnPositions(enemySpawnPositions spawnPosVectors, XMFLOAT3 scale)
+{
+	std::vector<XMFLOAT3> generatedPositions;
+	XMFLOAT3 spawnPosition;
+	XMFLOAT3 openingPosition;
+
+	bool reGenerateRandom = true;
+	int spawnLocation = 0;
+	int indexToOpening = -1;
+	int relevantOpeningsCount = -1;
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700, 800);
+	if (this->pulse) {
+		spawnOffset = 700.0f;
+	}
+
+	// Random a position
+	while (reGenerateRandom)
+	{
+		// Random a cardinal direction, repeat if there are no openings for that side.
+		spawnLocation = Locator::getRandomGenerator()->GenerateInt(1, 4);
+		
+		switch (spawnLocation) {
+		case 1:
+		{	// W E S T
+			if (spawnPosVectors.west.size() > 0) {
+
+				// Firstly generate the spawn position
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.west.size() - 1));
+				spawnPosition = {
+					(spawnPosVectors.west.at(spawnLocation).x - spawnOffset),
+					scale.y,
+					spawnPosVectors.west.at(spawnLocation).y
+				};
+
+				// Then fetch an opening in the wall
+				relevantOpeningsCount = spawnPosVectors.west.size();
+				indexToOpening = Locator::getRandomGenerator()->GenerateInt(0, relevantOpeningsCount - 1);
+				openingPosition.x = spawnPosVectors.west[indexToOpening].x;
+				openingPosition.y = 0;
+				openingPosition.z = spawnPosVectors.west[indexToOpening].y;
+
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 2:
+		{	// S O U T H
+			if (spawnPosVectors.south.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.south.size() - 1));
+				spawnPosition = {
+					spawnPosVectors.south.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.south.at(spawnLocation).y - spawnOffset)
+				};
+
+				// Then fetch an opening in the wall
+				relevantOpeningsCount = spawnPosVectors.south.size();
+				indexToOpening = Locator::getRandomGenerator()->GenerateInt(0, relevantOpeningsCount - 1);
+				openingPosition.x = spawnPosVectors.south[indexToOpening].x;
+				openingPosition.y = 0;
+				openingPosition.z = spawnPosVectors.south[indexToOpening].y;
+
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 3:
+		{	// E A S T
+			if (spawnPosVectors.east.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.east.size() - 1));
+				spawnPosition = {
+					(spawnPosVectors.east.at(spawnLocation).x + spawnOffset),
+					scale.y,
+					spawnPosVectors.east.at(spawnLocation).y
+				};
+
+				// Then fetch an opening in the wall
+				relevantOpeningsCount = spawnPosVectors.east.size();
+				indexToOpening = Locator::getRandomGenerator()->GenerateInt(0, relevantOpeningsCount - 1);
+				openingPosition.x = spawnPosVectors.east[indexToOpening].x;
+				openingPosition.y = 0;
+				openingPosition.z = spawnPosVectors.east[indexToOpening].y;
+
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		case 4:
+		{	// N O R T H
+			if (spawnPosVectors.north.size() > 0) {
+				spawnLocation = Locator::getRandomGenerator()->GenerateInt(0, (spawnPosVectors.north.size() - 1));
+				spawnPosition = {
+					spawnPosVectors.north.at(spawnLocation).x,
+					scale.y,
+					(spawnPosVectors.north.at(spawnLocation).y + spawnOffset)
+				};
+
+				// Then fetch an opening in the wall
+				relevantOpeningsCount = spawnPosVectors.north.size();
+				indexToOpening = Locator::getRandomGenerator()->GenerateInt(0, relevantOpeningsCount - 1);
+				openingPosition.x = spawnPosVectors.north[indexToOpening].x;
+				openingPosition.y = 0;
+				openingPosition.z = spawnPosVectors.north[indexToOpening].y;
+
+				reGenerateRandom = false;
+			}
+			break;
+		}
+		break;
+		}
+	}
+
+	generatedPositions.push_back(spawnPosition);
+	generatedPositions.push_back(openingPosition);
+
+	return generatedPositions;
 }
 
 void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> players)
