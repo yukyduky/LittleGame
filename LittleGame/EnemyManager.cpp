@@ -486,10 +486,6 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	// STATES
 	EnemyState* moveState = nullptr;
 
-	bool reGenerateRandom = true;
-	int spawnLocation = 0;
-
-
 	/// D E F I N I T I O N
 	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
@@ -801,7 +797,7 @@ std::vector<XMFLOAT3> EnemyManager::generateEnemySpawnPositions(enemySpawnPositi
 	int spawnLocation = 0;
 	int indexToOpening = -1;
 	int relevantOpeningsCount = -1;
-	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(700, 800);
+	float spawnOffset = Locator::getRandomGenerator()->GenerateFloat(900, 1000);
 	if (this->pulse) {
 		spawnOffset = 700.0f;
 	}
