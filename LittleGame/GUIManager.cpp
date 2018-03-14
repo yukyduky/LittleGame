@@ -115,9 +115,14 @@ int GUIManager::initGUI(
 
 	if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 1600)
 	{
+		this->enemyElementPosXMax = 1.05f;
 		this->enemyElementPosX = -1.05f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 1.1f;
+
+		this->waveElementPosX = -1.05f;
+		this->waveElementPosY = 0.0f;
+		this->waveElementPosZ = 1.0f;
 	}
 
 	else if (ARENADATA::GETarenaHeight() == 1000 && ARENADATA::GETarenaWidth() == 1000)
@@ -126,6 +131,10 @@ int GUIManager::initGUI(
 		this->enemyElementPosX = -1.07f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 1.15f;
+
+		this->waveElementPosX = -1.07f;
+		this->waveElementPosY = 0.0f;
+		this->waveElementPosZ = 1.05f;
 	}
 
 	else if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 800)
@@ -134,6 +143,10 @@ int GUIManager::initGUI(
 		this->enemyElementPosX = -1.15f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 1.3f;
+
+		this->waveElementPosX = -1.15f;
+		this->waveElementPosY = 0.0f;
+		this->waveElementPosZ = 1.2f;
 	}
 
 	else if (ARENADATA::GETarenaHeight() == 1000 && ARENADATA::GETarenaWidth() == 1500)
@@ -142,6 +155,10 @@ int GUIManager::initGUI(
 		this->enemyElementPosX = -1.0f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 0.95f;
+
+		this->waveElementPosX = -1.0f;
+		this->waveElementPosY = 0.0f;
+		this->waveElementPosZ = 0.85f;
 	}
 
 	else if (ARENADATA::GETarenaHeight() == 1600 && ARENADATA::GETarenaWidth() == 1400)
@@ -150,6 +167,10 @@ int GUIManager::initGUI(
 		this->enemyElementPosX = -1.1f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 1.13f;
+
+		this->waveElementPosX = -1.1f;
+		this->waveElementPosY = 0.0f;
+		this->waveElementPosZ = 1.03f;
 	}
 
 	else if (ARENADATA::GETarenaHeight() == 1200 && ARENADATA::GETarenaWidth() == 1200)
@@ -158,6 +179,10 @@ int GUIManager::initGUI(
 		this->enemyElementPosX = -1.05f;
 		this->enemyElementPosY = 0.0f;
 		this->enemyElementPosZ = 1.1f;
+
+		this->waveElementPosX = -1.05f;
+		this->waveElementPosY = 0.0f;
+		this->waveElementPosZ = 1.0f;
 	}
 
 //----------------------------\
@@ -450,6 +475,26 @@ void GUIManager::pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<
 	this->enemyElementRects.push_back(this->rect);
 }
 
+void GUIManager::pushWaveElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID)
+{
+	this->tempID = ID;
+
+	this->createGUIElement(
+		1.0f, 0.0f, 0.0f, 1.0f,
+		this->waveElementPosX, this->waveElementPosY, this->waveElementPosZ,
+		0.002f, 0.0f, 0.04f
+	);
+
+	this->waveElementPosX += this->separationDistance;
+
+	GUIObjects.push_back(this->object);
+	graphics.push_back(this->rect);
+
+	// Pushing to specific 'wave-only' lists
+	this->waveElementObjects.push_back(this->object);
+	this->waveElementRects.push_back(this->rect);
+}
+
 void GUIManager::popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics)
 {
 	GameObject* tempObjectHolder = this->enemyElementObjects.front();
@@ -465,10 +510,32 @@ void GUIManager::popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<G
 	delete tempObjectHolder;
 }
 
+void GUIManager::popWaveElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics)
+{
+	GameObject* tempObjectHolder = this->waveElementObjects.front();
+	GraphicsComponent* tempGraphicsHolder = this->waveElementRects.front();
+
+	this->waveElementObjects.pop_front();
+	this->waveElementRects.pop_front();
+
+	GUIObjects.remove(tempObjectHolder);
+	graphics.remove(tempGraphicsHolder);
+
+	tempObjectHolder->cleanUp();
+	delete tempObjectHolder;
+}
+
 void GUIManager::cleanUp()
 {
 	this->enemyElementObjects.clear();
 	this->enemyElementRects.clear();
+
+	this->enemyElementPosX = 0.0f;
+	this->enemyElementPosY = 0.0f;
+	this->enemyElementPosZ = 0.0f;
+
+	this->waveElementObjects.clear();
+	this->waveElementRects.clear();
 
 	this->enemyElementPosX = 0.0f;
 	this->enemyElementPosY = 0.0f;
