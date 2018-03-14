@@ -98,10 +98,10 @@ SpFireG1::SpFireG1(GameObject* owner) : SpFire(owner)
 {
 	// WHEN BALANCING, DONT FORGET THAT THERE IS A CAP ON PROJECTILES FOR THIS SPELL
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->setCoolDown(0.07f);
-	this->setCost(0.1f);
-	this->range = 150.0f;
-	this->damage = 10.0f;
+	this->setCoolDown(0.1f);
+	this->setCost(1.1f);
+	this->range = 250.0f;
+	this->damage = 30.0f;
 }
 
 SpFireG1::~SpFireG1()
@@ -118,26 +118,29 @@ bool SpFireG1::castSpell()
 		// For further info, if needed, see 'useEnergy()' description
 		if (this->actOwner->useEnergy(this->getCost()))
 		{
+			int flames = 4;
 			returnValue = true;
 
-			ProjProp props(10, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 300, this->range, false);
-
+			ProjProp props(20, XMFLOAT4(1.0f, 0.1f, 0.5f, 0.1f), 800, this->range, false);
+			
 			XMVECTOR direction = XMLoadFloat3(&this->actOwner->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };
-			
-			XMVECTOR leDir = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, -0.3f));
-			XMVECTOR riDir = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, 0.3f));
 
-			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)
-			)->setDirection(leDir);
-			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)
-			);
-			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50)
-			)->setDirection(riDir);
-			
+			float angle = 1.0f /*=2PI*/ / flames;
 
+			direction = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, - (2 * angle)));
+			for (int i = 0; i < flames; i++)
+			{
+				direction = XMVector3Rotate(direction, XMQuaternionRotationAxis(axis, angle));
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH1);
+				this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.2f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
+					->setDirection(direction);
+			}
+
+			if ((this->lessSound++ % 2) == 0)
+			{
+				Locator::getAudioManager()->play(SOUND::NAME::ABILITY1_GLYPH1);
+			}
 
 			this->setState(SPELLSTATE::COOLDOWN);
 

@@ -130,9 +130,9 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 SpBombG1::SpBombG1(GameObject* owner) : SpBomb(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->setCoolDown(this->getCoolDown() * 1.5f);
+	this->setCoolDown(this->getCoolDown() * 0.7f);
 	this->damage = 70.0f;
-	this->nrOfSplinters = 8;
+	this->nrOfSplinters = 16;
 }
 
 SpBombG1::~SpBombG1()
@@ -164,7 +164,7 @@ void SpBombG1::update()
 			// Set the projectiles to be the same as AutoAttack base
 			this->setName(NAME::AUTOATTACK);
 			this->insertGlyph(GLYPHTYPE::NONE);
-			ProjProp props(10, XMFLOAT4(0.3f, 0.1f, 0.3f, 0.1f), 500, 300, true);
+			ProjProp props(10, XMFLOAT4(0.3f, 0.1f, 0.1f, 0.1f), 900, 300, true);
 
 			XMVECTOR direction = XMLoadFloat3(&static_cast<Projectile*>(this->getOwner())->getDirection());
 			XMVECTOR axis = { 0.0f, 1.0f, 0.0f };

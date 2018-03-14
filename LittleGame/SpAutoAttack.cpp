@@ -7,7 +7,7 @@ SpAutoAttack::SpAutoAttack(GameObject* owner) : Spell(owner, NAME::AUTOATTACK)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 	
-	this->setCoolDown(0.3f);
+	this->setCoolDown(0.2f);
 	this->damage = 100.0f;
 	this->range = 1000.0f;
 	this->cost = 5;

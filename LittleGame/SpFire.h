@@ -30,6 +30,7 @@ protected:
 	float range = 0.0f;
 
 	float spinnValue = 0.0f;
+	int lessSound = 0;
 
 	int hits = 0;
 };
