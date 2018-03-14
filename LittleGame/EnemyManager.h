@@ -313,6 +313,7 @@ private:
 	int chargerCount = 0;
 	float timePassed = 0.0f;
 	float startTime = 0.0f;
+	bool waveElementRemoval = true;
 
 	bool ramp = false;
 	bool pulse = false;

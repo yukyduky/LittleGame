@@ -10,7 +10,7 @@ StatsHeader::StatsHeader()
 	this->stats.glyphs[4] = 0;
 
 	//Sets every enemyUpg to 0 aka NONE
-	this->stats.enemyUpg[0] = 0;;
+	this->stats.enemyUpg[0] = 0;
 	this->stats.enemyUpg[1] = 0;
 	this->stats.enemyUpg[2] = 0;
 	this->stats.enemyUpg[3] = 0;
@@ -63,7 +63,7 @@ void StatsHeader::resetStats()
 	this->stats.glyphs[4] = 0;
 
 	//Sets every enemyUpg to 0 aka NONE
-	this->stats.enemyUpg[0] = 0;;
+	this->stats.enemyUpg[0] = 0;
 	this->stats.enemyUpg[1] = 0;
 	this->stats.enemyUpg[2] = 0;
 	this->stats.enemyUpg[3] = 0;
