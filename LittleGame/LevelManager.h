@@ -155,7 +155,7 @@ private:
 	void LevelManager::createFallPatterns(std::vector<FloorFallData>& easy, std::vector<FloorFallData>& medium, std::vector<FloorFallData>& hard);
 
 public:
-	void selectArena();
+	void selectArena(int level);
 	/*--------<INFORMATION>--------
 	1. Creates the arena by calling the following private functions
 		createLevelWalls,

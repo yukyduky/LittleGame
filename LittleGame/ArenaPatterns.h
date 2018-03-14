@@ -65,7 +65,7 @@ public:
 	int GETmaxFloorNum();
 	void createWallPattern(int nr, WallData& pattern);
 	int GETmaxWallNum();
-	void createArenaData();
+	void createArenaData(int level);
 };
 
 

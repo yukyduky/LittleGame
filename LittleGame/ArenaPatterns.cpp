@@ -480,8 +480,14 @@ int ArenaPatterns::GETmaxWallNum()
 	return this->maxWallNum;
 }
 
-void ArenaPatterns::createArenaData() {
-	int nr = Locator::getRandomGenerator()->GenerateInt(0, this->maxArenaNum);
+void ArenaPatterns::createArenaData(int level) {
+	int nr;
+	if (level < 10) {
+		nr = Locator::getRandomGenerator()->GenerateInt(0, this->maxArenaNum);
+	}
+	else {
+		nr = 0;
+	}
 
 	// USE THIS if you want to try a SPECIFIC Arena
 	//nr = 0;

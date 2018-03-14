@@ -144,7 +144,13 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	int nrOfVerticalSquares = grid[0].size();
 	int nrOfHorizontalSquares = grid.size();
 	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
-	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
+	int caseNr;
+	if (Locator::getStatsHeader()->getStats().level < 10) {
+		caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
+	}
+	else {
+		caseNr = 2;
+	}
 	// USE THIS if you want to try a SPECIFIC wall pattern
 	//caseNr = 2;
 	this->arenaPatterns.createWallPattern(caseNr, wData);
@@ -287,8 +293,8 @@ void LevelManager::createFallPatterns(std::vector<FloorFallData>& easy, std::vec
 	this->arenaPatterns.createHardFloorPatterns(hard);
 }
 
-void LevelManager::selectArena() {
-	this->arenaPatterns.createArenaData();
+void LevelManager::selectArena(int level) {
+	this->arenaPatterns.createArenaData(level);
 }
 
 int LevelManager::initArena(int ID, int &staticPhysicsCount, GamePlayState &pGPS, 

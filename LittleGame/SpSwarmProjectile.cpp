@@ -52,6 +52,7 @@ void SpSwarmProjectile::upgrade(float modif)
 void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 {
 	OBJECTTYPE::TYPE type = target->getType();
+	float damage = this->damage * Locator::getGameTime()->getDeltaTime();
 	switch (type) {
 		case OBJECTTYPE::PLAYER: {
 			static_cast<ActorObject*>(target)->dealDmg(this->damage);

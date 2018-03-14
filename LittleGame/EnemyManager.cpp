@@ -506,7 +506,7 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float velocityMagnitude = 140.0f * speedModifier;
-	float immolationDamage = 10 * damageModifier;
+	float immolationDamage = 0.5f * damageModifier;
 	float attackCooldown = 0.5;
 	float attackRange = 70;
 	float hp = 100.0f * healthModifier;
