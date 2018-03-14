@@ -5,17 +5,17 @@
 #include "MenuState.h"
 #include "Locator.h"
 
-class StatisticsMenuState : public MenuState
+class MenuStatisticsState : public MenuState
 {
 public:
-	static StatisticsMenuState* getInstance();
+	static MenuStatisticsState* getInstance();
 
 	virtual void init();
 
 	Menu* initStatsMenu();
 private:
 
-	static StatisticsMenuState sStatisticsMenuState;
+	static MenuStatisticsState sStatisticsMenuState;
 
 };
 

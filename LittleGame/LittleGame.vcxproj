@@ -181,13 +181,13 @@
     <ClInclude Include="IncludeSpells.h" />
     <ClInclude Include="IRandomGeneration.h" />
     <ClInclude Include="IStatsHeader.h" />
-    <ClInclude Include="PauseMenuState.h" />
+    <ClInclude Include="MenuPauseState.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuObject.h" />
     <ClInclude Include="MenuState.h" />
     <ClInclude Include="RandomGeneration.h" />
     <ClInclude Include="RestartState.h" />
-    <ClInclude Include="RewardMenuState.h" />
+    <ClInclude Include="MenuRewardState.h" />
     <ClInclude Include="SpBomb.h" />
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EnemyManager.h" />
@@ -225,7 +225,7 @@
     <ClInclude Include="SpSwarmProjectile.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="StateManager.h" />
-    <ClInclude Include="StatisticsMenuState.h" />
+    <ClInclude Include="MenuStatisticsState.h" />
     <ClInclude Include="StatsHeader.h" />
     <ClInclude Include="SwarmerEnemyAttack.h" />
     <ClInclude Include="SwarmerOutsideState.h" />
@@ -263,7 +263,7 @@
     <ClCompile Include="GUIManager.cpp" />
     <ClCompile Include="HomeMenuState.cpp" />
     <ClCompile Include="IDHandler.cpp" />
-    <ClCompile Include="PauseMenuState.cpp" />
+    <ClCompile Include="MenuPauseState.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="MenuState.cpp" />
@@ -271,7 +271,7 @@
     <ClCompile Include="RandomGeneration.cpp" />
     <ClCompile Include="EnemyMovingState.cpp" />
     <ClCompile Include="RestartState.cpp" />
-    <ClCompile Include="RewardMenuState.cpp" />
+    <ClCompile Include="MenuRewardState.cpp" />
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="ArenaPatterns.cpp" />
@@ -303,7 +303,7 @@
     <ClCompile Include="SpFire.cpp" />
     <ClCompile Include="SpSwarmProjectile.cpp" />
     <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="StatisticsMenuState.cpp" />
+    <ClCompile Include="MenuStatisticsState.cpp" />
     <ClCompile Include="StatsHeader.cpp" />
     <ClCompile Include="SwarmerEnemyAttack.cpp" />
     <ClCompile Include="SwarmerSeekingState.cpp" />

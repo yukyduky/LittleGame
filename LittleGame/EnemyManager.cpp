@@ -20,7 +20,7 @@
 #include "SpNo.h"
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 //BOSS STATES
 #include "BossMoveToArenaState.h"
 #include "ChargerChannelingState.h"

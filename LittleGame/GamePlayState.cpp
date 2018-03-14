@@ -1,5 +1,5 @@
 #include "GamePlayState.h"
-#include "StatisticsMenuState.h"
+#include "MenuStatisticsState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "RectangleComponent.h"
@@ -17,7 +17,7 @@
 #include "StateManager.h"
 
 #include "IncludeSpells.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 
 
 
@@ -501,7 +501,7 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	//randomLevel = 1; 
+	//randomLevel = 2;
 	// TESTING ------------------------ 
 
 	if (Locator::getStatsHeader()->getStats().level < 10) {
@@ -530,7 +530,7 @@ void GamePlayState::init()
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->fallPatternCoolDown = 25.0;
 	this->playerSteppedOnBossTile = false;
-	RewardMenuState::getInstance()->provide(this->player1);
+	MenuRewardState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
@@ -637,13 +637,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
 			Locator::getD2D()->saveScreen();
-			StateManager::changeState(StatisticsMenuState::getInstance());
+			StateManager::changeState(MenuStatisticsState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			if (Locator::getStatsHeader()->getStats().level < 10)
 			{
 				//Sends the number of Lootboxes picked up druring the game
-				RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+				MenuRewardState::getInstance()->provide(this->nrOfPickedUpLoot);
 				// Change last so we've already done all of the changes.
 				StateManager::changeState(RestartState::getInstance());
 			}
@@ -651,7 +651,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			{
 				Locator::getStatsHeader()->completeGame();
 				Locator::getD2D()->saveScreen();
-				StateManager::changeState(StatisticsMenuState::getInstance());
+				StateManager::changeState(MenuStatisticsState::getInstance());
 			}
 		}
 

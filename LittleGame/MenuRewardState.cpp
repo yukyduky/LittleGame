@@ -1,12 +1,12 @@
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 #include "GameManager.h"
 #include "Button.h"
 #include "StateManager.h"
 //#include "Spell.h"
 
-RewardMenuState RewardMenuState::sRewardMenuState;
+MenuRewardState MenuRewardState::sRewardMenuState;
 
-WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
+WCHAR * MenuRewardState::getGlyphName(int name, int glyph)
 {
 	WCHAR* text = nullptr;
 
@@ -120,19 +120,19 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 	return text;
 }
 
-RewardMenuState * RewardMenuState::getInstance()
+MenuRewardState * MenuRewardState::getInstance()
 {
 	return &sRewardMenuState;
 }
 
-void RewardMenuState::init()
+void MenuRewardState::init()
 {	
 	MenuState::init();
 	this->displayMenu(this->initLootMenu());
 }
 
 
-Menu * RewardMenuState::initLootMenu()
+Menu * MenuRewardState::initLootMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -240,7 +240,7 @@ Menu * RewardMenuState::initLootMenu()
 	return menu;
 }
 
-Menu * RewardMenuState::initEnemyUpgradeMenu()
+Menu * MenuRewardState::initEnemyUpgradeMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -341,7 +341,7 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 	return menu;
 }
 
-Menu * RewardMenuState::initNextLevelMenu()
+Menu * MenuRewardState::initNextLevelMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -397,7 +397,7 @@ Menu * RewardMenuState::initNextLevelMenu()
 	return menu;
 }
 
-void RewardMenuState::provide(ActorObject * player)
+void MenuRewardState::provide(ActorObject * player)
 {
 	this->player = player;
 
@@ -407,7 +407,7 @@ void RewardMenuState::provide(ActorObject * player)
 	}
 }
 
-void RewardMenuState::startGame()
+void MenuRewardState::startGame()
 {
 	this->player->switchSpell();
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESUMEGAME);
