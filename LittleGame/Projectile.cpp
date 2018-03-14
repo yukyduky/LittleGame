@@ -317,12 +317,9 @@ void Projectile::update()
 
 	this->move();
 
-	if (this->spinn)
-	{
-		XMVECTOR dir = XMLoadFloat3(&this->moveDirection);
-		XMMATRIX rotM = XMLoadFloat4x4(&this->getRotationMatrix());
-		this->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->rangeCounter)));
-	}
+	//if (this->spinn)
+	//{
+	//}
 
 	/*
 	this->rangeCounter++;

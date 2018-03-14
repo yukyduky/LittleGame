@@ -29,6 +29,8 @@ protected:
 	// Travel-range of spell
 	float range = 0.0f;
 
+	float spinnValue = 0.0f;
+
 	int hits = 0;
 };
 

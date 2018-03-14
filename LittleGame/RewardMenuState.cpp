@@ -322,21 +322,21 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 
 	start.y = 380.0f;
 
-	nextID = this->newID();
-	text = L"End to stats";
-	pButton = new Button(this, nextID,
-		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::GOSTATS);
-	menu->addButton(pButton);
+	//nextID = this->newID();
+	//text = L"End to stats";
+	//pButton = new Button(this, nextID,
+	//	{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
+	//	text, BEHAVIOR::GOSTATS);
+	//menu->addButton(pButton);
 
-	start.y += 120.0f;
+	//start.y += 120.0f;
 
-	nextID = this->newID();
-	text = L"Quit";
-	pButton = new Button(this, nextID,
-		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::QUIT);
-	menu->addButton(pButton);
+	//nextID = this->newID();
+	//text = L"Quit";
+	//pButton = new Button(this, nextID,
+	//	{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
+	//	text, BEHAVIOR::QUIT);
+	//menu->addButton(pButton);
 
 	return menu;
 }
