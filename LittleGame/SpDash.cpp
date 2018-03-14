@@ -178,6 +178,7 @@ bool SpDashG1::castSpell()
 
 			this->getOwner()->setPosition(newPos);
 			
+			
 			this->actOwner->dealDmg(-this->damage);
 
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITY3_GLYPH1);
