@@ -656,7 +656,6 @@ void GamePlayState::update(GameManager * gm)
 		dt = 0;
 	this->counter += this->dt;
 	this->genCounter += this->dt;
-	this->GUI.updateGUI(this->player1);
 	
 	if (Locator::getStatsHeader()->getStats().level < 10) {
 		if (this->counter > this->fallPatternCoolDown) {
@@ -721,6 +720,7 @@ void GamePlayState::update(GameManager * gm)
 	this->checkPlayerTileStatus();
 	this->enemyManager.update(&this->GUI);
 	this->checkCollisions();
+	this->GUI.updateGUI(this->player1);
 }
 
 void GamePlayState::render(GameManager * gm) 
@@ -773,7 +773,7 @@ void GamePlayState::initPlayer()
 	float topSpeed = 11.0f;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 100.0f);
+	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);

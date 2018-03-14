@@ -63,6 +63,7 @@ public:
 	void update();
 private:
 	bool trip = false;
+	bool detonationStart = false;
 };
 
 // Blackhole 

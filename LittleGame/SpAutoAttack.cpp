@@ -31,7 +31,7 @@ bool SpAutoAttack::castSpell()
 
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
-		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITY0_GLYPH0);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
@@ -110,7 +110,7 @@ bool SpAutoAttackG1::castSpell()
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 			50))->setPosition(this->getOwner()->GETPosition() + distance);
 
-		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITY0_GLYPH0);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
@@ -126,7 +126,7 @@ SpAutoAttackG2::SpAutoAttackG2(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCoolDown(this->getCoolDown() * 3.0f);
-	this->damage = (this->damage * 5.0f);
+	this->damage = (this->damage * 2.5f);
 	this->cost *= 5.0f;
 }
 
@@ -151,7 +151,7 @@ bool SpAutoAttackG2::castSpell()
 		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0001f, 0.0001f),
 			50));
 
-		Locator::getAudioManager()->play(SOUND::NAME::BEEP1);
+		Locator::getAudioManager()->play(SOUND::NAME::ABILITY0_GLYPH2);
 
 		this->setState(SPELLSTATE::COOLDOWN);
 	}
