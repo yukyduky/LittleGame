@@ -29,6 +29,7 @@ void BossMoveToArenaState::executeBehavior()
 	// If we've reached the arena, change state.
 	if (bossPos.x <= ARENADATA::GETarenaWidth()) {
 		this->pHead->setPosition(XMFLOAT3(ARENADATA::GETarenaWidth(), bossPos.y, bossPos.z));
+		this->pHead->setkineticVector(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		EnemyState* bossBattleIntroState = new BossBattleIntroState(
 			*this->pHead, *this->pBrain, *this->pGPS, this->bossScale
 		);

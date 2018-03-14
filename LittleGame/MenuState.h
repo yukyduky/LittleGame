@@ -21,6 +21,8 @@ protected:
 	D2D* objD2D;
 private:
 
+	std::array<bool, 3> keyWasPressed;
+
 	int ID = 0;
 
 	bool quit;

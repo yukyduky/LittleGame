@@ -10,7 +10,7 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 	this->setCost(10);
 	this->setCoolDown(0.4f);
 	this->damage = 50;
-	this->range = 700;
+	this->range = 1000;
 	this->spinnValue = 0.0f;
 }
 
@@ -194,7 +194,7 @@ bool SpFireG2::castSpell()
 
 void SpFireG2::update()
 {
-	this->size += 3.0f;
+	this->size += 70.0f * Locator::getGameTime()->getDeltaTime();
 	XMMATRIX scaleM = XMMatrixScaling(this->size, this->size, this->size);
 	this->owner->GETphysicsComponent()->updateBoundingArea(this->size);
 	this->owner->SETscaleMatrix(scaleM);

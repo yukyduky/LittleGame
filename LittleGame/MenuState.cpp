@@ -14,6 +14,22 @@ using namespace DirectX::SimpleMath;
 
 void MenuState::init() 
 {
+	for (auto &i : this->keyWasPressed)
+	{
+		i = false;
+	}
+	if (GetAsyncKeyState(VK_UP))
+	{
+		this->keyWasPressed[0] = true;
+	}
+	if (GetAsyncKeyState(VK_DOWN))
+	{
+		this->keyWasPressed[1] = true;
+	}
+	if (GetAsyncKeyState(VK_SPACE))
+	{
+		this->keyWasPressed[2] = true;
+	}
 }
 
 void MenuState::cleanUp()
@@ -47,24 +63,37 @@ void MenuState::handleEvents(GameManager * gm) {
 		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
+		else if (msg.message == WM_KEYDOWN)
+		{
+			if ((msg.wParam == VK_UP || msg.wParam == 0x57) && !this->keyWasPressed[0])
+			{
+				this->keyWasPressed[0] = true;
+				this->currMenu->goUp();
+			}
+			else if ((msg.wParam == VK_DOWN || msg.wParam == 0x53) && !this->keyWasPressed[1])
+			{
+				this->keyWasPressed[1] = true;
+				this->currMenu->goDown();
+			}
+			else if ((msg.wParam == VK_RETURN || msg.wParam == VK_SPACE) && !this->keyWasPressed[2])
+			{
+				this->keyWasPressed[2] = true;
+				this->currMenu->pressButton();
+			}
+		}
 		else if (msg.message == WM_KEYUP)
 		{
-			switch (msg.wParam)
+			if ((msg.wParam == VK_UP || msg.wParam == 0x57) && this->keyWasPressed[0])
 			{
-			case VK_UP:
-			case 0x57:
-				this->currMenu->goUp();
-				break;
-			case VK_DOWN:
-			case 0x53:
-				this->currMenu->goDown();
-				break;
-			case VK_RETURN:
-			case VK_SPACE:
-				this->currMenu->pressButton();
-				break;
-			default:
-				break;
+				this->keyWasPressed[0] = false;
+			}
+			else if ((msg.wParam == VK_DOWN || msg.wParam == 0x53) && this->keyWasPressed[1])
+			{
+				this->keyWasPressed[1] = false;
+			}
+			else if ((msg.wParam == VK_RETURN || msg.wParam == VK_SPACE) && this->keyWasPressed[2])
+			{
+				this->keyWasPressed[2] = false;
 			}
 		}
 
@@ -248,16 +277,16 @@ void MenuState::addLoadOut(Menu * menu)
 		switch ((ENEMYUPGRADE)eneUpg)
 		{
 		case ENEMYUPGRADE::DAMAGE:
-			textStr = L"Damage: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
+			textStr = L"Damage:\n" + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
 			break;
 		case ENEMYUPGRADE::HEALTH:
-			textStr = L"Health: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
+			textStr = L"Health:\n" + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
 			break;
 		case ENEMYUPGRADE::AMOUNT:
-			textStr = L"Amount: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
+			textStr = L"Amount:\n" + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
 			break;
 		case ENEMYUPGRADE::SPEED:
-			textStr = L"Speed: " + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
+			textStr = L"Speed:\n" + std::to_wstring(Locator::getStatsHeader()->getStats().enemyUpg[eneUpg]);
 			break;
 		default:
 			textStr = L"ERROR";
@@ -266,7 +295,7 @@ void MenuState::addLoadOut(Menu * menu)
 
 		//Glyph desc
 		object = new MenuObject(this->newID(),
-			{ -250.0f, eneUpg * 110.0f, 100.0f,100.0f }, color,
+			{ -255.0f, eneUpg * 110.0f, 110.0f,100.0f }, color,
 			textStr);
 		menu->addQuad(object);
 	}
