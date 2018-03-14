@@ -472,8 +472,6 @@ void GamePlayState::generatorDischarge(Index index)
 
 void GamePlayState::init() 
 {
-	Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_START);
-
 	Locator::getStatsHeader()->addLevel();
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
@@ -512,7 +510,7 @@ void GamePlayState::init()
 	// TESTING ------------------------ 
 
 	if ( Locator::getStatsHeader()->getStats().level < 10 ) {
-		switch (randomLevel)
+		switch (1)
 		{
 		case 1:
 			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);

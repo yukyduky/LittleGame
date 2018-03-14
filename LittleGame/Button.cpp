@@ -96,6 +96,7 @@ void Button::onPress()
 	switch (this->behavior)
 	{
 	case BEHAVIOR::GOSTART:
+		Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_START);
 		this->pMS->displayMenu(static_cast<MenuPauseState*>(this->pMS)->initStartMenu());
 		break;
 	case BEHAVIOR::GOSTART_HOME:
@@ -111,6 +112,7 @@ void Button::onPress()
 		this->pMS->resumeGame();
 		break;
 	case BEHAVIOR::STARTGAME:
+		Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_START);
 		this->pMS->startGame();
 		break;
 	case BEHAVIOR::RESTARTGAME:
@@ -173,6 +175,7 @@ void Button::onPress()
 		this->pMS->displayMenu(static_cast<MenuRewardState*>(this->pMS)->initNextLevelMenu());
 		break;
 	case BEHAVIOR::REWSTARTGAME:
+		Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_START);
 		static_cast<MenuRewardState*>(this->pMS)->startGame();
 		break;
 

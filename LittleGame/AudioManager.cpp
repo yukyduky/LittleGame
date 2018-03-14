@@ -37,6 +37,7 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/8BIT_Death.wav"), SOUND::EIGHTBIT_DEATH);
 	error += this->loadSound(std::string("include/Sound/8BIT_Start.wav"), SOUND::EIGHTBIT_START);
 	error += this->loadSound(std::string("include/Sound/8BIT_LevelEnd.wav"), SOUND::EIGHTBIT_LEVELEND);
+	error += this->loadSound(std::string("include/Sound/8BIT_NextWave.wav"), SOUND::EIGHTBIT_NEXTWAVE);
 	
 	error += this->loadSound(std::string("include/Sound/TriangleSlice.wav"), SOUND::TRIANGLESLICE);
 
