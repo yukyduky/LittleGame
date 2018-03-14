@@ -530,8 +530,8 @@ void ActorObject::selectAbility4()
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[4]->castSpell();
 
-		this->selectedSpell = this->spells[4];
-		this->selectedSpellIntValue = 4;
+		//this->selectedSpell = this->spells[4];
+		//this->selectedSpellIntValue = 4;
 	}
 	else {
 
@@ -581,6 +581,10 @@ void ActorObject::dealDmg(float damag)
 	}
 	else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
 	{
+		if (this->hp > this->hpMAX)
+		{
+			this->hp = this->hpMAX;
+		}
 		Locator::getStatsHeader()->addDamageTaken(dmg);
 	}
 

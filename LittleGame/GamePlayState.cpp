@@ -472,11 +472,15 @@ void GamePlayState::generatorDischarge(Index index)
 
 void GamePlayState::init() 
 {
+	Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_START);
+
 	Locator::getStatsHeader()->addLevel();
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
-	this->lm.selectArena();
+	this->lm.selectArena(Locator::getStatsHeader()->getStats().level);
+//	this->lm.selectArena(10);
+
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
@@ -504,12 +508,11 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	//randomLevel = 2;
+	//randomLevel = 3;
 	// TESTING ------------------------ 
 
-	if (Locator::getStatsHeader()->getStats().level < 10) {
-		switch (2)
-
+	if ( Locator::getStatsHeader()->getStats().level < 10 ) {
+		switch (randomLevel)
 		{
 		case 1:
 			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
@@ -640,6 +643,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_DEATH);
 			Locator::getD2D()->saveScreen();
 			StateManager::changeState(MenuStatisticsState::getInstance());
 		}

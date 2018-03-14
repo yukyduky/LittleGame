@@ -52,10 +52,20 @@ void SpSwarmProjectile::upgrade(float modif)
 void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 {
 	OBJECTTYPE::TYPE type = target->getType();
+	float damage = this->damage * Locator::getGameTime()->getDeltaTime();
 	switch (type) {
 		case OBJECTTYPE::PLAYER: {
 			static_cast<ActorObject*>(target)->dealDmg(this->damage);
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
+			Locator::getAudioManager()->play(SOUND::CLICK);
+			/*if (Locator::getRandomGenerator()->GenerateInt(0, 1))
+			{
+				Locator::getAudioManager()->play(SOUND::CLICK);
+			}
+			else
+			{
+				Locator::getAudioManager()->play(SOUND::METAL_1);
+			}*/
 			break;
 		};
 		case OBJECTTYPE::INDESTRUCTIBLE: {

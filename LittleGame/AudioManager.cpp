@@ -12,6 +12,9 @@ int AudioManager::init()
 
 	error += this->loadSound(std::string("include/Sound/ahem_x.wav"), SOUND::AHEM);
 	error += this->loadSound(std::string("include/Sound/gulp_x.wav"), SOUND::GULP);
+	error += this->loadSound(std::string("include/Sound/hammer_anvil.wav"), SOUND::METAL_0);
+	error += this->loadSound(std::string("include/Sound/metal_crunch.wav"), SOUND::METAL_1);
+	error += this->loadSound(std::string("include/Sound/typewriter_click.wav"), SOUND::CLICK);
 
 	error += this->loadSound(std::string("include/Sound/Ability0_Glyph0.wav"), SOUND::ABILITY0_GLYPH0);
 	error += this->loadSound(std::string("include/Sound/Ability0_Glyph2.wav"), SOUND::ABILITY0_GLYPH2);
@@ -30,6 +33,10 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/Ability4_Glyph0.wav"), SOUND::ABILITY4_GLYPH0);
 	error += this->loadSound(std::string("include/Sound/Ability4_Glyph1.wav"), SOUND::ABILITY4_GLYPH1);
 	error += this->loadSound(std::string("include/Sound/Ability4_Glyph2.wav"), SOUND::ABILITY4_GLYPH2);
+
+	error += this->loadSound(std::string("include/Sound/8BIT_Death.wav"), SOUND::EIGHTBIT_DEATH);
+	error += this->loadSound(std::string("include/Sound/8BIT_Start.wav"), SOUND::EIGHTBIT_START);
+	error += this->loadSound(std::string("include/Sound/8BIT_LevelEnd.wav"), SOUND::EIGHTBIT_LEVELEND);
 	
 	error += this->loadSound(std::string("include/Sound/TriangleSlice.wav"), SOUND::TRIANGLESLICE);
 
