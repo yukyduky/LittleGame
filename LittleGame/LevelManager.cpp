@@ -146,7 +146,7 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
 	int caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
 	// USE THIS if you want to try a SPECIFIC wall pattern
-	caseNr = 2;
+	//caseNr = 2;
 	this->arenaPatterns.createWallPattern(caseNr, wData);
 	
 	//Create pillars in the corners
