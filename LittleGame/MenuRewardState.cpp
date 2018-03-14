@@ -256,7 +256,7 @@ Menu * MenuRewardState::initEnemyUpgradeMenu()
 	object = new MenuObject(this->newID(),
 		{ 0.0f,0.0f, 400.0f,700.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
-	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 6";
 	nextID = this->newID();
 	object = new MenuObject(nextID,
 		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,

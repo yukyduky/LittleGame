@@ -32,7 +32,7 @@ Menu * MenuStatisticsState::initStatsMenu()
 
 	if (Locator::getStatsHeader()->gameCompleted()) // Won
 	{
-		textStr = L"VICTORY! \nYou completed all 10 levels!";
+		textStr = L"VICTORY! \nYou completed all 6 levels!";
 		nextID = this->newID();
 		object = new MenuObject(nextID,
 			{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
@@ -41,7 +41,7 @@ Menu * MenuStatisticsState::initStatsMenu()
 	}
 	else // Lost
 	{
-		textStr = L"GAME OVER! \n Last level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+		textStr = L"GAME OVER! \n Last level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 6";
 		nextID = this->newID();
 		object = new MenuObject(nextID,
 			{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,
