@@ -55,6 +55,7 @@ private:
 	vColor colorBack = { 0.25f, 0.25f, 0.25f, 0.0f };
 	vColor colorBackSelected = { 1.0f, 1.0f, 0.9f, 1.0f };
 
+	float enemyElementPosXMax = 0.0f;
 	float enemyElementPosX = 0.0f;
 	float enemyElementPosY = 0.0f;
 	float enemyElementPosZ = 0.0f;

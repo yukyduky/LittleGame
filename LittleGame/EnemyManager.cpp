@@ -8,7 +8,6 @@
 #include "TriangleComponent.h"
 #include "AIComponent.h"
 #include "EnemyAttackComponent.h"
-#include "ImmolationEnemyAttack.h"
 #include "EnemyAttackingState.h"
 #include "EnemyMovingState.h"
 #include "StateManager.h"
@@ -462,15 +461,19 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
 	spawnPos = generatedPositions[0];
 	openingPos = generatedPositions[1];
+	float damageModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[0] * 0.25f);
+	float healthModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[1] * 0.25f);
+	float speedModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[3] * 0.25f);
 
-	float velocityMagnitude = 100.0f;//180.0f;
-	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 1.0f);
+	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float immolationDamage = 1.0f;
-	float attackCooldown = 0.5f;
-	float attackRange = 70.0f;
-	float hp = 100.0f;
-	float topSpeed = 8.0f; //12.0f;
+
+	float velocityMagnitude = 140.0f * speedModifier;
+	float immolationDamage = 10 * damageModifier;
+	float attackCooldown = 0.5;
+	float attackRange = 70;
+	float hp = 100.0f * healthModifier;
+	float topSpeed = 8.0f * speedModifier;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -522,18 +525,20 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
 	spawnPos = generatedPositions[0];
 	openingPos = generatedPositions[1];
+	float damageModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[0] * 0.25f);
+	float healthModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[1] * 0.25f);
+	float speedModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[3] * 0.25f);
 
-
-	float velocity = 100;
 	XMFLOAT4 color(0.0f, 1.0, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float topSpeed = 14;
-	float projectileDamage = 8.0f;
+	float velocity = 100.0f * speedModifier;
+	float topSpeed = 14.0f * speedModifier;
+	float projectileDamage = 8.0f * damageModifier;
 	float attackCooldown = 0.5f;
 	float projectileRange = 200.0f;
 	float attackRange = 500.0f;
-	float hp = 100.0f;
+	float hp = 200.0f * healthModifier;
 
 	/// A T T A C H M E N T
 	// OBJECT
@@ -586,19 +591,19 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	openingPos = generatedPositions[1];
 	float damageModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[0] * 0.25f);
 	float healthModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[1] * 0.25f);
-	float sppedModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[3] * 0.25f);
+	float speedModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[3] * 0.25f);
 
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float projectileDamage = 8.0f * damageModifier;
-	float attackCooldown = 3.0f;
-	float projectileRange = 250.0f;
-	float attackRange = 200.0f;
+	float attackCooldown = 0.5f;
+	float projectileRange = 700.0f;
+	float attackRange = -1.0f;
 	float hp = 200.0f * healthModifier;
 
-	float velocityMagnitude = 500.0f * sppedModifier;
-	float topSpeed = 14.0f * sppedModifier;
+	float velocityMagnitude = 500.0f * speedModifier;
+	float topSpeed = 14.0f * speedModifier;
 
 	// OBJECT
 	enemyObject = new EnemyObject(

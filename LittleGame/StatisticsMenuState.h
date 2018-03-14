@@ -13,7 +13,6 @@ public:
 	virtual void init();
 
 	Menu* initStatsMenu();
-
 private:
 
 	static StatisticsMenuState sStatisticsMenuState;

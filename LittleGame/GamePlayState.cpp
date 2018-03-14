@@ -618,16 +618,23 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
-			StateManager::changeState(StatisticsMenuState::getInstance());
 			Locator::getD2D()->saveScreen();
+			StateManager::changeState(StatisticsMenuState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			//Sends the number of Lootboxes picked up druring the game
-			RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
-
-
-			// Change last so we've already done all of the changes.
-			StateManager::changeState(RestartState::getInstance());
+			if (Locator::getStatsHeader()->getStats().level < 10)
+			{
+				//Sends the number of Lootboxes picked up druring the game
+				RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+				// Change last so we've already done all of the changes.
+				StateManager::changeState(RestartState::getInstance());
+			}
+			else if (Locator::getStatsHeader()->getStats().level == 10)
+			{
+				Locator::getStatsHeader()->completeGame();
+				Locator::getD2D()->saveScreen();
+				StateManager::changeState(StatisticsMenuState::getInstance());
+			}
 		}
 
 		//else if (globalmsg == GLOBALMESSAGES::ENEMYDIED)
@@ -649,7 +656,6 @@ void GamePlayState::update(GameManager * gm)
 		dt = 0;
 	this->counter += this->dt;
 	this->genCounter += this->dt;
-	this->GUI.updateGUI(this->player1);
 	
 	if (Locator::getStatsHeader()->getStats().level < 10) {
 		if (this->counter > this->fallPatternCoolDown) {
@@ -714,6 +720,7 @@ void GamePlayState::update(GameManager * gm)
 	this->checkPlayerTileStatus();
 	this->enemyManager.update(&this->GUI);
 	this->checkCollisions();
+	this->GUI.updateGUI(this->player1);
 }
 
 void GamePlayState::render(GameManager * gm) 
