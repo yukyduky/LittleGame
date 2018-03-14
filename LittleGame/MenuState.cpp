@@ -101,19 +101,6 @@ void MenuState::handleEvents(GameManager * gm) {
 		DispatchMessage(&msg);
 	}
 
-	/*if ((GetAsyncKeyState(0x26) & 0x26))
-	{
-		this->currMenu->goUp();
-	}
-	else if ((GetAsyncKeyState(VK_DOWN) & VK_DOWN) || (GetAsyncKeyState(0x53) & 0x53))
-	{
-		this->currMenu->goDown();
-	}
-	else if ((GetAsyncKeyState(VK_RETURN) & VK_RETURN) || (GetAsyncKeyState(VK_SPACE) & VK_SPACE))
-	{
-		this->currMenu->pressButton();
-	}*/
-
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::STARTGAME) {
 			StateManager::changeState(GamePlayState::getInstance());
