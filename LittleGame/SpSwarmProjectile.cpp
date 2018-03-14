@@ -56,6 +56,15 @@ void SpSwarmProjectile::collision(GameObject* target, Projectile* proj)
 		case OBJECTTYPE::PLAYER: {
 			static_cast<ActorObject*>(target)->dealDmg(this->damage);
 			proj->setState(OBJECTSTATE::TYPE::DEAD);
+			Locator::getAudioManager()->play(SOUND::CLICK);
+			/*if (Locator::getRandomGenerator()->GenerateInt(0, 1))
+			{
+				Locator::getAudioManager()->play(SOUND::CLICK);
+			}
+			else
+			{
+				Locator::getAudioManager()->play(SOUND::METAL_1);
+			}*/
 			break;
 		};
 		case OBJECTTYPE::INDESTRUCTIBLE: {
