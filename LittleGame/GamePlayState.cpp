@@ -338,6 +338,7 @@ void GamePlayState::updateFloor()
 	}
 
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	/*
 	float pulseVelocity = 1000.0f * dt;
 
 	for (int i = 0; i < this->gridPulsePoints[0].size(); i++)
@@ -359,6 +360,23 @@ void GamePlayState::updateFloor()
 		if (this->gridPulsePoints[1][i].x > ARENADATA::GETarenaWidth())
 		{
 			this->gridPulsePoints[1][i].x = this->gridPulsePoints[1][i].x - ARENADATA::GETarenaWidth();
+		}
+	}*/
+
+	this->pulseTime += dt;
+
+	if (this->pulseTime >= 0.4f)
+	{
+		this->pulseTime = 0.0f;
+
+		for (int i = 0; i < gridPulsePoints[0].size(); i++)
+		{
+			gridPulsePoints[0][i].y = rand() % ARENADATA::GETarenaHeight();
+		}
+
+		for (int i = 0; i < gridPulsePoints[1].size(); i++)
+		{
+			gridPulsePoints[1][i].x = rand() % ARENADATA::GETarenaWidth();
 		}
 	}
 }
@@ -456,6 +474,7 @@ void GamePlayState::init()
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
 	this->lm.selectArena();
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->lights);
@@ -467,7 +486,6 @@ void GamePlayState::init()
 		this->GUIObjects,
 		this->graphics
 	);
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
