@@ -52,7 +52,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
 	this->spawnInterval = (0.35f - (0.01f * currentLevelNumber));
-	this->waveInterval = (10.1f - (0.4f * currentLevelNumber));
+	this->waveInterval = (10.1f - (0.3f * currentLevelNumber));
 	if (this->waveInterval < 0.0f)
 		this->waveInterval = 0.0f;
 
@@ -79,7 +79,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	if (currentLevelNumber >= 2)
 	{
 		for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
-			this->currentWaveSwarmerCount.at(i) = static_cast<int>((this->swarmerCount + (i * 0.3)));
+			this->currentWaveSwarmerCount.at(i) = static_cast<int>((this->swarmerCount + (i * 0.2)));
 	}
 
 	else
@@ -99,7 +99,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	if (currentLevelNumber >= 3)
 	{
 		for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
-			this->currentWaveChargerCount.at(i) = (this->chargerCount + (i * 2));
+			this->currentWaveChargerCount.at(i) = static_cast<int>((this->chargerCount + (i * 0.2)));
 	}
 
 	else

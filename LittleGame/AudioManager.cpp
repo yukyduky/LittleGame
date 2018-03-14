@@ -53,16 +53,6 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_10.wav"), SOUND::ENEMYATTACK_10);
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_11.wav"), SOUND::ENEMYATTACK_11);
 
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_1.wav"), SOUND::ATTACKGRUNT_1);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_2.wav"), SOUND::ATTACKGRUNT_2);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_3.wav"), SOUND::ATTACKGRUNT_3);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_4.wav"), SOUND::ATTACKGRUNT_4);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_5.wav"), SOUND::ATTACKGRUNT_5);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_6.wav"), SOUND::ATTACKGRUNT_6);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_7.wav"), SOUND::ATTACKGRUNT_7);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_8.wav"), SOUND::ATTACKGRUNT_8);
-	error += this->loadSound(std::string("include/Sound/AttackGrunt_9.wav"), SOUND::ATTACKGRUNT_9);
-
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_1.wav"), SOUND::ENEMYDEATH_1);
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_2.wav"), SOUND::ENEMYDEATH_2);
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_3.wav"), SOUND::ENEMYDEATH_3);
