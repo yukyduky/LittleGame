@@ -509,7 +509,7 @@ void GamePlayState::init()
 	//randomLevel = 3;
 	// TESTING ------------------------ 
 
-	if ( Locator::getStatsHeader()->getStats().level < 10 ) {
+	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
 		switch (1)
 		{
 		case 1:

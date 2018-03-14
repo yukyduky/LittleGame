@@ -482,7 +482,7 @@ int ArenaPatterns::GETmaxWallNum()
 
 void ArenaPatterns::createArenaData(int level) {
 	int nr;
-	if (level < 10) {
+	if (level < 6) {
 		nr = Locator::getRandomGenerator()->GenerateInt(0, this->maxArenaNum);
 	}
 	else {
@@ -502,8 +502,8 @@ void ArenaPatterns::createArenaData(int level) {
 		ARENADATA::SETsquareSize(50);
 		break;
 	case 1:
-		ARENADATA::SETarenaHeight(1000);
-		ARENADATA::SETarenaWidth(1000);
+		ARENADATA::SETarenaHeight(1400);
+		ARENADATA::SETarenaWidth(1400);
 		ARENADATA::SETheightOfWall(2);
 		ARENADATA::SETlengthOfWall(1);
 		ARENADATA::SETsquareSize(50);
@@ -530,8 +530,8 @@ void ArenaPatterns::createArenaData(int level) {
 		ARENADATA::SETsquareSize(50);
 		break;
 	case 5:
-		ARENADATA::SETarenaHeight(1200);
-		ARENADATA::SETarenaWidth(1200);
+		ARENADATA::SETarenaHeight(1500);
+		ARENADATA::SETarenaWidth(1500);
 		ARENADATA::SETheightOfWall(2);
 		ARENADATA::SETlengthOfWall(1);
 		ARENADATA::SETsquareSize(50);

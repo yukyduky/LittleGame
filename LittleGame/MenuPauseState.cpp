@@ -88,7 +88,7 @@ Menu* MenuPauseState::initStartMenu()
 	nextID = this->newID();
 	object = new MenuObject(nextID);
 	menu->addQuad(object);
-	textStr = L"Current level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+	textStr = L"Current level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 6";
 	nextID = this->newID();
 	object = new MenuObject(nextID,
 		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,

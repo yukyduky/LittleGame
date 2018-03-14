@@ -592,7 +592,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 
 	float velocity = 100.0f * speedModifier;
 	float topSpeed = 14.0f * speedModifier;
-	float projectileDamage = 8.0f * damageModifier;
+	float projectileDamage = 4.0f * damageModifier;
 	float attackCooldown = 0.5f;
 	float projectileRange = 200.0f;
 	float attackRange = 500.0f;
@@ -615,7 +615,7 @@ EnemyObject * EnemyManager::createCharger(enemySpawnPositions spawnPosVectors)
 	// STATES
 	float chargeUpTime = 5.0f;
 	float maxSpinSpeed = 60.0f;
-	float collisionDamage = 30.0f;
+	float collisionDamage = 10.0f;
 	moveState = new ChargerOutsideState(*enemyObject, *aiComponent, openingPos, chargeUpTime, maxSpinSpeed, collisionDamage);
 
 	// Make the enemy inactive
@@ -654,7 +654,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float projectileDamage = 8.0f * damageModifier;
+	float projectileDamage = 4.0f * damageModifier;
 	float attackCooldown = 0.5f;
 	float projectileRange = 700.0f;
 	float attackRange = -1.0f;

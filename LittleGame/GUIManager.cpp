@@ -125,7 +125,7 @@ int GUIManager::initGUI(
 		this->waveElementPosZ = 1.0f;
 	}
 
-	else if (ARENADATA::GETarenaHeight() == 1000 && ARENADATA::GETarenaWidth() == 1000)
+	else if (ARENADATA::GETarenaHeight() == 1400 && ARENADATA::GETarenaWidth() == 1400)
 	{
 		this->enemyElementPosXMax = 1.07f;
 		this->enemyElementPosX = -1.07f;
@@ -173,7 +173,7 @@ int GUIManager::initGUI(
 		this->waveElementPosZ = 1.03f;
 	}
 
-	else if (ARENADATA::GETarenaHeight() == 1200 && ARENADATA::GETarenaWidth() == 1200)
+	else if (ARENADATA::GETarenaHeight() == 1500 && ARENADATA::GETarenaWidth() == 1500)
 	{
 		this->enemyElementPosXMax = 1.05f;
 		this->enemyElementPosX = -1.05f;
