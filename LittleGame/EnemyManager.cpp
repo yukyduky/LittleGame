@@ -601,8 +601,8 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 
 	float projectileDamage = 8.0f * damageModifier;
 	float attackCooldown = 0.5f;
-	float projectileRange = 200.0f;
-	float attackRange = 500.0f;
+	float projectileRange = 700.0f;
+	float attackRange = -1.0f;
 	float hp = 200.0f * healthModifier;
 
 	float velocityMagnitude = 500.0f * speedModifier;
