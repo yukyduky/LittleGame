@@ -148,7 +148,7 @@ SpBuffG2::SpBuffG2(GameObject* owner) :  SpBuff(owner)
 	this->range = 300.0f;
 
 	this->duration = 3.0f;
-	this->setCoolDown(15.0f);
+	this->setCoolDown(10.0f);
 	this->timeSC = 0.0f;
 }
 

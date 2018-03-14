@@ -51,8 +51,8 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	int currentLevelNumber = Locator::getStatsHeader()->getStats().level;
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
-	this->spawnInterval = (0.20f - (0.01f * currentLevelNumber));
-	this->waveInterval = (5.1f - (0.4f * currentLevelNumber));
+	this->spawnInterval = (0.35f - (0.01f * currentLevelNumber));
+	this->waveInterval = (10.1f - (0.4f * currentLevelNumber));
 	if (this->waveInterval < 0.0f)
 		this->waveInterval = 0.0f;
 
