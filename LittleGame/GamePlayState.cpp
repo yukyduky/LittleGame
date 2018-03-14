@@ -384,12 +384,15 @@ void GamePlayState::checkPlayerTileStatus()
 				break;
 			case TILESTATE::STATE::HEATED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::HEATED);
+				Locator::getAudioManager()->play(SOUND::HEATEDEFFECT);
 				break;
 			case TILESTATE::STATE::COOLED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::COOLED);
+				Locator::getAudioManager()->play(SOUND::SLOWEFFECT);
 				break;
 			case TILESTATE::STATE::ELECTRIFIED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+				Locator::getAudioManager()->play(SOUND::ELECTRIFIEDEFFECT);
 				break;
 			case TILESTATE::STATE::BOSSTILE:
 				this->playerSteppedOnBossTile = true;
@@ -700,6 +703,7 @@ void GamePlayState::update(GameManager * gm)
 				this->GUI.popEnemyElement(this->GUIObjects, this->graphics);
 
 			else if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
+				Locator::getAudioManager()->play(SOUND::GENERATORDESTROYED);
 				genPos = (*it)->GETPosition();
 				genIndex = this->lm.findTileIndexFromPos(XMFLOAT2(genPos.x, genPos.z));
 				for (int i = 0; i < this->genIndex.size(); i++) {

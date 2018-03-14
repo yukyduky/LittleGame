@@ -546,6 +546,7 @@ void CollisionHandler::collisionGeneratorProjectile() {
 	Spell* spell = proj->getSpell();
 	spell->collision(this->collidable1, proj);
 
+	Locator::getAudioManager()->play(SOUND::GENERATORHIT);
 	// There's potential here I suppose, mostly in terms of graphical effects, perhaps.
 	/// Regardless, this too does nothing for now.
 }
