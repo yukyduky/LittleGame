@@ -38,7 +38,7 @@ public:
 	MenuObject(size_t ID);
 	MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color);
 	MenuObject(size_t ID, XMFLOAT4 pos, D2D1::ColorF color, std::wstring text);
-	~MenuObject();
+	virtual ~MenuObject();
 
 	void cleanUp();
 	const size_t getID() const { return this->ID; }
