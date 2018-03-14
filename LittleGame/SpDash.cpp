@@ -133,7 +133,7 @@ SpDashG1::SpDashG1(GameObject* owner) : SpDash(owner)
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(1.0f);
 	// Damage will heal the player in this skill
-	this->damage = 5.0f;
+	this->damage = 20.0f;
 }
 
 SpDashG1::~SpDashG1()
