@@ -9,7 +9,7 @@ SpBuff::SpBuff(GameObject* owner) :  Spell(owner, NAME::BUFF)
 
 	this->setCost(15.0f);
 	this->setCoolDown(5.0f);
-	this->duration = 5.0f;
+	this->duration = 2.0f;
 	this->setCoolDown(15.0f);
 
 	this->range = 20.0f;
@@ -86,7 +86,7 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 SpBuffG1::SpBuffG1(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->duration = 5.0f;
+	this->duration = 2.0f;
 	this->setCoolDown(15.0f);
 }
 

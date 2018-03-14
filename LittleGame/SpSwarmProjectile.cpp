@@ -12,7 +12,7 @@ SpSwarmProjectile::SpSwarmProjectile(
 	this->projectilesMaxFlyingRange = projectilesMaxFlyingRange;
 	this->damage = dmg;
 	this->attackRange = attackRange;
-	this->setCoolDown(1.0f);
+	this->setCoolDown(cooldown);
 	this->seekSpeed = 0.9;
 }
 SpSwarmProjectile::~SpSwarmProjectile()
