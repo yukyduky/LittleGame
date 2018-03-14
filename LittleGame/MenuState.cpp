@@ -14,6 +14,22 @@ using namespace DirectX::SimpleMath;
 
 void MenuState::init() 
 {
+	for (auto &i : this->keyWasPressed)
+	{
+		i = false;
+	}
+	if (GetAsyncKeyState(VK_UP))
+	{
+		this->keyWasPressed[0] = true;
+	}
+	if (GetAsyncKeyState(VK_DOWN))
+	{
+		this->keyWasPressed[1] = true;
+	}
+	if (GetAsyncKeyState(VK_SPACE))
+	{
+		this->keyWasPressed[2] = true;
+	}
 }
 
 void MenuState::cleanUp()
@@ -47,30 +63,56 @@ void MenuState::handleEvents(GameManager * gm) {
 		if (msg.message == WM_QUIT) {
 			gm->quit();
 		}
+		else if (msg.message == WM_KEYDOWN)
+		{
+			if ((msg.wParam == VK_UP || msg.wParam == 0x57) && !this->keyWasPressed[0])
+			{
+				this->keyWasPressed[0] = true;
+				this->currMenu->goUp();
+			}
+			else if ((msg.wParam == VK_DOWN || msg.wParam == 0x53) && !this->keyWasPressed[1])
+			{
+				this->keyWasPressed[1] = true;
+				this->currMenu->goDown();
+			}
+			else if ((msg.wParam == VK_RETURN || msg.wParam == VK_SPACE) && !this->keyWasPressed[2])
+			{
+				this->keyWasPressed[2] = true;
+				this->currMenu->pressButton();
+			}
+		}
 		else if (msg.message == WM_KEYUP)
 		{
-			switch (msg.wParam)
+			if ((msg.wParam == VK_UP || msg.wParam == 0x57) && this->keyWasPressed[0])
 			{
-			case VK_UP:
-			case 0x57:
-				this->currMenu->goUp();
-				break;
-			case VK_DOWN:
-			case 0x53:
-				this->currMenu->goDown();
-				break;
-			case VK_RETURN:
-			case VK_SPACE:
-				this->currMenu->pressButton();
-				break;
-			default:
-				break;
+				this->keyWasPressed[0] = false;
+			}
+			else if ((msg.wParam == VK_DOWN || msg.wParam == 0x53) && this->keyWasPressed[1])
+			{
+				this->keyWasPressed[1] = false;
+			}
+			else if ((msg.wParam == VK_RETURN || msg.wParam == VK_SPACE) && this->keyWasPressed[2])
+			{
+				this->keyWasPressed[2] = false;
 			}
 		}
 
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
+
+	/*if ((GetAsyncKeyState(0x26) & 0x26))
+	{
+		this->currMenu->goUp();
+	}
+	else if ((GetAsyncKeyState(VK_DOWN) & VK_DOWN) || (GetAsyncKeyState(0x53) & 0x53))
+	{
+		this->currMenu->goDown();
+	}
+	else if ((GetAsyncKeyState(VK_RETURN) & VK_RETURN) || (GetAsyncKeyState(VK_SPACE) & VK_SPACE))
+	{
+		this->currMenu->pressButton();
+	}*/
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::STARTGAME) {
