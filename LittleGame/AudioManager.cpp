@@ -46,12 +46,6 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_3.wav"), SOUND::ENEMYATTACK_3);
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_4.wav"), SOUND::ENEMYATTACK_4);
 	error += this->loadSound(std::string("include/Sound/EnemyAttack_5.wav"), SOUND::ENEMYATTACK_5);
-	error += this->loadSound(std::string("include/Sound/EnemyAttack_6.wav"), SOUND::ENEMYATTACK_6);
-	error += this->loadSound(std::string("include/Sound/EnemyAttack_7.wav"), SOUND::ENEMYATTACK_7);
-	error += this->loadSound(std::string("include/Sound/EnemyAttack_8.wav"), SOUND::ENEMYATTACK_8);
-	error += this->loadSound(std::string("include/Sound/EnemyAttack_9.wav"), SOUND::ENEMYATTACK_9);
-	error += this->loadSound(std::string("include/Sound/EnemyAttack_10.wav"), SOUND::ENEMYATTACK_10);
-	error += this->loadSound(std::string("include/Sound/EnemyAttack_11.wav"), SOUND::ENEMYATTACK_11);
 
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_1.wav"), SOUND::ENEMYDEATH_1);
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_2.wav"), SOUND::ENEMYDEATH_2);
