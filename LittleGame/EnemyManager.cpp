@@ -989,6 +989,7 @@ void EnemyManager::update(GUIManager* GUI)
 		
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_LEVELEND);
 			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 		}
 	}

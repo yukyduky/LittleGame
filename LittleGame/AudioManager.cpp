@@ -30,6 +30,10 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/Ability4_Glyph0.wav"), SOUND::ABILITY4_GLYPH0);
 	error += this->loadSound(std::string("include/Sound/Ability4_Glyph1.wav"), SOUND::ABILITY4_GLYPH1);
 	error += this->loadSound(std::string("include/Sound/Ability4_Glyph2.wav"), SOUND::ABILITY4_GLYPH2);
+
+	error += this->loadSound(std::string("include/Sound/8BIT_Death.wav"), SOUND::EIGHTBIT_DEATH);
+	error += this->loadSound(std::string("include/Sound/8BIT_Start.wav"), SOUND::EIGHTBIT_START);
+	error += this->loadSound(std::string("include/Sound/8BIT_LevelEnd.wav"), SOUND::EIGHTBIT_LEVELEND);
 	
 	error += this->loadSound(std::string("include/Sound/TriangleSlice.wav"), SOUND::TRIANGLESLICE);
 
