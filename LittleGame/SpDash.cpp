@@ -12,7 +12,7 @@ SpDash::SpDash(GameObject* owner) : Spell(owner, NAME::DASH)
 	// Distance to jump
 	this->range = 200;
 	this->nrOfFlames = 6;
-	this->damage = 40.0f;
+	this->damage = 250.0f;
 
 	this->flameSize = this->range / static_cast<float>((this->nrOfFlames * 2));
 }
@@ -133,7 +133,7 @@ SpDashG1::SpDashG1(GameObject* owner) : SpDash(owner)
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(1.0f);
 	// Damage will heal the player in this skill
-	this->damage = 10.0f;
+	this->damage = 5.0f;
 }
 
 SpDashG1::~SpDashG1()
@@ -285,6 +285,7 @@ SpDashG3::SpDashG3(GameObject* owner) : SpDash(owner)
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 2.5f);
 	this->setCost(this->getCost() * 0.2f);
+	this->damage = 5.0f;
 }
 
 SpDashG3::~SpDashG3()

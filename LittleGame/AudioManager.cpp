@@ -14,6 +14,7 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/gulp_x.wav"), SOUND::GULP);
 
 	error += this->loadSound(std::string("include/Sound/Ability0_Glyph0.wav"), SOUND::ABILITY0_GLYPH0);
+	error += this->loadSound(std::string("include/Sound/Ability0_Glyph2.wav"), SOUND::ABILITY0_GLYPH2);
 	error += this->loadSound(std::string("include/Sound/Ability1_Glyph0.wav"), SOUND::ABILITY1_GLYPH0);
 	error += this->loadSound(std::string("include/Sound/Ability1_Glyph1.wav"), SOUND::ABILITY1_GLYPH1);
 	error += this->loadSound(std::string("include/Sound/Ability1_Glyph2.wav"), SOUND::ABILITY1_GLYPH2);
@@ -21,8 +22,8 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/Ability2_Glyph0_Throw.wav"), SOUND::ABILITY2_GLYPH0_THROW);
 	error += this->loadSound(std::string("include/Sound/Ability2_Glyph0_Explosion.wav"), SOUND::ABILITY2_GLYPH0_EXPLOSION);
 	error += this->loadSound(std::string("include/Sound/Ability2_Glyph1_Explosion.wav"), SOUND::ABILITY2_GLYPH1_EXPLOSION);
-	error += this->loadSound(std::string("include/Sound/Ability2_Glyph1_Explosion.wav"), SOUND::ABILITY2_GLYPH2_ARM);
-	error += this->loadSound(std::string("include/Sound/Ability2_Glyph1_Explosion.wav"), SOUND::ABILITY2_GLYPH2_EXPLOSION);
+	error += this->loadSound(std::string("include/Sound/Ability2_Glyph2_Armed.wav"), SOUND::ABILITY2_GLYPH2_ARMED);
+	error += this->loadSound(std::string("include/Sound/Ability2_Glyph2_Explosion.wav"), SOUND::ABILITY2_GLYPH2_EXPLOSION);
 	error += this->loadSound(std::string("include/Sound/Ability2_Glyph3_Explosion.wav"), SOUND::ABILITY2_GLYPH3_EXPLOSION);
 	error += this->loadSound(std::string("include/Sound/Ability3_Glyph0.wav"), SOUND::ABILITY3_GLYPH0);
 	error += this->loadSound(std::string("include/Sound/Ability3_Glyph1.wav"), SOUND::ABILITY3_GLYPH1);

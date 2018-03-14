@@ -9,7 +9,7 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 
 	this->setCost(10);
 	this->setCoolDown(0.4f);
-	this->damage = 60;
+	this->damage = 50;
 	this->range = 700;
 }
 
@@ -97,6 +97,7 @@ SpFireG1::SpFireG1(GameObject* owner) : SpFire(owner)
 	this->setCoolDown(0.07f);
 	this->setCost(0.1f);
 	this->range = 150.0f;
+	this->damage = 10.0f;
 }
 
 SpFireG1::~SpFireG1()
@@ -151,7 +152,7 @@ SpFireG2::SpFireG2(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCoolDown(this->getCoolDown() * 3.0f);
-	this->damage = (this->damage * 2.0f);
+	this->damage = 200.0f;
 	this->setCost(30.0f);
 	this->range = 1000.0f;
 
@@ -197,11 +198,13 @@ void SpFireG2::update()
 
 void SpFireG2::collision(GameObject * target, Projectile * proj)
 {
+	float dt = Locator::getGameTime()->getDeltaTime();
+
 	OBJECTTYPE::TYPE type = target->getType();
 	// IF target is an enemy AND target is NOT contained within the 'previouslyHit' list.
 	if ((type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || type == OBJECTTYPE::BOSS)) 
 	{
-		static_cast<ActorObject*>(target)->dealDmg(this->damage);
+		static_cast<ActorObject*>(target)->dealDmg(this->damage * dt);
 	}
 
 	else if (target->getType() == OBJECTTYPE::INDESTRUCTIBLE) {
@@ -217,7 +220,7 @@ SpFireG3::SpFireG3(GameObject* owner) : SpFire(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
 	this->setCoolDown(this->getCoolDown() * 4.5f);
-	this->damage = (this->damage * 2.5f);
+	this->damage = 250.0f;
 	this->cost = 10.0f;
 
 	// Higher starts a crash

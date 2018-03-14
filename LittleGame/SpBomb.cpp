@@ -93,7 +93,7 @@ void SpBomb::update()
 		{
 			this->damage += 300.0f * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
-			this->owner->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
+			this->owner->GETphysicsComponent()->updateBoundingArea(this->damage);
 			this->owner->SETscaleMatrix(scaleM);
 		}
 		else if (this->collisionDuration < 0.2f) // Delay; bomb stops growing
@@ -118,7 +118,8 @@ void SpBomb::collision(GameObject * target, Projectile* proj)
 	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR || 
 		type == OBJECTTYPE::BOSS) && this->landed)
 	{
-		static_cast<ActorObject*>(target)->dealDmg(100.0f);
+		float dt = Locator::getGameTime()->getDeltaTime();
+		static_cast<ActorObject*>(target)->dealDmg(150.0f * dt);
 	}
 }
 
@@ -203,7 +204,8 @@ void SpBombG2::collision(GameObject * target, Projectile * proj)
 	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
 		type == OBJECTTYPE::BOSS) && this->landed)
 	{
-		static_cast<ActorObject*>(target)->dealDmg(1000.0f);
+		float dt = Locator::getGameTime()->getDeltaTime();
+		static_cast<ActorObject*>(target)->dealDmg(150.0f * dt);
 		this->trip = true;
 	}
 
@@ -229,6 +231,7 @@ void SpBombG2::update()
 				static_cast<Projectile*>(this->owner)->SETvelocityMagnitude(0.0f);
 				this->trip = false;
 				this->damage = this->start;
+				Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH2_ARMED);
 			}
 		}
 		else if (this->trip)
@@ -237,6 +240,12 @@ void SpBombG2::update()
 
 			if (this->damage < this->end)
 			{
+				if (!this->detonationStart)
+				{
+					Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH2_EXPLOSION);
+					this->detonationStart = true;
+				}
+
 				this->damage += 300.0f * dt;
 				XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
 				this->owner->GETphysicsComponent()->updateBoundingArea(this->damage * 1.5f);
@@ -248,6 +257,7 @@ void SpBombG2::update()
 			}
 			else
 			{
+				this->detonationStart = false;
 				this->active = false;
 				this->trip = false;
 				this->owner->setState(OBJECTSTATE::TYPE::DEAD);
@@ -319,6 +329,8 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 	if ((type == OBJECTTYPE::TYPE::ENEMY || type == OBJECTTYPE::TYPE::GENERATOR ||
 		type == OBJECTTYPE::BOSS) && this->landed)
 	{
+		float dt = Locator::getGameTime()->getDeltaTime();
+
 		ActorObject* actorTarget = static_cast<ActorObject*>(target);
 
 		XMVECTOR pullDir = XMVectorSubtract(XMLoadFloat3(&proj->GETPosition()), XMLoadFloat3(&target->GETPosition()));
@@ -328,7 +340,7 @@ void SpBombG3::collision(GameObject * target, Projectile * proj)
 
 		if (pullLenght < this->damage)
 		{
-			actorTarget->dealDmg(this->damage);
+			actorTarget->dealDmg(15 * dt);
 		}
 
 		pullDir = XMVector3Normalize(pullDir);

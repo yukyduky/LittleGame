@@ -9,8 +9,8 @@ SpBuff::SpBuff(GameObject* owner) :  Spell(owner, NAME::BUFF)
 
 	this->setCost(15.0f);
 	this->setCoolDown(5.0f);
-	this->duration = 1.5f;
-	this->setCoolDown(8.0f);
+	this->duration = 5.0f;
+	this->setCoolDown(15.0f);
 
 	this->range = 20.0f;
 	this->oriRadius = this->getOwner()->GETphysicsComponent()->GETBoundingSphere().Radius;
@@ -86,8 +86,8 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 SpBuffG1::SpBuffG1(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->duration = 4.0f;
-	this->setCoolDown(10.0f);
+	this->duration = 5.0f;
+	this->setCoolDown(15.0f);
 }
 
 SpBuffG1::~SpBuffG1()
@@ -147,8 +147,8 @@ SpBuffG2::SpBuffG2(GameObject* owner) :  SpBuff(owner)
 	this->setCost(this->getCost() * 1.0f);
 	this->range = 300.0f;
 
-	this->duration = 1.5f;
-	this->setCoolDown(8.0f);
+	this->duration = 3.0f;
+	this->setCoolDown(15.0f);
 	this->timeSC = 0.0f;
 }
 

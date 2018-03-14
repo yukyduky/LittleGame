@@ -527,13 +527,13 @@ void ActorObject::selectAbility3()
 
 void ActorObject::selectAbility4()
 {
-	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
+	//Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->spells[4]->castSpell();
 
-		//this->selectedSpell = this->spells[4];
-		//this->selectedSpellIntValue = 4;
+		this->selectedSpell = this->spells[4];
+		this->selectedSpellIntValue = 4;
 	}
 	else {
 
