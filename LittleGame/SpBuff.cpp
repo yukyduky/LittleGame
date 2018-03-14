@@ -86,8 +86,8 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 SpBuffG1::SpBuffG1(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->duration = 2.0f;
-	this->setCoolDown(15.0f);
+	this->duration = 5.0f;
+	this->setCoolDown(10.0f);
 }
 
 SpBuffG1::~SpBuffG1()
@@ -110,6 +110,8 @@ bool SpBuffG1::castSpell()
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
 				;
 
+			Locator::getGameTime()->setMultiplier(0.7);
+
 			this->setState(SPELLSTATE::COOLDOWN);
 			GamePlayState::getInstance()->setBerserkerMode(true);
 			Locator::getAudioManager()->play(SOUND::NAME::ABILITY4_GLYPH1);
@@ -127,6 +129,7 @@ void SpBuffG1::update()
 	{
 		GamePlayState::getInstance()->setBerserkerMode(false);
 		this->owner->setState(OBJECTSTATE::TYPE::DEAD);
+		Locator::getGameTime()->setMultiplier(1.0);
 	}
 	else
 	{
