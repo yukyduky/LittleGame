@@ -192,7 +192,6 @@
     <ClInclude Include="SpAutoAttack.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="EnemyObject.h" />
-    <ClInclude Include="ImmolationEnemyAttack.h" />
     <ClInclude Include="ArenaPatterns.h" />
     <ClInclude Include="ID3D.h" />
     <ClInclude Include="LevelManager.h" />
@@ -276,7 +275,6 @@
     <ClCompile Include="SpAutoAttack.cpp" />
     <ClCompile Include="EnemyObject.cpp" />
     <ClCompile Include="ArenaPatterns.cpp" />
-    <ClCompile Include="ImmolationEnemyAttack.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="MouseInput.cpp" />
     <ClCompile Include="Projectile.cpp" />

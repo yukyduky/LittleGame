@@ -773,7 +773,7 @@ void GamePlayState::initPlayer()
 	float topSpeed = 11.0f;
 
 	/// ACTOR OBJECT:
-	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 100.0f);
+	actor = new ActorObject(nextID, velocityMagnitude, topSpeed, playerPos, this, OBJECTTYPE::PLAYER, 10000.0f);
 
 	/// PHYSICS COMPONENT:
 	physics = new PhysicsComponent(*actor, 20.0f);

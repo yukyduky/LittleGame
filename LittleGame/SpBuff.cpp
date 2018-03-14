@@ -9,8 +9,8 @@ SpBuff::SpBuff(GameObject* owner) :  Spell(owner, NAME::BUFF)
 
 	this->setCost(15.0f);
 	this->setCoolDown(5.0f);
-	this->duration = 1.5f;
-	this->setCoolDown(8.0f);
+	this->duration = 5.0f;
+	this->setCoolDown(15.0f);
 
 	this->range = 20.0f;
 	this->oriRadius = this->getOwner()->GETphysicsComponent()->GETBoundingSphere().Radius;
@@ -40,7 +40,7 @@ bool SpBuff::castSpell()
 
 			this->setState(SPELLSTATE::COOLDOWN);
 			Locator::getGameTime()->setMultiplier(0.3);
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY4_GLYPH0);
 		}
 	}
 
@@ -86,8 +86,8 @@ void SpBuff::collision(GameObject * target, Projectile* proj)
 SpBuffG1::SpBuffG1(GameObject* owner) :  SpBuff(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
-	this->duration = 1.5f;
-	this->setCoolDown(8.0f);
+	this->duration = 5.0f;
+	this->setCoolDown(15.0f);
 }
 
 SpBuffG1::~SpBuffG1()
@@ -112,7 +112,7 @@ bool SpBuffG1::castSpell()
 
 			this->setState(SPELLSTATE::COOLDOWN);
 			GamePlayState::getInstance()->setBerserkerMode(true);
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY4_GLYPH1);
 		}
 	}
 
@@ -147,8 +147,8 @@ SpBuffG2::SpBuffG2(GameObject* owner) :  SpBuff(owner)
 	this->setCost(this->getCost() * 1.0f);
 	this->range = 300.0f;
 
-	this->duration = 1.5f;
-	this->setCoolDown(8.0f);
+	this->duration = 3.0f;
+	this->setCoolDown(15.0f);
 	this->timeSC = 0.0f;
 }
 
@@ -172,7 +172,7 @@ bool SpBuffG2::castSpell()
 			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50))
 				->GETphysicsComponent()->updateBoundingArea(this->range);
 
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY4_GLYPH2);
 			this->setState(SPELLSTATE::COOLDOWN);
 		}
 	}
@@ -246,7 +246,7 @@ bool SpBuffG3::castSpell()
 			this->actOwner->SETvelocityMagnitude(300.0f);
 			this->actOwner->SETtopSpeedMagnitude(3.0f);
 			Locator::getGameTime()->setMultiplier(0.3);
-			Locator::getAudioManager()->play(SOUND::NAME::ABILITYSOUND_SPEEDBOOST);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY4_GLYPH0);
 		}
 	}
 

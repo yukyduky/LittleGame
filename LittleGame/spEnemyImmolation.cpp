@@ -16,7 +16,8 @@ bool SpEnemyImmolation::castSpell()
 {
 	this->actOwner = static_cast<ActorObject*>(this->getOwner());
 	// Only coded to work against 1 player atm!
-	this->GETpPlayer()->dealDmg(this->damage);
+	float dt = Locator::getGameTime()->getDeltaTime();
+	this->GETpPlayer()->dealDmg(this->damage * dt);
 
 	// Generates an ATTACK sound effect: 1 of 11 possibilities
 	switch (Locator::getRandomGenerator()->GenerateInt(1, 11)) {
