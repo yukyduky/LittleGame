@@ -41,18 +41,18 @@ bool SpBomb::castSpell()
 	}
 	else
 	{
-		//if (this->owner != nullptr)
-		//{
-		//	this->projOwner->setState(OBJECTSTATE::TYPE::DEAD);
-		//}
+		if (this->actOwner->useEnergy(this->cost)) {
+			//if (this->owner != nullptr)
+			//{
+			//	this->projOwner->setState(OBJECTSTATE::TYPE::DEAD);
+			//}
 
-		ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 500.0f, -1, false/*PROJBEHAVIOR::ENLARGE*/);
-		this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
+			ProjProp props(15, XMFLOAT4(0.0f, 0.0f, 0.0f, 0.0f), 300.0f, -1, false/*PROJBEHAVIOR::ENLARGE*/);
+			this->spawnProj(props, Light(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.0f, 0.0001f, 0.0001f), 50));
 
-		this->setState(SPELLSTATE::COOLDOWN);
-
-		Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH0_THROW);
-
+			this->setState(SPELLSTATE::COOLDOWN);
+			Locator::getAudioManager()->play(SOUND::NAME::ABILITY2_GLYPH0_THROW);
+		}		
 	}
 
 	return returnValue;
@@ -91,7 +91,7 @@ void SpBomb::update()
 		}
 		else if (this->damage < this->end)
 		{
-			this->damage += 300.0f * dt;
+			this->damage += 400.0f * dt;
 			XMMATRIX scaleM = XMMatrixScaling(this->damage, this->damage, this->damage);
 			this->owner->GETphysicsComponent()->updateBoundingArea(this->damage);
 			this->owner->SETscaleMatrix(scaleM);

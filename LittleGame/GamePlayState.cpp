@@ -510,7 +510,7 @@ void GamePlayState::init()
 	// TESTING ------------------------ 
 
 	if ( Locator::getStatsHeader()->getStats().level < 10 ) {
-		switch (randomLevel)
+		switch (1)
 		{
 		case 1:
 			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
@@ -641,6 +641,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_DEATH);
 			Locator::getD2D()->saveScreen();
 			StateManager::changeState(MenuStatisticsState::getInstance());
 		}
