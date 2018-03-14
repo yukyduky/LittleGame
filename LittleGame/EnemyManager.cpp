@@ -956,7 +956,7 @@ void EnemyManager::update(GUIManager* GUI)
 		// No enemies in this wave? Move on to the next wave
 		else if (this->timePassed > this->waveInterval) {
 			GUI->popWaveElement(*this->pGPS->GETGUIObjects(), *this->pGPS->getGraphicsComponents());
-			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_DEATH);
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_NEXTWAVE);
 			this->timePassed = 0;
 
 			// Ramping the time between waves
