@@ -51,6 +51,11 @@ void SwarmerSeekingState::executeBehavior()
 
 		//// Neighbours (If we have any)
 		if (neighbourCount > 1) {
+
+
+			if (neighbourCount > 5)
+				neighbourCount = 5;
+
 			// Affect spellCooldown
 			this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown() / neighbourCount);
 

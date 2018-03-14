@@ -368,9 +368,9 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Saves the pGPS as an internal pointer.
 	*/
-	void startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty);
-	void startRampLevel(enemySpawnPositions spawnPosVectors, float difficulty);
-	void startPulseLevel(enemySpawnPositions spawnPosVectors, float difficulty);
+	void startStandardLevel(enemySpawnPositions spawnPosVectors, float difficulty, GUIManager* GUI);
+	void startRampLevel(enemySpawnPositions spawnPosVectors, float difficulty, GUIManager* GUI);
+	void startPulseLevel(enemySpawnPositions spawnPosVectors, float difficulty, GUIManager* GUI);
 
 	void startBossLevel();
 

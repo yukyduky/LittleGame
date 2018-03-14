@@ -36,7 +36,7 @@ bool SpSwarmProjectile::castSpell()
 		light.attenuation = XMFLOAT3(0.0f, 0.0001f, 0.0001f);
 		light.specPower = 0.0f;
 
-		ProjProp props(5, XMFLOAT4(1.0f, 1.0f, 1.0f, 0.1f), 200, this->projectilesMaxFlyingRange, false);
+		ProjProp props(5, XMFLOAT4(1.0f, 0.412f, 0.71f, 1.0f), 200, this->projectilesMaxFlyingRange, false);
 		Projectile* pProj = this->spawnProj(props, light);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 
