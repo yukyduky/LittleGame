@@ -419,7 +419,7 @@ void LevelManager::createGenerator(int ID, std::vector<std::vector<tileData>>& g
 	switch (genType)
 	{
 	case GENERATOR::TYPE::OVERHEATED:
-		genColor = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+		genColor = XMFLOAT4(1.0f, 0.4f, 0.01f, 1.0f);
 		grid[index.x][index.y].genEffect = TILESTATE::THEATED;
 		break;
 	case GENERATOR::TYPE::COOLED:

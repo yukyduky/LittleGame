@@ -7,7 +7,7 @@ SpBuff::SpBuff(GameObject* owner) :  Spell(owner, NAME::BUFF)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCost(15.0f);
+	this->setCost(30.0f);
 	this->setCoolDown(5.0f);
 	this->duration = 2.0f;
 	this->setCoolDown(15.0f);

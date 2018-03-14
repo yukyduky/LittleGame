@@ -62,7 +62,7 @@ Menu * MenuStatisticsState::initStatsMenu()
 		textStr);
 	menu->addQuad(object);
 
-	textStr = L"Damage taken: " + std::to_wstring(Locator::getStatsHeader()->getStats().damageTaken);
+	textStr = L"Damage taken: " + std::to_wstring(static_cast<int>(Locator::getStatsHeader()->getStats().damageTaken));
 	nextID = this->newID();
 	object = new MenuObject(nextID,
 		{ 50.0f,100.0f, 300.0f,50.0f }, D2D1::ColorF::DarkGoldenrod,

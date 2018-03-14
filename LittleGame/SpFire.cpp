@@ -8,8 +8,8 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 	this->setState(SPELLSTATE::READY);
 
 	this->setCost(10);
-	this->setCoolDown(0.4f);
-	this->damage = 50;
+	this->setCoolDown(0.2f);
+	this->damage = 100;
 	this->range = 1000;
 	this->spinnValue = 0.0f;
 }
