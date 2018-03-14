@@ -487,6 +487,8 @@ void ActorObject::fireAbilityX()
 void ActorObject::pauseMenu()
 {
 	StateManager::pushState(MenuPauseState::getInstance());
+	Locator::getAudioManager()->pause(MUSIC::GAME_MUSIC);
+	Locator::getAudioManager()->play(MUSIC::MENU_MUSIC);
 }
 
 void ActorObject::selectAbility1()

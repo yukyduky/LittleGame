@@ -2,7 +2,7 @@
 #include "AudioManager.h"
 
 
-AudioManager::AudioManager() : soundVolume(10.0f), musicVolume(0.0f)
+AudioManager::AudioManager() : soundVolume(10.0f), musicVolume(10.0f)
 {
 }
 
@@ -61,6 +61,8 @@ int AudioManager::init()
 
 
 	error += this->mapMusic(std::string("include/Sound/OPM-OST.ogg"), MUSIC::ONEPUNCH);
+	error += this->mapMusic(std::string("include/Sound/Menu_Music.ogg"), MUSIC::MENU_MUSIC);
+	error += this->mapMusic(std::string("include/Sound/Game_Music.ogg"), MUSIC::GAME_MUSIC);
 
 	this->adjustEffects(this->soundVolume);
 	this->adjustMusic(this->musicVolume);

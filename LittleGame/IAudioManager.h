@@ -30,7 +30,7 @@ namespace SOUND {
 		SIZE };
 }
 namespace MUSIC {
-	enum NAME { ONEPUNCH, SIZE };
+	enum NAME { ONEPUNCH, MENU_MUSIC, GAME_MUSIC, SIZE };
 }
 namespace MUSICSTATE {
 	enum NAME { LEVEL1, MENU, SIZE };

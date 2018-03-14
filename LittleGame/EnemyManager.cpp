@@ -62,7 +62,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	int amountModifier = Locator::getStatsHeader()->getStats().enemyUpg[2];
 
 	// MINIONS
-	this->minionCount = static_cast<int>((2 + currentLevelNumber) * (amountModifier + 1));
+	this->minionCount = static_cast<int>((2 + currentLevelNumber) + (amountModifier * 2));
 	this->currentWaveMinionCount.resize(this->currentWaveCount);
 
 	for (int i = 0; i < this->currentWaveMinionCount.size(); i++)
@@ -70,7 +70,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 
 	// SWARMERS
 	if (currentLevelNumber >= 2)
-		this->swarmerCount = static_cast<int>((1 + currentLevelNumber) * (amountModifier + 1));
+		this->swarmerCount = static_cast<int>((1 + currentLevelNumber) + amountModifier);
 	else
 		this->swarmerCount = 0;
 
@@ -90,7 +90,7 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 
 	// CHARGERS
 	if (currentLevelNumber >= 3)
-		this->chargerCount = static_cast<int>((2 + currentLevelNumber) * (amountModifier + 1));
+		this->chargerCount = static_cast<int>((2 + currentLevelNumber) + amountModifier);
 	else
 		this->chargerCount = 0;
 
@@ -166,39 +166,61 @@ void EnemyManager::startRampLevel(enemySpawnPositions spawnPosVectors, float dif
 	int currentLevelNumber = Locator::getStatsHeader()->getStats().level;
 	this->timePassed = 0;
 	this->activeEnemiesCount = 0;
-	this->spawnInterval = 1.1f;
-	this->waveInterval = 10.1f;
+	this->spawnInterval = 0.7f;
+	this->waveInterval = 7.1f;
 
 	std::vector<EnemyObject*> localSwarmers;
-
-	this->currentWaveCount = 10;
+	this->currentWaveCount = 6;
 
 	int amountModifier = Locator::getStatsHeader()->getStats().enemyUpg[2];
-	// Deciding on how individual enemy counts will be calculated
-	this->minionCount = static_cast<int>((2 + currentLevelNumber) * (amountModifier + 1));
 
+	// MINIONS
+	this->minionCount = static_cast<int>((1 + currentLevelNumber) + (amountModifier * 2));
+	this->currentWaveMinionCount.resize(this->currentWaveCount);
+
+	for (int i = 0; i < this->currentWaveMinionCount.size(); i++)
+		this->currentWaveMinionCount.at(i) = (this->minionCount + (i * currentLevelNumber));
+
+	// SWARMERS
 	if (currentLevelNumber >= 2)
-		this->swarmerCount = static_cast<int>((1 + currentLevelNumber) * (amountModifier + 1));
+		this->swarmerCount = static_cast<int>((1 + currentLevelNumber) + amountModifier);
 	else
 		this->swarmerCount = 0;
 
+	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
+
+	if (currentLevelNumber >= 2)
+	{
+		for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
+			this->currentWaveSwarmerCount.at(i) = static_cast<int>((this->swarmerCount + (i * 0.2)));
+	}
+
+	else
+	{
+		for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
+			this->currentWaveSwarmerCount.at(i) = 0;
+	}
+
+	// CHARGERS
 	if (currentLevelNumber >= 3)
-		this->chargerCount = static_cast<int>((2 + currentLevelNumber) * (amountModifier + 1));
+		this->chargerCount = static_cast<int>((1 + currentLevelNumber) + amountModifier);
 	else
 		this->chargerCount = 0;
 
-	// Define specific MINION count PER WAVE
-	this->currentWaveMinionCount.resize(this->currentWaveCount);
-	for (int i = 0; i < this->currentWaveMinionCount.size(); i++)
-		this->currentWaveMinionCount.at(i) = (this->minionCount + i);
-	// Define specific SWARMER count PER WAVE
-	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
-	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
-		this->currentWaveSwarmerCount.at(i) = static_cast<int>((this->swarmerCount + (i * 0.3)));
-	// Define specific CHARGER count PER WAVE
 	this->currentWaveChargerCount.resize(this->currentWaveCount);
-	for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
-		this->currentWaveChargerCount.at(i) = (this->chargerCount + i);
+
+	if (currentLevelNumber >= 3)
+	{
+		for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
+			this->currentWaveChargerCount.at(i) = static_cast<int>((this->chargerCount + (i * 0.2)));
+	}
+
+	else
+	{
+		for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
+			this->currentWaveChargerCount.at(i) = 0;
+	}
+
 
 	Wave* currentWave = nullptr;
 
@@ -263,30 +285,54 @@ void EnemyManager::startPulseLevel(enemySpawnPositions spawnPosVectors, float di
 
 	this->currentWaveCount = (1 + currentLevelNumber);
 
-	int amountModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[2] * 0.25f);
+	int amountModifier = Locator::getStatsHeader()->getStats().enemyUpg[2];
 
+	// MINIONS
+	this->minionCount = static_cast<int>((1 + currentLevelNumber) + (amountModifier * 2));
+	this->currentWaveMinionCount.resize(this->currentWaveCount);
+
+	for (int i = 0; i < this->currentWaveMinionCount.size(); i++)
+		this->currentWaveMinionCount.at(i) = (this->minionCount + (i * currentLevelNumber));
+
+	// SWARMERS
 	if (currentLevelNumber >= 2)
-		this->swarmerCount = static_cast<int>((1 + currentLevelNumber) * amountModifier);
+		this->swarmerCount = static_cast<int>((1 + currentLevelNumber) + amountModifier);
 	else
 		this->swarmerCount = 0;
 
+	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
+
+	if (currentLevelNumber >= 2)
+	{
+		for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
+			this->currentWaveSwarmerCount.at(i) = static_cast<int>((this->swarmerCount + (i * 0.2)));
+	}
+
+	else
+	{
+		for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
+			this->currentWaveSwarmerCount.at(i) = 0;
+	}
+
+	// CHARGERS
 	if (currentLevelNumber >= 3)
-		this->chargerCount = static_cast<int>((2 + currentLevelNumber) * amountModifier);
+		this->chargerCount = static_cast<int>((1 + currentLevelNumber) + amountModifier);
 	else
 		this->chargerCount = 0;
 
-	// Define specific MINION count PER WAVE
-	this->currentWaveMinionCount.resize(this->currentWaveCount);
-	for (int i = 0; i < this->currentWaveMinionCount.size(); i++)
-		this->currentWaveMinionCount.at(i) = (this->minionCount + i);
-	// Define specific SWARMER count PER WAVE
-	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
-	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
-		this->currentWaveSwarmerCount.at(i) = (this->swarmerCount + i);
-	// Define specific CHARGER count PER WAVE
 	this->currentWaveChargerCount.resize(this->currentWaveCount);
-	for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
-		this->currentWaveChargerCount.at(i) = (this->chargerCount + (i * 2));
+
+	if (currentLevelNumber >= 3)
+	{
+		for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
+			this->currentWaveChargerCount.at(i) = static_cast<int>((this->chargerCount + (i * 0.2)));
+	}
+
+	else
+	{
+		for (int i = 0; i < this->currentWaveChargerCount.size(); i++)
+			this->currentWaveChargerCount.at(i) = 0;
+	}
 
 	Wave* currentWave = nullptr;
 
@@ -527,7 +573,7 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float velocityMagnitude = 140.0f * speedModifier;
-	float immolationDamage = 0.5f * damageModifier;
+	float immolationDamage = 1.5f * damageModifier;
 	float attackCooldown = 0.5;
 	float attackRange = 70;
 	float hp = 100.0f * healthModifier;

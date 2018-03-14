@@ -110,9 +110,13 @@ void Button::onPress()
 		break;
 	case BEHAVIOR::RESUMEGAME:
 		this->pMS->resumeGame();
+		Locator::getAudioManager()->pause(MUSIC::MENU_MUSIC);
+		Locator::getAudioManager()->play(MUSIC::GAME_MUSIC);
 		break;
 	case BEHAVIOR::STARTGAME:
 		Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_START);
+		Locator::getAudioManager()->pause(MUSIC::MENU_MUSIC);
+		Locator::getAudioManager()->play(MUSIC::GAME_MUSIC);
 		this->pMS->startGame();
 		break;
 	case BEHAVIOR::RESTARTGAME:
