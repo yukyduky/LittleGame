@@ -1,20 +1,20 @@
-#include "StatisticsMenuState.h"
+#include "MenuStatisticsState.h"
 
-StatisticsMenuState StatisticsMenuState::sStatisticsMenuState;
+MenuStatisticsState MenuStatisticsState::sStatisticsMenuState;
 
-StatisticsMenuState * StatisticsMenuState::getInstance()
+MenuStatisticsState * MenuStatisticsState::getInstance()
 {
 	return &sStatisticsMenuState;
 }
 
-void StatisticsMenuState::init()
+void MenuStatisticsState::init()
 {
 	MenuState::init();
 
 	this->displayMenu(this->initStatsMenu());
 }
 
-Menu * StatisticsMenuState::initStatsMenu()
+Menu * MenuStatisticsState::initStatsMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;

@@ -37,6 +37,9 @@ private:
 	std::list<GameObject*> enemyElementObjects;
 	std::list<RectangleComponent*> enemyElementRects;
 
+	std::list<GameObject*> waveElementObjects;
+	std::list<RectangleComponent*> waveElementRects;
+
 	int lastSpell = 0;
 
 	// vColor colorHP = { 255.0f, 0.0f, 0.0f, 255.0f };
@@ -59,6 +62,10 @@ private:
 	float enemyElementPosX = 0.0f;
 	float enemyElementPosY = 0.0f;
 	float enemyElementPosZ = 0.0f;
+
+	float waveElementPosX = 0.0f;
+	float waveElementPosY = 0.0f;
+	float waveElementPosZ = 0.0f;
 
 	float separationDistance = 0.01f;
 
@@ -86,7 +93,9 @@ public:
 
 	void updateGUI(ActorObject* player);
 	void pushEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID);
+	void pushWaveElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics, int ID);
 	void popEnemyElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics);
+	void popWaveElement(std::list<GameObject*>& GUIObjects, std::list<GraphicsComponent*>& graphics);
 
 	RectangleComponent* GETrectHP() { return this->rectHP; }
 	RectangleComponent* GETrectEnergy() { return this->rectEnergy; }

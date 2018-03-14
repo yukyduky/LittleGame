@@ -1,5 +1,5 @@
 #include "GamePlayState.h"
-#include "StatisticsMenuState.h"
+#include "MenuStatisticsState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "RectangleComponent.h"
@@ -17,7 +17,7 @@
 #include "StateManager.h"
 
 #include "IncludeSpells.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 
 
 
@@ -402,12 +402,15 @@ void GamePlayState::checkPlayerTileStatus()
 				break;
 			case TILESTATE::STATE::HEATED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::HEATED);
+				Locator::getAudioManager()->play(SOUND::HEATEDEFFECT);
 				break;
 			case TILESTATE::STATE::COOLED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::COOLED);
+				Locator::getAudioManager()->play(SOUND::SLOWEFFECT);
 				break;
 			case TILESTATE::STATE::ELECTRIFIED:
 				this->player1->applyStatusEffect(TILESTATE::STATE::ELECTRIFIED);
+				Locator::getAudioManager()->play(SOUND::ELECTRIFIEDEFFECT);
 				break;
 			case TILESTATE::STATE::BOSSTILE:
 				this->playerSteppedOnBossTile = true;
@@ -501,20 +504,21 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	//randomLevel = 1; 
+	//randomLevel = 2;
 	// TESTING ------------------------ 
 
 	if (Locator::getStatsHeader()->getStats().level < 10) {
-		switch (randomLevel)
+		switch (2)
+
 		{
 		case 1:
-			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
 			break;
 		case 2:
-			this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
 			break;
 		case 3:
-			this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
 			break;
 		}
 	}
@@ -530,7 +534,7 @@ void GamePlayState::init()
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->fallPatternCoolDown = 25.0;
 	this->playerSteppedOnBossTile = false;
-	RewardMenuState::getInstance()->provide(this->player1);
+	MenuRewardState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
@@ -637,13 +641,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
 			Locator::getD2D()->saveScreen();
-			StateManager::changeState(StatisticsMenuState::getInstance());
+			StateManager::changeState(MenuStatisticsState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			if (Locator::getStatsHeader()->getStats().level < 10)
 			{
 				//Sends the number of Lootboxes picked up druring the game
-				RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+				MenuRewardState::getInstance()->provide(this->nrOfPickedUpLoot);
 				// Change last so we've already done all of the changes.
 				StateManager::changeState(RestartState::getInstance());
 			}
@@ -651,7 +655,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			{
 				Locator::getStatsHeader()->completeGame();
 				Locator::getD2D()->saveScreen();
-				StateManager::changeState(StatisticsMenuState::getInstance());
+				StateManager::changeState(MenuStatisticsState::getInstance());
 			}
 		}
 
@@ -718,6 +722,7 @@ void GamePlayState::update(GameManager * gm)
 				this->GUI.popEnemyElement(this->GUIObjects, this->graphics);
 
 			else if ((*it)->getType() == OBJECTTYPE::GENERATOR) {
+				Locator::getAudioManager()->play(SOUND::GENERATORDESTROYED);
 				genPos = (*it)->GETPosition();
 				genIndex = this->lm.findTileIndexFromPos(XMFLOAT2(genPos.x, genPos.z));
 				for (int i = 0; i < this->genIndex.size(); i++) {

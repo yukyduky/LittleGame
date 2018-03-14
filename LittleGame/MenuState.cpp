@@ -1,8 +1,8 @@
 #include "MenuState.h"
 #include "GamePlayState.h"
-#include "PauseMenuState.h"
+#include "MenuPauseState.h"
 #include "HomeMenuState.h"
-#include "StatisticsMenuState.h"
+#include "MenuStatisticsState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "StateManager.h"
@@ -435,6 +435,6 @@ void MenuState::restartGame()
 void MenuState::statsWindow()
 {
 	StateManager::popState();
-	StateManager::changeState(StatisticsMenuState::getInstance());
+	StateManager::changeState(MenuStatisticsState::getInstance());
 }
 

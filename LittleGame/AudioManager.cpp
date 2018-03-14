@@ -64,6 +64,13 @@ int AudioManager::init()
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_4.wav"), SOUND::ENEMYDEATH_4);
 	error += this->loadSound(std::string("include/Sound/EnemyDeath_5.wav"), SOUND::ENEMYDEATH_5);
 
+	error += this->loadSound(std::string("include/Sound/gendestroy.wav"), SOUND::GENERATORDESTROYED);
+	error += this->loadSound(std::string("include/Sound/genhit.wav"), SOUND::GENERATORHIT);
+	error += this->loadSound(std::string("include/Sound/electrifiedeffect.wav"), SOUND::ELECTRIFIEDEFFECT);
+	error += this->loadSound(std::string("include/Sound/heatedeffect2.wav"), SOUND::HEATEDEFFECT);
+	error += this->loadSound(std::string("include/Sound/sloweffect.wav"), SOUND::SLOWEFFECT);
+
+
 	error += this->mapMusic(std::string("include/Sound/OPM-OST.ogg"), MUSIC::ONEPUNCH);
 
 	this->adjustEffects(this->soundVolume);

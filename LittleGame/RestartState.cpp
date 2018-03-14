@@ -1,7 +1,7 @@
 #include "RestartState.h"
 #include "GameManager.h"
 #include "StateManager.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 #include "IncludeSpells.h"
 
 RestartState RestartState::sRestartState;
@@ -40,5 +40,5 @@ void RestartState::render(GameManager* gm)
 {
 	Locator::getD2D()->saveScreen();
 	StateManager::changeState(GamePlayState::getInstance());
-	StateManager::pushState(RewardMenuState::getInstance());
+	StateManager::pushState(MenuRewardState::getInstance());
 }

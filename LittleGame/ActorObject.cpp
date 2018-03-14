@@ -1,11 +1,11 @@
 #include "ActorObject.h"
 #include "ControllerComponent.h"
 #include "GamePlayState.h"
-#include "PauseMenuState.h"
+#include "MenuPauseState.h"
 #include "ArenaGlobals.h"
 #include "StateManager.h"
-#include "RewardMenuState.h"
-#include "StatisticsMenuState.h"
+#include "MenuRewardState.h"
+#include "MenuStatisticsState.h"
 
 #include "RestartState.h"
 //Include spells
@@ -486,7 +486,7 @@ void ActorObject::fireAbilityX()
 
 void ActorObject::pauseMenu()
 {
-	StateManager::pushState(PauseMenuState::getInstance());
+	StateManager::pushState(MenuPauseState::getInstance());
 }
 
 void ActorObject::selectAbility1()

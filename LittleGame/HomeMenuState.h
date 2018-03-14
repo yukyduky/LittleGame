@@ -2,9 +2,9 @@
 #ifndef HomeMenuState_H
 #define HomeMenuState_H
 
-#include "PauseMenuState.h"
+#include "MenuPauseState.h"
 
-class HomeMenuState : public PauseMenuState
+class HomeMenuState : public MenuPauseState
 {
 private:
 	static HomeMenuState sHomeMenuState;
