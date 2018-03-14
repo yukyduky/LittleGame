@@ -502,8 +502,6 @@ void ActorObject::selectAbility1()
 
 void ActorObject::selectAbility2()
 {
-	Locator::getStatsHeader()->completeGame();
-
 	if (this->state == OBJECTSTATE::TYPE::ACTIVATED) {
 		this->selectedSpell = this->spells[2];
 		this->selectedSpellIntValue = 2;

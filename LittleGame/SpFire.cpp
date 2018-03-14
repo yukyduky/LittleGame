@@ -11,6 +11,7 @@ SpFire::SpFire(GameObject* owner) : Spell(owner, NAME::FIRE)
 	this->setCoolDown(0.4f);
 	this->damage = 50;
 	this->range = 700;
+	this->spinnValue = 0.0f;
 }
 
 SpFire::~SpFire()
@@ -52,7 +53,10 @@ void SpFire::upgrade(float modif)
 
 void SpFire::update()
 {
-	this->updateCD();
+	XMVECTOR dir = XMLoadFloat3(&this->owner->getDirection());
+	XMMATRIX rotM = XMLoadFloat4x4(&this->owner->getRotationMatrix());
+	this->spinnValue += 0.02f;
+	this->owner->SETrotationMatrix(rotM * XMMatrixRotationAxis(dir, static_cast<float>(this->spinnValue)));
 }
 
 void SpFire::cleanUp()
