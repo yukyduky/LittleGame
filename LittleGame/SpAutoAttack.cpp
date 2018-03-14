@@ -9,7 +9,7 @@ SpAutoAttack::SpAutoAttack(GameObject* owner) : Spell(owner, NAME::AUTOATTACK)
 	
 	this->setCoolDown(0.3f);
 	this->damage = 100.0f;
-	this->range = 2000.0f;
+	this->range = 1000.0f;
 }
 
 SpAutoAttack::~SpAutoAttack()
@@ -58,7 +58,7 @@ void SpAutoAttack::collision(GameObject * target, Projectile* proj)
 	OBJECTTYPE::TYPE type = target->getType();
 	if (type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::GENERATOR ||
 		type == OBJECTTYPE::BOSS) {
-		GamePlayState::getInstance()->addEnergyToPlayer(5);
+		GamePlayState::getInstance()->addEnergyToPlayer(this->cost);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
@@ -76,6 +76,8 @@ SpAutoAttackG1::SpAutoAttackG1(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(this->getCoolDown() * 2.0f);
+	this->damage = (this->damage * 0.8f);
+	this->cost *= 0.4f;
 }
 
 SpAutoAttackG1::~SpAutoAttackG1()
@@ -122,8 +124,9 @@ bool SpAutoAttackG1::castSpell()
 SpAutoAttackG2::SpAutoAttackG2(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
-	this->damage *= 2.5f;
-	this->setCoolDown(this->getCoolDown() * 2.0f);
+	this->setCoolDown(this->getCoolDown() * 3.0f);
+	this->damage = (this->damage * 5.0f);
+	this->cost *= 5.0f;
 }
 
 SpAutoAttackG2::~SpAutoAttackG2()
@@ -160,7 +163,7 @@ void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 	OBJECTTYPE::TYPE type = target->getType();
 	if (type == OBJECTTYPE::ENEMY || type == OBJECTTYPE::GENERATOR ||
 		type == OBJECTTYPE::BOSS) {
-		GamePlayState::getInstance()->addEnergyToPlayer(5);
+		GamePlayState::getInstance()->addEnergyToPlayer(this->cost);
 
 		static_cast<ActorObject*>(target)->dealDmg(this->damage);
 
@@ -177,8 +180,8 @@ void SpAutoAttackG2::collision(GameObject * target, Projectile * proj)
 SpAutoAttackG3::SpAutoAttackG3(GameObject* owner) : SpAutoAttack(owner)
 {
 	this->insertGlyph(GLYPHTYPE::GLYPH3);
-	this->damage *= 0.5f;
 	this->setCoolDown(this->getCoolDown() * 0.5f);
+	this->damage = (this->damage * 0.5f);
 }
 
 SpAutoAttackG3::~SpAutoAttackG3()
