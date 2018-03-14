@@ -6,7 +6,7 @@
 #include "GameTime.h"
 #include "RandomGeneration.h"
 #include "GamePlayState.h"
-#include "PauseMenuState.h"
+#include "MenuPauseState.h"
 #include "HomeMenuState.h"
 #include "Renderer.h"
 #include "AudioManager.h"

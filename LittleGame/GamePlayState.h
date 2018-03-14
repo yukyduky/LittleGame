@@ -80,6 +80,7 @@ private:
 	GUIManager GUI;
 	RenderInputOrganizer rio;
 	std::vector<std::vector<tileData>> grid;
+	float pulseTime = 0.0f;
 	std::vector<std::vector<XMFLOAT2>> gridPulsePoints;
 	//everything that will exist in this level
 	std::list<GameObject*> GUIObjects;

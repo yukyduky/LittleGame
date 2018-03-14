@@ -1,12 +1,12 @@
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 #include "GameManager.h"
 #include "Button.h"
 #include "StateManager.h"
 //#include "Spell.h"
 
-RewardMenuState RewardMenuState::sRewardMenuState;
+MenuRewardState MenuRewardState::sRewardMenuState;
 
-WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
+WCHAR * MenuRewardState::getGlyphName(int name, int glyph)
 {
 	WCHAR* text = nullptr;
 
@@ -120,19 +120,19 @@ WCHAR * RewardMenuState::getGlyphName(int name, int glyph)
 	return text;
 }
 
-RewardMenuState * RewardMenuState::getInstance()
+MenuRewardState * MenuRewardState::getInstance()
 {
 	return &sRewardMenuState;
 }
 
-void RewardMenuState::init()
+void MenuRewardState::init()
 {	
 	MenuState::init();
 	this->displayMenu(this->initLootMenu());
 }
 
 
-Menu * RewardMenuState::initLootMenu()
+Menu * MenuRewardState::initLootMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -240,7 +240,7 @@ Menu * RewardMenuState::initLootMenu()
 	return menu;
 }
 
-Menu * RewardMenuState::initEnemyUpgradeMenu()
+Menu * MenuRewardState::initEnemyUpgradeMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -322,26 +322,26 @@ Menu * RewardMenuState::initEnemyUpgradeMenu()
 
 	start.y = 380.0f;
 
-	nextID = this->newID();
-	text = L"End to stats";
-	pButton = new Button(this, nextID,
-		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::GOSTATS);
-	menu->addButton(pButton);
+	//nextID = this->newID();
+	//text = L"End to stats";
+	//pButton = new Button(this, nextID,
+	//	{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
+	//	text, BEHAVIOR::GOSTATS);
+	//menu->addButton(pButton);
 
-	start.y += 120.0f;
+	//start.y += 120.0f;
 
-	nextID = this->newID();
-	text = L"Quit";
-	pButton = new Button(this, nextID,
-		{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
-		text, BEHAVIOR::QUIT);
-	menu->addButton(pButton);
+	//nextID = this->newID();
+	//text = L"Quit";
+	//pButton = new Button(this, nextID,
+	//	{ 100.0f,start.y, 200.0f,100.0f }, D2D1::ColorF::DarkViolet,
+	//	text, BEHAVIOR::QUIT);
+	//menu->addButton(pButton);
 
 	return menu;
 }
 
-Menu * RewardMenuState::initNextLevelMenu()
+Menu * MenuRewardState::initNextLevelMenu()
 {
 	Menu* menu = nullptr;
 	MenuObject* object = nullptr;
@@ -397,7 +397,7 @@ Menu * RewardMenuState::initNextLevelMenu()
 	return menu;
 }
 
-void RewardMenuState::provide(ActorObject * player)
+void MenuRewardState::provide(ActorObject * player)
 {
 	this->player = player;
 
@@ -407,7 +407,7 @@ void RewardMenuState::provide(ActorObject * player)
 	}
 }
 
-void RewardMenuState::startGame()
+void MenuRewardState::startGame()
 {
 	this->player->switchSpell();
 	Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::RESUMEGAME);

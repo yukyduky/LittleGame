@@ -6,7 +6,7 @@ SpDash::SpDash(GameObject* owner) : Spell(owner, NAME::DASH)
 	this->setType(SPELLTYPE::DAMAGE);
 	this->setState(SPELLSTATE::READY);
 
-	this->setCost(0.0f);
+	this->setCost(25.0f);
 	this->setCoolDown(0.1f);
 	this->strength = this->getCoolDown();
 	// Distance to jump

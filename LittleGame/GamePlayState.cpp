@@ -1,5 +1,5 @@
 #include "GamePlayState.h"
-#include "StatisticsMenuState.h"
+#include "MenuStatisticsState.h"
 #include "GameManager.h"
 #include "Locator.h"
 #include "RectangleComponent.h"
@@ -17,7 +17,7 @@
 #include "StateManager.h"
 
 #include "IncludeSpells.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 
 
 
@@ -338,6 +338,7 @@ void GamePlayState::updateFloor()
 	}
 
 	float dt = static_cast<float>(Locator::getGameTime()->getDeltaTime());
+	/*
 	float pulseVelocity = 1000.0f * dt;
 
 	for (int i = 0; i < this->gridPulsePoints[0].size(); i++)
@@ -359,6 +360,23 @@ void GamePlayState::updateFloor()
 		if (this->gridPulsePoints[1][i].x > ARENADATA::GETarenaWidth())
 		{
 			this->gridPulsePoints[1][i].x = this->gridPulsePoints[1][i].x - ARENADATA::GETarenaWidth();
+		}
+	}*/
+
+	this->pulseTime += dt;
+
+	if (this->pulseTime >= 0.4f)
+	{
+		this->pulseTime = 0.0f;
+
+		for (int i = 0; i < gridPulsePoints[0].size(); i++)
+		{
+			gridPulsePoints[0][i].y = rand() % ARENADATA::GETarenaHeight();
+		}
+
+		for (int i = 0; i < gridPulsePoints[1].size(); i++)
+		{
+			gridPulsePoints[1][i].x = rand() % ARENADATA::GETarenaWidth();
 		}
 	}
 }
@@ -459,6 +477,7 @@ void GamePlayState::init()
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
 	this->lm.selectArena();
+	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
 	this->camera.init(static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()));
 	this->rio.initialize(this->camera, this->lights);
@@ -470,7 +489,6 @@ void GamePlayState::init()
 		this->GUIObjects,
 		this->graphics
 	);
-	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	int i = 0;
 	for (std::list<GameObject*>::iterator it = this->staticObjects.begin(); it != this->staticObjects.end() && i < this->staticPhysicsCount; it++) {
 		this->quadTree.insertStaticObject(*it);
@@ -486,7 +504,7 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	randomLevel = 1; 
+	//randomLevel = 2;
 	// TESTING ------------------------ 
 
 	if (Locator::getStatsHeader()->getStats().level < 10) {
@@ -515,7 +533,7 @@ void GamePlayState::init()
 	this->gTimeLastFrame = static_cast<float>(Locator::getGameTime()->GetTime());
 	this->fallPatternCoolDown = 25.0;
 	this->playerSteppedOnBossTile = false;
-	RewardMenuState::getInstance()->provide(this->player1);
+	MenuRewardState::getInstance()->provide(this->player1);
 
 	// Player will always get 2 rewards as a base
 	this->nrOfPickedUpLoot = 2;
@@ -622,13 +640,13 @@ void GamePlayState::handleEvents(GameManager * gm) {
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
 			Locator::getD2D()->saveScreen();
-			StateManager::changeState(StatisticsMenuState::getInstance());
+			StateManager::changeState(MenuStatisticsState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
 			if (Locator::getStatsHeader()->getStats().level < 10)
 			{
 				//Sends the number of Lootboxes picked up druring the game
-				RewardMenuState::getInstance()->provide(this->nrOfPickedUpLoot);
+				MenuRewardState::getInstance()->provide(this->nrOfPickedUpLoot);
 				// Change last so we've already done all of the changes.
 				StateManager::changeState(RestartState::getInstance());
 			}
@@ -636,7 +654,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			{
 				Locator::getStatsHeader()->completeGame();
 				Locator::getD2D()->saveScreen();
-				StateManager::changeState(StatisticsMenuState::getInstance());
+				StateManager::changeState(MenuStatisticsState::getInstance());
 			}
 		}
 

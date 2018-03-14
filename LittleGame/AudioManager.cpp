@@ -118,6 +118,7 @@ void AudioManager::play(MUSIC::NAME name)
 {
 	this->currentMusic[currState].openFromFile(this->musicFilenames[name]);
 	this->currentMusic[currState].play();
+	this->currentMusic[currState].setLoop(true);
 }
 
 void AudioManager::play(SOUND::NAME name)

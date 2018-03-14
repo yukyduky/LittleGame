@@ -4,10 +4,10 @@
 
 #include "MenuState.h"
 
-class PauseMenuState : public MenuState
+class MenuPauseState : public MenuState
 {
 private:
-	static PauseMenuState sPauseMenuState;
+	static MenuPauseState sPauseMenuState;
 
 	BOOL IsWindowMode = TRUE;
 	WINDOWPLACEMENT wpc;
@@ -24,7 +24,7 @@ public:
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Cleanup the 'PauseMenuState'; freeing memory, default settings, etc.
 	*/
-	static PauseMenuState* getInstance();
+	static MenuPauseState* getInstance();
 
 	void FullScreenSwitch();
 
