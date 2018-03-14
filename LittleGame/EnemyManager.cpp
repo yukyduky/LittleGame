@@ -956,6 +956,7 @@ void EnemyManager::update(GUIManager* GUI)
 		// No enemies in this wave? Move on to the next wave
 		else if (this->timePassed > this->waveInterval) {
 			GUI->popWaveElement(*this->pGPS->GETGUIObjects(), *this->pGPS->getGraphicsComponents());
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_NEXTWAVE);
 			this->timePassed = 0;
 
 			// Ramping the time between waves
@@ -985,6 +986,7 @@ void EnemyManager::update(GUIManager* GUI)
 		
 		// Has the player won? :O
 		if (this->activeEnemiesCount < 1) {
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_LEVELEND);
 			Locator::getGlobalEvents()->generateMessage(GLOBALMESSAGES::PLAYERWON);
 		}
 	}

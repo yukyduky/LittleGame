@@ -544,9 +544,12 @@ void CollisionHandler::collisionGeneratorProjectile() {
 
 	Projectile* proj = static_cast<Projectile*>(this->collidable2);
 	Spell* spell = proj->getSpell();
+	if (spell->getName() == NAME::AUTOATTACK)
+	{
+		Locator::getAudioManager()->play(SOUND::GENERATORHIT);
+	}
 	spell->collision(this->collidable1, proj);
 
-	Locator::getAudioManager()->play(SOUND::GENERATORHIT);
 	// There's potential here I suppose, mostly in terms of graphical effects, perhaps.
 	/// Regardless, this too does nothing for now.
 }

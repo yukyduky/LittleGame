@@ -641,6 +641,7 @@ void GamePlayState::handleEvents(GameManager * gm) {
 
 	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
 		if (globalmsg == GLOBALMESSAGES::PLAYERDIED) {
+			Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_DEATH);
 			Locator::getD2D()->saveScreen();
 			StateManager::changeState(MenuStatisticsState::getInstance());
 		}
