@@ -66,20 +66,17 @@ void EnemyManager::startStandardLevel(enemySpawnPositions spawnPosVectors, float
 	this->chargerCount = (1 + static_cast<int>(difficulty)) * amountModifier;
 
 	// ---------- TESTING ------------
-	//this->currentWaveCount = 1;
-	//this->minionCount = 0;
-	//this->swarmerCount = 0;
-	//this->chargerCount = 0;
-	//this->minionCount = 2;//(2 + static_cast<int>(difficulty)) * amountModifier;
-	//this->swarmerCount = 2; //(1 + static_cast<int>(difficulty)) * amountModifier;
-	//this->chargerCount = 2; //(1 + static_cast<int>(difficulty)) * amountModifier;
-
+	/*this->currentWaveCount = 1;
+	this->minionCount = 5;
+	this->swarmerCount = 0;
+	this->chargerCount = 0;
+*/
 	// ---------- TESTING ------------
 
 	// Define specific MINION count PER WAVE
 	this->currentWaveMinionCount.resize(this->currentWaveCount);
 	for (int i = 0; i < this->currentWaveMinionCount.size(); i++)
-		this->currentWaveMinionCount.at(i) = (this->minionCount * i);
+		this->currentWaveMinionCount.at(i) = (this->minionCount + i);
 	// Define specific SWARMER count PER WAVE
 	this->currentWaveSwarmerCount.resize(this->currentWaveCount);
 	for (int i = 0; i < this->currentWaveSwarmerCount.size(); i++)
@@ -458,22 +455,22 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 spawnPos = { 0, 0, 0.0001f };
-	XMFLOAT3 openingPos = { 0, 0, 0.0001f };
+	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
+	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.0001f };
 
 
 	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
 	spawnPos = generatedPositions[0];
 	openingPos = generatedPositions[1];
 
-	float velocityMagnitude = 180.0f;
-	XMFLOAT4 enemyColor(1.0f, 0.0, 0.0f, 1.0f);
+	float velocityMagnitude = 100.0f;//180.0f;
+	XMFLOAT4 enemyColor(1.0f, 0.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
-	float immolationDamage = 3;
-	float attackCooldown = 0.5;
-	float attackRange = 70;
-	float hp = 200.0f;
-	float topSpeed = 12.0f;
+	float immolationDamage = 1.0f;
+	float attackCooldown = 0.5f;
+	float attackRange = 70.0f;
+	float hp = 100.0f;
+	float topSpeed = 8.0f; //12.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -595,9 +592,9 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	XMFLOAT3 rotation(0, 0, 0);
 
 	float projectileDamage = 8.0f * damageModifier;
-	float attackCooldown = 0.5f;
-	float projectileRange = 200.0f;
-	float attackRange = 500.0f;
+	float attackCooldown = 3.0f;
+	float projectileRange = 250.0f;
+	float attackRange = 200.0f;
 	float hp = 200.0f * healthModifier;
 
 	float velocityMagnitude = 500.0f * sppedModifier;

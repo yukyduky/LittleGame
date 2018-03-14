@@ -483,7 +483,7 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	//randomLevel = 1; 
+	randomLevel = 1; 
 	// TESTING ------------------------ 
 
 	if (Locator::getStatsHeader()->getStats().level < 10) {
