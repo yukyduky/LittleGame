@@ -131,65 +131,6 @@ void RewardMenuState::init()
 	this->displayMenu(this->initLootMenu());
 }
 
-void RewardMenuState::handleEvents(GameManager * gm) {
-	MSG msg;
-	GLOBALMESSAGES globalmsg;
-
-	while (gm->pollEvent(msg)) {
-		// Exit the application when 'X' is pressed or the quit bool is true
-		if (msg.message == WM_QUIT) {
-			gm->quit();
-		}
-		else if (msg.message == WM_KEYUP)
-		{
-			switch (msg.wParam)
-			{
-			case VK_UP:
-			case 0x57:
-				this->currMenu->goUp();
-				break;
-			case VK_DOWN:
-			case 0x53:
-				this->currMenu->goDown();
-				break;
-			case VK_RETURN:
-			case VK_SPACE:
-				this->currMenu->pressButton();
-				if (this->currMenu->GETCurrent()->GETBehavior() == BEHAVIOR::ADDGLYPH)
-				{
-					if (this->nrOfLoot > 0)
-					{
-						this->displayMenu(this->initLootMenu());
-					}
-					else
-					{
-						this->displayMenu(this->initEnemyUpgradeMenu());
-					}
-				}
-				else if (this->currMenu->GETCurrent()->GETBehavior() == BEHAVIOR::ADDENEMYUPG)
-				{
-					this->displayMenu(this->initNextLevelMenu());
-				}
-				break;
-			default:
-				break;
-			}
-		}
-
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-
-	while (Locator::getGlobalEvents()->pollEvent(globalmsg)) {
-		if (globalmsg == GLOBALMESSAGES::STARTGAME) {
-			StateManager::changeState(GamePlayState::getInstance());
-		}
-		else if (globalmsg == GLOBALMESSAGES::RESUMEGAME) {
-			StateManager::popState();
-		}
-	}
-}
-
 
 Menu * RewardMenuState::initLootMenu()
 {
@@ -211,7 +152,7 @@ Menu * RewardMenuState::initLootMenu()
 	object = new MenuObject(this->newID(),
 		{ 0.0f,0.0f, 400.0f,700.0f }, D2D1::ColorF::DarkMagenta);
 	menu->addQuad(object);
-	textStr = L"Next level: " + std::to_wstring(Locator::getStatsHeader()->getStats().level) + L" of 10";
+	textStr = L"Pick a upgrade";
 	nextID = this->newID();
 	object = new MenuObject(nextID,
 		{ 50.0f,-100.0f, 300.0f,100.0f }, D2D1::ColorF::DeepSkyBlue,

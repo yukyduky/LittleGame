@@ -23,8 +23,6 @@ public:
 	*/
 	virtual void init();
 
-	virtual void handleEvents(GameManager* gm);
-
 	Menu* initLootMenu();
 	Menu* initEnemyUpgradeMenu();
 	Menu* initNextLevelMenu();
@@ -32,6 +30,7 @@ public:
 	void provide(ActorObject* player);
 	void provide(int nrOfLoot) { this->nrOfLoot = nrOfLoot; };
 	ActorObject* GETPlayer() { return this->player; };
+	int getLoot() { return this->nrOfLoot; };
 
 	void startGame();
 };

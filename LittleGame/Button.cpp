@@ -156,16 +156,21 @@ void Button::onPress()
 		this->choosen = true;
 		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
 		Locator::getStatsHeader()->addGlyph((int)this->spellname, (int)this->glyph);
-		this->nextButton->SETPrev(this->prevButton);
-		this->prevButton->SETNext(this->nextButton);
+		if (static_cast<RewardMenuState*>(this->pMS)->getLoot() > 0)
+		{
+			this->pMS->displayMenu(static_cast<RewardMenuState*>(this->pMS)->initLootMenu());
+		}
+		else
+		{
+			this->pMS->displayMenu(static_cast<RewardMenuState*>(this->pMS)->initEnemyUpgradeMenu());
+		}
 		break;
 		// Rewardmenu
 	case BEHAVIOR::ADDENEMYUPG:
 		this->choosen = true;
 		//HERE GOES THE FUNCTION TO UPGRADE ENEMIES
 		Locator::getStatsHeader()->addUpgrade((int)this->eneUpg);
-		this->nextButton->SETPrev(this->prevButton);
-		this->prevButton->SETNext(this->nextButton);
+		this->pMS->displayMenu(static_cast<RewardMenuState*>(this->pMS)->initNextLevelMenu());
 		break;
 	case BEHAVIOR::REWSTARTGAME:
 		static_cast<RewardMenuState*>(this->pMS)->startGame();
