@@ -505,7 +505,7 @@ void GamePlayState::init()
 	// TESTING ------------------------ 
 
 	if (Locator::getStatsHeader()->getStats().level < 10) {
-		switch (randomLevel)
+		switch (3)
 		{
 		case 1:
 			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
@@ -814,7 +814,7 @@ void GamePlayState::initPlayer()
 	// 0:
 	actor->addSpell(new SpAutoAttack(actor));
 	// 1:
-	actor->addSpell(new SpFire(actor));
+	actor->addSpell(new SpFireG2(actor));
 	// 2: 
 	actor->addSpell(new SpBomb(actor));
 	// 3:

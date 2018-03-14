@@ -581,6 +581,10 @@ void ActorObject::dealDmg(float damag)
 	}
 	else if (this->getType() == OBJECTTYPE::TYPE::PLAYER)
 	{
+		if (this->hp > this->hpMAX)
+		{
+			this->hp = this->hpMAX;
+		}
 		Locator::getStatsHeader()->addDamageTaken(dmg);
 	}
 
