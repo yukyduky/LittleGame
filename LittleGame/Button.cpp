@@ -1,7 +1,7 @@
 #include "Button.h"
-#include "PauseMenuState.h"
+#include "MenuPauseState.h"
 #include "HomeMenuState.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 
 Button::Button(MenuState* pMS, size_t ID,
 	XMFLOAT4 pos, D2D1::ColorF color, std::wstring text, BEHAVIOR behavior) : MenuObject(ID, pos, color, text)
@@ -96,7 +96,7 @@ void Button::onPress()
 	switch (this->behavior)
 	{
 	case BEHAVIOR::GOSTART:
-		this->pMS->displayMenu(static_cast<PauseMenuState*>(this->pMS)->initStartMenu());
+		this->pMS->displayMenu(static_cast<MenuPauseState*>(this->pMS)->initStartMenu());
 		break;
 	case BEHAVIOR::GOSTART_HOME:
 		this->pMS->displayMenu(static_cast<HomeMenuState*>(this->pMS)->initStartMenu());
@@ -105,7 +105,7 @@ void Button::onPress()
 		this->pMS->displayMenu(static_cast<HomeMenuState*>(this->pMS)->initControlsMenu());
 		break;
 	case BEHAVIOR::GOOPTIONS:
-		this->pMS->displayMenu(static_cast<PauseMenuState*>(this->pMS)->initOptionsMenu());
+		this->pMS->displayMenu(static_cast<MenuPauseState*>(this->pMS)->initOptionsMenu());
 		break;
 	case BEHAVIOR::RESUMEGAME:
 		this->pMS->resumeGame();
@@ -137,7 +137,7 @@ void Button::onPress()
 		Locator::getAudioManager()->adjustMusic(-5.0f);
 		break;
 	case BEHAVIOR::WINDOWSWITCH:
-		static_cast<PauseMenuState*>(this->pMS)->FullScreenSwitch();
+		static_cast<MenuPauseState*>(this->pMS)->FullScreenSwitch();
 		break;
 	case BEHAVIOR::USECONTROLLER:
 		currSetting = GamePlayState::getInstance()->switchControllerInput();
@@ -154,15 +154,15 @@ void Button::onPress()
 	// Rewardmenu
 	case BEHAVIOR::ADDGLYPH:
 		this->choosen = true;
-		static_cast<RewardMenuState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
+		static_cast<MenuRewardState*>(this->pMS)->GETPlayer()->changeSpell((int)this->spellname, (int)this->glyph);
 		Locator::getStatsHeader()->addGlyph((int)this->spellname, (int)this->glyph);
-		if (static_cast<RewardMenuState*>(this->pMS)->getLoot() > 0)
+		if (static_cast<MenuRewardState*>(this->pMS)->getLoot() > 0)
 		{
-			this->pMS->displayMenu(static_cast<RewardMenuState*>(this->pMS)->initLootMenu());
+			this->pMS->displayMenu(static_cast<MenuRewardState*>(this->pMS)->initLootMenu());
 		}
 		else
 		{
-			this->pMS->displayMenu(static_cast<RewardMenuState*>(this->pMS)->initEnemyUpgradeMenu());
+			this->pMS->displayMenu(static_cast<MenuRewardState*>(this->pMS)->initEnemyUpgradeMenu());
 		}
 		break;
 		// Rewardmenu
@@ -170,10 +170,10 @@ void Button::onPress()
 		this->choosen = true;
 		//HERE GOES THE FUNCTION TO UPGRADE ENEMIES
 		Locator::getStatsHeader()->addUpgrade((int)this->eneUpg);
-		this->pMS->displayMenu(static_cast<RewardMenuState*>(this->pMS)->initNextLevelMenu());
+		this->pMS->displayMenu(static_cast<MenuRewardState*>(this->pMS)->initNextLevelMenu());
 		break;
 	case BEHAVIOR::REWSTARTGAME:
-		static_cast<RewardMenuState*>(this->pMS)->startGame();
+		static_cast<MenuRewardState*>(this->pMS)->startGame();
 		break;
 
 	// Stats window

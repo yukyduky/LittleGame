@@ -4,10 +4,10 @@
 
 #include "MenuState.h"
 
-class RewardMenuState : public MenuState
+class MenuRewardState : public MenuState
 {
 private:
-	static RewardMenuState sRewardMenuState;
+	static MenuRewardState sRewardMenuState;
 
 	ActorObject* player = nullptr;
 	int nrOfLoot;
@@ -15,7 +15,7 @@ private:
 
 	WCHAR* getGlyphName(int name, int glyph);
 public:
-	static RewardMenuState* getInstance();
+	static MenuRewardState* getInstance();
 		
 	/*- - - - - - - -<INFORMATION>- - - - - - - -
 	1. Virtual Function.

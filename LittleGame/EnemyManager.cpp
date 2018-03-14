@@ -20,7 +20,7 @@
 #include "SpNo.h"
 #include "SpEnemyImmolation.h"
 #include "Grid.h"
-#include "RewardMenuState.h"
+#include "MenuRewardState.h"
 //BOSS STATES
 #include "BossMoveToArenaState.h"
 #include "ChargerChannelingState.h"
@@ -494,8 +494,8 @@ EnemyObject* EnemyManager::createMinion(enemySpawnPositions spawnPosVectors)
 	std::vector<XMFLOAT3> generatedPositions;
 	size_t ID = this->pGPS->newID();
 	XMFLOAT3 scale(10.0f, 20.0f, 10.0f);
-	XMFLOAT3 spawnPos = { 0, 0, 0.0001f };
-	XMFLOAT3 openingPos = { 0, 0, 0.0001f };
+	XMFLOAT3 spawnPos = { 0.0f, 0.0f, 0.0001f };
+	XMFLOAT3 openingPos = { 0.0f, 0.0f, 0.0001f };
 
 
 	generatedPositions = this->generateEnemySpawnPositions(spawnPosVectors, scale);
