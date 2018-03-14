@@ -132,7 +132,7 @@ void GamePlayState::updateFloor()
 	XMFLOAT3 flashColor(1.0f, 1.0f, 1.0f);
 	XMFLOAT3 recoverColor(0.6f, 0.1f, 0.1f);
 	XMFLOAT3 electrifiedColor = XMFLOAT3(0.5f, 0.5f, 0.05f);
-	XMFLOAT3 heatedColor = XMFLOAT3(0.5f, 0.245f, 0.05f);
+	XMFLOAT3 heatedColor = XMFLOAT3(1.0f, 0.4f, 0.01f);
 	XMFLOAT3 cooledColor = XMFLOAT3(0.05f, 0.4f, 0.5f);
 	
 	XMFLOAT3 bossTileColor = XMFLOAT3(0.001f, 0.75f, 0.001f);
