@@ -510,7 +510,7 @@ void GamePlayState::init()
 	// TESTING ------------------------ 
 
 	if ( Locator::getStatsHeader()->getStats().level < 10 ) {
-		switch (randomLevel)
+		switch (1)
 		{
 		case 1:
 			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
