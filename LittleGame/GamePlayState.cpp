@@ -505,16 +505,17 @@ void GamePlayState::init()
 	// TESTING ------------------------ 
 
 	if (Locator::getStatsHeader()->getStats().level < 10) {
-		switch (randomLevel)
+		switch (2)
+
 		{
 		case 1:
-			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			this->enemyManager.startStandardLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
 			break;
 		case 2:
-			this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			this->enemyManager.startRampLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
 			break;
 		case 3:
-			this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty);
+			this->enemyManager.startPulseLevel(this->enemySpawnPos, Locator::getStatsHeader()->getStats().difficulty, &this->GUI);
 			break;
 		}
 	}
