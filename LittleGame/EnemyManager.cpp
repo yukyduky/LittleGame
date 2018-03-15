@@ -996,7 +996,7 @@ void EnemyManager::initialize(GamePlayState& pGPS, std::vector<ActorObject*> pla
 
 void EnemyManager::update(GUIManager* GUI)
 {
-	if (this->waveElementRemoval && this->waves.size() > 0) {
+	if (this->waveElementRemoval && this->waves.size() > 0 && Locator::getStatsHeader()->getStats().level < 6) {
 		GUI->popWaveElement(*this->pGPS->GETGUIObjects(), *this->pGPS->getGraphicsComponents());
 		Locator::getAudioManager()->play(SOUND::NAME::EIGHTBIT_NEXTWAVE);
 		this->waveElementRemoval = false;
