@@ -147,12 +147,16 @@ void BossBattleIntroState::executeBehavior()
 		case INTROPHASE::DAMAGEPHASE:
 			//Update counter and make the boss invulnerable if the time is right.
 			//Then start the battle loop from phase FIRST again.
+			
+			/*
 			this->counter += dt;
+			
 			if (this->counter >= 4.0f) {
 				this->phase = INTROPHASE::FIRST;
 				this->pHead->turnOnInvulnerability();
 				this->counter = 0.0f;
 			}
+			*/
 			break;
 		default:
 			break;
