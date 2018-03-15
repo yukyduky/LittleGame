@@ -506,7 +506,6 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	//randomLevel = 3;
 	// TESTING ------------------------ 
 
 	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
@@ -819,7 +818,7 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0:
-	actor->addSpell(new SpAutoAttack(actor));
+	actor->addSpell(new SpAutoAttackG2(actor));
 	// 1:
 	actor->addSpell(new SpFire(actor));
 	// 2: 

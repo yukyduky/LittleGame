@@ -326,6 +326,9 @@ void TriangleComponent::updateColor(vColor newColor)
 	vertexData[16] = this->createPrimitiveVertexData(this->points[0], this->normals[T_NORMALS::SOUTH_EAST], newColor_);
 	vertexData[17] = this->createPrimitiveVertexData(this->points[3], this->normals[T_NORMALS::SOUTH_EAST], newColor_);
 
+	this->gVertexBuffer->Release();
+
+	Locator::getD3D()->createVertexBuffer(&this->gVertexBuffer, vertexData.data(), this->stride, this->offset, vertexData.size());
 }
 /*_____________________________
 |          END OF             |

@@ -6,18 +6,42 @@
 
 SpSwarmProjectile::SpSwarmProjectile(
 	EnemyObject* pShooter, ActorObject* pPlayer, int* pActiveEnemiesCount,
-	int projectilesMaxFlyingRange, int dmg, int attackRange, double cooldown) : EnemySpell(pShooter, pActiveEnemiesCount, NAME::ENEM_SWARM)
+	int projectilesMaxFlyingRange, int dmg, int attackRange, double cooldown, float projectileVelocity) : EnemySpell(pShooter, pActiveEnemiesCount, NAME::ENEM_SWARM)
 {
 	this->pPlayer = pPlayer;
 	this->projectilesMaxFlyingRange = projectilesMaxFlyingRange;
+	this->originalVelocity = projectileVelocity;
+	this->currentVelocity = originalVelocity;
 	this->damage = dmg;
 	this->attackRange = attackRange;
 	this->setCoolDown(cooldown);
 	this->seekSpeed = 0.9;
+	this->originalRange = this->projectilesMaxFlyingRange;
+	this->currentRange = originalRange;
 }
 SpSwarmProjectile::~SpSwarmProjectile()
 {
 
+}
+
+void SpSwarmProjectile::setProjectileVelocity(float projectileVelocity)
+{
+	this->currentVelocity = projectileVelocity;
+}
+
+float SpSwarmProjectile::getOriginalProjectileVelocity()
+{
+	return this->originalVelocity;
+}
+
+void SpSwarmProjectile::setProjectileRange(float projectileRange)
+{
+	this->currentRange = projectileRange;
+}
+
+float SpSwarmProjectile::getOriginalProjectileRange()
+{
+	return this->originalRange;
 }
 
 bool SpSwarmProjectile::castSpell()
@@ -36,7 +60,7 @@ bool SpSwarmProjectile::castSpell()
 		light.attenuation = XMFLOAT3(0.0f, 0.0001f, 0.0001f);
 		light.specPower = 0.0f;
 
-		ProjProp props(5, XMFLOAT4(1.0f, 0.412f, 0.71f, 1.0f), 200, this->projectilesMaxFlyingRange, false);
+		ProjProp props(5, XMFLOAT4(1.0f, 0.412f, 0.71f, 1.0f), this->currentVelocity, this->currentRange, false);
 		Projectile* pProj = this->spawnProj(props, light);
 		pProj->setSeeking(this->seekSpeed, this->pPlayer);
 

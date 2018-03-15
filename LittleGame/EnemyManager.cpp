@@ -700,14 +700,16 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
-	float projectileDamage = 4.0f * damageModifier;
-	float attackCooldown = 0.5f;
-	float projectileRange = 700.0f;
-	float attackRange = -1.0f;
+	float projectileDamage = 8.0f * damageModifier;
+	float attackCooldown = 1.5f;
+	float projectileRange = 600.0f;
+	float attackRange = 500.0f;
 	float hp = 200.0f * healthModifier;
 
 	float velocityMagnitude = 500.0f * speedModifier;
 	float topSpeed = 14.0f * speedModifier;
+
+	float projectileVelocity = 300.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -717,7 +719,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpSwarmProjectile(
-		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
+		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown, projectileVelocity
 	);
 	enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
 
@@ -763,14 +765,18 @@ EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors
 	XMFLOAT4 color(0.0f, 1.0f, 0.0f, 1.0f);
 	XMFLOAT3 rotation(0, 0, 0);
 
+	// Projectile
 	float projectileDamage = 8.0f;
-	float attackCooldown = 0.5f;
+	float attackCooldown = 1.5f;
 	float projectileRange = 200.0f;
+	float projectileVelocity = 200.0f;
 	float attackRange = 500.0f;
-	float hp = 200.0f;
 
+
+	float hp = 200.0f;
 	float velocityMagnitude = 180.0f;
 	float topSpeed = 11.0f;
+
 
 	// OBJECT
 	enemyObject = new EnemyObject(
@@ -780,7 +786,7 @@ EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors
 	);
 	// SPELL (Needs to be before States)
 	Spell* spell = new SpSwarmProjectile(
-		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown
+		enemyObject, this->players[0], &this->activeEnemiesCount, projectileRange, projectileDamage, attackRange, attackCooldown, projectileVelocity
 	);
 	enemyObject->addSpell(spell);	// HAS to be out here because of how spells are structured
 

@@ -49,6 +49,8 @@ void InputComponent::mapKeys()
 	mapKeyboardKeyToCommand(Key(commands[Commands::SELECTABILITY2], COMMANDTYPE::TAP), KEYBOARD::NUM2);
 	mapKeyboardKeyToCommand(Key(commands[Commands::SELECTABILITY3], COMMANDTYPE::TAP), KEYBOARD::NUM3);
 	mapKeyboardKeyToCommand(Key(commands[Commands::SELECTABILITY4], COMMANDTYPE::TAP), KEYBOARD::NUM4);
+	// Shift->dash
+	mapKeyboardKeyToCommand(Key(commands[Commands::SELECTABILITY3], COMMANDTYPE::TAP), KEYBOARD::SHIFT);
 
 	// Shoot Abilities
 	mapMouseKeyToCommand(Key(commands[Commands::FIREABILITY0], COMMANDTYPE::TAP), MOUSE::LEFTCLICK);
@@ -109,8 +111,10 @@ void InputComponent::mapKeyCodesToEnums()
 	}
 
 	// Map ESCAPE to enum (Mapped to index = i with the hexadecimal value of 27)
-	keyboardKeyMap.insert(keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), 27));
+	keyboardKeyMap.insert(keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i++), 27));
 
+	// Map SHIFT to enum
+	keyboardKeyMap.insert(keyboardKeyMap.end(), std::pair<KEYBOARD::KEY, size_t>(static_cast<KEYBOARD::KEY>(i), 16));
 
 	k = 1;
 	// Mouse
