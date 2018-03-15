@@ -99,7 +99,7 @@ SpFireG1::SpFireG1(GameObject* owner) : SpFire(owner)
 	// WHEN BALANCING, DONT FORGET THAT THERE IS A CAP ON PROJECTILES FOR THIS SPELL
 	this->insertGlyph(GLYPHTYPE::GLYPH1);
 	this->setCoolDown(0.1f);
-	this->setCost(1.1f);
+	this->setCost(2.1f);
 	this->range = 250.0f;
 	this->damage = 30.0f;
 }
