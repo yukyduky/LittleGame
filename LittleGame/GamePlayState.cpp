@@ -476,8 +476,8 @@ void GamePlayState::init()
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
-	this->lm.selectArena(Locator::getStatsHeader()->getStats().level);
-//	this->lm.selectArena(10);
+//	this->lm.selectArena(Locator::getStatsHeader()->getStats().level);
+	this->lm.selectArena(6);
 
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
@@ -509,7 +509,8 @@ void GamePlayState::init()
 	//randomLevel = 3;
 	// TESTING ------------------------ 
 
-	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
+	if ( false) {
+//	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
 		switch (2)
 		{
 		case 1:
@@ -646,14 +647,14 @@ void GamePlayState::handleEvents(GameManager * gm) {
 			StateManager::changeState(MenuStatisticsState::getInstance());
 		}
 		else if (globalmsg == GLOBALMESSAGES::PLAYERWON) {
-			if (Locator::getStatsHeader()->getStats().level < 10)
+			if (Locator::getStatsHeader()->getStats().level < 6)
 			{
 				//Sends the number of Lootboxes picked up druring the game
 				MenuRewardState::getInstance()->provide(this->nrOfPickedUpLoot);
 				// Change last so we've already done all of the changes.
 				StateManager::changeState(RestartState::getInstance());
 			}
-			else if (Locator::getStatsHeader()->getStats().level == 10)
+			else if (Locator::getStatsHeader()->getStats().level == 6)
 			{
 				Locator::getStatsHeader()->completeGame();
 				Locator::getD2D()->saveScreen();
@@ -681,7 +682,8 @@ void GamePlayState::update(GameManager * gm)
 	this->counter += this->dt;
 	this->genCounter += this->dt;
 	
-	if (Locator::getStatsHeader()->getStats().level < 10) {
+	if (false) {
+	//if ( Locator::getStatsHeader()->getStats().level < 6*/) {
 		if (this->counter > this->fallPatternCoolDown) {
 			this->updateFloorPattern();
 		}
