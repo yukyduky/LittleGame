@@ -702,7 +702,7 @@ EnemyObject* EnemyManager::createSwarmer(enemySpawnPositions spawnPosVectors)
 
 	float projectileDamage = 8.0f * damageModifier;
 	float attackCooldown = 1.5f;
-	float projectileRange = 600.0f;
+	float projectileRange = 700.0f;
 	float attackRange = 500.0f;
 	float hp = 200.0f * healthModifier;
 
@@ -766,17 +766,20 @@ EnemyObject* EnemyManager::createBossSwarmer(enemySpawnPositions spawnPosVectors
 	XMFLOAT3 rotation(0, 0, 0);
 
 	// Projectile
-	float projectileDamage = 8.0f;
+	float damageModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[0] * 0.25f);
+	float healthModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[1] * 0.25f);
+	float speedModifier = 1.0f + (Locator::getStatsHeader()->getStats().enemyUpg[3] * 0.25f);
+
+	float projectileDamage = 8.0f * damageModifier;
 	float attackCooldown = 1.5f;
-	float projectileRange = 200.0f;
-	float projectileVelocity = 200.0f;
+	float projectileRange = 700.0f;
 	float attackRange = 500.0f;
+	float hp = 200.0f * healthModifier;
 
+	float velocityMagnitude = 500.0f * speedModifier;
+	float topSpeed = 14.0f * speedModifier;
 
-	float hp = 200.0f;
-	float velocityMagnitude = 180.0f;
-	float topSpeed = 11.0f;
-
+	float projectileVelocity = 300.0f;
 
 	// OBJECT
 	enemyObject = new EnemyObject(
