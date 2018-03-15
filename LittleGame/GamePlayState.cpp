@@ -473,11 +473,11 @@ void GamePlayState::generatorDischarge(Index index)
 void GamePlayState::init() 
 {
 	Locator::getStatsHeader()->addLevel();
-	Locator::getStatsHeader()->addLevel();
-	Locator::getStatsHeader()->addLevel();
-	Locator::getStatsHeader()->addLevel();
-	Locator::getStatsHeader()->addLevel();
-	Locator::getStatsHeader()->addLevel();
+	//Locator::getStatsHeader()->addLevel();
+	//Locator::getStatsHeader()->addLevel();
+	//Locator::getStatsHeader()->addLevel();
+	//Locator::getStatsHeader()->addLevel();
+	//Locator::getStatsHeader()->addLevel();
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
@@ -511,7 +511,6 @@ void GamePlayState::init()
 	
 	int randomLevel = Locator::getRandomGenerator()->GenerateInt(1, 3);
 	// TESTING ------------------------ 
-	//randomLevel = 3;
 	// TESTING ------------------------ 
 
 	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
@@ -824,7 +823,7 @@ void GamePlayState::initPlayer()
 	//Add the spell to the player, numbers are used to in different places
 	// Slots:
 	// 0:
-	actor->addSpell(new SpAutoAttack(actor));
+	actor->addSpell(new SpAutoAttackG2(actor));
 	// 1:
 	actor->addSpell(new SpFire(actor));
 	// 2: 

@@ -10,6 +10,14 @@
 class SwarmerSeekingState : public SwarmerState
 {
 private:
+	struct Scale {
+		float max = 5;
+		float pulse = 0.2;
+		float cooldown = 0.2;
+		float velocity = 60;
+		float range = 100;
+	};
+	Scale scale;
 
 public:
 	SwarmerSeekingState(EnemyObject& pHead, AIComponent& pBrain, Grid* pGrid_, size_t swarmerID);

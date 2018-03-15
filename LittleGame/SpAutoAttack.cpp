@@ -127,6 +127,7 @@ SpAutoAttackG2::SpAutoAttackG2(GameObject* owner) : SpAutoAttack(owner)
 	this->insertGlyph(GLYPHTYPE::GLYPH2);
 	this->setCoolDown(this->getCoolDown() * 3.0f);
 	this->damage = (this->damage * 2.5f);
+	this->range = 2000.0f;
 	this->cost *= 5.0f;
 }
 

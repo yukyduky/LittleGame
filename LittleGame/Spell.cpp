@@ -57,7 +57,7 @@ Projectile* Spell::spawnProj(ProjProp props, Light light)
 			EnemyObject* trueCaster = static_cast<EnemyObject*>(trueThis->getOwner());
 
 			projectilesSpell = new SpSwarmProjectile(
-				trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(),
+				trueCaster, trueThis->GETpPlayer(), trueThis->getpActiveEnemiesCount(), trueThis->getprojectilesMaxFlyingRange(), trueThis->getDamage(), trueThis->getOriginalProjectileVelocity(),
 				trueThis->getAttackRange(), trueThis->getCoolDown()
 			);
 			proj->setSpell(projectilesSpell);

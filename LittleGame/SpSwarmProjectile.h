@@ -8,13 +8,23 @@ class SpSwarmProjectile : public EnemySpell
 {
 private:
 	float seekSpeed = -1;
+	float originalVelocity;
+	float currentVelocity;
+	float originalRange;
+	float currentRange;
 
 public:
 	SpSwarmProjectile(
 		EnemyObject* pShooter, ActorObject* pPlayer, int* pActiveEnemiesCount,
-		int range, int dmg, int attackRange, double cooldown
+		int range, int dmg, int attackRange, double cooldown, float projectileVelocity
 	);
 	~SpSwarmProjectile();
+
+
+	void setProjectileVelocity(float projectileVelocity);
+	float getOriginalProjectileVelocity();
+	void setProjectileRange(float projectileRange);
+	float getOriginalProjectileRange();
 
 	// Returns false if spell in unavalible to cast
 	bool castSpell();

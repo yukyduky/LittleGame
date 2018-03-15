@@ -49,27 +49,34 @@ void SwarmerSeekingState::executeBehavior()
 		XMFLOAT3 newDirection = { 0, 0, 0.0001f };
 		XMFLOAT3 antiWallDirection = { 0, 0, 0.0001f };
 
+		SpSwarmProjectile* spell = static_cast<SpSwarmProjectile*>(this->pHead->getFirstSpell());
+
 		//// Neighbours (If we have any)
 		if (neighbourCount > 1) {
-
-
+			/// CAPACITY
 			if (neighbourCount > 5)
-				neighbourCount = 5;
+				neighbourCount = this->scale.max;
 
-			// Affect spellCooldown
-			this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown() / neighbourCount);
-
-			// Affect velocity
-			this->pHead->SETvelocityMagnitude(this->getOriginalVelocity() * neighbourCount);
-
+			/// BODY
 			// Affect how fast we pulse
-			this->setPulseInterval(this->getOriginalPulseInterval() * neighbourCount);
+			this->setPulseInterval(this->getOriginalPulseInterval() - neighbourCount * scale.pulse);
+			/// SPELL
+			// Affect spellCooldown
+			spell->setCoolDown(this->getOriginalSpellCooldown() - neighbourCount * scale.cooldown);
+			// Affect spellvelocity
+			spell->setProjectileVelocity(spell->getOriginalProjectileVelocity() + neighbourCount * scale.velocity);
+			// Affect spellRange
+			spell->setProjectileRange(spell->getOriginalProjectileRange() + neighbourCount * scale.range);
+
 		}
+		// Reset values
 		else {
-			// Reset if we have to
-			this->pHead->getFirstSpell()->setCoolDown(this->getOriginalSpellCooldown());
-			this->pHead->SETvelocityMagnitude(this->getOriginalVelocity());
+			/// BODY
 			this->setPulseInterval(this->getOriginalPulseInterval());
+			/// SPELL
+			spell->setCoolDown(this->getOriginalSpellCooldown());
+			spell->setProjectileVelocity(spell->getOriginalProjectileVelocity());
+			spell->setProjectileRange(spell->getOriginalProjectileRange());
 		}
 
 		// Look for the average of all swarmers
