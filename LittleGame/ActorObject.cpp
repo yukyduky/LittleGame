@@ -587,7 +587,10 @@ void ActorObject::dealDmg(float damag)
 		{
 			this->hp = this->hpMAX;
 		}
-		Locator::getStatsHeader()->addDamageTaken(dmg);
+		if (dmg > 0.0f)
+		{
+			Locator::getStatsHeader()->addDamageTaken(dmg);
+		}
 	}
 
 	if (this->hp <= 0.0f) {
