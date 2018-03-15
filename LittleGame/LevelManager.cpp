@@ -145,8 +145,7 @@ void LevelManager::createLevelWalls(int &staticPhysicsCount, std::vector<std::ve
 	int nrOfHorizontalSquares = grid.size();
 	WallData wData(nrOfVerticalSquares, nrOfHorizontalSquares);
 	int caseNr;
-	if (false) {
-	//if (Locator::getStatsHeader()->getStats().level < 6) {
+	if (Locator::getStatsHeader()->getStats().level < 6) {
 		caseNr = Locator::getRandomGenerator()->GenerateInt(0, arenaPatterns.GETmaxWallNum());
 	}
 	else {

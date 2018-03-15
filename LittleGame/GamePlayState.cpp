@@ -473,11 +473,16 @@ void GamePlayState::generatorDischarge(Index index)
 void GamePlayState::init() 
 {
 	Locator::getStatsHeader()->addLevel();
+	Locator::getStatsHeader()->addLevel();
+	Locator::getStatsHeader()->addLevel();
+	Locator::getStatsHeader()->addLevel();
+	Locator::getStatsHeader()->addLevel();
+	Locator::getStatsHeader()->addLevel();
 	this->lights.reserve(MAX_NUM_POINTLIGHTS);
 	this->lights.push(Light(XMFLOAT3(static_cast<float>(ARENADATA::GETarenaWidth() / 2), static_cast<float>(ARENADATA::GETsquareSize() * 10), static_cast<float>(ARENADATA::GETarenaHeight() / 2)), XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.3f, 0.3f, 0.3f), XMFLOAT3(0.5f, 0.0f, 0.0f), 50.0f));
 
-//	this->lm.selectArena(Locator::getStatsHeader()->getStats().level);
-	this->lm.selectArena(6);
+	this->lm.selectArena(Locator::getStatsHeader()->getStats().level);
+//	this->lm.selectArena(6);
 
 	this->ID = lm.initArena(this->newID(), this->staticPhysicsCount, *this, this->fallData, this->grid, this->staticObjects, this->noCollisionDynamicObjects, this->dynamicObjects, this->graphics, this->easyPatterns, this->mediumPatterns, this->hardPatterns, this->enemySpawnPos, this->gridPulsePoints);
 	this->quadTree.initializeQuadTree(0, static_cast<float>(ARENADATA::GETarenaWidth()), static_cast<float>(ARENADATA::GETarenaHeight()), 0, 0);
@@ -509,8 +514,7 @@ void GamePlayState::init()
 	//randomLevel = 3;
 	// TESTING ------------------------ 
 
-	if ( false) {
-//	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
+	if ( Locator::getStatsHeader()->getStats().level < 6 ) {
 		switch (2)
 		{
 		case 1:
@@ -682,8 +686,7 @@ void GamePlayState::update(GameManager * gm)
 	this->counter += this->dt;
 	this->genCounter += this->dt;
 	
-	if (false) {
-	//if ( Locator::getStatsHeader()->getStats().level < 6*/) {
+	if ( Locator::getStatsHeader()->getStats().level < 6) {
 		if (this->counter > this->fallPatternCoolDown) {
 			this->updateFloorPattern();
 		}
